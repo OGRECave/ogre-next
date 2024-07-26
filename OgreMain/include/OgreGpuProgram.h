@@ -478,13 +478,9 @@ namespace Ogre
             return mVpAndRtArrayIndexFromAnyShader;
         }
 
-        /** Sets whether this geometry program requires adjacency information
-            from the input primitives.
-        */
+        /// @deprecated
         virtual void setAdjacencyInfoRequired( bool r ) { mNeedsAdjacencyInfo = r; }
-        /** Returns whether this geometry program requires adjacency information
-            from the input primitives.
-        */
+        /// @deprecated
         virtual bool isAdjacencyInfoRequired() const { return mNeedsAdjacencyInfo; }
         /** Sets the number of process groups dispatched by this compute
             program.
