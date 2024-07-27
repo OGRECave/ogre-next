@@ -1386,7 +1386,7 @@ namespace Ogre
         // This is a regular property!
         setProperty( tid, "samplerStateStart", samplerStateStart );
 
-        if( getProperty( HlmsBaseProp::ParticleSystem ) )
+        if( getProperty( tid, HlmsBaseProp::ParticleSystem ) )
         {
             setProperty( tid, "particleSystemConstSlot", mParticleSystemConstSlot );
             if( mVaoManager->readOnlyIsTexBuffer() )
@@ -1396,10 +1396,10 @@ namespace Ogre
 
             if( !casterPass )
             {
-                setProperty( kNoTid, HlmsBaseProp::Normal, 1 );
-                setProperty( kNoTid, HlmsBaseProp::Tangent, 1 );
+                setProperty( tid, HlmsBaseProp::Normal, 1 );
+                setProperty( tid, HlmsBaseProp::Tangent, 1 );
             }
-            setProperty( kNoTid, HlmsBaseProp::UvCount, 1 );
+            setProperty( tid, HlmsBaseProp::UvCount, 1 );
         }
     }
     //-----------------------------------------------------------------------------------

@@ -615,7 +615,7 @@ namespace Ogre
             }
         }
 
-        if( getProperty( HlmsBaseProp::ParticleSystem ) )
+        if( getProperty( tid, HlmsBaseProp::ParticleSystem ) )
         {
             setProperty( tid, "particleSystemConstSlot", mParticleSystemConstSlot );
             if( mVaoManager->readOnlyIsTexBuffer() )
