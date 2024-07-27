@@ -238,7 +238,8 @@ namespace Ogre
         return datablock;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsDatablock::setMacroblock( const HlmsMacroblock &macroblock, bool casterBlock )
+    void HlmsDatablock::setMacroblock( const HlmsMacroblock &macroblock, const bool casterBlock,
+                                       const bool overrideCasterBlock )
     {
         OgreProfileExhaustive( "HlmsDatablock::setMacroblockRef" );
 
@@ -251,7 +252,7 @@ namespace Ogre
             hlmsManager->destroyMacroblock( oldBlock );
         updateMacroblockHash( casterBlock );
 
-        if( !casterBlock )
+        if( !casterBlock && overrideCasterBlock )
         {
             mIgnoreFlushRenderables = true;
             setMacroblock( mMacroblock[0], true );
@@ -268,7 +269,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsDatablock::setMacroblock( const HlmsMacroblock *macroblock, bool casterBlock )
+    void HlmsDatablock::setMacroblock( const HlmsMacroblock *macroblock, const bool casterBlock,
+                                       const bool overrideCasterBlock )
     {
         OgreProfileExhaustive( "HlmsDatablock::setMacroblockPtr" );
 
@@ -281,7 +283,7 @@ namespace Ogre
 
         updateMacroblockHash( casterBlock );
 
-        if( !casterBlock )
+        if( !casterBlock && overrideCasterBlock )
         {
             mIgnoreFlushRenderables = true;
             setMacroblock( mMacroblock[0], true );
@@ -298,7 +300,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsDatablock::setBlendblock( const HlmsBlendblock &blendblock, bool casterBlock )
+    void HlmsDatablock::setBlendblock( const HlmsBlendblock &blendblock, const bool casterBlock,
+                                       const bool overrideCasterBlock )
     {
         OgreProfileExhaustive( "HlmsDatablock::setBlendblockRef" );
 
@@ -311,7 +314,7 @@ namespace Ogre
             hlmsManager->destroyBlendblock( oldBlock );
         updateMacroblockHash( casterBlock );
 
-        if( !casterBlock )
+        if( !casterBlock && overrideCasterBlock )
         {
             mIgnoreFlushRenderables = true;
             if( !mBlendblock[0]->mAlphaToCoverageEnabled )
@@ -335,7 +338,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsDatablock::setBlendblock( const HlmsBlendblock *blendblock, bool casterBlock )
+    void HlmsDatablock::setBlendblock( const HlmsBlendblock *blendblock, const bool casterBlock,
+                                       const bool overrideCasterBlock )
     {
         OgreProfileExhaustive( "HlmsDatablock::setBlendblockPtr" );
 
@@ -347,7 +351,7 @@ namespace Ogre
         mBlendblock[casterBlock] = blendblock;
         updateMacroblockHash( casterBlock );
 
-        if( !casterBlock )
+        if( !casterBlock && overrideCasterBlock )
         {
             mIgnoreFlushRenderables = true;
             if( !mBlendblock[0]->mAlphaToCoverageEnabled )

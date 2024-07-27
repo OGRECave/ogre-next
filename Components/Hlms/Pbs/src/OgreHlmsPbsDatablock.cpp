@@ -839,7 +839,7 @@ namespace Ogre
             }
 
             if( newBlendblock != *mBlendblock[0] )
-                setBlendblock( newBlendblock );
+                setBlendblock( newBlendblock, false, false );
 
             if( mTransparencyMode == Refractive && mMacroblock[0]->mDepthWrite )
             {
