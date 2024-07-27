@@ -427,10 +427,12 @@ namespace Ogre
             @see HlmsManager::getMacroblock
         @param casterBlock
             True to directly set the macroblock to be used during the shadow mapping's caster pass.
-            Note that when false, it will automatically reset the caster's block according to
-            HlmsManager::setShadowMappingUseBackFaces setting.
+            When false, the value of overrideCasterBlock becomes relevant.
+        @param overrideCasterBlock
+            If true and casterBlock = false, the caster block will also be set to the input value.
         */
-        void setMacroblock( const HlmsMacroblock &macroblock, bool casterBlock = false );
+        void setMacroblock( const HlmsMacroblock &macroblock, bool casterBlock = false,
+                            bool overrideCasterBlock = true );
 
         /** Sets the macroblock from the given pointer that was already
             retrieved from the HlmsManager. Unlike the other overload,
@@ -440,10 +442,12 @@ namespace Ogre
             A valid block. The reference count is increased inside this function.
         @param casterBlock
             True to directly set the macroblock to be used during the shadow mapping's caster pass.
-            Note that when false, it will automatically reset the caster's block according to
-            HlmsManager::setShadowMappingUseBackFaces setting.
+            When false, the value of overrideCasterBlock becomes relevant.
+        @param overrideCasterBlock
+            If true and casterBlock = false, the caster block will also be set to the input value.
         */
-        void setMacroblock( const HlmsMacroblock *macroblock, bool casterBlock = false );
+        void setMacroblock( const HlmsMacroblock *macroblock, bool casterBlock = false,
+                            bool overrideCasterBlock = true );
 
         /** Sets a new blendblock that matches the same parameter as the input.
             Decreases the reference count of the previous mBlendblock.
@@ -453,9 +457,12 @@ namespace Ogre
             @see HlmsManager::getBlendblock
         @param casterBlock
             True to directly set the blendblock to be used during the shadow mapping's caster pass.
-            Note that when false, it will reset the caster block to the same as the regular one.
+            When false, the value of overrideCasterBlock becomes relevant.
+        @param overrideCasterBlock
+            If true and casterBlock = false, the caster block will also be set to the input value.
         */
-        void setBlendblock( const HlmsBlendblock &blendblock, bool casterBlock = false );
+        void setBlendblock( const HlmsBlendblock &blendblock, bool casterBlock = false,
+                            bool overrideCasterBlock = true );
 
         /** Sets the blendblock from the given pointer that was already
             retrieved from the HlmsManager. Unlike the other overload,
@@ -465,9 +472,12 @@ namespace Ogre
             A valid block. The reference count is increased inside this function.
         @param casterBlock
             True to directly set the blendblock to be used during the shadow mapping's caster pass.
-            Note that when false, it will reset the caster block to the same as the regular one.
+            When false, the value of overrideCasterBlock becomes relevant.
+        @param overrideCasterBlock
+            If true and casterBlock = false, the caster block will also be set to the input value.
         */
-        void setBlendblock( const HlmsBlendblock *blendblock, bool casterBlock = false );
+        void setBlendblock( const HlmsBlendblock *blendblock, bool casterBlock = false,
+                            bool overrideCasterBlock = true );
 
         const HlmsMacroblock *getMacroblock( bool casterBlock = false ) const
         {
@@ -532,11 +542,11 @@ namespace Ogre
         virtual void setAlphaTestThreshold( float threshold );
         float        getAlphaTestThreshold() const { return mAlphaTestThreshold; }
 
-        /// @see Hlms::getNameStr. This operations is NOT fast. Might return null
+        /// @see Hlms::getNameStr. This operation is NOT fast. Might return null
         /// (if the datablock was removed from the Hlms but somehow is still alive)
         const String *getNameStr() const;
 
-        /// @see Hlms::getFilenameAndResourceGroup. This operations is NOT fast. Might return
+        /// @see Hlms::getFilenameAndResourceGroup. This operation is NOT fast. Might return
         /// null (if the datablock was removed from the Hlms but somehow is still alive)
         /// Usage:
         ///     String const *filename;
