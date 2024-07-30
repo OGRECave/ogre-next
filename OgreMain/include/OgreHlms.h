@@ -90,11 +90,11 @@ namespace Ogre
 
         enum PrecisionMode
         {
-            /// midf datatype maps to float (i.e. 32-bit)
+            /// midf datatype maps to float (i.e., 32-bit)
             /// This setting is always supported
             PrecisionFull32,
 
-            /// midf datatype maps to float16_t (i.e. forced 16-bit)
+            /// midf datatype maps to float16_t (i.e., forced 16-bit)
             ///
             /// It forces the driver to produce 16-bit code, even if unoptimal
             /// Great for testing quality downgrades caused by 16-bit support
@@ -596,7 +596,7 @@ namespace Ogre
         /// Call as early as possible.
         void setPrecisionMode( PrecisionMode precisionMode );
 
-        /// Returns requested precision mode (i.e. value passed to setPrecisionMode)
+        /// Returns requested precision mode (i.e., value passed to setPrecisionMode)
         /// See getSupportedPrecisionMode
         PrecisionMode getPrecisionMode() const;
 
@@ -625,6 +625,7 @@ namespace Ogre
 
             @see    setAreaLightForwardSettings
         @param maxLights
+            @parblock
             Maximum number of non-caster directional lights. 0 to allow unlimited number of lights,
             at the cost of shader recompilations when directional lights are added or removed.
 
@@ -636,6 +637,7 @@ namespace Ogre
 
             Beware of setting this value too high (e.g. 65535) as the amount of memory space is limited
             (we cannot exceed 64kb, including unrelated data to lighting, but required to the pass)
+            @endparblock
          */
         void   setMaxNonCasterDirectionalLights( uint16 maxLights );
         uint16 getMaxNonCasterDirectionalLights() const { return mNumLightsLimit; }
@@ -684,6 +686,7 @@ namespace Ogre
 
         /** Area lights use regular Forward.
         @param areaLightsApproxLimit
+            @parblock
             Maximum number of area approx lights that will be considered by the shader.
             Default value is 1.
             Use 0 to disable area lights.
@@ -694,6 +697,7 @@ namespace Ogre
 
             Beware of setting this value too high (e.g. 65535) as the amount of memory space is limited
             (we cannot exceed 64kb, including unrelated data to lighting, but required to the pass)
+            @endparblock
         @param areaLightsLtcLimit
             Same as areaLightsApproxLimit, but for LTC lights
         */
@@ -770,9 +774,9 @@ namespace Ogre
             useful for UI editors which want to enumerate all existing datablocks and
             display its name to the user.
         @param macroblockRef
-            @see HlmsManager::getMacroblock
+            see HlmsManager::getMacroblock
         @param blendblockRef
-            @see HlmsManager::getBlendblock
+            see HlmsManager::getBlendblock
         @param paramVec
             Key - String Value list of paramters. MUST BE SORTED.
         @param visibleToManager
@@ -812,8 +816,10 @@ namespace Ogre
         /// contain an empty string.
         /// The reason this String doesn't live in HlmsDatablock is to prevent
         /// cache trashing (datablocks are hot iterated every frame, and the
-        /// filename & resource groups are rarely ever used)
+        /// filename & resource groups are rarely ever used).
+        /// @par
         /// Usage:
+        /// @code
         ///     String const *filename;
         ///     String const *resourceGroup;
         ///     datablock->getFilenameAndResourceGroup( &filename, &resourceGroup );
@@ -821,6 +827,7 @@ namespace Ogre
         ///     {
         ///         //Valid filename & resource group.
         ///     }
+        /// @endcode
         void getFilenameAndResourceGroup( IdString name, String const **outFilename,
                                           String const **outResourceGroup ) const;
 
@@ -856,11 +863,9 @@ namespace Ogre
 
     public:
         /** Called by the renderable when either it changes the material,
-            or its properties change (e.g. the mesh' uvs are stripped)
+            or its properties change (e.g., the mesh's uvs are stripped)
         @param renderable
             The renderable the material will be used on.
-        @param movableObject
-            The MovableObject the material will be used on (usually the parent of renderable)
         @param outHash
             A hash. This hash references property parameters that are already cached.
         */
@@ -1052,8 +1057,8 @@ namespace Ogre
         /** See HlmsDatablock::setCustomPieceCodeFromMemory & HlmsDatablock::setCustomPieceFile.
         @param filename
             Name of the file.
-        @param shaderCode
-            The contents of the file.
+        @param resourceGroup
+            The name of the resource group in which to look for the file.
         */
         void _addDatablockCustomPieceFile( const String &filename, const String &resourceGroup );
 
@@ -1072,7 +1077,7 @@ namespace Ogre
             See _addDatablockCustomPieceFile() overload.
             Unlike the other overload, file not found errors are ignored.
         @param resourceGroup
-            See _addDatablockCustomPieceFile() overload.
+            The name of the resource group in which to look for the file.
         @param templateHash
             The expected hash of the file. File won't be added if the hash does not match.
         @return
@@ -1082,6 +1087,12 @@ namespace Ogre
                                                                   const String &resourceGroup,
                                                                   const uint64  sourceCodeHash[2] );
 
+        /**
+                @param filename
+                    Name of the file.
+                @param sourceCode
+                    The contents of the file.
+         */
         void _addDatablockCustomPieceFileFromMemory( const String &filename, const String &sourceCode );
 
         bool isDatablockCustomPieceFileCacheable( int32 filenameHashId ) const;

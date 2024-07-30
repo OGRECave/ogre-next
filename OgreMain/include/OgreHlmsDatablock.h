@@ -188,11 +188,15 @@ namespace Ogre
         /// stencil buffer).
         uint8 mBlendChannelMask;
 
-        /// This value calculated by HlmsManager::getBlendblock
-        /// mIsTransparent = 0  -> Not transparent
-        /// mIsTransparent |= 1 -> Automatically determined as transparent
-        /// mIsTransparent |= 2 -> Forced to be considered as transparent by RenderQueue for render order
-        /// mIsTransparent = 3  -> Forced & also automatically determined as transparent
+        /// @parblock
+        /// This value calculated by HlmsManager::getBlendblock.
+        ///
+        /// - mIsTransparent = 0  -> Not transparent
+        /// - mIsTransparent |= 1 -> Automatically determined as transparent
+        /// - mIsTransparent |= 2 -> Forced to be considered as transparent by RenderQueue for render
+        /// order
+        /// - mIsTransparent = 3  -> Forced & also automatically determined as transparent
+        /// @endparblock
         uint8 mIsTransparent;
         /// Used to determine if separate alpha blending should be used for color and alpha channels
         bool mSeparateBlend;
@@ -221,7 +225,7 @@ namespace Ogre
         void calculateSeparateBlendMode();
 
         /** Sometimes you want to force the RenderQueue to render back to front even if
-            the object isn't alpha blended (e.g. you're rendering refractive materials)
+            the object isn't alpha blended (e.g., you're rendering refractive materials)
         @param bForceTransparent
             True to always render back to front, like any transparent.
             False for default behavior (opaque objects are rendered front to back, alpha
@@ -424,7 +428,7 @@ namespace Ogre
             Runs an O(N) search to get the right block.
             Calling this function triggers a HlmsDatablock::flushRenderables
         @param macroblock
-            @see HlmsManager::getMacroblock
+            see HlmsManager::getMacroblock
         @param casterBlock
             True to directly set the macroblock to be used during the shadow mapping's caster pass.
             When false, the value of overrideCasterBlock becomes relevant.
@@ -454,7 +458,7 @@ namespace Ogre
             Runs an O(N) search to get the right block.
             Calling this function triggers a HlmsDatablock::flushRenderables
         @param blendblock
-            @see HlmsManager::getBlendblock
+            see HlmsManager::getBlendblock
         @param casterBlock
             True to directly set the blendblock to be used during the shadow mapping's caster pass.
             When false, the value of overrideCasterBlock becomes relevant.
@@ -494,8 +498,10 @@ namespace Ogre
 
             Calling this function triggers a HlmsDatablock::flushRenderables
         @remarks
+            @parblock
             For best results:
 
+            @code
                 // Disable alpha test (default)
                 datablock->setAlphaTest( CMPF_ALWAYS_PASS );
                 // Do NOT enable alpha blending in the HlmsBlendblock (default)
@@ -504,6 +510,8 @@ namespace Ogre
                 datablock->setBlendblock( &blendblock );
 
                 datablock->setAlphaHashing( true );
+            @endcode
+            @endparblock
         @param bAlphaHashing
             True to enable alpha hashing.
         */
@@ -548,7 +556,9 @@ namespace Ogre
 
         /// @see Hlms::getFilenameAndResourceGroup. This operation is NOT fast. Might return
         /// null (if the datablock was removed from the Hlms but somehow is still alive)
+        /// @par
         /// Usage:
+        /// @code
         ///     String const *filename;
         ///     String const *resourceGroup;
         ///     datablock->getFilenameAndResourceGroup( &filename, &resourceGroup );
@@ -556,6 +566,7 @@ namespace Ogre
         ///     {
         ///         //Valid filename & resource group.
         ///     }
+        /// @endcode
         void getFilenameAndResourceGroup( String const **outFilename,
                                           String const **outResourceGroup ) const;
 
