@@ -463,12 +463,9 @@ Public Member Functions</h2></td></tr>
 <p>The main difference is that there is no hlmsCacheEntry (because it hasn't been generated yet) and the properties are before they are transformed by the templates</p>
 <p>propertiesMergedPreGenerationStep </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">hlms</td><td>Pointer to caller. WARNING: Note that any modified property WON'T BE CACHED. If you set a property based on external information, it will break caches.</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>You can only set new properties that are derived from existing properties e.g. c = a + b, which means caching a and b will always result in c being the same value </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
+    <tr><td class="paramname">hlms</td><td><p class="starttd">Pointer to caller. WARNING: Note that any modified property WON'T BE CACHED. If you set a property based on external information, it will break caches.</p>
+<p class="endtd">You can only set new properties that are derived from existing properties e.g. c = a + b, which means caching a and b will always result in c being the same value </p>
+</td></tr>
     <tr><td class="paramname">passCache</td><td>Properties used by this pass </td></tr>
     <tr><td class="paramname">renderableCacheProperties</td><td>Properties assigned to the renderable </td></tr>
     <tr><td class="paramname">renderableCachePieces</td><td>Pieces that can be inserted, belonging to the renderable. The PiecesMap pointer cannot be null </td></tr>

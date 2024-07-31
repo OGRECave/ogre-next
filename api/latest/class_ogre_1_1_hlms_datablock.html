@@ -732,7 +732,16 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms.html#ad004bde573064ae48aba462dfcaa536e" title="Returns the filaname &amp; resource group a datablock was created from, and is associated with its hashed...">Hlms::getFilenameAndResourceGroup</a>. This operation is NOT fast. Might return null (if the datablock was removed from the <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> but somehow is still alive) Usage: <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> const *filename; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> const *resourceGroup; datablock-&gt;getFilenameAndResourceGroup( &amp;filename, &amp;resourceGroup ); if( filename &amp;&amp; resourceGroup &amp;&amp; !filename-&gt;empty() &amp;&amp; !resourceGroup-&gt;empty() ) { //Valid filename &amp; resource group. } </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms.html#ad004bde573064ae48aba462dfcaa536e" title="Returns the filaname &amp; resource group a datablock was created from, and is associated with its hashed...">Hlms::getFilenameAndResourceGroup</a>. This operation is NOT fast. Might return null (if the datablock was removed from the <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> but somehow is still alive) </dd></dl>
+<dl class="section user"><dt></dt><dd>Usage: <div class="fragment"><div class="line"><a class="code" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> <span class="keyword">const</span> *filename;</div>
+<div class="line"><a class="code" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> <span class="keyword">const</span> *resourceGroup;</div>
+<div class="line">datablock-&gt;getFilenameAndResourceGroup( &amp;filename, &amp;resourceGroup );</div>
+<div class="line"><span class="keywordflow">if</span>( filename &amp;&amp; resourceGroup &amp;&amp; !filename-&gt;empty() &amp;&amp; !resourceGroup-&gt;empty() )</div>
+<div class="line">{</div>
+<div class="line">    <span class="comment">//Valid filename &amp; resource group.</span></div>
+<div class="line">}</div>
+<div class="ttc" id="anamespace_ogre_html_af73bbdc8bed8a3e6fcd56bb8fa188c45"><div class="ttname"><a href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">Ogre::String</a></div><div class="ttdeci">_StringBase String</div><div class="ttdef"><b>Definition:</b> OgreCommon.h:40</div></div>
+</div><!-- fragment --> </dd></dl>
 
 </div>
 </div>
@@ -970,9 +979,19 @@ Public Attributes</h2></td></tr>
 
 <p>Uses a trick to <em>mimic</em> true Order Independent Transparency alpha blending. </p>
 <p>The advantage of this method is that it is compatible with depth buffer writes and is order independent.</p>
-<p>Calling this function triggers a HlmsDatablock::flushRenderables </p><dl class="section remark"><dt>Remarks</dt><dd>For best results:</dd></dl>
-<p>Disable alpha test (default) datablock-&gt;setAlphaTest( CMPF_ALWAYS_PASS ); Do NOT enable alpha blending in the <a class="el" href="struct_ogre_1_1_hlms_blendblock.html" title="A blend block contains settings that rarely change, and thus are common to many materials.">HlmsBlendblock</a> (default) <a class="el" href="struct_ogre_1_1_hlms_blendblock.html" title="A blend block contains settings that rarely change, and thus are common to many materials.">HlmsBlendblock</a> blendblock; blendblock.setBlendType( SBT_REPLACE ); datablock-&gt;setBlendblock( &amp;blendblock );</p>
-<p>datablock-&gt;setAlphaHashing( true ); </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Calling this function triggers a HlmsDatablock::flushRenderables </p><dl class="section remark"><dt>Remarks</dt><dd><p class="startdd">For best results:</p>
+<div class="fragment"><div class="line"><span class="comment">// Disable alpha test (default)</span></div>
+<div class="line">datablock-&gt;setAlphaTest( <a class="code" href="group___general.html#gga0212b4eb264f207d84c1df9425208c7aae10ea1648cd8c9bd90bdaccaa11cbc4e">CMPF_ALWAYS_PASS</a> );</div>
+<div class="line"><span class="comment">// Do NOT enable alpha blending in the HlmsBlendblock (default)</span></div>
+<div class="line">HlmsBlendblock blendblock;</div>
+<div class="line">blendblock.setBlendType( <a class="code" href="group___materials.html#ggac46c60cf6e5c199220e3b8f26570cb9aab6672abe57fa6051e9ab57d51975d244">SBT_REPLACE</a> );</div>
+<div class="line">datablock-&gt;setBlendblock( &amp;blendblock );</div>
+<div class="line"> </div>
+<div class="line">datablock-&gt;setAlphaHashing( <span class="keyword">true</span> );</div>
+<div class="ttc" id="agroup___general_html_gga0212b4eb264f207d84c1df9425208c7aae10ea1648cd8c9bd90bdaccaa11cbc4e"><div class="ttname"><a href="group___general.html#gga0212b4eb264f207d84c1df9425208c7aae10ea1648cd8c9bd90bdaccaa11cbc4e">Ogre::CMPF_ALWAYS_PASS</a></div><div class="ttdeci">@ CMPF_ALWAYS_PASS</div><div class="ttdef"><b>Definition:</b> OgreCommon.h:141</div></div>
+<div class="ttc" id="agroup___materials_html_ggac46c60cf6e5c199220e3b8f26570cb9aab6672abe57fa6051e9ab57d51975d244"><div class="ttname"><a href="group___materials.html#ggac46c60cf6e5c199220e3b8f26570cb9aab6672abe57fa6051e9ab57d51975d244">Ogre::SBT_REPLACE</a></div><div class="ttdeci">@ SBT_REPLACE</div><div class="ttdoc">The default blend mode where source replaces destination.</div><div class="ttdef"><b>Definition:</b> OgreBlendMode.h:221</div></div>
+</div><!-- fragment --> </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">bAlphaHashing</td><td>True to enable alpha hashing. </td></tr>
   </table>
@@ -1105,13 +1124,7 @@ Public Attributes</h2></td></tr>
 <p>Sets a new blendblock that matches the same parameter as the input. </p>
 <p>Decreases the reference count of the previous mBlendblock. Runs an O(N) search to get the right block. Calling this function triggers a HlmsDatablock::flushRenderables </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">blendblock</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_manager.html#af6654ffb48999902843bdd3d7f47ac0b" title="See HlmsManager::getMacroblock.">HlmsManager::getBlendblock</a> </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
+    <tr><td class="paramname">blendblock</td><td>see <a class="el" href="class_ogre_1_1_hlms_manager.html#af6654ffb48999902843bdd3d7f47ac0b" title="See HlmsManager::getMacroblock.">HlmsManager::getBlendblock</a> </td></tr>
     <tr><td class="paramname">casterBlock</td><td>True to directly set the blendblock to be used during the shadow mapping's caster pass. When false, the value of overrideCasterBlock becomes relevant. </td></tr>
     <tr><td class="paramname">overrideCasterBlock</td><td>If true and casterBlock = false, the caster block will also be set to the input value. </td></tr>
   </table>
@@ -1290,13 +1303,7 @@ Public Attributes</h2></td></tr>
 <p>Sets a new macroblock that matches the same parameter as the input. </p>
 <p>Decreases the reference count of the previously set one. Runs an O(N) search to get the right block. Calling this function triggers a HlmsDatablock::flushRenderables </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">macroblock</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_manager.html#a171e788a01e9a6c96f627a9b47482a82" title="Creates a macroblock that matches the same parameter as the input.">HlmsManager::getMacroblock</a> </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
+    <tr><td class="paramname">macroblock</td><td>see <a class="el" href="class_ogre_1_1_hlms_manager.html#a171e788a01e9a6c96f627a9b47482a82" title="Creates a macroblock that matches the same parameter as the input.">HlmsManager::getMacroblock</a> </td></tr>
     <tr><td class="paramname">casterBlock</td><td>True to directly set the macroblock to be used during the shadow mapping's caster pass. When false, the value of overrideCasterBlock becomes relevant. </td></tr>
     <tr><td class="paramname">overrideCasterBlock</td><td>If true and casterBlock = false, the caster block will also be set to the input value. </td></tr>
   </table>

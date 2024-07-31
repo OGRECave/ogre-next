@@ -189,7 +189,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad2b1ed80ecf35fa559da066bbdef5d20"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#ad2b1ed80ecf35fa559da066bbdef5d20">analyzeBarriers</a> (<a class="el" href="class_ogre_1_1_barrier_solver.html">BarrierSolver</a> &amp;barrierSolver, <a class="el" href="group___resources.html#gab881163687bedff909edce16d11d9127">ResourceTransitionArray</a> &amp;resourceTransitions, <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *renderingCamera, const bool bCasterPass)</td></tr>
 <tr class="separator:ad2b1ed80ecf35fa559da066bbdef5d20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b71158453ed0a2411a92ecf767af130"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a5b71158453ed0a2411a92ecf767af130">calculateHashFor</a> (<a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> *renderable, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> &amp;outHash, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> &amp;outCasterHash)</td></tr>
-<tr class="memdesc:a5b71158453ed0a2411a92ecf767af130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by the renderable when either it changes the material, or its properties change (e.g.  <a href="class_ogre_1_1_hlms.html#a5b71158453ed0a2411a92ecf767af130">More...</a><br /></td></tr>
+<tr class="memdesc:a5b71158453ed0a2411a92ecf767af130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by the renderable when either it changes the material, or its properties change (e.g., the mesh's uvs are stripped)  <a href="class_ogre_1_1_hlms.html#a5b71158453ed0a2411a92ecf767af130">More...</a><br /></td></tr>
 <tr class="separator:a5b71158453ed0a2411a92ecf767af130"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ef77fcae4df5d51475d7e5ff3baafd8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a0ef77fcae4df5d51475d7e5ff3baafd8">compileShaderCode</a> (ShaderCodeCache &amp;codeCache, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> shaderCounter, size_t tid)</td></tr>
 <tr class="memdesc:a0ef77fcae4df5d51475d7e5ff3baafd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compiles input properties and adds it to the shader code cache.  <a href="class_ogre_1_1_hlms.html#a0ef77fcae4df5d51475d7e5ff3baafd8">More...</a><br /></td></tr>
@@ -267,7 +267,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a14556592a9642bdea61b6a2298aaf53b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___resources.html#gac56fd5a93b0000f2487e2ca968784df3">ArchiveVec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a14556592a9642bdea61b6a2298aaf53b">getPiecesLibraryAsArchiveVec</a> () const</td></tr>
 <tr class="separator:a14556592a9642bdea61b6a2298aaf53b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31405ce224d30e5eff4900ba02f6fecd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms.html#aa0365b8787bb8b348fb7b715c056954f">PrecisionMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a31405ce224d30e5eff4900ba02f6fecd">getPrecisionMode</a> () const</td></tr>
-<tr class="memdesc:a31405ce224d30e5eff4900ba02f6fecd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns requested precision mode (i.e.  <a href="class_ogre_1_1_hlms.html#a31405ce224d30e5eff4900ba02f6fecd">More...</a><br /></td></tr>
+<tr class="memdesc:a31405ce224d30e5eff4900ba02f6fecd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns requested precision mode (i.e., value passed to setPrecisionMode) See getSupportedPrecisionMode.  <a href="class_ogre_1_1_hlms.html#a31405ce224d30e5eff4900ba02f6fecd">More...</a><br /></td></tr>
 <tr class="separator:a31405ce224d30e5eff4900ba02f6fecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5616a11e653b07871f31aedf8b797d67"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_render_system.html">RenderSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a5616a11e653b07871f31aedf8b797d67">getRenderSystem</a> () const</td></tr>
 <tr class="separator:a5616a11e653b07871f31aedf8b797d67"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -458,11 +458,10 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aa0365b8787bb8b348fb7b715c056954fa796424c11f74d0fae5691990af64f4fb"></a>PrecisionFull32&#160;</td><td class="fielddoc"><p>midf datatype maps to float (i.e. </p>
-<p>32-bit) This setting is always supported </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aa0365b8787bb8b348fb7b715c056954fa796424c11f74d0fae5691990af64f4fb"></a>PrecisionFull32&#160;</td><td class="fielddoc"><p>midf datatype maps to float (i.e., 32-bit) This setting is always supported </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aa0365b8787bb8b348fb7b715c056954faf7e50da9f4dde4015fcb939953caafa5"></a>PrecisionMidf16&#160;</td><td class="fielddoc"><p>midf datatype maps to float16_t (i.e. </p>
-<p>forced 16-bit) </p><pre class="fragment">        It forces the driver to produce 16-bit code, even if unoptimal
+<tr><td class="fieldname"><a id="aa0365b8787bb8b348fb7b715c056954faf7e50da9f4dde4015fcb939953caafa5"></a>PrecisionMidf16&#160;</td><td class="fielddoc"><p>midf datatype maps to float16_t (i.e., forced 16-bit) </p>
+<pre class="fragment">        It forces the driver to produce 16-bit code, even if unoptimal
         Great for testing quality downgrades caused by 16-bit support
 
         - This depends on RSC_SHADER_FLOAT16.
@@ -583,7 +582,7 @@ Static Public Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filename</td><td>Name of the file. </td></tr>
-    <tr><td class="paramname">shaderCode</td><td>The contents of the file. </td></tr>
+    <tr><td class="paramname">resourceGroup</td><td>The name of the resource group in which to look for the file. </td></tr>
   </table>
   </dd>
 </dl>
@@ -624,7 +623,7 @@ Static Public Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filename</td><td>See <a class="el" href="class_ogre_1_1_hlms.html#af94ec29fa0a6809a46dbf78d921f79c9" title="See HlmsDatablock::setCustomPieceCodeFromMemory &amp; HlmsDatablock::setCustomPieceFile.">_addDatablockCustomPieceFile()</a> overload. Unlike the other overload, file not found errors are ignored. </td></tr>
-    <tr><td class="paramname">resourceGroup</td><td>See <a class="el" href="class_ogre_1_1_hlms.html#af94ec29fa0a6809a46dbf78d921f79c9" title="See HlmsDatablock::setCustomPieceCodeFromMemory &amp; HlmsDatablock::setCustomPieceFile.">_addDatablockCustomPieceFile()</a> overload. </td></tr>
+    <tr><td class="paramname">resourceGroup</td><td>The name of the resource group in which to look for the file. </td></tr>
     <tr><td class="paramname">templateHash</td><td>The expected hash of the file. File won't be added if the hash does not match. </td></tr>
   </table>
   </dd>
@@ -658,6 +657,13 @@ Static Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>Name of the file. </td></tr>
+    <tr><td class="paramname">sourceCode</td><td>The contents of the file. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1244,11 +1250,10 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called by the renderable when either it changes the material, or its properties change (e.g. </p>
-<p>the mesh' uvs are stripped) </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Called by the renderable when either it changes the material, or its properties change (e.g., the mesh's uvs are stripped) </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">renderable</td><td>The renderable the material will be used on. </td></tr>
-    <tr><td class="paramname">movableObject</td><td>The <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> the material will be used on (usually the parent of renderable) </td></tr>
     <tr><td class="paramname">outHash</td><td>A hash. This hash references property parameters that are already cached. </td></tr>
   </table>
   </dd>
@@ -1433,20 +1438,8 @@ Static Public Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">name</td><td>Name of the Datablock, must be unique within all <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> types, not just this one. 99% you want this to be IdString( refName ); however this is not enforced. </td></tr>
     <tr><td class="paramname">refName</td><td>Name of the Datablock. The engine doesn't use this value at all. It is only useful for UI editors which want to enumerate all existing datablocks and display its name to the user. </td></tr>
-    <tr><td class="paramname">macroblockRef</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_manager.html#a171e788a01e9a6c96f627a9b47482a82" title="Creates a macroblock that matches the same parameter as the input.">HlmsManager::getMacroblock</a> </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">blendblockRef</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_manager.html#af6654ffb48999902843bdd3d7f47ac0b" title="See HlmsManager::getMacroblock.">HlmsManager::getBlendblock</a> </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
+    <tr><td class="paramname">macroblockRef</td><td>see <a class="el" href="class_ogre_1_1_hlms_manager.html#a171e788a01e9a6c96f627a9b47482a82" title="Creates a macroblock that matches the same parameter as the input.">HlmsManager::getMacroblock</a> </td></tr>
+    <tr><td class="paramname">blendblockRef</td><td>see <a class="el" href="class_ogre_1_1_hlms_manager.html#af6654ffb48999902843bdd3d7f47ac0b" title="See HlmsManager::getMacroblock.">HlmsManager::getBlendblock</a> </td></tr>
     <tr><td class="paramname">paramVec</td><td>Key - String Value list of paramters. MUST BE SORTED. </td></tr>
     <tr><td class="paramname">visibleToManager</td><td>When false, <a class="el" href="class_ogre_1_1_hlms_manager.html#ae017c067728c1de583db541cf5fdbb2f" title="Retrieves an exisiting datablock (i.e.">HlmsManager::getDatablock</a> won't find this datablock. True by default </td></tr>
     <tr><td class="paramname">filename</td><td>Filename in which it was defined, so that this information can be retrieved later by the user if needed. This is only for informational purposes. </td></tr>
@@ -1988,7 +1981,15 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns the filaname &amp; resource group a datablock was created from, and is associated with its hashed name (this was passed as in <a class="el" href="class_ogre_1_1_hlms.html#a335481b26695a97d83885780235ee0e5" title="Creates a unique datablock that can be shared by multiple renderables.">createDatablock()</a>). </p>
-<p>Returns null ptr if not found. Note that it may also be a valid pointer but contain an empty string. The reason this String doesn't live in <a class="el" href="class_ogre_1_1_hlms_datablock.html" title="An hlms datablock contains individual information about a specific material.">HlmsDatablock</a> is to prevent cache trashing (datablocks are hot iterated every frame, and the filename &amp; resource groups are rarely ever used) Usage: String const *filename; String const *resourceGroup; datablock-&gt;getFilenameAndResourceGroup( &amp;filename, &amp;resourceGroup ); if( filename &amp;&amp; resourceGroup &amp;&amp; !filename-&gt;empty() &amp;&amp; !resourceGroup-&gt;empty() ) { //Valid filename &amp; resource group. } </p>
+<p>Returns null ptr if not found. Note that it may also be a valid pointer but contain an empty string. The reason this String doesn't live in <a class="el" href="class_ogre_1_1_hlms_datablock.html" title="An hlms datablock contains individual information about a specific material.">HlmsDatablock</a> is to prevent cache trashing (datablocks are hot iterated every frame, and the filename &amp; resource groups are rarely ever used). </p><dl class="section user"><dt></dt><dd>Usage: <div class="fragment"><div class="line"><a class="code" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> <span class="keyword">const</span> *filename;</div>
+<div class="line"><a class="code" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> <span class="keyword">const</span> *resourceGroup;</div>
+<div class="line">datablock-&gt;getFilenameAndResourceGroup( &amp;filename, &amp;resourceGroup );</div>
+<div class="line"><span class="keywordflow">if</span>( filename &amp;&amp; resourceGroup &amp;&amp; !filename-&gt;empty() &amp;&amp; !resourceGroup-&gt;empty() )</div>
+<div class="line">{</div>
+<div class="line">    <span class="comment">//Valid filename &amp; resource group.</span></div>
+<div class="line">}</div>
+<div class="ttc" id="anamespace_ogre_html_af73bbdc8bed8a3e6fcd56bb8fa188c45"><div class="ttname"><a href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">Ogre::String</a></div><div class="ttdeci">_StringBase String</div><div class="ttdef"><b>Definition:</b> OgreCommon.h:40</div></div>
+</div><!-- fragment --> </dd></dl>
 
 </div>
 </div>
@@ -2318,8 +2319,7 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns requested precision mode (i.e. </p>
-<p>value passed to setPrecisionMode) See getSupportedPrecisionMode </p>
+<p>Returns requested precision mode (i.e., value passed to setPrecisionMode) See getSupportedPrecisionMode. </p>
 
 </div>
 </div>
@@ -2960,13 +2960,10 @@ Static Public Attributes</h2></td></tr>
 <p>Area lights use regular Forward. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">areaLightsApproxLimit</td><td>Maximum number of area approx lights that will be considered by the shader. Default value is 1. Use 0 to disable area lights.</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Note: There is little to no performance impact for setting this value higher than you need. e.g. If you set areaLightsApproxLimit = 4, but you only have 2 area lights on scene, you'll pay the price of 2 area lights (but the RAM price of 4).</p>
-<p>Beware of setting this value too high (e.g. 65535) as the amount of memory space is limited (we cannot exceed 64kb, including unrelated data to lighting, but required to the pass) </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
+    <tr><td class="paramname">areaLightsApproxLimit</td><td><p class="starttd">Maximum number of area approx lights that will be considered by the shader. Default value is 1. Use 0 to disable area lights.</p>
+<p class="intertd">Note: There is little to no performance impact for setting this value higher than you need. e.g. If you set areaLightsApproxLimit = 4, but you only have 2 area lights on scene, you'll pay the price of 2 area lights (but the RAM price of 4).</p>
+<p class="endtd">Beware of setting this value too high (e.g. 65535) as the amount of memory space is limited (we cannot exceed 64kb, including unrelated data to lighting, but required to the pass) </p>
+</td></tr>
     <tr><td class="paramname">areaLightsLtcLimit</td><td>Same as areaLightsApproxLimit, but for LTC lights </td></tr>
   </table>
   </dd>
@@ -3069,13 +3066,14 @@ Static Public Attributes</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms.html#aebca7da0789967e8fde70d95fa74ac0c" title="Area lights use regular Forward.">setAreaLightForwardSettings</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">maxLights</td><td>Maximum number of non-caster directional lights. 0 to allow unlimited number of lights, at the cost of shader recompilations when directional lights are added or removed.</td></tr>
+    <tr><td class="paramname">maxLights</td><td><p class="starttd">Maximum number of non-caster directional lights. 0 to allow unlimited number of lights, at the cost of shader recompilations when directional lights are added or removed.</p>
+<p class="intertd">Default value is 0.</p>
+<p class="intertd">Note: There is little to no performance impact for setting this value higher than you need. e.g. If you set maxLights = 4, but you only have 2 non-caster dir. lights on scene, you'll pay the price of 2 lights (but the RAM price of 4).</p>
+<p class="endtd">Beware of setting this value too high (e.g. 65535) as the amount of memory space is limited (we cannot exceed 64kb, including unrelated data to lighting, but required to the pass) </p>
+</td></tr>
   </table>
   </dd>
 </dl>
-<p>Default value is 0.</p>
-<p>Note: There is little to no performance impact for setting this value higher than you need. e.g. If you set maxLights = 4, but you only have 2 non-caster dir. lights on scene, you'll pay the price of 2 lights (but the RAM price of 4).</p>
-<p>Beware of setting this value too high (e.g. 65535) as the amount of memory space is limited (we cannot exceed 64kb, including unrelated data to lighting, but required to the pass) </p>
 
 </div>
 </div>

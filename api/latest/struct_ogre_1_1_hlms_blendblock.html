@@ -152,7 +152,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aed32e87dcd3a05f71d8e2171b7dbd6b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shortcut to set the blend factors to common blending operations.  <a href="struct_ogre_1_1_hlms_blendblock.html#aed32e87dcd3a05f71d8e2171b7dbd6b2">More...</a><br /></td></tr>
 <tr class="separator:aed32e87dcd3a05f71d8e2171b7dbd6b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad34f6d46eece2606c09a6eea73de4591"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#ad34f6d46eece2606c09a6eea73de4591">setForceTransparentRenderOrder</a> (bool bForceTransparent)</td></tr>
-<tr class="memdesc:ad34f6d46eece2606c09a6eea73de4591"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sometimes you want to force the <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> to render back to front even if the object isn't alpha blended (e.g.  <a href="struct_ogre_1_1_hlms_blendblock.html#ad34f6d46eece2606c09a6eea73de4591">More...</a><br /></td></tr>
+<tr class="memdesc:ad34f6d46eece2606c09a6eea73de4591"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sometimes you want to force the <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> to render back to front even if the object isn't alpha blended (e.g., you're rendering refractive materials)  <a href="struct_ogre_1_1_hlms_blendblock.html#ad34f6d46eece2606c09a6eea73de4591">More...</a><br /></td></tr>
 <tr class="separator:ad34f6d46eece2606c09a6eea73de4591"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_struct_ogre_1_1_basic_block"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_struct_ogre_1_1_basic_block')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="struct_ogre_1_1_basic_block.html">Ogre::BasicBlock</a></td></tr>
 <tr class="memitem:a8aefdd97cf9d334c75a8ca33664a34de inherit pub_methods_struct_ogre_1_1_basic_block"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_basic_block.html#a8aefdd97cf9d334c75a8ca33664a34de">BasicBlock</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> blockType)</td></tr>
@@ -174,7 +174,6 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a63d4a51e01cbbe17e7d69e190b07c6ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___materials.html#ga41c76d419d6c9c205a6c1d3b42872213">SceneBlendFactor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a63d4a51e01cbbe17e7d69e190b07c6ee">mDestBlendFactorAlpha</a></td></tr>
 <tr class="separator:a63d4a51e01cbbe17e7d69e190b07c6ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3df17a567525e19195f4d4daf1d11690"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a3df17a567525e19195f4d4daf1d11690">mIsTransparent</a></td></tr>
-<tr class="memdesc:a3df17a567525e19195f4d4daf1d11690"><td class="mdescLeft">&#160;</td><td class="mdescRight">This value calculated by <a class="el" href="class_ogre_1_1_hlms_manager.html#af6654ffb48999902843bdd3d7f47ac0b" title="See HlmsManager::getMacroblock.">HlmsManager::getBlendblock</a> mIsTransparent = 0 -&gt; Not transparent mIsTransparent |= 1 -&gt; Automatically determined as transparent mIsTransparent |= 2 -&gt; Forced to be considered as transparent by <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> for render order mIsTransparent = 3 -&gt; Forced &amp; also automatically determined as transparent.  <a href="struct_ogre_1_1_hlms_blendblock.html#a3df17a567525e19195f4d4daf1d11690">More...</a><br /></td></tr>
 <tr class="separator:a3df17a567525e19195f4d4daf1d11690"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36bb99bc16fd86300b1152414d10ebb8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a36bb99bc16fd86300b1152414d10ebb8">mSeparateBlend</a></td></tr>
 <tr class="memdesc:a36bb99bc16fd86300b1152414d10ebb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to determine if separate alpha blending should be used for color and alpha channels.  <a href="struct_ogre_1_1_hlms_blendblock.html#a36bb99bc16fd86300b1152414d10ebb8">More...</a><br /></td></tr>
@@ -494,8 +493,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Sometimes you want to force the <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> to render back to front even if the object isn't alpha blended (e.g. </p>
-<p>you're rendering refractive materials) </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Sometimes you want to force the <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> to render back to front even if the object isn't alpha blended (e.g., you're rendering refractive materials) </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">bForceTransparent</td><td>True to always render back to front, like any transparent. False for default behavior (opaque objects are rendered front to back, alpha blended objects are rendered back to front) </td></tr>
   </table>
@@ -615,8 +614,13 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>This value calculated by <a class="el" href="class_ogre_1_1_hlms_manager.html#af6654ffb48999902843bdd3d7f47ac0b" title="See HlmsManager::getMacroblock.">HlmsManager::getBlendblock</a> mIsTransparent = 0 -&gt; Not transparent mIsTransparent |= 1 -&gt; Automatically determined as transparent mIsTransparent |= 2 -&gt; Forced to be considered as transparent by <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> for render order mIsTransparent = 3 -&gt; Forced &amp; also automatically determined as transparent. </p>
+<p>This value calculated by <a class="el" href="class_ogre_1_1_hlms_manager.html#af6654ffb48999902843bdd3d7f47ac0b" title="See HlmsManager::getMacroblock.">HlmsManager::getBlendblock</a>.</p>
+<ul>
+<li>mIsTransparent = 0 -&gt; Not transparent</li>
+<li>mIsTransparent |= 1 -&gt; Automatically determined as transparent</li>
+<li>mIsTransparent |= 2 -&gt; Forced to be considered as transparent by <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> for render order</li>
+<li>mIsTransparent = 3 -&gt; Forced &amp; also automatically determined as transparent </li>
+</ul>
 
 <p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#afa02cd5c594a782367716cd76413c723">operator!=()</a>.</p>
 
