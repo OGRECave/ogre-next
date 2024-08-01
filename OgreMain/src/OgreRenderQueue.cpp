@@ -46,8 +46,11 @@ THE SOFTWARE.
 #include "OgreSceneManager.h"
 #include "OgreSceneManagerEnumerator.h"
 #include "OgreTechnique.h"
+#include "ParticleSystem/OgreParticleSystem2.h"
+#include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreIndirectBufferPacked.h"
+#include "Vao/OgreReadOnlyBufferPacked.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
 
@@ -108,6 +111,8 @@ namespace Ogre
             setRenderQueueMode( static_cast<uint8>( i ), V1_FAST );
         for( size_t i = 225; i < 256u; ++i )
             setRenderQueueMode( static_cast<uint8>( i ), V1_FAST );
+
+        setRenderQueueMode( kParticleSystemDefaultRenderQueueId, PARTICLE_SYSTEM );
     }
     //---------------------------------------------------------------------
     RenderQueue::~RenderQueue()
@@ -340,23 +345,30 @@ namespace Ogre
 
         rs->setCurrentPassIterationCount( 1 );
 
-        size_t numNeededDraws = 0;
+        size_t numNeededDraws = 0u;
+        size_t numNeededV2Draws = 0u;
+        size_t numNeededParticleDraws = 0u;
         for( size_t i = firstRq; i < lastRq; ++i )
         {
             if( mRenderQueues[i].mMode == FAST )
             {
-                QueuedRenderableArrayPerThread::const_iterator itor =
-                    mRenderQueues[i].mQueuedRenderablesPerThread.begin();
-                QueuedRenderableArrayPerThread::const_iterator endt =
-                    mRenderQueues[i].mQueuedRenderablesPerThread.end();
-
-                while( itor != endt )
+                for( const ThreadRenderQueue &threadRenderQueue :
+                     mRenderQueues[i].mQueuedRenderablesPerThread )
                 {
-                    numNeededDraws += itor->q.size();
-                    ++itor;
+                    numNeededV2Draws += threadRenderQueue.q.size();
+                }
+            }
+            else if( mRenderQueues[i].mMode == PARTICLE_SYSTEM )
+            {
+                for( const ThreadRenderQueue &threadRenderQueue :
+                     mRenderQueues[i].mQueuedRenderablesPerThread )
+                {
+                    numNeededParticleDraws += threadRenderQueue.q.size();
                 }
             }
         }
+
+        numNeededDraws = numNeededV2Draws + numNeededParticleDraws;
 
         mCommandBuffer->setCurrentRenderSystem( rs );
 
@@ -463,7 +475,13 @@ namespace Ogre
                 renderGL3V1( rs, casterPass, dualParaboloid, mPassCache, mRenderQueues[i],
                              parallelCompileQueue );
             }
-            else if( numNeededDraws > 0 /*&& mRenderQueues[i].mMode == FAST*/ )
+            else if( numNeededParticleDraws > 0 && mRenderQueues[i].mMode == PARTICLE_SYSTEM )
+            {
+                indirectDraw =
+                    renderParticles( rs, casterPass, mPassCache, mRenderQueues[i], parallelCompileQueue,
+                                     indirectBuffer, indirectDraw, startIndirectDraw );
+            }
+            else if( numNeededV2Draws > 0 /*&& mRenderQueues[i].mMode == FAST*/ )
             {
                 indirectDraw =
                     renderGL3( rs, casterPass, dualParaboloid, mPassCache, mRenderQueues[i],
@@ -626,6 +644,184 @@ namespace Ogre
         mLastVertexData = lastVertexData;
         mLastIndexData = lastIndexData;
         mLastTextureHash = lastTextureHash;
+    }
+    //-----------------------------------------------------------------------
+    uint8 *RenderQueue::renderParticles( RenderSystem *rs, const bool casterPass, HlmsCache passCache[],
+                                         const RenderQueueGroup &renderQueueGroup,
+                                         ParallelHlmsCompileQueue *parallelCompileQueue,
+                                         IndirectBufferPacked *indirectBuffer, uint8 *indirectDraw,
+                                         uint8 *startIndirectDraw )
+    {
+        uint32 lastVaoName = mLastVaoName;
+        HlmsCache const *lastHlmsCache = &c_dummyCache;
+        uint32 lastHlmsCacheHash = 0;
+
+        int baseInstanceAndIndirectBuffers = 0;
+        if( mVaoManager->supportsIndirectBuffers() )
+            baseInstanceAndIndirectBuffers = 2;
+        else if( mVaoManager->supportsBaseInstance() )
+            baseInstanceAndIndirectBuffers = 1;
+
+        const bool isUsingInstancedStereo = mSceneManager->isUsingInstancedStereo();
+        const uint32 instancesPerDraw = isUsingInstancedStereo ? 2u : 1u;
+        const uint32 baseInstanceShift = isUsingInstancedStereo ? 1u : 0u;
+
+        CbDrawCall *drawCmd = 0;
+
+        RenderingMetrics stats;
+
+        uint8 particleSystemSlot[HLMS_MAX][2];
+        for( size_t i = 0u; i < HLMS_MAX; ++i )
+        {
+            Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
+            if( hlms )
+            {
+                particleSystemSlot[i][0] = hlms->getParticleSystemConstSlot();
+                particleSystemSlot[i][1] = hlms->getParticleSystemSlot();
+            }
+            else
+            {
+                particleSystemSlot[i][0] = 0u;
+                particleSystemSlot[i][1] = 0u;
+            }
+        }
+
+        const QueuedRenderableArray &queuedRenderables = renderQueueGroup.mQueuedRenderables;
+
+        QueuedRenderableArray::const_iterator itor = queuedRenderables.begin();
+        QueuedRenderableArray::const_iterator endt = queuedRenderables.end();
+
+        while( itor != endt )
+        {
+            const QueuedRenderable &queuedRenderable = *itor;
+            const VertexArrayObjectArray &vaos = queuedRenderable.renderable->getVaos( VpNormal );
+
+            VertexArrayObject *vao = vaos[0];
+            const HlmsDatablock *datablock = queuedRenderable.renderable->getDatablock();
+
+            const HlmsTypes hlmsType = static_cast<HlmsTypes>( datablock->mType );
+            Hlms *hlms = mHlmsManager->getHlms( hlmsType );
+
+            lastHlmsCacheHash = lastHlmsCache->hash;
+            const HlmsCache *hlmsCache =
+                hlms->getMaterial( lastHlmsCache, passCache[datablock->mType], queuedRenderable,
+                                   casterPass, parallelCompileQueue );
+            if( lastHlmsCacheHash != hlmsCache->hash )
+            {
+                CbPipelineStateObject *psoCmd = mCommandBuffer->addCommand<CbPipelineStateObject>();
+                *psoCmd = CbPipelineStateObject( &hlmsCache->pso );
+                lastHlmsCache = hlmsCache;
+
+                // Flush the Vao when changing shaders. Needed by D3D11/12 & possibly Vulkan
+                lastVaoName = 0;
+            }
+
+            const ParticleSystemDef *systemDef =
+                ParticleSystemDef::castFromRenderable( queuedRenderable.renderable );
+
+            const uint32 baseInstance = hlms->fillBuffersForV2( hlmsCache, queuedRenderable, casterPass,
+                                                                lastHlmsCacheHash, mCommandBuffer );
+
+            ConstBufferPacked *particleCommonBuffer = systemDef->_getGpuCommonBuffer();
+            *mCommandBuffer->addCommand<CbShaderBuffer>() =
+                CbShaderBuffer( VertexShader, particleSystemSlot[hlmsType][0], particleCommonBuffer, 0,
+                                (uint32)particleCommonBuffer->getTotalSizeBytes() );
+            ReadOnlyBufferPacked *particleDataBuffer = systemDef->_getGpuDataBuffer();
+            *mCommandBuffer->addCommand<CbShaderBuffer>() =
+                CbShaderBuffer( VertexShader, particleSystemSlot[hlmsType][1], particleDataBuffer, 0,
+                                (uint32)particleDataBuffer->getTotalSizeBytes() );
+
+            // We always break the commands (because we re-bind particleDataBuffer for every draw)
+            {
+                // Different mesh, vertex buffers or layout. Make a new draw call.
+                //(or also the the Hlms made a batch-breaking command)
+
+                OGRE_ASSERT_MEDIUM( vao->getVaoName() != 0u &&
+                                    "Invalid Vao name! This can happen if a BT_IMMUTABLE buffer was "
+                                    "recently created and VaoManager::_beginFrame() wasn't called" );
+
+                if( lastVaoName != vao->getVaoName() )
+                {
+                    *mCommandBuffer->addCommand<CbVao>() = CbVao( vao );
+                    *mCommandBuffer->addCommand<CbIndirectBuffer>() = CbIndirectBuffer( indirectBuffer );
+                    lastVaoName = vao->getVaoName();
+                }
+
+                void *offset = reinterpret_cast<void *>(
+                    static_cast<ptrdiff_t>( indirectBuffer->_getFinalBufferStart() ) +
+                    ( indirectDraw - startIndirectDraw ) );
+
+                if( vao->getIndexBuffer() )
+                {
+                    CbDrawCallIndexed *drawCall = mCommandBuffer->addCommand<CbDrawCallIndexed>();
+                    *drawCall = CbDrawCallIndexed( baseInstanceAndIndirectBuffers, vao, offset );
+                    drawCmd = drawCall;
+                }
+                else
+                {
+                    CbDrawCallStrip *drawCall = mCommandBuffer->addCommand<CbDrawCallStrip>();
+                    *drawCall = CbDrawCallStrip( baseInstanceAndIndirectBuffers, vao, offset );
+                    drawCmd = drawCall;
+                }
+
+                stats.mDrawCount += 1u;
+            }
+
+            // Different mesh, but same vertex buffers & layouts. Advance indirection buffer.
+            ++drawCmd->numDraws;
+
+            if( vao->mIndexBuffer )
+            {
+                CbDrawIndexed *drawIndexedPtr = reinterpret_cast<CbDrawIndexed *>( indirectDraw );
+                indirectDraw += sizeof( CbDrawIndexed );
+
+                drawIndexedPtr->primCount = vao->mPrimCount;
+                drawIndexedPtr->instanceCount = instancesPerDraw;
+                drawIndexedPtr->firstVertexIndex =
+                    uint32( vao->mIndexBuffer->_getFinalBufferStart() + vao->mPrimStart );
+                drawIndexedPtr->baseVertex = uint32( vao->mBaseVertexBuffer->_getFinalBufferStart() );
+                drawIndexedPtr->baseInstance = baseInstance << baseInstanceShift;
+            }
+            else
+            {
+                CbDrawStrip *drawStripPtr = reinterpret_cast<CbDrawStrip *>( indirectDraw );
+                indirectDraw += sizeof( CbDrawStrip );
+
+                drawStripPtr->primCount = vao->mPrimCount;
+                drawStripPtr->instanceCount = instancesPerDraw;
+                drawStripPtr->firstVertexIndex =
+                    uint32( vao->mBaseVertexBuffer->_getFinalBufferStart() + vao->mPrimStart );
+                drawStripPtr->baseInstance = baseInstance << baseInstanceShift;
+            }
+
+            stats.mInstanceCount += instancesPerDraw;
+
+            switch( vao->getOperationType() )
+            {
+            case OT_TRIANGLE_LIST:
+                stats.mFaceCount += ( vao->mPrimCount / 3u ) * instancesPerDraw;
+                break;
+            case OT_TRIANGLE_STRIP:
+            case OT_TRIANGLE_FAN:
+                stats.mFaceCount += ( vao->mPrimCount - 2u ) * instancesPerDraw;
+                break;
+            default:
+                break;
+            }
+
+            stats.mVertexCount += vao->mPrimCount * instancesPerDraw;
+
+            ++itor;
+        }
+
+        rs->_addMetrics( stats );
+
+        mLastVaoName = lastVaoName;
+        mLastVertexData = 0;
+        mLastIndexData = 0;
+        mLastTextureHash = 0;
+
+        return indirectDraw;
     }
     //-----------------------------------------------------------------------
     unsigned char *RenderQueue::renderGL3( RenderSystem *rs, bool casterPass, bool dualParaboloid,

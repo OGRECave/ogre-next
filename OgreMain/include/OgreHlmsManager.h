@@ -117,6 +117,8 @@ namespace Ogre
 
         RenderSystem *mRenderSystem;
 
+        TextureGpu *mBlueNoise;
+
     public:
         typedef std::map<IdString, HlmsDatablock *> HlmsDatablockMap;
 
@@ -410,6 +412,10 @@ namespace Ogre
         /// to get how which indices are active. @see _getBlocks to retrieve
         /// all types of block in a generic way.
         const HlmsSamplerblock *_getSamplerblock( uint16 idx ) const;
+
+        void loadBlueNoise();
+
+        TextureGpu *getBlueNoiseTexture() const { return mBlueNoise; }
     };
     /** @} */
     /** @} */

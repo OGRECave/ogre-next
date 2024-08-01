@@ -88,8 +88,11 @@ namespace Ogre
 
         bool   mUsingExponentialShadowMaps;
         uint16 mEsmK;  ///< K parameter for ESM.
+
+        uint8 mReservedTexBufferSlots;  // Includes ReadOnly
+        uint8 mReservedTexSlots;        // These get added to mReservedTexBufferSlots
+
         uint32 mTexUnitSlotStart;
-        uint32 mSamplerUnitSlotStart;
 
         void setupRootLayout( RootLayout &rootLayout, size_t tid ) override;
 
@@ -107,7 +110,8 @@ namespace Ogre
 
         void calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash ) override;
         void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces ) override;
-        void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces ) override;
+        void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces,
+                                        const PiecesMap *normalPassPieces ) override;
 
         void notifyPropertiesMergedPreGenerationStep( size_t tid ) override;
 

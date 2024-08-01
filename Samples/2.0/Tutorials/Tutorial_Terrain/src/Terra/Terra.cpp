@@ -408,6 +408,55 @@ namespace Ogre
             m_skirtSize *= 65535.0f;
     }
     //-----------------------------------------------------------------------------------
+    void Terra::createTerrainCells()
+    {
+        {
+            // Find out how many TerrainCells we need. I think this might be
+            // solved analitically with a power series. But my math is rusty.
+            const uint32 basePixelDimension = m_basePixelDimension;
+            const uint32 vertPixelDimension =
+                static_cast<uint32>( m_basePixelDimension * m_depthWidthRatio );
+            const uint32 maxPixelDimension = std::max( basePixelDimension, vertPixelDimension );
+            const uint32 maxRes = std::max( m_width, m_depth );
+
+            uint32 numCells = 16u;  // 4x4
+            uint32 accumDim = 0u;
+            uint32 iteration = 1u;
+            while( accumDim < maxRes )
+            {
+                numCells += 12u;  // 4x4 - 2x2
+                accumDim += maxPixelDimension * ( 1u << iteration );
+                ++iteration;
+            }
+
+            numCells += 12u;
+            accumDim += maxPixelDimension * ( 1u << iteration );
+            ++iteration;
+
+            for( size_t i = 0u; i < 2u; ++i )
+            {
+                m_terrainCells[i].clear();
+                m_terrainCells[i].resize( numCells, TerrainCell( this ) );
+            }
+        }
+
+        VaoManager *vaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
+
+        for( size_t i = 0u; i < 2u; ++i )
+        {
+            std::vector<TerrainCell>::iterator itor = m_terrainCells[i].begin();
+            std::vector<TerrainCell>::iterator endt = m_terrainCells[i].end();
+
+            const std::vector<TerrainCell>::iterator begin = itor;
+
+            while( itor != endt )
+            {
+                itor->initialize( vaoManager, ( itor - begin ) >= 16u );
+                ++itor;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     inline GridPoint Terra::worldToGrid( const Vector3 &vPos ) const
     {
         GridPoint retVal;
@@ -680,50 +729,26 @@ namespace Ogre
         m_height = dimensions.y;
         m_basePixelDimension = 64u;
         createHeightmap( image, imageName, bMinimizeMemoryConsumption, bLowResShadow );
-
+        createTerrainCells();
+    }
+    //-----------------------------------------------------------------------------------
+    void Terra::setBasePixelDimension( uint32 basePixelDimension )
+    {
+        m_basePixelDimension = basePixelDimension;
+        if( !m_heightMap.empty() && !m_terrainCells->empty() )
         {
-            // Find out how many TerrainCells we need. I think this might be
-            // solved analitically with a power series. But my math is rusty.
-            const uint32 basePixelDimension = m_basePixelDimension;
-            const uint32 vertPixelDimension =
-                static_cast<uint32>( m_basePixelDimension * m_depthWidthRatio );
-            const uint32 maxPixelDimension = std::max( basePixelDimension, vertPixelDimension );
-            const uint32 maxRes = std::max( m_width, m_depth );
+            HlmsDatablock *datablock = m_terrainCells[0].back().getDatablock();
 
-            uint32 numCells = 16u;  // 4x4
-            uint32 accumDim = 0u;
-            uint32 iteration = 1u;
-            while( accumDim < maxRes )
+            calculateOptimumSkirtSize();
+            createTerrainCells();
+
+            if( datablock )
             {
-                numCells += 12u;  // 4x4 - 2x2
-                accumDim += maxPixelDimension * ( 1u << iteration );
-                ++iteration;
-            }
-
-            numCells += 12u;
-            accumDim += maxPixelDimension * ( 1u << iteration );
-            ++iteration;
-
-            for( size_t i = 0u; i < 2u; ++i )
-            {
-                m_terrainCells[i].clear();
-                m_terrainCells[i].resize( numCells, TerrainCell( this ) );
-            }
-        }
-
-        VaoManager *vaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
-
-        for( size_t i = 0u; i < 2u; ++i )
-        {
-            std::vector<TerrainCell>::iterator itor = m_terrainCells[i].begin();
-            std::vector<TerrainCell>::iterator endt = m_terrainCells[i].end();
-
-            const std::vector<TerrainCell>::iterator begin = itor;
-
-            while( itor != endt )
-            {
-                itor->initialize( vaoManager, ( itor - begin ) >= 16u );
-                ++itor;
+                for( size_t i = 0u; i < 2u; ++i )
+                {
+                    for( TerrainCell &terrainCell : m_terrainCells[i] )
+                        terrainCell.setDatablock( datablock );
+                }
             }
         }
     }

@@ -114,7 +114,14 @@ inline half3x3 toMatHalf3x3( float3x4 m )
 #define NO_INTERPOLATION_SUFFIX [[flat]]
 
 #define floatBitsToUint(x) as_type<uint>(x)
-#define uintBitsToFloat(x) as_type<float>(x)
+inline float uintBitsToFloat( uint x )
+{
+	return as_type<float>( x );
+}
+inline float2 uintBitsToFloat( uint2 x )
+{
+	return as_type<float2>( x );
+}
 #define floatBitsToInt(x) as_type<int>(x)
 #define lessThan( a, b ) (a < b)
 #define discard discard_fragment()
@@ -156,7 +163,7 @@ inline half3x3 toMatHalf3x3( float3x4 m )
 #define findLSB clz
 #define findMSB ctz
 #define reversebits reverse_bits
-#define mod( a, b ) (a - b * floor(a / b))
+#define mod( a, b ) ( (a) - (b) * floor( (a) / (b) ) )
 
 #define outPs_colour0 outPs.colour0
 #define OGRE_Sample( tex, sampler, uv ) tex.sample( sampler, uv )
@@ -169,7 +176,7 @@ inline half3x3 toMatHalf3x3( float3x4 m )
 #define OGRE_ddx( val ) dfdx( val )
 #define OGRE_ddy( val ) dfdy( val )
 #define OGRE_Load2D( tex, iuv, lod ) tex.read( iuv, lod )
-#define OGRE_LoadArray2D( tex, iuv, arrayIdx, lod ) tex.read( iuv, arrayIdx, lod )
+#define OGRE_LoadArray2D( tex, iuv, arrayIdx, lod ) tex.read( ushort2( iuv ), arrayIdx, lod )
 #define OGRE_Load2DMS( tex, iuv, subsample ) tex.read( iuv, subsample )
 
 #define OGRE_Load3D( tex, iuv, lod ) tex.read( ushort3( iuv ), lod )
@@ -209,4 +216,8 @@ inline half3x3 toMatHalf3x3( float3x4 m )
 
 #define OGRE_ARRAY_START( type ) {
 #define OGRE_ARRAY_END }
+
+#define unpackSnorm4x8 unpack_snorm4x8_to_float
+#define unpackSnorm2x16 unpack_snorm2x16_to_float
+
 @end

@@ -52,6 +52,8 @@ namespace Ogre
 
         /** See ParticleEmitter. */
         unsigned short _getEmissionCount( Real timeElapsed ) override;
+
+        const String &getType() const override;
     };
 
 }  // namespace Ogre

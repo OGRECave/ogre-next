@@ -56,6 +56,7 @@ layout(std140) uniform;
 @insertpiece( DeclPlanarReflTextures )
 @insertpiece( DeclAreaApproxTextures )
 @insertpiece( DeclLightProfilesTexture )
+@insertpiece( DeclBlueNoiseTexture )
 
 @property( hlms_vpos )
 in vec4 gl_FragCoord;
@@ -66,7 +67,7 @@ in vec4 gl_FragCoord;
 
 @insertpiece( PccManualProbeDecl )
 
-@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || alpha_test || exponential_shadow_maps )
+@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || alpha_test || hlms_alpha_hash || exponential_shadow_maps )
 vulkan_layout( location = 0 ) in block
 {
 @insertpiece( VStoPS_block )
@@ -138,7 +139,7 @@ void main()
 
 @insertpiece( DeclShadowCasterMacros )
 
-@property( alpha_test )
+@property( alpha_test || hlms_alpha_hash )
 	@foreach( num_textures, n )
 		vulkan_layout( ogre_t@value(textureMaps@n) ) midf_tex uniform texture2DArray textureMaps@n;@end
 

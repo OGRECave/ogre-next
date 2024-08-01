@@ -388,7 +388,8 @@ namespace Ogre
         void _descriptorSetUavCreated( DescriptorSetUav *newSet ) override;
         void _descriptorSetUavDestroyed( DescriptorSetUav *set ) override;
         void _setHlmsMacroblock( const HlmsMacroblock *macroblock, const GL3PlusHlmsPso *pso );
-        void _setHlmsBlendblock( const HlmsBlendblock *blendblock, const GL3PlusHlmsPso *pso );
+        void _setHlmsBlendblock( const HlmsBlendblock *blendblock, const GL3PlusHlmsPso *pso,
+                                 bool bIsMultisample );
         void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock ) override;
         void _setPipelineStateObject( const HlmsPso *pso ) override;
 

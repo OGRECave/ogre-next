@@ -1,0 +1,29 @@
+hlms Examples/Flare2 unlit
+{
+	depth_write		off
+	cull_hardware	none
+
+	scene_blend		add
+
+	diffuse_map flaretrail.png
+}
+
+hlms Examples/Aureola unlit
+{
+	depth_write		off
+	cull_hardware	none
+
+	scene_blend		alpha_blend
+
+	diffuse_map aureola.png
+}
+
+hlms Examples/AnimationParticleTest unlit
+{
+	depth_write		off
+	cull_hardware	none
+
+	scene_blend		add
+	
+	diffuse_map flames_anim.png
+}

@@ -52,6 +52,8 @@ namespace Ogre
 
         /** See ParticleEmitter. */
         void _initParticle( Particle *pParticle ) override;
+
+        const String &getType() const override;
     };
 
 }  // namespace Ogre

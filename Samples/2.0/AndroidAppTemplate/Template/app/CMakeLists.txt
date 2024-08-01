@@ -23,6 +23,8 @@ endif()
 # Read OgreBuildSettings.h to link against optional libraries (only if set)
 file( READ "${OGRE_BINARIES}/include/OgreBuildSettings.h" OGRE_BUILD_SETTINGS_STR )
 string( FIND "${OGRE_BUILD_SETTINGS_STR}" "#define OGRE_BUILD_COMPONENT_ATMOSPHERE" OGRE_BUILD_COMPONENT_ATMOSPHERE )
+string( FIND "${OGRE_BUILD_SETTINGS_STR}" "#define OGRE_BUILD_PLUGIN_PFX" OGRE_BUILD_PLUGIN_PFX )
+string( FIND "${OGRE_BUILD_SETTINGS_STR}" "#define OGRE_BUILD_PLUGIN_PFX2" OGRE_BUILD_PLUGIN_PFX2 )
 
 # Read OgreVulkanBuildSettings.h to link against optional libraries (only if set)
 file( READ "${OGRE_BINARIES}/include/OgreVulkanBuildSettings.h" OGRE_VK_BUILD_SETTINGS_STR )
@@ -56,6 +58,20 @@ if( NOT OGRE_BUILD_COMPONENT_ATMOSPHERE EQUAL -1 )
 	set( OGRE_OPTIONAL_LIBS ${OGRE_OPTIONAL_LIBS}
 		optimized ${OGRE_BINARIES}/lib/lib${OGRE_NEXT}AtmosphereStatic.a
 		debug ${OGRE_BINARIES}/lib/lib${OGRE_NEXT}AtmosphereStatic_d.a
+	)
+endif()
+
+if( NOT OGRE_BUILD_PLUGIN_PFX EQUAL -1 )
+	set( OGRE_OPTIONAL_LIBS ${OGRE_OPTIONAL_LIBS}
+		optimized ${OGRE_BINARIES}/lib/libPlugin_ParticleFXStatic.a
+		debug ${OGRE_BINARIES}/lib/libPlugin_ParticleFXStatic_d.a
+	)
+endif()
+
+if( NOT OGRE_BUILD_PLUGIN_PFX2 EQUAL -1 )
+	set( OGRE_OPTIONAL_LIBS ${OGRE_OPTIONAL_LIBS}
+		optimized ${OGRE_BINARIES}/lib/libPlugin_ParticleFX2Static.a
+		debug ${OGRE_BINARIES}/lib/libPlugin_ParticleFX2Static_d.a
 	)
 endif()
 

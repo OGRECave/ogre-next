@@ -63,12 +63,14 @@ namespace Ogre
             generated yet) and the properties are before they are transformed by the templates
         @brief propertiesMergedPreGenerationStep
         @param hlms
+            @parblock
             Pointer to caller.
             WARNING: Note that any modified property WON'T BE CACHED. If you set a property based
             on external information, it will break caches.
 
             You can only set new properties that are derived from existing properties e.g. c = a + b,
             which means caching a and b will always result in c being the same value
+            @endparblock
         @param passCache
             Properties used by this pass
         @param renderableCacheProperties

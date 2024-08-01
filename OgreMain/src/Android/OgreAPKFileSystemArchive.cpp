@@ -73,7 +73,8 @@ namespace Ogre
             memcpy( membuf, AAsset_getBuffer( asset ), length );
             AAsset_close( asset );
 
-            stream = Ogre::DataStreamPtr( new Ogre::MemoryDataStream( membuf, length, true, true ) );
+            stream = Ogre::DataStreamPtr(
+                new Ogre::MemoryDataStream( filename, membuf, length, true, true ) );
         }
         return stream;
     }

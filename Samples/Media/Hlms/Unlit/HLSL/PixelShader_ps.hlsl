@@ -9,7 +9,7 @@ struct PS_INPUT
 	@insertpiece( VStoPS_block )
 };
 
-@property( !hlms_shadowcaster || alpha_test )
+@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 	@foreach( num_textures, n )
 		@property( is_texture@n_array )
 			Texture2DArray textureMapsArray@n : register(t@value(textureMapsArray@n));
@@ -19,10 +19,14 @@ struct PS_INPUT
 	@end
 @end
 
+@pset( currSampler, samplerStateStart )
+
 @foreach( num_samplers, n )
-	SamplerState samplerState@n : register(s@counter(samplerStateStart));@end
+	SamplerState samplerState@n : register(s@counter(currSampler));@end
 
 @insertpiece( DeclOutputType )
+
+@insertpiece( DeclBlueNoiseTexture )
 
 @insertpiece( DefaultHeaderPS )
 
@@ -38,7 +42,7 @@ struct PS_INPUT
 {
 	PS_OUTPUT outPs;
 	@insertpiece( custom_ps_preExecution )
-	@property( !hlms_shadowcaster || alpha_test )
+	@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 		@insertpiece( DefaultBodyPS )
 	@end
 	@property( hlms_shadowcaster )

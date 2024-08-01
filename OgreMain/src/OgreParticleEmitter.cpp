@@ -184,7 +184,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void ParticleEmitter::setEmitted( bool emitted ) { mEmitted = emitted; }
     //-----------------------------------------------------------------------
-    void ParticleEmitter::genEmissionDirection( const Vector3 &particlePos, Vector3 &destVector )
+    void ParticleEmitter::genEmissionDirection( const Vector3 &particlePos, Vector3 &destVector ) const
     {
         if( mUseDirPositionRef )
         {
@@ -226,7 +226,7 @@ namespace Ogre
         // both direction and 'up' are.
     }
     //-----------------------------------------------------------------------
-    void ParticleEmitter::genEmissionVelocity( Vector3 &destVector )
+    void ParticleEmitter::genEmissionVelocity( Vector3 &destVector ) const
     {
         Real scalar;
         if( mMinSpeed != mMaxSpeed )
@@ -241,7 +241,7 @@ namespace Ogre
         destVector *= scalar;
     }
     //-----------------------------------------------------------------------
-    Real ParticleEmitter::genEmissionTTL()
+    Real ParticleEmitter::genEmissionTTL() const
     {
         if( mMaxTTL != mMinTTL )
         {
@@ -299,7 +299,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
-    void ParticleEmitter::genEmissionColour( ColourValue &destColour )
+    void ParticleEmitter::genEmissionColour( ColourValue &destColour ) const
     {
         if( mColourRangeStart != mColourRangeEnd )
         {
@@ -575,31 +575,7 @@ namespace Ogre
     Real ParticleEmitter::getMaxRepeatDelay() const { return mRepeatDelayMax; }
 
     //-----------------------------------------------------------------------
-    ParticleEmitterFactory::~ParticleEmitterFactory()
-    {
-        // Destroy all emitters
-        vector<ParticleEmitter *>::type::iterator i;
-        for( i = mEmitters.begin(); i != mEmitters.end(); ++i )
-        {
-            OGRE_DELETE( *i );
-        }
-
-        mEmitters.clear();
-    }
-    //-----------------------------------------------------------------------
-    void ParticleEmitterFactory::destroyEmitter( ParticleEmitter *e )
-    {
-        vector<ParticleEmitter *>::type::iterator i;
-        for( i = mEmitters.begin(); i != mEmitters.end(); ++i )
-        {
-            if( ( *i ) == e )
-            {
-                mEmitters.erase( i );
-                OGRE_DELETE e;
-                break;
-            }
-        }
-    }
+    void ParticleEmitterFactory::destroyEmitter( ParticleEmitter *e ) { OGRE_DELETE e; }
 
     //-----------------------------------------------------------------------
 

@@ -825,6 +825,17 @@ namespace Demo
         // Initialise, parse scripts etc
         Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups( true );
 
+        try
+        {
+            mRoot->getHlmsManager()->loadBlueNoise();
+        }
+        catch( Ogre::FileNotFoundException &e )
+        {
+            Ogre::LogManager::getSingleton().logMessage( e.getFullDescription(), Ogre::LML_CRITICAL );
+            Ogre::LogManager::getSingleton().logMessage(
+                "WARNING: Blue Noise textures could not be loaded.", Ogre::LML_CRITICAL );
+        }
+
         // Initialize resources for LTC area lights and accurate specular reflections (IBL)
         Ogre::Hlms *hlms = mRoot->getHlmsManager()->getHlms( Ogre::HLMS_PBS );
         OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbs *>( hlms ) );

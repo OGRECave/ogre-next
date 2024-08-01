@@ -2128,7 +2128,7 @@ namespace Ogre
     }
 
     void GL3PlusRenderSystem::_setHlmsBlendblock( const HlmsBlendblock *blendblock,
-                                                  const GL3PlusHlmsPso *pso )
+                                                  const GL3PlusHlmsPso *pso, const bool bIsMultisample )
     {
         if( pso->enableAlphaBlend )
         {
@@ -2150,7 +2150,8 @@ namespace Ogre
             OCGE( glDisable( GL_BLEND ) );
         }
 
-        if( blendblock->mAlphaToCoverageEnabled )
+        if( blendblock->mAlphaToCoverage == HlmsBlendblock::A2cEnabled ||
+            ( blendblock->mAlphaToCoverage == HlmsBlendblock::A2cEnabledMsaaOnly && bIsMultisample ) )
         {
             OCGE( glEnable( GL_SAMPLE_ALPHA_TO_COVERAGE ) );
         }
@@ -2257,7 +2258,7 @@ namespace Ogre
         mPso = reinterpret_cast<GL3PlusHlmsPso *>( pso->rsData );
 
         _setHlmsMacroblock( pso->macroblock, mPso );
-        _setHlmsBlendblock( pso->blendblock, mPso );
+        _setHlmsBlendblock( pso->blendblock, mPso, pso->pass.sampleDescription.isMultisample() );
 
         if( mPso->vertexShader )
         {

@@ -1,0 +1,11 @@
+@property( !hlms_shadowcaster && my_custom_colour_enabled )
+
+// This file gets parsed by all shader stages (because it ends in piece_all.any)
+// We must add myCustomColour to the pass buffer, which MUST be consistent across all
+// shader stages.
+
+@piece( custom_passBuffer )
+	float4 myCustomColour;
+@end
+
+@end

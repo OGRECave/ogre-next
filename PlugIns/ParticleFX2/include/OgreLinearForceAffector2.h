@@ -1,0 +1,134 @@
+/*
+-----------------------------------------------------------------------------
+This source file is part of OGRE-Next
+(Object-oriented Graphics Rendering Engine)
+For the latest info, see http://www.ogre3d.org/
+
+Copyright (c) 2000-2023 Torus Knot Software Ltd
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-----------------------------------------------------------------------------
+*/
+#ifndef OgreLinearForceAffector2_H
+#define OgreLinearForceAffector2_H
+
+#include "OgreParticleFX2Prerequisites.h"
+
+#include "ParticleSystem/OgreParticleAffector2.h"
+
+namespace Ogre
+{
+    OGRE_ASSUME_NONNULL_BEGIN
+
+    /** This class defines a ParticleAffector which applies a linear force to particles in a system.
+    @remarks
+        This affector (see ParticleAffector) applies a linear force, such as gravity, to a particle
+    system. This force can be applied in 2 ways: by taking the average of the particle's current momentum
+    and the force vector, or by adding the force vector to the current particle's momentum.
+    @par
+        The former approach is self-stabilising i.e. once a particle's momentum
+        is equal to the force vector, no further change is made to it's momentum. It also results in
+        a non-linear acceleration of particles.
+        The latter approach is simpler and applies a constant acceleration to particles. However,
+        it is not self-stabilising and can lead to perpetually increasing particle velocities.
+        You choose the approach by calling the setForceApplication method.
+    */
+    class _OgreParticleFX2Export LinearForceAffector2 : public ParticleAffector2
+    {
+    private:
+        /** Command object for force vector (see ParamCommand).*/
+        class _OgrePrivate CmdForceVector final : public ParamCommand
+        {
+        public:
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
+        };
+
+        /** Command object for force application (see ParamCommand).*/
+        class _OgrePrivate CmdForceApp final : public ParamCommand
+        {
+        public:
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
+        };
+
+        /// Command objects
+        static CmdForceVector msForceVectorCmd;
+        static CmdForceApp    msForceAppCmd;
+
+    public:
+        /// Choice of how to apply the force vector to particles
+        enum ForceApplication
+        {
+            /// Take the average of the force vector and the particle momentum
+            FA_AVERAGE,
+            /// Add the force vector to the particle momentum
+            FA_ADD
+        };
+
+    protected:
+        /// Force vector
+        Vector3 mForceVector;
+
+        /// How to apply force
+        ForceApplication mForceApplication;
+
+    public:
+        LinearForceAffector2();
+
+        void run( ParticleCpuData cpuData, size_t numParticles, ArrayReal timeSinceLast ) const override;
+
+        /// Sets the force vector to apply to the particles in a system.
+        void setForceVector( const Vector3 &force );
+
+        /// Gets the force vector to apply to the particles in a system.
+        Vector3 getForceVector() const;
+
+        /** Sets how the force vector is applied to a particle.
+        @remarks
+          The default is FA_ADD.
+        @param fa A member of the ForceApplication enum.
+        */
+        void setForceApplication( ForceApplication fa );
+
+        /** Retrieves how the force vector is applied to a particle.
+        @return A member of the ForceApplication enum.
+        */
+        ForceApplication getForceApplication() const;
+
+        void _cloneFrom( const ParticleAffector2 *original ) override;
+
+        String getType() const override;
+    };
+
+    class _OgrePrivate LinearForceAffectorFactory2 final : public ParticleAffectorFactory2
+    {
+        String getName() const override { return "LinearForce"; }
+
+        ParticleAffector2 *createAffector() override
+        {
+            ParticleAffector2 *p = new LinearForceAffector2();
+            return p;
+        }
+    };
+
+    OGRE_ASSUME_NONNULL_END
+}  // namespace Ogre
+
+#endif

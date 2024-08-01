@@ -102,8 +102,6 @@ namespace Ogre
         Vector3 mPosition;
         /// Rate in particles per second at which this emitter wishes to emit particles
         Real mEmissionRate;
-        /// Name of the type of emitter, MUST be initialised by subclasses
-        String mType;
         /// Base direction of the emitter, may not be used by some emitters
         Vector3 mDirection;
         /// Notional up vector, used to speed up generation of variant directions, and also to orient
@@ -170,19 +168,19 @@ namespace Ogre
         /** Internal utility method for generating particle exit direction
         @param destVector Reference to vector to complete with new direction (normalised)
         */
-        virtual void genEmissionDirection( const Vector3 &particlePos, Vector3 &destVector );
+        void genEmissionDirection( const Vector3 &particlePos, Vector3 &destVector ) const;
 
         /** Internal utility method to apply velocity to a particle direction.
         @param destVector The vector to scale by a randomly generated scale between min and max speed.
             Assumed normalised already, and likely already oriented in the right direction.
         */
-        virtual void genEmissionVelocity( Vector3 &destVector );
+        void genEmissionVelocity( Vector3 &destVector ) const;
 
         /** Internal utility method for generating a time-to-live for a particle. */
-        virtual Real genEmissionTTL();
+        Real genEmissionTTL() const;
 
         /** Internal utility method for generating a colour for a particle. */
-        virtual void genEmissionColour( ColourValue &destColour );
+        void genEmissionColour( ColourValue &destColour ) const;
 
         /** Internal utility method for generating an emission count based on a constant emission rate.
          */
@@ -432,7 +430,7 @@ namespace Ogre
             This property is useful for determining the type of emitter procedurally so another
             can be created.
         */
-        const String &getType() const { return mType; }
+        virtual const String &getType() const = 0;
 
         /** Sets whether or not the emitter is enabled.
         @remarks

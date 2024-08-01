@@ -179,8 +179,11 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 	@property( hlms_lights_area_ltc )AreaLtcLight areaLtcLights[@value(hlms_lights_area_ltc)];@end
 @end // !use_light_buffers
 
-@end @property( hlms_shadowcaster )
+@else /// hlms_shadowcaster
 	//Vertex shader
+	@property( hlms_view_matrix )
+		float4x4 view;
+	@end
 	@property( exponential_shadow_maps )float4 viewZRow;@end
 	float2 depthRange;
 @end
@@ -387,7 +390,7 @@ struct Material
 
 @piece( VStoPS_block )
 	@property( syntax == metal || lower_gpu_overhead )
-		@property( (!hlms_shadowcaster || alpha_test) && !lower_gpu_overhead )
+		@property( (!hlms_shadowcaster || alpha_test || hlms_alpha_hash) && !lower_gpu_overhead )
 			FLAT_INTERPOLANT( ushort materialId, @counter(texcoord) );
 		@end
 		@property( hlms_fine_light_mask || hlms_forwardplus_fine_light_mask )
@@ -397,7 +400,7 @@ struct Material
 			FLAT_INTERPOLANT( ushort planarReflectionIdx, @counter(texcoord) );
 		@end
 	@else
-		@property( (!hlms_shadowcaster || alpha_test) && !lower_gpu_overhead )
+		@property( (!hlms_shadowcaster || alpha_test || hlms_alpha_hash) && !lower_gpu_overhead )
 			FLAT_INTERPOLANT( ushort drawId, @counter(texcoord) );
 		@end
 	@end
@@ -443,7 +446,7 @@ struct Material
 			INTERPOLANT( midf3 fog, @counter(texcoord) );
 		@end
 	@else
-		@property( alpha_test )
+		@property( alpha_test || hlms_alpha_hash )
 			@foreach( hlms_uv_count, n )
 				INTERPOLANT( float@value( hlms_uv_count@n ) uv@n, @counter(texcoord) );@end
 		@end

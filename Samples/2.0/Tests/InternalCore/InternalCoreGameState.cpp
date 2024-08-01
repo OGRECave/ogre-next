@@ -53,5 +53,61 @@ void InternalCoreGameState::createScene01()
         OGRE_ASSERT( collapsedMaxToTest == maxCollapsed );
     }
 
+    for( int i = -128; i < 128; ++i )
+    {
+        Real vals[ARRAY_PACKED_REALS];
+        ArrayReal arrayVal = ARRAY_REAL_ZERO;
+        for( int j = 0; j < ARRAY_PACKED_REALS; ++j )
+        {
+            vals[j] = Real( i ) + Real( j ) * 3.0f;
+            if( vals[j] >= 128.0f )
+                vals[j] -= 255.0f;
+
+            Mathlib::Set( arrayVal, vals[j], (size_t)j );
+        }
+
+        OGRE_ASSERT( Mathlib::Get0( arrayVal ) == vals[0] );
+
+        arrayVal = arrayVal / 127.0f;
+
+        int8 outValues[ARRAY_PACKED_REALS];
+        Mathlib::extractS8( Mathlib::ToSnorm8Unsafe( arrayVal ), outValues );
+
+        for( int j = 0; j < ARRAY_PACKED_REALS; ++j )
+        {
+            OGRE_ASSERT( outValues[j] == (int8)vals[j] ||  //
+                         ( outValues[j] == -127 && (int8)vals[j] == -128 ) ||
+                         ( outValues[j] == -128 && (int8)vals[j] == -127 ) );
+        }
+    }
+
+    for( int i = -32768; i < 32767; ++i )
+    {
+        Real vals[ARRAY_PACKED_REALS];
+        ArrayReal arrayVal = ARRAY_REAL_ZERO;
+        for( int j = 0; j < ARRAY_PACKED_REALS; ++j )
+        {
+            vals[j] = Real( i ) + Real( j ) * 3.0f;
+            if( vals[j] >= 32768.0f )
+                vals[j] -= 65535.0f;
+
+            Mathlib::Set( arrayVal, vals[j], (size_t)j );
+        }
+
+        OGRE_ASSERT( Mathlib::Get0( arrayVal ) == vals[0] );
+
+        arrayVal = arrayVal / 32767.0f;
+
+        int16 outValues[ARRAY_PACKED_REALS];
+        Mathlib::extractS16( Mathlib::ToSnorm16( arrayVal ), outValues );
+
+        for( int j = 0; j < ARRAY_PACKED_REALS; ++j )
+        {
+            OGRE_ASSERT( ( outValues[j] - (int16)vals[j] ) <= 1 ||  //
+                         ( outValues[j] == -32767 && (int16)vals[j] == -32768 ) ||
+                         ( outValues[j] == -32768 && (int16)vals[j] == -32767 ) );
+        }
+    }
+
     mGraphicsSystem->setQuit();
 }

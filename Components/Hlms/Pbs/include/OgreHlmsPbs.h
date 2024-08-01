@@ -92,14 +92,26 @@ namespace Ogre
             /// Use fixed-colour ambient lighting when upper hemisphere = lower hemisphere,
             /// use hemisphere lighting when they don't match.
             /// Disables ambient lighting if the colours are black.
-            AmbientAuto,
+            AmbientAutoNormal,
+
+            /// Same as AmbientAutoNormal but inverts specular & diffuse calculations.
+            /// See AmbientHemisphereInverted.
+            ///
+            /// This version was called "AmbientAuto" in OgreNext <= 2.3
+            AmbientAutoInverted,
 
             /// Force fixed-colour ambient light. Only uses the upper hemisphere paramter.
             AmbientFixed,
 
             /// Force hemisphere ambient light. Useful if you plan on adjusting the colours
             /// dynamically very often and this might cause swapping shaders.
-            AmbientHemisphere,
+            AmbientHemisphereNormal,
+
+            /// Same as AmbientHemisphereNormal, but inverts the specular & diffuse calculations
+            /// which can be visually more pleasant, or you just need it to look how it was in 2.3.
+            ///
+            /// This version was called "AmbientHemisphere" in OgreNext <= 2.3
+            AmbientHemisphereInverted,
 
             /// Uses spherical harmonics
             AmbientSh,
@@ -143,7 +155,7 @@ namespace Ogre
         ReadOnlyBufferPacked *mGlobalLightListBuffer;
 
         float  mMaxSpecIblMipmap;
-        uint16 mTexBufUnitSlotEnd;
+        uint16 mTexBufUnitSlotEnd;  /// Not used by Ogre but derived implementations may
         uint32 mTexUnitSlotStart;
 
         TextureGpuVec const *mPrePassTextures;
@@ -245,7 +257,8 @@ namespace Ogre
 
         void calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash ) override;
         void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces ) override;
-        void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces ) override;
+        void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces,
+                                        const PiecesMap *normalPassPieces ) override;
 
         void notifyPropertiesMergedPreGenerationStep( size_t tid ) override;
 
@@ -630,6 +643,7 @@ namespace Ogre
         static const IdString ExponentialShadowMaps;
 
         static const IdString AmbientHemisphere;
+        static const IdString AmbientHemisphereInverted;
         static const IdString AmbientSh;
         static const IdString AmbientShMonochrome;
         static const IdString LightProfilesTexture;

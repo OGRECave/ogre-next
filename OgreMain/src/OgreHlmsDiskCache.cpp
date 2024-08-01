@@ -45,7 +45,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    static const uint16 c_hlmsDiskCacheVersion = 4u;
+    static const uint16 c_hlmsDiskCacheVersion = 5u;
 
     HlmsDiskCache::HlmsDiskCache( HlmsManager *hlmsManager ) :
         mTemplatesOutOfDate( false ),
@@ -62,6 +62,7 @@ namespace Ogre
         mCache.type = 255;
         mCache.sourceCode.clear();
         mCache.pso.clear();
+        mCache.datablockCustomPieceFiles.clear();
         mShaderProfile.clear();
 
         mNativeShadingLangVer = 0u;
@@ -109,6 +110,24 @@ namespace Ogre
         hlms->getTemplateChecksum( mCache.templateHash );
 
         {
+            // Copy datablock's custom pieces
+            // (Those that came from files. The ones from memory cannot be cached).
+            mCache.datablockCustomPieceFiles.reserve( hlms->mDatablockCustomPieceFiles.size() );
+            for( const auto &itPair : hlms->mDatablockCustomPieceFiles )
+            {
+                const Hlms::DatablockCustomPieceFile &customPieceFile = itPair.second;
+                if( customPieceFile.isCacheable() )
+                {
+                    DatablockCustomPiecesCache cacheEntry;
+                    cacheEntry.filename = customPieceFile.filename;
+                    cacheEntry.resourceGroup = customPieceFile.resourceGroup;
+                    customPieceFile.getCodeChecksum( cacheEntry.sourceCodeHash );
+                    mCache.datablockCustomPieceFiles.emplace_back( cacheEntry );
+                }
+            }
+        }
+
+        {
             // Copy shaders
             mCache.sourceCode.reserve( hlms->mShaderCodeCache.size() );
             Hlms::ShaderCodeCacheVec::const_iterator itor = hlms->mShaderCodeCache.begin();
@@ -116,8 +135,25 @@ namespace Ogre
 
             while( itor != endt )
             {
-                SourceCode sourceCode( *itor );
-                mCache.sourceCode.push_back( sourceCode );
+                bool bCacheable = true;
+
+                for( size_t i = 0u; i < NumShaderTypes; ++i )
+                {
+                    const int32 customPieceName =
+                        hlms->getProperty( itor->mergedCache.setProperties,
+                                           HlmsBaseProp::_DatablockCustomPieceShaderName[i] );
+                    if( customPieceName &&
+                        !hlms->isDatablockCustomPieceFileCacheable( customPieceName ) )
+                    {
+                        bCacheable = false;
+                    }
+                }
+
+                if( bCacheable )
+                {
+                    SourceCode sourceCode( *itor );
+                    mCache.sourceCode.push_back( sourceCode );
+                }
                 ++itor;
             }
         }
@@ -138,8 +174,26 @@ namespace Ogre
                                        (uint32)HlmsBits::PassMask;
                 // const uint32 inputLayout    = (finalHash >> HlmsBits::InputLayoutShift) & //
                 //                              (uint32)HlmsBits::InputLayoutMask;
-                Pso pso( hlms->mRenderableCache[renderableIdx], hlms->mPassCache[passIdx], *itor );
-                mCache.pso.push_back( pso );
+
+                bool bCacheable = true;
+
+                for( size_t i = 0u; i < NumShaderTypes; ++i )
+                {
+                    const int32 customPieceName =
+                        hlms->getProperty( hlms->mRenderableCache[renderableIdx].setProperties,
+                                           HlmsBaseProp::_DatablockCustomPieceShaderName[i] );
+                    if( customPieceName &&
+                        !hlms->isDatablockCustomPieceFileCacheable( customPieceName ) )
+                    {
+                        bCacheable = false;
+                    }
+                }
+
+                if( bCacheable )
+                {
+                    Pso pso( hlms->mRenderableCache[renderableIdx], hlms->mPassCache[passIdx], *itor );
+                    mCache.pso.push_back( pso );
+                }
                 ++itor;
             }
         }
@@ -277,11 +331,42 @@ namespace Ogre
                 LogManager::getSingleton().logMessage(
                     "WARNING: The cached Hlms is out of date. The templates have changed. "
                     "We will parse the templates again. If you experience crashes or shader "
-                    "compiler errors, delete the cache" );
+                    "compiler errors, delete the cache." );
             }
         }
 
         hlms->clearShaderCache();
+
+        for( const DatablockCustomPiecesCache &datablockPiece : mCache.datablockCustomPieceFiles )
+        {
+            Hlms::CachedCustomPieceFileStatus status = hlms->_addDatablockCustomPieceFile(
+                datablockPiece.filename, datablockPiece.resourceGroup, datablockPiece.sourceCodeHash );
+            switch( status )
+            {
+            case Hlms::CCPFS_Success:
+                break;  // Everything OK, continue.
+            case Hlms::CCPFS_OutOfDate:
+                mTemplatesOutOfDate = true;
+                LogManager::getSingleton().logMessage(
+                    "WARNING: The cached Hlms is out of date. Datablock's custom piece file '" +
+                    datablockPiece.filename + "' in resource group '" + datablockPiece.resourceGroup +
+                    "' has changed. "
+                    "We will parse the templates again. If you experience crashes or shader "
+                    "compiler errors, delete the cache." );
+                break;
+            case Hlms::CCPFS_CriticalError:
+                // We could in theory recover from this error if we iterate through all the cache
+                // entries and remove the ones using this piece file. However we encountered that
+                // a file is missing. It's likely the cache has been invalidated too much.
+                LogManager::getSingleton().logMessage(
+                    "ERROR: Datablock's custom piece file '" + datablockPiece.filename +
+                        "' in resource group '" + datablockPiece.resourceGroup +
+                        "' not found! Aborting the loading of the HlmsDiskCache.",
+                    LML_CRITICAL );
+                hlms->clearShaderCache();
+                return;  // ABORT! THIS IS A RETURN!
+            }
+        }
 
         {
             CompilerJobParams jobParams( hlms, mCache.sourceCode, mTemplatesOutOfDate );
@@ -436,6 +521,14 @@ namespace Ogre
         write<uint8>( dataStream, mPrecisionMode );
         write<bool>( dataStream, mFastShaderBuildHack );
 
+        write<uint32>( dataStream, static_cast<uint32>( mCache.datablockCustomPieceFiles.size() ) );
+        for( const DatablockCustomPiecesCache &datablockPiece : mCache.datablockCustomPieceFiles )
+        {
+            write( dataStream, datablockPiece.sourceCodeHash );
+            save( dataStream, datablockPiece.filename );
+            save( dataStream, datablockPiece.resourceGroup );
+        }
+
         {
             // Save shaders
             write<uint32>( dataStream, static_cast<uint32>( mCache.sourceCode.size() ) );
@@ -501,7 +594,7 @@ namespace Ogre
                 write( dataStream, itor->macroblock.mCullMode );
                 write( dataStream, itor->macroblock.mPolygonMode );
 
-                write( dataStream, itor->blendblock.mAlphaToCoverageEnabled );
+                write( dataStream, itor->blendblock.mAlphaToCoverage );
                 write( dataStream, itor->blendblock.mBlendChannelMask );
                 write<uint8>( dataStream, itor->blendblock.mIsTransparent & 0x02u );
                 write( dataStream, itor->blendblock.mSeparateBlend );
@@ -656,6 +749,21 @@ namespace Ogre
         read<bool>( dataStream, mFastShaderBuildHack );
 
         {
+            // Load datablock's custom pieces
+            // (Those that came from files. The ones from memory cannot be cached).
+            const uint32 numPieceFiles = read<uint32>( dataStream );
+            mCache.datablockCustomPieceFiles.reserve( numPieceFiles );
+            for( size_t i = 0u; i < numPieceFiles; ++i )
+            {
+                DatablockCustomPiecesCache datablockPiece;
+                read( dataStream, datablockPiece.sourceCodeHash );
+                load( dataStream, datablockPiece.filename );
+                load( dataStream, datablockPiece.resourceGroup );
+                mCache.datablockCustomPieceFiles.emplace_back( datablockPiece );
+            }
+        }
+
+        {
             // Load shaders
             uint32 numEntries = read<uint32>( dataStream );
             mCache.sourceCode.reserve( numEntries );
@@ -717,7 +825,7 @@ namespace Ogre
                 read( dataStream, pso.macroblock.mCullMode );
                 read( dataStream, pso.macroblock.mPolygonMode );
 
-                read( dataStream, pso.blendblock.mAlphaToCoverageEnabled );
+                read( dataStream, pso.blendblock.mAlphaToCoverage );
                 read( dataStream, pso.blendblock.mBlendChannelMask );
                 read( dataStream, pso.blendblock.mIsTransparent );
                 read( dataStream, pso.blendblock.mSeparateBlend );

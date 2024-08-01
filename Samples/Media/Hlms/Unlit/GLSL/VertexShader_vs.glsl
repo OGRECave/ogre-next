@@ -11,11 +11,17 @@ out gl_PerVertex
 
 layout(std140) uniform;
 
+// START UNIFORM GL PRE DECLARATION
+@insertpiece( ParticleSystemDeclVS )
+// END UNIFORM GL PRE DECLARATION
+
 @insertpiece( DefaultHeaderVS )
 @insertpiece( custom_vs_uniformDeclaration )
 
-vulkan_layout( OGRE_POSITION ) in vec4 vertex;
-@property( hlms_colour )vulkan_layout( OGRE_DIFFUSE ) in vec4 colour;@end
+@property( !hlms_particle_system )
+	vulkan_layout( OGRE_POSITION ) in vec4 vertex;
+@end
+@property( hlms_colour && !hlms_particle_system )vulkan_layout( OGRE_DIFFUSE ) in vec4 colour;@end
 
 @foreach( hlms_uv_count, n )
 	vulkan_layout( OGRE_TEXCOORD@n ) in vec@value( hlms_uv_count@n ) uv@n;
@@ -27,7 +33,7 @@ vulkan_layout( OGRE_POSITION ) in vec4 vertex;
 
 @insertpiece( custom_vs_attributes )
 
-@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || exponential_shadow_maps )
+@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || alpha_test || hlms_alpha_hash || exponential_shadow_maps )
 	vulkan_layout( location = 0 ) out block
 	{
 		@insertpiece( VStoPS_block )
@@ -35,8 +41,10 @@ vulkan_layout( OGRE_POSITION ) in vec4 vertex;
 @end
 
 // START UNIFORM GL DECLARATION
-ReadOnlyBufferF( 0, float4, worldMatBuf );
-@property( texture_matrix )ReadOnlyBufferF( 1, float4, animationMatrixBuf );@end
+@property( !hlms_particle_system )
+	ReadOnlyBufferF( 0, float4, worldMatBuf );
+@end
+@property( texture_matrix )ReadOnlyBufferF( @value( texture_matrix ), float4, animationMatrixBuf );@end
 @property( !GL_ARB_base_instance )uniform uint baseInstance;@end
 // END UNIFORM GL DECLARATION
 

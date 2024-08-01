@@ -63,16 +63,18 @@ namespace Ogre
             @remarks
                 This is useful for shadow map atlases. On desktop you probably
                 want to render to a 8192x8192 shadow map in the following way:
+                @code
                     clear( 0, 0, 8192, 8192 );
                     foreach( shadowmap in shadowmaps )
                         render( shadowmap.x, shadowmap.y, shadowmap.width, shadowmap.height );
-
+                @endcode
                 However this is heavily innefficient for tilers. In tilers you probably
                 want to do the following:
+                @code
                     foreach( shadowmap in shadowmaps )
                         clear( shadowmap.x, shadowmap.y, shadowmap.width, shadowmap.height );
                         render( shadowmap.x, shadowmap.y, shadowmap.width, shadowmap.height );
-
+                @endcode
                 ClearOnTilers allows you to perform the most efficient shadow map rendering
                 on both tilers & non-tilers using the same compositor script, provided the
                 full clear pass was set to only execute on non-tilers.

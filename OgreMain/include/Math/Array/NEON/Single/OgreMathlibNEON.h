@@ -138,6 +138,14 @@ namespace Ogre
         // ArrayReal valueDegrees() const; // see bottom of this file
         ArrayReal valueRadians() const { return mRad; }
 
+        /** Wraps the given value to the range [-pi; pi]
+            The algorithm is:
+                const float signedPi = std::copysign( _PI, mRad );
+                const float wrappedValue = fmod( mRad + signedPi, TWO_PI );
+                mRad = wrappedValue - signedPi;
+        */
+        inline void wrapToRangeNPI_PI();
+
         inline const ArrayRadian &operator+() const;
         inline ArrayRadian        operator+( const ArrayRadian &r ) const;
         // inline ArrayRadian operator + ( const ArrayDegree& d ) const;
@@ -387,6 +395,12 @@ namespace Ogre
             dst[index] = val;
         }
 
+        /** Returns the first entry in src
+        @return
+            src[0]
+        */
+        static inline Real Get0( ArrayReal src ) { return vgetq_lane_f32( src, 0 ); }
+
         /** Returns the result of "a == std::numeric_limits<float>::infinity()"
         @return
             r[i] = a[i] == Inf ? 0xffffffff : 0;
@@ -396,11 +410,23 @@ namespace Ogre
             return vceqq_f32( a, MathlibNEON::INFINITEA );
         }
 
+        /// Truncates float to 32-bit integer
+        static inline ArrayInt Truncate( ArrayReal a ) { return vcvtq_s32_f32( a ); }
+
+        /// Converts 32-bit integer to float
+        static inline ArrayReal ConvertToF32( ArrayInt a ) { return vcvtq_f32_s32( a ); }
+
         /// Returns the maximum value between a and b
         static inline ArrayReal Max( ArrayReal a, ArrayReal b ) { return vmaxq_f32( a, b ); }
 
         /// Returns the minimum value between a and b
         static inline ArrayReal Min( ArrayReal a, ArrayReal b ) { return vminq_f32( a, b ); }
+
+        /// Clamps the value to the range [0; 1]
+        static inline ArrayReal Saturate( ArrayReal a )
+        {
+            return vmaxq_f32( vminq_f32( a, ONE ), vdupq_n_f32( 0.0f ) );
+        }
 
         /** Returns the minimum value of all elements in a
         @return
@@ -411,8 +437,8 @@ namespace Ogre
             float32x2_t a_lo, a_hi, min;
             a_lo = vget_low_f32( a );
             a_hi = vget_high_f32( a );
-            min = vpmin_f32( a_lo, a_hi );
-            min = vpmin_f32( min, min );
+            min = vpmin_f32( a_lo, a_hi );  // min = { min( a_lo.x, a_lo.y ), min( a_hi.x, a_hi.y ) }
+            min = vpmin_f32( min, min );    // min = { min( min.x, min.y ),   min( min.x, min.y ) }
 
             return vget_lane_f32( min, 0 );
         }
@@ -426,10 +452,73 @@ namespace Ogre
             float32x2_t a_lo, a_hi, max;
             a_lo = vget_low_f32( a );
             a_hi = vget_high_f32( a );
-            max = vpmax_f32( a_lo, a_hi );
-            max = vpmax_f32( max, max );
+            max = vpmax_f32( a_lo, a_hi );  // max = { max( a_lo.x, a_lo.y ), max( a_hi.x, a_hi.y ) }
+            max = vpmax_f32( max, max );    // max = { max( max.x, max.y ),   max( max.x, max.y ) }
 
             return vget_lane_f32( max, 0 );
+        }
+
+        /// Returns:
+        ///     (int16)( saturate( a ) * 32767.5f );
+        static inline ArrayToS16 ToSnorm16( ArrayReal a )
+        {
+            // vqmovn_s32 already performs saturation. No need for us to do it.
+            a = vmulq_f32( a, vdupq_n_f32( 32767.5f ) );
+            const int32x4_t asInt32 = vcvtnq_s32_f32( a );
+            const int16x4_t asInt16 = vqmovn_s32( asInt32 );
+            return asInt16;
+        }
+
+        /// Returns:
+        ///     (int16)( saturate( a ) * 127.5f );
+        ///
+        /// Input a MUST be in range (-256.996; 256.996) for saturation to properly work.
+        /// Otherwise result will be wrong.
+        static inline ArrayToS8 ToSnorm8Unsafe( ArrayReal a )
+        {
+            // vqmovn_s16 converts 16 bit to 8 bit using saturation. However
+            // the value is in 32-bit (there is 32 -> 8 instruction, but SSE2 doesn't have it,
+            // so we take a shortcut thanks to the guarantee/promise).
+            // As long as `a * 127.5` results in a value that can be represented in signed 16-bit,
+            // vqmovn_s16's automatic saturation will do the job for us.
+            a = vmulq_f32( a, vdupq_n_f32( 127.5f ) );
+            const int32x4_t asInt32 = vcvtnq_s32_f32( a );
+            const int16x8_t asInt16 = vreinterpretq_s16_s32( asInt32 );
+            return vqmovn_s16( asInt16 );
+        }
+
+        /** Extracts ARRAY_PACKED_REALS int16.
+        @param a
+            a must contain integers. Not floats.
+        @param outValues [out]
+            outValues[0] = (int16)a[0];
+            outValues[1] = (int16)a[1];
+            outValues[2] = (int16)a[2];
+            outValues[3] = (int16)a[3];
+        */
+        static inline void extractS16( ArrayToS16 a, int16 outValues[ARRAY_PACKED_REALS] )
+        {
+            outValues[0] = vget_lane_s16( a, 0 );
+            outValues[1] = vget_lane_s16( a, 1 );
+            outValues[2] = vget_lane_s16( a, 2 );
+            outValues[3] = vget_lane_s16( a, 3 );
+        }
+
+        /** Extracts ARRAY_PACKED_REALS int8.
+        @param a
+            a must contain integers. Not floats.
+        @param outValues [out]
+            outValues[0] = (int8)a[0];
+            outValues[1] = (int8)a[1];
+            outValues[2] = (int8)a[2];
+            outValues[3] = (int8)a[3];
+        */
+        static inline void extractS8( ArrayToS8 a, int8 outValues[ARRAY_PACKED_REALS] )
+        {
+            outValues[0] = vget_lane_s8( a, 0 );
+            outValues[1] = vget_lane_s8( a, 2 );
+            outValues[2] = vget_lane_s8( a, 4 );
+            outValues[3] = vget_lane_s8( a, 6 );
         }
 
         /** Returns the reciprocal of x
@@ -588,6 +677,16 @@ namespace Ogre
                 The fractional part of x. i.e. 0.57
         */
         static inline ArrayReal Modf4( ArrayReal x, ArrayReal &outIntegral );
+
+        /** Like std::copysign, composes a value of magnitude mag and sign sig
+        @param mag
+            Magnitude of the returned value.
+        @param sig
+            Sign of the returned value.
+        @return
+            A value of magnitude mag and sign sig
+        */
+        static inline ArrayReal CopySign4( ArrayReal mag, ArrayReal sig );
 
         /** Returns the arccos of x
             @param x

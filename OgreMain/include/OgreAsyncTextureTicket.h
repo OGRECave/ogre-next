@@ -35,6 +35,13 @@ THE SOFTWARE.
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuListener.h"
 
+// If X11/Xlib.h gets included before this header (for example it happens when
+// including wxWidgets and FLTK), Status is defined as an int which we don't
+// want as we have an enum named Status.
+#ifdef Status
+#    undef Status
+#endif
+
 namespace Ogre
 {
     /** In Ogre 2.2 reading data from GPU back to CPU is asynchronous.

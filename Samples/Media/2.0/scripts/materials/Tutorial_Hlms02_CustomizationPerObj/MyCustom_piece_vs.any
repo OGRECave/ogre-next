@@ -1,0 +1,11 @@
+@property( my_customizations_enabled && use_wind_animation )
+
+// This file gets parsed by the vertex shader stage (because it ends in piece_vs.any)
+
+@piece( custom_vs_preTransform )
+	// This math is way too simple, you probably want something better to simulate wind.
+	worldPos.xz += lerp( float2( 0.0f, 0.0f ), passBuf.wind.xz,
+						 worldPos.y + cos( worldPos.y * 200.0f ) * 0.05f );
+@end
+
+@end

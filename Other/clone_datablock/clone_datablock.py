@@ -17,7 +17,7 @@ def setup_clang(library):
         if sys.platform.startswith("win32"):
             clang.cindex.Config.set_library_path("C:/Program Files/LLVM/bin")
         else:
-            clang.cindex.Config.set_library_file( find_library('clang-4.0') )
+            clang.cindex.Config.set_library_file( find_library('clang-10') )
             #clang.cindex.Config.set_library_path("/usr/lib")
     else:
         clang.cindex.Config.set_library_file(library)
@@ -71,38 +71,45 @@ def parse_fielddecl(cursor, classname, classmembers):
     classmembers.append((cursor.spelling, size))
 
 
+def writeFileIfChanged(newFile, fullPath):
+    try:
+        oldFile = io.open(fullPath, 'r', encoding='utf-8', newline="\n")
+    except IOError:
+        oldFile = None
+
+    newFile.seek(0, io.SEEK_SET)
+
+    oldData = oldFile.read() if oldFile else ''
+    newData = newFile.read()
+
+    # Raw compare.
+    if oldData != newData:
+        if oldFile:
+            oldFile.seek(0, io.SEEK_SET)
+        newFile.seek(0, io.SEEK_SET)
+        print("File " + fullPath + " is outdated. Overwriting...")
+        if oldFile:
+            oldFile.close()
+        oldFile = io.open(fullPath, 'w', encoding='utf-8', newline="\n")
+        oldFile.write(newFile.read())
+        oldFile.close()
+    else:
+        print("File " + fullPath + " is up to date.")
+    newFile.close()
+    return
+
+
 def dump_cpp(dirname, basename, classname, classmembers, baseclassname):
     fullPath = dirname + "/" + basename
-    #file = io.open(fullPath, "w", encoding = "utf-8", newline = "\n")
     newFile = io.StringIO(newline = "\n")
 
     dump_cpp_disclaimer( newFile )
     dump_cpp_license( newFile )
+    
     dump_cpp_implementation( newFile, classname, classmembers, baseclassname )
 
-    newFile.seek( 0, io.SEEK_SET )
-    try:
-        oldFile = io.open( fullPath, 'r', encoding='utf-8', newline = "\n" )
-    except IOError:
-        oldFile = None
-
-    # Hash code removed since it's useless (why compare if we need to hash both?). Just raw compare.
-    #oldHash = hashlib.md5( oldFile.read() ).hexdigest()
-    #newHash = hashlib.md5( newFile.read() ).hexdigest()
-    if not oldFile or oldFile.read() != newFile.read():
-        if oldFile: oldFile.seek( 0, io.SEEK_SET )
-        newFile.seek( 0, io.SEEK_SET )
-        #print( "File " + fullPath + " is outdated " + str( oldHash ) + " (old) vs " + str( newHash ) + " (new). Overwriting..." )
-        print( "File " + fullPath + " is outdated. Overwriting..." )
-        if oldFile: oldFile.close()
-        oldFile = io.open( fullPath, 'w', encoding='utf-8', newline = "\n" )
-        oldFile.write( newFile.read() )
-        oldFile.close()
-    else:
-        #print( "File " + fullPath + " is up to date (" + str( oldHash ) + ")" )
-        print( "File " + fullPath + " is up to date." )
-    newFile.close()
-
+    writeFileIfChanged(newFile, fullPath)
+    
 
 def dump_cpp_disclaimer(file):
     file.write(

@@ -132,6 +132,15 @@ namespace Ogre
         "min",
         "max"
     };
+
+    static const char *c_customPieceKeyword[NumShaderTypes] =
+    {
+        "custom_piece_file_vs",
+        "custom_piece_file_ps",
+        "custom_piece_file_gs",
+        "custom_piece_file_hs",
+        "custom_piece_file_ds",
+    };
     // clang-format on
 
     HlmsJson::HlmsJson( HlmsManager *hlmsManager, HlmsJsonListener *listener ) :
@@ -363,8 +372,18 @@ namespace Ogre
     void HlmsJson::loadBlendblock( const rapidjson::Value &blendblocksJson, HlmsBlendblock &blendblock )
     {
         rapidjson::Value::ConstMemberIterator itor = blendblocksJson.FindMember( "alpha_to_coverage" );
-        if( itor != blendblocksJson.MemberEnd() && itor->value.IsBool() )
-            blendblock.mAlphaToCoverageEnabled = itor->value.GetBool();
+        if( itor != blendblocksJson.MemberEnd() )
+        {
+            if( itor->value.IsBool() )
+            {
+                blendblock.mAlphaToCoverage =
+                    itor->value.GetBool() ? HlmsBlendblock::A2cEnabled : HlmsBlendblock::A2cDisabled;
+            }
+            else if( itor->value.IsString() && !strcmp( itor->value.GetString(), "msaa_only" ) )
+            {
+                blendblock.mAlphaToCoverage = HlmsBlendblock::A2cEnabledMsaaOnly;
+            }
+        }
 
         itor = blendblocksJson.FindMember( "blendmask" );
         if( itor != blendblocksJson.MemberEnd() && itor->value.IsString() )
@@ -481,6 +500,17 @@ namespace Ogre
                             datablock->setBlendblock( it->second, i != 0 );
                     }
                 }
+            }
+        }
+
+        for( size_t i = 0u; i < NumShaderTypes; ++i )
+        {
+            itor = json.FindMember( c_customPieceKeyword[i] );
+            if( itor != json.MemberEnd() && itor->value.IsArray() && itor->value.Size() == 2u &&
+                itor->value[0].IsString() && itor->value[1].IsString() )
+            {
+                datablock->setCustomPieceFile( itor->value[0].GetString(), itor->value[1].GetString(),
+                                               static_cast<ShaderType>( i ) );
             }
         }
 
@@ -904,7 +934,19 @@ namespace Ogre
         outString += " :\n\t\t{\n";
 
         outString += "\t\t\t\"alpha_to_coverage\" : ";
-        outString += blendblock->mAlphaToCoverageEnabled ? "true" : "false";
+        switch( blendblock->mAlphaToCoverage )
+        {
+        default:
+        case HlmsBlendblock::A2cDisabled:
+            outString += "false";
+            break;
+        case HlmsBlendblock::A2cEnabled:
+            outString += "true";
+            break;
+        case HlmsBlendblock::A2cEnabledMsaaOnly:
+            outString += "\"msaa_only\"";
+            break;
+        }
 
         outString += ",\n\t\t\t\"blendmask\" : \"";
         if( blendblock->mBlendChannelMask == HlmsBlendblock::BlendChannelForceDisabled )
@@ -989,6 +1031,27 @@ namespace Ogre
         else
         {
             outString += getName( datablock->getBlendblock() );
+        }
+
+        for( size_t i = 0u; i < NumShaderTypes; ++i )
+        {
+            const int32 hashId = datablock->getCustomPieceFileIdHash( static_cast<ShaderType>( i ) );
+            if( hashId )
+            {
+                const Hlms *hlms = datablock->getCreator();
+                const Hlms::DatablockCustomPieceFile *data = hlms->getDatablockCustomPieceData( hashId );
+                OGRE_ASSERT_LOW( data );
+                if( data->isCacheable() )
+                {
+                    outString += ",\n\t\t\t\"";
+                    outString += c_customPieceKeyword[i];
+                    outString += "\" : [";
+                    outString += data->filename;
+                    outString += ", ";
+                    outString += data->resourceGroup;
+                    outString += "];";
+                }
+            }
         }
 
         if( datablock->getAlphaTest() != CMPF_ALWAYS_PASS )

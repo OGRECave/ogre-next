@@ -88,8 +88,9 @@ namespace Ogre
         mDefaultGenerateMipmaps( false ),
         mUsingExponentialShadowMaps( false ),
         mEsmK( 600u ),
-        mTexUnitSlotStart( 2u ),
-        mSamplerUnitSlotStart( 2u )
+        mReservedTexBufferSlots( 2u ),  // Vertex shader consumes 2 slots with its tbuffers.
+        mReservedTexSlots( 0u ),
+        mTexUnitSlotStart( 2u )
     {
         // Override defaults
         mLightGatheringMode = LightGatherNone;
@@ -99,6 +100,11 @@ namespace Ogre
 
         // Always an identity matrix
         mPreparedPass.viewProjMatrix[4] = Matrix4::IDENTITY;
+
+        mParticleSystemConstSlot = 3u;  // It is always 3.
+        // It is always 0.
+        // (0 is world matrix, we don't need it for particles. 1 is animation matrix)
+        mParticleSystemSlot = 0u;
     }
     HlmsUnlit::HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders, HlmsTypes type,
                           const String &typeName, uint32 constBufferSize ) :
@@ -112,8 +118,9 @@ namespace Ogre
         mUsingInstancedStereo( false ),
         mUsingExponentialShadowMaps( false ),
         mEsmK( 600u ),
-        mTexUnitSlotStart( 2u ),
-        mSamplerUnitSlotStart( 2u )
+        mReservedTexBufferSlots( 2u ),  // Vertex shader consumes 2 slots with its tbuffers.
+        mReservedTexSlots( 0u ),
+        mTexUnitSlotStart( 2u )
     {
         // Override defaults
         mLightGatheringMode = LightGatherNone;
@@ -123,6 +130,11 @@ namespace Ogre
 
         // Always an identity matrix
         mPreparedPass.viewProjMatrix[4] = Matrix4::IDENTITY;
+
+        mParticleSystemConstSlot = 3u;  // It is always 3.
+        // It is always 0.
+        // (0 is world matrix, we don't need it for particles. 1 is animation matrix)
+        mParticleSystemSlot = 0u;
     }
     //-----------------------------------------------------------------------------------
     HlmsUnlit::~HlmsUnlit() { destroyAllBuffers(); }
@@ -160,22 +172,35 @@ namespace Ogre
     {
         DescBindingRange *descBindingRanges = rootLayout.mDescBindingRanges[0];
 
-        descBindingRanges[DescBindingTypes::ConstBuffer].end = 3u;
+        if( getProperty( tid, HlmsBaseProp::ParticleSystem ) == 0 )
+            descBindingRanges[DescBindingTypes::ConstBuffer].end = 3u;
+        else
+            descBindingRanges[DescBindingTypes::ConstBuffer].end = 4u;
 
         if( getProperty( tid, UnlitProperty::TextureMatrix ) == 0 )
             descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 1u;
         else
             descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 2u;
 
+        if( getProperty( tid, HlmsBaseProp::BlueNoise ) )
+        {
+            descBindingRanges[DescBindingTypes::Texture].end =
+                (uint16)getProperty( tid, "samplerStateStart" );
+            descBindingRanges[DescBindingTypes::Texture].start =
+                descBindingRanges[DescBindingTypes::Texture].end - 1u;
+        }
+
         rootLayout.mBaked[1] = true;
         DescBindingRange *bakedRanges = rootLayout.mDescBindingRanges[1];
-        bakedRanges[DescBindingTypes::Sampler].start = (uint16)mSamplerUnitSlotStart;
-        bakedRanges[DescBindingTypes::Sampler].end =
-            (uint16)mSamplerUnitSlotStart + (uint16)getProperty( tid, UnlitProperty::NumSamplers );
-
-        bakedRanges[DescBindingTypes::Texture].start = (uint16)mTexUnitSlotStart;
+        bakedRanges[DescBindingTypes::Texture].start = (uint16)getProperty( tid, "samplerStateStart" );
         bakedRanges[DescBindingTypes::Texture].end =
-            (uint16)mTexUnitSlotStart + (uint16)getProperty( tid, UnlitProperty::NumTextures );
+            bakedRanges[DescBindingTypes::Texture].start +
+            (uint16)getProperty( tid, UnlitProperty::NumTextures );
+
+        bakedRanges[DescBindingTypes::Sampler].start = bakedRanges[DescBindingTypes::Texture].start;
+        bakedRanges[DescBindingTypes::Sampler].end =
+            bakedRanges[DescBindingTypes::Sampler].start +
+            (uint16)getProperty( tid, UnlitProperty::NumSamplers );
 
         mListener->setupRootLayout( rootLayout, mT[tid].setProperties, tid );
     }
@@ -207,8 +232,10 @@ namespace Ogre
         if( mVaoManager->readOnlyIsTexBuffer() )
         {
             vsParams->setNamedConstant( "worldMatBuf", 0 );
-            if( getProperty( tid, UnlitProperty::TextureMatrix ) )
-                vsParams->setNamedConstant( "animationMatrixBuf", 1 );
+
+            const int32 texMatrixSlot = getProperty( tid, UnlitProperty::TextureMatrix );
+            if( texMatrixSlot )
+                vsParams->setNamedConstant( "animationMatrixBuf", texMatrixSlot );
         }
 
         mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache, mT[tid].setProperties,
@@ -504,15 +531,17 @@ namespace Ogre
             setProperty( kNoTid, UnlitProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlit::calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces )
+    void HlmsUnlit::calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces,
+                                               const PiecesMap *normalPassPieces )
     {
         // HlmsUnlitDatablock *datablock = static_cast<HlmsUnlitDatablock*>(
         //                                              renderable->getDatablock() );
 
         HlmsDatablock *datablock = renderable->getDatablock();
-        const bool hasAlphaTest = datablock->getAlphaTest() != CMPF_ALWAYS_PASS;
+        const bool hasAlphaTestOrHash =
+            datablock->getAlphaTest() != CMPF_ALWAYS_PASS || datablock->getAlphaHashing();
 
-        if( !hasAlphaTest )
+        if( !hasAlphaTestOrHash )
         {
             HlmsPropertyVec::iterator itor = mT[kNoTid].setProperties.begin();
             HlmsPropertyVec::iterator endt = mT[kNoTid].setProperties.end();
@@ -524,9 +553,7 @@ namespace Ogre
                     itor->keyName != HlmsPsoProp::InputLayoutId &&
                     itor->keyName != HlmsBaseProp::Skeleton &&
                     itor->keyName != HlmsBaseProp::BonesPerVertex &&
-                    itor->keyName != HlmsBaseProp::DualParaboloidMapping &&
-                    itor->keyName != HlmsBaseProp::AlphaTest &&
-                    itor->keyName != HlmsBaseProp::AlphaBlend )
+                    itor->keyName != HlmsBaseProp::DualParaboloidMapping )
                 {
                     itor = mT[kNoTid].setProperties.erase( itor );
                     endt = mT[kNoTid].setProperties.end();
@@ -537,6 +564,13 @@ namespace Ogre
                 }
             }
         }
+        else
+        {
+            inOutPieces[VertexShader] = normalPassPieces[VertexShader];
+            inOutPieces[PixelShader] = normalPassPieces[PixelShader];
+        }
+
+        setupSharedBasicProperties( renderable );
 
         if( mFastShaderBuildHack )
             setProperty( kNoTid, UnlitProperty::MaterialsPerBuffer, static_cast<int>( 2 ) );
@@ -546,8 +580,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsUnlit::notifyPropertiesMergedPreGenerationStep( const size_t tid )
     {
+        Hlms::notifyPropertiesMergedPreGenerationStep( tid );
+
         const int32 samplerStateStart = getProperty( tid, UnlitProperty::SamplerStateStart );
         int32 texUnit = samplerStateStart;
+
+        if( getProperty( tid, HlmsBaseProp::BlueNoise ) )
+            setTextureReg( tid, PixelShader, "blueNoiseTex", texUnit - 1 );
+
         {
             char tmpData[32];
             LwString texName = LwString::FromEmptyPointer( tmpData, sizeof( tmpData ) );
@@ -573,6 +613,15 @@ namespace Ogre
 
                 setTextureReg( tid, PixelShader, texName.c_str(), texUnit++ );
             }
+        }
+
+        if( getProperty( tid, HlmsBaseProp::ParticleSystem ) )
+        {
+            setProperty( tid, "particleSystemConstSlot", mParticleSystemConstSlot );
+            if( mVaoManager->readOnlyIsTexBuffer() )
+                setTextureReg( tid, VertexShader, "particleSystemGpuData", mParticleSystemSlot );
+            else
+                setProperty( tid, "particleSystemGpuData", mParticleSystemSlot );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -621,7 +670,21 @@ namespace Ogre
         setProperty( kNoTid, HlmsBaseProp::RenderDepthOnly,
                      ( renderPassDesc->getNumColourEntries() > 0 ) ? 0 : 1 );
 
-        setProperty( kNoTid, UnlitProperty::SamplerStateStart, (int32)mSamplerUnitSlotStart );
+        mTexUnitSlotStart =
+            uint32( mReservedTexSlots + mReservedTexBufferSlots +
+                    mListener->getNumExtraPassTextures( mT[kNoTid].setProperties, casterPass ) );
+
+        if( mHlmsManager->getBlueNoiseTexture() )
+        {
+            setProperty( kNoTid, HlmsBaseProp::BlueNoise, 1 );
+            ++mTexUnitSlotStart;
+        }
+
+        setProperty( kNoTid, UnlitProperty::SamplerStateStart, (int32)mTexUnitSlotStart );
+
+        const bool bNeedsViewMatrix = msHasParticleFX2Plugin;
+        if( bNeedsViewMatrix )
+            setProperty( kNoTid, HlmsBaseProp::ViewMatrix, 1 );
 
         if( mOptimizationStrategy == LowerGpuOverhead )
             setProperty( kNoTid, UnlitProperty::LowerGpuOverhead, 1 );
@@ -635,6 +698,12 @@ namespace Ogre
             // some Android devices(e.g. Mali-G77, Google Pixel 7 Pro) do not support user clip planes
             if( !mRenderSystem->getCapabilities()->hasCapability( RSC_USER_CLIP_PLANES ) )
                 setProperty( kNoTid, HlmsBaseProp::EmulateClipDistances, 1 );
+        }
+
+        if( pass && pass->getAnyTargetTexture() )
+        {
+            setProperty( kNoTid, HlmsBaseProp::MsaaSamples,
+                         pass->getAnyTargetTexture()->getSampleDescription().getColourSamples() );
         }
 
         mListener->preparePassHash( shadowNode, casterPass, dualParaboloid, sceneManager, this );
@@ -728,6 +797,12 @@ namespace Ogre
             mapSize += ( 16 + 16 ) * 4;
         }
 
+        if( bNeedsViewMatrix )
+        {
+            // float4x4 view
+            mapSize += 16u * 4u;
+        }
+
         const bool isCameraReflected = cameras.renderingCamera->isReflected();
         // mat4 invViewProj
         if( ( isCameraReflected ||
@@ -791,6 +866,12 @@ namespace Ogre
             // mat4 viewProj[1] (identityProj, right eye);
             for( size_t i = 0u; i < 16u; ++i )
                 *passBufferPtr++ = (float)mPreparedPass.viewProjMatrix[3][0][i];
+        }
+
+        if( bNeedsViewMatrix )
+        {
+            for( size_t i = 0u; i < 16u; ++i )
+                *passBufferPtr++ = (float)viewMatrix[0][i];
         }
 
         // vec4 clipPlane0
@@ -935,6 +1016,14 @@ namespace Ogre
                     CbShaderBuffer( PixelShader, 2, mConstBuffers[mCurrentConstBuffer], 0, 0 );
             }
 
+            size_t texUnit = mReservedTexBufferSlots;
+            if( mHlmsManager->getBlueNoiseTexture() )
+            {
+                *commandBuffer->addCommand<CbTexture>() =
+                    CbTexture( (uint16)texUnit, mHlmsManager->getBlueNoiseTexture(), 0 );
+                ++texUnit;
+            }
+
             rebindTexBuffer( commandBuffer );
 
             mListener->hlmsTypeChanged( casterPass, commandBuffer, datablock, 0u );
@@ -942,7 +1031,9 @@ namespace Ogre
 
         // Don't bind the material buffer on caster passes (important to keep
         // MDI & auto-instancing running on shadow map passes)
-        if( mLastBoundPool != datablock->getAssignedPool() && !casterPass )
+        if( mLastBoundPool != datablock->getAssignedPool() &&
+            ( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS ||
+              datablock->getAlphaHashing() ) )
         {
             // layout(binding = 1) uniform MaterialBuf {} materialArray
             const ConstBufferPool::BufferPool *newPool = datablock->getAssignedPool();
@@ -956,7 +1047,7 @@ namespace Ogre
             {
                 TexBufferPacked *extraBuffer = static_cast<TexBufferPacked *>( newPool->extraBuffer );
                 *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
-                    VertexShader, 1, extraBuffer, 0, (uint32)extraBuffer->getTotalSizeBytes() );
+                    VertexShader, 1u, extraBuffer, 0, (uint32)extraBuffer->getTotalSizeBytes() );
             }
 
             mLastBoundPool = newPool;
@@ -1019,7 +1110,8 @@ namespace Ogre
         //                          ---- PIXEL SHADER ----
         //---------------------------------------------------------------------------
 
-        if( !casterPass )
+        if( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS ||
+            datablock->getAlphaHashing() )
         {
             if( datablock->mTexturesDescSet != mLastDescTexture )
             {
@@ -1049,7 +1141,7 @@ namespace Ogre
                 if( datablock->mSamplersDescSet )
                 {
                     // Bind samplers
-                    size_t texUnit = mSamplerUnitSlotStart;
+                    size_t texUnit = mTexUnitSlotStart;
                     *commandBuffer->addCommand<CbSamplers>() =
                         CbSamplers( (uint16)texUnit, datablock->mSamplersDescSet );
                     mLastDescSampler = datablock->mSamplersDescSet;
@@ -1113,9 +1205,7 @@ namespace Ogre
         // name of the compatible shading language is part of the path
         RenderSystem *renderSystem = Root::getSingleton().getRenderSystem();
         String shaderSyntax = "GLSL";
-        if( renderSystem->getName() == "OpenGL ES 2.x Rendering Subsystem" )
-            shaderSyntax = "GLSLES";
-        else if( renderSystem->getName() == "Direct3D11 Rendering Subsystem" )
+        if( renderSystem->getName() == "Direct3D11 Rendering Subsystem" )
             shaderSyntax = "HLSL";
         else if( renderSystem->getName() == "Metal Rendering Subsystem" )
             shaderSyntax = "Metal";

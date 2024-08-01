@@ -267,8 +267,12 @@ namespace Ogre
         void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso ) override;
         void _hlmsMacroblockCreated( HlmsMacroblock *newBlock ) override;
         void _hlmsMacroblockDestroyed( HlmsMacroblock *block ) override;
-        void _hlmsBlendblockCreated( HlmsBlendblock *newBlock ) override;
-        void _hlmsBlendblockDestroyed( HlmsBlendblock *block ) override;
+
+    protected:
+        void createBlendState( const HlmsBlendblock *newBlock, bool bIsMultisample,
+                               ComPtr<ID3D11BlendState> &outBlendblock );
+
+    public:
         void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock ) override;
         void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block ) override;
         void _descriptorSetTextureCreated( DescriptorSetTexture *newSet ) override;
@@ -278,7 +282,7 @@ namespace Ogre
         void _descriptorSetUavCreated( DescriptorSetUav *newSet ) override;
         void _descriptorSetUavDestroyed( DescriptorSetUav *set ) override;
         void _setHlmsMacroblock( const HlmsMacroblock *macroblock );
-        void _setHlmsBlendblock( const HlmsBlendblock *blendblock );
+        void _setHlmsBlendblock( ComPtr<ID3D11BlendState> blendState );
         void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock ) override;
         void _setPipelineStateObject( const HlmsPso *pso ) override;
 

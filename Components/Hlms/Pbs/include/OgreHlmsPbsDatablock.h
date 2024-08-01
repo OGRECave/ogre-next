@@ -608,7 +608,7 @@ namespace Ogre
         @param transparency
             Value in range [0; 1] where 0 = full transparency and 1 = fully opaque.
         @param mode
-            @see TransparencyModes
+            see #TransparencyModes
         @param useAlphaFromTextures
             When false, the alpha channel of the diffuse maps and detail maps will be
             ignored. It's a GPU performance optimization.

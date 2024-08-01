@@ -159,7 +159,8 @@ namespace Ogre
             Rectangle2D:        10 \n
             v1::Entity:         110 \n
             v1::Rectangle2D:    110 \n
-            ParticleSystem:     110 \n
+            ParticleSystem (v1):110 \n
+            ParticleSystem (v2):kParticleSystemDefaultRenderQueueId \n
             [.. more unlisted ..]
         @remarks
             By default, the render queues have the following mode set: \n
@@ -193,7 +194,11 @@ namespace Ogre
             /// of homogeneous and heterogenous meshes, with many different kinds
             /// of materials and textures.
             /// Only v2 Items can be put in this queue.
-            FAST
+            FAST,
+
+            /// Renders ParticleSystemDef (i.e. ParticleFX2 plugin).
+            /// Don't put v1 Particle Systems here.
+            PARTICLE_SYSTEM,
         };
 
         enum RqSortMode
@@ -281,6 +286,12 @@ namespace Ogre
 
         void renderES2( RenderSystem *rs, bool casterPass, bool dualParaboloid,
                         HlmsCache passCache[HLMS_MAX], const RenderQueueGroup &renderQueueGroup );
+
+        uint8 *renderParticles( RenderSystem *rs, bool casterPass, HlmsCache passCache[],
+                                const RenderQueueGroup   &renderQueueGroup,
+                                ParallelHlmsCompileQueue *parallelCompileQueue,
+                                IndirectBufferPacked *indirectBuffer, uint8 *indirectDraw,
+                                uint8 *startIndirectDraw );
 
         /// Renders in a compatible way with GL 3.3 and D3D11. Can only render V2 objects
         /// (i.e. Items, VertexArrayObject)

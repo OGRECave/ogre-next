@@ -139,6 +139,7 @@ namespace Ogre
     class AxisAlignedBox;
     class AxisAlignedBoxSceneQuery;
     class Barrier;
+    class BillboardSet;
     class Bone;
     class BoneMemoryManager;
     struct BoneTransform;
@@ -172,6 +173,7 @@ namespace Ogre
     struct DescriptorSetUav;
     class DynLib;
     class DynLibManager;
+    class EmitterDefData;
     class ErrorDialog;
     class ExternalTextureSourceManager;
     class Factory;
@@ -246,11 +248,15 @@ namespace Ogre
     class ObjectMemoryManager;
     class Particle;
     class ParticleAffector;
+    class ParticleAffector2;
     class ParticleAffectorFactory;
     class ParticleEmitter;
     class ParticleEmitterFactory;
     class ParticleSystem;
+    class ParticleSystem2;
+    class ParticleSystemDef;
     class ParticleSystemManager;
+    class ParticleSystemManager2;
     class ParticleSystemRenderer;
     class ParticleSystemRendererFactory;
     class ParticleVisualData;

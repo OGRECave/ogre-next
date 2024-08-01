@@ -237,6 +237,12 @@ namespace Ogre
 
         static inline void Set( ArrayReal &dst, Real val, size_t index ) { dst = val; }
 
+        /** Returns the first entry in src
+        @return
+            src[0]
+        */
+        static inline Real Get0( ArrayReal src ) { return src; }
+
         /** Returns the result of "a == std::numeric_limits<float>::infinity()"
         @return
             r[i] = a[i] == Inf ? 0xffffffff : 0;
@@ -246,11 +252,75 @@ namespace Ogre
             return a == std::numeric_limits<float>::infinity();
         }
 
+        /// Truncates float to 32-bit integer
+        static inline ArrayInt Truncate( ArrayReal a ) { return static_cast<ArrayInt>( a ); }
+
+        /// Converts 32-bit integer to float
+        static inline ArrayReal ConvertToF32( ArrayInt a ) { return static_cast<ArrayReal>( a ); }
+
         /// Returns the maximum value between a and b
         static inline ArrayReal Max( ArrayReal a, ArrayReal b ) { return std::max( a, b ); }
 
         /// Returns the minimum value between a and b
         static inline ArrayReal Min( ArrayReal a, ArrayReal b ) { return std::min( a, b ); }
+
+        /// Clamps the value to the range [0; 1]
+        static inline ArrayReal Saturate( ArrayReal a )
+        {
+            return std::max( std::min( a, ArrayReal( 1.0f ) ), ArrayReal( 0.0f ) );
+        }
+
+        /// Returns:
+        ///     (int16)( saturate( a ) * 32767.5f );
+        static inline ArrayToS16 ToSnorm16( ArrayReal a )
+        {
+            a = std::max( std::min( a, 1.0f ), -1.0f );
+            a = a * 32767.5f;
+            const ArrayInt asUint32 = static_cast<ArrayInt>( static_cast<int32>( a ) );
+            return asUint32;
+        }
+
+        /// Returns:
+        ///     (int16)( saturate( a ) * 127.5f );
+        ///
+        /// Input a MUST be in range (-256.996; 256.996) for saturation to properly work
+        /// (in other implementations, C version doesn't have this flaw).
+        /// Otherwise result will be wrong.
+        static inline ArrayToS8 ToSnorm8Unsafe( ArrayReal a )
+        {
+            a = std::max( std::min( a, 1.0f ), -1.0f );
+            a = a * 127.5f;
+            const ArrayInt asUint32 = static_cast<ArrayInt>( static_cast<int32>( a ) );
+            return asUint32;
+        }
+
+        /** Extracts ARRAY_PACKED_REALS int16.
+        @param a
+            a must contain integers. Not floats.
+        @param outValues [out]
+            outValues[0] = (int16)a[0];
+            outValues[1] = (int16)a[1];
+            outValues[2] = (int16)a[2];
+            outValues[3] = (int16)a[3];
+        */
+        static inline void extractS16( ArrayToS16 a, int16 outValues[ARRAY_PACKED_REALS] )
+        {
+            outValues[0] = (int16)a;
+        }
+
+        /** Extracts ARRAY_PACKED_REALS int8.
+        @param a
+            a must contain integers. Not floats.
+        @param outValues [out]
+            outValues[0] = (int8)a[0];
+            outValues[1] = (int8)a[1];
+            outValues[2] = (int8)a[2];
+            outValues[3] = (int8)a[3];
+        */
+        static inline void extractS8( ArrayToS8 a, int8 outValues[ARRAY_PACKED_REALS] )
+        {
+            outValues[0] = (int8)a;
+        }
 
         /** Returns the minimum value of all elements in a
         @return
@@ -300,11 +370,11 @@ namespace Ogre
         static inline ArrayReal InvSqrtNonZero4( ArrayReal f ) { return 1.0f / std::sqrt( f ); }
 
         /** Break x into fractional and integral parts
-            @param
-                4 floating point values. i.e. "2.57" (x4)
             @param x
+                4 floating point values. i.e. "2.57" (x4)
+            @param outIntegral
                 The integral part of x. i.e. 2
-            @return outIntegral
+            @return
                 The fractional part of x. i.e. 0.57
         */
         static inline ArrayReal Modf4( ArrayReal x, ArrayReal &outIntegral );

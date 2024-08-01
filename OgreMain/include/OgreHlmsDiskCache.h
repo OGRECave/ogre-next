@@ -160,12 +160,23 @@ namespace Ogre
 
         typedef vector<Pso>::type PsoVec;
 
+        struct DatablockCustomPiecesCache
+        {
+            uint64 sourceCodeHash[2];  // 128 bit hash
+            String filename;
+            String resourceGroup;
+        };
+
+        typedef vector<DatablockCustomPiecesCache>::type DatablockCustomPiecesCacheVec;
+
         struct Cache
         {
             uint64        templateHash[2];  // 128 bit hash
             uint8         type;             ///< See HlmsTypes
             SourceCodeVec sourceCode;
             PsoVec        pso;
+
+            DatablockCustomPiecesCacheVec datablockCustomPieceFiles;
         };
 
         bool         mTemplatesOutOfDate;

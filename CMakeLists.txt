@@ -501,6 +501,7 @@ if( APPLE )
     option(OGRE_BUILD_RENDERSYSTEM_METAL "Build Metal RenderSystem (Apple only)" TRUE)
 endif()
 option(OGRE_BUILD_PLUGIN_PFX "Build ParticleFX plugin" TRUE)
+option(OGRE_BUILD_PLUGIN_PFX2 "Build ParticleFX2 plugin" TRUE)
 
 option(OGRE_IDSTRING_USE_128 "Ogre will use 128 for IdString to reduce chances of collisions. Use this if you have approximately >= 10.000 meshes or materials" FALSE)
 

@@ -34,6 +34,9 @@ THE SOFTWARE.
 #include "OgreHlmsCompute.h"
 #include "OgreLogManager.h"
 #include "OgreRenderSystem.h"
+#include "OgreTextureFilters.h"
+#include "OgreTextureGpu.h"
+#include "OgreTextureGpuManager.h"
 #if !OGRE_NO_JSON
 #    include "OgreResourceGroupManager.h"
 #endif
@@ -45,6 +48,7 @@ namespace Ogre
     HlmsManager::HlmsManager() :
         mComputeHlms( 0 ),
         mRenderSystem( 0 ),
+        mBlueNoise( 0 ),
         mDefaultHlmsType( HLMS_PBS )
 #if !OGRE_NO_JSON
         ,
@@ -957,5 +961,24 @@ namespace Ogre
     {
         assert( idx < OGRE_HLMS_NUM_SAMPLERBLOCKS );
         return &mSamplerblocks[idx];
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsManager::loadBlueNoise()
+    {
+        const uint32 poolId = 992044u;  // Same as LTC (LTC has different pixel format)
+
+        TextureGpuManager *textureGpuManager = mRenderSystem->getTextureGpuManager();
+        if( !textureGpuManager->hasPoolId( poolId, 64u, 64u, 1u, PFG_RGBA16_FLOAT ) )
+            textureGpuManager->reservePoolId( poolId, 64u, 64u, 1u, 1u, PFG_R8_UNORM );
+
+        TextureGpu *blueNoise = textureGpuManager->createOrRetrieveTexture(
+            "LDR_R_0.png", GpuPageOutStrategy::Discard, TextureFlags::AutomaticBatching,
+            TextureTypes::Type2D, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+            TextureFilter::TypeLeaveChannelR, poolId );
+
+        blueNoise->scheduleTransitionTo( GpuResidency::Resident, nullptr, false, true );
+        OGRE_ASSERT_LOW( blueNoise->getInternalSliceStart() == 0u );
+
+        mBlueNoise = blueNoise;
     }
 }  // namespace Ogre

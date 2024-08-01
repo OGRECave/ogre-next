@@ -1,0 +1,16 @@
+@piece( DeclQuaternion )
+	INLINE float4 BuildQuaternionFromAngleAxis( float3 v, float angleRad )
+	{
+		float fHalfAngle = 0.5 * angleRad;
+		float fSin = sin( fHalfAngle );
+		float4 retVal;
+		retVal.w = cos( fHalfAngle );
+		retVal.xyz = fSin * v.xyz;
+		return retVal;
+	}
+
+	INLINE float3 qmul( float4 q, float3 v )
+	{
+		return v + 2.0 * cross( cross( v, q.xyz ) + q.w * v, q.xyz );
+	}
+@end

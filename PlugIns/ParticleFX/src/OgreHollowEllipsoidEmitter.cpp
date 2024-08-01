@@ -51,7 +51,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     HollowEllipsoidEmitter::HollowEllipsoidEmitter( ParticleSystem *psys ) : EllipsoidEmitter( psys )
     {
-        if( initDefaults( "HollowEllipsoid" ) )
+        if( initDefaults() )
         {
             // Add custom parameters
             ParamDictionary *pDict = getParamDictionary();
@@ -154,6 +154,9 @@ namespace Ogre
     Real HollowEllipsoidEmitter::getInnerSizeY() const { return mInnerSize.y; }
     //-----------------------------------------------------------------------
     Real HollowEllipsoidEmitter::getInnerSizeZ() const { return mInnerSize.z; }
+    //-----------------------------------------------------------------------
+    static const String kHollowEllipsoidEmitterFactoryName = "HollowEllipsoid";
+    const String &HollowEllipsoidEmitter::getType() const { return kHollowEllipsoidEmitterFactoryName; }
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     // Command objects

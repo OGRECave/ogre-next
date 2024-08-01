@@ -45,7 +45,6 @@ namespace Ogre
         ParticleAffector *createAffector( ParticleSystem *psys ) override
         {
             ParticleAffector *p = new ScaleInterpolatorAffector( psys );
-            mAffectors.push_back( p );
             return p;
         }
     };

@@ -255,7 +255,18 @@ namespace Ogre
         return SampleDescription( samples, sampleDesc.getMsaaPattern() );
     }
     //-------------------------------------------------------------------------
-    bool MetalRenderSystem::supportsMultithreadedShaderCompliation() const { return true; }
+    bool MetalRenderSystem::supportsMultithreadedShaderCompliation() const
+    {
+#ifndef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
+        return true;
+#else
+#    ifdef OGRE_SHADER_THREADING_USE_TLS
+        return true;
+#    else
+        return false;
+#    endif
+#endif
+    }
     //-------------------------------------------------------------------------
     HardwareOcclusionQuery *MetalRenderSystem::createHardwareOcclusionQuery()
     {
@@ -1649,7 +1660,10 @@ namespace Ogre
             psd.vertexDescriptor = vertexDescriptor;
         }
 
-        psd.alphaToCoverageEnabled = newPso->blendblock->mAlphaToCoverageEnabled;
+        psd.alphaToCoverageEnabled =
+            newPso->blendblock->mAlphaToCoverage == HlmsBlendblock::A2cEnabled ||
+            ( newPso->blendblock->mAlphaToCoverage == HlmsBlendblock::A2cEnabledMsaaOnly &&
+              newPso->pass.sampleDescription.isMultisample() );
 
         uint8 mrtCount = 0;
         for( size_t i = 0; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
