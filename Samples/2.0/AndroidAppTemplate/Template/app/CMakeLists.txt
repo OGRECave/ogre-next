@@ -23,6 +23,12 @@ endif()
 # Read OgreBuildSettings.h to link against optional libraries (only if set)
 file( READ "${OGRE_BINARIES}/include/OgreBuildSettings.h" OGRE_BUILD_SETTINGS_STR )
 string( FIND "${OGRE_BUILD_SETTINGS_STR}" "#define OGRE_BUILD_COMPONENT_ATMOSPHERE" OGRE_BUILD_COMPONENT_ATMOSPHERE )
+string( FIND "${OGRE_BUILD_SETTINGS_STR}" "#define OGRE_BUILD_PLUGIN_PFX" OGRE_BUILD_PLUGIN_PFX )
+string( FIND "${OGRE_BUILD_SETTINGS_STR}" "#define OGRE_BUILD_PLUGIN_PFX2" OGRE_BUILD_PLUGIN_PFX2 )
+
+# Read OgreVulkanBuildSettings.h to link against optional libraries (only if set)
+file( READ "${OGRE_BINARIES}/include/OgreVulkanBuildSettings.h" OGRE_VK_BUILD_SETTINGS_STR )
+string( FIND "${OGRE_VK_BUILD_SETTINGS_STR}" "#define OGRE_VULKAN_USE_SWAPPY" OGRE_VULKAN_USE_SWAPPY )
 
 include_directories( ${OGRE_SOURCE}/OgreMain/include )
 include_directories( ${OGRE_SOURCE}/RenderSystems/Vulkan/include )
@@ -55,6 +61,20 @@ if( NOT OGRE_BUILD_COMPONENT_ATMOSPHERE EQUAL -1 )
 	)
 endif()
 
+if( NOT OGRE_BUILD_PLUGIN_PFX EQUAL -1 )
+	set( OGRE_OPTIONAL_LIBS ${OGRE_OPTIONAL_LIBS}
+		optimized ${OGRE_BINARIES}/lib/libPlugin_ParticleFXStatic.a
+		debug ${OGRE_BINARIES}/lib/libPlugin_ParticleFXStatic_d.a
+	)
+endif()
+
+if( NOT OGRE_BUILD_PLUGIN_PFX2 EQUAL -1 )
+	set( OGRE_OPTIONAL_LIBS ${OGRE_OPTIONAL_LIBS}
+		optimized ${OGRE_BINARIES}/lib/libPlugin_ParticleFX2Static.a
+		debug ${OGRE_BINARIES}/lib/libPlugin_ParticleFX2Static_d.a
+	)
+endif()
+
 # The order in which libs are linked MATTERS
 set( OGRE_LIBS
 	optimized ${OGRE_BINARIES}/lib/lib%%prefixSampleName%%.a
@@ -82,5 +102,9 @@ set( OGRE_LIBS
 	${OGRE_SOURCE}/DependenciesAndroid/lib/libfreetype.a
 	${OGRE_SOURCE}/DependenciesAndroid/lib/libzlib.a
 	${OGRE_SOURCE}/DependenciesAndroid/lib/libzziplib.a )
+
+if( OGRE_VULKAN_USE_SWAPPY )
+	list( APPEND OGRE_LIBS ${OGRE_SOURCE}/DependenciesAndroid/lib/libswappy_static.a )
+endif()
 
 target_link_libraries( %%sampleName%% app-glue log android vulkan ${OGRE_LIBS} cpufeatures )

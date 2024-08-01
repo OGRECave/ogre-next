@@ -1,0 +1,148 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+@property( hlms_particle_system )
+
+@piece( ParticleSystemStructDeclVS )
+	CONST_BUFFER_STRUCT_BEGIN( GpuParticleCommon, @value(particleSystemConstSlot) )
+	{
+		float4 dir;
+		float4 up;
+	}
+	CONST_BUFFER_STRUCT_END( particleCommon );
+
+	struct ParticleGpuData
+	{
+		float2 dim;
+		float3 pos;
+		float3 dir;
+		float rotation;
+		float4 colour;
+	};
+
+	@property( syntax == metal )
+		#define PARTICLEGPU_ARG_DECL , device const uint4 *particleSystemGpuData
+		#define PARTICLEGPU_ARG , particleSystemGpuData
+	@else
+		#define PARTICLEGPU_ARG_DECL
+		#define PARTICLEGPU_ARG
+	@end
+
+	ParticleGpuData loadParticleGpuData( uint vertexId PARTICLEGPU_ARG_DECL )
+	{
+		ParticleGpuData retVal;
+
+		// const uint particleId = vertexId / 6u;
+		const uint particleId = vertexId / 4u;
+		uint4 tmp;
+		tmp = readOnlyFetch( particleSystemGpuData, particleId * 2u );
+		retVal.dim.xy = uintBitsToFloat( tmp.xy );
+		retVal.pos.xy = uintBitsToFloat( tmp.zw );
+		tmp = readOnlyFetch( particleSystemGpuData, particleId * 2u + 1u );
+		retVal.pos.z = uintBitsToFloat( tmp.x );
+		float4 tmp2 = unpackSnorm4x8( tmp.y );
+		retVal.dir.xyz = tmp2.xyz;
+		retVal.colour.w = tmp2.w * 0.5f + 0.5f;
+		tmp2.xy = unpackSnorm2x16( tmp.z );
+		retVal.rotation = tmp2.x * 3.14159265359f;
+		retVal.colour.x = tmp2.y * 124.0f - 4.0f;
+		retVal.colour.yz = unpackSnorm2x16( tmp.w ) * 124.0f - 4.0f;
+
+		return retVal;
+	}
+@end
+
+@piece( DoParticleSystemVS )
+	// We try that most variables start with particle prefix to avoid our
+	// variable names from clashing with other Hlms custom blocks.
+	const ParticleGpuData particleData = loadParticleGpuData( uint( inVs_vertexId ) PARTICLEGPU_ARG );
+
+	const uint vertexInQuad = uint( inVs_vertexId ) & 0x03u;
+
+	@property( hlms_particle_type == particle_type_point )
+		// In point type, these are in view space
+		const float3 particleRightVec =
+			mul( toFloat3x3( passBuf.view ), float3( particleData.dim.x, 0, 0 ) );
+		const float3 particleUpVec =
+			mul( toFloat3x3( passBuf.view ), float3( 0, particleData.dim.y, 0 ) );
+	@end
+	@property( hlms_particle_type == particle_type_oriented_common )
+		const float3 particleCamDir = mul( toFloat3x3( passBuf.view ), float3( 0, 0, -1 ) );
+		const float3 particleRightVec =
+			normalize( cross( particleCamDir, particleCommon.dir.xyz ) ) * particleData.dim.x;
+		const float3 particleUpVec = particleCommon.dir.xyz * particleData.dim.y;
+	@end
+	@property( hlms_particle_type == particle_type_oriented_self )
+		const float3 particleCamDir = mul( toFloat3x3( passBuf.view ), float3( 0, 0, -1 ) );
+		const float3 particleRightVec =
+			normalize( cross( particleCamDir, particleData.dir ) ) * particleData.dim.x;
+		const float3 particleUpVec = particleData.dir * particleData.dim.y;
+	@end
+	@property( hlms_particle_type == particle_type_perpendicular_common )
+		// In this mode, particleCommon.up.xyz actually contains
+		// cross( particleCommon.up.xyz, particleCommon.dir.xyz )
+		const float3 particleUpVec = particleCommon.up.xyz * particleData.dim.y;
+		const float3 particleRightVec = particleCommon.dir.xyz * particleData.dim.x;
+	@end
+	@property( hlms_particle_type == particle_type_perpendicular_self )
+		const float3 particleRightVecNorm =
+			normalize( cross( particleCommon.up.xyz, particleData.dir ) );
+		// cross( particleData.dir, particleRightVecNorm ) should already be normalized.
+		const float3 particleUpVec =
+			cross( particleData.dir, particleRightVecNorm ) * particleData.dim.y;
+		const float3 particleRightVec = particleRightVecNorm * particleData.dim.x;
+	@end
+	#undef inVs_vertex
+	float4 inVs_vertex = float4( particleData.pos, 1.0f );
+
+	float3 toParticleEdge = particleRightVec * ( vertexInQuad < 2u ? -1.0f : 1.0f ) +
+							particleUpVec * ( ( vertexInQuad & 0x01u ) != 0u ? -1.0f : 1.0f );
+
+	@property( hlms_particle_rotation == 1 )
+		const float4 particleRotQuat = BuildQuaternionFromAngleAxis(
+			normalize( cross( particleRightVec, particleUpVec ) ), particleData.rotation );
+		toParticleEdge = qmul( particleRotQuat, toParticleEdge );
+	@end
+
+	inVs_vertex.xyz += toParticleEdge;
+
+	#undef inVs_colour
+	#define inVs_colour particleData.colour
+
+	#undef inVs_uv0
+	float2 inVs_uv0;
+	inVs_uv0.x = vertexInQuad < 2u ? 0.0f : 1.0f;
+	inVs_uv0.y = ( ( vertexInQuad & 0x01u ) != 0u ? 1.0f : 0.0f );
+
+	@property( hlms_particle_rotation == 2 )
+		// 2x2 matrix rotation
+		float4 particleRotMatrix;
+		particleRotMatrix.xz = float2( cos( particleData.rotation ), sin( particleData.rotation ) );
+		particleRotMatrix.yw = float2( -particleRotMatrix.z, particleRotMatrix.x );
+		const float2 oldUv = inVs_uv0;
+		inVs_uv0.x = dot( oldUv.xy - 0.5f, particleRotMatrix.xy ) + 0.5f;
+		inVs_uv0.y = dot( oldUv.xy - 0.5f, particleRotMatrix.zw ) + 0.5f;
+	@end
+
+	@property( hlms_shadowcaster )
+		float4 worldPos = inVs_vertex;
+	@end
+
+	@property( hlms_normal )
+		float4 worldPos = inVs_vertex;
+
+		#undef worldViewMat
+		#define worldViewMat passBuf.view
+		#undef inVs_normal
+		float3 inVs_normal = normalize( cross( particleRightVec, particleUpVec ) );
+		@property( normal_map )
+			#undef inVs_tangent
+			float3 inVs_tangent = normalize( particleRightVec );
+		@end
+		@property( hlms_num_shadow_map_lights )
+			// We need worldNorm for normal offset bias
+			midf3 worldNorm = midf3_c( inVs_normal );
+		@end
+	@end
+@end
+@end

@@ -205,38 +205,4 @@ namespace Ogre
 
         return "SPV_REFLECT_INVALID_ERROR_CODE";
     }
-
-    VkSampleCountFlagBits getMaxUsableSampleCount( VkPhysicalDeviceProperties &physicalDeviceProperties,
-                                                   uint32 requestedSampleCount )
-    {
-        VkSampleCountFlags counts = physicalDeviceProperties.limits.framebufferColorSampleCounts &
-                                    physicalDeviceProperties.limits.framebufferDepthSampleCounts;
-        counts = std::min( counts, requestedSampleCount );
-        if( counts & VK_SAMPLE_COUNT_64_BIT )
-        {
-            return VK_SAMPLE_COUNT_64_BIT;
-        }
-        if( counts & VK_SAMPLE_COUNT_32_BIT )
-        {
-            return VK_SAMPLE_COUNT_32_BIT;
-        }
-        if( counts & VK_SAMPLE_COUNT_16_BIT )
-        {
-            return VK_SAMPLE_COUNT_16_BIT;
-        }
-        if( counts & VK_SAMPLE_COUNT_8_BIT )
-        {
-            return VK_SAMPLE_COUNT_8_BIT;
-        }
-        if( counts & VK_SAMPLE_COUNT_4_BIT )
-        {
-            return VK_SAMPLE_COUNT_4_BIT;
-        }
-        if( counts & VK_SAMPLE_COUNT_2_BIT )
-        {
-            return VK_SAMPLE_COUNT_2_BIT;
-        }
-
-        return VK_SAMPLE_COUNT_1_BIT;
-    }
 }  // namespace Ogre

@@ -3,13 +3,17 @@
 
 @piece( DefaultHeaderVS )
 	@insertpiece( Common_Matrix_DeclUnpackMatrix4x4 )
+	@property( hlms_particle_system )
+		@insertpiece( DeclQuaternion )
+	@end
 
 	// START UNIFORM DECLARATION
 	@insertpiece( PassStructDecl )
-	@property( ( !hlms_shadowcaster || alpha_test ) && hlms_colour && diffuse )
+	@property( ( !hlms_shadowcaster || alpha_test || hlms_alpha_hash ) && hlms_colour && diffuse )
 		@insertpiece( MaterialStructDecl )
 	@end
 	@insertpiece( InstanceStructDecl )
+	@insertpiece( ParticleSystemStructDeclVS )
 	@insertpiece( custom_vs_uniformStructDeclaration )
 	// END UNIFORM DECLARATION
 
@@ -49,6 +53,8 @@
 @end
 
 @piece( DefaultBodyVS )
+	@insertpiece( DoParticleSystemVS )
+
 	@property( !hlms_instanced_stereo )
 		@property( !hlms_identity_world )
 			float4x4 worldViewProj = UNPACK_MAT4( worldMatBuf, finalDrawId );
@@ -68,8 +74,8 @@
 	@else
 		// Instanced stereo must index the viewProj matrix dynamically, thus considering
 		// hlms_identity_viewproj_dynamic to save performance by hardcoding the index is pointless
-		float4x4 worldMat = UNPACK_MAT4( worldMatBuf, finalDrawId );
 		@property( !hlms_identity_world )
+			float4x4 worldMat = UNPACK_MAT4( worldMatBuf, finalDrawId );
 			float4 worldPos = float4( mul( inVs_vertex, worldMat ).xyz, 1.0f );
 		@else
 			float4 worldPos = float4( inVs_vertex.xyz, 1.0f );
@@ -78,7 +84,7 @@
 		outVs_Position = mul( worldPos, passBuf.viewProj[vpmatIdx] );
 	@end
 
-	@property( !hlms_shadowcaster || alpha_test )
+	@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 		@property( hlms_colour )
 			outVs.colour = midf4_c( inVs_colour );
 			@property( diffuse )

@@ -57,12 +57,9 @@ namespace Ogre
     */
     class _OgreExport ParticleEmitterFactory : public OgreAllocatedObj
     {
-    protected:
-        vector<ParticleEmitter *>::type mEmitters;
-
     public:
         ParticleEmitterFactory() {}
-        virtual ~ParticleEmitterFactory();
+        virtual ~ParticleEmitterFactory() = default;
 
         /** Returns the name of the factory, the name which identifies the particle emitter type this
          * factory creates. */

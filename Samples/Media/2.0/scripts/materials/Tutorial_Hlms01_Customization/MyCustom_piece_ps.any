@@ -1,0 +1,9 @@
+@property( !hlms_shadowcaster && my_custom_colour_enabled )
+
+// This file gets parsed by the pixel shader stage (because it ends in piece_ps.any)
+
+@piece( custom_ps_posExecution )
+	outPs_colour0.xyzw *= passBuf.myCustomColour.xyzw;
+@end
+
+@end

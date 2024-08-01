@@ -180,6 +180,7 @@ namespace Ogre
     const IdString PbsProperty::LtcTextureAvailable = IdString( "ltc_texture_available" );
     const IdString PbsProperty::AmbientFixed = IdString( "ambient_fixed" );
     const IdString PbsProperty::AmbientHemisphere = IdString( "ambient_hemisphere" );
+    const IdString PbsProperty::AmbientHemisphereInverted = IdString( "ambient_hemisphere_inverted" );
     const IdString PbsProperty::AmbientSh = IdString( "ambient_sh" );
     const IdString PbsProperty::AmbientShMonochrome = IdString( "ambient_sh_monochrome" );
     const IdString PbsProperty::TargetEnvprobeMap = IdString( "target_envprobe_map" );
@@ -330,12 +331,16 @@ namespace Ogre
         mDefaultBrdfWithDiffuseFresnel( false ),
         mShadowFilter( PCF_3x3 ),
         mEsmK( 600u ),
-        mAmbientLightMode( AmbientAuto )
+        mAmbientLightMode( AmbientAutoNormal )
     {
         memset( mDecalsTextures, 0, sizeof( mDecalsTextures ) );
 
         // Override defaults
         mLightGatheringMode = LightGatherForwardPlus;
+
+        // It is always 0.
+        // (0 is world matrix, we don't need it for particles. 1 is animation matrix)
+        mParticleSystemSlot = 0u;
     }
     //-----------------------------------------------------------------------------------
     HlmsPbs::~HlmsPbs() { destroyAllBuffers(); }
@@ -465,18 +470,18 @@ namespace Ogre
     }
 
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::setupRootLayout( RootLayout &rootLayout )
+    void HlmsPbs::setupRootLayout( RootLayout &rootLayout, const size_t tid )
     {
         DescBindingRange *descBindingRanges = rootLayout.mDescBindingRanges[0];
 
         descBindingRanges[DescBindingTypes::ConstBuffer].end =
-            static_cast<uint16>( getProperty( PbsProperty::NumPassConstBuffers ) );
+            static_cast<uint16>( getProperty( tid, PbsProperty::NumPassConstBuffers ) );
 
         // PccManualProbeDecl piece uses more conditionals to whether use an extra const buffer
         // However we don't need to test them all. It's ok to have a few false positives
         // (it just wastes a little bit more memory)
-        if( getProperty( PbsProperty::UseParallaxCorrectCubemaps ) &&
-            !getProperty( PbsProperty::EnableCubemapsAuto ) )
+        if( getProperty( tid, PbsProperty::UseParallaxCorrectCubemaps ) &&
+            !getProperty( tid, PbsProperty::EnableCubemapsAuto ) )
         {
             ++descBindingRanges[DescBindingTypes::ConstBuffer].end;
         }
@@ -497,12 +502,13 @@ namespace Ogre
 
         // else
         {
-            if( getProperty( HlmsBaseProp::ForwardPlus ) )
+            if( getProperty( tid, HlmsBaseProp::ForwardPlus ) )
             {
                 descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end =
-                    (uint16)getProperty( "f3dLightList" ) + 1u;
+                    (uint16)getProperty( tid, "f3dLightList" ) + 1u;
 
-                descBindingRanges[DescBindingTypes::TexBuffer].start = (uint16)getProperty( "f3dGrid" );
+                descBindingRanges[DescBindingTypes::TexBuffer].start =
+                    (uint16)getProperty( tid, "f3dGrid" );
                 descBindingRanges[DescBindingTypes::TexBuffer].end =
                     descBindingRanges[DescBindingTypes::TexBuffer].start + 1u;
             }
@@ -523,25 +529,26 @@ namespace Ogre
                           descBindingRanges[DescBindingTypes::TexBuffer].end );
         }
         descBindingRanges[DescBindingTypes::Texture].end =
-            (uint16)getProperty( PbsProperty::Set0TextureSlotEnd );
+            (uint16)getProperty( tid, PbsProperty::Set0TextureSlotEnd );
 
         descBindingRanges[DescBindingTypes::Sampler].start =
             descBindingRanges[DescBindingTypes::Texture].start;
         descBindingRanges[DescBindingTypes::Sampler].end =
-            (uint16)( getProperty( "samplerStateStart" ) );
+            (uint16)( getProperty( tid, "samplerStateStart" ) );
 
         rootLayout.mBaked[1] = true;
         DescBindingRange *bakedRanges = rootLayout.mDescBindingRanges[1];
 
         bakedRanges[DescBindingTypes::Texture].start = descBindingRanges[DescBindingTypes::Texture].end;
         bakedRanges[DescBindingTypes::Texture].end =
-            (uint16)getProperty( PbsProperty::Set1TextureSlotEnd );
+            (uint16)getProperty( tid, PbsProperty::Set1TextureSlotEnd );
 
         bakedRanges[DescBindingTypes::Sampler].start = descBindingRanges[DescBindingTypes::Sampler].end;
-        bakedRanges[DescBindingTypes::Sampler].end = bakedRanges[DescBindingTypes::Sampler].start +
-                                                     (uint16)getProperty( PbsProperty::NumSamplers );
+        bakedRanges[DescBindingTypes::Sampler].end =
+            bakedRanges[DescBindingTypes::Sampler].start +
+            (uint16)getProperty( tid, PbsProperty::NumSamplers );
 
-        int32 poseBufReg = getProperty( "poseBuf", -1 );
+        int32 poseBufReg = getProperty( tid, "poseBuf", -1 );
         if( poseBufReg >= 0 )
         {
             DescBindingRange *poseRanges = rootLayout.mDescBindingRanges[2];
@@ -555,16 +562,16 @@ namespace Ogre
             poseRanges[DescBindingTypes::TexBuffer].end = static_cast<uint16>( poseBufReg + 1 );
         }
 
-        const int32 numVctProbes = getProperty( PbsProperty::VctNumProbes );
+        const int32 numVctProbes = getProperty( tid, PbsProperty::VctNumProbes );
 
         if( numVctProbes > 1 )
         {
-            int32 vctProbeIdx = getProperty( "vctProbes" );
+            int32 vctProbeIdx = getProperty( tid, "vctProbes" );
 
             rootLayout.addArrayBinding( DescBindingTypes::Texture,
                                         RootLayout::ArrayDesc( static_cast<uint16>( vctProbeIdx ),
                                                                static_cast<uint16>( numVctProbes ) ) );
-            if( getProperty( PbsProperty::VctAnisotropic ) )
+            if( getProperty( tid, PbsProperty::VctAnisotropic ) )
             {
                 for( int32 i = 0; i < 3; ++i )
                 {
@@ -577,22 +584,23 @@ namespace Ogre
             }
         }
 
-        mListener->setupRootLayout( rootLayout, mSetProperties );
+        mListener->setupRootLayout( rootLayout, mT[tid].setProperties, tid );
     }
     //-----------------------------------------------------------------------------------
     const HlmsCache *HlmsPbs::createShaderCacheEntry( uint32 renderableHash, const HlmsCache &passCache,
                                                       uint32 finalHash,
-                                                      const QueuedRenderable &queuedRenderable )
+                                                      const QueuedRenderable &queuedRenderable,
+                                                      HlmsCache *reservedStubEntry, const size_t tid )
     {
         OgreProfileExhaustive( "HlmsPbs::createShaderCacheEntry" );
 
-        const HlmsCache *retVal =
-            Hlms::createShaderCacheEntry( renderableHash, passCache, finalHash, queuedRenderable );
+        const HlmsCache *retVal = Hlms::createShaderCacheEntry(
+            renderableHash, passCache, finalHash, queuedRenderable, reservedStubEntry, tid );
 
         if( mShaderProfile != "glsl" )
         {
-            mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache, mSetProperties,
-                                                queuedRenderable );
+            mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache, mT[tid].setProperties,
+                                                queuedRenderable, tid );
             return retVal;  // D3D embeds the texture slots in the shader.
         }
 
@@ -600,8 +608,8 @@ namespace Ogre
         if( mSetupWorldMatBuf && mVaoManager->readOnlyIsTexBuffer() )
             vsParams->setNamedConstant( "worldMatBuf", 0 );
 
-        mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache, mSetProperties,
-                                            queuedRenderable );
+        mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache, mT[tid].setProperties,
+                                            queuedRenderable, tid );
 
         mRenderSystem->_setPipelineStateObject( &retVal->pso );
 
@@ -623,8 +631,8 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::setDetailMapProperties( HlmsPbsDatablock *datablock, PiecesMap *inOutPieces,
-                                          const bool bCasterPass )
+    void HlmsPbs::setDetailMapProperties( const size_t tid, HlmsPbsDatablock *datablock,
+                                          PiecesMap *inOutPieces, const bool bCasterPass )
     {
         int32 minNormalMap = 4;
         bool hasDiffuseMaps = false;
@@ -636,9 +644,12 @@ namespace Ogre
 
             const uint8 idx = static_cast<uint8>( i );
 
-            setDetailTextureProperty( PbsProperty::DetailMapN, datablock, PBSM_DETAIL0, idx );
+            setDetailTextureProperty( tid, PbsProperty::DetailMapN, datablock, PBSM_DETAIL0, idx );
             if( !bCasterPass )
-                setDetailTextureProperty( PbsProperty::DetailMapNmN, datablock, PBSM_DETAIL0_NM, idx );
+            {
+                setDetailTextureProperty( tid, PbsProperty::DetailMapNmN, datablock, PBSM_DETAIL0_NM,
+                                          idx );
+            }
 
             if( datablock->getTexture( PBSM_DETAIL0 + idx ) )
             {
@@ -654,7 +665,7 @@ namespace Ogre
             }
 
             if( datablock->getDetailMapOffsetScale( idx ) != Vector4( 0, 0, 1, 1 ) )
-                setProperty( *PbsProperty::DetailOffsetsPtrs[i], 1 );
+                setProperty( tid, *PbsProperty::DetailOffsetsPtrs[i], 1 );
 
             if( datablock->mDetailWeight[i] != 1.0f &&
                 ( datablock->getTexture( static_cast<uint8>( PBSM_DETAIL0 + i ) ) ||
@@ -666,19 +677,19 @@ namespace Ogre
         }
 
         if( hasDiffuseMaps )
-            setProperty( PbsProperty::DetailMapsDiffuse, 4 );
+            setProperty( tid, PbsProperty::DetailMapsDiffuse, 4 );
 
         if( hasNormalMaps )
-            setProperty( PbsProperty::DetailMapsNormal, 4 );
+            setProperty( tid, PbsProperty::DetailMapsNormal, 4 );
 
-        setProperty( PbsProperty::FirstValidDetailMapNm, minNormalMap );
+        setProperty( tid, PbsProperty::FirstValidDetailMapNm, minNormalMap );
 
         if( anyDetailWeight )
-            setProperty( PbsProperty::DetailWeights, 1 );
+            setProperty( tid, PbsProperty::DetailWeights, 1 );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::setTextureProperty( const char *propertyName, HlmsPbsDatablock *datablock,
-                                      PbsTextureTypes texType )
+    void HlmsPbs::setTextureProperty( const size_t tid, const char *propertyName,
+                                      HlmsPbsDatablock *datablock, PbsTextureTypes texType )
     {
         uint8 idx = datablock->getIndexToDescriptorTexture( texType );
         if( idx != NUM_PBSM_TEXTURE_TYPES )
@@ -693,30 +704,31 @@ namespace Ogre
             // In the template the we subtract the "+1" for the index.
             // We need to increment it now otherwise @property( diffuse_map )
             // can translate to @property( 0 ) which is not what we want.
-            setProperty( propertyName, idx + 1 );
+            setProperty( tid, propertyName, idx + 1 );
 
             propName.resize( basePropSize );
             propName.a( "_idx" );  // diffuse_map_idx
-            setProperty( propName.c_str(), idx );
+            setProperty( tid, propName.c_str(), idx );
 
             if( mHasSeparateSamplers )
             {
                 const uint8 samplerIdx = datablock->getIndexToDescriptorSampler( texType );
                 propName.resize( basePropSize );
                 propName.a( "_sampler" );  // diffuse_map_sampler
-                setProperty( propName.c_str(), samplerIdx );
+                setProperty( tid, propName.c_str(), samplerIdx );
             }
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::setDetailTextureProperty( const char *propertyName, HlmsPbsDatablock *datablock,
-                                            PbsTextureTypes baseTexType, uint8 detailIdx )
+    void HlmsPbs::setDetailTextureProperty( const size_t tid, const char *propertyName,
+                                            HlmsPbsDatablock *datablock, PbsTextureTypes baseTexType,
+                                            uint8 detailIdx )
     {
         const PbsTextureTypes texType = static_cast<PbsTextureTypes>( baseTexType + detailIdx );
         char tmpData[32];
         LwString propName = LwString::FromEmptyPointer( tmpData, sizeof( tmpData ) );
         propName.a( propertyName, detailIdx );  // detail_map0
-        setTextureProperty( propName.c_str(), datablock, texType );
+        setTextureProperty( tid, propName.c_str(), datablock, texType );
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash )
@@ -747,66 +759,68 @@ namespace Ogre
         const bool fresnelWorkflow =
             datablock->getWorkflow() == HlmsPbsDatablock::SpecularAsFresnelWorkflow;
 
-        setProperty( PbsProperty::FresnelScalar, datablock->hasSeparateFresnel() || metallicWorkflow );
-        setProperty( PbsProperty::FresnelWorkflow, fresnelWorkflow );
-        setProperty( PbsProperty::MetallicWorkflow, metallicWorkflow );
+        setProperty( kNoTid, PbsProperty::FresnelScalar,
+                     datablock->hasSeparateFresnel() || metallicWorkflow );
+        setProperty( kNoTid, PbsProperty::FresnelWorkflow, fresnelWorkflow );
+        setProperty( kNoTid, PbsProperty::MetallicWorkflow, metallicWorkflow );
 
         if( datablock->getTwoSidedLighting() )
-            setProperty( PbsProperty::TwoSidedLighting, 1 );
+            setProperty( kNoTid, PbsProperty::TwoSidedLighting, 1 );
 
         if( datablock->getReceiveShadows() )
-            setProperty( PbsProperty::ReceiveShadows, 1 );
+            setProperty( kNoTid, PbsProperty::ReceiveShadows, 1 );
 
         if( datablock->mTransparencyMode == HlmsPbsDatablock::Refractive )
         {
-            setProperty( HlmsBaseProp::ScreenSpaceRefractions, 1 );
-            setProperty( HlmsBaseProp::VPos, 1 );
-            setProperty( HlmsBaseProp::ScreenPosInt, 1 );
-            setProperty( HlmsBaseProp::ScreenPosUv, 1 );
+            setProperty( kNoTid, HlmsBaseProp::ScreenSpaceRefractions, 1 );
+            setProperty( kNoTid, HlmsBaseProp::VPos, 1 );
+            setProperty( kNoTid, HlmsBaseProp::ScreenPosInt, 1 );
+            setProperty( kNoTid, HlmsBaseProp::ScreenPosUv, 1 );
         }
 
-        if( !getProperty( HlmsBaseProp::QTangent ) && !getProperty( HlmsBaseProp::Normal ) )
+        if( !getProperty( kNoTid, HlmsBaseProp::QTangent ) &&
+            !getProperty( kNoTid, HlmsBaseProp::Normal ) )
         {
             // No normals means we can't use normal offset bias.
             // Without normals, PBS is probably a very poor fit for this object
             // but at least don't crash
-            setProperty( "skip_normal_offset_bias_vs", 1 );
+            setProperty( kNoTid, "skip_normal_offset_bias_vs", 1 );
         }
 
         uint32 brdf = datablock->getBrdf();
         if( ( brdf & PbsBrdf::BRDF_MASK ) == PbsBrdf::Default )
         {
-            setProperty( PbsProperty::BrdfDefault, 1 );
+            setProperty( kNoTid, PbsProperty::BrdfDefault, 1 );
 
             if( !( brdf & PbsBrdf::FLAG_UNCORRELATED ) )
-                setProperty( PbsProperty::GgxHeightCorrelated, 1 );
+                setProperty( kNoTid, PbsProperty::GgxHeightCorrelated, 1 );
 
-            setProperty( PbsProperty::ClearCoat, datablock->mClearCoat != 0.0f );
+            setProperty( kNoTid, PbsProperty::ClearCoat, datablock->mClearCoat != 0.0f );
         }
         else if( ( brdf & PbsBrdf::BRDF_MASK ) == PbsBrdf::CookTorrance )
-            setProperty( PbsProperty::BrdfCookTorrance, 1 );
+            setProperty( kNoTid, PbsProperty::BrdfCookTorrance, 1 );
         else if( ( brdf & PbsBrdf::BRDF_MASK ) == PbsBrdf::BlinnPhong )
-            setProperty( PbsProperty::BrdfBlinnPhong, 1 );
+            setProperty( kNoTid, PbsProperty::BrdfBlinnPhong, 1 );
 
         if( brdf & PbsBrdf::FLAG_HAS_DIFFUSE_FRESNEL )
         {
-            setProperty( PbsProperty::FresnelHasDiffuse, 1 );
+            setProperty( kNoTid, PbsProperty::FresnelHasDiffuse, 1 );
             if( brdf & PbsBrdf::FLAG_SPERATE_DIFFUSE_FRESNEL )
-                setProperty( PbsProperty::FresnelSeparateDiffuse, 1 );
+                setProperty( kNoTid, PbsProperty::FresnelSeparateDiffuse, 1 );
         }
 
         if( brdf & PbsBrdf::FLAG_LEGACY_MATH )
-            setProperty( PbsProperty::LegacyMathBrdf, 1 );
+            setProperty( kNoTid, PbsProperty::LegacyMathBrdf, 1 );
         if( brdf & PbsBrdf::FLAG_FULL_LEGACY )
-            setProperty( PbsProperty::RoughnessIsShininess, 1 );
+            setProperty( kNoTid, PbsProperty::RoughnessIsShininess, 1 );
 
         for( size_t i = 0u; i < PBSM_REFLECTION; ++i )
         {
             uint8 uvSource = datablock->mUvSource[i];
-            setProperty( *PbsProperty::UvSourcePtrs[i], uvSource );
+            setProperty( kNoTid, *PbsProperty::UvSourcePtrs[i], uvSource );
 
             if( datablock->getTexture( static_cast<uint8>( i ) ) &&
-                getProperty( *HlmsBaseProp::UvCountPtrs[uvSource] ) < 2 )
+                getProperty( kNoTid, *HlmsBaseProp::UvCountPtrs[uvSource] ) < 2 )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                              "Renderable needs at least 2 coordinates in UV set #" +
@@ -819,7 +833,7 @@ namespace Ogre
         int numNormalWeights = 0;
         if( datablock->getNormalMapWeight() != 1.0f && datablock->getTexture( PBSM_NORMAL ) )
         {
-            setProperty( PbsProperty::NormalWeightTex, 1 );
+            setProperty( kNoTid, PbsProperty::NormalWeightTex, 1 );
             ++numNormalWeights;
         }
 
@@ -829,52 +843,53 @@ namespace Ogre
             {
                 if( datablock->getDetailNormalWeight( (uint8)i ) != 1.0f )
                 {
-                    setProperty( *PbsProperty::DetailNormalWeights[i], 1 );
+                    setProperty( kNoTid, *PbsProperty::DetailNormalWeights[i], 1 );
                     ++numNormalWeights;
                 }
             }
         }
 
-        setProperty( PbsProperty::NormalWeight, numNormalWeights );
+        setProperty( kNoTid, PbsProperty::NormalWeight, numNormalWeights );
 
         if( datablock->mTexturesDescSet )
-            setDetailMapProperties( datablock, inOutPieces, false );
+            setDetailMapProperties( kNoTid, datablock, inOutPieces, false );
         else
-            setProperty( PbsProperty::FirstValidDetailMapNm, 4 );
+            setProperty( kNoTid, PbsProperty::FirstValidDetailMapNm, 4 );
 
         if( datablock->mSamplersDescSet )
         {
-            setProperty( PbsProperty::NumSamplers,
+            setProperty( kNoTid, PbsProperty::NumSamplers,
                          (int32)datablock->mSamplersDescSet->mSamplers.size() );
         }
 
         if( datablock->mTexturesDescSet )
         {
             bool envMap = datablock->getTexture( PBSM_REFLECTION ) != 0;
-            setProperty( PbsProperty::NumTextures,
+            setProperty( kNoTid, PbsProperty::NumTextures,
                          int32( datablock->mTexturesDescSet->mTextures.size() - envMap ) );
 
-            setTextureProperty( PbsProperty::DiffuseMap, datablock, PBSM_DIFFUSE );
-            setTextureProperty( PbsProperty::NormalMapTex, datablock, PBSM_NORMAL );
-            setTextureProperty( PbsProperty::SpecularMap, datablock, PBSM_SPECULAR );
-            setTextureProperty( PbsProperty::RoughnessMap, datablock, PBSM_ROUGHNESS );
-            setTextureProperty( PbsProperty::EmissiveMap, datablock, PBSM_EMISSIVE );
-            setTextureProperty( PbsProperty::EnvProbeMap, datablock, PBSM_REFLECTION );
-            setTextureProperty( PbsProperty::DetailWeightMap, datablock, PBSM_DETAIL_WEIGHT );
+            setTextureProperty( kNoTid, PbsProperty::DiffuseMap, datablock, PBSM_DIFFUSE );
+            setTextureProperty( kNoTid, PbsProperty::NormalMapTex, datablock, PBSM_NORMAL );
+            setTextureProperty( kNoTid, PbsProperty::SpecularMap, datablock, PBSM_SPECULAR );
+            setTextureProperty( kNoTid, PbsProperty::RoughnessMap, datablock, PBSM_ROUGHNESS );
+            setTextureProperty( kNoTid, PbsProperty::EmissiveMap, datablock, PBSM_EMISSIVE );
+            setTextureProperty( kNoTid, PbsProperty::EnvProbeMap, datablock, PBSM_REFLECTION );
+            setTextureProperty( kNoTid, PbsProperty::DetailWeightMap, datablock, PBSM_DETAIL_WEIGHT );
 
-            if( getProperty( PbsProperty::DiffuseMap ) )
+            if( getProperty( kNoTid, PbsProperty::DiffuseMap ) )
             {
                 if( datablock->getUseDiffuseMapAsGrayscale() )
-                    setProperty( PbsProperty::DiffuseMapGrayscale, 1 );
+                    setProperty( kNoTid, PbsProperty::DiffuseMapGrayscale, 1 );
             }
 
-            if( datablock->getTexture( PBSM_EMISSIVE ) && getProperty( PbsProperty::EmissiveMap ) )
+            if( datablock->getTexture( PBSM_EMISSIVE ) &&
+                getProperty( kNoTid, PbsProperty::EmissiveMap ) )
             {
                 TextureGpu *emissiveTexture = datablock->getTexture( PBSM_EMISSIVE );
                 if( PixelFormatGpuUtils::getNumberOfComponents( emissiveTexture->getPixelFormat() ) ==
                     1u )
                 {
-                    setProperty( PbsProperty::EmissiveMapGrayscale, 1 );
+                    setProperty( kNoTid, PbsProperty::EmissiveMapGrayscale, 1 );
                 }
             }
 
@@ -885,8 +900,8 @@ namespace Ogre
             {
                 // Manual reflection texture
                 if( datablock->getCubemapProbe() )
-                    setProperty( PbsProperty::UseParallaxCorrectCubemaps, 1 );
-                setProperty( PbsProperty::EnvProbeMap,
+                    setProperty( kNoTid, PbsProperty::UseParallaxCorrectCubemaps, 1 );
+                setProperty( kNoTid, PbsProperty::EnvProbeMap,
                              static_cast<int32>( reflectionTexture->getName().getU32Value() ) );
             }
         }
@@ -894,12 +909,12 @@ namespace Ogre
         if( datablock->_hasEmissive() )
         {
             if( datablock->hasEmissiveConstant() )
-                setProperty( PbsProperty::EmissiveConstant, 1 );
+                setProperty( kNoTid, PbsProperty::EmissiveConstant, 1 );
 
             if( datablock->getTexture( PBSM_EMISSIVE ) )
             {
                 if( datablock->getUseEmissiveAsLightmap() )
-                    setProperty( PbsProperty::EmissiveAsLightmap, 1 );
+                    setProperty( kNoTid, PbsProperty::EmissiveAsLightmap, 1 );
             }
         }
 
@@ -929,13 +944,14 @@ namespace Ogre
             }
         }
 
-        setProperty( PbsProperty::NormalMap, !datablockNormalMaps.empty() );
+        setProperty( kNoTid, PbsProperty::NormalMap, !datablockNormalMaps.empty() );
 
-        /*setProperty( HlmsBaseProp::, (bool)datablock->getTexture( PBSM_DETAIL0 ) );
-        setProperty( HlmsBaseProp::DiffuseMap, (bool)datablock->getTexture( PBSM_DETAIL1 ) );*/
-        bool normalMapCanBeSupported =
-            ( getProperty( HlmsBaseProp::Normal ) && getProperty( HlmsBaseProp::Tangent ) ) ||
-            getProperty( HlmsBaseProp::QTangent );
+        /*setProperty(  kNoTid,HlmsBaseProp::, (bool)datablock->getTexture( PBSM_DETAIL0 ) );
+        setProperty(  kNoTid,HlmsBaseProp::DiffuseMap, (bool)datablock->getTexture( PBSM_DETAIL1 ) );*/
+        bool normalMapCanBeSupported = ( getProperty( kNoTid, HlmsBaseProp::Normal ) &&
+                                         getProperty( kNoTid, HlmsBaseProp::Tangent ) ) ||
+                                       getProperty( kNoTid, HlmsBaseProp::QTangent ) ||
+                                       getProperty( kNoTid, HlmsBaseProp::ParticleSystem );
 
         if( !normalMapCanBeSupported && !datablockNormalMaps.empty() )
         {
@@ -955,25 +971,25 @@ namespace Ogre
             const bool isSigned = PixelFormatGpuUtils::isSigned( nmPixelFormat );
             if( isSigned )
             {
-                setProperty( PbsProperty::NormalSamplingFormat,
+                setProperty( kNoTid, PbsProperty::NormalSamplingFormat,
                              static_cast<int32>( PbsProperty::NormalRgSnorm.getU32Value() ) );
-                setProperty( PbsProperty::NormalRgSnorm,
+                setProperty( kNoTid, PbsProperty::NormalRgSnorm,
                              static_cast<int32>( PbsProperty::NormalRgSnorm.getU32Value() ) );
             }
             else
             {
                 if( nmPixelFormat != PFG_BC3_UNORM )
                 {
-                    setProperty( PbsProperty::NormalSamplingFormat,
+                    setProperty( kNoTid, PbsProperty::NormalSamplingFormat,
                                  static_cast<int32>( PbsProperty::NormalRgUnorm.getU32Value() ) );
-                    setProperty( PbsProperty::NormalRgUnorm,
+                    setProperty( kNoTid, PbsProperty::NormalRgUnorm,
                                  static_cast<int32>( PbsProperty::NormalRgUnorm.getU32Value() ) );
                 }
                 else
                 {
-                    setProperty( PbsProperty::NormalSamplingFormat,
+                    setProperty( kNoTid, PbsProperty::NormalSamplingFormat,
                                  static_cast<int32>( PbsProperty::NormalBc3Unorm.getU32Value() ) );
-                    setProperty( PbsProperty::NormalBc3Unorm,
+                    setProperty( kNoTid, PbsProperty::NormalBc3Unorm,
                                  static_cast<int32>( PbsProperty::NormalBc3Unorm.getU32Value() ) );
                 }
             }
@@ -1003,18 +1019,19 @@ namespace Ogre
         if( datablock->mUseAlphaFromTextures &&
             ( datablock->getAlphaTest() != CMPF_ALWAYS_PASS ||
               datablock->mBlendblock[0]->isAutoTransparent() ||
-              datablock->mBlendblock[0]->mAlphaToCoverageEnabled ||
+              datablock->mBlendblock[0]->mAlphaToCoverage != HlmsBlendblock::A2cDisabled ||  //
+              datablock->mAlphaHashing ||
               datablock->mTransparencyMode == HlmsPbsDatablock::Refractive ) &&
-            ( getProperty( PbsProperty::DiffuseMap ) ||  //
-              getProperty( PbsProperty::DetailMapsDiffuse ) ) )
+            ( getProperty( kNoTid, PbsProperty::DiffuseMap ) ||  //
+              getProperty( kNoTid, PbsProperty::DetailMapsDiffuse ) ) )
         {
-            setProperty( PbsProperty::UseTextureAlpha, 1 );
+            setProperty( kNoTid, PbsProperty::UseTextureAlpha, 1 );
 
             // When we don't use the alpha in the texture, transparency still works but
             // only at material level (i.e. what datablock->mTransparency says). The
             // alpha from the texture will be ignored.
             if( datablock->mTransparencyMode == HlmsPbsDatablock::Transparent )
-                setProperty( PbsProperty::TransparentMode, 1 );
+                setProperty( kNoTid, PbsProperty::TransparentMode, 1 );
         }
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
@@ -1023,25 +1040,27 @@ namespace Ogre
             if( !mPlanarReflections->_isUpdatingRenderablesHlms() )
                 mPlanarReflections->_notifyRenderableFlushedHlmsDatablock( renderable );
             else
-                setProperty( PbsProperty::UsePlanarReflections, 1 );
+                setProperty( kNoTid, PbsProperty::UsePlanarReflections, 1 );
         }
 #endif
 
         if( mFastShaderBuildHack )
-            setProperty( PbsProperty::MaterialsPerBuffer, static_cast<int>( 2 ) );
+            setProperty( kNoTid, PbsProperty::MaterialsPerBuffer, static_cast<int>( 2 ) );
         else
-            setProperty( PbsProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
+            setProperty( kNoTid, PbsProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces )
+    void HlmsPbs::calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces,
+                                             const PiecesMap * )
     {
         HlmsPbsDatablock *datablock = static_cast<HlmsPbsDatablock *>( renderable->getDatablock() );
-        const bool hasAlphaTest = datablock->getAlphaTest() != CMPF_ALWAYS_PASS;
+        const bool hasAlphaTestOrHash =
+            datablock->getAlphaTest() != CMPF_ALWAYS_PASS || datablock->getAlphaHashing();
 
-        HlmsPropertyVec::iterator itor = mSetProperties.begin();
-        HlmsPropertyVec::iterator end = mSetProperties.end();
+        HlmsPropertyVec::iterator itor = mT[kNoTid].setProperties.begin();
+        HlmsPropertyVec::iterator endt = mT[kNoTid].setProperties.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->keyName == PbsProperty::FirstValidDetailMapNm )
             {
@@ -1056,12 +1075,10 @@ namespace Ogre
                      itor->keyName != HlmsBaseProp::PoseNormals &&
                      itor->keyName != HlmsBaseProp::BonesPerVertex &&
                      itor->keyName != HlmsBaseProp::DualParaboloidMapping &&
-                     itor->keyName != HlmsBaseProp::AlphaTest &&
-                     itor->keyName != HlmsBaseProp::AlphaBlend &&
-                     ( !hasAlphaTest || !requiredPropertyByAlphaTest( itor->keyName ) ) )
+                     ( !hasAlphaTestOrHash || !requiredPropertyByAlphaTest( itor->keyName ) ) )
             {
-                itor = mSetProperties.erase( itor );
-                end = mSetProperties.end();
+                itor = mT[kNoTid].setProperties.erase( itor );
+                endt = mT[kNoTid].setProperties.end();
             }
             else
             {
@@ -1069,127 +1086,136 @@ namespace Ogre
             }
         }
 
-        if( hasAlphaTest && getProperty( PbsProperty::UseTextureAlpha ) )
+        setupSharedBasicProperties( renderable );
+
+        if( hasAlphaTestOrHash && getProperty( kNoTid, PbsProperty::UseTextureAlpha ) )
         {
             if( datablock->mTexturesDescSet )
-                setDetailMapProperties( datablock, inOutPieces, true );
+                setDetailMapProperties( kNoTid, datablock, inOutPieces, true );
 
             if( datablock->mSamplersDescSet )
             {
-                setProperty( PbsProperty::NumSamplers,
+                setProperty( kNoTid, PbsProperty::NumSamplers,
                              (int32)datablock->mSamplersDescSet->mSamplers.size() );
             }
 
             if( datablock->mTexturesDescSet )
             {
                 const bool envMap = datablock->getTexture( PBSM_REFLECTION ) != 0;
-                setProperty( PbsProperty::NumTextures,
+                setProperty( kNoTid, PbsProperty::NumTextures,
                              int32( datablock->mTexturesDescSet->mTextures.size() - envMap ) );
 
-                setTextureProperty( PbsProperty::DiffuseMap, datablock, PBSM_DIFFUSE );
-                setTextureProperty( PbsProperty::DetailWeightMap, datablock, PBSM_DETAIL_WEIGHT );
+                setTextureProperty( kNoTid, PbsProperty::DiffuseMap, datablock, PBSM_DIFFUSE );
+                setTextureProperty( kNoTid, PbsProperty::DetailWeightMap, datablock,
+                                    PBSM_DETAIL_WEIGHT );
 
-                if( getProperty( PbsProperty::DiffuseMap ) )
+                if( getProperty( kNoTid, PbsProperty::DiffuseMap ) )
                 {
                     if( datablock->getUseDiffuseMapAsGrayscale() )
-                        setProperty( PbsProperty::DiffuseMapGrayscale, 1 );
+                        setProperty( kNoTid, PbsProperty::DiffuseMapGrayscale, 1 );
                 }
             }
         }
 
         if( mFastShaderBuildHack )
-            setProperty( PbsProperty::MaterialsPerBuffer, static_cast<int>( 2 ) );
+            setProperty( kNoTid, PbsProperty::MaterialsPerBuffer, static_cast<int>( 2 ) );
         else
-            setProperty( PbsProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
+            setProperty( kNoTid, PbsProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::notifyPropertiesMergedPreGenerationStep()
+    void HlmsPbs::notifyPropertiesMergedPreGenerationStep( const size_t tid )
     {
-        const int32 numVctProbes = getProperty( PbsProperty::VctNumProbes );
+        Hlms::notifyPropertiesMergedPreGenerationStep( tid );
+
+        const int32 numVctProbes = getProperty( tid, PbsProperty::VctNumProbes );
         const bool hasVct = numVctProbes > 0;
-        if( getProperty( HlmsBaseProp::DecalsNormals ) || hasVct )
+        if( getProperty( tid, HlmsBaseProp::DecalsNormals ) || hasVct )
         {
             // If decals normals are enabled or VCT is used, we need to generate the TBN matrix.
-            bool normalMapCanBeSupported =
-                ( getProperty( HlmsBaseProp::Normal ) && getProperty( HlmsBaseProp::Tangent ) ) ||
-                getProperty( HlmsBaseProp::QTangent );
+            bool normalMapCanBeSupported = ( getProperty( tid, HlmsBaseProp::Normal ) &&
+                                             getProperty( tid, HlmsBaseProp::Tangent ) ) ||
+                                           getProperty( tid, HlmsBaseProp::QTangent );
 
-            setProperty( PbsProperty::NormalMap, normalMapCanBeSupported );
+            setProperty( tid, PbsProperty::NormalMap, normalMapCanBeSupported );
         }
 
         // If the pass does not have planar reflections, then the object cannot use it
-        if( !getProperty( PbsProperty::HasPlanarReflections ) )
-            setProperty( PbsProperty::UsePlanarReflections, 0 );
+        if( !getProperty( tid, PbsProperty::HasPlanarReflections ) )
+            setProperty( tid, PbsProperty::UsePlanarReflections, 0 );
 
-        if( getProperty( HlmsBaseProp::Pose ) > 0 )
-            setProperty( HlmsBaseProp::VertexId, 1 );
+        if( getProperty( tid, HlmsBaseProp::Pose ) > 0 )
+            setProperty( tid, HlmsBaseProp::VertexId, 1 );
 
-        const int32 envProbeMapVal = getProperty( PbsProperty::EnvProbeMap );
+        const int32 envProbeMapVal = getProperty( tid, PbsProperty::EnvProbeMap );
         const bool canUseManualProbe =
-            envProbeMapVal && envProbeMapVal != getProperty( PbsProperty::TargetEnvprobeMap );
-        if( canUseManualProbe || getProperty( PbsProperty::ParallaxCorrectCubemaps ) )
+            envProbeMapVal && envProbeMapVal != getProperty( tid, PbsProperty::TargetEnvprobeMap );
+        if( canUseManualProbe || getProperty( tid, PbsProperty::ParallaxCorrectCubemaps ) )
         {
-            setProperty( PbsProperty::UseEnvProbeMap, 1 );
+            setProperty( tid, PbsProperty::UseEnvProbeMap, 1 );
 
             if( !canUseManualProbe )
             {
                 /// "No cubemap"? Then we're in auto mode or...
                 /// We're rendering to the cubemap probe we're using as manual.
                 /// Use the auto mode as fallback.
-                setProperty( PbsProperty::UseParallaxCorrectCubemaps, 1 );
+                setProperty( tid, PbsProperty::UseParallaxCorrectCubemaps, 1 );
             }
         }
 
-        OGRE_ASSERT_MEDIUM( ( !getProperty( PbsProperty::UseParallaxCorrectCubemaps ) ||
-                              getProperty( PbsProperty::ParallaxCorrectCubemaps ) ) &&
+        OGRE_ASSERT_MEDIUM( ( !getProperty( tid, PbsProperty::UseParallaxCorrectCubemaps ) ||
+                              getProperty( tid, PbsProperty::ParallaxCorrectCubemaps ) ) &&
                             "Object with manual cubemap probe but "
                             "setParallaxCorrectedCubemap() was not called!" );
 
-        const bool hasIrradianceField = getProperty( PbsProperty::IrradianceField ) != 0;
+        const bool hasIrradianceField = getProperty( tid, PbsProperty::IrradianceField ) != 0;
 
         bool bNeedsEnvBrdf = false;
 
-        if( getProperty( HlmsBaseProp::UseSsr ) || getProperty( PbsProperty::UseEnvProbeMap ) ||
-            getProperty( PbsProperty::UsePlanarReflections ) ||
-            getProperty( PbsProperty::AmbientHemisphere ) || getProperty( PbsProperty::AmbientSh ) ||
-            getProperty( PbsProperty::EnableCubemapsAuto ) || hasIrradianceField || hasVct )
+        if( getProperty( tid, HlmsBaseProp::UseSsr ) ||
+            getProperty( tid, PbsProperty::UseEnvProbeMap ) ||
+            getProperty( tid, PbsProperty::UsePlanarReflections ) ||
+            getProperty( tid, PbsProperty::AmbientHemisphere ) ||
+            getProperty( tid, PbsProperty::AmbientSh ) ||
+            getProperty( tid, PbsProperty::EnableCubemapsAuto ) || hasIrradianceField || hasVct )
         {
-            setProperty( PbsProperty::NeedsReflDir, 1 );
-            setProperty( PbsProperty::NeedsEnvBrdf, 1 );
+            setProperty( tid, PbsProperty::NeedsReflDir, 1 );
+            setProperty( tid, PbsProperty::NeedsEnvBrdf, 1 );
             bNeedsEnvBrdf = true;
         }
 
-        if( getProperty( HlmsBaseProp::LightsSpot ) || getProperty( HlmsBaseProp::ForwardPlus ) ||
-            getProperty( HlmsBaseProp::LightsAreaApprox ) ||
-            getProperty( HlmsBaseProp::LightsAreaLtc ) || bNeedsEnvBrdf || hasIrradianceField || hasVct )
+        if( getProperty( tid, HlmsBaseProp::LightsSpot ) ||
+            getProperty( tid, HlmsBaseProp::ForwardPlus ) ||
+            getProperty( tid, HlmsBaseProp::LightsAreaApprox ) ||
+            getProperty( tid, HlmsBaseProp::LightsAreaLtc ) || bNeedsEnvBrdf || hasIrradianceField ||
+            hasVct )
         {
-            setProperty( PbsProperty::NeedsViewDir, 1 );
+            setProperty( tid, PbsProperty::NeedsViewDir, 1 );
         }
 
         int32 texUnit = mReservedTexBufferSlots;
 
-        if( getProperty( HlmsBaseProp::ForwardPlus ) )
+        if( getProperty( tid, HlmsBaseProp::ForwardPlus ) )
         {
             if( mVaoManager->readOnlyIsTexBuffer() )
-                setTextureReg( PixelShader, "f3dLightList", texUnit++ );
+                setTextureReg( tid, PixelShader, "f3dLightList", texUnit++ );
             else
-                setProperty( "f3dLightList", texUnit++ );
+                setProperty( tid, "f3dLightList", texUnit++ );
 
-            setTextureReg( PixelShader, "f3dGrid", texUnit++ );
+            setTextureReg( tid, PixelShader, "f3dGrid", texUnit++ );
         }
 
         texUnit += mReservedTexSlots;
 
         bool depthTextureDefined = false;
 
-        if( getProperty( HlmsBaseProp::UsePrePass ) )
+        if( getProperty( tid, HlmsBaseProp::UsePrePass ) )
         {
-            setTextureReg( PixelShader, "gBuf_normals", texUnit++ );
-            setTextureReg( PixelShader, "gBuf_shadowRoughness", texUnit++ );
+            setTextureReg( tid, PixelShader, "gBuf_normals", texUnit++ );
+            setTextureReg( tid, PixelShader, "gBuf_shadowRoughness", texUnit++ );
 
-            if( getProperty( HlmsBaseProp::UsePrePassMsaa ) )
+            if( getProperty( tid, HlmsBaseProp::UsePrePassMsaa ) )
             {
-                setTextureReg( PixelShader, "gBuf_depthTexture", texUnit++ );
+                setTextureReg( tid, PixelShader, "gBuf_depthTexture", texUnit++ );
                 depthTextureDefined = true;
             }
             else
@@ -1197,66 +1223,66 @@ namespace Ogre
                 ++texUnit;
             }
 
-            if( getProperty( HlmsBaseProp::UseSsr ) )
-                setTextureReg( PixelShader, "ssrTexture", texUnit++ );
+            if( getProperty( tid, HlmsBaseProp::UseSsr ) )
+                setTextureReg( tid, PixelShader, "ssrTexture", texUnit++ );
         }
 
-        const bool refractionsAvailable = getProperty( HlmsBaseProp::SsRefractionsAvailable );
+        const bool refractionsAvailable = getProperty( tid, HlmsBaseProp::SsRefractionsAvailable );
         if( refractionsAvailable )
         {
-            if( !depthTextureDefined && !getProperty( HlmsBaseProp::UsePrePassMsaa ) )
+            if( !depthTextureDefined && !getProperty( tid, HlmsBaseProp::UsePrePassMsaa ) )
             {
-                setTextureReg( PixelShader, "gBuf_depthTexture", texUnit++ );
+                setTextureReg( tid, PixelShader, "gBuf_depthTexture", texUnit++ );
                 depthTextureDefined = true;
             }
             else
             {
-                setTextureReg( PixelShader, "depthTextureNoMsaa", texUnit++ );
+                setTextureReg( tid, PixelShader, "depthTextureNoMsaa", texUnit++ );
             }
-            setTextureReg( PixelShader, "refractionMap", texUnit++ );
+            setTextureReg( tid, PixelShader, "refractionMap", texUnit++ );
         }
 
         OGRE_ASSERT_HIGH(
-            ( refractionsAvailable || getProperty( HlmsBaseProp::ScreenSpaceRefractions ) == 0 ) &&
+            ( refractionsAvailable || getProperty( tid, HlmsBaseProp::ScreenSpaceRefractions ) == 0 ) &&
             "A material that uses refractions is used in a pass where refractions are unavailable! See "
             "Samples/2.0/ApiUsage/Refractions for which pass refractions must be rendered in" );
 
-        const bool casterPass = getProperty( HlmsBaseProp::ShadowCaster ) != 0;
+        const bool casterPass = getProperty( tid, HlmsBaseProp::ShadowCaster ) != 0;
 
-        if( !casterPass && getProperty( PbsProperty::IrradianceVolumes ) )
-            setTextureReg( PixelShader, "irradianceVolume", texUnit++ );
+        if( !casterPass && getProperty( tid, PbsProperty::IrradianceVolumes ) )
+            setTextureReg( tid, PixelShader, "irradianceVolume", texUnit++ );
 
         if( numVctProbes > 0 )
         {
-            setTextureReg( PixelShader, "vctProbes", texUnit, numVctProbes );
+            setTextureReg( tid, PixelShader, "vctProbes", texUnit, numVctProbes );
             texUnit += numVctProbes;
-            if( getProperty( PbsProperty::VctAnisotropic ) )
+            if( getProperty( tid, PbsProperty::VctAnisotropic ) )
             {
-                setTextureReg( PixelShader, "vctProbeX", texUnit, numVctProbes );
+                setTextureReg( tid, PixelShader, "vctProbeX", texUnit, numVctProbes );
                 texUnit += numVctProbes;
-                setTextureReg( PixelShader, "vctProbeY", texUnit, numVctProbes );
+                setTextureReg( tid, PixelShader, "vctProbeY", texUnit, numVctProbes );
                 texUnit += numVctProbes;
-                setTextureReg( PixelShader, "vctProbeZ", texUnit, numVctProbes );
+                setTextureReg( tid, PixelShader, "vctProbeZ", texUnit, numVctProbes );
                 texUnit += numVctProbes;
             }
         }
 
-        if( getProperty( PbsProperty::IrradianceField ) )
+        if( getProperty( tid, PbsProperty::IrradianceField ) )
         {
-            setTextureReg( PixelShader, "ifdColour", texUnit++ );
-            setTextureReg( PixelShader, "ifdDepth", texUnit++ );
+            setTextureReg( tid, PixelShader, "ifdColour", texUnit++ );
+            setTextureReg( tid, PixelShader, "ifdDepth", texUnit++ );
         }
 
-        if( getProperty( HlmsBaseProp::LightsAreaTexMask ) > 0 )
-            setTextureReg( PixelShader, "areaLightMasks", texUnit++ );
+        if( getProperty( tid, HlmsBaseProp::LightsAreaTexMask ) > 0 )
+            setTextureReg( tid, PixelShader, "areaLightMasks", texUnit++ );
 
-        if( getProperty( PbsProperty::LightProfilesTexture ) > 0 )
-            setTextureReg( PixelShader, "lightProfiles", texUnit++ );
+        if( getProperty( tid, PbsProperty::LightProfilesTexture ) > 0 )
+            setTextureReg( tid, PixelShader, "lightProfiles", texUnit++ );
 
-        if( getProperty( PbsProperty::LtcTextureAvailable ) )
+        if( getProperty( tid, PbsProperty::LtcTextureAvailable ) )
         {
-            if( bNeedsEnvBrdf || getProperty( HlmsBaseProp::LightsAreaLtc ) > 0 )
-                setTextureReg( PixelShader, "ltcMatrix", texUnit++ );
+            if( bNeedsEnvBrdf || getProperty( tid, HlmsBaseProp::LightsAreaLtc ) > 0 )
+                setTextureReg( tid, PixelShader, "ltcMatrix", texUnit++ );
             else
             {
                 // Always occupy the texture unit
@@ -1264,25 +1290,25 @@ namespace Ogre
             }
         }
 
-        if( getProperty( HlmsBaseProp::EnableDecals ) )
+        if( getProperty( tid, HlmsBaseProp::EnableDecals ) )
         {
-            const int32 decalsDiffuseProp = getProperty( HlmsBaseProp::DecalsDiffuse );
+            const int32 decalsDiffuseProp = getProperty( tid, HlmsBaseProp::DecalsDiffuse );
             // This is a regular property!
-            setProperty( "decalsSampler", texUnit );
+            setProperty( tid, "decalsSampler", texUnit );
 
             if( decalsDiffuseProp )
-                setTextureReg( PixelShader, "decalsDiffuseTex", texUnit++ );
-            if( getProperty( HlmsBaseProp::DecalsNormals ) )
-                setTextureReg( PixelShader, "decalsNormalsTex", texUnit++ );
-            const int32 decalsEmissiveProp = getProperty( HlmsBaseProp::DecalsEmissive );
+                setTextureReg( tid, PixelShader, "decalsDiffuseTex", texUnit++ );
+            if( getProperty( tid, HlmsBaseProp::DecalsNormals ) )
+                setTextureReg( tid, PixelShader, "decalsNormalsTex", texUnit++ );
+            const int32 decalsEmissiveProp = getProperty( tid, HlmsBaseProp::DecalsEmissive );
             if( decalsEmissiveProp && decalsEmissiveProp != decalsDiffuseProp )
-                setTextureReg( PixelShader, "decalsEmissiveTex", texUnit++ );
+                setTextureReg( tid, PixelShader, "decalsEmissiveTex", texUnit++ );
         }
 
-        const int32 numShadowMaps = getProperty( HlmsBaseProp::NumShadowMapTextures );
+        const int32 numShadowMaps = getProperty( tid, HlmsBaseProp::NumShadowMapTextures );
         if( numShadowMaps )
         {
-            if( getProperty( HlmsBaseProp::NumShadowMapLights ) != 0 )
+            if( getProperty( tid, HlmsBaseProp::NumShadowMapLights ) != 0 )
             {
                 char tmpData[32];
                 LwString texName = LwString::FromEmptyPointer( tmpData, sizeof( tmpData ) );
@@ -1293,7 +1319,7 @@ namespace Ogre
                 {
                     texName.resize( baseTexSize );
                     texName.a( i );  // texShadowMap0
-                    setTextureReg( PixelShader, texName.c_str(), texUnit++ );
+                    setTextureReg( tid, PixelShader, texName.c_str(), texUnit++ );
                 }
             }
             else
@@ -1304,22 +1330,26 @@ namespace Ogre
         }
 
         int cubemapTexUnit = 0;
-        const int32 parallaxCorrectCubemaps = getProperty( PbsProperty::ParallaxCorrectCubemaps );
+        const int32 parallaxCorrectCubemaps = getProperty( tid, PbsProperty::ParallaxCorrectCubemaps );
         if( parallaxCorrectCubemaps )
             cubemapTexUnit = texUnit++;
 
-        const int32 hasPlanarReflections = getProperty( PbsProperty::HasPlanarReflections );
+        if( getProperty( tid, HlmsBaseProp::BlueNoise ) )
+            setTextureReg( tid, PixelShader, "blueNoiseTex", texUnit++ );
+
+        const int32 hasPlanarReflections = getProperty( tid, PbsProperty::HasPlanarReflections );
         if( hasPlanarReflections )
         {
-            const bool usesPlanarReflections = getProperty( PbsProperty::UsePlanarReflections ) != 0;
+            const bool usesPlanarReflections =
+                getProperty( tid, PbsProperty::UsePlanarReflections ) != 0;
             if( usesPlanarReflections )
-                setTextureReg( PixelShader, "planarReflectionTex", texUnit );
+                setTextureReg( tid, PixelShader, "planarReflectionTex", texUnit );
             ++texUnit;
         }
 
-        texUnit += mListener->getNumExtraPassTextures( mSetProperties, casterPass );
+        texUnit += mListener->getNumExtraPassTextures( mT[tid].setProperties, casterPass );
 
-        setProperty( PbsProperty::Set0TextureSlotEnd, texUnit );
+        setProperty( tid, PbsProperty::Set0TextureSlotEnd, texUnit );
 
         const int32 samplerStateStart = texUnit;
         {
@@ -1328,33 +1358,49 @@ namespace Ogre
             texName = "textureMaps";
             const size_t baseTexSize = texName.size();
 
-            int32 numTextures = getProperty( PbsProperty::NumTextures );
+            int32 numTextures = getProperty( tid, PbsProperty::NumTextures );
 
             for( int32 i = 0; i < numTextures; ++i )
             {
                 texName.resize( baseTexSize );
                 texName.a( i );  // textureMaps0
-                setTextureReg( PixelShader, texName.c_str(), texUnit++ );
+                setTextureReg( tid, PixelShader, texName.c_str(), texUnit++ );
             }
         }
 
-        const int32 envProbeMap = getProperty( PbsProperty::EnvProbeMap );
-        const int32 targetEnvProbeMap = getProperty( PbsProperty::TargetEnvprobeMap );
+        const int32 envProbeMap = getProperty( tid, PbsProperty::EnvProbeMap );
+        const int32 targetEnvProbeMap = getProperty( tid, PbsProperty::TargetEnvprobeMap );
         if( ( envProbeMap && envProbeMap != targetEnvProbeMap ) || parallaxCorrectCubemaps )
         {
             if( !envProbeMap || envProbeMap == targetEnvProbeMap )
-                setTextureReg( PixelShader, "texEnvProbeMap", cubemapTexUnit );
+                setTextureReg( tid, PixelShader, "texEnvProbeMap", cubemapTexUnit );
             else
-                setTextureReg( PixelShader, "texEnvProbeMap", texUnit++ );
+                setTextureReg( tid, PixelShader, "texEnvProbeMap", texUnit++ );
         }
 
-        setProperty( PbsProperty::Set1TextureSlotEnd, texUnit );
+        setProperty( tid, PbsProperty::Set1TextureSlotEnd, texUnit );
 
-        if( getProperty( HlmsBaseProp::Pose ) )
-            setTextureReg( VertexShader, "poseBuf", texUnit++ );
+        if( getProperty( tid, HlmsBaseProp::Pose ) )
+            setTextureReg( tid, VertexShader, "poseBuf", texUnit++ );
 
         // This is a regular property!
-        setProperty( "samplerStateStart", samplerStateStart );
+        setProperty( tid, "samplerStateStart", samplerStateStart );
+
+        if( getProperty( tid, HlmsBaseProp::ParticleSystem ) )
+        {
+            setProperty( tid, "particleSystemConstSlot", mParticleSystemConstSlot );
+            if( mVaoManager->readOnlyIsTexBuffer() )
+                setTextureReg( tid, VertexShader, "particleSystemGpuData", mParticleSystemSlot );
+            else
+                setProperty( tid, "particleSystemGpuData", mParticleSystemSlot );
+
+            if( !casterPass )
+            {
+                setProperty( tid, HlmsBaseProp::Normal, 1 );
+                setProperty( tid, HlmsBaseProp::Tangent, 1 );
+            }
+            setProperty( tid, HlmsBaseProp::UvCount, 1 );
+        }
     }
     //-----------------------------------------------------------------------------------
     bool HlmsPbs::requiredPropertyByAlphaTest( IdString keyName )
@@ -1456,10 +1502,10 @@ namespace Ogre
     {
         OgreProfileExhaustive( "HlmsPbs::preparePassHash" );
 
-        mSetProperties.clear();
+        mT[kNoTid].setProperties.clear();
 
         if( shadowNode && mShadowFilter == ExponentialShadowMaps )
-            setProperty( PbsProperty::ExponentialShadowMaps, mEsmK );
+            setProperty( kNoTid, PbsProperty::ExponentialShadowMaps, mEsmK );
 
         // The properties need to be set before preparePassHash so that
         // they are considered when building the HlmsCache's hash.
@@ -1469,40 +1515,40 @@ namespace Ogre
             //(it's the only feature so far that uses gather)
             const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
             if( capabilities->hasCapability( RSC_TEXTURE_GATHER ) )
-                setProperty( HlmsBaseProp::TexGather, 1 );
+                setProperty( kNoTid, HlmsBaseProp::TexGather, 1 );
 
             if( mShadowFilter == PCF_3x3 )
             {
-                setProperty( PbsProperty::Pcf, 3 );
-                setProperty( PbsProperty::PcfIterations, 4 );
+                setProperty( kNoTid, PbsProperty::Pcf, 3 );
+                setProperty( kNoTid, PbsProperty::PcfIterations, 4 );
             }
             else if( mShadowFilter == PCF_4x4 )
             {
-                setProperty( PbsProperty::Pcf, 4 );
-                setProperty( PbsProperty::PcfIterations, 9 );
+                setProperty( kNoTid, PbsProperty::Pcf, 4 );
+                setProperty( kNoTid, PbsProperty::PcfIterations, 9 );
             }
             else if( mShadowFilter == PCF_5x5 )
             {
-                setProperty( PbsProperty::Pcf, 5 );
-                setProperty( PbsProperty::PcfIterations, 16 );
+                setProperty( kNoTid, PbsProperty::Pcf, 5 );
+                setProperty( kNoTid, PbsProperty::PcfIterations, 16 );
             }
             else if( mShadowFilter == PCF_6x6 )
             {
-                setProperty( PbsProperty::Pcf, 6 );
-                setProperty( PbsProperty::PcfIterations, 25 );
+                setProperty( kNoTid, PbsProperty::Pcf, 6 );
+                setProperty( kNoTid, PbsProperty::PcfIterations, 25 );
             }
             else if( mShadowFilter == ExponentialShadowMaps )
             {
                 // Already set
-                // setProperty( PbsProperty::ExponentialShadowMaps, 1 );
+                // setProperty(  kNoTid,PbsProperty::ExponentialShadowMaps, 1 );
             }
             else
             {
-                setProperty( PbsProperty::PcfIterations, 1 );
+                setProperty( kNoTid, PbsProperty::PcfIterations, 1 );
             }
 
             if( mShadowReceiversInPixelShader )
-                setProperty( PbsProperty::ShadowsReceiveOnPs, 1 );
+                setProperty( kNoTid, PbsProperty::ShadowsReceiveOnPs, 1 );
 
             if( mDebugPssmSplits )
             {
@@ -1512,7 +1558,7 @@ namespace Ogre
                 {
                     numPssmSplits = static_cast<int32>( pssmSplits->size() - 1 );
                     if( numPssmSplits > 0 )
-                        setProperty( PbsProperty::DebugPssmSplits, 1 );
+                        setProperty( kNoTid, PbsProperty::DebugPssmSplits, 1 );
                 }
             }
         }
@@ -1565,22 +1611,25 @@ namespace Ogre
         }
         const bool isInstancedStereo = passSceneDef && passSceneDef->mInstancedStereo;
         if( isInstancedStereo )
-            setProperty( HlmsBaseProp::VPos, 1 );
+            setProperty( kNoTid, HlmsBaseProp::VPos, 1 );
 
         mAtmosphere = sceneManager->getAtmosphere();
+
+        if( mHlmsManager->getBlueNoiseTexture() )
+            setProperty( kNoTid, HlmsBaseProp::BlueNoise, 1 );
 
         if( !casterPass )
         {
             if( mIndustryCompatible )
-                setProperty( PbsProperty::IndustryCompatible, 1 );
+                setProperty( kNoTid, PbsProperty::IndustryCompatible, 1 );
             if( mPerceptualRoughness )
-                setProperty( PbsProperty::PerceptualRoughness, 1 );
+                setProperty( kNoTid, PbsProperty::PerceptualRoughness, 1 );
             if( mLightProfilesTexture )
-                setProperty( PbsProperty::LightProfilesTexture, 1 );
+                setProperty( kNoTid, PbsProperty::LightProfilesTexture, 1 );
             if( mLtcMatrixTexture )
-                setProperty( PbsProperty::LtcTextureAvailable, 1 );
+                setProperty( kNoTid, PbsProperty::LtcTextureAvailable, 1 );
 
-            if( mAmbientLightMode == AmbientAuto )
+            if( mAmbientLightMode == AmbientAutoNormal || mAmbientLightMode == AmbientAutoInverted )
             {
                 if( upperHemisphere == lowerHemisphere )
                 {
@@ -1591,28 +1640,35 @@ namespace Ogre
                 }
                 else
                 {
-                    ambientMode = AmbientHemisphere;
+                    if( mAmbientLightMode == AmbientAutoInverted )
+                        ambientMode = AmbientHemisphereNormal;
+                    else
+                        ambientMode = AmbientHemisphereInverted;
                 }
             }
 
             if( ambientMode == AmbientFixed )
-                setProperty( PbsProperty::AmbientFixed, 1 );
-            if( ambientMode == AmbientHemisphere )
-                setProperty( PbsProperty::AmbientHemisphere, 1 );
+                setProperty( kNoTid, PbsProperty::AmbientFixed, 1 );
+            if( ambientMode == AmbientHemisphereNormal || ambientMode == AmbientHemisphereInverted )
+            {
+                setProperty( kNoTid, PbsProperty::AmbientHemisphere, 1 );
+                if( ambientMode == AmbientHemisphereInverted )
+                    setProperty( kNoTid, PbsProperty::AmbientHemisphereInverted, 1 );
+            }
             if( ambientMode == AmbientSh || ambientMode == AmbientShMonochrome )
             {
-                setProperty( PbsProperty::AmbientSh, 1 );
+                setProperty( kNoTid, PbsProperty::AmbientSh, 1 );
                 if( ambientMode == AmbientShMonochrome )
-                    setProperty( PbsProperty::AmbientShMonochrome, 1 );
+                    setProperty( kNoTid, PbsProperty::AmbientShMonochrome, 1 );
             }
 
             if( envMapScale != 1.0f )
-                setProperty( PbsProperty::EnvMapScale, 1 );
+                setProperty( kNoTid, PbsProperty::EnvMapScale, 1 );
 
             const uint32 envFeatures = sceneManager->getEnvFeatures();
 
             if( envFeatures & SceneManager::EnvFeatures_DiffuseGiFromReflectionProbe )
-                setProperty( PbsProperty::CubemapsAsDiffuseGi, 1 );
+                setProperty( kNoTid, PbsProperty::CubemapsAsDiffuseGi, 1 );
 
             // Save cubemap's name so that we never try to render & sample to/from it at the same time
             RenderPassDescriptor *renderPassDescriptor = mRenderSystem->getCurrentPassDescriptor();
@@ -1621,59 +1677,59 @@ namespace Ogre
                 TextureGpu *firstColourTarget = renderPassDescriptor->mColour[0].texture;
                 if( firstColourTarget->getTextureType() == TextureTypes::TypeCube )
                 {
-                    setProperty( PbsProperty::TargetEnvprobeMap,
+                    setProperty( kNoTid, PbsProperty::TargetEnvprobeMap,
                                  static_cast<int32>( firstColourTarget->getName().getU32Value() ) );
                 }
             }
 
             if( mParallaxCorrectedCubemap && !mParallaxCorrectedCubemap->isRendering() )
             {
-                setProperty( PbsProperty::ParallaxCorrectCubemaps, 1 );
+                setProperty( kNoTid, PbsProperty::ParallaxCorrectCubemaps, 1 );
                 if( mParallaxCorrectedCubemap->getAutomaticMode() )
                 {
-                    setProperty( PbsProperty::EnableCubemapsAuto, 1 );
+                    setProperty( kNoTid, PbsProperty::EnableCubemapsAuto, 1 );
                     if( mParallaxCorrectedCubemap->getUseDpm2DArray() )
-                        setProperty( PbsProperty::CubemapsUseDpm, 1 );
+                        setProperty( kNoTid, PbsProperty::CubemapsUseDpm, 1 );
                 }
             }
 
             if( mVctLighting )
             {
-                setProperty( PbsProperty::VctNumProbes,
+                setProperty( kNoTid, PbsProperty::VctNumProbes,
                              static_cast<int32>( mVctLighting->getNumCascades() ) );
-                setProperty( PbsProperty::VctConeDirs, mVctFullConeCount ? 6 : 4 );
-                setProperty( PbsProperty::VctAnisotropic, mVctLighting->isAnisotropic() );
-                setProperty( PbsProperty::VctEnableSpecularSdfQuality,
+                setProperty( kNoTid, PbsProperty::VctConeDirs, mVctFullConeCount ? 6 : 4 );
+                setProperty( kNoTid, PbsProperty::VctAnisotropic, mVctLighting->isAnisotropic() );
+                setProperty( kNoTid, PbsProperty::VctEnableSpecularSdfQuality,
                              mVctLighting->shouldEnableSpecularSdfQuality() );
-                setProperty( PbsProperty::VctAmbientSphere, vctNeedsAmbientHemi );
+                setProperty( kNoTid, PbsProperty::VctAmbientSphere, vctNeedsAmbientHemi );
 
                 //'Static' reflections on cubemaps look horrible
                 if( mParallaxCorrectedCubemap && mParallaxCorrectedCubemap->isRendering() )
-                    setProperty( PbsProperty::VctDisableSpecular, 1 );
+                    setProperty( kNoTid, PbsProperty::VctDisableSpecular, 1 );
             }
 
             if( mIrradianceField )
             {
-                setProperty( PbsProperty::IrradianceField, 1 );
-                setProperty( PbsProperty::VctDisableDiffuse, 1 );
+                setProperty( kNoTid, PbsProperty::IrradianceField, 1 );
+                setProperty( kNoTid, PbsProperty::VctDisableDiffuse, 1 );
             }
 
             if( mIrradianceVolume )
-                setProperty( PbsProperty::IrradianceVolumes, 1 );
+                setProperty( kNoTid, PbsProperty::IrradianceVolumes, 1 );
 
             if( mAreaLightMasks )
             {
                 const size_t numComponents =
                     PixelFormatGpuUtils::getNumberOfComponents( mAreaLightMasks->getPixelFormat() );
                 if( numComponents > 2u )
-                    setProperty( HlmsBaseProp::LightsAreaTexColour, 1 );
+                    setProperty( kNoTid, HlmsBaseProp::LightsAreaTexColour, 1 );
             }
 
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
             if( mUseObbRestraintAreaApprox )
-                setProperty( PbsProperty::ObbRestraintApprox, 1 );
+                setProperty( kNoTid, PbsProperty::ObbRestraintApprox, 1 );
             if( mUseObbRestraintAreaLtc )
-                setProperty( PbsProperty::ObbRestraintLtc, 1 );
+                setProperty( kNoTid, PbsProperty::ObbRestraintLtc, 1 );
 #endif
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
@@ -1683,16 +1739,18 @@ namespace Ogre
                                           sceneManager->getCamerasInProgress().renderingCamera ) )
             {
                 mHasPlanarReflections = true;
-                setProperty( PbsProperty::HasPlanarReflections,
+                setProperty( kNoTid, PbsProperty::HasPlanarReflections,
                              mPlanarReflections->getMaxActiveActors() );
             }
 #endif
 
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
             if( mFineLightMaskGranularity )
-                setProperty( HlmsBaseProp::FineLightMask, 1 );
+                setProperty( kNoTid, HlmsBaseProp::FineLightMask, 1 );
 #endif
         }
+
+        const bool bNeedsViewMatrix = msHasParticleFX2Plugin;
 
         {
             uint32 numPassConstBuffers = 3u;
@@ -1703,27 +1761,31 @@ namespace Ogre
                 numPassConstBuffers += mAtmosphere->preparePassHash( this, numPassConstBuffers );
             }
 
+            if( msHasParticleFX2Plugin )
+            {
+                setProperty( kNoTid, HlmsBaseProp::ViewMatrix, 1 );
+                mParticleSystemConstSlot = static_cast<uint8>( numPassConstBuffers );
+                ++numPassConstBuffers;
+            }
+
             mNumPassConstBuffers = numPassConstBuffers;
 
-            setProperty( PbsProperty::NumPassConstBuffers, int32( numPassConstBuffers ) );
+            setProperty( kNoTid, PbsProperty::NumPassConstBuffers, int32( numPassConstBuffers ) );
         }
 
         if( mOptimizationStrategy == LowerGpuOverhead )
-            setProperty( PbsProperty::LowerGpuOverhead, 1 );
+            setProperty( kNoTid, PbsProperty::LowerGpuOverhead, 1 );
 
         HlmsCache retVal =
             Hlms::preparePassHashBase( shadowNode, casterPass, dualParaboloid, sceneManager );
 
         if( mUseLightBuffers )
-            setProperty( PbsProperty::useLightBuffers, 1 );
+            setProperty( kNoTid, PbsProperty::useLightBuffers, 1 );
 
         const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
-        setProperty( PbsProperty::HwGammaRead, capabilities->hasCapability( RSC_HW_GAMMA ) );
-        //        setProperty( PbsProperty::HwGammaWrite, capabilities->hasCapability( RSC_HW_GAMMA ) &&
-        //                                                        renderTarget->isHardwareGammaEnabled()
-        //                                                        );
-        setProperty( PbsProperty::HwGammaWrite, 1 );
-        retVal.setProperties = mSetProperties;
+        setProperty( kNoTid, PbsProperty::HwGammaRead, capabilities->hasCapability( RSC_HW_GAMMA ) );
+        setProperty( kNoTid, PbsProperty::HwGammaWrite, 1 );
+        retVal.setProperties = mT[kNoTid].setProperties;
 
         CamerasInProgress cameras = sceneManager->getCamerasInProgress();
         mConstantBiasScale = cameras.renderingCamera->_getConstantBiasScale();
@@ -1740,16 +1802,17 @@ namespace Ogre
             projectionMatrix[1][3] = -projectionMatrix[1][3];
         }
 
-        const size_t numLights = static_cast<size_t>( getProperty( HlmsBaseProp::LightsSpot ) );
+        const size_t numLights = static_cast<size_t>( getProperty( kNoTid, HlmsBaseProp::LightsSpot ) );
         const size_t numDirectionalLights =
-            static_cast<size_t>( getProperty( HlmsBaseProp::LightsDirNonCaster ) );
+            static_cast<size_t>( getProperty( kNoTid, HlmsBaseProp::LightsDirNonCaster ) );
         const size_t numShadowMapLights =
-            static_cast<size_t>( getProperty( HlmsBaseProp::NumShadowMapLights ) );
-        const size_t numPssmSplits = static_cast<size_t>( getProperty( HlmsBaseProp::PssmSplits ) );
+            static_cast<size_t>( getProperty( kNoTid, HlmsBaseProp::NumShadowMapLights ) );
+        const size_t numPssmSplits =
+            static_cast<size_t>( getProperty( kNoTid, HlmsBaseProp::PssmSplits ) );
         const size_t numAreaApproxLights =
-            static_cast<size_t>( getProperty( HlmsBaseProp::LightsAreaApprox ) );
+            static_cast<size_t>( getProperty( kNoTid, HlmsBaseProp::LightsAreaApprox ) );
         const size_t numAreaLtcLights =
-            static_cast<size_t>( getProperty( HlmsBaseProp::LightsAreaLtc ) );
+            static_cast<size_t>( getProperty( kNoTid, HlmsBaseProp::LightsAreaLtc ) );
         const uint32 realNumDirectionalLights = mRealNumDirectionalLights;
         const uint32 realNumAreaApproxLightsWithMask = mRealNumAreaApproxLightsWithMask;
         const uint32 realNumAreaApproxLights = mRealNumAreaApproxLights;
@@ -1762,10 +1825,10 @@ namespace Ogre
         const size_t numAreaLtcFloat4Vars = 7u;
 #endif
 
-        bool isPssmBlend = getProperty( HlmsBaseProp::PssmBlend ) != 0;
-        bool isPssmFade = getProperty( HlmsBaseProp::PssmFade ) != 0;
+        bool isPssmBlend = getProperty( kNoTid, HlmsBaseProp::PssmBlend ) != 0;
+        bool isPssmFade = getProperty( kNoTid, HlmsBaseProp::PssmFade ) != 0;
         bool isStaticBranchShadowMapLights =
-            getProperty( HlmsBaseProp::StaticBranchShadowMapLights ) != 0;
+            getProperty( kNoTid, HlmsBaseProp::StaticBranchShadowMapLights ) != 0;
 
         bool isShadowCastingPointLight = false;
 
@@ -1844,14 +1907,15 @@ namespace Ogre
                 mapSize += 4u * 4u;
 
             // vec3 ambientUpperHemi + float envMapScale
-            if( ambientMode == AmbientFixed || ambientMode == AmbientHemisphere || envMapScale != 1.0f ||
-                vctNeedsAmbientHemi )
+            if( ( ambientMode >= AmbientFixed && ambientMode <= AmbientHemisphereInverted ) ||
+                envMapScale != 1.0f || vctNeedsAmbientHemi )
             {
                 mapSize += 4 * 4;
             }
 
             // vec3 ambientLowerHemi + padding + vec3 ambientHemisphereDir + padding
-            if( ambientMode == AmbientHemisphere || vctNeedsAmbientHemi )
+            if( ambientMode == AmbientHemisphereNormal || ambientMode == AmbientHemisphereInverted ||
+                vctNeedsAmbientHemi )
             {
                 mapSize += 8 * 4;
             }
@@ -1911,7 +1975,10 @@ namespace Ogre
         }
         else
         {
-            isShadowCastingPointLight = getProperty( HlmsBaseProp::ShadowCasterPoint ) != 0;
+            // float4x4 view
+            if( bNeedsViewMatrix )
+                mapSize += 16u * 4u;
+            isShadowCastingPointLight = getProperty( kNoTid, HlmsBaseProp::ShadowCasterPoint ) != 0;
             // vec4 cameraPosWS
             if( isShadowCastingPointLight )
                 mapSize += 4 * 4;
@@ -2242,8 +2309,8 @@ namespace Ogre
             }
 
             // vec3 ambientUpperHemi + padding
-            if( ambientMode == AmbientFixed || ambientMode == AmbientHemisphere || envMapScale != 1.0f ||
-                vctNeedsAmbientHemi )
+            if( ( ambientMode >= AmbientFixed && ambientMode <= AmbientHemisphereInverted ) ||
+                envMapScale != 1.0f || vctNeedsAmbientHemi )
             {
                 *passBufferPtr++ = static_cast<float>( upperHemisphere.r );
                 *passBufferPtr++ = static_cast<float>( upperHemisphere.g );
@@ -2252,7 +2319,8 @@ namespace Ogre
             }
 
             // vec3 ambientLowerHemi + padding + vec3 ambientHemisphereDir + padding
-            if( ambientMode == AmbientHemisphere || vctNeedsAmbientHemi )
+            if( ambientMode == AmbientHemisphereNormal || ambientMode == AmbientHemisphereInverted ||
+                vctNeedsAmbientHemi )
             {
                 *passBufferPtr++ = static_cast<float>( lowerHemisphere.r );
                 *passBufferPtr++ = static_cast<float>( lowerHemisphere.g );
@@ -2375,7 +2443,7 @@ namespace Ogre
                     shadowNode->getAffectedLightsBitSet();
 
                 const size_t shadowCastingDirLights =
-                    static_cast<size_t>( getProperty( HlmsBaseProp::LightsDirectional ) );
+                    static_cast<size_t>( getProperty( kNoTid, HlmsBaseProp::LightsDirectional ) );
 
                 for( size_t i = 0u; i < numLights; ++i )
                 {
@@ -2787,7 +2855,7 @@ namespace Ogre
             if( mHasPlanarReflections )
             {
                 mPlanarReflections->fillConstBufferData( renderTarget, cameras.renderingCamera,
-                                                         projectionMatrix, passBufferPtr );
+                                                         passBufferPtr );
                 passBufferPtr += mPlanarReflections->getConstBufferSize() >> 2u;
             }
 #endif
@@ -2811,6 +2879,12 @@ namespace Ogre
         }
         else
         {
+            if( bNeedsViewMatrix )
+            {
+                for( size_t i = 0u; i < 16u; ++i )
+                    *passBufferPtr++ = (float)viewMatrix[0][i];
+            }
+
             // vec4 viewZRow
             if( mShadowFilter == ExponentialShadowMaps )
             {
@@ -2865,7 +2939,7 @@ namespace Ogre
 
         if( mShadowFilter == ExponentialShadowMaps )
             mCurrentShadowmapSamplerblock = mShadowmapEsmSamplerblock;
-        else if( mShadowmapSamplerblock && !getProperty( HlmsBaseProp::ShadowUsesDepthTexture ) )
+        else if( mShadowmapSamplerblock && !getProperty( kNoTid, HlmsBaseProp::ShadowUsesDepthTexture ) )
             mCurrentShadowmapSamplerblock = mShadowmapSamplerblock;
         else
             mCurrentShadowmapSamplerblock = mShadowmapCmpSamplerblock;
@@ -2873,7 +2947,7 @@ namespace Ogre
         mTexBufUnitSlotEnd = mReservedTexBufferSlots;
         mTexUnitSlotStart =
             uint32( mPreparedPass.shadowMaps.size() + mReservedTexSlots + mReservedTexBufferSlots +
-                    mListener->getNumExtraPassTextures( mSetProperties, casterPass ) );
+                    mListener->getNumExtraPassTextures( mT[kNoTid].setProperties, casterPass ) );
 
         if( !casterPass )
         {
@@ -2905,7 +2979,7 @@ namespace Ogre
                 mTexUnitSlotStart += 1;
             if( mRefractionsTexture )
                 mTexUnitSlotStart += 1;
-            if( mAreaLightMasks && getProperty( HlmsBaseProp::LightsAreaTexMask ) > 0 )
+            if( mAreaLightMasks && getProperty( kNoTid, HlmsBaseProp::LightsAreaTexMask ) > 0 )
             {
                 mTexUnitSlotStart += 1;
                 mUsingAreaLightMasks = true;
@@ -2936,8 +3010,18 @@ namespace Ogre
 
                 mPlanarReflectionSlotIdx = static_cast<uint8>(
                     mTexUnitSlotStart - 1u -
-                    mListener->getNumExtraPassTextures( mSetProperties, casterPass ) );
+                    mListener->getNumExtraPassTextures( mT[kNoTid].setProperties, casterPass ) );
             }
+#endif
+        }
+
+        if( mHlmsManager->getBlueNoiseTexture() )
+        {
+            // Blue Noise is bound with shadow casters too
+            ++mTexUnitSlotStart;
+#ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
+            // Planar reflections did not account for our slot. Correct it.
+            ++mPlanarReflectionSlotIdx;
 #endif
         }
 
@@ -3160,6 +3244,13 @@ namespace Ogre
                 }
             }
 
+            if( mHlmsManager->getBlueNoiseTexture() )
+            {
+                *commandBuffer->addCommand<CbTexture>() =
+                    CbTexture( (uint16)texUnit, mHlmsManager->getBlueNoiseTexture(), 0 );
+                ++texUnit;
+            }
+
             mLastDescTexture = 0;
             mLastDescSampler = 0;
             mLastBoundPool = 0;
@@ -3179,6 +3270,8 @@ namespace Ogre
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
             mLastBoundPlanarReflection = 0u;
+            if( mHasPlanarReflections )
+                ++texUnit;  // We do not bind this texture now, but its slot is reserved.
 #endif
             mListener->hlmsTypeChanged( casterPass, commandBuffer, datablock, texUnit );
         }
@@ -3186,7 +3279,8 @@ namespace Ogre
         // Don't bind the material buffer on caster passes (important to keep
         // MDI & auto-instancing running on shadow map passes)
         if( mLastBoundPool != datablock->getAssignedPool() &&
-            ( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS ) )
+            ( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS ||
+              datablock->getAlphaHashing() ) )
         {
             // layout(binding = 1) uniform MaterialBuf {} materialArray
             const ConstBufferPool::BufferPool *newPool = datablock->getAssignedPool();
@@ -3350,9 +3444,8 @@ namespace Ogre
                 {
                     SkeletonInstance *skeleton = queuedRenderable.movableObject->getSkeletonInstance();
 
-#if OGRE_DEBUG_MODE
-                    assert( dynamic_cast<const RenderableAnimated *>( queuedRenderable.renderable ) );
-#endif
+                    OGRE_ASSERT_HIGH(
+                        dynamic_cast<const RenderableAnimated *>( queuedRenderable.renderable ) );
 
                     const RenderableAnimated *renderableAnimated =
                         static_cast<const RenderableAnimated *>( queuedRenderable.renderable );
@@ -3526,7 +3619,8 @@ namespace Ogre
         //                          ---- PIXEL SHADER ----
         //---------------------------------------------------------------------------
 
-        if( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS )
+        if( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS ||
+            datablock->getAlphaHashing() )
         {
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
             if( !casterPass && mHasPlanarReflections &&
@@ -3726,7 +3820,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsPbs::loadLtcMatrix()
     {
-        const uint32 poolId = 992044u;
+        const uint32 poolId = 992044u;  // Same as BlueNoise (BlueNoise has different pixel format)
 
         TextureGpuManager *textureGpuManager = mRenderSystem->getTextureGpuManager();
         if( !textureGpuManager->hasPoolId( poolId, 64u, 64u, 1u, PFG_RGBA16_FLOAT ) )
@@ -3769,9 +3863,7 @@ namespace Ogre
         // name of the compatible shading language is part of the path
         Ogre::RenderSystem *renderSystem = Ogre::Root::getSingleton().getRenderSystem();
         Ogre::String shaderSyntax = "GLSL";
-        if( renderSystem->getName() == "OpenGL ES 2.x Rendering Subsystem" )
-            shaderSyntax = "GLSLES";
-        else if( renderSystem->getName() == "Direct3D11 Rendering Subsystem" )
+        if( renderSystem->getName() == "Direct3D11 Rendering Subsystem" )
             shaderSyntax = "HLSL";
         else if( renderSystem->getName() == "Metal Rendering Subsystem" )
             shaderSyntax = "Metal";

@@ -7,8 +7,12 @@
 
 struct VS_INPUT
 {
+@property( !hlms_particle_system )
 	float4 position [[attribute(VES_POSITION)]];
-@property( hlms_colour )	float4 colour [[attribute(VES_DIFFUSE)]];@end
+@end
+@property( hlms_colour && !hlms_particle_system )
+	float4 colour [[attribute(VES_DIFFUSE)]];
+@end
 @foreach( hlms_uv_count, n )
 	float@value( hlms_uv_count@n ) uv@n [[attribute(VES_TEXTURE_COORDINATES@n)]];@end
 @property( !iOS )
@@ -36,12 +40,23 @@ vertex PS_INPUT main_metal
 	@end
 	// START UNIFORM DECLARATION
 	@insertpiece( PassDecl )
-	@property( ( !hlms_shadowcaster || alpha_test ) && hlms_colour && diffuse )
+	@property( ( !hlms_shadowcaster || alpha_test || hlms_alpha_hash ) && hlms_colour && diffuse )
 		@insertpiece( MaterialDecl )
 	@end
 	@insertpiece( InstanceDecl )
-	, device const float4 *worldMatBuf [[buffer(TEX_SLOT_START+0)]]
-	@property( texture_matrix ), device const float4 *animationMatrixBuf [[buffer(TEX_SLOT_START+1)]]@end
+	@property( !hlms_particle_system )
+		, device const float4 *worldMatBuf [[buffer(TEX_SLOT_START+0)]]
+	@end
+	@property( texture_matrix )
+		, device const float4 *animationMatrixBuf [[buffer(TEX_SLOT_START+@value( texture_matrix ))]]
+	@end
+
+	@insertpiece( ParticleSystemDeclVS )
+
+	@property( hlms_vertex_id )
+		, uint inVs_vertexId [[vertex_id]]
+		, uint baseVertexID [[base_vertex]]
+	@end
 	@insertpiece( custom_vs_uniformDeclaration )
 	// END UNIFORM DECLARATION
 )

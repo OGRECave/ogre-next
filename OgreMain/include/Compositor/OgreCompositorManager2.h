@@ -77,7 +77,7 @@ namespace Ogre
                         + PASS_STENCIL
                         + PASS_RESOLVE
                 + Shadow Node
-                
+
         A Node definition must be created first. Inside the Node Def. different passes can be defined
         including which targets they should render to.
         Once the definitions are set, a workspace instance must be created using addWorkspace
@@ -104,7 +104,7 @@ namespace Ogre
         postprocessing), which enables the possibility of easily creating RSM (Reflective Shadow
         Maps) for Global Illumination calculations.
     @par
-        For more information @see CompositorNode & @see CompositorShadowNode
+        For more information @see CompositorNode @see CompositorShadowNode
     */
     class _OgreExport CompositorManager2 : public OgreAllocatedObj
     {
@@ -231,7 +231,7 @@ namespace Ogre
         /// Returns how many times _update has been called.
         size_t getFrameCount() const { return mFrameCount; }
 
-        /** Get an appropriately defined 'null' texture, i.e. one which will always
+        /** Get an appropriately defined 'null' texture, i.e., one which will always
             result in no shadows.
         */
         TextureGpu *getNullShadowTexture( PixelFormatGpu format );
@@ -253,21 +253,24 @@ namespace Ogre
             a portion of the screen while using two (or more) workspaces without
             having to duplicate the nodes just to alter their viewport parameters.
 
+        @par
             viewportModifier controls how to stretch the viewport in each pass,
             vpModifierMask controls which passes will ignore the stretching, and
             executionMask controls which passes get skipped.
 
+        @par
             All passes have a default executionMask = 0xFF vpModifierMask = 0xFF
             except for clear passes which default to
             executionMask = 0x01 vpModifierMask = 0x00
 
+        @par
             The reasoning behind this is that often you want to clear the whole renderTarget
             the first time (it's GPU-friendly to discard the entire buffer; aka
             vpModifierMask = 0), but the second time you don't want the clear to be executed
             at all to prevent overwritting the contents from the first pass (executionMask = 1).
         @par
-
             Example, stereo (split screen):
+        @code
             //Render Eye0 to the left side of the screen
             m_workspaceEye0 = mgr->addWorkspace( sceneManager, renderTarget,
                                                  eyeCamera0, "MainWorkspace", true,
@@ -278,9 +281,11 @@ namespace Ogre
                                                  eyeCamera1, "MainWorkspace", true,
                                                  -1, Vector4( 0.5f, 0, 0.5f, 1 ),
                                                  0x02, 0x02 );
-        @par
+        @endcode
 
-            Example, split screen, multiplayer, 4 players (e.g. Mario Kart (R)-like games)
+        @par
+           Example, split screen, multiplayer, 4 players (e.g. Mario Kart (R)-like games)
+        @code
             for( int i=0; i<4; ++i )
             {
                 Vector4 vpModifier( (i % 2) * 0.5f, (i >> 1) * 0.5f, 0.25f, 0.25f );
@@ -289,6 +294,7 @@ namespace Ogre
                                                     -1, vpModifier,
                                                     (1 << i), (1 << i) );
             }
+        @endcode
 
         @param sceneManager
             The SceneManager this workspace will be associated with. You can have multiple
@@ -298,10 +304,10 @@ namespace Ogre
             The final RT where the workspace will be rendered to. Usually the RenderWindow.
             We need this pointer in order to correctly create RTTs that depend on
             the final target's width, height, gamma & fsaa settings.
-            This pointer will be used for "connectOutput" channels
-            (@see CompositorWorkspaceDef::connectOutput)
+            This pointer will be used for "connectExternal" channels
+            (see CompositorWorkspaceDef::connectExternal)
             In theory if none of your nodes use width & height relative to final RT &
-            you don't use connectOutput, this pointer could be null. Although it's not
+            you don't use connectExternal, this pointer could be null. Although it's not
             recommended nor explicitly supported.
         @param defaultCam
             Default camera to use when a camera name wasn't specified explicitly in a
@@ -333,19 +339,23 @@ namespace Ogre
                 height  *= vpOffsetScale.w;
             This affects both the viewport dimensions as well as the scissor rect.
         @param vpModifierMask
+        @parblock
             An 8-bit mask that will be AND'ed with the viewport modifier mask of each pass
             from every node. When the result is zero, the previous parameter "viewportModifier"
             isn't applied to that pass.
 
             This is useful when you want to apply a pass (like Clear) to the whole render
             target and not just to the scaled region.
+        @endparblock
         @param executionMask
+        @parblock
             An 8-bit mask that will be AND'ed with the execution mask of each pass from
             every node. When the result is zero, the pass isn't executed. See remarks
             on how to use this for efficient Stereo or split screen.
 
             This is useful when you want to skip a pass (like Clear) when rendering the second
             eye (or the second split from the second player).
+        @endparblock
         */
         CompositorWorkspace *addWorkspace( SceneManager *sceneManager, TextureGpu *finalRenderTarget,
                                            Camera *defaultCam, IdString definitionName, bool bEnabled,
@@ -366,7 +376,7 @@ namespace Ogre
         /// Removes the given workspace. Pointer is no longer valid after this call
         void removeWorkspace( CompositorWorkspace *workspace );
 
-        /// Removes all workspaces. Make sure you don't hold any reference to a CompositorWorkpace!
+        /// Removes all workspaces. Make sure you don't hold any reference to a CompositorWorkspace !
         void removeAllWorkspaces();
         void removeAllWorkspaceDefinitions();
 
@@ -374,22 +384,22 @@ namespace Ogre
 
         /** Removes all shadow nodes defs. Make sure there are no active nodes using the definition!
         @remarks
-            Call removeAllWorkspaceDefinitions first
+            Call removeAllWorkspaceDefinitions() first
         */
         void removeAllShadowNodeDefinitions();
 
         /** Removes all node defs. Make sure there are no active nodes using the definition!
         @remarks
-            Call removeAllWorkspaceDefinitions first
+            Call removeAllWorkspaceDefinitions() first
         */
         void removeAllNodeDefinitions();
 
-        /// Calls @see CompositorNode::_validateAndFinish on all objects who aren't yet validated
+        /// Calls CompositorShadowNodeDef::_validateAndFinish on all objects who aren't yet validated
         void validateAllNodes();
 
         BarrierSolver &getBarrierSolver() { return mBarrierSolver; }
 
-        /// Will call the renderSystem which in turns calls _updateImplementation
+        /// Will call the renderSystem which in turns calls _updateImplementation()
         void _update();
 
         /// This should be called by the render system to

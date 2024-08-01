@@ -143,13 +143,15 @@ namespace Ogre
             void   doSet( void *target, const String &val ) override;
         };
 
+    public:
         /** Creates a particle system with no emitters or affectors.
         @remarks
             You should use the ParticleSystemManager to create particle systems rather than creating
             them directly.
         */
         ParticleSystem( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
-                        const String &resourceGroupName );
+                        const String &resourceGroupName, uint8 renderQueueId = 110u,
+                        bool bCreateRenderer = true );
 
         virtual ~ParticleSystem() override;
 
@@ -315,7 +317,7 @@ namespace Ogre
         possible. The quota can be increased but not decreased after the system has been created.
         @param quota The maximum number of particles this system is allowed to have.
         */
-        void setParticleQuota( size_t quota );
+        virtual void setParticleQuota( size_t quota );
 
         /** Returns the maximum number of emitted emitters this system is allowed to have active at once.
         @remarks
@@ -916,6 +918,8 @@ namespace Ogre
            flag, they are rebuild in the regular process flow.
         */
         void _notifyReorganiseEmittedEmitterData();
+
+        void _cloneFrom( const ParticleSystem *_original );
     };
     /** @} */
     /** @} */

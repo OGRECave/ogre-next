@@ -1,4 +1,4 @@
-name: CI
+name: Linux CI
 
 # Controls when the action will run.
 on:

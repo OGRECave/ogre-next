@@ -15,6 +15,8 @@
 #define toFloat3x3( x ) ((float3x3)(x))
 #define buildFloat3x3( row0, row1, row2 ) transpose( float3x3( row0, row1, row2 ) )
 
+#define buildFloat4x4( row0, row1, row2, row3 ) transpose( float4x4( row0, row1, row2, row3 ) )
+
 // See CrossPlatformSettings_piece_all.glsl for an explanation
 @property( precision_mode == full32 )
 	#define _h(x) (x)
@@ -98,7 +100,7 @@
 	#define inVs_stereoDrawId input.drawId
 @end
 
-#define finalDrawId input.drawId
+#define finalDrawId inVs_drawId
 
 @foreach( hlms_uv_count, n )
 	#define inVs_uv@n input.uv@n@end
@@ -111,7 +113,7 @@
 #define interpolateAtSample( interp, subsample ) EvaluateAttributeAtSample( interp, subsample )
 #define findLSB firstbitlow
 #define findMSB firstbithigh
-#define mod( a, b ) (a - b * floor(a / b))
+#define mod( a, b ) ( (a) - (b) * floor( (a) / (b) ) )
 
 #define outPs_colour0 outPs.colour0
 #define OGRE_Sample( tex, sampler, uv ) tex.Sample( sampler, uv )
@@ -173,4 +175,19 @@
 
 #define OGRE_ARRAY_START( type ) {
 #define OGRE_ARRAY_END }
+
+float4 unpackSnorm4x8( uint value )
+{
+	int signedValue = int( value );
+	int4 packed = int4( signedValue << 24, signedValue << 16, signedValue << 8, signedValue ) >> 24;
+	return clamp( float4( packed ) / 127.0, -1.0, 1.0 );
+}
+
+float2 unpackSnorm2x16( uint value )
+{
+	int signedValue = int( value );
+	int2 packed = int2( signedValue << 16, signedValue ) >> 16;
+	return clamp( float2( packed ) / 32767.0, -1.0, 1.0 );
+}
+
 @end

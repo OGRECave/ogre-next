@@ -1066,10 +1066,14 @@ namespace Ogre
         if( mEncoderState == EncoderCopyOpen )
         {
             bool needsToFlush = false;
+            bool mustRemoveFromBarrier = false;
             TextureGpuDownloadMap::const_iterator itor = mCopyDownloadTextures.find( texture );
 
             if( itor != mCopyDownloadTextures.end() )
+            {
                 needsToFlush = true;
+                mustRemoveFromBarrier = true;
+            }
             else
             {
                 FastArray<TextureGpu *>::const_iterator it2 =
@@ -1087,6 +1091,14 @@ namespace Ogre
                 OGRE_ASSERT_LOW( texture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ||
                                  texture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
                 endCopyEncoder();
+
+                if( mustRemoveFromBarrier )
+                {
+                    // endCopyEncoder() just called solver.assumeTransition() on this texture
+                    // but we're destroying the texture. Remove the dangling pointer.
+                    BarrierSolver &solver = mRenderSystem->getBarrierSolver();
+                    solver.textureDeleted( texture );
+                }
             }
         }
     }
@@ -1174,6 +1186,8 @@ namespace Ogre
     void VulkanQueue::commitAndNextCommandBuffer( SubmissionType::SubmissionType submissionType )
     {
         endCommandBuffer();
+
+        mRenderSystem->flushPendingNonCoherentFlushes( submissionType );
 
         // We must reset all bindings or else after 3 (mDynamicBufferCurrentFrame) frames
         // there could be dangling API handles left hanging around indefinitely that

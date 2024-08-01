@@ -1,4 +1,4 @@
-version: 2.3.{build}
+version: 3.0.{build}
 
 environment:
   matrix:
@@ -19,14 +19,14 @@ environment:
 #      BUILD_SCRIPT: build_ogre_Visual_Studio_14_2015_x64.bat
     - PLATFORM: x64
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      PYTHON: "C:\\Python36-x64"
-      PYTHONHOME: "C:\\Python36-x64"
-      PYTHONPATH: "C:\\Python36-x64\\lib\\site-packages"
-      PATH: "C:\\Python36-x64;C:\\Python36\\Scripts;%PATH%"
+      PYTHON: "C:\\Python312"
+      PYTHONHOME: "C:\\Python312"
+      PYTHONPATH: "C:\\Python312\\lib\\site-packages"
+      PATH: "C:\\Python312;C:\\Python312\\Scripts;%PATH%"
       BUILD_SCRIPT: build_ci_windows.bat
 
 cache:
-  - ..\ogredeps
+  - ..\ogre-next-deps
 
 build_script:
   - cmd: Scripts\BuildScripts\%BUILD_SCRIPT%

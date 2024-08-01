@@ -150,19 +150,20 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsTerra::setDetailMapProperties( HlmsTerraDatablock *datablock, PiecesMap *inOutPieces )
+    void HlmsTerra::setDetailMapProperties( const size_t tid, HlmsTerraDatablock *datablock,
+                                            PiecesMap *inOutPieces )
     {
         int32 minNormalMap = 4;
         bool hasDiffuseMaps = false;
         bool hasNormalMaps = false;
         for( uint8 i = 0; i < 4u; ++i )
         {
-            setDetailTextureProperty( TerraProperty::DetailMapN, datablock, TERRA_DETAIL0, i );
-            setDetailTextureProperty( TerraProperty::DetailMapNmN, datablock, TERRA_DETAIL0_NM, i );
-            setDetailTextureProperty( TerraProperty::RoughnessMap, datablock, TERRA_DETAIL_ROUGHNESS0,
-                                      i );
-            setDetailTextureProperty( TerraProperty::MetalnessMap, datablock, TERRA_DETAIL_METALNESS0,
-                                      i );
+            setDetailTextureProperty( tid, TerraProperty::DetailMapN, datablock, TERRA_DETAIL0, i );
+            setDetailTextureProperty( tid, TerraProperty::DetailMapNmN, datablock, TERRA_DETAIL0_NM, i );
+            setDetailTextureProperty( tid, TerraProperty::RoughnessMap, datablock,
+                                      TERRA_DETAIL_ROUGHNESS0, i );
+            setDetailTextureProperty( tid, TerraProperty::MetalnessMap, datablock,
+                                      TERRA_DETAIL_METALNESS0, i );
 
             if( datablock->getTexture( TERRA_DETAIL0 + i ) )
                 hasDiffuseMaps = true;
@@ -174,20 +175,20 @@ namespace Ogre
             }
 
             if( datablock->mDetailsOffsetScale[i] != Vector4( 0, 0, 1, 1 ) )
-                setProperty( *PbsProperty::DetailOffsetsPtrs[i], 1 );
+                setProperty( tid, *PbsProperty::DetailOffsetsPtrs[i], 1 );
         }
 
         if( hasDiffuseMaps )
-            setProperty( PbsProperty::DetailMapsDiffuse, 4 );
+            setProperty( tid, PbsProperty::DetailMapsDiffuse, 4 );
 
         if( hasNormalMaps )
-            setProperty( PbsProperty::DetailMapsNormal, 4 );
+            setProperty( tid, PbsProperty::DetailMapsNormal, 4 );
 
-        setProperty( PbsProperty::FirstValidDetailMapNm, minNormalMap );
+        setProperty( tid, PbsProperty::FirstValidDetailMapNm, minNormalMap );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsTerra::setTextureProperty( const char *propertyName, HlmsTerraDatablock *datablock,
-                                        TerraTextureTypes texType )
+    void HlmsTerra::setTextureProperty( const size_t tid, const char *propertyName,
+                                        HlmsTerraDatablock *datablock, TerraTextureTypes texType )
     {
         uint8 idx = datablock->getIndexToDescriptorTexture( texType );
         if( idx != NUM_TERRA_TEXTURE_TYPES )
@@ -202,23 +203,24 @@ namespace Ogre
             // In the template the we subtract the "+1" for the index.
             // We need to increment it now otherwise @property( diffuse_map )
             // can translate to @property( 0 ) which is not what we want.
-            setProperty( propertyName, idx + 1 );
+            setProperty( tid, propertyName, idx + 1 );
 
             propName.resize( basePropSize );
             propName.a( "_idx" );  // diffuse_map_idx
-            setProperty( propName.c_str(), idx );
+            setProperty( tid, propName.c_str(), idx );
 
             if( mHasSeparateSamplers )
             {
                 const uint8 samplerIdx = datablock->getIndexToDescriptorSampler( texType );
                 propName.resize( basePropSize );
                 propName.a( "_sampler" );  // diffuse_map_sampler
-                setProperty( propName.c_str(), samplerIdx );
+                setProperty( tid, propName.c_str(), samplerIdx );
             }
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsTerra::setDetailTextureProperty( const char *propertyName, HlmsTerraDatablock *datablock,
+    void HlmsTerra::setDetailTextureProperty( const size_t tid, const char *propertyName,
+                                              HlmsTerraDatablock *datablock,
                                               TerraTextureTypes baseTexType, uint8 detailIdx )
     {
         const TerraTextureTypes texType = static_cast<TerraTextureTypes>( baseTexType + detailIdx );
@@ -235,18 +237,18 @@ namespace Ogre
             // In the template the we subtract the "+1" for the index.
             // We need to increment it now otherwise @property( diffuse_map )
             // can translate to @property( 0 ) which is not what we want.
-            setProperty( propName.c_str(), idx + 1 );
+            setProperty( tid, propName.c_str(), idx + 1 );
 
             propName.resize( basePropSize );
             propName.a( "_idx" );  // detail_map0_idx
-            setProperty( propName.c_str(), idx );
+            setProperty( tid, propName.c_str(), idx );
 
             if( mHasSeparateSamplers )
             {
                 const uint8 samplerIdx = datablock->getIndexToDescriptorSampler( texType );
                 propName.resize( basePropSize );
                 propName.a( "_sampler" );  // detail_map0_sampler
-                setProperty( propName.c_str(), samplerIdx );
+                setProperty( tid, propName.c_str(), samplerIdx );
             }
         }
     }
@@ -278,69 +280,69 @@ namespace Ogre
         // vertex shader. We could fetch the normals, but tessellation is constantly changing in
         // Terra, and besides we don't care because Terra doesn't cast shadow maps, thus it
         // has no self occlussion artifacts.
-        setProperty( "skip_normal_offset_bias_vs", 1 );
+        setProperty( kNoTid, "skip_normal_offset_bias_vs", 1 );
 
         TerrainCell *terrainCell = static_cast<TerrainCell *>( renderable );
-        setProperty( TerraProperty::UseSkirts, terrainCell->getUseSkirts() );
-        setProperty( TerraProperty::ZUp, terrainCell->isZUp() );
+        setProperty( kNoTid, TerraProperty::UseSkirts, terrainCell->getUseSkirts() );
+        setProperty( kNoTid, TerraProperty::ZUp, terrainCell->isZUp() );
 
         assert( dynamic_cast<HlmsTerraDatablock *>( renderable->getDatablock() ) );
         HlmsTerraDatablock *datablock = static_cast<HlmsTerraDatablock *>( renderable->getDatablock() );
 
-        setProperty( PbsProperty::FresnelScalar, 1 );
-        setProperty( PbsProperty::FresnelWorkflow, 0 );
-        setProperty( PbsProperty::MetallicWorkflow, 1 );
+        setProperty( kNoTid, PbsProperty::FresnelScalar, 1 );
+        setProperty( kNoTid, PbsProperty::FresnelWorkflow, 0 );
+        setProperty( kNoTid, PbsProperty::MetallicWorkflow, 1 );
 
-        setProperty( PbsProperty::ReceiveShadows, 1 );
+        setProperty( kNoTid, PbsProperty::ReceiveShadows, 1 );
 
         uint32 brdf = datablock->getBrdf();
         if( ( brdf & TerraBrdf::BRDF_MASK ) == TerraBrdf::Default )
         {
-            setProperty( PbsProperty::BrdfDefault, 1 );
+            setProperty( kNoTid, PbsProperty::BrdfDefault, 1 );
 
             if( !( brdf & TerraBrdf::FLAG_UNCORRELATED ) )
-                setProperty( PbsProperty::GgxHeightCorrelated, 1 );
+                setProperty( kNoTid, PbsProperty::GgxHeightCorrelated, 1 );
         }
         else if( ( brdf & TerraBrdf::BRDF_MASK ) == TerraBrdf::CookTorrance )
-            setProperty( PbsProperty::BrdfCookTorrance, 1 );
+            setProperty( kNoTid, PbsProperty::BrdfCookTorrance, 1 );
         else if( ( brdf & TerraBrdf::BRDF_MASK ) == TerraBrdf::BlinnPhong )
-            setProperty( PbsProperty::BrdfBlinnPhong, 1 );
+            setProperty( kNoTid, PbsProperty::BrdfBlinnPhong, 1 );
 
         if( brdf & TerraBrdf::FLAG_HAS_DIFFUSE_FRESNEL )
         {
-            setProperty( PbsProperty::FresnelHasDiffuse, 1 );
+            setProperty( kNoTid, PbsProperty::FresnelHasDiffuse, 1 );
             if( brdf & TerraBrdf::FLAG_SPERATE_DIFFUSE_FRESNEL )
-                setProperty( PbsProperty::FresnelSeparateDiffuse, 1 );
+                setProperty( kNoTid, PbsProperty::FresnelSeparateDiffuse, 1 );
         }
 
         if( brdf & TerraBrdf::FLAG_LEGACY_MATH )
-            setProperty( PbsProperty::LegacyMathBrdf, 1 );
+            setProperty( kNoTid, PbsProperty::LegacyMathBrdf, 1 );
         if( brdf & TerraBrdf::FLAG_FULL_LEGACY )
-            setProperty( PbsProperty::RoughnessIsShininess, 1 );
+            setProperty( kNoTid, PbsProperty::RoughnessIsShininess, 1 );
 
         if( datablock->mTexturesDescSet )
-            setDetailMapProperties( datablock, inOutPieces );
+            setDetailMapProperties( kNoTid, datablock, inOutPieces );
         else
-            setProperty( PbsProperty::FirstValidDetailMapNm, 4 );
+            setProperty( kNoTid, PbsProperty::FirstValidDetailMapNm, 4 );
 
         if( datablock->mSamplersDescSet )
         {
-            setProperty( PbsProperty::NumSamplers,
+            setProperty( kNoTid, PbsProperty::NumSamplers,
                          (int32)datablock->mSamplersDescSet->mSamplers.size() );
         }
 
         if( terrainCell->getParentTerra()->getHeightMapTex()->getPixelFormat() == PFG_R16_UINT )
-            setProperty( "terra_use_uint", 1 );
+            setProperty( kNoTid, "terra_use_uint", 1 );
 
         if( datablock->mTexturesDescSet )
         {
             bool envMap = datablock->getTexture( TERRA_REFLECTION ) != 0;
-            setProperty( PbsProperty::NumTextures,
+            setProperty( kNoTid, PbsProperty::NumTextures,
                          int32( datablock->mTexturesDescSet->mTextures.size() - envMap ) );
 
-            setTextureProperty( PbsProperty::DiffuseMap, datablock, TERRA_DIFFUSE );
-            setTextureProperty( PbsProperty::EnvProbeMap, datablock, TERRA_REFLECTION );
-            setTextureProperty( PbsProperty::DetailWeightMap, datablock, TERRA_DETAIL_WEIGHT );
+            setTextureProperty( kNoTid, PbsProperty::DiffuseMap, datablock, TERRA_DIFFUSE );
+            setTextureProperty( kNoTid, PbsProperty::EnvProbeMap, datablock, TERRA_REFLECTION );
+            setTextureProperty( kNoTid, PbsProperty::DetailWeightMap, datablock, TERRA_DETAIL_WEIGHT );
 
             // Save the name of the cubemap for hazard prevention
             //(don't sample the cubemap and render to it at the same time).
@@ -349,8 +351,8 @@ namespace Ogre
             {
                 // Manual reflection texture
                 //                if( datablock->getCubemapProbe() )
-                //                    setProperty( PbsProperty::UseParallaxCorrectCubemaps, 1 );
-                setProperty( PbsProperty::EnvProbeMap,
+                //                    setProperty( kNoTid,PbsProperty::UseParallaxCorrectCubemaps, 1 );
+                setProperty( kNoTid, PbsProperty::EnvProbeMap,
                              static_cast<int32>( reflectionTexture->getName().getU32Value() ) );
             }
         }
@@ -358,40 +360,40 @@ namespace Ogre
         bool usesNormalMap = false;
         for( uint8 i = TERRA_DETAIL0_NM; i <= TERRA_DETAIL3_NM; ++i )
             usesNormalMap |= datablock->getTexture( i ) != 0;
-        setProperty( PbsProperty::NormalMap, usesNormalMap );
+        setProperty( kNoTid, PbsProperty::NormalMap, usesNormalMap );
 
         if( usesNormalMap )
         {
             {
-                setProperty( PbsProperty::NormalSamplingFormat,
+                setProperty( kNoTid, PbsProperty::NormalSamplingFormat,
                              static_cast<int32>( PbsProperty::NormalRgSnorm.getU32Value() ) );
-                setProperty( PbsProperty::NormalRgSnorm,
+                setProperty( kNoTid, PbsProperty::NormalRgSnorm,
                              static_cast<int32>( PbsProperty::NormalRgSnorm.getU32Value() ) );
             }
         }
 
         if( datablock->getDetailTriplanarDiffuseEnabled() )
         {
-            setProperty( TerraProperty::DetailTriplanar, 1 );
-            setProperty( TerraProperty::DetailTriplanarDiffuse, 1 );
+            setProperty( kNoTid, TerraProperty::DetailTriplanar, 1 );
+            setProperty( kNoTid, TerraProperty::DetailTriplanarDiffuse, 1 );
         }
 
         if( datablock->getDetailTriplanarNormalEnabled() )
         {
-            setProperty( TerraProperty::DetailTriplanar, 1 );
-            setProperty( TerraProperty::DetailTriplanarNormal, 1 );
+            setProperty( kNoTid, TerraProperty::DetailTriplanar, 1 );
+            setProperty( kNoTid, TerraProperty::DetailTriplanarNormal, 1 );
         }
 
         if( datablock->getDetailTriplanarRoughnessEnabled() )
         {
-            setProperty( TerraProperty::DetailTriplanar, 1 );
-            setProperty( TerraProperty::DetailTriplanarRoughness, 1 );
+            setProperty( kNoTid, TerraProperty::DetailTriplanar, 1 );
+            setProperty( kNoTid, TerraProperty::DetailTriplanarRoughness, 1 );
         }
 
         if( datablock->getDetailTriplanarMetalnessEnabled() )
         {
-            setProperty( TerraProperty::DetailTriplanar, 1 );
-            setProperty( TerraProperty::DetailTriplanarMetalness, 1 );
+            setProperty( kNoTid, TerraProperty::DetailTriplanar, 1 );
+            setProperty( kNoTid, TerraProperty::DetailTriplanarMetalness, 1 );
         }
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
@@ -400,33 +402,34 @@ namespace Ogre
             if( !mPlanarReflections->_isUpdatingRenderablesHlms() )
                 mPlanarReflections->_notifyRenderableFlushedHlmsDatablock( renderable );
             else
-                setProperty( PbsProperty::UsePlanarReflections, 1 );
+                setProperty( kNoTid, PbsProperty::UsePlanarReflections, 1 );
         }
 #endif
     }
     //-----------------------------------------------------------------------------------
-    void HlmsTerra::calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces )
+    void HlmsTerra::calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces,
+                                               const PiecesMap * )
     {
         // Override, since shadow casting is very basic
-        mSetProperties.clear();
-        setProperty( "hlms_no_shadowConstantBias_decl", 1 );
+        mT[kNoTid].setProperties.clear();
+        setProperty( kNoTid, "hlms_no_shadowConstantBias_decl", 1 );
 
         TerrainCell *terrainCell = static_cast<TerrainCell *>( renderable );
-        setProperty( TerraProperty::ZUp, terrainCell->isZUp() );
+        setProperty( kNoTid, TerraProperty::ZUp, terrainCell->isZUp() );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsTerra::notifyPropertiesMergedPreGenerationStep()
+    void HlmsTerra::notifyPropertiesMergedPreGenerationStep( const size_t tid )
     {
-        HlmsPbs::notifyPropertiesMergedPreGenerationStep();
+        HlmsPbs::notifyPropertiesMergedPreGenerationStep( tid );
 
         int32 texSlotsStart = 0;
-        if( getProperty( HlmsBaseProp::ForwardPlus ) )
-            texSlotsStart = getProperty( "f3dGrid" ) + 1;
-        setTextureReg( VertexShader, "heightMap", texSlotsStart + 0 );
-        if( !getProperty( HlmsBaseProp::ShadowCaster ) )
+        if( getProperty( tid, HlmsBaseProp::ForwardPlus ) )
+            texSlotsStart = getProperty( tid, "f3dGrid" ) + 1;
+        setTextureReg( tid, VertexShader, "heightMap", texSlotsStart + 0 );
+        if( !getProperty( tid, HlmsBaseProp::ShadowCaster ) )
         {
-            setTextureReg( PixelShader, "terrainNormals", texSlotsStart + 1 );
-            setTextureReg( PixelShader, "terrainShadows", texSlotsStart + 2 );
+            setTextureReg( tid, PixelShader, "terrainNormals", texSlotsStart + 1 );
+            setTextureReg( tid, PixelShader, "terrainShadows", texSlotsStart + 2 );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -648,6 +651,8 @@ namespace Ogre
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
             mLastBoundPlanarReflection = 0u;
+            if( mHasPlanarReflections )
+                ++texUnit;  // We do not bind this texture now, but its slot is reserved.
 #endif
             mListener->hlmsTypeChanged( casterPass, commandBuffer, datablock, 0u );
         }
@@ -783,6 +788,7 @@ namespace Ogre
         outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any/Atmosphere" );
 #endif
         outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any/Main" );
+        outLibraryFoldersPaths.push_back( "Hlms/Pbs/" + shaderSyntax );
         outLibraryFoldersPaths.push_back( "Hlms/Terra/Any" );
 
         // Fill the data folder path

@@ -2675,6 +2675,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     unsigned long updateTextureMultiLoadWorkerThread( ThreadHandle *threadHandle )
     {
+        Threads::SetThreadName(
+            threadHandle, "TxtreLoad#" + StringConverter::toString( threadHandle->getThreadIdx() ) );
+
         TextureGpuManager *textureManager =
             reinterpret_cast<TextureGpuManager *>( threadHandle->getUserParam() );
         return textureManager->_updateTextureMultiLoadWorkerThread( threadHandle );
@@ -2777,6 +2780,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     unsigned long updateStreamingWorkerThread( ThreadHandle *threadHandle )
     {
+        Threads::SetThreadName(
+            threadHandle, "TexStream#" + StringConverter::toString( threadHandle->getThreadIdx() ) );
+
         TextureGpuManager *textureManager =
             reinterpret_cast<TextureGpuManager *>( threadHandle->getUserParam() );
         return textureManager->_updateStreamingWorkerThread( threadHandle );

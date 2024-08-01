@@ -1,0 +1,58 @@
+// Example particle systems
+
+// smoke
+particle_system Particle/SmokePBS
+{
+	material        	Particle/SmokePBS
+	particle_width  	10
+	particle_height 	10
+	cull_each       	true
+	quota           	500
+	billboard_type  	point
+	sorted				true
+
+	// billboard_type		oriented_common
+	// common_direction	0 1 0
+    
+	// Area emitter
+	emitter Point
+	{
+		position 0 15 -15
+		angle 35
+		emission_rate 15
+		time_to_live 4
+		direction 0 1 0
+		velocity_min 50
+		velocity_max 80
+	}
+
+   	affector Scaler
+   	{
+		rate 25
+   	}
+}
+
+particle_system Particle/SmokeUnlit : Particle/SmokePBS
+{
+	material	Particle/SmokeUnlit
+
+	// The PBS version does not rotate because that makes the lighting look wrong
+	affector Rotator
+	{
+		rotation_range_start 0
+		rotation_range_end 360
+		rotation_speed_range_start -60
+		rotation_speed_range_end 200
+	}
+
+	// PBS doesn't support vertex colours
+	affector ColourImage
+	{
+		image smokecolors.png
+	}
+}
+
+particle_system Particle/SpherePBS : Particle/SmokePBS
+{
+	material	Particle/SpherePBS
+}

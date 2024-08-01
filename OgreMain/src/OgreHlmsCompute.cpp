@@ -130,7 +130,6 @@ namespace Ogre
                   filename.compare( pos + 1, String::npos, "any" ) != 0 &&
                   filename.compare( pos + 1, String::npos, "metal" ) != 0 &&
                   filename.compare( pos + 1, String::npos, "glsl" ) != 0 &&
-                  filename.compare( pos + 1, String::npos, "glsles" ) != 0 &&
                   filename.compare( pos + 1, String::npos, "hlsl" ) != 0 ) )
             {
                 filename += mShaderFileExt;
@@ -144,16 +143,16 @@ namespace Ogre
             inString.resize( inFile->size() );
             inFile->read( &inString[0], inFile->size() );
 
-            this->parseMath( inString, outString );
+            this->parseMath( inString, outString, kNoTid );
             while( outString.find( "@foreach" ) != String::npos )
             {
-                this->parseForEach( outString, inString );
+                this->parseForEach( outString, inString, kNoTid );
                 inString.swap( outString );
             }
-            this->parseProperties( outString, inString );
-            this->parseUndefPieces( inString, outString );
-            this->collectPieces( outString, inString );
-            this->parseCounter( inString, outString );
+            this->parseProperties( outString, inString, kNoTid );
+            this->parseUndefPieces( inString, outString, kNoTid );
+            this->collectPieces( outString, inString, kNoTid );
+            this->parseCounter( inString, outString, kNoTid );
 
             ++itor;
         }
@@ -162,24 +161,24 @@ namespace Ogre
     HlmsComputePso HlmsCompute::compileShader( HlmsComputeJob *job, uint32 finalHash )
     {
         // Assumes mSetProperties is already set
-        // mSetProperties.clear();
+        // mSetProperties[kNoTid].clear();
         {
             // Add RenderSystem-specific properties
             IdStringVec::const_iterator itor = mRsSpecificExtensions.begin();
             IdStringVec::const_iterator endt = mRsSpecificExtensions.end();
 
             while( itor != endt )
-                setProperty( *itor++, 1 );
+                setProperty( kNoTid, *itor++, 1 );
         }
 
         GpuProgramPtr shader;
         // Generate the shader
 
         // Collect pieces
-        mPieces.clear();
+        mT[kNoTid].pieces.clear();
 
         // Start with the pieces sent by the user
-        mPieces = job->mPieces;
+        mT[kNoTid].pieces = job->mPieces;
 
         const String sourceFilename = job->mSourceFilename + mShaderFileExt;
 
@@ -188,32 +187,38 @@ namespace Ogre
 
         if( mShaderProfile == "glsl" || mShaderProfile == "glslvk" )  // TODO: String comparision
         {
-            setProperty( HlmsBaseProp::GL3Plus, mRenderSystem->getNativeShadingLanguageVersion() );
+            setProperty( kNoTid, HlmsBaseProp::GL3Plus,
+                         mRenderSystem->getNativeShadingLanguageVersion() );
         }
-        if( mShaderProfile == "glsles" )  // TODO: String comparision
-            setProperty( HlmsBaseProp::GLES, 300 );
 
-        setProperty( HlmsBaseProp::Syntax, static_cast<int32>( mShaderSyntax.getU32Value() ) );
-        setProperty( HlmsBaseProp::Hlsl, static_cast<int32>( HlmsBaseProp::Hlsl.getU32Value() ) );
-        setProperty( HlmsBaseProp::Glsl, static_cast<int32>( HlmsBaseProp::Glsl.getU32Value() ) );
-        setProperty( HlmsBaseProp::Glslvk, static_cast<int32>( HlmsBaseProp::Glslvk.getU32Value() ) );
-        setProperty( HlmsBaseProp::Hlslvk, static_cast<int32>( HlmsBaseProp::Hlslvk.getU32Value() ) );
-        setProperty( HlmsBaseProp::Glsles, static_cast<int32>( HlmsBaseProp::Glsles.getU32Value() ) );
-        setProperty( HlmsBaseProp::Metal, static_cast<int32>( HlmsBaseProp::Metal.getU32Value() ) );
+        setProperty( kNoTid, HlmsBaseProp::Syntax, static_cast<int32>( mShaderSyntax.getU32Value() ) );
+        setProperty( kNoTid, HlmsBaseProp::Hlsl,
+                     static_cast<int32>( HlmsBaseProp::Hlsl.getU32Value() ) );
+        setProperty( kNoTid, HlmsBaseProp::Glsl,
+                     static_cast<int32>( HlmsBaseProp::Glsl.getU32Value() ) );
+        setProperty( kNoTid, HlmsBaseProp::Glslvk,
+                     static_cast<int32>( HlmsBaseProp::Glslvk.getU32Value() ) );
+        setProperty( kNoTid, HlmsBaseProp::Hlslvk,
+                     static_cast<int32>( HlmsBaseProp::Hlslvk.getU32Value() ) );
+        setProperty( kNoTid, HlmsBaseProp::Metal,
+                     static_cast<int32>( HlmsBaseProp::Metal.getU32Value() ) );
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        setProperty( HlmsBaseProp::iOS, 1 );
+        setProperty( kNoTid, HlmsBaseProp::iOS, 1 );
 #endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-        setProperty( HlmsBaseProp::macOS, 1 );
+        setProperty( kNoTid, HlmsBaseProp::macOS, 1 );
 #endif
-        setProperty( HlmsBaseProp::Full32, static_cast<int32>( HlmsBaseProp::Full32.getU32Value() ) );
-        setProperty( HlmsBaseProp::Midf16, static_cast<int32>( HlmsBaseProp::Midf16.getU32Value() ) );
-        setProperty( HlmsBaseProp::Relaxed, static_cast<int32>( HlmsBaseProp::Relaxed.getU32Value() ) );
-        setProperty( HlmsBaseProp::PrecisionMode, getSupportedPrecisionModeHash() );
+        setProperty( kNoTid, HlmsBaseProp::Full32,
+                     static_cast<int32>( HlmsBaseProp::Full32.getU32Value() ) );
+        setProperty( kNoTid, HlmsBaseProp::Midf16,
+                     static_cast<int32>( HlmsBaseProp::Midf16.getU32Value() ) );
+        setProperty( kNoTid, HlmsBaseProp::Relaxed,
+                     static_cast<int32>( HlmsBaseProp::Relaxed.getU32Value() ) );
+        setProperty( kNoTid, HlmsBaseProp::PrecisionMode, getSupportedPrecisionModeHash() );
 
         if( mFastShaderBuildHack )
-            setProperty( HlmsBaseProp::FastShaderBuildHack, 1 );
+            setProperty( kNoTid, HlmsBaseProp::FastShaderBuildHack, 1 );
 
         // Piece files
         processPieces( job->mIncludedPieceFiles );
@@ -226,21 +231,21 @@ namespace Ogre
 
         bool syntaxError = false;
 
-        syntaxError |= this->parseMath( inString, outString );
+        syntaxError |= this->parseMath( inString, outString, kNoTid );
         while( !syntaxError && outString.find( "@foreach" ) != String::npos )
         {
-            syntaxError |= this->parseForEach( outString, inString );
+            syntaxError |= this->parseForEach( outString, inString, kNoTid );
             inString.swap( outString );
         }
-        syntaxError |= this->parseProperties( outString, inString );
-        syntaxError |= this->parseUndefPieces( inString, outString );
+        syntaxError |= this->parseProperties( outString, inString, kNoTid );
+        syntaxError |= this->parseUndefPieces( inString, outString, kNoTid );
         while( !syntaxError && ( outString.find( "@piece" ) != String::npos ||
                                  outString.find( "@insertpiece" ) != String::npos ) )
         {
-            syntaxError |= this->collectPieces( outString, inString );
-            syntaxError |= this->insertPieces( inString, outString );
+            syntaxError |= this->collectPieces( outString, inString, kNoTid );
+            syntaxError |= this->insertPieces( inString, outString, kNoTid );
         }
-        syntaxError |= this->parseCounter( outString, inString );
+        syntaxError |= this->parseCounter( outString, inString, kNoTid );
 
         outString.swap( inString );
 
@@ -260,12 +265,12 @@ namespace Ogre
             std::ofstream outFile( Ogre::fileSystemPathFromString( debugFilenameOutput ).c_str(),
                                    std::ios::out | std::ios::binary );
             if( mDebugOutputProperties )
-                dumpProperties( outFile );
+                dumpProperties( outFile, kNoTid );
             outFile.write( &outString[0], static_cast<std::streamsize>( outString.size() ) );
         }
 
         // Don't create and compile if template requested not to
-        if( !getProperty( HlmsBaseProp::DisableStage ) )
+        if( !getProperty( kNoTid, HlmsBaseProp::DisableStage ) )
         {
             // Very similar to what the GpuProgramManager does with its microcode cache,
             // but we **need** to know if two Compute Shaders share the same source code.
@@ -312,7 +317,7 @@ namespace Ogre
                     rootLayout.mCompute = true;
                     job->setupRootLayout( rootLayout );
                     gp->setRootLayout( gp->getType(), rootLayout );
-                    if( getProperty( "uses_array_bindings" ) )
+                    if( getProperty( kNoTid, "uses_array_bindings" ) )
                         gp->setAutoReflectArrayBindingsInRootLayout( true );
                 }
 
@@ -323,9 +328,9 @@ namespace Ogre
                     gp->setParameter( "entry_point", "main" );
                 }
 
-                gp->setSkeletalAnimationIncluded( getProperty( HlmsBaseProp::Skeleton ) != 0 );
+                gp->setSkeletalAnimationIncluded( getProperty( kNoTid, HlmsBaseProp::Skeleton ) != 0 );
                 gp->setMorphAnimationIncluded( false );
-                gp->setPoseAnimationIncluded( getProperty( HlmsBaseProp::Pose ) != 0 );
+                gp->setPoseAnimationIncluded( getProperty( kNoTid, HlmsBaseProp::Pose ) != 0 );
                 gp->setVertexTextureFetchRequired( false );
 
                 gp->load();
@@ -337,18 +342,18 @@ namespace Ogre
         }
 
         // Reset the disable flag.
-        setProperty( HlmsBaseProp::DisableStage, 0 );
+        setProperty( kNoTid, HlmsBaseProp::DisableStage, 0 );
 
         HlmsComputePso pso;
         pso.initialize();
         pso.computeShader = shader;
         pso.computeParams = shader->createParameters();
-        pso.mThreadsPerGroup[0] = (uint32)( getProperty( ComputeProperty::ThreadsPerGroupX ) );
-        pso.mThreadsPerGroup[1] = (uint32)( getProperty( ComputeProperty::ThreadsPerGroupY ) );
-        pso.mThreadsPerGroup[2] = (uint32)( getProperty( ComputeProperty::ThreadsPerGroupZ ) );
-        pso.mNumThreadGroups[0] = (uint32)( getProperty( ComputeProperty::NumThreadGroupsX ) );
-        pso.mNumThreadGroups[1] = (uint32)( getProperty( ComputeProperty::NumThreadGroupsY ) );
-        pso.mNumThreadGroups[2] = (uint32)( getProperty( ComputeProperty::NumThreadGroupsZ ) );
+        pso.mThreadsPerGroup[0] = (uint32)( getProperty( kNoTid, ComputeProperty::ThreadsPerGroupX ) );
+        pso.mThreadsPerGroup[1] = (uint32)( getProperty( kNoTid, ComputeProperty::ThreadsPerGroupY ) );
+        pso.mThreadsPerGroup[2] = (uint32)( getProperty( kNoTid, ComputeProperty::ThreadsPerGroupZ ) );
+        pso.mNumThreadGroups[0] = (uint32)( getProperty( kNoTid, ComputeProperty::NumThreadGroupsX ) );
+        pso.mNumThreadGroups[1] = (uint32)( getProperty( kNoTid, ComputeProperty::NumThreadGroupsY ) );
+        pso.mNumThreadGroups[2] = (uint32)( getProperty( kNoTid, ComputeProperty::NumThreadGroupsZ ) );
 
         if( pso.mThreadsPerGroup[0] * pso.mThreadsPerGroup[1] * pso.mThreadsPerGroup[2] == 0u ||
             pso.mNumThreadGroups[0] * pso.mNumThreadGroups[1] * pso.mNumThreadGroups[2] == 0u )
@@ -467,7 +472,7 @@ namespace Ogre
                 // Return back the borrowed properties and make
                 // a hard copy for starting the compilation.
                 psoCache.setProperties.swap( job->mSetProperties );
-                this->mSetProperties = job->mSetProperties;
+                this->mT[kNoTid].setProperties = job->mSetProperties;
 
                 // Uset the HlmsComputePso, as the ptr may be cached by the
                 // RenderSystem and this could be invalidated
@@ -567,7 +572,7 @@ namespace Ogre
         return 0;
     }
     //----------------------------------------------------------------------------------
-    void HlmsCompute::setupRootLayout( RootLayout &rootLayout ) {}
+    void HlmsCompute::setupRootLayout( RootLayout &rootLayout, const size_t tid ) {}
     //----------------------------------------------------------------------------------
     void HlmsCompute::reloadFrom( Archive *newDataFolder, ArchiveVec *libraryFolders )
     {

@@ -76,6 +76,8 @@ THE SOFTWARE.
 #include "OgreTextureGpuManager.h"
 #include "OgreViewport.h"
 #include "OgreWireAabb.h"
+#include "ParticleSystem/OgreParticleSystem2.h"
+#include "ParticleSystem/OgreParticleSystemManager2.h"
 #include "Threading/OgreBarrier.h"
 #include "Threading/OgreUniformScalableTask.h"
 
@@ -131,6 +133,8 @@ namespace Ogre
         mDecalsNormalsTex( 0 ),
         mDecalsEmissiveTex( 0 ),
         mEnvFeatures( 0u ),
+        mParticleSystemManager2(
+            new ParticleSystemManager2( this, Root::getSingleton().getParticleSystemManager2() ) ),
         mCamerasInProgress( 0 ),
         mCurrentViewport0( 0 ),
         mCurrentPass( 0 ),
@@ -165,6 +169,7 @@ namespace Ogre
         mFindVisibleObjects( true ),
         mNumWorkerThreads( std::max<size_t>( numWorkerThreads, 1u ) ),
         mForceMainThread( numWorkerThreads == 0u ? true : false ),
+        mPrepareParticleFx( false ),
         mUpdateBoundsRequest( 0 ),
         mUserTask( 0 ),
         mRequestType( NUM_REQUESTS ),
@@ -193,6 +198,7 @@ namespace Ogre
                                                           &mForwardPlusMemoryManager[SCENE_DYNAMIC] );
         mForwardPlusMemoryManager[SCENE_DYNAMIC]._setTwin( SCENE_DYNAMIC,
                                                            &mForwardPlusMemoryManager[SCENE_STATIC] );
+        mParticleSysDefMemoryManager._setTwin( SCENE_STATIC, 0 );
 
         Root *root = Root::getSingletonPtr();
         if( root )
@@ -229,8 +235,20 @@ namespace Ogre
                 mShadowCasterPlainBlackPass->setDiffuse( ColourValue::Black );
                 mShadowCasterPlainBlackPass->setSelfIllumination( ColourValue::Black );
                 mShadowCasterPlainBlackPass->setSpecular( ColourValue::Black );
+
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( push, 0 )
+#else
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
                 // Override fog
                 mShadowCasterPlainBlackPass->setFog( true, FOG_NONE );
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( pop )
+#else
+#    pragma GCC diagnostic pop
+#endif
                 // no textures or anything else, we will bind vertex programs
                 // every so often though
             }
@@ -297,6 +315,8 @@ namespace Ogre
 
         mRenderQueue = 0;
         mAutoParamDataSource = 0;
+
+        delete mParticleSystemManager2;
 
         stopWorkerThreads();
     }
@@ -499,6 +519,8 @@ namespace Ogre
         }
 
         mLightMemoryManager.defragment();
+        // Do not defragment mParticleSysDefMemoryManager
+        mParticleSysMemoryManager.defragment();
         // Skeletons are more complex because the new slot count must be multiple bonesPerDepth
         // mSkeletonAnimationManager.defragment();
         mTagPointNodeMemoryManager.defragment();
@@ -514,6 +536,8 @@ namespace Ogre
         }
 
         mLightMemoryManager.shrinkToFit();
+        // Do not defragment mParticleSysDefMemoryManager
+        mParticleSysMemoryManager.shrinkToFit();
         // Skeletons are more complex because the new slot count must be multiple bonesPerDepth
         // mSkeletonAnimationManager.shrinkToFit();
         mTagPointNodeMemoryManager.shrinkToFit();
@@ -762,6 +786,56 @@ namespace Ogre
     void SceneManager::destroyAllParticleSystems()
     {
         destroyAllMovableObjectsByType( ParticleSystemFactory::FACTORY_TYPE_NAME );
+    }
+    //-----------------------------------------------------------------------
+    ParticleSystemDef *SceneManager::createParticleSystemDef( const String &name )
+    {
+        return mParticleSystemManager2->createParticleSystemDef( name );
+    }
+    //-----------------------------------------------------------------------
+    ParticleSystem2 *SceneManager::createParticleSystem2( ParticleSystemDef *systemDef )
+    {
+        NameValuePairList params;
+        params.insert( { "", Ogre::StringConverter::toString( (uintptr_t)systemDef ) } );
+        return static_cast<ParticleSystem2 *>( createMovableObject(
+            ParticleSystem2Factory::FACTORY_TYPE_NAME, &mParticleSysMemoryManager, &params ) );
+    }
+    //-----------------------------------------------------------------------
+    ParticleSystem2 *SceneManager::createParticleSystem2( const String &templateDefName )
+    {
+        return createParticleSystem2( mParticleSystemManager2->getParticleSystemDef( templateDefName ) );
+    }
+    //-----------------------------------------------------------------------
+    void SceneManager::destroyParticleSystem2( ParticleSystem2 *obj )
+    {
+        return destroyMovableObject( obj );
+    }
+    //-----------------------------------------------------------------------
+    void SceneManager::destroyAllParticleSystems2()
+    {
+        MovableObjectCollection *objectMap =
+            getMovableObjectCollection( ParticleSystem2Factory::FACTORY_TYPE_NAME );
+        {
+            OGRE_LOCK_MUTEX( objectMap->mutex );
+            objectMap->movableObjects.clear();
+        }
+
+        mParticleSystemManager2->destroyAllParticleSystems();
+    }
+    //-----------------------------------------------------------------------
+    BillboardSet *SceneManager::createBillboardSet2()
+    {
+        return mParticleSystemManager2->createBillboardSet();
+    }
+    //-----------------------------------------------------------------------
+    void SceneManager::destroyBillboardSet2( BillboardSet *billboardSet )
+    {
+        return mParticleSystemManager2->destroyBillboardSet( billboardSet );
+    }
+    //-----------------------------------------------------------------------
+    void SceneManager::destroyAllBillboardSets2()
+    {
+        return mParticleSystemManager2->destroyAllBillboardSets();
     }
     //-----------------------------------------------------------------------
     void SceneManager::clearScene( bool deleteIndestructibleToo, bool reattachCameras )
@@ -1531,8 +1605,8 @@ namespace Ogre
         mVisibleObjects.swap( mTmpVisibleObjects );
     }
     //-----------------------------------------------------------------------
-    void SceneManager::_warmUpShaders( Camera *camera, uint32_t visibilityMask, const uint8 firstRq,
-                                       const uint8 lastRq )
+    void SceneManager::_warmUpShadersCollect( Camera *camera, uint32_t visibilityMask,
+                                              const uint8 firstRq, const uint8 lastRq )
     {
         const uint32_t oldVisibilityMask = mVisibilityMask;
 
@@ -1603,7 +1677,57 @@ namespace Ogre
         }
 
         mVisibilityMask = oldVisibilityMask;
-        mRenderQueue->warmUpShaders( realFirstRq, realLastRq, casterPass );
+        mRenderQueue->warmUpShadersCollect( realFirstRq, realLastRq, casterPass );
+    }
+    //-----------------------------------------------------------------------
+    void SceneManager::_warmUpShadersTrigger()
+    {
+        mRenderQueue->warmUpShadersTrigger( mDestRenderSystem );
+    }
+    //-----------------------------------------------------------------------
+    void SceneManager::_fireWarmUpShadersCompile()
+    {
+        mRequestType = WARM_UP_SHADERS_COMPILE;
+
+        if( mForceMainThread )
+            updateWorkerThreadImpl( 0 );
+        else
+        {
+            mWorkerThreadsBarrier->sync();  // Fire threads
+            mWorkerThreadsBarrier->sync();  // Wait them to complete
+        }
+    }
+    //-----------------------------------------------------------------------
+    void SceneManager::_fireParallelHlmsCompile()
+    {
+        mRequestType = PARALLEL_HLMS_COMPILE;
+
+        if( mForceMainThread )
+            updateWorkerThreadImpl( 0 );
+        else
+            mWorkerThreadsBarrier->sync();  // Fire threads
+    }
+    //-----------------------------------------------------------------------
+    void SceneManager::waitForParallelHlmsCompile()
+    {
+        if( !mForceMainThread )
+        {
+            OGRE_ASSERT_LOW( mRequestType == PARALLEL_HLMS_COMPILE );
+            mWorkerThreadsBarrier->sync();  // Wait them to complete
+        }
+    }
+    //-----------------------------------------------------------------------
+    void SceneManager::_fireParticleSystemManager2Update()
+    {
+        mRequestType = PARTICLE_SYSTEM_MANAGER2;
+
+        if( mForceMainThread )
+            updateWorkerThreadImpl( 0 );
+        else
+        {
+            mWorkerThreadsBarrier->sync();  // Fire threads
+            mWorkerThreadsBarrier->sync();  // Wait them to complete
+        }
     }
     //-----------------------------------------------------------------------
     void SceneManager::_frameEnded() { mRenderQueue->frameEnded(); }
@@ -2018,6 +2142,9 @@ namespace Ogre
                     ( camera->getLastViewport()->getVisibilityMask() &
                       ~VisibilityFlags::RESERVED_VISIBILITY_FLAGS ) );
 
+        CullFrustumPreparedData preparedData;
+        MovableObject::cullFrustumPrepare( camera, visibilityMask, lodCamera, preparedData );
+
         ObjectMemoryManagerVec::const_iterator it = request.objectMemManager->begin();
         ObjectMemoryManagerVec::const_iterator en = request.objectMemManager->end();
 
@@ -2037,50 +2164,64 @@ namespace Ogre
                 ObjectData objData;
                 const size_t totalObjs = memoryManager->getFirstObjectData( objData, i );
 
-                // Distribute the work evenly across all threads (not perfect), taking into
-                // account we need to distribute in multiples of ARRAY_PACKED_REALS
-                size_t numObjs = ( totalObjs + ( mNumWorkerThreads - 1 ) ) / mNumWorkerThreads;
-                numObjs =
-                    ( ( numObjs + ARRAY_PACKED_REALS - 1 ) / ARRAY_PACKED_REALS ) * ARRAY_PACKED_REALS;
-
-                const size_t toAdvance = std::min( threadIdx * numObjs, totalObjs );
-
-                // Prevent going out of bounds (usually in the last threadIdx, or
-                // when there are less entities than ARRAY_PACKED_REALS
-                numObjs = std::min( numObjs, totalObjs - toAdvance );
-                objData.advancePack( toAdvance / ARRAY_PACKED_REALS );
-
-                MovableObject::cullFrustum( numObjs, objData, camera, visibilityMask, outVisibleObjects,
-                                            lodCamera );
-
                 const uint8 currRqId = static_cast<uint8>( i );
 
-                if( mRenderQueue->getRenderQueueMode( currRqId ) == RenderQueue::FAST &&
+                // Skip if totalObjs == 0u. Profiling shows there is considerable gains.
+                // Too much (255 queues, most of them empty, multiples scene passes...)
+                if( totalObjs > 0u )
+                {
+                    // Distribute the work evenly across all threads (not perfect), taking into
+                    // account we need to distribute in multiples of ARRAY_PACKED_REALS
+                    size_t numObjs = ( totalObjs + ( mNumWorkerThreads - 1 ) ) / mNumWorkerThreads;
+                    numObjs = ( ( numObjs + ARRAY_PACKED_REALS - 1 ) / ARRAY_PACKED_REALS ) *
+                              ARRAY_PACKED_REALS;
+
+                    const size_t toAdvance = std::min( threadIdx * numObjs, totalObjs );
+
+                    // Prevent going out of bounds (usually in the last threadIdx, or
+                    // when there are less entities than ARRAY_PACKED_REALS
+                    numObjs = std::min( numObjs, totalObjs - toAdvance );
+                    objData.advancePack( toAdvance / ARRAY_PACKED_REALS );
+
+                    MovableObject::cullFrustum( numObjs, objData, camera, outVisibleObjects,
+                                                preparedData );
+
+                    if( mRenderQueue->getRenderQueueMode( currRqId ) == RenderQueue::FAST &&
+                        request.addToRenderQueue )
+                    {
+                        // V2 meshes can be added to the render queue in parallel
+                        bool casterPass = request.casterPass;
+                        MovableObject::MovableObjectArray::const_iterator itor =
+                            outVisibleObjects.begin();
+                        MovableObject::MovableObjectArray::const_iterator endt = outVisibleObjects.end();
+
+                        while( itor != endt )
+                        {
+                            RenderableArray::const_iterator itRend = ( *itor )->mRenderables.begin();
+                            RenderableArray::const_iterator enRend = ( *itor )->mRenderables.end();
+
+                            while( itRend != enRend )
+                            {
+                                if( ( *itRend )->mRenderableVisible )
+                                {
+                                    mRenderQueue->addRenderableV2( threadIdx, currRqId, casterPass,
+                                                                   *itRend, *itor );
+                                }
+                                ++itRend;
+                            }
+                            ++itor;
+                        }
+
+                        outVisibleObjects.clear();
+                    }
+                }
+
+                if( mRenderQueue->getRenderQueueMode( currRqId ) == RenderQueue::PARTICLE_SYSTEM &&
                     request.addToRenderQueue )
                 {
-                    // V2 meshes can be added to the render queue in parallel
-                    bool casterPass = request.casterPass;
-                    MovableObject::MovableObjectArray::const_iterator itor = outVisibleObjects.begin();
-                    MovableObject::MovableObjectArray::const_iterator endt = outVisibleObjects.end();
-
-                    while( itor != endt )
-                    {
-                        RenderableArray::const_iterator itRend = ( *itor )->mRenderables.begin();
-                        RenderableArray::const_iterator enRend = ( *itor )->mRenderables.end();
-
-                        while( itRend != enRend )
-                        {
-                            if( ( *itRend )->mRenderableVisible )
-                            {
-                                mRenderQueue->addRenderableV2( threadIdx, currRqId, casterPass, *itRend,
-                                                               *itor );
-                            }
-                            ++itRend;
-                        }
-                        ++itor;
-                    }
-
-                    outVisibleObjects.clear();
+                    mParticleSystemManager2->_addToRenderQueue( threadIdx, mNumWorkerThreads,
+                                                                mRenderQueue, currRqId, visibilityMask,
+                                                                !request.casterPass );
                 }
             }
 
@@ -2566,7 +2707,14 @@ namespace Ogre
         OgreProfileGroup( "updateSceneGraph", OGREPROF_GENERAL );
 
         // Update controllers
-        ControllerManager::getSingleton().updateAllControllers();
+        ControllerManager &controllerManager = ControllerManager::getSingleton();
+        controllerManager.updateAllControllers();
+
+        {
+            const Real timeSinceLast = controllerManager.getFrameTimeSource()->getValue();
+            mParticleSystemManager2->prepareForUpdate( timeSinceLast );
+            mPrepareParticleFx = true;
+        }
 
         highLevelCull();
         _applySceneAnimations();
@@ -2575,6 +2723,8 @@ namespace Ogre
         updateAllTagPoints();
         updateAllBounds( mEntitiesMemoryManagerUpdateList );
         updateAllBounds( mLightsMemoryManagerCulledList );
+
+        mPrepareParticleFx = false;
 
         {
             // Auto-track nodes
@@ -2616,17 +2766,7 @@ namespace Ogre
 
         buildLightList();
 
-        // Reset the list of render RQs for all cameras that are in a PASS_SCENE (except shadow passes)
-        uint8 numRqs = 0;
-        {
-            ObjectMemoryManagerVec::const_iterator itor = mEntitiesMemoryManagerCulledList.begin();
-            ObjectMemoryManagerVec::const_iterator endt = mEntitiesMemoryManagerCulledList.end();
-            while( itor != endt )
-            {
-                numRqs = (uint8)std::max<size_t>( numRqs, ( *itor )->_getTotalRenderQueues() );
-                ++itor;
-            }
-        }
+        mParticleSystemManager2->update();
 
         // Reset these
         mStaticMinDepthLevelDirty = std::numeric_limits<uint16>::max();
@@ -3620,6 +3760,34 @@ namespace Ogre
             ++it;
         }
 
+        {
+            // Calculate the particles
+            // Everything will be treated as const (we have no ConstObjectData structure).
+            ObjectMemoryManager *objMemoryManager =
+                const_cast<ObjectMemoryManager *>( &mParticleSysDefMemoryManager );
+            const size_t numRenderQueues = objMemoryManager->getNumRenderQueues();
+
+            // TODO: Send this to worker threads (dark_sylinc)
+
+            size_t firstRq = std::min<size_t>( _firstRq, numRenderQueues );
+            size_t lastRq = std::min<size_t>( _lastRq, numRenderQueues );
+
+            for( size_t i = firstRq; i < lastRq; ++i )
+            {
+                AxisAlignedBox tmpBox;
+
+                ObjectData objData;
+                const size_t numObjs = objMemoryManager->getFirstObjectData( objData, i );
+
+                MovableObject::calculateCastersBox(
+                    numObjs, objData,
+                    ( viewportVisibilityMask & getVisibilityMask() ) |
+                        ( viewportVisibilityMask & ~VisibilityFlags::RESERVED_VISIBILITY_FLAGS ),
+                    &tmpBox );
+                retVal.merge( tmpBox );
+            }
+        }
+
         return retVal;
     }
     //---------------------------------------------------------------------
@@ -4479,6 +4647,9 @@ namespace Ogre
     //---------------------------------------------------------------------
     unsigned long updateWorkerThread( ThreadHandle *threadHandle )
     {
+        Threads::SetThreadName(
+            threadHandle, "SceneMgr#" + StringConverter::toString( threadHandle->getThreadIdx() ) );
+
         SceneManager *sceneManager = reinterpret_cast<SceneManager *>( threadHandle->getUserParam() );
         return sceneManager->_updateWorkerThread( threadHandle );
     }
@@ -4537,6 +4708,8 @@ namespace Ogre
             break;
         case UPDATE_ALL_ANIMATIONS:
             updateAllAnimationsThread( threadIdx );
+            if( mPrepareParticleFx )
+                mParticleSystemManager2->_prepareParallel();
             break;
         case UPDATE_ALL_TRANSFORMS:
             updateAllTransformsThread( mUpdateTransformRequest, threadIdx );
@@ -4561,6 +4734,15 @@ namespace Ogre
             break;
         case WARM_UP_SHADERS:
             warmUpShaders( mCurrentCullFrustumRequest, threadIdx );
+            break;
+        case WARM_UP_SHADERS_COMPILE:
+            mRenderQueue->_warmUpShadersThread( threadIdx );
+            break;
+        case PARALLEL_HLMS_COMPILE:
+            mRenderQueue->_compileShadersThread( threadIdx );
+            break;
+        case PARTICLE_SYSTEM_MANAGER2:
+            mParticleSystemManager2->_updateParallel( threadIdx, mNumWorkerThreads );
             break;
         case USER_UNIFORM_SCALABLE_TASK:
             mUserTask->execute( threadIdx, mNumWorkerThreads );

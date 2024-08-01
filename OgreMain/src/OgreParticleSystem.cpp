@@ -112,8 +112,9 @@ namespace Ogre
     };
     //-----------------------------------------------------------------------
     ParticleSystem::ParticleSystem( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                    SceneManager *manager, const String &resourceGroup ) :
-        MovableObject( id, objectMemoryManager, manager, 110u ),
+                                    SceneManager *manager, const String &resourceGroup,
+                                    uint8 renderQueueId, const bool bCreateRenderer ) :
+        MovableObject( id, objectMemoryManager, manager, renderQueueId ),
         mBoundsAutoUpdate( true ),
         mBoundsUpdateTime( 10.0f ),
         mUpdateRemainTime( 0 ),
@@ -145,8 +146,11 @@ namespace Ogre
         setEmittedEmitterQuota( 3 );
         initParameters();
 
-        // Default to billboard renderer
-        setRenderer( "billboard" );
+        if( bCreateRenderer )
+        {
+            // Default to billboard renderer
+            setRenderer( "billboard" );
+        }
 
         // By default most particles don't cast shadows.
         setCastShadows( false );
@@ -1604,30 +1608,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     ParticleAffector::~ParticleAffector() {}
     //-----------------------------------------------------------------------
-    ParticleAffectorFactory::~ParticleAffectorFactory()
-    {
-        // Destroy all affectors
-        vector<ParticleAffector *>::type::iterator i;
-        for( i = mAffectors.begin(); i != mAffectors.end(); ++i )
-        {
-            OGRE_DELETE( *i );
-        }
-
-        mAffectors.clear();
-    }
-    //-----------------------------------------------------------------------
-    void ParticleAffectorFactory::destroyAffector( ParticleAffector *e )
-    {
-        vector<ParticleAffector *>::type::iterator i;
-        for( i = mAffectors.begin(); i != mAffectors.end(); ++i )
-        {
-            if( ( *i ) == e )
-            {
-                mAffectors.erase( i );
-                OGRE_DELETE e;
-                break;
-            }
-        }
-    }
-
+    void ParticleAffectorFactory::destroyAffector( ParticleAffector *e ) { OGRE_DELETE e; }
 }  // namespace Ogre
+
+#include "OgreParticleSystem.autogen.h"

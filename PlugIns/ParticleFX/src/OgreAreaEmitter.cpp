@@ -41,7 +41,7 @@ namespace Ogre
     AreaEmitter::CmdDepth AreaEmitter::msDepthCmd;
 
     //-----------------------------------------------------------------------
-    bool AreaEmitter::initDefaults( const String &t )
+    bool AreaEmitter::initDefaults()
     {
         // called by the constructor as initDefaults("Type")
 
@@ -49,10 +49,9 @@ namespace Ogre
         mDirection = Vector3::UNIT_Z;
         mUp = Vector3::UNIT_Y;
         setSize( 100, 100, 100 );
-        mType = t;
 
         // Set up parameters
-        if( createParamDictionary( mType + "Emitter" ) )
+        if( createParamDictionary( getType() + "Emitter" ) )
         {
             addBaseParameters();
             ParamDictionary *dict = getParamDictionary();

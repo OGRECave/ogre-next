@@ -239,7 +239,9 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     SampleDescription MetalRenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
-                                                                    PixelFormatGpu format )
+                                                                    PixelFormatGpu format,
+                                                                    uint32 textureFlags,
+                                                                    uint32 depthTextureFlags )
     {
         uint8 samples = sampleDesc.getMaxSamples();
         if( @available( iOS 9.0, * ) )
@@ -251,6 +253,19 @@ namespace Ogre
             }
         }
         return SampleDescription( samples, sampleDesc.getMsaaPattern() );
+    }
+    //-------------------------------------------------------------------------
+    bool MetalRenderSystem::supportsMultithreadedShaderCompliation() const
+    {
+#ifndef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
+        return true;
+#else
+#    ifdef OGRE_SHADER_THREADING_USE_TLS
+        return true;
+#    else
+        return false;
+#    endif
+#endif
     }
     //-------------------------------------------------------------------------
     HardwareOcclusionQuery *MetalRenderSystem::createHardwareOcclusionQuery()
@@ -1470,6 +1485,8 @@ namespace Ogre
 
         depthState.stencilParams = pso->pass.stencilParams;
 
+        ScopedLock lock( mMutexDepthStencilStates );
+
         CachedDepthStencilStateVec::iterator itor =
             std::lower_bound( mDepthStencilStates.begin(), mDepthStencilStates.end(), depthState );
 
@@ -1547,6 +1564,7 @@ namespace Ogre
 
         depthState.stencilParams = pso->pass.stencilParams;
 
+        ScopedLock lock( mMutexDepthStencilStates );
         CachedDepthStencilStateVec::iterator itor =
             std::lower_bound( mDepthStencilStates.begin(), mDepthStencilStates.end(), depthState );
 
@@ -1642,7 +1660,10 @@ namespace Ogre
             psd.vertexDescriptor = vertexDescriptor;
         }
 
-        psd.alphaToCoverageEnabled = newPso->blendblock->mAlphaToCoverageEnabled;
+        psd.alphaToCoverageEnabled =
+            newPso->blendblock->mAlphaToCoverage == HlmsBlendblock::A2cEnabled ||
+            ( newPso->blendblock->mAlphaToCoverage == HlmsBlendblock::A2cEnabledMsaaOnly &&
+              newPso->pass.sampleDescription.isMultisample() );
 
         uint8 mrtCount = 0;
         for( size_t i = 0; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
@@ -2277,7 +2298,7 @@ namespace Ogre
             }
 
             // Setup baseInstance.
-#    if TARGET_OS_SIMULATOR == 0
+#    if TARGET_OS_SIMULATOR == 0 || OGRE_CPU == OGRE_CPU_ARM
             [mActiveRenderEncoder setVertexBufferOffset:drawCmd->baseInstance * 4u atIndex:15];
 #    else
             [mActiveRenderEncoder setVertexBufferOffset:drawCmd->baseInstance * 256u atIndex:15];
@@ -2324,7 +2345,7 @@ namespace Ogre
         {
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
             // Setup baseInstance.
-#    if TARGET_OS_SIMULATOR == 0
+#    if TARGET_OS_SIMULATOR == 0 || OGRE_CPU == OGRE_CPU_ARM
             [mActiveRenderEncoder setVertexBufferOffset:drawCmd->baseInstance * 4u atIndex:15];
 #    else
             [mActiveRenderEncoder setVertexBufferOffset:drawCmd->baseInstance * 256u atIndex:15];
@@ -2407,7 +2428,7 @@ namespace Ogre
 #    endif
 
         // Setup baseInstance.
-#    if TARGET_OS_SIMULATOR == 0
+#    if TARGET_OS_SIMULATOR == 0 || OGRE_CPU == OGRE_CPU_ARM
         [mActiveRenderEncoder setVertexBufferOffset:cmd->baseInstance * 4u atIndex:15];
 #    else
         [mActiveRenderEncoder setVertexBufferOffset:cmd->baseInstance * 256u atIndex:15];
@@ -2437,7 +2458,7 @@ namespace Ogre
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         // Setup baseInstance.
-#    if TARGET_OS_SIMULATOR == 0
+#    if TARGET_OS_SIMULATOR == 0 || OGRE_CPU == OGRE_CPU_ARM
         [mActiveRenderEncoder setVertexBufferOffset:cmd->baseInstance * 4u atIndex:15];
 #    else
         [mActiveRenderEncoder setVertexBufferOffset:cmd->baseInstance * 256u atIndex:15];

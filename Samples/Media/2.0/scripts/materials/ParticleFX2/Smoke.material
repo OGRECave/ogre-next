@@ -1,0 +1,36 @@
+hlms Particle/SmokeUnlit unlit
+{
+	cull_mode	none
+	diffuse_map smoke.png
+
+	alpha_hash yes
+	alpha_to_coverage msaa_only
+}
+
+hlms Particle/SmokePBS pbs
+{
+	cull_mode	none
+
+	roughness 1.00
+	fresnel 1
+
+	alpha_hash yes
+	alpha_to_coverage msaa_only
+
+	diffuse_map smoke.png
+	normal_map Sphere_nm.png
+}
+
+hlms Particle/SpherePBS pbs
+{
+	cull_mode	none
+
+	roughness 0.2
+	fresnel 0.5
+
+	alpha_hash yes
+	alpha_to_coverage msaa_only
+
+	diffuse_map Sphere_diffuse.png
+	normal_map Sphere_nm.png
+}

@@ -66,21 +66,23 @@ namespace Ogre
     protected:
         HlmsDatablock *createDatablockImpl( IdString datablockName, const HlmsMacroblock *macroblock,
                                             const HlmsBlendblock *blendblock,
-                                            const HlmsParamVec &  paramVec ) override;
+                                            const HlmsParamVec   &paramVec ) override;
 
-        void setDetailMapProperties( HlmsTerraDatablock *datablock, PiecesMap *inOutPieces );
-        void setTextureProperty( const char *propertyName, HlmsTerraDatablock *datablock,
+        void setDetailMapProperties( size_t tid, HlmsTerraDatablock *datablock, PiecesMap *inOutPieces );
+        void setTextureProperty( size_t tid, const char *propertyName, HlmsTerraDatablock *datablock,
                                  TerraTextureTypes texType );
-        void setDetailTextureProperty( const char *propertyName, HlmsTerraDatablock *datablock,
-                                       TerraTextureTypes baseTexType, uint8 detailIdx );
+        void setDetailTextureProperty( size_t tid, const char *propertyName,
+                                       HlmsTerraDatablock *datablock, TerraTextureTypes baseTexType,
+                                       uint8 detailIdx );
 
         void calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash ) override;
         void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces ) override;
-        void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces ) override;
+        void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces,
+                                        const PiecesMap *normalPassPieces ) override;
 
-        void notifyPropertiesMergedPreGenerationStep() override;
+        void notifyPropertiesMergedPreGenerationStep( size_t tid ) override;
 
-        FORCEINLINE uint32 fillBuffersFor( const HlmsCache *       cache,
+        FORCEINLINE uint32 fillBuffersFor( const HlmsCache        *cache,
                                            const QueuedRenderable &queuedRenderable, bool casterPass,
                                            uint32 lastCacheHash, CommandBuffer *commandBuffer,
                                            bool isV1 );
@@ -116,14 +118,14 @@ namespace Ogre
         void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
                         HlmsDatablock *datablock, const String &resourceGroup,
                         HlmsJsonListener *listener,
-                        const String &    additionalTextureExtension ) const override;
+                        const String     &additionalTextureExtension ) const override;
         /// @copydoc Hlms::_saveJson
         void _saveJson( const HlmsDatablock *datablock, String &outString, HlmsJsonListener *listener,
                         const String &additionalTextureExtension ) const override;
 
         /// @copydoc Hlms::_collectSamplerblocks
         void _collectSamplerblocks( set<const HlmsSamplerblock *>::type &outSamplerblocks,
-                                    const HlmsDatablock *                datablock ) const override;
+                                    const HlmsDatablock                 *datablock ) const override;
 #endif
     };
 
@@ -133,13 +135,13 @@ namespace Ogre
         static const IdString ZUp;
 
         static const IdString NumTextures;
-        static const char *   DiffuseMap;
-        static const char *   EnvProbeMap;
-        static const char *   DetailWeightMap;
-        static const char *   DetailMapN;
-        static const char *   DetailMapNmN;
-        static const char *   RoughnessMap;
-        static const char *   MetalnessMap;
+        static const char    *DiffuseMap;
+        static const char    *EnvProbeMap;
+        static const char    *DetailWeightMap;
+        static const char    *DetailMapN;
+        static const char    *DetailMapNmN;
+        static const char    *RoughnessMap;
+        static const char    *MetalnessMap;
 
         static const IdString DetailTriplanar;
         static const IdString DetailTriplanarDiffuse;

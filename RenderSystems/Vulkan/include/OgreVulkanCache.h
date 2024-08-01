@@ -61,7 +61,8 @@ namespace Ogre
         typedef map<VkRenderPassCreateInfo, VkRenderPass, VkRenderPassCreateInfoCmp>::type
             VkRenderPassMap;
 
-        VkRenderPassMap mRenderPassCache;
+        VkRenderPassMap mRenderPassCache;  // GUARDED_BY( mRenderPassCache )
+        LightweightMutex mMutex;
 
         static void copySubpass( const VkAttachmentReference **dstStruct,
                                  const VkAttachmentReference *src, uint32_t attachmentCount,

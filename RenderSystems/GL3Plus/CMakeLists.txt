@@ -91,6 +91,9 @@ if(NOT APPLE)
   include_directories(
     ${OPENGL_INCLUDE_DIR}
   )
+  include_directories(
+	include/GL
+  )
 endif()
 
 if( OGRE_GLSUPPORT_USE_GLX )
@@ -98,7 +101,7 @@ if( OGRE_GLSUPPORT_USE_GLX )
   ogre_add_library(RenderSystem_GL3Plus
 	  ${OGRE_LIB_TYPE} ${HEADER_FILES} ${GLSL_SOURCE} ${PLATFORM_HEADERS} ${PLATFORM_SOURCES}
 	  ${SOURCE_FILES}
-	  SEPARATE "src/windowing/GLX/OgreGLXWindow.cpp" "src/windowing/GLX/OgreGLXGLSupport.cpp")
+	  SEPARATE "${CMAKE_CURRENT_SOURCE_DIR}/src/windowing/GLX/OgreGLXContext.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/src/windowing/GLX/OgreGLXWindow.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/src/windowing/GLX/OgreGLXGLSupport.cpp")
 else()
   ogre_add_library(RenderSystem_GL3Plus
 	  ${OGRE_LIB_TYPE} ${HEADER_FILES} ${GLSL_SOURCE} ${PLATFORM_HEADERS}

@@ -55,7 +55,8 @@ sampleNames = [ \
 	"V1Interfaces",
 	"V2ManualObject",
 	"V2Mesh",
-	["Readback", True]
+	["InternalCore", True],
+	["Readback", True],
 ]
 
 templateFiles = list()

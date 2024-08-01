@@ -63,12 +63,9 @@ namespace Ogre
         return _mm_mul_ps( mRad, MathlibSSE2::fRad2Deg );
     }*/
     //-----------------------------------------------------------------------------------
-    inline const ArrayRadian& ArrayRadian::operator + () const
-    {
-        return *this;
-    }
+    inline const ArrayRadian &ArrayRadian::operator+() const { return *this; }
     //-----------------------------------------------------------------------------------
-    inline ArrayRadian ArrayRadian::operator + ( const ArrayRadian& r ) const
+    inline ArrayRadian ArrayRadian::operator+( const ArrayRadian &r ) const
     {
         return ArrayRadian( _mm_add_ps( mRad, r.mRad ) );
     }
@@ -78,7 +75,7 @@ namespace Ogre
         return ArrayRadian( _mm_add_ps( mRad, r.valueRadians() ) );
     }*/
     //-----------------------------------------------------------------------------------
-    inline ArrayRadian& ArrayRadian::operator += ( const ArrayRadian& r )
+    inline ArrayRadian &ArrayRadian::operator+=( const ArrayRadian &r )
     {
         mRad = _mm_add_ps( mRad, r.mRad );
         return *this;
@@ -90,12 +87,12 @@ namespace Ogre
         return *this;
     }*/
     //-----------------------------------------------------------------------------------
-    inline ArrayRadian ArrayRadian::operator - () const
+    inline ArrayRadian ArrayRadian::operator-() const
     {
         return ArrayRadian( _mm_xor_ps( mRad, MathlibSSE2::SIGN_MASK ) );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayRadian ArrayRadian::operator - ( const ArrayRadian& r ) const
+    inline ArrayRadian ArrayRadian::operator-( const ArrayRadian &r ) const
     {
         return ArrayRadian( _mm_sub_ps( mRad, r.mRad ) );
     }
@@ -105,7 +102,7 @@ namespace Ogre
         return ArrayRadian( _mm_sub_ps( mRad, r.valueRadians() ) );
     }*/
     //-----------------------------------------------------------------------------------
-    inline ArrayRadian& ArrayRadian::operator -= ( const ArrayRadian& r )
+    inline ArrayRadian &ArrayRadian::operator-=( const ArrayRadian &r )
     {
         mRad = _mm_sub_ps( mRad, r.mRad );
         return *this;
@@ -117,37 +114,82 @@ namespace Ogre
         return *this;
     }*/
     //-----------------------------------------------------------------------------------
-    inline ArrayRadian ArrayRadian::operator * ( const ArrayRadian& r ) const
+    inline ArrayRadian ArrayRadian::operator*( ArrayReal r ) const
+    {
+        return ArrayRadian( _mm_mul_ps( mRad, r ) );
+    }
+    //-----------------------------------------------------------------------------------
+    inline ArrayRadian ArrayRadian::operator*( const ArrayRadian &r ) const
     {
         return ArrayRadian( _mm_mul_ps( mRad, r.mRad ) );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayRadian ArrayRadian::operator / ( ArrayReal r ) const
+    inline ArrayRadian ArrayRadian::operator/( ArrayReal r ) const
     {
         return ArrayRadian( _mm_div_ps( mRad, r ) );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayRadian& ArrayRadian::operator /= ( ArrayReal r )
+    inline ArrayRadian &ArrayRadian::operator/=( ArrayReal r )
     {
         mRad = _mm_div_ps( mRad, r );
         return *this;
     }
 
-    inline ArrayReal ArrayRadian::operator <  ( const ArrayRadian& r ) const { return _mm_cmplt_ps( mRad, r.mRad ); }
-    inline ArrayReal ArrayRadian::operator <= ( const ArrayRadian& r ) const { return _mm_cmple_ps( mRad, r.mRad ); }
-    inline ArrayReal ArrayRadian::operator == ( const ArrayRadian& r ) const { return _mm_cmpeq_ps( mRad, r.mRad ); }
-    inline ArrayReal ArrayRadian::operator != ( const ArrayRadian& r ) const { return _mm_cmpneq_ps( mRad, r.mRad );}
-    inline ArrayReal ArrayRadian::operator >= ( const ArrayRadian& r ) const { return _mm_cmpge_ps( mRad, r.mRad ); }
-    inline ArrayReal ArrayRadian::operator >  ( const ArrayRadian& r ) const { return _mm_cmpgt_ps( mRad, r.mRad ); }
+    inline ArrayReal ArrayRadian::operator<( const ArrayRadian &r ) const
+    {
+        return _mm_cmplt_ps( mRad, r.mRad );
+    }
+    inline ArrayReal ArrayRadian::operator<=( const ArrayRadian &r ) const
+    {
+        return _mm_cmple_ps( mRad, r.mRad );
+    }
+    inline ArrayReal ArrayRadian::operator==( const ArrayRadian &r ) const
+    {
+        return _mm_cmpeq_ps( mRad, r.mRad );
+    }
+    inline ArrayReal ArrayRadian::operator!=( const ArrayRadian &r ) const
+    {
+        return _mm_cmpneq_ps( mRad, r.mRad );
+    }
+    inline ArrayReal ArrayRadian::operator>=( const ArrayRadian &r ) const
+    {
+        return _mm_cmpge_ps( mRad, r.mRad );
+    }
+    inline ArrayReal ArrayRadian::operator>( const ArrayRadian &r ) const
+    {
+        return _mm_cmpgt_ps( mRad, r.mRad );
+    }
 
+    //-----------------------------------------------------------------------------------
+    inline void ArrayRadian::wrapToRangeNPI_PI()
+    {
+        const ArrayReal signedPi = MathlibSSE2::CopySign4( MathlibSSE2::PI, mRad );
+        const ArrayReal x = _mm_add_ps( mRad, signedPi );                      // x = mRad + signedPi
+        const ArrayReal quotient = _mm_mul_ps( x, MathlibSSE2::ONE_DIV_2PI );  // x / ( 2 * PI )
+        const ArrayReal integerQuot =
+            _mm_cvtepi32_ps( _mm_cvttps_epi32( quotient ) );                 // trunc( x / 2PI )
+        const ArrayReal s = _mm_mul_ps( integerQuot, MathlibSSE2::TWO_PI );  // trunc( x / 2PI ) * 2PI
+
+        const ArrayReal wrappedValue = _mm_sub_ps( x, s );  // x - trunc( x / 2PI ) * 2PI
+
+        mRad = _mm_sub_ps( wrappedValue, signedPi );  // mRad = wrappedValue - signedPi
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     inline ArrayReal MathlibSSE2::Modf4( ArrayReal x, ArrayReal &outIntegral )
     {
-        outIntegral = _mm_cvtepi32_ps( _mm_cvttps_epi32( x ) ); // truncate towards zero, overflows for large input
+        outIntegral = _mm_cvtepi32_ps(
+            _mm_cvttps_epi32( x ) );  // truncate towards zero, overflows for large input
         return _mm_sub_ps( x, outIntegral );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayReal MathlibSSE2::ACos4( ArrayReal x)
+    inline ArrayReal MathlibSSE2::CopySign4( ArrayReal mag, ArrayReal sig )
+    {
+        return _mm_xor_ps( mag, _mm_and_ps( sig, MathlibSSE2::SIGN_MASK ) );
+    }
+    //-----------------------------------------------------------------------------------
+    inline ArrayReal MathlibSSE2::ACos4( ArrayReal x )
     {
         // This function, ACos4, is under Copyright (C) 2006, 2007
         // Sony Computer Entertainment Inc. (BSD style license) See
@@ -155,29 +197,29 @@ namespace Ogre
         __m128 xabs = Abs4( x );
         __m128 select = _mm_cmplt_ps( x, _mm_setzero_ps() );
         __m128 t1 = _mm_sqrt_ps( _mm_sub_ps( ONE, xabs ) );
-        
+
         /* Instruction counts can be reduced if the polynomial was
-         * computed entirely from nested (dependent) fma's. However, 
-         * to reduce the number of pipeline stalls, the polygon is evaluated 
-         * in two halves (hi amd lo). 
+         * computed entirely from nested (dependent) fma's. However,
+         * to reduce the number of pipeline stalls, the polygon is evaluated
+         * in two halves (hi amd lo).
          */
-        __m128 xabs2 = _mm_mul_ps( xabs,  xabs );
+        __m128 xabs2 = _mm_mul_ps( xabs, xabs );
         __m128 xabs4 = _mm_mul_ps( xabs2, xabs2 );
-        __m128 hi = _mm_madd_ps(_mm_madd_ps(_mm_madd_ps(_mm_set1_ps(-0.0012624911f),
-            xabs, _mm_set1_ps(0.0066700901f)),
-                xabs, _mm_set1_ps(-0.0170881256f)),
-                    xabs, _mm_set1_ps( 0.0308918810f));
-        __m128 lo = _mm_madd_ps(_mm_madd_ps(_mm_madd_ps(_mm_set1_ps(-0.0501743046f),
-            xabs, _mm_set1_ps(0.0889789874f)),
-                xabs, _mm_set1_ps(-0.2145988016f)),
-                    xabs, _mm_set1_ps( 1.5707963050f));
-        
+        __m128 hi = _mm_madd_ps( _mm_madd_ps( _mm_madd_ps( _mm_set1_ps( -0.0012624911f ),  //
+                                                           xabs, _mm_set1_ps( 0.0066700901f ) ),
+                                              xabs, _mm_set1_ps( -0.0170881256f ) ),
+                                 xabs, _mm_set1_ps( 0.0308918810f ) );
+        __m128 lo = _mm_madd_ps( _mm_madd_ps( _mm_madd_ps( _mm_set1_ps( -0.0501743046f ),  //
+                                                           xabs, _mm_set1_ps( 0.0889789874f ) ),
+                                              xabs, _mm_set1_ps( -0.2145988016f ) ),
+                                 xabs, _mm_set1_ps( 1.5707963050f ) );
+
         __m128 result = _mm_madd_ps( hi, xabs4, lo );
-        
+
         // Adjust the result if x is negactive.
-        return Cmov4(   _mm_nmsub_ps( t1, result, PI ), // Negative
-                        _mm_mul_ps( t1, result ),       // Positive
-                        select );
+        return Cmov4( _mm_nmsub_ps( t1, result, PI ),  // Negative
+                      _mm_mul_ps( t1, result ),        // Positive
+                      select );
     }
 
-}
+}  // namespace Ogre

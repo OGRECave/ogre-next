@@ -182,6 +182,8 @@ namespace Ogre
                 "shadow mapping buffers on objects with alpha testing materials" );
     }
     //-----------------------------------------------------------------------------------
+    void Renderable::resetMaterialLod() { mCurrentMaterialLod = 0u; }
+    //-----------------------------------------------------------------------------------
     void Renderable::setMaterialName( const String &name, const String &groupName )
     {
         MaterialPtr material;

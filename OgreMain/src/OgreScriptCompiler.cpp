@@ -1235,11 +1235,10 @@ namespace Ogre
         mIds["target_height_scaled"] = ID_TARGET_HEIGHT_SCALED;
         mIds["target_orientation_mode"] = ID_TARGET_ORIENTATION_MODE;
         mIds["target_format"] = ID_TARGET_FORMAT;
-        mIds["no_gamma"] = ID_NO_GAMMA;
-        mIds["no_fsaa"] = ID_NO_FSAA;
         mIds["msaa"] = ID_MSAA;
         mIds["msaa_auto"] = ID_MSAA_AUTO;
         mIds["explicit_resolve"] = ID_EXPLICIT_RESOLVE;
+        mIds["not_texture"] = ID_NOT_TEXTURE;
         mIds["reinterpretable"] = ID_REINTERPRETABLE;
         mIds["keep_content"] = ID_KEEP_CONTENT;
         mIds["depth_pool"] = ID_DEPTH_POOL;
@@ -1368,6 +1367,8 @@ namespace Ogre
         mIds["samples_per_iteration"] = ID_SAMPLES_PER_ITERATION;
         mIds["samples_single_iteration_fallback"] = ID_SAMPLES_SINGLE_ITERATION_FALLBACK;
         mIds["force_mipmap_fallback"] = ID_FORCE_MIPMAP_FALLBACK;
+
+        mIds["mode"] = ID_MODE;
 
         mIds["compositor_node_shadow"] = ID_SHADOW_NODE;
         mIds["num_splits"] = ID_NUM_SPLITS;
@@ -1704,6 +1705,7 @@ namespace Ogre
         mScriptPatterns.push_back( "*.program" );
         mScriptPatterns.push_back( "*.material" );
         mScriptPatterns.push_back( "*.particle" );
+        mScriptPatterns.push_back( "*.particle2" );
         mScriptPatterns.push_back( "*.compositor" );
         mScriptPatterns.push_back( "*.os" );
         ResourceGroupManager::getSingleton()._registerScriptLoader( this );

@@ -9,10 +9,10 @@ sudo apt-get update
 sudo apt-get install -y ninja-build libxrandr-dev libxaw7-dev libxcb-randr0-dev libx11-xcb-dev libsdl2-dev
 
 echo "--- Fetching prebuilt Dependencies ---"
-wget https://github.com/OGRECave/ogre-next-deps/releases/download/bin-releases/Dependencies_Release_Ubuntu.20.04.LTS.Clang-12_a3f61e782f3effbd58a15727885cbd85cd1b342b.7z
+wget https://github.com/OGRECave/ogre-next-deps/releases/download/bin-releases/Dependencies_Release_Ubuntu.20.04.LTS.Clang-12_22ab475b517e724409cb6d585b3646ac6a7b23ea.7z
 
 echo "--- Extracting prebuilt Dependencies ---"
-7z x Dependencies_Release_Ubuntu.20.04.LTS.Clang-12_a3f61e782f3effbd58a15727885cbd85cd1b342b.7z
+7z x Dependencies_Release_Ubuntu.20.04.LTS.Clang-12_22ab475b517e724409cb6d585b3646ac6a7b23ea.7z
 
 mkdir -p build/Debug
 cd build/Debug

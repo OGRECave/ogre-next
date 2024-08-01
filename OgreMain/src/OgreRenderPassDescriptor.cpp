@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreRenderPassDescriptor.h"
 
 #include "OgreException.h"
+#include "OgreLogManager.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreStringConverter.h"
 #include "OgreTextureGpu.h"
@@ -206,6 +207,26 @@ namespace Ogre
                                      colourEntry.texture->getNameStr() + "' is not MSAA",
                                  "RenderPassDescriptor::colourEntriesModified" );
                 }
+
+                if( colourEntry.texture != colourEntry.resolveTexture &&
+                    !colourEntry.texture->hasMsaaExplicitResolves() )
+                {
+                    LogManager::getSingleton().logMessage(
+                        "[Performance Warning] Resolve Texture '" +
+                            colourEntry.resolveTexture->getNameStr() +
+                            "' specified, but texture to render to '" +
+                            colourEntry.texture->getNameStr() +
+                            "' was not created with MsaaExplicitResolve. This is valid and may be "
+                            "intended. But if not, then you can save VRAM by creating the latter with "
+                            "MsaaExplicitResolve|NotTexture (explicit_resolve and not_texture)",
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+                        LML_CRITICAL  // Draw the dev's attention in debug mode.
+#else
+                        LML_TRIVIAL
+#endif
+                    );
+                }
+
                 if( colourEntry.resolveTexture == colourEntry.texture &&
                     ( colourEntry.mipLevel != 0 || colourEntry.slice != 0 ) )
                 {

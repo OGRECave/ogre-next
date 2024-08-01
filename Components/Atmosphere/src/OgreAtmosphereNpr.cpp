@@ -437,8 +437,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     uint32 AtmosphereNpr::preparePassHash( Hlms *hlms, size_t constBufferSlot )
     {
-        hlms->_setProperty( HlmsBaseProp::Fog, 1 );
-        hlms->_setProperty( "atmosky_npr", int32( constBufferSlot ) );
+        hlms->_setProperty( Hlms::kNoTid, HlmsBaseProp::Fog, 1 );
+        hlms->_setProperty( Hlms::kNoTid, "atmosky_npr", int32( constBufferSlot ) );
         return 1u;
     }
     //-------------------------------------------------------------------------

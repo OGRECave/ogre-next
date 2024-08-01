@@ -61,7 +61,7 @@ namespace Ogre
         (i.e. multiple monitors, stereo 3D, etc), while they all will share the same definition.
         A workspace definition (see CompositorWorkspaceDef) contains all the information needed
         by this CompositorWorkspace to instantiate and know which nodes to create and how to connect
-        them. @see CompositorNodeDef
+        them. (See CompositorNodeDef)
         A workspace may define global textures that are visible to all of its Node instances.
     @par
         If you want to have (e.g.) two monitors rendering the same but with different compositor
@@ -174,9 +174,9 @@ namespace Ogre
         void setAmalgamatedProfiling( bool bEnabled ) { mAmalgamatedProfiling = bEnabled; }
         bool getAmalgamatedProfiling() const { return mAmalgamatedProfiling; }
 
-        /// @deprecated use addListener and removeListener instead
+        /// @deprecated use addListener() and removeListener() instead
         void setListener( CompositorWorkspaceListener *listener );
-        /// @deprecated use getListeners instead
+        /// @deprecated use getListeners() instead
         CompositorWorkspaceListener *getListener() const;
 
         void addListener( CompositorWorkspaceListener *listener );
@@ -199,7 +199,7 @@ namespace Ogre
             Name of the node instance (they're unique)
         @param includeShadowNodes
             When true, also looks for ShadowNodes with that name, if the instance doesn't exists,
-            it will not be created (default: false). @see findShadowNode
+            it will not be created (default: false). (See findShadowNode())
             When a Node has the same name of a Shadow Node, the Node takes precedence.
         @return
             Regular version: Valid pointer. Throws exception if not found.
@@ -222,22 +222,24 @@ namespace Ogre
         */
         void reconnectAllNodes();
 
-        /** Resets the number of passes left for every pass (@see CompositorPassDef::mNumInitialPasses)
+        /** Resets the number of passes left for every pass (see CompositorPassDef::mNumInitialPasses)
             Useful when you have a few starting 'initialization' passes and you want to reset them.
         */
         void resetAllNumPassesLeft();
 
-        /** Call before _update unless the final render target is not a render window
+        /** Call before _update() unless the final render target is not a render window
         @param forceBeginFrame
             Forces a beginFrame call to the D3D9 API, even if the final render target is not
             a RenderWindow (not recommended). To avoid forcing extra begin/end frame pairs,
             update your manual workspaces inside CompositorWorkspaceListener::workspacePreUpdate
             (performance optimization)
         @param bInsideAutoreleasePool
+        @parblock
             If manually updating the workspace, leave this to default.
 
             Relevant only in Metal: If we're not inside an autorelease pool, we
             automatically wrap the call into one. Otherwise we will leak
+        @endparblock
         */
         void _beginUpdate( bool forceBeginFrame, const bool bInsideAutoreleasePool = false );
 
@@ -248,25 +250,29 @@ namespace Ogre
             You might also need to enclose the _update calls with _beginUpdate( true )
             and _endUpdate( true ) if you're having issues.
         @param bInsideAutoreleasePool
+        @parblock
             If manually updating the workspace, leave this to default.
 
             Relevant only in Metal: If we're not inside an autorelease pool, we
             automatically wrap the call into one. Otherwise we will leak
+        @endparblock
         */
         void _update( const bool bInsideAutoreleasePool = false );
 
-        /** Call after _update unless the final render target is not a render window
+        /** Call after _update() unless the final render target is not a render window
         @param forceEndFrame
-            @see _beginUpdate
+            (See beginUpdate())
             !!!WARNING!!! Forcing an end frame can cause API issues w/ D3D9 if Ogre had already
             issued a begin frame automatically (i.e. if you're calling from inside a RenderTarget
             or CompositorWorkspace listener). These API issues may not manifest on all HW/Driver
             combinations, making it hard to detect (if you're on D3D, use the Debug Runtimes)
         @param bInsideAutoreleasePool
+        @parblock
             If manually updating the workspace, leave this to default.
 
             Relevant only in Metal: If we're not inside an autorelease pool, we
-            automatically wrap the call into one. Otherwise we will leak
+            automatically wrap the call into one. Otherwise we will leak.
+        @endparblock
         */
         void _endUpdate( bool forceEndFrame, const bool bInsideAutoreleasePool = false );
 
@@ -274,7 +280,7 @@ namespace Ogre
             In the case of RenderTextures, resolves FSAA (unless it's tagged as explicit
             resolve, or its contents haven't changed since the last resolve)
         @remarks
-            Call this after _endUpdate
+            Call this after _endUpdate()
         */
         void _swapFinalTarget( vector<TextureGpu *>::type &swappedTargets );
 
@@ -296,7 +302,7 @@ namespace Ogre
         */
         CompositorShadowNode *findShadowNode( IdString nodeDefName ) const;
 
-        /** Finds a shadow node given it's definition name. If it doesn't exist, creates one.
+        /** Finds a shadow node given its definition name. If it doesn't exist, creates one.
             Note that unlike nodes, there can only be one ShadowNode instance per definition
             (in the same workspace)
         @remarks

@@ -213,6 +213,11 @@ namespace Ogre
         */
         virtual size_t getNumPriorityConfigOptions() const;
 
+        /// Returns true if RenderSystem supports multithreaded shader and PSO compilation.
+        /// Support depends on the API, our implementation, and CMake setting
+        /// OGRE_SHADER_COMPILATION_THREADING_MODE with which OgreNext was built.
+        virtual bool supportsMultithreadedShaderCompliation() const;
+
         /** Create an object for performing hardware occlusion queries.
          */
         virtual HardwareOcclusionQuery *createHardwareOcclusionQuery() = 0;
@@ -300,9 +305,27 @@ namespace Ogre
         bool getWBufferEnabled() const;
 
         /** Returns supported sample description for requested FSAA mode, with graceful downgrading.
-         */
+        @note
+            Depth/Stencil-only buffer formats combined with TextureFlags::Uav is valid
+            but a rarely-supported combination. Don't ask for it unless that's truly what you want.
+        @param sampleDesc
+            Reqiested sample description.
+        @param format
+            Use PF_NULL returns to query support for framebuffer-less rendering.
+        @param textureFlags
+            See TextureFlags::TextureFlags.
+            Relevant flags are:
+                NotTexture
+                Uav
+        @param depthTextureFlags
+            Only used if format is a colour pixel format.
+            Same as textureFlags, but for associated depth buffer if format.
+        @return
+            Supported sample description for requested FSAA mode, with graceful downgrading.
+        */
         virtual SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
-                                                             PixelFormatGpu           format );
+                                                             PixelFormatGpu format, uint32 textureFlags,
+                                                             uint32 depthTextureFlags );
 
         /** Creates a new rendering window.
         @remarks

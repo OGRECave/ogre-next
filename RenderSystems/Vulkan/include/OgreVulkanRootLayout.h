@@ -33,6 +33,8 @@ THE SOFTWARE.
 #include "OgreRootLayout.h"
 #include "OgreVulkanProgram.h"
 
+#include <atomic>
+
 struct VkDescriptorSetLayoutBinding;
 struct VkWriteDescriptorSet;
 
@@ -65,7 +67,7 @@ namespace Ogre
 
         /// The Vulkan Handle to our root layout. Won't be initialized if this
         /// VulkanRootLayout never makes it into a PSO.
-        VkPipelineLayout mRootLayout;
+        std::atomic<VkPipelineLayout> mRootLayout;
 
         /// There's one VulkanDescriptorPool per binding set
         FastArray<VulkanDescriptorPool *> mPools;

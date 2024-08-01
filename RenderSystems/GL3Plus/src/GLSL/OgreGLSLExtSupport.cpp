@@ -28,7 +28,6 @@
 
 #include "OgreGLSLExtSupport.h"
 #include "OgreLogManager.h"
-#include "OgreRoot.h"
 
 namespace Ogre
 {

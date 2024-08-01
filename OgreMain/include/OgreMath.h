@@ -104,6 +104,14 @@ namespace Ogre
         bool operator>=( const Radian &r ) const { return mRad >= r.mRad; }
         bool operator>( const Radian &r ) const { return mRad > r.mRad; }
 
+        /** Wraps the given value to the range [-pi; pi]
+            The algorithm is:
+                const float signedPi = std::copysign( _PI, mRad );
+                const float wrappedValue = fmod( mRad + signedPi, TWO_PI );
+                mRad = wrappedValue - signedPi;
+        */
+        inline void wrapToRangeNPI_PI();
+
         _OgreExport friend std::ostream &operator<<( std::ostream &o, const Radian &v );
     };
 
@@ -257,7 +265,9 @@ namespace Ogre
         {
         public:
             virtual ~RandomValueProvider();
-            /** When called should return a random values in the range of [0,1] */
+
+            /// When called should return a random values in the range of [0,1]
+            /// It it is strongly advised this function to be thread safe.
             virtual Real getRandomUnit() = 0;
         };
 
@@ -883,6 +893,13 @@ namespace Ogre
     inline Degree operator*( Real a, const Degree &b ) { return Degree( a * b.valueDegrees() ); }
 
     inline Degree operator/( Real a, const Degree &b ) { return Degree( a / b.valueDegrees() ); }
+
+    inline void Radian::wrapToRangeNPI_PI()
+    {
+        const float signedPi = std::copysign( Math::PI, mRad );
+        const float wrappedValue = std::fmod( mRad + signedPi, Math::PI * Real( 2.0f ) );
+        mRad = wrappedValue - signedPi;
+    }
     /** @} */
     /** @} */
 }  // namespace Ogre

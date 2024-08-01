@@ -368,6 +368,10 @@ namespace Ogre
                                            changeBlendblock );
         }
 
+        itor = json.FindMember( "refraction_strength" );
+        if( itor != json.MemberEnd() && itor->value.IsNumber() )
+            pbsDatablock->setRefractionStrength( static_cast<float>( itor->value.GetDouble() ) );
+
         itor = json.FindMember( "clear_coat" );
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
@@ -836,6 +840,9 @@ namespace Ogre
             outString += pbsDatablock->getUseAlphaFromTextures() ? "true" : "false";
             outString += "\n\t\t\t}";
         }
+
+        outString += ",\n\t\t\t\"refraction_strength\" : ";
+        outString += StringConverter::toString( pbsDatablock->getRefractionStrength() );
 
         if( pbsDatablock->getClearCoat() != 0.0f )
         {

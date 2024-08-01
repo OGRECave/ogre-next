@@ -22,6 +22,8 @@ if(CMAKE_VS_PLATFORM_NAME STREQUAL "Tegra-Android")
 	set(CMAKE_LINK_LIBRARY_FLAG "")
 endif()
 
+#fix Policy CMP0072 is not set
+set(OpenGL_GL_PREFERENCE LEGACY)
 
 # Use relative paths
 # This is mostly to reduce path size for command-line limits on windows
@@ -180,7 +182,7 @@ if (MSVC)
 	# set variable to state that we are using jom makefiles
 	set(JOM TRUE)
   endif ()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fp:fast")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fp:fast /Zc:__cplusplus")
   if (NOT OGRE_PLATFORM_X64)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
   endif()
@@ -301,6 +303,10 @@ set(OGRE_Paging_LIBRARIES ${OGRE_NEXT}Paging)
 set(OGRE_Terrain_LIBRARIES ${OGRE_NEXT}Terrain)
 set(OGRE_Volume_LIBRARIES ${OGRE_NEXT}Volume)
 
+if( OGRE_STATIC AND UNIX AND NOT APPLE AND NOT OGRE_CONFIG_UNIX_NO_X11 )
+	set( OGRE_LIBRARIES ${OGRE_LIBRARIES} xcb xcb-randr )
+endif()
+
 # Specify build paths
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OGRE_BINARY_DIR}/lib")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${OGRE_BINARY_DIR}/lib")
@@ -357,7 +363,6 @@ elseif (ANDROID)
    set(OGRE_BUILD_COMPONENT_PAGING FALSE CACHE BOOL "Disable paging component on Android ES1" FORCE)
   endif()
 
-  set(OGRE_BUILD_TESTS FALSE CACHE BOOL "Disable tests on Android" FORCE)
   set(OGRE_BUILD_TOOLS FALSE CACHE BOOL "Disable tools on Android" FORCE)
   set(OGRE_STATIC TRUE CACHE BOOL "Forcing static build for Android" FORCE)
   set(OGRE_SIMD FALSE CACHE BOOL "Disable SIMD on Android" FORCE)
@@ -440,6 +445,31 @@ endif()
 
 # Customise what to build
 cmake_dependent_option(OGRE_STATIC "Static build" FALSE "" TRUE)
+set(OGRE_SHADER_COMPILATION_THREADING_MODE 1 CACHE STRING
+"Specify shader and PSO threading model:
+  0 - Disable.
+  1 - Use compatible API. Enable only if supported by compiler and OS.
+  2 - Force-enable.
+
+This setting is independent of OGRE_CONFIG_THREAD_PROVIDER.
+
+Option 1 means we will use compiler-assisted TLS (Thread Local Storage) to provide a
+backwards-compatible interface and ease porting to newer OgreNext versions.
+However this is only supported if OGRE_STATIC is true.
+
+Option 2 will disable the backwards-compatible interface, which means there may be compiler
+errors when porting to newer OgreNext versions. However, this works on dynamic DLLs builds."
+)
+if( OGRE_SHADER_COMPILATION_THREADING_MODE EQUAL 0 )
+	set( OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API TRUE )
+	set( OGRE_SHADER_THREADING_USE_TLS FALSE )
+elseif( OGRE_SHADER_COMPILATION_THREADING_MODE EQUAL 1 )
+	set( OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API TRUE )
+	set( OGRE_SHADER_THREADING_USE_TLS ${OGRE_STATIC} )
+else()
+	set( OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API FALSE )
+	set( OGRE_SHADER_THREADING_USE_TLS FALSE )
+endif()
 cmake_dependent_option(OGRE_BUILD_RENDERSYSTEM_D3D11 "Build Direct3D11 RenderSystem" TRUE "WIN32;DirectX11_FOUND OR WINDOWS_STORE OR WINDOWS_PHONE" FALSE)
 cmake_dependent_option(OGRE_BUILD_RENDERSYSTEM_GL3PLUS "Build OpenGL 3+ RenderSystem" TRUE "OPENGL_FOUND; NOT OGRE_BUILD_RENDERSYSTEM_GLES; NOT OGRE_BUILD_RENDERSYSTEM_GLES2;NOT WINDOWS_STORE;NOT WINDOWS_PHONE;NOT OGRE_BUILD_PLATFORM_APPLE_IOS" FALSE)
 cmake_dependent_option(OGRE_GLSUPPORT_USE_EGL_HEADLESS "Use EGL. Required if you want to use GL3+ headless support (e.g. rendering on the Cloud without X11). If more than one GLSUPPORT is enabled, interface can be selected at runtime" FALSE "OGRE_BUILD_RENDERSYSTEM_GL3PLUS;EGL_FOUND" FALSE)
@@ -458,6 +488,7 @@ if( OGRE_GLSUPPORT_USE_EGL_HEADLESS )
 endif()
 cmake_dependent_option(OGRE_BUILD_RENDERSYSTEM_GLES2 "Build OpenGL ES 2.x RenderSystem" FALSE "OPENGLES2_FOUND;NOT WINDOWS_STORE;NOT WINDOWS_PHONE" FALSE)
 cmake_dependent_option(OGRE_BUILD_RENDERSYSTEM_VULKAN "Build Vulkan RenderSystem" TRUE "Vulkan_FOUND" FALSE)
+cmake_dependent_option(OGRE_VULKAN_USE_SWAPPY "Vulkan: Use Swappy Frame Pacing (Recommended)" TRUE "ANDROID;AndroidSwappy_FOUND" FALSE)
 cmake_dependent_option(OGRE_VULKAN_WINDOW_NULL "Allow headless support. If more than one OGRE_VULKAN_WINDOW is enabled, interface can be selected at runtime" FALSE "OGRE_BUILD_RENDERSYSTEM_VULKAN" FALSE)
 cmake_dependent_option(OGRE_VULKAN_WINDOW_WIN32 "Use Win32 (Default / Native window). If more than one OGRE_VULKAN_WINDOW is enabled, interface can be selected at runtime" TRUE "OGRE_BUILD_RENDERSYSTEM_VULKAN;WIN32" FALSE)
 cmake_dependent_option(OGRE_VULKAN_WINDOW_XCB "Use X11 / xcb (Default / Native window). If more than one OGRE_VULKAN_WINDOW is enabled, interface can be selected at runtime" TRUE "OGRE_BUILD_RENDERSYSTEM_VULKAN;UNIX;NOT ANDROID;NOT OGRE_CONFIG_UNIX_NO_X11" FALSE)
@@ -470,6 +501,7 @@ if( APPLE )
     option(OGRE_BUILD_RENDERSYSTEM_METAL "Build Metal RenderSystem (Apple only)" TRUE)
 endif()
 option(OGRE_BUILD_PLUGIN_PFX "Build ParticleFX plugin" TRUE)
+option(OGRE_BUILD_PLUGIN_PFX2 "Build ParticleFX2 plugin" TRUE)
 
 option(OGRE_IDSTRING_USE_128 "Ogre will use 128 for IdString to reduce chances of collisions. Use this if you have approximately >= 10.000 meshes or materials" FALSE)
 
@@ -734,5 +766,5 @@ include(Packaging)
 
 
 # Show feature summary
-include(FeatureSummary)
+include(OgreFeatureSummary)
 

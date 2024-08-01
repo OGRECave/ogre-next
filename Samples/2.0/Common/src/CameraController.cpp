@@ -12,7 +12,7 @@ namespace Demo
 {
     CameraController::CameraController( GraphicsSystem *graphicsSystem, bool useSceneNode ) :
         mUseSceneNode( useSceneNode ),
-        mSpeedMofifier( false ),
+        mSpeedModifier( false ),
         mCameraYaw( 0 ),
         mCameraPitch( 0 ),
         mCameraBaseSpeed( 10 ),
@@ -58,7 +58,7 @@ namespace Demo
                                           (Ogre::Real)camMovementZ );
             camMovementDir.normalise();
             camMovementDir *=
-                timeSinceLast * mCameraBaseSpeed * ( 1 + mSpeedMofifier * mCameraSpeedBoost );
+                timeSinceLast * mCameraBaseSpeed * ( 1 + mSpeedModifier * mCameraSpeedBoost );
 
             if( mUseSceneNode )
             {
@@ -75,7 +75,7 @@ namespace Demo
     bool CameraController::keyPressed( const SDL_KeyboardEvent &arg )
     {
         if( arg.keysym.scancode == SDL_SCANCODE_LSHIFT )
-            mSpeedMofifier = true;
+            mSpeedModifier = true;
 
         if( arg.keysym.scancode == SDL_SCANCODE_W )
             mWASD[0] = true;
@@ -98,7 +98,7 @@ namespace Demo
     bool CameraController::keyReleased( const SDL_KeyboardEvent &arg )
     {
         if( arg.keysym.scancode == SDL_SCANCODE_LSHIFT )
-            mSpeedMofifier = false;
+            mSpeedModifier = false;
 
         if( arg.keysym.scancode == SDL_SCANCODE_W )
             mWASD[0] = false;

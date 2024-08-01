@@ -854,7 +854,6 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void PlanarReflections::fillConstBufferData( TextureGpu *renderTarget, const Camera *camera,
-                                                 const Matrix4 &projectionMatrix,
                                                  float *RESTRICT_ALIAS passBufferPtr ) const
     {
         const Matrix4 viewMatrix = camera->getViewMatrix( true );
@@ -886,7 +885,10 @@ namespace Ogre
         memset( passBufferPtr, 0, ( mMaxActiveActors - mActiveActors.size() ) * 4u * sizeof( float ) );
         passBufferPtr += ( mMaxActiveActors - mActiveActors.size() ) * 4u;
 
-        Matrix4 reflProjMat = PROJECTIONCLIPSPACE2DTOIMAGESPACE_PERSPECTIVE * projectionMatrix;
+        // We call getProjectionMatrixWithRSDepth directly because
+        // it must NOT account for requiresTextureFlipping.
+        Matrix4 reflProjMat =
+            PROJECTIONCLIPSPACE2DTOIMAGESPACE_PERSPECTIVE * camera->getProjectionMatrixWithRSDepth();
         for( size_t i = 0; i < 16; ++i )
             *passBufferPtr++ = (float)reflProjMat[0][i];
 

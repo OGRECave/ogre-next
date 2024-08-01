@@ -231,8 +231,18 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VkPipelineLayout VulkanRootLayout::createVulkanHandles()
     {
+        {
+            // If mRootLayout is nullptr but being created in another thread, we will check again
+            // but with a proper lock. If it's not a nullptr, it means it's properly been created.
+            VkPipelineLayout retVal = mRootLayout.load( std::memory_order::memory_order_relaxed );
+            if( retVal )
+                return retVal;
+        }
+
+        ScopedLock lock( mProgramManager->getMutexRootLayoutHandles() );
+
         if( mRootLayout )
-            return mRootLayout;
+            return mRootLayout;  // Checking again as previous check was unsafe.
 
         FastArray<FastArray<VkDescriptorSetLayoutBinding> > rootLayoutDesc;
 
@@ -321,8 +331,12 @@ namespace Ogre
         pipelineLayoutCi.setLayoutCount = static_cast<uint32>( numSets );
         pipelineLayoutCi.pSetLayouts = mSets.begin();
 
-        VkResult result = vkCreatePipelineLayout( device->mDevice, &pipelineLayoutCi, 0, &mRootLayout );
+        VkPipelineLayout rootLayoutResult;
+        VkResult result =
+            vkCreatePipelineLayout( device->mDevice, &pipelineLayoutCi, 0, &rootLayoutResult );
         checkVkResult( result, "vkCreatePipelineLayout" );
+
+        mRootLayout.store( rootLayoutResult, std::memory_order::memory_order_relaxed );
 
         return mRootLayout;
     }
@@ -500,13 +514,13 @@ namespace Ogre
             }
             else
             {
-                bDirty |=
-                    table.dirtyBakedTextures & ( ranges[DescBindingTypes::ReadOnlyBuffer].isInUse() |
-                                                 ranges[DescBindingTypes::TexBuffer].isInUse() |
-                                                 ranges[DescBindingTypes::Texture].isInUse() );
+                bDirty |= table.dirtyBakedTextures &
+                          ( (int)ranges[DescBindingTypes::ReadOnlyBuffer].isInUse() |
+                            (int)ranges[DescBindingTypes::TexBuffer].isInUse() |
+                            (int)ranges[DescBindingTypes::Texture].isInUse() );
                 bDirty |= table.dirtyBakedSamplers & ranges[DescBindingTypes::Sampler].isInUse();
-                bDirty |= table.dirtyBakedUavs & ( ranges[DescBindingTypes::UavBuffer].isInUse() |
-                                                   ranges[DescBindingTypes::UavTexture].isInUse() );
+                bDirty |= table.dirtyBakedUavs & ( (int)ranges[DescBindingTypes::UavBuffer].isInUse() |
+                                                   (int)ranges[DescBindingTypes::UavTexture].isInUse() );
             }
 
             if( bDirty )
@@ -566,8 +580,11 @@ namespace Ogre
                         descBindingRanges[j + DescBindingTypes::ReadOnlyBuffer];
                     if( bindRanges.isInUse() )
                     {
-                        OGRE_ASSERT_MEDIUM( table.bakedDescriptorSets[j] &&
-                                            "No DescriptorSetTexture/Sampler/Uav bound when expected!" );
+                        OGRE_ASSERT_MEDIUM(
+                            table.bakedDescriptorSets[j] &&
+                            "No DescriptorSetTexture/Sampler/Uav bound when expected!\n"
+                            "Forgot a call to "
+                            "RenderSystem::_setTextures/_setTextures2/_setSamplers/etc?" );
                         OGRE_ASSERT_MEDIUM( table.bakedDescriptorSets[j]->descriptorCount ==
                                                 bindRanges.getNumUsedSlots() &&
                                             "DescriptorSetTexture/Sampler/Uav provided is incompatible "

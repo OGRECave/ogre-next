@@ -909,6 +909,7 @@ namespace Ogre
         SAFE_DELETE( mDriverList );
         mActiveD3DDriver = D3D11Driver();
         mDevice.ReleaseAll();
+        SAFE_DELETE( mVendorExtension );
         LogManager::getSingleton().logMessage( "D3D11: Shutting down cleanly." );
         SAFE_DELETE( mHardwareBufferManager );
         SAFE_DELETE( mGpuProgramManager );
@@ -2312,6 +2313,18 @@ namespace Ogre
             }
         }
 
+        try
+        {
+            createBlendState( block->blendblock, block->pass.sampleDescription.isMultisample(),
+                              pso->blendState );
+        }
+        catch( Exception & )
+        {
+            delete pso;
+            pso = 0;
+            throw;
+        }
+
         block->rsData = pso;
     }
     //---------------------------------------------------------------------
@@ -2381,7 +2394,8 @@ namespace Ogre
         block->mRsData = 0;
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_hlmsBlendblockCreated( HlmsBlendblock *newBlock )
+    void D3D11RenderSystem::createBlendState( const HlmsBlendblock *newBlock, const bool bIsMultisample,
+                                              ComPtr<ID3D11BlendState> &outBlendblock )
     {
         D3D11_BLEND_DESC blendDesc;
         ZeroMemory( &blendDesc, sizeof( D3D11_BLEND_DESC ) );
@@ -2447,27 +2461,22 @@ namespace Ogre
         if( mFeatureLevel < D3D_FEATURE_LEVEL_10_0 )
             blendDesc.AlphaToCoverageEnable = false;
         else
-            blendDesc.AlphaToCoverageEnable = newBlock->mAlphaToCoverageEnabled;
+        {
+            blendDesc.AlphaToCoverageEnable =
+                newBlock->mAlphaToCoverage == HlmsBlendblock::A2cEnabled ||
+                ( newBlock->mAlphaToCoverage == HlmsBlendblock::A2cEnabledMsaaOnly && bIsMultisample );
+        }
 
         ID3D11BlendState *blendState = 0;
 
-        HRESULT hr = mDevice->CreateBlendState( &blendDesc, &blendState );
+        HRESULT hr = mDevice->CreateBlendState( &blendDesc, outBlendblock.GetAddressOf() );
         if( FAILED( hr ) )
         {
             String errorDescription = mDevice.getErrorDescription( hr );
             OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
                             "Failed to create blend state\nError Description: " + errorDescription,
-                            "D3D11RenderSystem::_hlmsBlendblockCreated" );
+                            "D3D11RenderSystem::createBlendState" );
         }
-
-        newBlock->mRsData = blendState;
-    }
-    //---------------------------------------------------------------------
-    void D3D11RenderSystem::_hlmsBlendblockDestroyed( HlmsBlendblock *block )
-    {
-        ID3D11BlendState *blendState = reinterpret_cast<ID3D11BlendState *>( block->mRsData );
-        blendState->Release();
-        block->mRsData = 0;
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_hlmsSamplerblockCreated( HlmsSamplerblock *newBlock )
@@ -2659,15 +2668,10 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setHlmsBlendblock( const HlmsBlendblock *blendblock )
+    void D3D11RenderSystem::_setHlmsBlendblock( ComPtr<ID3D11BlendState> blendState )
     {
-        assert( blendblock->mRsData &&
-                "The block must have been created via HlmsManager::getBlendblock!" );
-
-        ID3D11BlendState *blendState = reinterpret_cast<ID3D11BlendState *>( blendblock->mRsData );
-
         // TODO - Add this functionality to Ogre (what's the GL equivalent?)
-        mDevice.GetImmediateContext()->OMSetBlendState( blendState, 0, 0xffffffff );
+        mDevice.GetImmediateContext()->OMSetBlendState( blendState.Get(), 0, 0xffffffff );
         if( mDevice.isError() )
         {
             String errorDescription = mDevice.getErrorDescription();
@@ -2721,10 +2725,10 @@ namespace Ogre
         if( !pso )
             return;
 
-        _setHlmsMacroblock( pso->macroblock );
-        _setHlmsBlendblock( pso->blendblock );
-
         D3D11HlmsPso *d3dPso = reinterpret_cast<D3D11HlmsPso *>( pso->rsData );
+
+        _setHlmsMacroblock( pso->macroblock );
+        _setHlmsBlendblock( d3dPso->blendState );
 
         mPso = d3dPso;
 
@@ -3657,8 +3661,13 @@ namespace Ogre
     }
     //---------------------------------------------------------------------
     SampleDescription D3D11RenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
-                                                                    PixelFormatGpu format )
+                                                                    PixelFormatGpu format,
+                                                                    uint32 textureFlags,
+                                                                    uint32 depthTextureFlags )
     {
+        OGRE_UNUSED_VAR( textureFlags );
+        OGRE_UNUSED_VAR( depthTextureFlags );
+
         SampleDescription res;
         DXGI_FORMAT dxgiFormat = D3D11Mappings::get( format );
         const uint8 samples = sampleDesc.getMaxSamples();

@@ -132,7 +132,7 @@ namespace Ogre
                                             const HlmsBlendblock *blendblock,     //
                                             const HlmsParamVec   &paramVec ) override;
 
-        void setupRootLayout( RootLayout &rootLayout ) override;
+        void setupRootLayout( RootLayout &rootLayout, size_t tid ) override;
 
     public:
         HlmsCompute( AutoParamDataSource *autoParamDataSource );

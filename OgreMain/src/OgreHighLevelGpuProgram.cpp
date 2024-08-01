@@ -320,7 +320,7 @@ namespace Ogre
             {
                 Hlms *hlms = Root::getSingletonPtr()->getHlmsManager()->getHlms( HLMS_LOW_LEVEL );
                 String inputStr( mSource );
-                hlms->parseOffline( mName, inputStr, mSource );
+                hlms->parseOffline( mName, inputStr, mSource, Hlms::kNoTid );
             }
         }
 

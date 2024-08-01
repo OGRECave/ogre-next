@@ -142,7 +142,7 @@
 												  material.detailOffsetScale[@n].xy,
 												  texIndex_detailMetalnessIdx@n ).x;
 		@else
-			midf metalness@n = _h( 0 );
+			midf metalness@n = _h( 1.0 );
 		@end
 	@end
 
@@ -167,7 +167,7 @@
 												  material.detailOffsetScale[@n].xy,
 												  texIndex_detailRoughnessIdx@n ).x;
 		@else
-			midf roughness@n = _h( 0 );
+			midf roughness@n = _h( 1.0 );
 		@end
 	@end
 
@@ -182,6 +182,7 @@
 	@end
 @end
 
+@undefpiece( LoadGeomNormalData )
 @undefpiece( LoadNormalData )
 @piece( LoadNormalData )
 	// Geometric normal
@@ -211,6 +212,13 @@
 @piece( DefaultTerraBodyPS )
 	PixelData pixelData;
 
+	@property( hlms_emulate_clip_distances && hlms_global_clip_planes && hlms_pso_clip_distances && syntax == glslvk)
+		@foreach( hlms_pso_clip_distances, n )
+			if( inPs.clipDistance@n < 0.0 )
+				discard;
+		@end
+	@end
+
 	@insertpiece( LoadMaterial )
 	@insertpiece( UnpackTextureIndices0 )
 	@insertpiece( UnpackTextureIndices1 )
@@ -220,6 +228,7 @@
 	@insertpiece( LoadDetailWeights )
 
 	@property( !hlms_use_prepass )
+		@insertpiece( LoadGeomNormalData )
 		@insertpiece( LoadNormalData )
 		@insertpiece( SampleAndApplyDetailNormalMaps@property( detail_triplanar_normal )Triplanar@end )
 	@end
@@ -358,6 +367,14 @@
 		@insertpiece( DoPlanarReflectionsPS )
 
 		@property( ambient_hemisphere )
+			@property( ambient_hemisphere_inverted )
+				float tmpAmbientWS = ambientWD;
+				float tmpAmbientWD = ambientWS;
+			@else
+				float tmpAmbientWS = ambientWS;
+				float tmpAmbientWD = ambientWD;
+			@end
+
 			@property( use_envprobe_map || hlms_use_ssr || use_planar_reflections || vct_num_probes )
 				@property( vct_num_probes )
 					//Only use ambient lighting if object is outside any VCT probe
@@ -365,17 +382,21 @@
 					{
 				@end
 						pixelData.envColourS += lerp( midf3_c( passBuf.ambientLowerHemi.xyz ),
-													  midf3_c( passBuf.ambientUpperHemi.xyz ), ambientWD );
+													  midf3_c( passBuf.ambientUpperHemi.xyz ),
+													  tmpAmbientWS );
 						pixelData.envColourD += lerp( midf3_c( passBuf.ambientLowerHemi.xyz ),
-													  midf3_c( passBuf.ambientUpperHemi.xyz ), ambientWS );
+													  midf3_c( passBuf.ambientUpperHemi.xyz ),
+													  tmpAmbientWD );
 				@property( vct_num_probes )
 					}
 				@end
 			@else
 				pixelData.envColourS = lerp( midf3_c( passBuf.ambientLowerHemi.xyz ),
-											 midf3_c( passBuf.ambientUpperHemi.xyz ), ambientWD );
+											 midf3_c( passBuf.ambientUpperHemi.xyz ),
+											 tmpAmbientWS );
 				pixelData.envColourD = lerp( midf3_c( passBuf.ambientLowerHemi.xyz ),
-											 midf3_c( passBuf.ambientUpperHemi.xyz ), ambientWS );
+											 midf3_c( passBuf.ambientUpperHemi.xyz ),
+											 tmpAmbientWD );
 			@end
 		@end
 		@property( ambient_fixed && vct_num_probes )

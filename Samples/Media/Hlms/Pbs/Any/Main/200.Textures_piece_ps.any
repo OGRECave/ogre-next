@@ -7,8 +7,8 @@
 			uniform sampler2DArray ltcMatrix;
 		@end
         @property( syntax == glslvk )
-			layout( ogre_t@value(ltcMatrix) ) uniform texture2DArray ltcMatrix;
-            layout( ogre_s@value(ltcMatrix) ) uniform sampler ltcSampler;
+			layout( ogre_t@value(ltcMatrix) ) midf_tex uniform texture2DArray ltcMatrix;
+			layout( ogre_s@value(ltcMatrix) ) midf_tex uniform sampler ltcSampler;
         @end
 		@property( syntax == hlsl )
 			Texture2DArray<float4> ltcMatrix	: register(t@value(ltcMatrix));

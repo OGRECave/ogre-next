@@ -75,7 +75,7 @@ namespace Ogre
     {
         bool anyErrors = false;
         while( value-- )
-            anyErrors = sem_post( &mSemaphore ) != 0;
+            anyErrors |= sem_post( &mSemaphore ) != 0;
         return !anyErrors;
     }
 #endif

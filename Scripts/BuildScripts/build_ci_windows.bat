@@ -30,25 +30,27 @@ echo %PATH%
 echo -- PYTHONPATH --
 echo %PYTHONPATH%
 
-IF NOT EXIST %BUILD_FOLDER%\..\ogredeps (
-	mkdir %BUILD_FOLDER%\..\ogredeps
-	echo --- Cloning Ogredeps ---
-	git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps %BUILD_FOLDER%\..\ogredeps
+IF NOT EXIST %BUILD_FOLDER%\..\ogre-next-deps (
+	mkdir %BUILD_FOLDER%\..\ogre-next-deps
+	echo --- Cloning ogre-next-deps ---
+	git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps %BUILD_FOLDER%\..\ogre-next-deps
+
+	mkdir %BUILD_FOLDER%\..\ogre-next-deps\build
+	cd %BUILD_FOLDER%\..\ogre-next-deps\build
+	echo --- Building ogre-next-deps ---
+	%CMAKE_BIN% -G %GENERATOR% -A %PLATFORM% %BUILD_FOLDER%\..\ogre-next-deps
+	%CMAKE_BIN% --build . --config %CONFIGURATION%
+	%CMAKE_BIN% --build . --target install --config %CONFIGURATION%
 ) ELSE (
-	echo --- Ogredeps repo detected. Cloning skipped ---
+	echo --- ogre-next-deps repo detected. Cloning skipped ---
+	echo --- ogre-next-deps repo detected. Building skipped ---
 )
-mkdir %BUILD_FOLDER%\..\ogredeps\build
-cd %BUILD_FOLDER%\..\ogredeps\build
-echo --- Building Ogredeps ---
-%CMAKE_BIN% -G %GENERATOR% -A %PLATFORM% %BUILD_FOLDER%\..\ogredeps
-%CMAKE_BIN% --build . --config %CONFIGURATION%
-%CMAKE_BIN% --build . --target install --config %CONFIGURATION%
 
 cd %BUILD_FOLDER%
 mkdir %BUILD_FOLDER%\build
 cd %BUILD_FOLDER%\build
 echo --- Running CMake configure ---
-%CMAKE_BIN% -D OGRE_UNITY_BUILD=1 -D OGRE_USE_BOOST=0 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D OGRE_BUILD_COMPONENT_SCENE_FORMAT=1 -D OGRE_BUILD_SAMPLES2=1 -D OGRE_BUILD_TESTS=1 -D OGRE_DEPENDENCIES_DIR=%BUILD_FOLDER%\..\ogredeps\build\ogredeps -G %GENERATOR% -A %PLATFORM% %BUILD_FOLDER%
+%CMAKE_BIN% -D OGRE_UNITY_BUILD=1 -D OGRE_USE_BOOST=0 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D OGRE_BUILD_COMPONENT_SCENE_FORMAT=1 -D OGRE_BUILD_SAMPLES2=1 -D OGRE_BUILD_TESTS=1 -D OGRE_DEPENDENCIES_DIR=%BUILD_FOLDER%\..\ogre-next-deps\build\ogredeps -G %GENERATOR% -A %PLATFORM% %BUILD_FOLDER%
 echo --- Building Ogre ---
 %CMAKE_BIN% --build . --config %CONFIGURATION%
 %CMAKE_BIN% --build . --target install --config %CONFIGURATION%

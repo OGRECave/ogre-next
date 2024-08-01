@@ -56,12 +56,9 @@ namespace Ogre
     */
     class _OgreExport ParticleAffectorFactory : public OgreAllocatedObj
     {
-    protected:
-        vector<ParticleAffector *>::type mAffectors;
-
     public:
         ParticleAffectorFactory() {}
-        virtual ~ParticleAffectorFactory();
+        virtual ~ParticleAffectorFactory() = default;
         /** Returns the name of the factory, the name which identifies the particle affector type this
          * factory creates. */
         virtual String getName() const = 0;

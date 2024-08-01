@@ -138,7 +138,7 @@ namespace Ogre
         // On iOS alignment must match "the maximum accessed object" type. e.g.
         // if it's all float, then alignment = 4. if it's a float2, then alignment = 8.
         // The max. object is float4, so alignment = 16
-#    if TARGET_OS_SIMULATOR == 0
+#    if TARGET_OS_SIMULATOR == 0 || OGRE_CPU == OGRE_CPU_ARM 
         mConstBufferAlignment = 16;
         mTexBufferAlignment = 16;
 #    else
@@ -200,7 +200,7 @@ namespace Ogre
         mSupportsPersistentMapping = true;
 
         const uint32 maxNumInstances = 4096u * 2u;
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS && TARGET_OS_SIMULATOR == 0
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS && (TARGET_OS_SIMULATOR == 0 || OGRE_CPU == OGRE_CPU_ARM)
         uint32 *drawIdPtr = static_cast<uint32 *>(
             OGRE_MALLOC_SIMD( maxNumInstances * sizeof( uint32 ), MEMCATEGORY_GEOMETRY ) );
         for( uint32 i = 0; i < maxNumInstances; ++i )

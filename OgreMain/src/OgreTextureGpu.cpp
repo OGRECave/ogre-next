@@ -447,8 +447,16 @@ namespace Ogre
             // and just call the listeners
             if( !isRenderWindowSpecific() )
             {
+                uint32 msaaTextureFlags = TextureFlags::NotTexture;
+                if( hasMsaaExplicitResolves() )
+                    msaaTextureFlags = mTextureFlags;
+                uint32 depthFormatTextureFlags = 0u;
+                if( !getPreferDepthTexture() )
+                    depthFormatTextureFlags = TextureFlags::NotTexture;
+
                 mSampleDescription = mTextureManager->getRenderSystem()->validateSampleDescription(
-                    mRequestedSampleDescription, mPixelFormat );
+                    mRequestedSampleDescription, mPixelFormat, msaaTextureFlags,
+                    depthFormatTextureFlags );
             }
             if( !( mSampleDescription == mRequestedSampleDescription ) )
                 notifyAllListenersTextureChanged( TextureGpuListener::FsaaSettingAlteredByApi, 0 );

@@ -1,0 +1,23 @@
+// This file gets parsed by the vertex shader stage (because it ends in piece_vs.any)
+
+@property( clear_depth )
+	@piece( ClearDepth )
+		@property( hlms_no_reverse_depth )
+			// Outputting exactly outVs_Position.w can cause us to miss depth tests because of
+			// interpolation works in some GPUs, causing w / w > 1 for a few pixels.
+			//
+			// Thus we use an epsilon.
+			outVs_Position.z = outVs_Position.w - 1e-6f;
+		@else
+			outVs_Position.z = 0.0f;
+		@end
+	@end
+@end
+
+@end
+
+@piece( custom_vs_posExecution )
+	// We use this strategy in case you want to chain multiple customizations together.
+	// Put those here.
+	@insertpiece( ClearDepth )
+@end

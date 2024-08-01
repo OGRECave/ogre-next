@@ -95,10 +95,10 @@ namespace Demo
         finalText += "Frame FPS:\t";
         finalText += Ogre::StringConverter::toString( 1.0f / timeSinceLast );
         finalText += "\nAvg time:\t";
-        finalText += Ogre::StringConverter::toString( frameStats->getAvgTime() );
+        finalText += Ogre::StringConverter::toString( frameStats->getRollingAverage() * 1000.0 );
         finalText += " ms\n";
         finalText += "Avg FPS:\t";
-        finalText += Ogre::StringConverter::toString( 1000.0f / frameStats->getAvgTime() );
+        finalText += Ogre::StringConverter::toString( frameStats->getRollingAverageFps() );
         finalText += "\n\nPress F1 to toggle help";
 
         outText.swap( finalText );

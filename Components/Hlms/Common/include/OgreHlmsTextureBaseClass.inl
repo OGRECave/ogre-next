@@ -285,9 +285,15 @@ namespace Ogre
         else if( !mSamplersDescSet || *mSamplersDescSet != baseSampler )
         {
             if( mSamplersDescSet )
+            {
                 hlmsManager->destroyDescriptorSetSampler( mSamplersDescSet );
-            mSamplersDescSet = hlmsManager->getDescriptorSetSampler( baseSampler );
-            needsRecalculateHash = true;
+                mSamplersDescSet = 0;
+            }
+            if( !baseSampler.mSamplers.empty() )
+            {
+                mSamplersDescSet = hlmsManager->getDescriptorSetSampler( baseSampler );
+                needsRecalculateHash = true;
+            }
         }
 
         return needsRecalculateHash;

@@ -17,37 +17,41 @@ layout(location = FRAG_COLOR, index = 0) out midf outColour;
 // START UNIFORM DECLARATION
 @insertpiece( custom_ps_uniformDeclaration )
 // END UNIFORM DECLARATION
-@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || exponential_shadow_maps )
+@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || alpha_test || hlms_alpha_hash || exponential_shadow_maps )
 	vulkan_layout( location = 0 ) in block
 	{
 		@insertpiece( VStoPS_block )
 	} inPs;
 @end
 
-@property( !hlms_shadowcaster || alpha_test )
+@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 	@property( syntax != glslvk )
 		@foreach( num_textures, n )
 			@property( is_texture@n_array )
-				uniform sampler2DArray textureMapsArray@n;
+				midf_tex uniform sampler2DArray textureMapsArray@n;
 			@else
-				uniform sampler2D textureMaps@n;
+				midf_tex uniform sampler2D textureMaps@n;
 			@end
 		@end
 	@else
 		@foreach( num_textures, n )
 			@property( is_texture@n_array )
-				layout( ogre_t@value(textureMapsArray@n) ) uniform texture2DArray textureMapsArray@n;
+				layout( ogre_t@value(textureMapsArray@n) ) midf_tex uniform texture2DArray textureMapsArray@n;
 			@else
-				layout( ogre_t@value(textureMaps@n) ) uniform texture2D textureMaps@n;
+				layout( ogre_t@value(textureMaps@n) ) midf_tex uniform texture2D textureMaps@n;
 			@end
 		@end
 	@end
 @end
 
+@pset( currSampler, samplerStateStart )
+
 @property( syntax == glslvk )
 	@foreach( num_samplers, n )
-		layout( ogre_s@counter(samplerStateStart) ) uniform sampler samplerState@n;@end
+		layout( ogre_s@counter(currSampler) ) uniform sampler samplerState@n;@end
 @end
+
+@insertpiece( DeclBlueNoiseTexture )
 
 @insertpiece( DefaultHeaderPS )
 
@@ -58,7 +62,7 @@ layout(location = FRAG_COLOR, index = 0) out midf outColour;
 void main()
 {
 	@insertpiece( custom_ps_preExecution )
-	@property( !hlms_shadowcaster || alpha_test )
+	@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 		@insertpiece( DefaultBodyPS )
 	@end
 	@property( hlms_shadowcaster )

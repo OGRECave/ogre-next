@@ -88,26 +88,32 @@ namespace Ogre
 
         bool   mUsingExponentialShadowMaps;
         uint16 mEsmK;  ///< K parameter for ESM.
-        uint32 mTexUnitSlotStart;
-        uint32 mSamplerUnitSlotStart;
 
-        void setupRootLayout( RootLayout &rootLayout ) override;
+        uint8 mReservedTexBufferSlots;  // Includes ReadOnly
+        uint8 mReservedTexSlots;        // These get added to mReservedTexBufferSlots
+
+        uint32 mTexUnitSlotStart;
+
+        void setupRootLayout( RootLayout &rootLayout, size_t tid ) override;
 
         const HlmsCache *createShaderCacheEntry( uint32 renderableHash, const HlmsCache &passCache,
                                                  uint32                  finalHash,
-                                                 const QueuedRenderable &queuedRenderable ) override;
+                                                 const QueuedRenderable &queuedRenderable,
+                                                 HlmsCache *reservedStubEntry, size_t tid ) override;
 
         HlmsDatablock *createDatablockImpl( IdString datablockName, const HlmsMacroblock *macroblock,
                                             const HlmsBlendblock *blendblock,
                                             const HlmsParamVec   &paramVec ) override;
 
-        void setTextureProperty( LwString &propertyName, HlmsUnlitDatablock *datablock, uint8 texType );
+        void setTextureProperty( size_t tid, LwString &propertyName, HlmsUnlitDatablock *datablock,
+                                 uint8 texType );
 
         void calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash ) override;
         void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces ) override;
-        void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces ) override;
+        void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces,
+                                        const PiecesMap *normalPassPieces ) override;
 
-        void notifyPropertiesMergedPreGenerationStep() override;
+        void notifyPropertiesMergedPreGenerationStep( size_t tid ) override;
 
         void destroyAllBuffers() override;
 

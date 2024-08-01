@@ -926,11 +926,10 @@ namespace Ogre
                 ID_TARGET_ORIENTATION_MODE,
                 ID_TARGET_FORMAT,
             //  ID_GAMMA,
-                ID_NO_GAMMA,
-                ID_NO_FSAA,
                 ID_MSAA,
                 ID_MSAA_AUTO,
                 ID_EXPLICIT_RESOLVE,
+                ID_NOT_TEXTURE,
                 ID_REINTERPRETABLE,
                 ID_KEEP_CONTENT,
                 ID_DEPTH_POOL,
@@ -1074,6 +1073,9 @@ namespace Ogre
                     ID_SAMPLES_PER_ITERATION,
                     ID_SAMPLES_SINGLE_ITERATION_FALLBACK,
                     ID_FORCE_MIPMAP_FALLBACK,
+
+                    //Used by WARM_UP
+                    ID_MODE,
 
             ID_READ_BACK_AS_TEXTURE,
 

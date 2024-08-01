@@ -406,6 +406,8 @@ namespace Ogre
         ObjectMemoryManager mForwardPlusMemoryManager[NUM_SCENE_MEMORY_MANAGER_TYPES];
         SkeletonAnimManager mSkeletonAnimationManager;
         NodeMemoryManager   mTagPointNodeMemoryManager;
+        ObjectMemoryManager mParticleSysDefMemoryManager;
+        ObjectMemoryManager mParticleSysMemoryManager;
         /// Filled and cleared every frame in HighLevelCull()
         NodeMemoryManagerVec   mNodeMemoryManagerUpdateList;
         NodeMemoryManagerVec   mTagPointNodeMemoryManagerUpdateList;
@@ -486,6 +488,8 @@ namespace Ogre
         CameraMap  mCamerasByName;
         FrustumVec mVisibleCameras;
         FrustumVec mCubeMapCameras;
+
+        ParticleSystemManager2 *mParticleSystemManager2;
 
         typedef vector<WireAabb *>::type WireAabbVec;
 
@@ -614,14 +618,6 @@ namespace Ogre
 
         /// A pass designed to let us render shadow colour on white for texture shadows
         Pass *mShadowCasterPlainBlackPass;
-
-        /** Internal method to validate whether a Pass should be allowed to render.
-        @remarks
-            Called just before a pass is about to be used for rendering a group to
-            allow the SceneManager to omit it if required. A return value of false
-            skips this pass.
-        */
-        virtual_l2 bool validatePassForRendering( const Pass *pass );
 
         enum BoxPlane
         {
@@ -813,6 +809,9 @@ namespace Ogre
             BUILD_LIGHT_LIST01,
             BUILD_LIGHT_LIST02,
             WARM_UP_SHADERS,
+            WARM_UP_SHADERS_COMPILE,
+            PARALLEL_HLMS_COMPILE,
+            PARTICLE_SYSTEM_MANAGER2,
             USER_UNIFORM_SCALABLE_TASK,
             STOP_THREADS,
             NUM_REQUESTS
@@ -820,6 +819,9 @@ namespace Ogre
 
         size_t mNumWorkerThreads;
         bool   mForceMainThread;
+        /// Performance optimization. When true, ParticleSystemManager2::_prepareParallel()
+        /// will be called in an unrelated call so we don't have to sync more than needed.
+        bool mPrepareParticleFx;
 
         CullFrustumRequest            mCurrentCullFrustumRequest;
         UpdateLodRequest              mUpdateLodRequest;
@@ -1366,6 +1368,9 @@ namespace Ogre
         }
         ObjectMemoryManager &_getLightMemoryManager() { return mLightMemoryManager; }
 
+        ObjectMemoryManager &_getParticleSysDefMemoryManager() { return mParticleSysDefMemoryManager; }
+        ObjectMemoryManager &_getParticleSysMemoryManager() { return mParticleSysMemoryManager; }
+
         /// @copydoc ArrayMemoryManager::defragment
         void defragmentMemoryPools();
 
@@ -1616,6 +1621,74 @@ namespace Ogre
         /** Removes & destroys all ParticleSystems from the SceneManager.
          */
         virtual void destroyAllParticleSystems();
+
+        /** Creates the template / definition of the new generation of ParticleFXs.
+        @remarks
+            A ParticleSystemDef does not form part of the scene.
+
+            The reason it derives from MovableObject is to keep backwards compatibility with the
+            interface of the older ParticleFX plugin for much easier
+            migration/porting.
+
+            Do NOT attach it to a SceneNode.
+
+            See createParticleSystem2().
+        @param name
+            Name of the definition. Must be unique.
+        @return
+            ParticleSystem Definition to setup.
+        */
+        ParticleSystemDef *createParticleSystemDef( const String &name );
+
+        /** Creates an instance the next generation of ParticleFX.
+            This instance must be based off a ParticleSystemDef already setup.
+
+            See createParticleSystemDef().
+        @param systemDef
+            The ParticleSystemDef.
+        @return
+            The ParticleSystem2
+        */
+        ParticleSystem2 *createParticleSystem2( ParticleSystemDef *systemDef );
+
+        /// See createParticleSystem2(). This supplies the name of the particle
+        /// system def instead of a pointer (slightly slower)
+        ParticleSystem2 *createParticleSystem2( const String &templateDefName );
+
+        void destroyParticleSystem2( ParticleSystem2 *obj );
+
+        /// Destroys all particle systems created with createParticleSystem2.
+        /// Do not hold any more references to those pointers as they will become dangling!
+        void destroyAllParticleSystems2();
+
+        /** Creates an instance of the new generation of billboards.
+            See ParticleSystemManager2::createBillboardSet.
+        @remark
+            This is the same as doing:
+                sceneMgr->getParticleSystemManager2()->createBillboardSet();
+        */
+        BillboardSet *createBillboardSet2();
+
+        /** Destroys a BillboardSet created with createBillboardSet2().
+            See ParticleSystemManager2::destroyBillboardSet.
+        @remark
+            This is the same as doing:
+                sceneMgr->getParticleSystemManager2()->destroyBillboardSet( s );
+        @param billboardSet
+            Set to destroy.
+        */
+        void destroyBillboardSet2( BillboardSet *billboardSet );
+
+        /**  Destroys all BillboardSet created with createBillboardSet2().
+             Do not hold any more references to those pointers as they will become dangling!
+             See ParticleSystemManager2::destroyAllBillboardSets.
+        @remark
+            This is the same as doing:
+                sceneMgr->getParticleSystemManager2()->destroyAllBillboardSets();
+        */
+        void destroyAllBillboardSets2();
+
+        ParticleSystemManager2 *getParticleSystemManager2() { return mParticleSystemManager2; }
 
         /** Empties the entire scene, inluding all SceneNodes, Entities, Lights,
             BillboardSets etc. Cameras are not deleted at this stage since
@@ -1907,7 +1980,16 @@ namespace Ogre
         void cullLights( Camera *camera, Light::LightTypes startType, Light::LightTypes endType,
                          LightArray &outLights );
 
-        void _warmUpShaders( Camera *camera, uint32_t visibilityMask, uint8 firstRq, uint8 lastRq );
+        void _warmUpShadersCollect( Camera *camera, uint32_t visibilityMask, uint8 firstRq,
+                                    uint8 lastRq );
+        void _warmUpShadersTrigger();
+
+        void _fireWarmUpShadersCompile();
+
+        void _fireParallelHlmsCompile();
+        void waitForParallelHlmsCompile();
+
+        void _fireParticleSystemManager2Update();
 
         /// Called when the frame has fully ended (ALL passes have been executed to all RTTs)
         void _frameEnded();
@@ -1943,6 +2025,8 @@ namespace Ogre
         virtual void _restoreManualHardwareResources();
 
         /** Sets the fogging mode applied to the scene.
+            Deprecated in favour of Atmosphere component. See AtmosphereNpr::setSky.
+
             @remarks
                 This method sets up the scene-wide fogging effect. These settings
                 apply to all geometry rendered, UNLESS the material with which it
@@ -1966,29 +2050,30 @@ namespace Ogre
                 opaque. Only applicable if mode is
                 FOG_LINEAR.
         */
+        OGRE_DEPRECATED_VER( 3 )
         void setFog( FogMode mode = FOG_NONE, const ColourValue &colour = ColourValue::White,
                      Real expDensity = Real( 0.001 ), Real linearStart = Real( 0.0 ),
                      Real linearEnd = Real( 1.0 ) );
 
         /** Returns the fog mode for the scene.
          */
-        virtual FogMode getFogMode() const;
+        OGRE_DEPRECATED_VER( 3 ) virtual FogMode getFogMode() const;
 
         /** Returns the fog colour for the scene.
          */
-        virtual const ColourValue &getFogColour() const;
+        OGRE_DEPRECATED_VER( 3 ) virtual const ColourValue &getFogColour() const;
 
         /** Returns the fog start distance for the scene.
          */
-        virtual Real getFogStart() const;
+        OGRE_DEPRECATED_VER( 3 ) virtual Real getFogStart() const;
 
         /** Returns the fog end distance for the scene.
          */
-        virtual Real getFogEnd() const;
+        OGRE_DEPRECATED_VER( 3 ) virtual Real getFogEnd() const;
 
         /** Returns the fog density for the scene.
          */
-        virtual Real getFogDensity() const;
+        OGRE_DEPRECATED_VER( 3 ) virtual Real getFogDensity() const;
 
         /** Creates a new BillboardSet for use with this scene manager.
             @remarks

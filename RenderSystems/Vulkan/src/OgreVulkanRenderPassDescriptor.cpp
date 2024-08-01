@@ -694,8 +694,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanRenderPassDescriptor::notifySwapchainCreated( VulkanWindow *window )
     {
-        if( mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific() &&
-            mColour[0].texture == window->getTexture() )
+        if( mNumColourEntries > 0 &&
+            ( ( mColour[0].texture && mColour[0].texture->isRenderWindowSpecific() &&
+                mColour[0].texture == window->getTexture() ) ||
+              ( mColour[0].resolveTexture && mColour[0].resolveTexture->isRenderWindowSpecific() &&
+                mColour[0].resolveTexture == window->getTexture() ) ) )
         {
             entriesModified( RenderPassDescriptor::All );
         }
@@ -703,8 +706,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanRenderPassDescriptor::notifySwapchainDestroyed( VulkanWindow *window )
     {
-        if( mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific() &&
-            mColour[0].texture == window->getTexture() )
+        if( mNumColourEntries > 0 &&
+            ( ( mColour[0].texture && mColour[0].texture->isRenderWindowSpecific() &&
+                mColour[0].texture == window->getTexture() ) ||
+              ( mColour[0].resolveTexture && mColour[0].resolveTexture->isRenderWindowSpecific() &&
+                mColour[0].resolveTexture == window->getTexture() ) ) )
         {
             releaseFbo();
         }

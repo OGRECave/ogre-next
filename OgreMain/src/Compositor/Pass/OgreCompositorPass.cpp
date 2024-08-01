@@ -142,8 +142,9 @@ namespace Ogre
         {
             OGRE_ASSERT_MEDIUM(
                 ( mDefinition->getType() == PASS_QUAD || mDefinition->getType() == PASS_SCENE ||
-                  mDefinition->getType() == PASS_CUSTOM ) &&
-                "mSkipLoadStoreSemantics is only intended for use with pass quad, scene & custom" );
+                  mDefinition->getType() == PASS_WARM_UP || mDefinition->getType() == PASS_CUSTOM ) &&
+                "mSkipLoadStoreSemantics is only intended for use with pass quad, scene. warm_up & "
+                "custom" );
 
             const RenderPassDescriptor *currRenderPassDesc = renderSystem->getCurrentPassDescriptor();
             if( !currRenderPassDesc )

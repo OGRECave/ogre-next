@@ -66,13 +66,14 @@ namespace Ogre
 
         const HlmsCache *createShaderCacheEntry( uint32 renderableHash, const HlmsCache &passCache,
                                                  uint32                  finalHash,
-                                                 const QueuedRenderable &queuedRenderable ) override;
+                                                 const QueuedRenderable &queuedRenderable,
+                                                 HlmsCache *reservedStubEntry, size_t tid ) override;
 
         HlmsDatablock *createDatablockImpl( IdString datablockName, const HlmsMacroblock *macroblock,
                                             const HlmsBlendblock *blendblock,
                                             const HlmsParamVec   &paramVec ) override;
 
-        void setupRootLayout( RootLayout &rootLayout ) override;
+        void setupRootLayout( RootLayout &rootLayout, size_t tid ) override;
 
     public:
         HlmsLowLevel();

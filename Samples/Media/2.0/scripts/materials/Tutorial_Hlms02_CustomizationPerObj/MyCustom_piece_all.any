@@ -1,0 +1,27 @@
+@property( my_customizations_enabled )
+
+// This file gets parsed by all shader stages (because it ends in piece_all.any)
+// We must add wind & myCustomColour to the pass buffer, which MUST be consistent
+// across all shader stages.
+
+@piece( custom_passBuffer )
+	// We actually use .xyz, the .w is just padding
+	// We don't write:
+	//	float3 wind;
+	//	float padding;
+	//
+	// Because on some APIs that may mean float4 + float of padding while
+	// in others it means float3 + float of padding.
+	//
+	// This value must always be present (even for objects that don't use wind) since it is uploaded once
+	// per pass for all objects.
+	// However only a few objects use it (which are guarded by use_wind_animation) and they
+	// will use a customized vertex shader.
+	float4 wind;
+
+	@property( !hlms_shadowcaster )
+		float4 myCustomColour;
+	@end
+@end
+
+@end

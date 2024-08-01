@@ -42,6 +42,13 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+#    if !defined( OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API ) || \
+        defined( OGRE_SHADER_THREADING_USE_TLS )
+#        define OGRE_ZIP_LOCK_MUTEX ScopedLock lock( mMutex );
+#    else
+#        define OGRE_ZIP_LOCK_MUTEX OGRE_LOCK_AUTO_MUTEX
+#    endif
+
     /// Utility method to format out zzip errors
     String getZzipErrorDescription( zzip_error_t zzipError )
     {
@@ -93,7 +100,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void ZipArchive::load()
     {
-        OGRE_LOCK_AUTO_MUTEX;
+        OGRE_ZIP_LOCK_MUTEX;
         if( !mZzipDir )
         {
             zzip_error_t zzipError;
@@ -132,7 +139,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void ZipArchive::unload()
     {
-        OGRE_LOCK_AUTO_MUTEX;
+        OGRE_ZIP_LOCK_MUTEX;
         if( mZzipDir )
         {
             zzip_dir_close( mZzipDir );
@@ -144,7 +151,7 @@ namespace Ogre
     DataStreamPtr ZipArchive::open( const String &filename, bool readOnly )
     {
         // zziplib is not threadsafe
-        OGRE_LOCK_AUTO_MUTEX;
+        OGRE_ZIP_LOCK_MUTEX;
         String lookUpFileName = filename;
 
         // Format not used here (always binary)
@@ -152,7 +159,7 @@ namespace Ogre
             zzip_file_open( mZzipDir, lookUpFileName.c_str(), ZZIP_ONLYZIP | ZZIP_CASELESS );
         if( !zzipFile )  // Try if we find the file
         {
-            const Ogre::FileInfoListPtr fileNfo = findFileInfo( lookUpFileName, true );
+            const Ogre::FileInfoListPtr fileNfo = findFileInfo( lookUpFileName, true, false, true );
             if( fileNfo->size() == 1 )  // If there are more files with the same do not open anyone
             {
                 Ogre::FileInfo info = fileNfo->at( 0 );
@@ -198,7 +205,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     StringVectorPtr ZipArchive::list( bool recursive, bool dirs )
     {
-        OGRE_LOCK_AUTO_MUTEX;
+        OGRE_ZIP_LOCK_MUTEX;
         StringVectorPtr ret =
             StringVectorPtr( OGRE_NEW_T( StringVector, MEMCATEGORY_GENERAL )(), SPFM_DELETE_T );
 
@@ -211,7 +218,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     FileInfoListPtr ZipArchive::listFileInfo( bool recursive, bool dirs )
     {
-        OGRE_LOCK_AUTO_MUTEX;
+        OGRE_ZIP_LOCK_MUTEX;
         FileInfoList *fil = OGRE_NEW_T( FileInfoList, MEMCATEGORY_GENERAL )();
         for( const FileInfo &fi : mFileList )
             if( ( dirs == ( fi.compressedSize == size_t( -1 ) ) ) && ( recursive || fi.path.empty() ) )
@@ -222,7 +229,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     StringVectorPtr ZipArchive::find( const String &pattern, bool recursive, bool dirs )
     {
-        OGRE_LOCK_AUTO_MUTEX;
+        OGRE_ZIP_LOCK_MUTEX;
         StringVectorPtr ret =
             StringVectorPtr( OGRE_NEW_T( StringVector, MEMCATEGORY_GENERAL )(), SPFM_DELETE_T );
         // If pattern contains a directory name, do a full match
@@ -240,9 +247,17 @@ namespace Ogre
         return ret;
     }
     //-----------------------------------------------------------------------
-    FileInfoListPtr ZipArchive::findFileInfo( const String &pattern, bool recursive, bool dirs )
+    FileInfoListPtr ZipArchive::findFileInfo( const String &pattern, bool recursive, bool dirs,
+                                              bool bAlreadyLocked )
     {
-        OGRE_LOCK_AUTO_MUTEX;
+#    if !defined( OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API ) || \
+        defined( OGRE_SHADER_THREADING_USE_TLS )
+        if( !bAlreadyLocked )
+            mMutex.lock();
+#    else
+        OGRE_ZIP_LOCK_MUTEX;
+#    endif
+
         FileInfoListPtr ret =
             FileInfoListPtr( OGRE_NEW_T( FileInfoList, MEMCATEGORY_GENERAL )(), SPFM_DELETE_T );
         // If pattern contains a directory name, do a full match
@@ -257,12 +272,23 @@ namespace Ogre
                 if( StringUtil::match( full_match ? fi.filename : fi.basename, pattern, false ) )
                     ret->push_back( fi );
 
+#    if !defined( OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API ) || \
+        defined( OGRE_SHADER_THREADING_USE_TLS )
+        if( !bAlreadyLocked )
+            mMutex.unlock();
+#    endif
+
         return ret;
+    }
+    //-----------------------------------------------------------------------
+    FileInfoListPtr ZipArchive::findFileInfo( const String &pattern, bool recursive, bool dirs )
+    {
+        return findFileInfo( pattern, recursive, dirs, false );
     }
     //-----------------------------------------------------------------------
     bool ZipArchive::exists( const String &filename )
     {
-        OGRE_LOCK_AUTO_MUTEX;
+        OGRE_ZIP_LOCK_MUTEX;
         String cleanName = filename;
         if( filename.rfind( "/" ) != String::npos )
         {

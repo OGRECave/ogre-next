@@ -2,11 +2,20 @@
 <!-- BEGIN_INCLUDE(manifest) -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.ogre3d.%%sampleName%%" android:versionCode="1" android:versionName="1.0">
 
+	<uses-feature
+		android:name="android.hardware.vulkan.version"
+		android:version="0x400003"
+		android:required="true" />
+
 	<application android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 
 		<!-- Our activity is the built-in NativeActivity framework class.
 			 This will take care of integrating with our NDK code. -->
-		<activity android:name="android.app.NativeActivity" android:label="@string/app_name" android:configChanges="orientation|screenSize|keyboardHidden">
+		<activity android:name="com.ogre3d.core.DemoNativeActivity" android:label="@string/app_name"
+			android:exported="true"
+			android:configChanges="orientation|screenSize|keyboardHidden"
+			android:resizeableActivity="false"
+			android:launchMode="singleTop">
 			<!-- Tell NativeActivity the name of or .so -->
 			<meta-data android:name="android.app.lib_name" android:value="%%sampleName%%"/>
 			<intent-filter>

@@ -39,6 +39,10 @@ THE SOFTWARE.
 
 #include <vulkan/vulkan.h>
 
+#ifdef OGRE_VULKAN_USE_SWAPPY
+#    include "swappy/swappyVk.h"
+#endif
+
 #define TODO_findRealPresentQueue
 
 namespace Ogre
@@ -334,7 +338,9 @@ namespace Ogre
         createInfo.enabledExtensionCount = static_cast<uint32>( extensions.size() );
         createInfo.ppEnabledExtensionNames = extensions.begin();
 
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH && !defined OGRE_VULKAN_WINDOW_ANDROID
+        // Workaround: skip following code on Android as it causes crash in vkCreateInstance() on Android
+        // Emulator 35.1.4, macOS 14.4.1, M1 Pro, despite declared support for rev.10 VK_EXT_debug_report
         VkDebugReportCallbackCreateInfoEXT debugCb = addDebugCallback( debugCallback, renderSystem );
         createInfo.pNext = &debugCb;
 #endif
@@ -647,6 +653,9 @@ namespace Ogre
             mGraphicsQueue.init( mDevice, mGraphicsQueue.mQueue, mRenderSystem );
         }
 
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        SwappyVk_setQueueFamilyIndex( mDevice, mGraphicsQueue.mQueue, mGraphicsQueue.mFamilyIdx );
+#endif
         VkQueue queue = 0;
 
         FastArray<VulkanQueue>::iterator itor = mComputeQueues.begin();
@@ -678,6 +687,20 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanDevice::stall()
     {
+        // We must call flushBoundGpuProgramParameters() now because commitAndNextCommandBuffer() will
+        // call flushBoundGpuProgramParameters( SubmissionType::FlushOnly ).
+        //
+        // Unfortunately that's not enough because that assumes VaoManager::mFrameCount
+        // won't change (which normally wouldn't w/ FlushOnly). However our caller is
+        // about to do mFrameCount += mDynamicBufferMultiplier.
+        //
+        // The solution is to tell flushBoundGpuProgramParameters() we're changing frame idx.
+        // Calling it again becomes a no-op since mFirstUnflushedAutoParamsBuffer becomes 0.
+        //
+        // We also *want* mCurrentAutoParamsBufferPtr to become nullptr since it can be reused from
+        // scratch. Because we're stalling, it is safe to do so.
+        mRenderSystem->flushBoundGpuProgramParameters( SubmissionType::NewFrameIdx );
+
         // We must flush the cmd buffer and our bindings because we take the
         // moment to delete all delayed buffers and API handles after a stall.
         //

@@ -42,6 +42,10 @@ THE SOFTWARE.
 
 #include "vulkan/vulkan_core.h"
 
+#ifdef OGRE_VULKAN_USE_SWAPPY
+#    include "swappy/swappyVk.h"
+#endif
+
 #define TODO_handleSeparatePresentQueue
 
 namespace Ogre
@@ -695,7 +699,15 @@ namespace Ogre
             present.pWaitSemaphores = &queueFinishSemaphore;
         }
 
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        VkResult result;
+        if( mDevice->mRenderSystem->getSwappyFramePacing() )
+            result = SwappyVk_queuePresent( mDevice->mPresentQueue, &present );
+        else
+            result = vkQueuePresentKHR( mDevice->mPresentQueue, &present );
+#else
         VkResult result = vkQueuePresentKHR( mDevice->mPresentQueue, &present );
+#endif
 
         if( result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR && result != VK_ERROR_OUT_OF_DATE_KHR )
         {

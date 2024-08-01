@@ -57,6 +57,30 @@ namespace Ogre
 
     typedef FastArray<Renderable *> RenderableArray;
 
+    // Thanks to Fabian Giesen for summing up all known methods of frustum culling:
+    // http://fgiesen.wordpress.com/2010/10/17/view-frustum-culling/
+    // (we use method Method 5: "If you really don't care whether a box is
+    // partially or fully inside"):
+    // vector4 signFlip = componentwise_and(plane, 0x80000000);
+    // return dot3(center + xor(extent, signFlip), plane) > -plane.w;
+    struct ArrayPlane
+    {
+        ArrayVector3 planeNormal;
+        ArrayVector3 signFlip;
+        ArrayReal    planeNegD;
+    };
+
+    struct CullFrustumPreparedData
+    {
+        ArrayVector3 cameraPos, cameraDir, lodCameraPos;
+        ArrayInt     includeNonCasters;
+        ArrayInt     sceneFlags;
+        ArrayPlane   planes[6];
+
+        ArrayMaskR ignoreRenderingDistance;
+        bool       isShadowMappingCasterPass;
+    };
+
     /** Abstract class defining a movable object in a scene.
         @remarks
             Instances of this class are discrete, relatively small, movable objects
@@ -212,6 +236,9 @@ namespace Ogre
         /// @see Node::_callMemoryChangeListeners
         virtual void _notifyParentNodeMemoryChanged() {}
 
+        /// Sets mCurrentMeshLod to 0.
+        void resetMeshLod();
+
         unsigned char getCurrentMeshLod() const { return mCurrentMeshLod; }
 
         /// Checks whether this MovableObject is static. @see setStatic
@@ -262,6 +289,9 @@ namespace Ogre
                                                          ArrayReal *RESTRICT_ALIAS worldRadius );
 
     public:
+        static void cullFrustumPrepare( const Camera *frustum, uint32 sceneVisibilityFlags,
+                                        const Camera *lodCamera, CullFrustumPreparedData &pd );
+
         /** @see SceneManager::cullFrustum
         @remarks
             We don't pass by reference on purpose (avoid implicit aliasing)
@@ -281,8 +311,8 @@ namespace Ogre
         */
         typedef FastArray<MovableObject *> MovableObjectArray;
         static void cullFrustum( const size_t numNodes, ObjectData t, const Camera *frustum,
-                                 uint32 sceneVisibilityFlags, MovableObjectArray &outCulledObjects,
-                                 const Camera *lodCamera );
+                                 MovableObjectArray            &outCulledObjects,
+                                 const CullFrustumPreparedData &pd );
 
         /// @see InstancingTheadedCullingMethod, @see InstanceBatch::instanceBatchCullFrustumThreaded
         virtual void instanceBatchCullFrustumThreaded( const Frustum *frustum, const Camera *lodCamera,

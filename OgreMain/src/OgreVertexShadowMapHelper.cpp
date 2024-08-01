@@ -256,9 +256,9 @@ namespace Ogre
     }
     //---------------------------------------------------------------------
     uint32 VertexShadowMapHelper::shrinkVertexBuffer(
-        uint8 *dstData, const VertexElement2 *vertexElements[],
-        FastArray<uint32> &vertexConversionLutArg, bool hasIndexBuffer, const uint8 *srcData[],
-        const size_t srcOffset[], const size_t srcBytesPerVertex[], uint32 numVertices )
+        uint8 *dstData, const VertexElement2 *vertexElements[3],
+        FastArray<uint32> &vertexConversionLutArg, bool hasIndexBuffer, const uint8 *srcData[3],
+        const size_t srcOffset[3], const size_t srcBytesPerVertex[3], uint32 numVertices )
     {
         size_t elementOffset[3];
         size_t elementSize[3];

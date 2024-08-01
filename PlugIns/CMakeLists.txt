@@ -11,4 +11,8 @@
 
 if (OGRE_BUILD_PLUGIN_PFX)
   add_subdirectory(ParticleFX)
-endif (OGRE_BUILD_PLUGIN_PFX)
+endif()
+
+if (OGRE_BUILD_PLUGIN_PFX2)
+  add_subdirectory(ParticleFX2)
+endif()

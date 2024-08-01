@@ -49,7 +49,9 @@ namespace Ogre
         /// Diffuse colours
         VES_DIFFUSE = 5,
         /// Specular colours
-        VES_SPECULAR = 6,
+        ///
+        /// DEPRECATED. DO NOT USE.
+        VES_SPECULAR OGRE_DEPRECATED_VER( 4 ) = 6,
         /// Texture coordinates. You can have up to 8 of these. 6 if
         /// VES_BLEND_WEIGHTS2 or VES_BLEND_INDICES2 if present.
         VES_TEXTURE_COORDINATES = 7,

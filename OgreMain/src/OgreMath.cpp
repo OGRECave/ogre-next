@@ -173,14 +173,25 @@ namespace Ogre
         return 0.0;
     }
     //-----------------------------------------------------------------------
+    /// Whether we're compiled as a static or shared lib, mCurrentRand must always be thread_local
+    static thread_local uint32 gCurrentRand = 7525534u;
+    static constexpr uint32 kLCRNG_Max = 0x3FFFFFFF;
+    /// Returns a random number between 0 and 0x3FFFFFFF
+    /// See https://en.wikipedia.org/wiki/Linear_congruential_generator
+    static uint32_t LCRNG()
+    {
+        const uint32 newValue = 214013u * gCurrentRand + 2531011u;
+        OGRE_ASSERT_MEDIUM( gCurrentRand != newValue );
+        gCurrentRand = newValue;
+        return newValue >> 2u;
+    }
     Real Math::UnitRandom()
     {
         if( mRandProvider )
             return mRandProvider->getRandomUnit();
         else
-            return Real( rand() ) / Real( RAND_MAX );
+            return Real( LCRNG() ) / Real( kLCRNG_Max );
     }
-
     //-----------------------------------------------------------------------
     Real Math::RangeRandom( Real fLow, Real fHigh ) { return ( fHigh - fLow ) * UnitRandom() + fLow; }
 

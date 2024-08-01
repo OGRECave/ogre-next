@@ -30,10 +30,12 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
+#include "OgreResourceManager.h"
+
 // Precompiler options
 #include "OgreGpuProgram.h"
-#include "OgreResourceManager.h"
 #include "OgreSingleton.h"
+#include "Threading/OgreLightweightMutex.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -80,9 +82,10 @@ namespace Ogre
         typedef map<Hash, Microcode>::type MicrocodeMap;
 
     protected:
-        SharedParametersMap mSharedParametersMap;
-        MicrocodeMap        mMicrocodeCache;
-        bool                mSaveMicrocodesToCache;
+        SharedParametersMap      mSharedParametersMap;
+        MicrocodeMap             mMicrocodeCache;  // GUARDED_BY( mMicrocodeCacheMutex )
+        mutable LightweightMutex mMicrocodeCacheMutex;
+        bool                     mSaveMicrocodesToCache;
         bool mCacheDirty;  // When this is true the cache is 'dirty' and should be resaved to disk.
 
         static Hash computeHashWithRenderSystemName( const String &source );
@@ -221,7 +224,24 @@ namespace Ogre
          */
         bool getSaveMicrocodesToCache();
         /** Set if the microcode of a shader should be saved to a cache
-         */
+
+            Q: Can I bundle the microcode cache created in one system, into another system?
+            - Direct3D11: Yes.
+            - OpenGL: No. It must be generated on target machine.
+            - Metal: N/A (microcode cache unsupported).
+            - Vulkan: Yes (even created on PC and bundled into Android).
+
+            Beware in all cases, a microcode cache created by a Release build may not be
+            the same as one created by a Debug build.
+
+            In the cases where it can be bundled to different HW, beware if there are HW feature
+            differences that cause different shaders to be generated (or, where applicable, different
+            Root Layouts) then the bundled microcode cache may become fully or partially useless
+            as more misses will be generated.
+
+            In those cases it's possible to merge those caches (if you have access to both systems)
+            and bundle the larger cache to everyone.
+        */
         void setSaveMicrocodesToCache( const bool val );
 
         /** Returns true if the microcodecache changed during the run.
@@ -230,13 +250,30 @@ namespace Ogre
 
         bool canGetCompiledShaderBuffer();
         /** Check if a microcode is available for a program in the microcode cache.
+            Deprecated: Use getMicrocodeFromCache()
+
+            This version is subject to race conditions.
         @param name The name of the program.
         */
-        virtual bool isMicrocodeAvailableInCache( const String &source ) const;
+        OGRE_DEPRECATED_VER( 4 ) virtual bool isMicrocodeAvailableInCache( const String &source ) const;
         /** Returns a microcode for a program from the microcode cache.
+            Deprecated: Use getMicrocodeFromCache()
+
+            This version is subject to race conditions.
         @param name The name of the program.
         */
+        OGRE_DEPRECATED_VER( 4 )
         virtual const Microcode &getMicrocodeFromCache( const String &source ) const;
+
+        /** Retrieves a microcode for a program from the microcode cache.
+        @param source
+            The key of the shader to obtain
+        @param outMicrocode
+            The microcode being queried. Not nullptr if we return true, nullptr otherwise.
+        @return
+            Returns true if the microcode exists in cache. False otherwise
+        */
+        bool getMicrocodeFromCache( const String &source, const Microcode **outMicrocode ) const;
 
         /** Creates a microcode to be later added to the cache.
         @param size The size of the microcode in bytes

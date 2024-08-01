@@ -166,10 +166,28 @@ namespace Ogre
     public:
         /** Finds the first bit set.
         @return
-            The index to the first unset bit
+            The index to the first set bit
             returns this->capacity() if all bits are unset (i.e. all 0s)
         */
         size_t findFirstBitSet() const;
+
+        /** Same as findFirstBitSet(); starting from startFrom (inclusive).
+        @param startFrom
+            In range [0; capacity)
+
+            e.g. if capacity == 5 and we've set 01001b (0 is the 4th bit, 1 is the 0th bit) then:
+
+                findFirstBitSet( 5 ) = INVALID
+                findFirstBitSet( 4 ) = 5u (capacity, not found)
+                findFirstBitSet( 3 ) = 3u
+                findFirstBitSet( 2 ) = 3u
+                findFirstBitSet( 1 ) = 3u
+                findFirstBitSet( 0 ) = 0u
+        @return
+            The index to the first unset bit
+            returns this->capacity() if all bits are unset (i.e. all 0s)
+        */
+        size_t findFirstBitSet( const size_t startFrom ) const;
 
         /** Finds the first bit unset after the last bit set.
         @return
@@ -238,8 +256,75 @@ namespace Ogre
         /// @copydoc cbitset64::findFirstBitSet
         inline size_t findFirstBitSet() const;
 
+        /// @copydoc cbitset64::findFirstBitSet
+        inline size_t findFirstBitSet( size_t startFrom ) const;
+
         /// @copydoc cbitset64::findLastBitSetPlusOne
         inline size_t findLastBitSetPlusOne() const;
+
+        /** Same as findLastBitSetPlusOne(); starting from startFrom (exclusive).
+        @param startFrom
+            Must be in range (0; capacity]
+            e.g. if capacity == 5 and we've set 01001b (0 is the 4th bit, 1 is the 0th bit) then:
+
+                findLastBitSetPlusOne( 6 ) = INVALID
+                findLastBitSetPlusOne( 5 ) = 4u
+                findLastBitSetPlusOne( 4 ) = 4u
+                findLastBitSetPlusOne( 3 ) = 1u
+                findLastBitSetPlusOne( 2 ) = 1u
+                findLastBitSetPlusOne( 1 ) = 1u
+                findLastBitSetPlusOne( 0 ) = INVALID
+
+            e.g. if capacity == 5 and we've set 10110b (1 is the 4th bit, 0 is the 0th bit) then:
+
+                findLastBitSetPlusOne( 6 ) = INVALID
+                findLastBitSetPlusOne( 5 ) = 5u
+                findLastBitSetPlusOne( 4 ) = 3u
+                findLastBitSetPlusOne( 3 ) = 3u
+                findLastBitSetPlusOne( 2 ) = 2u
+                findLastBitSetPlusOne( 1 ) = 0u (not found)
+                findLastBitSetPlusOne( 0 ) = INVALID
+
+        @return
+            If all bits are unset (i.e. all 0s):
+                Returns 0
+            If at least one bit is set:
+                The index to the last set bit, plus one.
+                Return range is [1; startFrom]
+        */
+        inline size_t findLastBitSetPlusOne( size_t startFrom ) const;
+
+        /** Finds the last bit unset.
+        @return
+            If all bits are set (i.e. all 1s):
+                Returns this->capacity()
+            If at least one bit is unset:
+                The index to the last set unbit.
+                Return range is [0; capacity)
+        */
+        inline size_t findLastBitUnset() const;
+
+        /** Finds the last bit unset; starting from startFrom (exclusive).
+        @param startFrom
+            Must be in range (0; capacity]
+            e.g. if capacity == 5 and we've set 01001b (0 is the 4th bit, 1 is the 0th bit) then:
+
+                findLastBitUnsetPlusOne( 6 ) = INVALID
+                findLastBitUnsetPlusOne( 5 ) = 4u
+                findLastBitUnsetPlusOne( 4 ) = 2u
+                findLastBitUnsetPlusOne( 3 ) = 2u
+                findLastBitUnsetPlusOne( 2 ) = 1u
+                findLastBitUnsetPlusOne( 1 ) = 5u (capacity, not found)
+                findLastBitUnsetPlusOne( 0 ) = INVALID
+
+        @return
+            If all bits are set (i.e. all 1s):
+                Returns this->capacity()
+            If at least one bit is unset:
+                The index to the last set unbit.
+                Return range is [0; capacity)
+        */
+        inline size_t findLastBitUnset( size_t startFrom ) const;
     };
 }  // namespace Ogre
 

@@ -34,7 +34,7 @@ THE SOFTWARE.
 
 #include <string.h>
 
-#if defined( __GNUC__ ) && !defined( __clang__ ) && !defined( __MINGW32__ )
+#if defined( __GNUC__ ) && !defined( __clang__ ) && defined( __nonnull ) && defined( __fortify_function )
 #    pragma GCC diagnostic push
 #    pragma GCC diagnostic ignored "-Wclass-memaccess"
 

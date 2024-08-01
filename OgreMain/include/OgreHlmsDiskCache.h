@@ -42,6 +42,8 @@ namespace Ogre
      *  @{
      */
 
+    struct CompilerJobParams;
+
     /** @class HlmsDiskCache
 
         This class allows saving the current state of an Hlms to disk: both its compiled shaders
@@ -158,12 +160,23 @@ namespace Ogre
 
         typedef vector<Pso>::type PsoVec;
 
+        struct DatablockCustomPiecesCache
+        {
+            uint64 sourceCodeHash[2];  // 128 bit hash
+            String filename;
+            String resourceGroup;
+        };
+
+        typedef vector<DatablockCustomPiecesCache>::type DatablockCustomPiecesCacheVec;
+
         struct Cache
         {
             uint64        templateHash[2];  // 128 bit hash
             uint8         type;             ///< See HlmsTypes
             SourceCodeVec sourceCode;
             PsoVec        pso;
+
+            DatablockCustomPiecesCacheVec datablockCustomPieceFiles;
         };
 
         bool         mTemplatesOutOfDate;
@@ -192,10 +205,12 @@ namespace Ogre
         void clearCache();
 
         void copyFrom( Hlms *hlms );
-        void applyTo( Hlms *hlms );
+        void applyTo( Hlms *hlms, size_t numThreads );
 
         void saveTo( DataStreamPtr &dataStream );
         void loadFrom( DataStreamPtr &dataStream );
+
+        static void _compileShadersThread( CompilerJobParams &threadHandle, size_t threadIdx );
     };
 
     /** @} */

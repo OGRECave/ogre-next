@@ -552,29 +552,29 @@ namespace Ogre
         return cachedGrid->gridBuffers[cachedGrid->currentBufIdx].globalLightListBuffer;
     }
     //-----------------------------------------------------------------------------------
-    void ForwardPlusBase::setHlmsPassProperties( Hlms *hlms )
+    void ForwardPlusBase::setHlmsPassProperties( const size_t tid, Hlms *hlms )
     {
         // ForwardPlus should be overriden by derived class to set the method in use.
-        hlms->_setProperty( HlmsBaseProp::ForwardPlus, 1 );
-        hlms->_setProperty( HlmsBaseProp::ForwardPlusDebug, mDebugMode );
-        hlms->_setProperty( HlmsBaseProp::ForwardPlusFadeAttenRange, mFadeAttenuationRange );
-        hlms->_setProperty( HlmsBaseProp::VPos, 1 );
+        hlms->_setProperty( tid, HlmsBaseProp::ForwardPlus, 1 );
+        hlms->_setProperty( tid, HlmsBaseProp::ForwardPlusDebug, mDebugMode );
+        hlms->_setProperty( tid, HlmsBaseProp::ForwardPlusFadeAttenRange, mFadeAttenuationRange );
+        hlms->_setProperty( tid, HlmsBaseProp::VPos, 1 );
 
-        hlms->_setProperty( HlmsBaseProp::Forward3D,
+        hlms->_setProperty( tid, HlmsBaseProp::Forward3D,
                             static_cast<int32>( HlmsBaseProp::Forward3D.getU32Value() ) );
-        hlms->_setProperty( HlmsBaseProp::ForwardClustered,
+        hlms->_setProperty( tid, HlmsBaseProp::ForwardClustered,
                             static_cast<int32>( HlmsBaseProp::ForwardClustered.getU32Value() ) );
 
         if( mEnableVpls )
-            hlms->_setProperty( HlmsBaseProp::EnableVpls, 1 );
+            hlms->_setProperty( tid, HlmsBaseProp::EnableVpls, 1 );
 
         Viewport *viewport = mSceneManager->getCurrentViewport0();
-        if( viewport->coversEntireTarget() && !hlms->_getProperty( HlmsBaseProp::InstancedStereo ) )
-            hlms->_setProperty( HlmsBaseProp::ForwardPlusCoversEntireTarget, 1 );
+        if( viewport->coversEntireTarget() && !hlms->_getProperty( tid, HlmsBaseProp::InstancedStereo ) )
+            hlms->_setProperty( tid, HlmsBaseProp::ForwardPlusCoversEntireTarget, 1 );
 
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
         if( mFineLightMaskGranularity )
-            hlms->_setProperty( HlmsBaseProp::ForwardPlusFineLightMask, 1 );
+            hlms->_setProperty( tid, HlmsBaseProp::ForwardPlusFineLightMask, 1 );
 #endif
     }
 }  // namespace Ogre

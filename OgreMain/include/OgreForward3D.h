@@ -121,7 +121,7 @@ namespace Ogre
                                   uint32 renderTargetHeight, IdString shaderSyntax, bool instancedStereo,
                                   float *RESTRICT_ALIAS passBufferPtr ) const override;
 
-        void setHlmsPassProperties( Hlms *hlms ) override;
+        void setHlmsPassProperties( size_t tid, Hlms *hlms ) override;
     };
 
     /** @} */

@@ -93,6 +93,8 @@ namespace Ogre
         /** Gets the y component of the area inside the ellipsoid which doesn't emit particles. */
         Real getInnerSizeY() const;
 
+        const String &getType() const override;
+
     protected:
         /// @see ParticleEmitter
         static CmdInnerX msCmdInnerX;

@@ -53,6 +53,30 @@ namespace Ogre
     /** \addtogroup Scene
      *  @{
      */
+
+    namespace ParticleType
+    {
+        enum ParticleType
+        {
+            NotParticle,
+            /// Standard point billboard (default), always faces the camera completely and is always
+            /// upright
+            Point,
+            /// Billboards are oriented around a shared direction vector (used as Y axis) and only rotate
+            /// around this to face the camera
+            OrientedCommon,
+            /// Billboards are oriented around their own direction vector (their own Y axis) and only
+            /// rotate around this to face the camera
+            OrientedSelf,
+            /// Billboards are perpendicular to a shared direction vector (used as Z axis, the facing
+            /// direction) and X, Y axis are determined by a shared up-vertor
+            PerpendicularCommon,
+            /// Billboards are perpendicular to their own direction vector (their own Z axis, the facing
+            /// direction) and X, Y axis are determined by a shared up-vertor
+            PerpendicularSelf
+        };
+    }
+
     /** Abstract class defining the interface all renderable objects must implement.
     @remarks
         This interface abstracts renderable discrete objects which will be queued in the render pipeline,
@@ -232,6 +256,9 @@ namespace Ogre
         @see Renderable::setUseIdentityView
         */
         bool getUseIdentityView() const { return mUseIdentityView; }
+
+        /// Used by ParticleSystemDef to indicate Hlms they want specific shader code.
+        virtual ParticleType::ParticleType getParticleType() const { return ParticleType::NotParticle; }
 
         /** Gets a list of lights, ordered relative to how close they are to this renderable.
         @remarks
@@ -415,6 +442,9 @@ namespace Ogre
 
         /// Manually sets the hlms hashes. Don't call this directly
         virtual void _setHlmsHashes( uint32 hash, uint32 casterHash );
+
+        /// Sets mCurrentMaterialLod to 0.
+        void resetMaterialLod();
 
         uint8 getCurrentMaterialLod() const { return mCurrentMaterialLod; }
 

@@ -267,6 +267,26 @@ namespace Ogre
         return mMicrocodeCache.find( computeHashWithRenderSystemName( source ) )->second;
     }
     //---------------------------------------------------------------------
+    bool GpuProgramManager::getMicrocodeFromCache( const String &source,
+                                                   const Microcode **outMicrocode ) const
+    {
+        const GpuProgramManager::Hash hashKey = computeHashWithRenderSystemName( source );
+
+        ScopedLock lock( mMicrocodeCacheMutex );
+        MicrocodeMap ::const_iterator itor = mMicrocodeCache.find( hashKey );
+
+        if( itor != mMicrocodeCache.end() )
+        {
+            *outMicrocode = &itor->second;
+            return true;
+        }
+        else
+        {
+            *outMicrocode = nullptr;
+            return false;
+        }
+    }
+    //---------------------------------------------------------------------
     GpuProgramManager::Microcode GpuProgramManager::createMicrocode( const uint32 size ) const
     {
         return Microcode( OGRE_NEW MemoryDataStream( size ) );
@@ -275,25 +295,31 @@ namespace Ogre
     void GpuProgramManager::addMicrocodeToCache( const String &source,
                                                  const GpuProgramManager::Microcode &microcode )
     {
-        Hash hash = computeHashWithRenderSystemName( source );
+        const Hash hashKey = computeHashWithRenderSystemName( source );
 
-        MicrocodeMap::iterator foundIter = mMicrocodeCache.find( hash );
+        ScopedLock lock( mMicrocodeCacheMutex );
+        MicrocodeMap::iterator foundIter = mMicrocodeCache.find( hashKey );
+
         if( foundIter == mMicrocodeCache.end() )
         {
-            mMicrocodeCache.emplace( hash, microcode );
-            // if cache is modified, mark it as dirty.
-            mCacheDirty = true;
+            mMicrocodeCache.emplace( hashKey, microcode );
         }
         else
         {
             foundIter->second = microcode;
         }
+
+        // if cache is modified, mark it as dirty.
+        // We don't check foundIter->second == microcode
+        mCacheDirty = true;
     }
     //---------------------------------------------------------------------
     void GpuProgramManager::removeMicrocodeFromCache( const String &source )
     {
-        Hash hash = computeHashWithRenderSystemName( source );
-        MicrocodeMap::iterator foundIter = mMicrocodeCache.find( hash );
+        const Hash hashKey = computeHashWithRenderSystemName( source );
+
+        ScopedLock lock( mMicrocodeCacheMutex );
+        MicrocodeMap::iterator foundIter = mMicrocodeCache.find( hashKey );
 
         if( foundIter != mMicrocodeCache.end() )
         {
@@ -304,6 +330,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     void GpuProgramManager::saveMicrocodeCache( DataStreamPtr stream ) const
     {
+        ScopedLock lock( mMicrocodeCacheMutex );
         if( !mCacheDirty )
             return;
 
@@ -340,6 +367,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     void GpuProgramManager::loadMicrocodeCache( DataStreamPtr stream )
     {
+        ScopedLock lock( mMicrocodeCacheMutex );
         mMicrocodeCache.clear();
 
         // write the size of the array
@@ -371,6 +399,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     void GpuProgramManager::clearMicrocodeCache()
     {
+        ScopedLock lock( mMicrocodeCacheMutex );
         mMicrocodeCache.clear();
         mCacheDirty = false;
     }

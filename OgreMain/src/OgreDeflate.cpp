@@ -239,7 +239,7 @@ namespace Ogre
                         mZStream->next_in = mTmp;
                     }
 
-                    if( mZStream->avail_in )
+                    if( mZStream->avail_in || mZStream->avail_out )
                     {
                         const uint32 availpre = mZStream->avail_out;
                         const int status = inflate( mZStream, Z_SYNC_FLUSH );

@@ -24,11 +24,13 @@
 		@end
 	@end
 
+	@insertpiece( DeclAlphaHashFuncs )
+
 	// START UNIFORM DECLARATION
 	@property( has_planar_reflections || hlms_shadowcaster_point )
 		@insertpiece( PassStructDecl )
 	@end
-	@property( !hlms_shadowcaster || alpha_test )
+	@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 		@insertpiece( MaterialStructDecl )
 		@insertpiece( InstanceStructDecl )
 	@end
@@ -43,7 +45,7 @@
 @piece( LoadMaterial )
 	@property( !lower_gpu_overhead )
 		@property( syntax != metal )
-			ushort materialId	= worldMaterialIdx[inPs.drawId].x & 0x1FFu;
+			ushort materialId	= worldMaterialIdx[inPs.drawId].x;
 			#define material materialArray[materialId]
 		@else
 			#define material materialArray[inPs.materialId]
@@ -54,9 +56,16 @@
 @end
 
 @piece( DefaultBodyPS )
+	@property( hlms_emulate_clip_distances && hlms_global_clip_planes && hlms_pso_clip_distances && syntax == glslvk)
+		@foreach( hlms_pso_clip_distances, n )
+			if( inPs.clipDistance@n < 0.0 )
+				discard;
+		@end
+	@end
+
 	midf4 diffuseCol = midf4_c( 1.0f, 1.0f, 1.0f, 1.0f );
 
-	@property( diffuse_map || alpha_test || diffuse )
+	@property( diffuse_map || alpha_test || hlms_alpha_hash || diffuse )
 		@insertpiece( LoadMaterial )
 	@end
 
@@ -103,6 +112,11 @@
 
 	@insertpiece( custom_ps_preLights )
 
+	@property( hlms_alpha_hash && !hlms_alpha_to_coverage )
+		if( AlphaHashReject( diffuseCol.w, inPs.uv0.xy ALPHA_HASHING_ARG ) )
+			discard;
+	@end
+
 	@property( alpha_test && (!alpha_test_shadow_caster_only || hlms_shadowcaster) )
 		if( material.alpha_test_threshold.x @insertpiece( alpha_test_cmp_func ) diffuseCol.w )
 			discard;
@@ -110,5 +124,9 @@
 
 	@property( !hlms_shadowcaster )
 		outPs_colour0 = diffuseCol;
+
+		@property( hlms_alpha_hash && hlms_alpha_to_coverage )
+			outPs_colour0.w = AlphaHashReject( diffuseCol.w, inPs.uv0.xy ALPHA_HASHING_ARG );
+		@end
 	@end
 @end

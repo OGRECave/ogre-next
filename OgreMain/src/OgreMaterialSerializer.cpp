@@ -507,10 +507,22 @@ namespace Ogre
             }
 
             // alpha_to_coverage
-            if( mDefaults || blendblock->mAlphaToCoverageEnabled )
+            if( mDefaults || blendblock->mAlphaToCoverage != HlmsBlendblock::A2cDisabled )
             {
                 writeAttribute( 3, "alpha_to_coverage" );
-                writeValue( blendblock->mAlphaToCoverageEnabled ? "on" : "off" );
+                switch( blendblock->mAlphaToCoverage )
+                {
+                default:
+                case HlmsBlendblock::A2cDisabled:
+                    writeValue( "off" );
+                    break;
+                case HlmsBlendblock::A2cEnabled:
+                    writeValue( "on" );
+                    break;
+                case HlmsBlendblock::A2cEnabledMsaaOnly:
+                    writeValue( "msaa_only" );
+                    break;
+                }
             }
 
             const HlmsMacroblock *macroblock = pPass->getMacroblock();
@@ -627,6 +639,12 @@ namespace Ogre
                 writeValue( pPass->getPolygonModeOverrideable() ? "on" : "off" );
             }
 
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( push, 0 )
+#else
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
             // fog override
             if( mDefaults || pPass->getFogOverride() != false )
             {
@@ -659,6 +677,11 @@ namespace Ogre
                     }
                 }
             }
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( pop )
+#else
+#    pragma GCC diagnostic pop
+#endif
 
             //  GPU Vertex and Fragment program references and parameters
             if( pPass->hasVertexProgram() )

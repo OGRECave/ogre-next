@@ -132,6 +132,23 @@ namespace Ogre
         return hashedName;
     }
     //-----------------------------------------------------------------------------------
+    void TextureDefinitionBase::_addTextureSourceName( const IdString hashedName, size_t index,
+                                                       TextureSource textureSource )
+    {
+        const uint32 value = encodeTexSource( index, textureSource );
+
+        NameToChannelMap::const_iterator itor = mNameToChannelMap.find( hashedName );
+        if( itor != mNameToChannelMap.end() && itor->second != value )
+        {
+            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
+                         "Texture with same name '" + hashedName.getFriendlyText() +
+                             "' in the same scope already exists",
+                         "TextureDefinitionBase::_addTextureSourceName" );
+        }
+
+        mNameToChannelMap[hashedName] = value;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::removeTexture( IdString name )
     {
         size_t index = std::numeric_limits<size_t>::max();
@@ -227,6 +244,14 @@ namespace Ogre
     {
         IdString hashedName =
             addTextureSourceName( name, mLocalTextureDefs.size(), mDefaultLocalTextureSource );
+        mLocalTextureDefs.push_back( TextureDefinition( hashedName ) );
+        return &mLocalTextureDefs.back();
+    }
+    //-----------------------------------------------------------------------------------
+    TextureDefinitionBase::TextureDefinition *TextureDefinitionBase::_addTextureDefinition(
+        const IdString hashedName )
+    {
+        _addTextureSourceName( hashedName, mLocalTextureDefs.size(), mDefaultLocalTextureSource );
         mLocalTextureDefs.push_back( TextureDefinition( hashedName ) );
         return &mLocalTextureDefs.back();
     }

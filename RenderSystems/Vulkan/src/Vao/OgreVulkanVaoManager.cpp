@@ -101,7 +101,8 @@ namespace Ogre
         mDrawId( 0 ),
         mDevice( device ),
         mVkRenderSystem( renderSystem ),
-        mFenceFlushed( true ),
+        mFenceFlushedWarningCount( 0u ),
+        mFenceFlushed( FenceUnflushed ),
         mSupportsCoherentMemory( false ),
         mSupportsNonCoherentMemory( false ),
         mReadMemoryIsCoherent( false )
@@ -121,7 +122,8 @@ namespace Ogre
 #ifdef OGRE_VK_WORKAROUND_ADRENO_UBO64K
         Workarounds::mAdrenoUbo64kLimitTriggered = false;
         Workarounds::mAdrenoUbo64kLimit = 0u;
-        if( renderSystem->getCapabilities()->getVendor() == GPU_QUALCOMM )
+        if( renderSystem->getCapabilities()->getVendor() == GPU_QUALCOMM &&
+            renderSystem->getCapabilities()->getDeviceName().find( "Turnip" ) == String::npos )
         {
             mConstBufferMaxSize =
                 std::min<size_t>( mConstBufferMaxSize, 64u * 1024u - mConstBufferAlignment );
@@ -798,7 +800,7 @@ namespace Ogre
                   ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) ) ==
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT )
             {
-                // addMemoryType( CPU_WRITE_PERSISTENT, memProperties, i );
+                addMemoryType( CPU_WRITE_PERSISTENT, memProperties, i );
             }
 
             // Find coherent memory (many desktop GPUs don't provide this)
@@ -824,10 +826,49 @@ namespace Ogre
         mSupportsNonCoherentMemory = !mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT].empty();
         mSupportsCoherentMemory = !mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT].empty();
 
+        mPreferCoherentMemory = false;
+        if( !mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT].empty() )
+        {
+            // When it comes to writing (and at least in theory), the following order should be
+            // preferred:
+            //
+            // 1 Uncached, coherent
+            // 2 Cached, non-coherent
+            // 3 Cached, coherent
+            // 4 Anything else (uncached, non-coherent? that doesn't make sense)
+            //
+            // "Uncached, coherent" means CPU caches are bypassed. Hence GPU doesn't have to worry about
+            // them and can automatically synchronize its internal caches (since there's nothing to
+            // synchronize).
+            //
+            // "Cached" means CPU caches are important. If it's coherent, HW (likely) needs to do heavy
+            // work to keep both CPU & GPU caches in sync. Hence non-coherent makes sense to be superior
+            // here since we just invalidate the GPU caches by hand.
+            //
+            // Now there are a few gotchas:
+            //
+            // - Whether 1 is faster than 2 mostly depends on whether the code makes correct use of
+            //   write-combining (or else perf goes down fast).
+            // - Whether 2 is faster than 3 or viceversa may be HW specific. For example Intel only
+            //   exposes Cached + Coherent and nothing else. It seems they have no performance problems
+            //   at all.
+            //
+            // This assumes CPU write-combining is fast. If it's not, then this is wrong.
+            const uint32 idx = mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT].back();
+            // Prefer coherent memory if it's uncached, or if we have no choice.
+            if( !mSupportsNonCoherentMemory ||
+                !( memProperties.memoryTypes[idx].propertyFlags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT ) )
+            {
+                mPreferCoherentMemory = true;
+            }
+        }
+
         logManager.logMessage( "VkDevice will use coherent memory buffers: " +
                                StringConverter::toString( mSupportsCoherentMemory ) );
         logManager.logMessage( "VkDevice will use non-coherent memory buffers: " +
                                StringConverter::toString( mSupportsNonCoherentMemory ) );
+        logManager.logMessage( "VkDevice will prefer coherent memory buffers: " +
+                               StringConverter::toString( mPreferCoherentMemory ) );
 
         if( mBestVkMemoryTypeIndex[CPU_READ_WRITE].empty() )
         {
@@ -1000,8 +1041,7 @@ namespace Ogre
                             // Found one!
                             size_t defaultPoolSize =
                                 std::min( (VkDeviceSize)mDefaultPoolSize[vboFlag],
-                                          memHeaps[memTypes[*itMemTypeIdx].heapIndex].size -
-                                              mUsedHeapMemory[heapIdx] );
+                                          memHeaps[heapIdx].size - mUsedHeapMemory[heapIdx] );
                             poolSize = std::max( defaultPoolSize, sizeBytes );
                             break;
                         }
@@ -1027,14 +1067,13 @@ namespace Ogre
                             {
                                 // We didn't try this memory type. Let's check if we can use it
                                 // TODO: See comment above about memHeaps[heapIdx].size
-                                const size_t heapIdx = memTypes[memTypes[i].heapIndex].heapIndex;
+                                const size_t heapIdx = memTypes[i].heapIndex;
                                 if( mUsedHeapMemory[heapIdx] + poolSize < memHeaps[heapIdx].size )
                                 {
                                     // Found one!
                                     size_t defaultPoolSize =
                                         std::min( (VkDeviceSize)mDefaultPoolSize[vboFlag],
-                                                  memHeaps[memTypes[heapIdx].heapIndex].size -
-                                                      mUsedHeapMemory[heapIdx] );
+                                                  memHeaps[heapIdx].size - mUsedHeapMemory[heapIdx] );
                                     chosenMemoryTypeIdx = static_cast<uint32>( i );
                                     poolSize = std::max( defaultPoolSize, sizeBytes );
                                     break;
@@ -1261,8 +1300,8 @@ namespace Ogre
     VulkanRawBuffer VulkanVaoManager::allocateRawBuffer( VboFlag vboFlag, size_t sizeBytes,
                                                          size_t alignment )
     {
-        // Change flag if unavailable
-        if( vboFlag == CPU_WRITE_PERSISTENT && !mSupportsNonCoherentMemory )
+        // Override what user prefers (or change if unavailable).
+        if( vboFlag == CPU_WRITE_PERSISTENT && mPreferCoherentMemory )
             vboFlag = CPU_WRITE_PERSISTENT_COHERENT;
         else if( vboFlag == CPU_WRITE_PERSISTENT_COHERENT && !mSupportsCoherentMemory )
             vboFlag = CPU_WRITE_PERSISTENT;
@@ -1940,6 +1979,37 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_update()
     {
+        if( mFenceFlushed == FenceUnflushed )
+        {
+            // We could only reach here if _update() was called
+            // twice in a row without completing a full frame.
+            //
+            // Without this, mFrameCount won't actually advance, and if we increment
+            // mFrameCount ourselves, waitForTailFrameToFinish would become unsafe.
+            //
+            // This must be done at the beginning, because normally the following sequence would happen:
+            //  1. VulkanVaoManager::_update - mFrameCount = 0
+            //  2. _notifyNewCommandBuffer   - mFrameCount = 1
+            //  3. VulkanVaoManager::_update - mFrameCount = 1
+            //  4. _notifyNewCommandBuffer   - mFrameCount = 2
+            //  5. And so on...
+            //
+            // However we reached here because we performed the following:
+            //  1. VulkanVaoManager::_update - mFrameCount = 0
+            //  2. VulkanVaoManager::_update - mFrameCount = ???
+            //
+            // Thus we MUST insert a _notifyNewCommandBuffer in-between the first two:
+            //  1. VulkanVaoManager::_update - mFrameCount = 0
+            //  2a._notifyNewCommandBuffer   - mFrameCount = 1
+            //  2b.VulkanVaoManager::_update - mFrameCount = 1
+            //
+            // Previously this block of code was at the end of VulkanVaoManager::_update
+            // and this was causing troubles. See https://github.com/OGRECave/ogre-next/issues/433
+            mDevice->commitAndNextCommandBuffer( SubmissionType::NewFrameIdx );
+        }
+
+        mFenceFlushed = FenceUnflushed;
+
         {
             FastArray<VulkanDescriptorPool *>::const_iterator itor = mUsedDescriptorPools.begin();
             FastArray<VulkanDescriptorPool *>::const_iterator endt = mUsedDescriptorPools.end();
@@ -1950,6 +2020,10 @@ namespace Ogre
                 ++itor;
             }
         }
+
+        VaoManager::_update();
+        // Undo the increment from VaoManager::_update. This is done by _notifyNewCommandBuffer
+        --mFrameCount;
 
         mUsedDescriptorPools.clear();
 
@@ -1993,14 +2067,6 @@ namespace Ogre
                     }
                 }
             }
-        }
-
-        if( !mFenceFlushed )
-        {
-            // We could only reach here if _update() was called
-            // twice in a row without completing a full frame.
-            // Without this, waitForTailFrameToFinish becomes unsafe.
-            mDevice->commitAndNextCommandBuffer( SubmissionType::NewFrameIdx );
         }
 
         if( !mUsedSemaphores.empty() )
@@ -2052,16 +2118,26 @@ namespace Ogre
         }
 
         deallocateEmptyVbos( false );
-
-        VaoManager::_update();
-
-        mFenceFlushed = false;
-        mDynamicBufferCurrentFrame = ( mDynamicBufferCurrentFrame + 1 ) % mDynamicBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_notifyNewCommandBuffer()
     {
-        mFenceFlushed = true;
+        if( mFenceFlushed == FenceFlushed )
+        {
+            if( mFenceFlushedWarningCount < 5u )
+            {
+                LogManager::getSingleton().logMessage(
+                    "WARNING: Calling RenderSystem::_endFrameOnce() twice in a row without calling "
+                    "RenderSystem::_update. This can lead to strange results.",
+                    LML_CRITICAL );
+                ++mFenceFlushedWarningCount;
+            }
+
+            _update();
+        }
+        mFenceFlushed = FenceFlushed;
+        mDynamicBufferCurrentFrame = ( mDynamicBufferCurrentFrame + 1 ) % mDynamicBufferMultiplier;
+        ++mFrameCount;
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::getAvailableSempaphores( VkSemaphoreArray &semaphoreArray,
@@ -2208,7 +2284,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_notifyDeviceStalled()
     {
-        mFenceFlushed = true;
+        mFenceFlushed = GpuStalled;
 
         flushAllGpuDelayedBlocks( false );
 
@@ -2299,8 +2375,8 @@ namespace Ogre
             break;
         }
 
-        // Change flag if unavailable
-        if( vboFlag == CPU_WRITE_PERSISTENT && !mSupportsNonCoherentMemory )
+        // Override what user prefers (or change if unavailable).
+        if( vboFlag == CPU_WRITE_PERSISTENT && mPreferCoherentMemory )
             vboFlag = CPU_WRITE_PERSISTENT_COHERENT;
         else if( vboFlag == CPU_WRITE_PERSISTENT_COHERENT && !mSupportsCoherentMemory )
             vboFlag = CPU_WRITE_PERSISTENT;

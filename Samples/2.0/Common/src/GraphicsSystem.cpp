@@ -311,6 +311,9 @@ namespace Demo
         params.insert( std::make_pair(
             "ANativeWindow",
             Ogre::StringConverter::toString( (uintptr_t)AndroidSystems::getNativeWindow() ) ) );
+        params.insert( std::make_pair(
+            "AndroidJniProvider",
+            Ogre::StringConverter::toString( (uintptr_t)AndroidSystems::getJniProvider() ) ) );
 #endif
 
         params.insert( std::make_pair( "title", windowTitle ) );
@@ -615,6 +618,8 @@ namespace Demo
 
         if( mUseHlmsDiskCache )
         {
+            const size_t numThreads =
+                std::max<size_t>( 1u, Ogre::PlatformInformation::getNumLogicalCores() );
             for( size_t i = Ogre::HLMS_LOW_LEVEL + 1u; i < Ogre::HLMS_MAX; ++i )
             {
                 Ogre::Hlms *hlms = hlmsManager->getHlms( static_cast<Ogre::HlmsTypes>( i ) );
@@ -629,7 +634,7 @@ namespace Demo
                         {
                             Ogre::DataStreamPtr diskCacheFile = rwAccessFolderArchive->open( filename );
                             diskCache.loadFrom( diskCacheFile );
-                            diskCache.applyTo( hlms );
+                            diskCache.applyTo( hlms, numThreads );
                         }
                     }
                     catch( Ogre::Exception & )
@@ -664,7 +669,7 @@ namespace Demo
                 for( size_t i = Ogre::HLMS_LOW_LEVEL + 1u; i < Ogre::HLMS_MAX; ++i )
                 {
                     Ogre::Hlms *hlms = hlmsManager->getHlms( static_cast<Ogre::HlmsTypes>( i ) );
-                    if( hlms )
+                    if( hlms && hlms->isShaderCodeCacheDirty() )
                     {
                         diskCache.copyFrom( hlms );
 
@@ -819,6 +824,17 @@ namespace Demo
 
         // Initialise, parse scripts etc
         Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups( true );
+
+        try
+        {
+            mRoot->getHlmsManager()->loadBlueNoise();
+        }
+        catch( Ogre::FileNotFoundException &e )
+        {
+            Ogre::LogManager::getSingleton().logMessage( e.getFullDescription(), Ogre::LML_CRITICAL );
+            Ogre::LogManager::getSingleton().logMessage(
+                "WARNING: Blue Noise textures could not be loaded.", Ogre::LML_CRITICAL );
+        }
 
         // Initialize resources for LTC area lights and accurate specular reflections (IBL)
         Ogre::Hlms *hlms = mRoot->getHlmsManager()->getHlms( Ogre::HLMS_PBS );

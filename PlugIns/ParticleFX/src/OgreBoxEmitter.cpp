@@ -34,7 +34,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     //-----------------------------------------------------------------------
-    BoxEmitter::BoxEmitter( ParticleSystem *psys ) : AreaEmitter( psys ) { initDefaults( "Box" ); }
+    BoxEmitter::BoxEmitter( ParticleSystem *psys ) : AreaEmitter( psys ) { initDefaults(); }
     //-----------------------------------------------------------------------
     void BoxEmitter::_initParticle( Particle *pParticle )
     {
@@ -57,5 +57,7 @@ namespace Ogre
         // Generate simpler data
         pParticle->mTimeToLive = pParticle->mTotalTimeToLive = genEmissionTTL();
     }
-
+    //-----------------------------------------------------------------------------------
+    static const String kBoxEmitterFactoryName = "Box";
+    const String &BoxEmitter::getType() const { return kBoxEmitterFactoryName; }
 }  // namespace Ogre

@@ -63,12 +63,9 @@ namespace Ogre
         return vmulq_f32( mRad, MathlibNEON::fRad2Deg );
     }*/
     //-----------------------------------------------------------------------------------
-    inline const ArrayRadian& ArrayRadian::operator + () const
-    {
-        return *this;
-    }
+    inline const ArrayRadian &ArrayRadian::operator+() const { return *this; }
     //-----------------------------------------------------------------------------------
-    inline ArrayRadian ArrayRadian::operator + ( const ArrayRadian& r ) const
+    inline ArrayRadian ArrayRadian::operator+( const ArrayRadian &r ) const
     {
         return ArrayRadian( vaddq_f32( mRad, r.mRad ) );
     }
@@ -78,7 +75,7 @@ namespace Ogre
         return ArrayRadian( vaddq_f32( mRad, r.valueRadians() ) );
     }*/
     //-----------------------------------------------------------------------------------
-    inline ArrayRadian& ArrayRadian::operator += ( const ArrayRadian& r )
+    inline ArrayRadian &ArrayRadian::operator+=( const ArrayRadian &r )
     {
         mRad = vaddq_f32( mRad, r.mRad );
         return *this;
@@ -90,12 +87,12 @@ namespace Ogre
         return *this;
     }*/
     //-----------------------------------------------------------------------------------
-    inline ArrayRadian ArrayRadian::operator - () const
+    inline ArrayRadian ArrayRadian::operator-() const
     {
         return ArrayRadian( veorq_f32( mRad, MathlibNEON::SIGN_MASK ) );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayRadian ArrayRadian::operator - ( const ArrayRadian& r ) const
+    inline ArrayRadian ArrayRadian::operator-( const ArrayRadian &r ) const
     {
         return ArrayRadian( vsubq_f32( mRad, r.mRad ) );
     }
@@ -105,7 +102,7 @@ namespace Ogre
         return ArrayRadian( vsubq_f32( mRad, r.valueRadians() ) );
     }*/
     //-----------------------------------------------------------------------------------
-    inline ArrayRadian& ArrayRadian::operator -= ( const ArrayRadian& r )
+    inline ArrayRadian &ArrayRadian::operator-=( const ArrayRadian &r )
     {
         mRad = vsubq_f32( mRad, r.mRad );
         return *this;
@@ -117,71 +114,113 @@ namespace Ogre
         return *this;
     }*/
     //-----------------------------------------------------------------------------------
-    inline ArrayRadian ArrayRadian::operator * ( const ArrayRadian& r ) const
+    inline ArrayRadian ArrayRadian::operator*( const ArrayReal r ) const
+    {
+        return ArrayRadian( vmulq_f32( mRad, r ) );
+    }
+    //-----------------------------------------------------------------------------------
+    inline ArrayRadian ArrayRadian::operator*( const ArrayRadian &r ) const
     {
         return ArrayRadian( vmulq_f32( mRad, r.mRad ) );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayRadian ArrayRadian::operator / ( ArrayReal r ) const
+    inline ArrayRadian ArrayRadian::operator/( ArrayReal r ) const
     {
         return ArrayRadian( vdivq_f32( mRad, r ) );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayRadian& ArrayRadian::operator /= ( ArrayReal r )
+    inline ArrayRadian &ArrayRadian::operator/=( ArrayReal r )
     {
         mRad = vdivq_f32( mRad, r );
         return *this;
     }
 
-    inline ArrayMaskR ArrayRadian::operator <  ( const ArrayRadian& r ) const { return vcltq_f32( mRad, r.mRad ); }
-    inline ArrayMaskR ArrayRadian::operator <= ( const ArrayRadian& r ) const { return vcleq_f32( mRad, r.mRad ); }
-    inline ArrayMaskR ArrayRadian::operator == ( const ArrayRadian& r ) const { return vceqq_f32( mRad, r.mRad ); }
-    inline ArrayMaskR ArrayRadian::operator != ( const ArrayRadian& r ) const { return vcneqq_f32( mRad, r.mRad );}
-    inline ArrayMaskR ArrayRadian::operator >= ( const ArrayRadian& r ) const { return vcgeq_f32( mRad, r.mRad ); }
-    inline ArrayMaskR ArrayRadian::operator >  ( const ArrayRadian& r ) const { return vcgtq_f32( mRad, r.mRad ); }
+    inline ArrayMaskR ArrayRadian::operator<( const ArrayRadian &r ) const
+    {
+        return vcltq_f32( mRad, r.mRad );
+    }
+    inline ArrayMaskR ArrayRadian::operator<=( const ArrayRadian &r ) const
+    {
+        return vcleq_f32( mRad, r.mRad );
+    }
+    inline ArrayMaskR ArrayRadian::operator==( const ArrayRadian &r ) const
+    {
+        return vceqq_f32( mRad, r.mRad );
+    }
+    inline ArrayMaskR ArrayRadian::operator!=( const ArrayRadian &r ) const
+    {
+        return vcneqq_f32( mRad, r.mRad );
+    }
+    inline ArrayMaskR ArrayRadian::operator>=( const ArrayRadian &r ) const
+    {
+        return vcgeq_f32( mRad, r.mRad );
+    }
+    inline ArrayMaskR ArrayRadian::operator>( const ArrayRadian &r ) const
+    {
+        return vcgtq_f32( mRad, r.mRad );
+    }
 
+    //-----------------------------------------------------------------------------------
+    inline void ArrayRadian::wrapToRangeNPI_PI()
+    {
+        const ArrayReal signedPi = MathlibNEON::CopySign4( MathlibNEON::PI, mRad );
+        const ArrayReal x = vaddq_f32( mRad, signedPi );                           // x = mRad + signedPi
+        const ArrayReal quotient = vmulq_f32( x, MathlibNEON::ONE_DIV_2PI );       // x / ( 2 * PI )
+        const ArrayReal integerQuot = vcvtq_f32_s32( vcvtq_s32_f32( quotient ) );  // trunc( x / 2PI )
+        const ArrayReal s = vmulq_f32( integerQuot, MathlibNEON::TWO_PI );  // trunc( x / 2PI ) * 2PI
+
+        const ArrayReal wrappedValue = vsubq_f32( x, s );  // x - trunc( x / 2PI ) * 2PI
+
+        mRad = vsubq_f32( wrappedValue, signedPi );  // mRad = wrappedValue - signedPi
+    }
     //-----------------------------------------------------------------------------------
     inline ArrayReal MathlibNEON::Modf4( ArrayReal x, ArrayReal &outIntegral )
     {
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
-        outIntegral = vrndq_f32( x ); // truncate towards zero
+        outIntegral = vrndq_f32( x );  // truncate towards zero
 #else
-        outIntegral = vcvtq_f32_s32( vcvtq_s32_f32( x ) ); // truncate towards zero, overflows for large input
+        outIntegral =
+            vcvtq_f32_s32( vcvtq_s32_f32( x ) );  // truncate towards zero, overflows for large input
 #endif
         return vsubq_f32( x, outIntegral );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayReal MathlibNEON::ACos4( ArrayReal x)
+    inline ArrayReal MathlibNEON::CopySign4( ArrayReal mag, ArrayReal sig )
+    {
+        return veorq_f32( mag, vandq_f32( sig, MathlibNEON::SIGN_MASK ) );
+    }
+    //-----------------------------------------------------------------------------------
+    inline ArrayReal MathlibNEON::ACos4( ArrayReal x )
     {
         // This function, ACos4, is under Copyright (C) 2006, 2007
         // Sony Computer Entertainment Inc. (BSD style license) See
         // header for details. Adapted/ported to Ogre intrinsics.
-        ArrayReal xabs = Abs4( x );
-        ArrayMaskR select = vcltq_f32( x, vdupq_n_f32(0.0f) );
-        ArrayReal t1 = MathlibNEON::Sqrt( vsubq_f32( ONE, xabs ) );
-        
+        ArrayReal  xabs = Abs4( x );
+        ArrayMaskR select = vcltq_f32( x, vdupq_n_f32( 0.0f ) );
+        ArrayReal  t1 = MathlibNEON::Sqrt( vsubq_f32( ONE, xabs ) );
+
         /* Instruction counts can be reduced if the polynomial was
-         * computed entirely from nested (dependent) fma's. However, 
-         * to reduce the number of pipeline stalls, the polygon is evaluated 
-         * in two halves (hi amd lo). 
+         * computed entirely from nested (dependent) fma's. However,
+         * to reduce the number of pipeline stalls, the polygon is evaluated
+         * in two halves (hi amd lo).
          */
-        ArrayReal xabs2 = vmulq_f32( xabs,  xabs );
+        ArrayReal xabs2 = vmulq_f32( xabs, xabs );
         ArrayReal xabs4 = vmulq_f32( xabs2, xabs2 );
-        ArrayReal hi = _mm_madd_ps(_mm_madd_ps(_mm_madd_ps(vdupq_n_f32(-0.0012624911f),
-            xabs, vdupq_n_f32(0.0066700901f)),
-                xabs, vdupq_n_f32(-0.0170881256f)),
-                    xabs, vdupq_n_f32( 0.0308918810f));
-        ArrayReal lo = _mm_madd_ps(_mm_madd_ps(_mm_madd_ps(vdupq_n_f32(-0.0501743046f),
-            xabs, vdupq_n_f32(0.0889789874f)),
-                xabs, vdupq_n_f32(-0.2145988016f)),
-                    xabs, vdupq_n_f32( 1.5707963050f));
-        
+        ArrayReal hi = _mm_madd_ps( _mm_madd_ps( _mm_madd_ps( vdupq_n_f32( -0.0012624911f ), xabs,
+                                                              vdupq_n_f32( 0.0066700901f ) ),
+                                                 xabs, vdupq_n_f32( -0.0170881256f ) ),
+                                    xabs, vdupq_n_f32( 0.0308918810f ) );
+        ArrayReal lo = _mm_madd_ps( _mm_madd_ps( _mm_madd_ps( vdupq_n_f32( -0.0501743046f ), xabs,
+                                                              vdupq_n_f32( 0.0889789874f ) ),
+                                                 xabs, vdupq_n_f32( -0.2145988016f ) ),
+                                    xabs, vdupq_n_f32( 1.5707963050f ) );
+
         ArrayReal result = _mm_madd_ps( hi, xabs4, lo );
-        
+
         // Adjust the result if x is negactive.
-        return Cmov4(   _mm_nmsub_ps( t1, result, PI ), // Negative
-                        vmulq_f32( t1, result ),        // Positive
-                        select );
+        return Cmov4( _mm_nmsub_ps( t1, result, PI ),  // Negative
+                      vmulq_f32( t1, result ),         // Positive
+                      select );
     }
 
-}
+}  // namespace Ogre

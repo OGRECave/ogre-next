@@ -69,6 +69,7 @@ add_filtered_std("Hash")
 add_filtered_std("Math/Array")
 add_filtered_std("Math/Simple")
 add_filtered_std("Math/Simple/C")
+add_filtered_std("ParticleSystem")
 add_filtered_std("ogrestd")
 add_filtered_std("Vao")
 
@@ -269,9 +270,18 @@ if (NOT WIN32)
 endif()
 
 list( APPEND THREAD_SOURCE_FILES
-	src/Threading/OgreSemaphore.cpp
 	src/Threading/OgreWaitableEvent.cpp
 )
+
+if( APPLE )
+	list( APPEND THREAD_SOURCE_FILES
+		src/Threading/OgreSemaphoreApple.mm
+	)
+else()
+	list( APPEND THREAD_SOURCE_FILES
+		src/Threading/OgreSemaphore.cpp
+	)
+endif()
 
 
 # Configure threading files
@@ -388,14 +398,26 @@ endif ()
 
 set (TARGET_LINK_FLAGS "")
 
+set( BROKEN_FILES_IN_UNITY_BUILD "src/OgreFreeImageCodec2.cpp" )
+
 # setup OgreMain target
 if (WINDOWS_STORE OR WINDOWS_PHONE)
 	# exclude OgreTimer.cpp from unity builds; causes problem
-	ogre_add_library(${OGRE_NEXT}Main ${OGRE_LIB_TYPE} ${PREC_HEADER} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES} SEPARATE "src/WIN32/OgreTimer.cpp")
+	list( APPEND BROKEN_FILES_IN_UNITY_BUILD
+			"src/WIN32/OgreTimer.cpp" )
 else ()
-	# exclude OgreAlignedAllocator.cpp from unity builds; causes problems on Linux
-	ogre_add_library(${OGRE_NEXT}Main ${OGRE_LIB_TYPE} ${PREC_HEADER} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES} SEPARATE "src/OgreAlignedAllocator.cpp")
+	# exclude these from unity builds; cause problems
+	list( APPEND BROKEN_FILES_IN_UNITY_BUILD
+			"${CMAKE_CURRENT_SOURCE_DIR}/src/OgreAlignedAllocator.cpp"
+	)
+	if( UNIX AND NOT OGRE_CONFIG_UNIX_NO_X11 AND NOT ANDROID AND NOT APPLE )
+		# These files cause problems on Linux
+		list( APPEND BROKEN_FILES_IN_UNITY_BUILD
+				"${CMAKE_CURRENT_SOURCE_DIR}/src/GLX/OgreConfigDialog.cpp"
+		)
+	endif()
 endif ()
+ogre_add_library(${OGRE_NEXT}Main ${OGRE_LIB_TYPE} ${PREC_HEADER} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES} SEPARATE ${BROKEN_FILES_IN_UNITY_BUILD})
 # In visual studio 2010 - 64 bit we get this error: "LINK : fatal error LNK1210: exceeded internal ILK size limit; link with /INCREMENTAL:NO"
 if(WIN32 AND MSVC10 AND CMAKE_CL_64)
   set_target_properties(${OGRE_NEXT}Main PROPERTIES

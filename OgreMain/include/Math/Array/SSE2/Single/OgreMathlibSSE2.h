@@ -56,6 +56,14 @@ namespace Ogre
         // ArrayReal valueDegrees() const; // see bottom of this file
         ArrayReal valueRadians() const { return mRad; }
 
+        /** Wraps the given value to the range [-pi; pi]
+            The algorithm is:
+                const float signedPi = std::copysign( _PI, mRad );
+                const float wrappedValue = fmod( mRad + signedPi, TWO_PI );
+                mRad = wrappedValue - signedPi;
+        */
+        inline void wrapToRangeNPI_PI();
+
         inline const ArrayRadian &operator+() const;
         inline ArrayRadian        operator+( const ArrayRadian &r ) const;
         // inline ArrayRadian operator + ( const ArrayDegree& d ) const;
@@ -269,6 +277,17 @@ namespace Ogre
             dst[index] = val;
         }
 
+        /** Returns the first entry in src
+        @return
+            src[0]
+        */
+        static inline Real Get0( ArrayReal src )
+        {
+            float dst;
+            _mm_store_ss( &dst, src );
+            return dst;
+        }
+
         /** Returns the result of "a == std::numeric_limits<float>::infinity()"
         @return
             r[i] = a[i] == Inf ? 0xffffffff : 0;
@@ -278,11 +297,83 @@ namespace Ogre
             return _mm_cmpeq_ps( a, MathlibSSE2::INFINITEA );
         }
 
+        /// Truncates float to 32-bit integer
+        static inline ArrayInt Truncate( ArrayReal a ) { return _mm_cvttps_epi32( a ); }
+
+        /// Converts 32-bit integer to float
+        static inline ArrayReal ConvertToF32( ArrayInt a ) { return _mm_cvtepi32_ps( a ); }
+
         /// Returns the maximum value between a and b
         static inline ArrayReal Max( ArrayReal a, ArrayReal b ) { return _mm_max_ps( a, b ); }
 
         /// Returns the minimum value between a and b
         static inline ArrayReal Min( ArrayReal a, ArrayReal b ) { return _mm_min_ps( a, b ); }
+
+        /// Clamps the value to the range [0; 1]
+        static inline ArrayReal Saturate( ArrayReal a )
+        {
+            return _mm_max_ps( _mm_min_ps( a, ONE ), _mm_setzero_ps() );
+        }
+
+        /// Returns:
+        ///     (int16)( saturate( a ) * 32767.5f );
+        static inline ArrayToS16 ToSnorm16( ArrayReal a )
+        {
+            // _mm_packs_epi32 already performs saturation. No need for us to do it.
+            a = _mm_mul_ps( a, _mm_set_ps1( 32767.5f ) );
+            const __m128i asUint32 = _mm_cvtps_epi32( a );
+            return _mm_packs_epi32( asUint32, asUint32 );
+        }
+
+        /// Returns:
+        ///     (int16)( saturate( a ) * 127.5f );
+        ///
+        /// Input a MUST be in range (-256.996; 256.996) for saturation to properly work.
+        /// Otherwise result will be wrong.
+        static inline ArrayToS8 ToSnorm8Unsafe( ArrayReal a )
+        {
+            // _mm_packs_epi16 converts 16 bit to 8 bit using saturation. However
+            // the value is in 32-bit (there is no 32 -> 8 instruction).
+            // As long as `a * 127.5` results in a value that can be represented in signed 16-bit,
+            // _mm_packs_epi16's automatic saturation will do the job for us.
+            a = _mm_mul_ps( a, _mm_set_ps1( 127.5f ) );
+            const __m128i asUint32 = _mm_cvtps_epi32( a );
+            return _mm_packs_epi16( asUint32, asUint32 );
+        }
+
+        /** Extracts ARRAY_PACKED_REALS int16.
+        @param a
+            a must contain integers. Not floats.
+        @param outValues [out]
+            outValues[0] = (int16)a[0];
+            outValues[1] = (int16)a[1];
+            outValues[2] = (int16)a[2];
+            outValues[3] = (int16)a[3];
+        */
+        static inline void extractS16( ArrayToS16 a, int16 outValues[ARRAY_PACKED_REALS] )
+        {
+            outValues[0] = (int16)_mm_extract_epi16( a, 0 );
+            outValues[1] = (int16)_mm_extract_epi16( a, 1 );
+            outValues[2] = (int16)_mm_extract_epi16( a, 2 );
+            outValues[3] = (int16)_mm_extract_epi16( a, 3 );
+        }
+
+        /** Extracts ARRAY_PACKED_REALS int8.
+        @param a
+            a must contain integers. Not floats.
+        @param outValues [out]
+            outValues[0] = (int8)a[0];
+            outValues[1] = (int8)a[1];
+            outValues[2] = (int8)a[2];
+            outValues[3] = (int8)a[3];
+        */
+        static inline void extractS8( ArrayToS8 a, int8 outValues[ARRAY_PACKED_REALS] )
+        {
+            outValues[0] = (int8)_mm_extract_epi16( a, 0 );
+            outValues[1] = (int8)_mm_extract_epi16( a, 1 );
+            outValues[2] = (int8)_mm_extract_epi16( a, 2 );
+            outValues[3] = (int8)_mm_extract_epi16( a, 3 );
+        }
 
         /** Returns the minimum value of all elements in a
         @return
@@ -446,6 +537,16 @@ namespace Ogre
         */
         static inline ArrayReal Modf4( ArrayReal x, ArrayReal &outIntegral );
 
+        /** Like std::copysign, composes a value of magnitude mag and sign sig
+        @param mag
+            Magnitude of the returned value.
+        @param sig
+            Sign of the returned value.
+        @return
+            A value of magnitude mag and sign sig
+        */
+        static inline ArrayReal CopySign4( ArrayReal mag, ArrayReal sig );
+
         /** Returns the arccos of x
             @param x
                 4 floating point values
@@ -485,16 +586,16 @@ namespace Ogre
 #    if OGRE_COMPILER != OGRE_COMPILER_CLANG && OGRE_COMPILER != OGRE_COMPILER_GNUC
     // clang-format off
     inline ArrayReal operator - ( ArrayReal l )                 { return _mm_xor_ps( l, MathlibSSE2::SIGN_MASK ); }
-//  inline ArrayReal operator + ( ArrayReal l, Real r )         { return _mm_add_ps( l, _mm_set1_ps( r ) ); }
+    inline ArrayReal operator + ( ArrayReal l, Real r )         { return _mm_add_ps( l, _mm_set1_ps( r ) ); }
 //  inline ArrayReal operator + ( Real l, ArrayReal r )         { return _mm_add_ps( _mm_set1_ps( l ), r ); }
     inline ArrayReal operator + ( ArrayReal l, ArrayReal r )    { return _mm_add_ps( l, r ); }
 //  inline ArrayReal operator - ( ArrayReal l, Real r )         { return _mm_sub_ps( l, _mm_set1_ps( r ) ); }
 //  inline ArrayReal operator - ( Real l, ArrayReal r )         { return _mm_sub_ps( _mm_set1_ps( l ), r ); }
     inline ArrayReal operator - ( ArrayReal l, ArrayReal r )    { return _mm_sub_ps( l, r ); }
 //  inline ArrayReal operator * ( ArrayReal l, Real r )         { return _mm_mul_ps( l, _mm_set1_ps( r ) ); }
-//  inline ArrayReal operator * ( Real l, ArrayReal r )         { return _mm_mul_ps( _mm_set1_ps( l ), r ); }
+    inline ArrayReal operator * ( Real l, ArrayReal r )         { return _mm_mul_ps( _mm_set1_ps( l ), r ); }
     inline ArrayReal operator * ( ArrayReal l, ArrayReal r )    { return _mm_mul_ps( l, r ); }
-//  inline ArrayReal operator / ( ArrayReal l, Real r )         { return _mm_div_ps( l, _mm_set1_ps( r ) ); }
+    inline ArrayReal operator / ( ArrayReal l, Real r )         { return _mm_div_ps( l, _mm_set1_ps( r ) ); }
 //  inline ArrayReal operator / ( Real l, ArrayReal r )         { return _mm_div_ps( _mm_set1_ps( l ), r ); }
     inline ArrayReal operator / ( ArrayReal l, ArrayReal r )    { return _mm_div_ps( l, r ); }
 // clang-format on

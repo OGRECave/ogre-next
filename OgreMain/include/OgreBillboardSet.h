@@ -54,8 +54,13 @@ namespace Ogre
 
         /** Enum covering what exactly a billboard's position means (center,
             top-left etc).
-        @see
-            BillboardSet::setBillboardOrigin
+
+            This setting controls the fine tuning of where a billboard appears in relation to it's
+            position. It could be that a billboard's position represents it's center (e.g. for
+            fireballs), it could mean the center of the bottom edge (e.g. a tree which is positioned on
+            the ground), the top-left corner (e.g. a cursor).
+
+            @see BillboardSet::setBillboardOrigin
         */
         enum BillboardOrigin
         {
@@ -843,7 +848,7 @@ namespace Ogre
             */
             void notifyBillboardDataChanged() { mBillboardDataChanged = true; }
 
-            /** @copydoc MovableObject::_releaseManualHardwareResources. */
+            /** @copydoc MovableObject::_releaseManualHardwareResources */
             void _releaseManualHardwareResources() override { _destroyBuffers(); }
 
             void setMaterial( const MaterialPtr &material ) override;

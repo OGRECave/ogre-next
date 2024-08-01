@@ -111,6 +111,8 @@ namespace Ogre
         RenderSystemCapabilitiesManager *mRenderSystemCapabilitiesManager;
         ScriptCompilerManager           *mCompilerManager;
         LodStrategyManager              *mLodStrategyManager;
+        /// See getParticleSystemManager2()
+        ParticleSystemManager2 *mParticleSystemManager;
 
         FrameStats                   *mFrameStats;
         Timer                        *mTimer;
@@ -147,6 +149,7 @@ namespace Ogre
         MovableObjectFactory *mEntityFactory;
         MovableObjectFactory *mItemFactory;
         MovableObjectFactory *mLightFactory;
+        MovableObjectFactory *mParticleSystem2Factory;
         MovableObjectFactory *mRectangle2DFactory;
         MovableObjectFactory *mBillboardSetFactory;
         MovableObjectFactory *mManualObjectFactory;
@@ -346,6 +349,11 @@ namespace Ogre
 
         CompositorManager2 *getCompositorManager2() const { return mCompositorManager2; }
 
+        /// ParticleSystemManager2 belongs to SceneManager. However parsing of scripts happens before
+        /// any SceneManager is created. They are added here instead (which belongs to Root).
+        /// Later each SceneManager can clone their definitions as needed.
+        ParticleSystemManager2 *getParticleSystemManager2() { return mParticleSystemManager; }
+
         /** Initialises the renderer.
             @remarks
                 This method can only be called after a renderer has been
@@ -526,6 +534,8 @@ namespace Ogre
                 Root, Root::queueEndRendering, Root::startRendering
         */
         bool endRenderingQueued();
+
+        void resetFrameStats();
 
         const FrameStats *getFrameStats() const { return mFrameStats; }
 

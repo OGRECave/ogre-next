@@ -71,6 +71,7 @@ namespace Ogre
     protected:
         CompositorShadowNode *mShadowNode;
         Camera               *mCamera;
+        bool                  mUpdateShadowNode;
 
         void notifyPassSceneAfterShadowMapsListeners();
 
@@ -82,10 +83,46 @@ namespace Ogre
         void execute( const Camera *lodCamera ) override;
 
         Camera *getCamera() { return mCamera; }
+
+        CompositorShadowNode *getShadowNode() const { return mShadowNode; }
+
+        void _setUpdateShadowNode( bool update ) { mUpdateShadowNode = update; }
+
+        const CompositorPassWarmUpDef *getDefinition() const { return mDefinition; }
     };
 
-    /** @} */
-    /** @} */
+    class _OgreExport WarmUpHelper
+    {
+        static size_t calculateNumTargetPasses( const CompositorNodeDef *refNode );
+
+        static size_t calculateNumScenePasses( const CompositorTargetDef *baseTargetDef );
+
+        static void createFromRtv( CompositorNodeDef *warmUpNodeDef, const CompositorNodeDef *refNode,
+                                   const IdString textureName, std::set<IdString> &seenTextures );
+
+        static void createFromRtv( CompositorNodeDef *warmUpNodeDef, const CompositorNodeDef *refNode,
+                                   const RenderTargetViewEntry &rtvEntry,
+                                   std::set<IdString>          &seenTextures );
+
+    public:
+        /** Utility to programmatically create a node that contains only warm_up passes
+            by basing them off the render_pass passes from a reference node.
+        @param compositorManager
+        @param nodeDefinitionName
+            Name to give to the node definition containing the warm ups.
+            Must be unique and not exist already.
+        @param refNodeDefinitionName
+            Name of the reference node definition to analyze.
+        @param bCopyAllInputChannels
+            False to only generate input channels that are actually needed.
+            True to generate all input channels. This is useful if you must enforce certain order.
+        */
+        static void createFrom( CompositorManager2 *compositorManager, const String &nodeDefinitionName,
+                                const IdString refNodeDefinitionName, const bool bCopyAllInputChannels );
+
+        /** @} */
+        /** @} */
+    };
 }  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"

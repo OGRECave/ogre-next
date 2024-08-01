@@ -81,6 +81,10 @@ THE SOFTWARE.
 
 #include "OgrePixelFormatGpuUtils.h"
 
+#ifdef OGRE_VULKAN_USE_SWAPPY
+#    include "swappy/swappyVk.h"
+#endif
+
 #define TODO_addVpCount_to_passpso
 
 namespace Ogre
@@ -153,6 +157,9 @@ namespace Ogre
     VulkanRenderSystem::VulkanRenderSystem( const NameValuePairList *options ) :
         RenderSystem(),
         mInitialized( false ),
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        mSwappyFramePacing( true ),
+#endif
         mHardwareBufferManager( 0 ),
         mIndirectBuffer( 0 ),
         mShaderManager( 0 ),
@@ -161,6 +168,7 @@ namespace Ogre
         mVulkanProgramFactory2( 0 ),
         mVulkanProgramFactory3( 0 ),
         mVkInstance( 0 ),
+        mFirstUnflushedAutoParamsBuffer( 0 ),
         mAutoParamsBufferIdx( 0 ),
         mCurrentAutoParamsBufferPtr( 0 ),
         mCurrentAutoParamsBufferSpaceLeft( 0 ),
@@ -288,6 +296,18 @@ namespace Ogre
         if( !mDevice )
             return;
 
+        for( ConstBufferPacked *constBuffer : mAutoParamsBuffer )
+        {
+            if( constBuffer->getMappingState() != MS_UNMAPPED )
+                constBuffer->unmap( UO_UNMAP_ALL );
+            mVaoManager->destroyConstBuffer( constBuffer );
+        }
+        mAutoParamsBuffer.clear();
+        mFirstUnflushedAutoParamsBuffer = 0u;
+        mAutoParamsBufferIdx = 0u;
+        mCurrentAutoParamsBufferPtr = 0;
+        mCurrentAutoParamsBufferSpaceLeft = 0;
+
         mDevice->stall();
 
         {
@@ -369,6 +389,11 @@ namespace Ogre
         VkDevice vkDevice = mDevice->mDevice;
         delete mDevice;
         mDevice = 0;
+
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        SwappyVk_destroyDevice( vkDevice );
+#endif
+
         if( !bIsExternal )
             vkDestroyDevice( vkDevice, 0 );
     }
@@ -428,6 +453,19 @@ namespace Ogre
     const char *VulkanRenderSystem::getPriorityConfigOption( size_t ) const { return "Device"; }
     //-------------------------------------------------------------------------
     size_t VulkanRenderSystem::getNumPriorityConfigOptions() const { return 1u; }
+    //-------------------------------------------------------------------------
+    bool VulkanRenderSystem::supportsMultithreadedShaderCompliation() const
+    {
+#ifndef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
+        return true;
+#else
+#    ifdef OGRE_SHADER_THREADING_USE_TLS
+        return true;
+#    else
+        return false;
+#    endif
+#endif
+    }
     //-------------------------------------------------------------------------
     String VulkanRenderSystem::validateConfigOptions()
     {
@@ -615,8 +653,9 @@ namespace Ogre
         }
 
         const VkPhysicalDeviceLimits &deviceLimits = mDevice->mDeviceProperties.limits;
-        rsc->setMaximumResolutions( deviceLimits.maxImageDimension2D, deviceLimits.maxImageDimension3D,
-                                    deviceLimits.maxImageDimensionCube );
+        rsc->setMaximumResolutions( std::min( deviceLimits.maxImageDimension2D, 16384u ),
+                                    std::min( deviceLimits.maxImageDimension3D, 4096u ),
+                                    std::min( deviceLimits.maxImageDimensionCube, 16384u ) );
         rsc->setMaxThreadsPerThreadgroupAxis( deviceLimits.maxComputeWorkGroupSize );
         rsc->setMaxThreadsPerThreadgroup( deviceLimits.maxComputeWorkGroupInvocations );
 
@@ -670,10 +709,36 @@ namespace Ogre
         rsc->setCapability( RSC_ALPHA_TO_COVERAGE );
         rsc->setCapability( RSC_HW_GAMMA );
         rsc->setCapability( RSC_VERTEX_BUFFER_INSTANCE_DATA );
+        // We don't support PSO nor VkShaderModule caches yet, but we do have SPIR-V caches.
+        rsc->setCapability( RSC_CAN_GET_COMPILED_SHADER_BUFFER );
         rsc->setCapability( RSC_EXPLICIT_API );
         rsc->setMaxPointSize( 256 );
 
-        rsc->setMaximumResolutions( 16384, 4096, 16384 );
+        // check memory properties to determine, if we can use UMA and/or TBDR optimizations
+        const VkPhysicalDeviceMemoryProperties &memoryProperties = mDevice->mDeviceMemoryProperties;
+        if( mDevice->mDeviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU ||
+            mDevice->mDeviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_CPU )
+        {
+            for( uint32_t typeIndex = 0; typeIndex < memoryProperties.memoryTypeCount; ++typeIndex )
+            {
+                const VkMemoryType &memoryType = memoryProperties.memoryTypes[typeIndex];
+                if( ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) != 0 &&
+                    ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) != 0 &&
+                    ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) != 0 )
+                {
+                    rsc->setCapability( RSC_UMA );
+                }
+
+                // VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT is a prerequisite for TBDR, and is probably
+                // a good heuristic that TBDR mode of buffers clearing is supported efficiently,
+                // i.e. RSC_IS_TILER.
+                if( ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT ) != 0 )
+                {
+                    rsc->setCapability( RSC_IS_TILER );
+                    rsc->setCapability( RSC_TILER_CAN_CLEAR_STENCIL_REGION );
+                }
+            }
+        }
 
         rsc->setVertexProgramConstantFloatCount( 256u );
         rsc->setVertexProgramConstantIntCount( 256u );
@@ -699,7 +764,9 @@ namespace Ogre
         rsc->addShaderProfile( "glslvk" );
         rsc->addShaderProfile( "glsl" );
 
-        if( rsc->getVendor() == GPU_QUALCOMM )
+        // Turnip is the Mesa driver.
+        // These workarounds are for the proprietary driver.
+        if( rsc->getVendor() == GPU_QUALCOMM && rsc->getDeviceName().find( "Turnip" ) == String::npos )
         {
 #ifdef OGRE_VK_WORKAROUND_BAD_3D_BLIT
             Workarounds::mBad3DBlit = true;
@@ -753,6 +820,35 @@ namespace Ogre
         }
 
         return rsc;
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::setSwappyFramePacing( bool bEnable, Window *callingWindow )
+    {
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        const bool bChanged = mSwappyFramePacing != bEnable;
+        mSwappyFramePacing = bEnable;
+
+        if( bChanged )
+        {
+            for( Window *window : mWindows )
+            {
+                if( window != callingWindow )
+                {
+                    OGRE_ASSERT_HIGH( dynamic_cast<VulkanAndroidWindow *>( window ) );
+                    static_cast<VulkanAndroidWindow *>( window )->_notifySwappyToggled();
+                }
+            }
+        }
+#endif
+    }
+    //-------------------------------------------------------------------------
+    bool VulkanRenderSystem::getSwappyFramePacing() const
+    {
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        return mSwappyFramePacing;
+#else
+        return false;
+#endif
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::resetAllBindings()
@@ -1211,6 +1307,15 @@ namespace Ogre
 
             bool bCanRestrictImageViewUsage = false;
 
+#ifdef OGRE_VULKAN_USE_SWAPPY
+            // Declared at this scope because the pointer must live long enough
+            // for the reference in deviceExtensions[i] to remain valid.
+            struct ExtName
+            {
+                char name[VK_MAX_EXTENSION_NAME_SIZE];
+            };
+            FastArray<ExtName> swappyRequiredExtensionNames;
+#endif
             FastArray<const char *> deviceExtensions;
             if( !externalDevice )
             {
@@ -1245,6 +1350,39 @@ namespace Ogre
                     else if( extensionName == VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME )
                         deviceExtensions.push_back( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME );
                 }
+#ifdef OGRE_VULKAN_USE_SWAPPY
+                // Add any extensions that SwappyVk requires:
+                uint32_t numSwappyRequiredExtensions = 0u;
+                SwappyVk_determineDeviceExtensions( mDevice->mPhysicalDevice, numExtensions,
+                                                    availableExtensions.begin(),
+                                                    &numSwappyRequiredExtensions, 0 );
+                FastArray<char *> swappyRequiredExtensionNamesTmp;
+                swappyRequiredExtensionNames.resize( numSwappyRequiredExtensions );
+                swappyRequiredExtensionNamesTmp.reserve( numSwappyRequiredExtensions );
+
+                for( ExtName &extName : swappyRequiredExtensionNames )
+                    swappyRequiredExtensionNamesTmp.push_back( extName.name );
+
+                SwappyVk_determineDeviceExtensions(
+                    mDevice->mPhysicalDevice, numExtensions, availableExtensions.begin(),
+                    &numSwappyRequiredExtensions, swappyRequiredExtensionNamesTmp.begin() );
+
+                for( const char *swappyReqExtension : swappyRequiredExtensionNamesTmp )
+                {
+                    bool bAlreadyAdded = false;
+                    for( const char *alreadyAdded : deviceExtensions )
+                    {
+                        if( strncmp( alreadyAdded, swappyReqExtension, VK_MAX_EXTENSION_NAME_SIZE ) ==
+                            0 )
+                        {
+                            bAlreadyAdded = true;
+                            break;
+                        }
+                    }
+                    if( !bAlreadyAdded )
+                        deviceExtensions.push_back( swappyReqExtension );
+                }
+#endif
             }
             else
             {
@@ -1907,8 +2045,8 @@ namespace Ogre
         {
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
             VkSampler textureSampler = static_cast<VkSampler>( samplerblock->mRsData );
-#else // VK handles are always 64bit, even on 32bit systems
-            VkSampler textureSampler = *static_cast<VkSampler*>( samplerblock->mRsData );
+#else  // VK handles are always 64bit, even on 32bit systems
+            VkSampler textureSampler = *static_cast<VkSampler *>( samplerblock->mRsData );
 #endif
             if( mGlobalTable.samplers[texUnit].sampler != textureSampler )
             {
@@ -2291,13 +2429,21 @@ namespace Ogre
             {
                 if( mAutoParamsBufferIdx >= mAutoParamsBuffer.size() )
                 {
+                    // Ask for a coherent buffer to avoid excessive flushing. Note: VaoManager may ignore
+                    // this request if the GPU can't provide coherent memory and we must flush anyway.
                     ConstBufferPacked *constBuffer =
                         mVaoManager->createConstBuffer( std::max<size_t>( 512u * 1024u, bytesToWrite ),
-                                                        BT_DYNAMIC_PERSISTENT, 0, false );
+                                                        BT_DYNAMIC_PERSISTENT_COHERENT, 0, false );
                     mAutoParamsBuffer.push_back( constBuffer );
                 }
 
                 ConstBufferPacked *constBuffer = mAutoParamsBuffer[mAutoParamsBufferIdx];
+
+                // This should be near-impossible to trigger because most Const Buffers are <= 64kb
+                // and we reserver 512kb per const buffer. A Low Level Material using a Params buffer
+                // with > 64kb is an edge case we don't care handling.
+                OGRE_ASSERT_LOW( bytesToWrite <= constBuffer->getTotalSizeBytes() );
+
                 mCurrentAutoParamsBufferPtr =
                     reinterpret_cast<uint8 *>( constBuffer->map( 0, constBuffer->getNumElements() ) );
                 mCurrentAutoParamsBufferSpaceLeft = constBuffer->getTotalSizeBytes();
@@ -2307,7 +2453,7 @@ namespace Ogre
 
             shader->updateBuffers( params, mCurrentAutoParamsBufferPtr );
 
-            assert( dynamic_cast<VulkanConstBufferPacked *>(
+            OGRE_ASSERT_HIGH( dynamic_cast<VulkanConstBufferPacked *>(
                 mAutoParamsBuffer[mAutoParamsBufferIdx - 1u] ) );
 
             VulkanConstBufferPacked *constBuffer =
@@ -2330,6 +2476,70 @@ namespace Ogre
             mCurrentAutoParamsBufferSpaceLeft -=
                 std::min( mCurrentAutoParamsBufferSpaceLeft, bytesToWrite );
         }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::flushBoundGpuProgramParameters(
+        const SubmissionType::SubmissionType submissionType )
+    {
+        bool bWillReuseLastBuffer = false;
+
+        const size_t maxBufferToFlush = mAutoParamsBufferIdx;
+        for( size_t i = mFirstUnflushedAutoParamsBuffer; i < maxBufferToFlush; ++i )
+        {
+            ConstBufferPacked *constBuffer = mAutoParamsBuffer[i];
+            if( i + 1u != maxBufferToFlush )
+            {
+                // Flush whole buffer.
+                constBuffer->unmap( UO_KEEP_PERSISTENT );
+            }
+            else
+            {
+                // Last buffer. Partial flush.
+                const size_t bytesToFlush =
+                    constBuffer->getTotalSizeBytes() - mCurrentAutoParamsBufferSpaceLeft;
+
+                constBuffer->unmap( UO_KEEP_PERSISTENT, 0u, bytesToFlush );
+                if( submissionType <= SubmissionType::FlushOnly &&
+                    mCurrentAutoParamsBufferSpaceLeft >= 4u )
+                {
+                    // Map again so we can continue from where we left off.
+
+                    // If the assert triggers then getNumElements is not in bytes and our math is wrong.
+                    OGRE_ASSERT_LOW( constBuffer->getBytesPerElement() == 1u );
+                    constBuffer->regressFrame();
+                    mCurrentAutoParamsBufferPtr = reinterpret_cast<uint8 *>(
+                        constBuffer->map( bytesToFlush, constBuffer->getNumElements() - bytesToFlush ) );
+                    mCurrentAutoParamsBufferSpaceLeft = constBuffer->getNumElements() - bytesToFlush;
+                    bWillReuseLastBuffer = true;
+                }
+                else
+                {
+                    mCurrentAutoParamsBufferSpaceLeft = 0u;
+                    mCurrentAutoParamsBufferPtr = 0;
+                }
+            }
+        }
+
+        if( submissionType >= SubmissionType::NewFrameIdx )
+        {
+            mAutoParamsBufferIdx = 0u;
+            mFirstUnflushedAutoParamsBuffer = 0u;
+        }
+        else
+        {
+            // If maxBufferToFlush == 0 then bindGpuProgramParameters() was never called this round
+            // and bWillReuseLastBuffer can't be true.
+            if( bWillReuseLastBuffer )
+                mFirstUnflushedAutoParamsBuffer = maxBufferToFlush - 1u;
+            else
+                mFirstUnflushedAutoParamsBuffer = maxBufferToFlush;
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::flushPendingNonCoherentFlushes(
+        const SubmissionType::SubmissionType submissionType )
+    {
+        flushBoundGpuProgramParameters( submissionType );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::bindGpuProgramPassIterationParameters( GpuProgramType gptype ) {}
@@ -2411,6 +2621,43 @@ namespace Ogre
         if( mRenderDocApi && !bDiscard )
             mActiveDevice->commitAndNextCommandBuffer( SubmissionType::FlushOnly );
         RenderSystem::endGpuDebuggerFrameCapture( window, bDiscard );
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::getCustomAttribute( const String &name, void *pData )
+    {
+        if( name == "VkInstance" )
+        {
+            *(VkInstance *)pData = mDevice->mInstance;
+            return;
+        }
+        else if( name == "VkPhysicalDevice" )
+        {
+            *(VkPhysicalDevice *)pData = mDevice->mPhysicalDevice;
+            return;
+        }
+        else if( name == "VulkanDevice" )
+        {
+            *(VulkanDevice **)pData = mDevice;
+            return;
+        }
+        else if( name == "VkDevice" )
+        {
+            *(VkDevice *)pData = mDevice->mDevice;
+            return;
+        }
+        else if( name == "mPresentQueue" )
+        {
+            *(VkQueue *)pData = mDevice->mPresentQueue;
+            return;
+        }
+        else if( name == "VulkanQueue" )
+        {
+            *(VulkanQueue **)pData = &mDevice->mGraphicsQueue;
+            return;
+        }
+
+        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Attribute not found: " + name,
+                     "VulkanRenderSystem::getCustomAttribute" );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::setClipPlanesImpl( const PlaneList &clipPlanes ) {}
@@ -3146,7 +3393,10 @@ namespace Ogre
         makeVkStruct( mssCi, VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO );
         mssCi.rasterizationSamples =
             static_cast<VkSampleCountFlagBits>( newPso->pass.sampleDescription.getColourSamples() );
-        mssCi.alphaToCoverageEnable = newPso->blendblock->mAlphaToCoverageEnabled;
+        mssCi.alphaToCoverageEnable =
+            newPso->blendblock->mAlphaToCoverage == HlmsBlendblock::A2cEnabled ||
+            ( newPso->blendblock->mAlphaToCoverage == HlmsBlendblock::A2cEnabledMsaaOnly &&
+              newPso->pass.sampleDescription.isMultisample() );
 
         VkPipelineDepthStencilStateCreateInfo depthStencilStateCi;
         makeVkStruct( depthStencilStateCi, VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO );
@@ -3391,8 +3641,8 @@ namespace Ogre
 
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
         newBlock->mRsData = textureSampler;
-#else // VK handles are always 64bit, even on 32bit systems
-        newBlock->mRsData = new uint64(textureSampler);
+#else  // VK handles are always 64bit, even on 32bit systems
+        newBlock->mRsData = new uint64( textureSampler );
 #endif
     }
     //-------------------------------------------------------------------------
@@ -3401,9 +3651,9 @@ namespace Ogre
         assert( block->mRsData );
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
         VkSampler textureSampler = static_cast<VkSampler>( block->mRsData );
-#else // VK handles are always 64bit, even on 32bit systems
-        VkSampler textureSampler = *static_cast<VkSampler*>( block->mRsData );
-        delete (uint64*)block->mRsData;
+#else  // VK handles are always 64bit, even on 32bit systems
+        VkSampler textureSampler = *static_cast<VkSampler *>( block->mRsData );
+        delete(uint64 *)block->mRsData;
 #endif
         delayed_vkDestroySampler( mVaoManager, mActiveDevice->mDevice, textureSampler, 0 );
     }
@@ -3498,13 +3748,129 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    inline bool isPowerOf2( uint32 x ) { return ( x & ( x - 1u ) ) == 0u; }
     SampleDescription VulkanRenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
-                                                                     PixelFormatGpu format )
+                                                                     PixelFormatGpu format,
+                                                                     uint32 textureFlags,
+                                                                     uint32 depthTextureFlags )
     {
-        uint8 samples = sampleDesc.getMaxSamples();
-        if( mDevice )
-            samples = (uint8)getMaxUsableSampleCount( mDevice->mDeviceProperties, samples );
-        return SampleDescription( samples, sampleDesc.getMsaaPattern() );
+        if( !mDevice )
+        {
+            // TODO
+            return sampleDesc;
+        }
+
+        // TODO: Spec says framebufferColorSampleCounts & co. contains the base minimum for all formats
+        // and we can use vkGetPhysicalDeviceImageFormatProperties to check for MSAA settings that may go
+        // BEYOND that mask for a specific format (honestly I don't trust Android drivers to implement
+        // vkGetPhysicalDeviceImageFormatProperties properly).
+        const VkPhysicalDeviceLimits &deviceLimits = mDevice->mDeviceProperties.limits;
+
+        if( sampleDesc.getCoverageSamples() != 0u )
+        {
+            // EQAA / CSAA.
+            // TODO: Support VK_AMD_mixed_attachment_samples & VK_NV_framebuffer_mixed_samples.
+            return validateSampleDescription(
+                SampleDescription( sampleDesc.getMaxSamples(), sampleDesc.getMsaaPattern() ), format,
+                textureFlags, depthTextureFlags );
+        }
+        else
+        {
+            // MSAA.
+            VkSampleCountFlags supportedSampleCounts = 0u;
+
+            if( PixelFormatGpuUtils::isDepth( format ) )
+            {
+                // Not an if-else typo: storageImageSampleCounts is AND'ed against *DepthSampleCounts.
+                if( textureFlags & TextureFlags::Uav )
+                    supportedSampleCounts = deviceLimits.storageImageSampleCounts;
+
+                if( textureFlags & TextureFlags::NotTexture )
+                    supportedSampleCounts = deviceLimits.framebufferDepthSampleCounts;
+                else
+                    supportedSampleCounts = deviceLimits.sampledImageDepthSampleCounts;
+
+                if( PixelFormatGpuUtils::isStencil( format ) )
+                {
+                    // Not a typo: storageImageSampleCounts is AND'ed against *StencilSampleCounts.
+                    if( textureFlags & TextureFlags::Uav )
+                        supportedSampleCounts &= deviceLimits.storageImageSampleCounts;
+
+                    if( textureFlags & TextureFlags::NotTexture )
+                        supportedSampleCounts &= deviceLimits.framebufferStencilSampleCounts;
+                    else
+                        supportedSampleCounts &= deviceLimits.sampledImageStencilSampleCounts;
+                }
+            }
+            else if( PixelFormatGpuUtils::isStencil( format ) )
+            {
+                // Not an if-else typo: storageImageSampleCounts is AND'ed against *StencilSampleCounts.
+                if( textureFlags & TextureFlags::Uav )
+                    supportedSampleCounts = deviceLimits.storageImageSampleCounts;
+
+                if( textureFlags & TextureFlags::NotTexture )
+                    supportedSampleCounts = deviceLimits.framebufferStencilSampleCounts;
+                else
+                    supportedSampleCounts = deviceLimits.sampledImageStencilSampleCounts;
+            }
+            else if( format == PFG_NULL )
+            {
+                // PFG_NULL is always NotTexture and can't be Uav,
+                // let's just return to the user what they intended to ask.
+                supportedSampleCounts = deviceLimits.framebufferNoAttachmentsSampleCounts;
+            }
+            else if( PixelFormatGpuUtils::isInteger( format ) )
+            {
+                // TODO: Query Vulkan 1.2 / extensions to get framebufferIntegerColorSampleCounts.
+                // supportedSampleCounts = deviceLimits.framebufferIntegerColorSampleCounts;
+                supportedSampleCounts = VK_SAMPLE_COUNT_1_BIT;
+            }
+            else
+            {
+                if( textureFlags & TextureFlags::Uav )
+                    supportedSampleCounts = deviceLimits.storageImageSampleCounts;
+                else if( textureFlags & TextureFlags::NotTexture )
+                    supportedSampleCounts = deviceLimits.framebufferColorSampleCounts;
+                else
+                    supportedSampleCounts = deviceLimits.sampledImageColorSampleCounts;
+
+                if( PixelFormatGpuUtils::isDepth( format ) )
+                {
+                    // Not an if-else typo: storageImage... is AND'ed against *DepthSampleCounts.
+                    if( depthTextureFlags & TextureFlags::Uav )
+                        supportedSampleCounts &= deviceLimits.storageImageSampleCounts;
+
+                    if( depthTextureFlags & TextureFlags::NotTexture )
+                        supportedSampleCounts &= deviceLimits.framebufferDepthSampleCounts;
+                    else
+                        supportedSampleCounts &= deviceLimits.sampledImageDepthSampleCounts;
+
+                    if( PixelFormatGpuUtils::isStencil( format ) )
+                    {
+                        // Not a typo: storageImageSampleCounts is AND'ed against *StencilSampleCounts.
+                        if( depthTextureFlags & TextureFlags::Uav )
+                            supportedSampleCounts &= deviceLimits.storageImageSampleCounts;
+
+                        if( depthTextureFlags & TextureFlags::NotTexture )
+                            supportedSampleCounts &= deviceLimits.framebufferStencilSampleCounts;
+                        else
+                            supportedSampleCounts &= deviceLimits.sampledImageStencilSampleCounts;
+                    }
+                }
+            }
+
+            uint8 samples = sampleDesc.getColourSamples();
+            OGRE_ASSERT_LOW( isPowerOf2( samples ) );
+            while( samples > 0u )
+            {
+                if( supportedSampleCounts & samples )
+                    return SampleDescription( samples, sampleDesc.getMsaaPattern() );
+                samples = samples >> 1u;
+            }
+
+            // Ouch. The format is not supported. Return "something".
+            return SampleDescription( 0u, sampleDesc.getMsaaPattern() );
+        }
     }
     //-------------------------------------------------------------------------
     bool VulkanRenderSystem::isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,

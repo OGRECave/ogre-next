@@ -223,10 +223,10 @@ namespace Ogre
         return getAttributeIndex( semantic, index ) != NOT_FOUND_CUSTOM_ATTRIBUTES_INDEX;
     }
 
-    void GLSLProgram::getMicrocodeFromCache()
+    void GLSLProgram::getMicrocodeFromCache( const void *microcode )
     {
-        GpuProgramManager::Microcode cacheMicrocode =
-            GpuProgramManager::getSingleton().getMicrocodeFromCache( getCombinedSource() );
+        const GpuProgramManager::Microcode &cacheMicrocode =
+            *static_cast<const GpuProgramManager::Microcode *>( microcode );
 
         cacheMicrocode->seek( 0 );
 

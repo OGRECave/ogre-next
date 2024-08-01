@@ -3,6 +3,7 @@
 
 // CMake auto-generated configuration options
 
+#cmakedefine OGRE_VULKAN_USE_SWAPPY
 #cmakedefine OGRE_VULKAN_WINDOW_NULL
 #cmakedefine OGRE_VULKAN_WINDOW_WIN32
 #cmakedefine OGRE_VULKAN_WINDOW_XCB

@@ -117,6 +117,8 @@ namespace Ogre
 
         RenderSystem *mRenderSystem;
 
+        TextureGpu *mBlueNoise;
+
     public:
         typedef std::map<IdString, HlmsDatablock *> HlmsDatablockMap;
 
@@ -354,9 +356,12 @@ namespace Ogre
             Hlms type. The type must be registered, otherwise it may crash.
         @param filename
             Valid file path.
+        @param sortByName
+            Use true if output JSON should have materials sorted alphabetically
+            by name (case sensitive).
         */
         void saveMaterials( HlmsTypes hlmsType, const String &filename, HlmsJsonListener *listener,
-                            const String &additionalTextureExtension );
+                            const String &additionalTextureExtension, bool sortByName = false );
 
         /** Saves a specific Hlms material at the given file location.
         @param datablock
@@ -407,6 +412,10 @@ namespace Ogre
         /// to get how which indices are active. @see _getBlocks to retrieve
         /// all types of block in a generic way.
         const HlmsSamplerblock *_getSamplerblock( uint16 idx ) const;
+
+        void loadBlueNoise();
+
+        TextureGpu *getBlueNoiseTexture() const { return mBlueNoise; }
     };
     /** @} */
     /** @} */

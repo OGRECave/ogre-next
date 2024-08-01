@@ -6,7 +6,7 @@
 
 @piece( DefaultHeaderPS )
 	// START UNIFORM DECLARATION
-	@property( !hlms_shadowcaster || alpha_test )
+	@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 		@property( !hlms_shadowcaster )
 			@insertpiece( PassStructDecl )
 		@end
@@ -179,6 +179,7 @@
 	@insertpiece( DeclRefractionsFuncs )
 	@insertpiece( DeclIrradianceSH )
 	@insertpiece( DeclLightProfilesTextureFuncs )
+	@insertpiece( DeclAlphaHashFuncs )
 @end
 
 
@@ -371,11 +372,12 @@
 		@piece( two_sided_flip_normal )* (gl_FrontFacing ? 1.0 : -1.0)@end
 	@end
 @end
+@piece( LoadGeomNormalData )
+	// Geometric normal
+	pixelData.geomNormal = normalize( inPs.normal ) @insertpiece( two_sided_flip_normal );
+@end
 @piece( LoadNormalData )
-	@property( !normal_map )
-		// Geometric normal
-		pixelData.normal = normalize( inPs.normal ) @insertpiece( two_sided_flip_normal );
-	@else
+	@property( normal_map )
 		//Normal mapping.
 		pixelData.geomNormal = normalize( inPs.normal ) @insertpiece( two_sided_flip_normal );
 		midf3 vTangent		= normalize( inPs.tangent );
@@ -746,8 +748,36 @@
 	@end
 @end
 
+@piece( ProcessAlpha )
+	@property( hlms_alphablend || hlms_alpha_to_coverage || hlms_alpha_hash )
+		@property( use_texture_alpha )
+			float finalAlpha = midf_c( material.F0.w ) * pixelData.diffuse.w;
+		@else
+			float finalAlpha = midf_c( material.F0.w );
+		@end
+
+		@property( hlms_alpha_hash )
+			@property( hlms_alpha_to_coverage )
+				finalAlpha = AlphaHashReject( finalAlpha, inPs.uv0.xy ALPHA_HASHING_ARG );
+			@else
+				if( AlphaHashReject( finalAlpha, inPs.uv0.xy ALPHA_HASHING_ARG ) )
+					discard;
+			@end
+		@end
+	@else
+		midf finalAlpha = _h( 1.0f );
+	@end
+@end
+
 @property( !hlms_shadowcaster )
 @piece( DefaultBodyPS )
+	@property( hlms_emulate_clip_distances && hlms_global_clip_planes && hlms_pso_clip_distances && syntax == glslvk )
+		@foreach( hlms_pso_clip_distances, n )
+			if( inPs.clipDistance@n < 0.0 )
+				discard;
+		@end
+	@end
+
 	@property( hlms_screen_pos_uv )
 		float2 screenPosUv = gl_FragCoord.xy * passBuf.invWindowRes.xy;
 	@end
@@ -771,7 +801,7 @@
 
 		@insertpiece( SampleDetailMaps )
 
-		@property( !hlms_prepass || alpha_test )
+		@property( !hlms_prepass || alpha_test || hlms_alpha_hash )
 			@insertpiece( SampleDiffuseMap )
 		@end
 
@@ -783,6 +813,10 @@
 		pixelData.diffuse.xyz	= float3( 1.0f, 1.0f, 1.0f );
 		pixelData.specular.xyz	= float3( 0.0f, 0.0f, 0.0f );
 @end
+
+		@property( !hlms_use_prepass )
+			@insertpiece( LoadGeomNormalData )
+		@end
 
 		@insertpiece( forwardPlusDoDecals )
 
@@ -935,15 +969,8 @@
 					outPs_colour0.xyz	= finalColour;
 				@end
 
-				@property( hlms_alphablend || hlms_alpha_to_coverage )
-					@property( use_texture_alpha )
-						outPs_colour0.w	= midf_c( material.F0.w ) * pixelData.diffuse.w;
-					@else
-						outPs_colour0.w	= midf_c( material.F0.w );
-					@end
-				@else
-					outPs_colour0.w		= _h( 1.0 );
-				@end
+				@insertpiece( ProcessAlpha )
+				outPs_colour0.w = finalAlpha;
 
 				@property( debug_pssm_splits )
 					outPs_colour0.xyz = lerp( outPs_colour0.xyz, debugPssmSplit.xyz, _h( 0.2f ) );
@@ -965,12 +992,14 @@
 				outPs_shadowRoughness	= midf2_c( 1.0, (pixelData.roughness - 0.02) * 1.02040816 );
 			@end
 		@end
+	@else /// hlms_render_depth_only
+		@insertpiece( ProcessAlpha )
 	@end
 @end ///DefaultBodyPS
 @else ///!hlms_shadowcaster
 
 @piece( DefaultBodyPS )
-	@property( alpha_test )
+	@property( alpha_test || hlms_alpha_hash )
 		PixelData pixelData;
 		@insertpiece( LoadMaterial )
 		@insertpiece( UnpackTextureIndices0 )
@@ -979,6 +1008,9 @@
 		@insertpiece( SampleDiffuseMap )
 	@end
 	@insertpiece( DoShadowCastPS )
+	@property( hlms_alpha_hash )
+		@insertpiece( ProcessAlpha )
+	@end
 @end
 
 @end

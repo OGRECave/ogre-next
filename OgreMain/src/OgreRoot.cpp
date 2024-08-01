@@ -83,6 +83,8 @@ THE SOFTWARE.
 #include "OgreWindow.h"
 #include "OgreWindowEventUtilities.h"
 #include "OgreWireAabb.h"
+#include "ParticleSystem/OgreParticleSystem2.h"
+#include "ParticleSystem/OgreParticleSystemManager2.h"
 #include "Threading/OgreDefaultWorkQueue.h"
 
 #if OGRE_NO_FREEIMAGE == 0
@@ -233,6 +235,8 @@ namespace Ogre
         // LOD strategy manager
         mLodStrategyManager = OGRE_NEW LodStrategyManager();
 
+        mParticleSystemManager = new ParticleSystemManager2( nullptr, nullptr );
+
 #if OGRE_PROFILING
         // Profiler
         mProfiler = OGRE_NEW Profiler();
@@ -296,6 +300,8 @@ namespace Ogre
         addMovableObjectFactory( mItemFactory );
         mLightFactory = OGRE_NEW LightFactory();
         addMovableObjectFactory( mLightFactory );
+        mParticleSystem2Factory = OGRE_NEW ParticleSystem2Factory();
+        addMovableObjectFactory( mParticleSystem2Factory );
         mRectangle2DFactory = OGRE_NEW Rectangle2DFactory();
         addMovableObjectFactory( mRectangle2DFactory );
         mBillboardSetFactory = OGRE_NEW v1::BillboardSetFactory();
@@ -327,8 +333,8 @@ namespace Ogre
     Root::~Root()
     {
         LogManager::getSingleton().stream( LML_TRIVIAL )
-            << "Average FPS: " << mFrameStats->getAvgFps() << "\n"
-            << "Average time: \t" << mFrameStats->getAvgTime() << " ms\n"
+            << "Average FPS: " << mFrameStats->getRollingAverageFps() << "\n"
+            << "Average time: \t" << ( mFrameStats->getRollingAverage() * 1000.0 ) << " ms\n"
             << "Best time: \t" << mFrameStats->getBestTime() << " ms\n"
             << "Worst time: \t" << mFrameStats->getWorstTime() << " ms";
 
@@ -364,6 +370,8 @@ namespace Ogre
 #if OGRE_NO_ASTC_CODEC == 0
         ASTCCodec::shutdown();
 #endif
+
+        delete mParticleSystemManager;
 
         OGRE_DELETE mLodStrategyManager;
 
@@ -403,6 +411,7 @@ namespace Ogre
         OGRE_DELETE mEntityFactory;
         OGRE_DELETE mItemFactory;
         OGRE_DELETE mLightFactory;
+        OGRE_DELETE mParticleSystem2Factory;
         OGRE_DELETE mRectangle2DFactory;
         OGRE_DELETE mBillboardSetFactory;
         OGRE_DELETE mManualObjectFactory;
@@ -1065,6 +1074,8 @@ namespace Ogre
     void Root::queueEndRendering( bool state /* = true */ ) { mQueuedEnd = state; }
     //-----------------------------------------------------------------------
     bool Root::endRenderingQueued() { return mQueuedEnd; }
+    //-----------------------------------------------------------------------
+    void Root::resetFrameStats() { mFrameStats->reset( mTimer->getMicroseconds() ); }
     //-----------------------------------------------------------------------
     void Root::startRendering()
     {

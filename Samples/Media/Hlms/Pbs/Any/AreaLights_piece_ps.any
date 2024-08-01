@@ -8,7 +8,7 @@
 			uniform sampler2DArray areaLightMasks;
 		@end
 		@property( syntax == glslvk )
-			layout( ogre_t@value(areaLightMasks) ) uniform texture2DArray areaLightMasks;
+			layout( ogre_t@value(areaLightMasks) ) midf_tex uniform texture2DArray areaLightMasks;
 			layout( ogre_s@value(areaLightMasks) ) uniform sampler areaLightMasksSampler;
 		@end
 		@property( syntax == hlsl )

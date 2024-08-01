@@ -166,6 +166,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
+    void MovableObject::resetMeshLod() { mCurrentMeshLod = 0u; }
+    //-----------------------------------------------------------------------
     bool MovableObject::isStatic() const
     {
         return mObjectMemoryManager->getMemoryManagerType() == SCENE_STATIC;
@@ -449,9 +451,44 @@ namespace Ogre
         return cameraDir.dotProduct( worldAabb->mCenter - cameraPos ) - *worldRadius;
     }
     //-----------------------------------------------------------------------
+    void MovableObject::cullFrustumPrepare( const Camera *frustum, uint32 sceneVisibilityFlags,
+                                            const Camera *lodCamera, CullFrustumPreparedData &pd )
+    {
+        ArrayVector3 cameraPos, cameraDir, lodCameraPos;
+        pd.cameraPos.setAll( frustum->_getCachedDerivedPosition() );
+        pd.cameraDir.setAll( -frustum->_getCachedDerivedOrientation().zAxis() );
+        pd.lodCameraPos.setAll( lodCamera->_getCachedDerivedPosition() );
+
+        // Flip the bit from shadow caster, and leave only that in "includeNonCasters"
+        const uint32 includeNonCastersTest =
+            ( ( ( sceneVisibilityFlags & LAYER_SHADOW_CASTER ) ^ std::numeric_limits<uint32>::max() ) &
+              LAYER_SHADOW_CASTER );
+
+        pd.includeNonCasters = Mathlib::SetAll( includeNonCastersTest );
+
+        pd.isShadowMappingCasterPass = includeNonCastersTest == 0;
+
+        sceneVisibilityFlags &= RESERVED_VISIBILITY_FLAGS;
+
+        pd.sceneFlags = Mathlib::SetAll( sceneVisibilityFlags );
+        ArrayPlane planes[6];
+        const Plane *frustumPlanes = frustum->_getCachedFrustumPlanes();
+
+        for( size_t i = 0; i < 6; ++i )
+        {
+            pd.planes[i].planeNormal.setAll( frustumPlanes[i].normal );
+            pd.planes[i].signFlip.setAll( frustumPlanes[i].normal );
+            pd.planes[i].signFlip.setToSign();
+            pd.planes[i].planeNegD = Mathlib::SetAll( -frustumPlanes[i].d );
+        }
+
+        pd.ignoreRenderingDistance =
+            CastIntToReal( Mathlib::SetAll( lodCamera->getUseRenderingDistance() ? 0 : 0xffffffff ) );
+    }
+    //-----------------------------------------------------------------------
     void MovableObject::cullFrustum( const size_t numNodes, ObjectData objData, const Camera *frustum,
-                                     uint32 sceneVisibilityFlags, MovableObjectArray &outCulledObjects,
-                                     const Camera *lodCamera )
+                                     MovableObjectArray &outCulledObjects,
+                                     const CullFrustumPreparedData &pd )
     {
         // On threaded environments, the internal variables from outCulledObjects cause
         // a false cache sharing because they're too close to each other. Perfoming
@@ -459,51 +496,18 @@ namespace Ogre
         MovableObjectArray culledObjects;
         culledObjects.swap( outCulledObjects );
 
-        // Thanks to Fabian Giesen for summing up all known methods of frustum culling:
-        // http://fgiesen.wordpress.com/2010/10/17/view-frustum-culling/
-        // (we use method Method 5: "If you really don't care whether a box is
-        // partially or fully inside"):
-        // vector4 signFlip = componentwise_and(plane, 0x80000000);
-        // return dot3(center + xor(extent, signFlip), plane) > -plane.w;
-        struct ArrayPlane
-        {
-            ArrayVector3 planeNormal;
-            ArrayVector3 signFlip;
-            ArrayReal planeNegD;
-        };
-
-        ArrayVector3 cameraPos, cameraDir, lodCameraPos;
-        cameraPos.setAll( frustum->_getCachedDerivedPosition() );
-        cameraDir.setAll( -frustum->_getCachedDerivedOrientation().zAxis() );
-        lodCameraPos.setAll( lodCamera->_getCachedDerivedPosition() );
+        const ArrayVector3 cameraPos = pd.cameraPos;
+        const ArrayVector3 cameraDir = pd.cameraDir;
+        const ArrayVector3 lodCameraPos = pd.lodCameraPos;
 
         const Camera::CameraSortMode cameraSortMode = frustum->mSortMode;
 
-        // Flip the bit from shadow caster, and leave only that in "includeNonCasters"
-        const uint32 includeNonCastersTest =
-            ( ( ( sceneVisibilityFlags & LAYER_SHADOW_CASTER ) ^ std::numeric_limits<uint32>::max() ) &
-              LAYER_SHADOW_CASTER );
+        const ArrayInt includeNonCasters = pd.includeNonCasters;
+        const bool isShadowMappingCasterPass = pd.isShadowMappingCasterPass;
 
-        ArrayInt includeNonCasters = Mathlib::SetAll( includeNonCastersTest );
-
-        const bool isShadowMappingCasterPass = includeNonCastersTest == 0;
-
-        sceneVisibilityFlags &= RESERVED_VISIBILITY_FLAGS;
-
-        ArrayInt sceneFlags = Mathlib::SetAll( sceneVisibilityFlags );
-        ArrayPlane planes[6];
-        const Plane *frustumPlanes = frustum->_getCachedFrustumPlanes();
-
-        for( size_t i = 0; i < 6; ++i )
-        {
-            planes[i].planeNormal.setAll( frustumPlanes[i].normal );
-            planes[i].signFlip.setAll( frustumPlanes[i].normal );
-            planes[i].signFlip.setToSign();
-            planes[i].planeNegD = Mathlib::SetAll( -frustumPlanes[i].d );
-        }
-
-        const ArrayMaskR ignoreRenderingDistance =
-            CastIntToReal( Mathlib::SetAll( lodCamera->getUseRenderingDistance() ? 0 : 0xffffffff ) );
+        const ArrayInt sceneFlags = pd.sceneFlags;
+        const ArrayPlane *RESTRICT_ALIAS planes = pd.planes;
+        const ArrayMaskR ignoreRenderingDistance = pd.ignoreRenderingDistance;
 
         // TODO: Profile whether we should use XOR to flip the sign or simple multiplication.
         // In theory xor is faster, but some archs have a penalty for switching between integer
@@ -872,8 +876,6 @@ namespace Ogre
         {
             ArrayInt *RESTRICT_ALIAS visibilityFlags =
                 reinterpret_cast<ArrayInt * RESTRICT_ALIAS>( objData.mVisibilityFlags );
-
-            objData.mWorldAabb->mCenter + objData.mWorldAabb->mHalfSize;
 
             // Ignore casters with infinite boxes
             ArrayMaskR infMask = Mathlib::Or(

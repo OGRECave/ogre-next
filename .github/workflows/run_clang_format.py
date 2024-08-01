@@ -40,10 +40,12 @@ g_folders = [
     'RenderSystems/Metal',
     'RenderSystems/NULL',
     'PlugIns/ParticleFX',
+    'PlugIns/ParticleFX2',
     'Samples/2.0',
 ]
 
 g_exceptions = {'stb_image_write.h', 'stb_image.h',
+                'wgl.h', 'khrplatform.h',
                 'MurmurHash3.cpp', 'GLX_backdrop.h',
                 'glcorearb.h', 'glext.h', 'wglext.h',
                 'gl3w.h', 'glxtokens-backup.h', 'glxext.h',
@@ -85,7 +87,6 @@ g_thresholds = {
     '../../OgreMain/include/Math/Array/NEON/Single/OgreArrayMatrixAf4x3.inl': 1791,
     '../../OgreMain/include/Math/Array/SSE2/Single/OgreArrayVector3.inl': 1239,
     '../../OgreMain/include/Math/Array/SSE2/Single/OgreArraySphere.inl': 30,
-    '../../OgreMain/include/Math/Array/SSE2/Single/OgreMathlibSSE2.inl': 393,
     '../../OgreMain/include/Math/Array/SSE2/Single/OgreArrayMatrix4.inl': 1530,
     '../../OgreMain/include/Math/Array/SSE2/Single/OgreArrayAabb.inl': 219,
     '../../OgreMain/include/Math/Array/SSE2/Single/OgreBooleanMask.inl': 126,
@@ -164,8 +165,8 @@ def collectCppFilesForFormatting():
             for fileName in filenames:
                 fullpath = os.path.join(root, fileName)
                 ext = os.path.splitext(fileName)[-1].lower()
-                if(ext == '.cpp' or ext == '.h' or ext == '.inl' or ext == '.mm'):
-                    if(fileName not in g_exceptions):
+                if (ext == '.cpp' or ext == '.h' or ext == '.inl' or ext == '.mm'):
+                    if (fileName not in g_exceptions):
                         pathsToParse.append(fullpath)
     return pathsToParse
 

@@ -214,7 +214,7 @@ namespace Ogre
                                           bool                  instancedStereo,
                                           float *RESTRICT_ALIAS passBufferPtr ) const = 0;
 
-        virtual void setHlmsPassProperties( Hlms *hlms );
+        virtual void setHlmsPassProperties( const size_t tid, Hlms *hlms );
 
         /// Turns on visualization of light cell occupancy
         void setDebugMode( bool debugMode ) { mDebugMode = debugMode; }

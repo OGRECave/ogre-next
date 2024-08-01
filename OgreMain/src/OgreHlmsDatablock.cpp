@@ -67,7 +67,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HlmsBlendblock::HlmsBlendblock() :
         BasicBlock( BLOCK_BLEND ),
-        mAlphaToCoverageEnabled( false ),
+        mAlphaToCoverage( A2cDisabled ),
         mBlendChannelMask( BlendChannelAll ),
         mIsTransparent( 0u ),
         mSeparateBlend( false ),
@@ -114,12 +114,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HlmsDatablock::HlmsDatablock( IdString name, Hlms *creator, const HlmsMacroblock *macroblock,
                                   const HlmsBlendblock *blendblock, const HlmsParamVec &params ) :
+        mCustomPieceFileIdHash{},
         mCreator( creator ),
         mName( name ),
         mTextureHash( 0 ),
         mType( creator->getType() ),
         mAllowTextureResidencyChange( true ),
         mIgnoreFlushRenderables( false ),
+        mAlphaHashing( false ),
         mAlphaTestCmp( CMPF_ALWAYS_PASS ),
         mAlphaTestShadowCasterOnly( false ),
         mAlphaTestThreshold( 0.5f ),
@@ -137,6 +139,10 @@ namespace Ogre
         hlmsManager->destroyBlendblock( blendblock );
 
         String paramVal;
+
+        if( Hlms::findParamInVec( params, "alpha_hash", paramVal ) && !paramVal.empty() )
+            mAlphaHashing = StringConverter::parseBool( paramVal, false );
+
         if( Hlms::findParamInVec( params, HlmsBaseProp::AlphaTest, paramVal ) )
         {
             mAlphaTestCmp = CMPF_LESS;
@@ -225,6 +231,7 @@ namespace Ogre
         datablock->setBlendblock( const_cast<HlmsBlendblock *>( mBlendblock[0] ), false );
         datablock->setBlendblock( const_cast<HlmsBlendblock *>( mBlendblock[1] ), true );
 
+        datablock->mAlphaHashing = mAlphaHashing;
         datablock->mAlphaTestCmp = mAlphaTestCmp;
         datablock->mAlphaTestShadowCasterOnly = mAlphaTestShadowCasterOnly;
         datablock->mAlphaTestThreshold = mAlphaTestThreshold;
@@ -238,7 +245,66 @@ namespace Ogre
         return datablock;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsDatablock::setMacroblock( const HlmsMacroblock &macroblock, bool casterBlock )
+    void HlmsDatablock::setCustomPieceCodeFromMemory( const String &filename, const String &shaderCode,
+                                                      ShaderType shaderType )
+    {
+        if( filename.empty() )
+        {
+            OGRE_ASSERT_LOW( shaderCode.empty() && "Providing shader code but the filename is empty!" );
+            if( mCustomPieceFileIdHash[shaderType] )
+            {
+                mCustomPieceFileIdHash[shaderType] = 0;
+                flushRenderables();
+            }
+        }
+        else
+        {
+            mCreator->_addDatablockCustomPieceFileFromMemory( filename, shaderCode );
+            const int32 hashNameId = static_cast<int32>( IdString( filename ).getU32Value() );
+            mCustomPieceFileIdHash[shaderType] = hashNameId;
+            flushRenderables();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsDatablock::setCustomPieceFile( const String &filename, const String &resourceGroup,
+                                            ShaderType shaderType )
+    {
+        if( filename.empty() )
+        {
+            if( mCustomPieceFileIdHash[shaderType] )
+            {
+                mCustomPieceFileIdHash[shaderType] = 0;
+                flushRenderables();
+            }
+        }
+        else
+        {
+            const int32 hashNameId = static_cast<int32>( IdString( filename ).getU32Value() );
+            if( mCustomPieceFileIdHash[shaderType] != hashNameId )
+            {
+                mCreator->_addDatablockCustomPieceFile( filename, resourceGroup );
+                mCustomPieceFileIdHash[shaderType] = hashNameId;
+                flushRenderables();
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    int32 HlmsDatablock::getCustomPieceFileIdHash( ShaderType shaderType ) const
+    {
+        OGRE_ASSERT_LOW( shaderType < NumShaderTypes );
+        return mCustomPieceFileIdHash[shaderType];
+    }
+    //-----------------------------------------------------------------------------------
+    const String &HlmsDatablock::getCustomPieceFileStr( ShaderType shaderType ) const
+    {
+        OGRE_ASSERT_LOW( shaderType < NumShaderTypes );
+        if( !mCustomPieceFileIdHash[shaderType] )
+            return BLANKSTRING;
+        return mCreator->getDatablockCustomPieceFileNameStr( mCustomPieceFileIdHash[shaderType] );
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsDatablock::setMacroblock( const HlmsMacroblock &macroblock, const bool casterBlock,
+                                       const bool overrideCasterBlock )
     {
         OgreProfileExhaustive( "HlmsDatablock::setMacroblockRef" );
 
@@ -251,7 +317,7 @@ namespace Ogre
             hlmsManager->destroyMacroblock( oldBlock );
         updateMacroblockHash( casterBlock );
 
-        if( !casterBlock )
+        if( !casterBlock && overrideCasterBlock )
         {
             mIgnoreFlushRenderables = true;
             setMacroblock( mMacroblock[0], true );
@@ -268,7 +334,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsDatablock::setMacroblock( const HlmsMacroblock *macroblock, bool casterBlock )
+    void HlmsDatablock::setMacroblock( const HlmsMacroblock *macroblock, const bool casterBlock,
+                                       const bool overrideCasterBlock )
     {
         OgreProfileExhaustive( "HlmsDatablock::setMacroblockPtr" );
 
@@ -281,7 +348,7 @@ namespace Ogre
 
         updateMacroblockHash( casterBlock );
 
-        if( !casterBlock )
+        if( !casterBlock && overrideCasterBlock )
         {
             mIgnoreFlushRenderables = true;
             setMacroblock( mMacroblock[0], true );
@@ -298,7 +365,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsDatablock::setBlendblock( const HlmsBlendblock &blendblock, bool casterBlock )
+    void HlmsDatablock::setBlendblock( const HlmsBlendblock &blendblock, const bool casterBlock,
+                                       const bool overrideCasterBlock )
     {
         OgreProfileExhaustive( "HlmsDatablock::setBlendblockRef" );
 
@@ -311,15 +379,15 @@ namespace Ogre
             hlmsManager->destroyBlendblock( oldBlock );
         updateMacroblockHash( casterBlock );
 
-        if( !casterBlock )
+        if( !casterBlock && overrideCasterBlock )
         {
             mIgnoreFlushRenderables = true;
-            if( !mBlendblock[0]->mAlphaToCoverageEnabled )
+            if( mBlendblock[0]->mAlphaToCoverage == HlmsBlendblock::A2cDisabled )
                 setBlendblock( mBlendblock[0], true );
             else
             {
                 HlmsBlendblock blendblockNoAC = *mBlendblock[0];
-                blendblockNoAC.mAlphaToCoverageEnabled = false;
+                blendblockNoAC.mAlphaToCoverage = HlmsBlendblock::A2cDisabled;
                 setBlendblock( blendblockNoAC, true );
             }
             mIgnoreFlushRenderables = false;
@@ -335,7 +403,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsDatablock::setBlendblock( const HlmsBlendblock *blendblock, bool casterBlock )
+    void HlmsDatablock::setBlendblock( const HlmsBlendblock *blendblock, const bool casterBlock,
+                                       const bool overrideCasterBlock )
     {
         OgreProfileExhaustive( "HlmsDatablock::setBlendblockPtr" );
 
@@ -347,15 +416,15 @@ namespace Ogre
         mBlendblock[casterBlock] = blendblock;
         updateMacroblockHash( casterBlock );
 
-        if( !casterBlock )
+        if( !casterBlock && overrideCasterBlock )
         {
             mIgnoreFlushRenderables = true;
-            if( !mBlendblock[0]->mAlphaToCoverageEnabled )
+            if( mBlendblock[0]->mAlphaToCoverage == HlmsBlendblock::A2cDisabled )
                 setBlendblock( mBlendblock[0], true );
             else
             {
                 HlmsBlendblock blendblockNoAC = *mBlendblock[0];
-                blendblockNoAC.mAlphaToCoverageEnabled = false;
+                blendblockNoAC.mAlphaToCoverage = HlmsBlendblock::A2cDisabled;
                 setBlendblock( blendblockNoAC, true );
             }
             mIgnoreFlushRenderables = false;
@@ -367,6 +436,15 @@ namespace Ogre
             // be different but be assigned a different ID (old one's API construct was already
             // destroyed) or be equal but have a different ID. It's not random or chaotic and
             // there are guarantees, but it's tricky to get it right and not worth it.
+            flushRenderables();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsDatablock::setAlphaHashing( bool bAlphaHashing )
+    {
+        if( mAlphaHashing != bAlphaHashing )
+        {
+            mAlphaHashing = bAlphaHashing;
             flushRenderables();
         }
     }

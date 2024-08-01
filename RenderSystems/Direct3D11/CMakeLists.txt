@@ -61,4 +61,4 @@ if( OGRE_CONFIG_AMD_AGS )
 endif()
 
 ogre_config_plugin(RenderSystem_Direct3D11)
-install(FILES ${HEADER_FILES} DESTINATION include/OGRE/RenderSystems/Direct3D11)
+install(FILES ${HEADER_FILES} DESTINATION include/${OGRE_NEXT_PREFIX}/RenderSystems/Direct3D11)
