@@ -2985,8 +2985,11 @@ namespace Ogre
         {
             // rendering without tessellation.
             int operationType = op.operationType;
-            if( mGeometryProgramBound && mPso->geometryShader && mPso->geometryShader->isAdjacencyInfoRequired() )
+            if( mGeometryProgramBound && mPso->geometryShader &&
+                mPso->geometryShader->isAdjacencyInfoRequired() )
+            {
                 operationType |= OT_DETAIL_ADJACENCY_BIT;
+            }
 
             switch( operationType )
             {
@@ -3041,7 +3044,9 @@ namespace Ogre
             case OT_TRIANGLE_STRIP_ADJ:
                 primType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP_ADJ;
                 primCount =
-                    (DWORD)( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) / 2 - 2;
+                    (DWORD)( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) /
+                        2 -
+                    2;
                 break;
 
             case OT_TRIANGLE_FAN:

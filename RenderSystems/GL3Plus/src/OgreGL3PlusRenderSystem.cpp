@@ -2247,7 +2247,7 @@ namespace Ogre
             mClipDistances = newClipDistances;
         }
 
-        mUseAdjacency = pso != nullptr && (pso->operationType & OT_DETAIL_ADJACENCY_BIT) != 0;
+        mUseAdjacency = pso != nullptr && ( pso->operationType & OT_DETAIL_ADJACENCY_BIT ) != 0;
         mPso = 0;
 
         if( !pso )
@@ -2271,7 +2271,7 @@ namespace Ogre
             mActiveGeometryGpuProgramParameters = mPso->geometryShader->getDefaultParameters();
             mGeometryProgramBound = true;
 
-            if (mPso->geometryShader->isAdjacencyInfoRequired())
+            if( mPso->geometryShader->isAdjacencyInfoRequired() )
                 mUseAdjacency = true;
         }
         if( mPso->hullShader )
@@ -2617,8 +2617,11 @@ namespace Ogre
 
         int operationType = op.operationType;
         // Use adjacency if there is a geometry program and it requested adjacency info
-        if (mGeometryProgramBound && mPso->geometryShader && mPso->geometryShader->isAdjacencyInfoRequired())
+        if( mGeometryProgramBound && mPso->geometryShader &&
+            mPso->geometryShader->isAdjacencyInfoRequired() )
+        {
             operationType |= OT_DETAIL_ADJACENCY_BIT;
+        }
 
         // Determine the correct primitive type to render.
         GLenum primType;
