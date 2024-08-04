@@ -1,5 +1,10 @@
 var NAVTREEINDEX8 =
 {
+"_ogre_particle_system_renderer_8h.html":[9,0,657],
+"_ogre_pass_8h.html":[9,0,658],
+"_ogre_patch_mesh_8h.html":[9,0,659],
+"_ogre_patch_surface_8h.html":[9,0,660],
+"_ogre_pcc_per_pixel_grid_placement_8h.html":[9,0,661],
 "_ogre_pixel_count_lod_strategy_8h.html":[9,0,662],
 "_ogre_pixel_count_lod_strategy_8h.html#ga38fecb64e97fd482dc19f755f9665830":[9,0,662,2],
 "_ogre_pixel_format_gpu_8h.html":[9,0,663],
@@ -244,10 +249,5 @@ var NAVTREEINDEX8 =
 "_ogre_plugin_8h.html":[9,0,672],
 "_ogre_point_emitter2_8h.html":[9,0,674],
 "_ogre_point_emitter_8h.html":[9,0,673],
-"_ogre_point_emitter_factory_8h.html":[9,0,675],
-"_ogre_polygon_8h.html":[9,0,676],
-"_ogre_pose_8h.html":[9,0,677],
-"_ogre_pose_8h.html#ga4b8e1c003a5b70771a65da0cb40428cf":[9,0,677,0],
-"_ogre_predefined_controllers_8h.html":[9,0,678],
-"_ogre_prefab_factory_8h.html":[9,0,679]
+"_ogre_point_emitter_factory_8h.html":[9,0,675]
 };

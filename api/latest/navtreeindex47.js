@@ -1,5 +1,10 @@
 var NAVTREEINDEX47 =
 {
+"class_ogre_1_1_mathlib_c.html#a3d1d71d9c37680d641151099dcaa3734":[8,0,0,602,27],
+"class_ogre_1_1_mathlib_c.html#a4138830d91582362115ea56227e5d4cf":[8,0,0,602,45],
+"class_ogre_1_1_mathlib_c.html#a42a6c6481e282f099722394ac5292a10":[8,0,0,602,36],
+"class_ogre_1_1_mathlib_c.html#a49a9d59c77c224e0957e86552b549ff8":[8,0,0,602,46],
+"class_ogre_1_1_mathlib_c.html#a4ccee353e3595f0b8d4c581d8b5ba60a":[8,0,0,602,35],
 "class_ogre_1_1_mathlib_c.html#a50472ea7c1030f0d2b9bf8f498b1e033":[8,0,0,602,4],
 "class_ogre_1_1_mathlib_c.html#a50bf583f311372bb0252964ce45c6f53":[8,0,0,602,16],
 "class_ogre_1_1_mathlib_c.html#a53cdc41216d6cf553a3f5c6ea44c4b0a":[8,0,0,602,53],
@@ -244,10 +249,5 @@ var NAVTREEINDEX47 =
 "class_ogre_1_1_mesh_manager.html#a02e6d60df44151ca1e36b77c4260cef6":[6,2,10,72,0],
 "class_ogre_1_1_mesh_manager.html#a06f3acca8ad8c5f12cfc8232e57eb2e4":[6,2,10,72,15],
 "class_ogre_1_1_mesh_manager.html#a135415cf0a7862b66cf8bc9bd863793e":[6,2,10,72,3],
-"class_ogre_1_1_mesh_manager.html#a2957d3b2cc7bf8a2bcb292ff9c21b6d2":[6,2,10,72,12],
-"class_ogre_1_1_mesh_manager.html#a43a699f6f39e44ec740f84a64c9e3758":[6,2,10,72,2],
-"class_ogre_1_1_mesh_manager.html#a4ad90436c4e30026900e0aa7ca700439":[6,2,10,72,8],
-"class_ogre_1_1_mesh_manager.html#a6599e38a1f398edf12b56fa0627bcae2":[6,2,10,72,7],
-"class_ogre_1_1_mesh_manager.html#a8d26f4a0b59172e9045faa1134ef50a0":[6,2,10,72,5],
-"class_ogre_1_1_mesh_manager.html#a955f0dde288172a7aa9939071ce0184e":[6,2,10,72,1]
+"class_ogre_1_1_mesh_manager.html#a2957d3b2cc7bf8a2bcb292ff9c21b6d2":[6,2,10,72,12]
 };

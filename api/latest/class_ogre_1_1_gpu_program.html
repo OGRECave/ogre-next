@@ -173,9 +173,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad32d6024efaa2c26489fcd734533879f"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#ad32d6024efaa2c26489fcd734533879f">hasDefaultParameters</a> () const</td></tr>
 <tr class="memdesc:ad32d6024efaa2c26489fcd734533879f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if default parameters have been set up.  <a href="class_ogre_1_1_gpu_program.html#ad32d6024efaa2c26489fcd734533879f">More...</a><br /></td></tr>
 <tr class="separator:ad32d6024efaa2c26489fcd734533879f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5f89eae6b10645fd069679030d5adf7"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#ac5f89eae6b10645fd069679030d5adf7">isAdjacencyInfoRequired</a> () const</td></tr>
-<tr class="memdesc:ac5f89eae6b10645fd069679030d5adf7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this geometry program requires adjacency information from the input primitives.  <a href="class_ogre_1_1_gpu_program.html#ac5f89eae6b10645fd069679030d5adf7">More...</a><br /></td></tr>
-<tr class="separator:ac5f89eae6b10645fd069679030d5adf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addb9af3735c17437f6ac807dd10e0ab3"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#addb9af3735c17437f6ac807dd10e0ab3">isMorphAnimationIncluded</a> () const</td></tr>
 <tr class="memdesc:addb9af3735c17437f6ac807dd10e0ab3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether a vertex program includes the required instructions to perform morph animation.  <a href="class_ogre_1_1_gpu_program.html#addb9af3735c17437f6ac807dd10e0ab3">More...</a><br /></td></tr>
 <tr class="separator:addb9af3735c17437f6ac807dd10e0ab3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -194,12 +191,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a349f67352f147b7d8112db7b5508db17"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#a349f67352f147b7d8112db7b5508db17">isVpAndRtArrayIndexFromAnyShaderRequired</a> () const</td></tr>
 <tr class="memdesc:a349f67352f147b7d8112db7b5508db17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this program requires support for choosing viewport or render target index in any program or only geometry one.  <a href="class_ogre_1_1_gpu_program.html#a349f67352f147b7d8112db7b5508db17">More...</a><br /></td></tr>
 <tr class="separator:a349f67352f147b7d8112db7b5508db17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60ae5ceeb573e9758882e7e797a24db5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#a60ae5ceeb573e9758882e7e797a24db5">OGRE_DEPRECATED_VER</a> (4) virtual bool isAdjacencyInfoRequired() const</td></tr>
+<tr class="separator:a60ae5ceeb573e9758882e7e797a24db5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13d566c858ff0c52c121ac92cc261b4f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#a13d566c858ff0c52c121ac92cc261b4f">OGRE_DEPRECATED_VER</a> (4) virtual void setAdjacencyInfoRequired(bool r)</td></tr>
+<tr class="separator:a13d566c858ff0c52c121ac92cc261b4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0e74c68c668da059c6e4096a43760b1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#ae0e74c68c668da059c6e4096a43760b1">resetCompileError</a> ()</td></tr>
 <tr class="memdesc:ae0e74c68c668da059c6e4096a43760b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset a compile error if it occurred, allowing the load to be retried.  <a href="class_ogre_1_1_gpu_program.html#ae0e74c68c668da059c6e4096a43760b1">More...</a><br /></td></tr>
 <tr class="separator:ae0e74c68c668da059c6e4096a43760b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39b43157d6b40626101e5de8f9c77bf5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#a39b43157d6b40626101e5de8f9c77bf5">setAdjacencyInfoRequired</a> (bool r)</td></tr>
-<tr class="memdesc:a39b43157d6b40626101e5de8f9c77bf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether this geometry program requires adjacency information from the input primitives.  <a href="class_ogre_1_1_gpu_program.html#a39b43157d6b40626101e5de8f9c77bf5">More...</a><br /></td></tr>
-<tr class="separator:a39b43157d6b40626101e5de8f9c77bf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4d9c0afca2284a5e0972bdf8b6ff543"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#ae4d9c0afca2284a5e0972bdf8b6ff543">setAutoReflectArrayBindingsInRootLayout</a> (bool bReflectArrayRootLayouts)</td></tr>
 <tr class="memdesc:ae4d9c0afca2284a5e0972bdf8b6ff543"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set to true to reflects the shader looking for array bindings (e.g.  <a href="class_ogre_1_1_gpu_program.html#ae4d9c0afca2284a5e0972bdf8b6ff543">More...</a><br /></td></tr>
 <tr class="separator:ae4d9c0afca2284a5e0972bdf8b6ff543"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1080,33 +1078,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="ac5f89eae6b10645fd069679030d5adf7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5f89eae6b10645fd069679030d5adf7">&#9670;&nbsp;</a></span>isAdjacencyInfoRequired()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Ogre::GpuProgram::isAdjacencyInfoRequired </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns whether this geometry program requires adjacency information from the input primitives. </p>
-
-</div>
-</div>
 <a id="addb9af3735c17437f6ac807dd10e0ab3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#addb9af3735c17437f6ac807dd10e0ab3">&#9670;&nbsp;</a></span>isMorphAnimationIncluded()</h2>
 
@@ -1282,6 +1253,58 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a60ae5ceeb573e9758882e7e797a24db5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60ae5ceeb573e9758882e7e797a24db5">&#9670;&nbsp;</a></span>OGRE_DEPRECATED_VER() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ogre::GpuProgram::OGRE_DEPRECATED_VER </td>
+          <td>(</td>
+          <td class="paramtype">4&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a13d566c858ff0c52c121ac92cc261b4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13d566c858ff0c52c121ac92cc261b4f">&#9670;&nbsp;</a></span>OGRE_DEPRECATED_VER() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ogre::GpuProgram::OGRE_DEPRECATED_VER </td>
+          <td>(</td>
+          <td class="paramtype">4&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ae0e74c68c668da059c6e4096a43760b1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae0e74c68c668da059c6e4096a43760b1">&#9670;&nbsp;</a></span>resetCompileError()</h2>
 
@@ -1308,34 +1331,6 @@ Additional Inherited Members</h2></td></tr>
 <p>Reset a compile error if it occurred, allowing the load to be retried. </p>
 
 <p>Reimplemented in <a class="el" href="class_ogre_1_1_unified_high_level_gpu_program.html#a9a60ae72d8d098854318f747304163ae">Ogre::UnifiedHighLevelGpuProgram</a>.</p>
-
-</div>
-</div>
-<a id="a39b43157d6b40626101e5de8f9c77bf5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a39b43157d6b40626101e5de8f9c77bf5">&#9670;&nbsp;</a></span>setAdjacencyInfoRequired()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::GpuProgram::setAdjacencyInfoRequired </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>r</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets whether this geometry program requires adjacency information from the input primitives. </p>
 
 </div>
 </div>

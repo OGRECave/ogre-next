@@ -1181,6 +1181,12 @@ Enumerations</h2></td></tr>
 , <br />
 &#160;&#160;<a class="el" href="group___general.html#gga0ef99399e9e670e7bb69dc373968a666a533f065a707ecf18062498a2ade0c285">Ogre::OT_PATCH_31_CONTROL_POINT</a> = 37
 , <a class="el" href="group___general.html#gga0ef99399e9e670e7bb69dc373968a666aa1a5ac01c92b3fb3701d5fce1521b84d">Ogre::OT_PATCH_32_CONTROL_POINT</a> = 38
+, <a class="el" href="group___general.html#gga0ef99399e9e670e7bb69dc373968a666a420b09a0f1a0f15c26d507bc923b6c09">Ogre::OT_DETAIL_ADJACENCY_BIT</a> = 1 &lt;&lt; 6
+, <a class="el" href="group___general.html#gga0ef99399e9e670e7bb69dc373968a666a339f42b5bdf36abf28cbcc26d026a3ea">Ogre::OT_LINE_LIST_ADJ</a> = OT_LINE_LIST | OT_DETAIL_ADJACENCY_BIT
+, <br />
+&#160;&#160;<a class="el" href="group___general.html#gga0ef99399e9e670e7bb69dc373968a666a85c73bd00773643f2827690f13f3fb17">Ogre::OT_LINE_STRIP_ADJ</a> = OT_LINE_STRIP | OT_DETAIL_ADJACENCY_BIT
+, <a class="el" href="group___general.html#gga0ef99399e9e670e7bb69dc373968a666a515e5f6d54c1586397526fd6488399f0">Ogre::OT_TRIANGLE_LIST_ADJ</a> = OT_TRIANGLE_LIST | OT_DETAIL_ADJACENCY_BIT
+, <a class="el" href="group___general.html#gga0ef99399e9e670e7bb69dc373968a666aae5e1f6ba2b8916e54c50e8745abd346">Ogre::OT_TRIANGLE_STRIP_ADJ</a> = OT_TRIANGLE_STRIP | OT_DETAIL_ADJACENCY_BIT
 <br />
  }</td></tr>
 <tr class="separator:ga0ef99399e9e670e7bb69dc373968a666"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2829,6 +2835,16 @@ Variables</h2></td></tr>
 <tr><td class="fieldname"><a id="gga0ef99399e9e670e7bb69dc373968a666a1172a84681f7d68bdca1cea005fd55f9"></a>OT_PATCH_30_CONTROL_POINT&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga0ef99399e9e670e7bb69dc373968a666a533f065a707ecf18062498a2ade0c285"></a>OT_PATCH_31_CONTROL_POINT&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga0ef99399e9e670e7bb69dc373968a666aa1a5ac01c92b3fb3701d5fce1521b84d"></a>OT_PATCH_32_CONTROL_POINT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="gga0ef99399e9e670e7bb69dc373968a666a420b09a0f1a0f15c26d507bc923b6c09"></a>OT_DETAIL_ADJACENCY_BIT&#160;</td><td class="fielddoc"><p>Mark that the index buffer contains adjacency information. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga0ef99399e9e670e7bb69dc373968a666a339f42b5bdf36abf28cbcc26d026a3ea"></a>OT_LINE_LIST_ADJ&#160;</td><td class="fielddoc"><p>like OT_POINT_LIST but with adjacency information for the geometry shader </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga0ef99399e9e670e7bb69dc373968a666a85c73bd00773643f2827690f13f3fb17"></a>OT_LINE_STRIP_ADJ&#160;</td><td class="fielddoc"><p>like OT_LINE_STRIP but with adjacency information for the geometry shader </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga0ef99399e9e670e7bb69dc373968a666a515e5f6d54c1586397526fd6488399f0"></a>OT_TRIANGLE_LIST_ADJ&#160;</td><td class="fielddoc"><p>like OT_TRIANGLE_LIST but with adjacency information for the geometry shader </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga0ef99399e9e670e7bb69dc373968a666aae5e1f6ba2b8916e54c50e8745abd346"></a>OT_TRIANGLE_STRIP_ADJ&#160;</td><td class="fielddoc"><p>like OT_TRIANGLE_STRIP but with adjacency information for the geometry shader </p>
+</td></tr>
 </table>
 
 </div>
@@ -4137,11 +4153,11 @@ template&lt;class T &gt; </div>
 <b>Initial value:</b><div class="fragment"><div class="line">= ( 1u &lt;&lt; <a class="code" href="group___general.html#gga7049ce296bb4883feab25251d3865035a3401095a48724f9b624466d596891233">VertexShader</a> ) | ( 1u &lt;&lt; <a class="code" href="group___general.html#gga7049ce296bb4883feab25251d3865035a9c3da27b8219766cfc034322a4b6ffff">PixelShader</a> ) |</div>
 <div class="line">                                                ( 1u &lt;&lt; <a class="code" href="group___general.html#gga7049ce296bb4883feab25251d3865035a63dd081c4d08bece8b71016780453737">GeometryShader</a> ) | ( 1u &lt;&lt; <a class="code" href="group___general.html#gga7049ce296bb4883feab25251d3865035a6548d1c95c89305763dafbd8c58c9df0">HullShader</a> ) |</div>
 <div class="line">                                                ( 1u &lt;&lt; <a class="code" href="group___general.html#gga7049ce296bb4883feab25251d3865035a9169029277f523651135ddbb41db69aa">DomainShader</a> )</div>
-<div class="ttc" id="agroup___general_html_gga7049ce296bb4883feab25251d3865035a3401095a48724f9b624466d596891233"><div class="ttname"><a href="group___general.html#gga7049ce296bb4883feab25251d3865035a3401095a48724f9b624466d596891233">Ogre::VertexShader</a></div><div class="ttdeci">@ VertexShader</div><div class="ttdef"><b>Definition:</b> OgreCommon.h:401</div></div>
-<div class="ttc" id="agroup___general_html_gga7049ce296bb4883feab25251d3865035a63dd081c4d08bece8b71016780453737"><div class="ttname"><a href="group___general.html#gga7049ce296bb4883feab25251d3865035a63dd081c4d08bece8b71016780453737">Ogre::GeometryShader</a></div><div class="ttdeci">@ GeometryShader</div><div class="ttdef"><b>Definition:</b> OgreCommon.h:403</div></div>
-<div class="ttc" id="agroup___general_html_gga7049ce296bb4883feab25251d3865035a6548d1c95c89305763dafbd8c58c9df0"><div class="ttname"><a href="group___general.html#gga7049ce296bb4883feab25251d3865035a6548d1c95c89305763dafbd8c58c9df0">Ogre::HullShader</a></div><div class="ttdeci">@ HullShader</div><div class="ttdef"><b>Definition:</b> OgreCommon.h:404</div></div>
-<div class="ttc" id="agroup___general_html_gga7049ce296bb4883feab25251d3865035a9169029277f523651135ddbb41db69aa"><div class="ttname"><a href="group___general.html#gga7049ce296bb4883feab25251d3865035a9169029277f523651135ddbb41db69aa">Ogre::DomainShader</a></div><div class="ttdeci">@ DomainShader</div><div class="ttdef"><b>Definition:</b> OgreCommon.h:405</div></div>
-<div class="ttc" id="agroup___general_html_gga7049ce296bb4883feab25251d3865035a9c3da27b8219766cfc034322a4b6ffff"><div class="ttname"><a href="group___general.html#gga7049ce296bb4883feab25251d3865035a9c3da27b8219766cfc034322a4b6ffff">Ogre::PixelShader</a></div><div class="ttdeci">@ PixelShader</div><div class="ttdef"><b>Definition:</b> OgreCommon.h:402</div></div>
+<div class="ttc" id="agroup___general_html_gga7049ce296bb4883feab25251d3865035a3401095a48724f9b624466d596891233"><div class="ttname"><a href="group___general.html#gga7049ce296bb4883feab25251d3865035a3401095a48724f9b624466d596891233">Ogre::VertexShader</a></div><div class="ttdeci">@ VertexShader</div><div class="ttdef"><b>Definition:</b> OgreCommon.h:412</div></div>
+<div class="ttc" id="agroup___general_html_gga7049ce296bb4883feab25251d3865035a63dd081c4d08bece8b71016780453737"><div class="ttname"><a href="group___general.html#gga7049ce296bb4883feab25251d3865035a63dd081c4d08bece8b71016780453737">Ogre::GeometryShader</a></div><div class="ttdeci">@ GeometryShader</div><div class="ttdef"><b>Definition:</b> OgreCommon.h:414</div></div>
+<div class="ttc" id="agroup___general_html_gga7049ce296bb4883feab25251d3865035a6548d1c95c89305763dafbd8c58c9df0"><div class="ttname"><a href="group___general.html#gga7049ce296bb4883feab25251d3865035a6548d1c95c89305763dafbd8c58c9df0">Ogre::HullShader</a></div><div class="ttdeci">@ HullShader</div><div class="ttdef"><b>Definition:</b> OgreCommon.h:415</div></div>
+<div class="ttc" id="agroup___general_html_gga7049ce296bb4883feab25251d3865035a9169029277f523651135ddbb41db69aa"><div class="ttname"><a href="group___general.html#gga7049ce296bb4883feab25251d3865035a9169029277f523651135ddbb41db69aa">Ogre::DomainShader</a></div><div class="ttdeci">@ DomainShader</div><div class="ttdef"><b>Definition:</b> OgreCommon.h:416</div></div>
+<div class="ttc" id="agroup___general_html_gga7049ce296bb4883feab25251d3865035a9c3da27b8219766cfc034322a4b6ffff"><div class="ttname"><a href="group___general.html#gga7049ce296bb4883feab25251d3865035a9c3da27b8219766cfc034322a4b6ffff">Ogre::PixelShader</a></div><div class="ttdeci">@ PixelShader</div><div class="ttdef"><b>Definition:</b> OgreCommon.h:413</div></div>
 </div><!-- fragment -->
 </div>
 </div>

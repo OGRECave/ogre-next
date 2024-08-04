@@ -2181,7 +2181,12 @@ var namespace_ogre =
       [ "OT_PATCH_29_CONTROL_POINT", "group___general.html#gga0ef99399e9e670e7bb69dc373968a666a7fc197946c9e4554fe7cc866d797ead0", null ],
       [ "OT_PATCH_30_CONTROL_POINT", "group___general.html#gga0ef99399e9e670e7bb69dc373968a666a1172a84681f7d68bdca1cea005fd55f9", null ],
       [ "OT_PATCH_31_CONTROL_POINT", "group___general.html#gga0ef99399e9e670e7bb69dc373968a666a533f065a707ecf18062498a2ade0c285", null ],
-      [ "OT_PATCH_32_CONTROL_POINT", "group___general.html#gga0ef99399e9e670e7bb69dc373968a666aa1a5ac01c92b3fb3701d5fce1521b84d", null ]
+      [ "OT_PATCH_32_CONTROL_POINT", "group___general.html#gga0ef99399e9e670e7bb69dc373968a666aa1a5ac01c92b3fb3701d5fce1521b84d", null ],
+      [ "OT_DETAIL_ADJACENCY_BIT", "group___general.html#gga0ef99399e9e670e7bb69dc373968a666a420b09a0f1a0f15c26d507bc923b6c09", null ],
+      [ "OT_LINE_LIST_ADJ", "group___general.html#gga0ef99399e9e670e7bb69dc373968a666a339f42b5bdf36abf28cbcc26d026a3ea", null ],
+      [ "OT_LINE_STRIP_ADJ", "group___general.html#gga0ef99399e9e670e7bb69dc373968a666a85c73bd00773643f2827690f13f3fb17", null ],
+      [ "OT_TRIANGLE_LIST_ADJ", "group___general.html#gga0ef99399e9e670e7bb69dc373968a666a515e5f6d54c1586397526fd6488399f0", null ],
+      [ "OT_TRIANGLE_STRIP_ADJ", "group___general.html#gga0ef99399e9e670e7bb69dc373968a666aae5e1f6ba2b8916e54c50e8745abd346", null ]
     ] ],
     [ "OrientationMode", "group___general.html#ga86b4672dfa02cea53b10a52bd6344305", [
       [ "OR_DEGREE_0", "group___general.html#gga86b4672dfa02cea53b10a52bd6344305a8e7655727ba9332f3843f46a4d1b126b", null ],

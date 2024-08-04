@@ -1,5 +1,10 @@
 var NAVTREEINDEX14 =
 {
+"_samples.html#ssao":[4,4,48],
+"_samples.html#ssreflections":[4,4,22],
+"_samples.html#staticshadowmap":[4,4,25],
+"_samples.html#stenciltest":[4,4,26],
+"_samples.html#stereorendering":[4,4,27],
 "_samples.html#terrain":[4,4,49],
 "_samples.html#texturebaking":[4,4,50],
 "_samples.html#tut_distortion":[4,4,41],
@@ -244,10 +249,5 @@ var NAVTREEINDEX14 =
 "class_ogre_1_1_any.html#a8de17caf0ea6729e6904b6552162cf77":[6,2,2,3,7],
 "class_ogre_1_1_any.html#a8e18c614d89437e11df1b8defe85ea2e":[6,2,2,3,13],
 "class_ogre_1_1_any.html#a9408e147480f134e1ba1817b4b1bc50f":[6,2,2,3,8],
-"class_ogre_1_1_any.html#aa7e584ce6897ef8c468404ba60996644":[6,2,2,3,0],
-"class_ogre_1_1_any.html#ab714694739f9a50a361f3087e2188c94":[6,2,2,3,10],
-"class_ogre_1_1_any.html#ac1df40ae0c766635b60427035ce2a76d":[6,2,2,3,9],
-"class_ogre_1_1_any.html#ace912cd3c6c53f0ebd6c7146e460cc20":[6,2,2,3,11],
-"class_ogre_1_1_any.html#ad52fddf4aadae22e9471b6d76cf9749f":[6,2,2,3,15],
-"class_ogre_1_1_any.html#adc16537bcc7e1ef5ea0a0cae7bbc37bc":[6,2,2,3,3]
+"class_ogre_1_1_any.html#aa7e584ce6897ef8c468404ba60996644":[6,2,2,3,0]
 };
