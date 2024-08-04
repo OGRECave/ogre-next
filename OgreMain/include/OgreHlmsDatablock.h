@@ -507,7 +507,7 @@ namespace Ogre
                 // Do NOT enable alpha blending in the HlmsBlendblock (default)
                 HlmsBlendblock blendblock;
                 blendblock.setBlendType( SBT_REPLACE );
-                datablock->setBlendblock( &blendblock );
+                datablock->setBlendblock( blendblock );
 
                 datablock->setAlphaHashing( true );
             @endcode
