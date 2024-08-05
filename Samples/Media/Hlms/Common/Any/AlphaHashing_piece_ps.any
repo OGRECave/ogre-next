@@ -75,8 +75,7 @@
 	alphaThreshold = clamp( alphaThreshold, 1.0e-6f, 1.0 );
 
 	@property( hlms_alpha_to_coverage )
-		return lerp( max( ( _alpha - alphaThreshold ) * 2.0f, 0.0f ), 1.0f,
-					 _alpha * _alpha * _alpha * _alpha );
+		return lerp( max( ( _alpha - alphaThreshold ), 0.0f ), 1.0f, _alpha );
 	@else
 		return _alpha < alphaThreshold;
 	@end
