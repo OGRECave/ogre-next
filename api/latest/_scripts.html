@@ -91,7 +91,7 @@ $(document).ready(function(){initNavTree('_scripts.html',''); initResizable(); }
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
-<ul><li class="level1"><a href="#autotoc_md117">Loading scripts</a></li>
+<ul><li class="level1"><a href="#autotoc_md118">Loading scripts</a></li>
 <li class="level1"><a href="#Format">Format</a><ul><li class="level2"><a href="#Script-Inheritance">Script Inheritance</a><ul><li class="level3"><a href="#Advanced-Script-Inheritance">Advanced Script Inheritance</a></li>
 </ul>
 </li>
@@ -111,7 +111,7 @@ $(document).ready(function(){initNavTree('_scripts.html',''); initResizable(); }
 <li><a class="el" href="_particle-_scripts.html">Particle Scripts</a></li>
 <li><a class="el" href="v1__overlays.html">Overlays</a></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md117"></a>
+<h1><a class="anchor" id="autotoc_md118"></a>
 Loading scripts</h1>
 <p>Scripts are loaded when resource groups are initialised: OGRE-Next looks in all resource locations associated with the group (see <a class="el" href="class_ogre_1_1_resource_group_manager.html#a6ff0efec5d27cedb448cfba8b2b78c8d" title="Method to add a resource location to for a given resource group.">Ogre::ResourceGroupManager::addResourceLocation</a>) for files with the respective extension (e.g. ’.material’, ’.material.json’, ’.compositor’, ..) and parses them. If you want to parse files manually, use <a class="el" href="class_ogre_1_1_script_compiler_manager.html#a4526cdfb54f683b2c36e0d95be0914da" title="Parse a script file.">Ogre::ScriptCompilerManager::parseScript</a>.</p>
 <p>The file extension does not actually restrict the items that can be specified inside the file; e.g. Ogre is perfectly fine with loading a particle-system from a ’.compositor’ file - but it will lead you straight to maintenance-hell if you do that. The extensions, however, do specify the order in which the scripts are parsed, which is as follows:</p>

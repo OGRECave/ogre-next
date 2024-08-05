@@ -1,5 +1,6 @@
 var NAVTREEINDEX43 =
 {
+"class_ogre_1_1_indirect_buffer_packed.html#acc00ab1415a267cae1594f4381616575":[8,0,0,504,0],
 "class_ogre_1_1_instant_radiosity.html":[6,0,0,13],
 "class_ogre_1_1_instant_radiosity.html#a0b1d471ff85666f47683928fcb192540":[6,0,0,13,32],
 "class_ogre_1_1_instant_radiosity.html#a16a3209a9581179699c754cbaafded49":[6,0,0,13,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX43 =
 "class_ogre_1_1_light.html#a10cc35a3cd6ef162958a0f517a3cf080":[6,0,1,25,43],
 "class_ogre_1_1_light.html#a10cc35a3cd6ef162958a0f517a3cf080":[6,2,11,25,43],
 "class_ogre_1_1_light.html#a1659111f4eb55f3b3227e87c8bfce8d9":[6,0,1,25,51],
-"class_ogre_1_1_light.html#a1659111f4eb55f3b3227e87c8bfce8d9":[6,2,11,25,51],
-"class_ogre_1_1_light.html#a1a0671d05e0dcde78bb636e84bb13274":[6,0,1,25,10]
+"class_ogre_1_1_light.html#a1659111f4eb55f3b3227e87c8bfce8d9":[6,2,11,25,51]
 };

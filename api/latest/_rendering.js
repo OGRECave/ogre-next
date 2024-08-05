@@ -1,6 +1,6 @@
 var _rendering =
 [
-    [ "Advanced Users", "_rendering.html#autotoc_md102", null ],
+    [ "Advanced Users", "_rendering.html#autotoc_md103", null ],
     [ "HLMS: High Level Material System", "hlms.html", "hlms" ],
     [ "Global Illumination Methods", "_gi_methods.html", "_gi_methods" ],
     [ "The Command Buffer", "commandbuffer.html", [
@@ -15,7 +15,7 @@ var _rendering =
       [ "Old APIs (i.e. D3D11 and GL)", "_root_layouts.html#RootLayoutsOldAPIs", null ],
       [ "New APIs and Root Layouts", "_root_layouts.html#RootLayoutsNewAPIs", null ],
       [ "Setting up root layouts", "_root_layouts.html#RootLayoutsSettingUp", [
-        [ "Could you have used e.g. \"const_buffers\" : [0,7] instead of [4,7]?", "_root_layouts.html#autotoc_md103", null ]
+        [ "Could you have used e.g. \"const_buffers\" : [0,7] instead of [4,7]?", "_root_layouts.html#autotoc_md104", null ]
       ] ],
       [ "Declaring Root Layouts in shaders", "_root_layouts.html#RootLayoutsDeclaringInShaders", null ],
       [ "Baked sets", "_root_layouts.html#RootLayoutsBakedSets", null ],
@@ -26,8 +26,8 @@ var _rendering =
         [ "Automatic", "_root_layouts.html#RootLayoutsAoTAuto", null ],
         [ "Making GLSL shaders compatible with both Vulkan and OpenGL", "_root_layouts.html#RootLayoutsGLSLForGLandVK", [
           [ "Example:", "_root_layouts.html#RootLayoutsGLSLForGLandVKExample", [
-            [ "OpenGL", "_root_layouts.html#autotoc_md104", null ],
-            [ "Vulkan", "_root_layouts.html#autotoc_md105", null ]
+            [ "OpenGL", "_root_layouts.html#autotoc_md105", null ],
+            [ "Vulkan", "_root_layouts.html#autotoc_md106", null ]
           ] ]
         ] ]
       ] ]

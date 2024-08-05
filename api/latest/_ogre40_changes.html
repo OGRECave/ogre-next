@@ -91,22 +91,22 @@ $(document).ready(function(){initNavTree('_ogre40_changes.html',''); initResizab
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
-<ul><li class="level1"><a href="#autotoc_md56">Threaded Hlms</a></li>
-<li class="level1"><a href="#autotoc_md57">Hlms implementations and listeners</a><ul><li class="level2"><a href="#Ogre40Changes_PortingTips">Porting tips (from &lt;= 3.0)</a></li>
+<ul><li class="level1"><a href="#autotoc_md57">Threaded Hlms</a></li>
+<li class="level1"><a href="#autotoc_md58">Hlms implementations and listeners</a><ul><li class="level2"><a href="#Ogre40Changes_PortingTips">Porting tips (from &lt;= 3.0)</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md58">Compositor Script changes</a></li>
-<li class="level1"><a href="#autotoc_md59">New initialization step</a></li>
+<li class="level1"><a href="#autotoc_md59">Compositor Script changes</a></li>
+<li class="level1"><a href="#autotoc_md60">New initialization step</a></li>
 </ul>
 </div>
 <div class="textblock"><p><a class="anchor" id="md_manual_Migrating_Ogre4_0_Changes"></a></p>
-<h1><a class="anchor" id="autotoc_md56"></a>
+<h1><a class="anchor" id="autotoc_md57"></a>
 Threaded Hlms</h1>
 <p>We introduced threaded Hlms shader generation, shader compilation, and PSO compilation.</p>
 <p>This is used by the new <code>warm_up</code> compositor pass (see <a class="el" href="class_ogre_1_1_compositor_pass_warm_up.html" title="Implementation of CompositorPass.">Ogre::CompositorPassWarmUp</a> and <a class="el" href="class_ogre_1_1_compositor_pass_warm_up_def.html">Ogre::CompositorPassWarmUpDef</a>), the Hlms Disk Cache, and during regular rendering.</p>
 <p>This means that most Hlms operations gained a <code>tid</code> parameter, which contains the thread index in range <code>[0; num_threads)</code>.</p>
 <p>Operations done in <a class="el" href="class_ogre_1_1_hlms.html#ad3e82fb2e682366cc721e521ee41d64d" title="Called every frame by the Render Queue to cache the properties needed by this pass.">Ogre::Hlms::preparePassHash</a> and <a class="el" href="class_ogre_1_1_hlms.html#a5b71158453ed0a2411a92ecf767af130" title="Called by the renderable when either it changes the material, or its properties change (e....">Ogre::Hlms::calculateHashFor</a> are single threaded and thus should use <a class="el" href="class_ogre_1_1_hlms.html#a3b41b85c9b51fe6794d25e95bd5ea31f" title="For single-threaded operations.">Ogre::Hlms::kNoTid</a>.</p>
-<h1><a class="anchor" id="autotoc_md57"></a>
+<h1><a class="anchor" id="autotoc_md58"></a>
 Hlms implementations and listeners</h1>
 <p>Custom Hlms implementations and listeners must update their virtual overload functions to accommodate the <code>tid</code> parameter.</p>
 <p>This is explained in detail the new <a class="el" href="_hlms_threading.html">Multithreaded Shader Compilation</a> section.</p>
@@ -130,7 +130,7 @@ Porting tips (from &lt;= 3.0)</h2>
 </table>
 <p>You should Find &amp; Replace in that order. If you first find all <code>setProperty(</code> and replace them with <code>setProperty( kNoTid,</code>; you will end up with code that compiles but introduces race conditions and no way to identify them.</p>
 <p>However if you first find all <code>setProperty(</code> and replace them with <code>setProperty( tid,</code>, you will end up with code that does not compile wherever <code>kNoTid</code> should be used (still exercise care when replacing <code>tid</code> with <code>kNoTid</code>, make sure to be conscious of it. See <a class="el" href="_hlms_threading.html#HlmsThreading_tidArgument">The tid (Thread ID) argument</a> for details).</p>
-<h1><a class="anchor" id="autotoc_md58"></a>
+<h1><a class="anchor" id="autotoc_md59"></a>
 Compositor Script changes</h1>
 <p>Added the <code>not_texture</code> keyword. This can improve performance in scenarios where you don't intend to sample from this texture i.e. usually in conjuntion with either the <code>uav</code> or <code>explicit_resolve</code> keywords:</p>
 <div class="fragment"><div class="line">compositor_node RenderingNodeMsaa</div>
@@ -153,7 +153,7 @@ Compositor Script changes</h1>
 <div class="line"> </div>
 <div class="line">    out 0 rt_renderwindow</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md59"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md60"></a>
 New initialization step</h1>
 <p>If you plan on using Alpha Hashing, we provide both blue and white noise.</p>
 <p>But blue noise requires you to call <code>mRoot-&gt;getHlmsManager()-&gt;loadBlueNoise()</code> during start up. <a class="el" href="_particle_system2.html#AlphaHashingBlueNoiseSetup">See its new section in the manual</a> for more information. </p>

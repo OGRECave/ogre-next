@@ -1,5 +1,6 @@
 var NAVTREEINDEX110 =
 {
+"struct_ogre_1_1_hidden_area_vr_settings.html#a804e9f115a1c7d5be10fc8e0dfca8226":[6,2,10,41,8],
 "struct_ogre_1_1_hidden_area_vr_settings.html#a80aa7c9981f0fb82d2516ed2a1e1ef24":[6,2,10,41,3],
 "struct_ogre_1_1_hidden_area_vr_settings.html#a8729ee2ece54466fc992a6185c27b4f1":[6,2,10,41,6],
 "struct_ogre_1_1_hidden_area_vr_settings.html#a8ab0b721d456556fcf54305f9c0c481c":[6,2,10,41,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX110 =
 "struct_ogre_1_1_hlms_macroblock.html#ae4f0032da31f52e0f518a932ecda643b":[6,2,10,58,5],
 "struct_ogre_1_1_hlms_pass_pso.html":[6,2,10,60],
 "struct_ogre_1_1_hlms_pass_pso.html#a0eb4945bc9aa5f3a9b83bfcf1a758ae9":[6,2,10,60,8],
-"struct_ogre_1_1_hlms_pass_pso.html#a3931e31bb2d0b7e23e33b21249a29c40":[6,2,10,60,6],
-"struct_ogre_1_1_hlms_pass_pso.html#a4ee0425ddb698aebcecada4f182565da":[6,2,10,60,9]
+"struct_ogre_1_1_hlms_pass_pso.html#a3931e31bb2d0b7e23e33b21249a29c40":[6,2,10,60,6]
 };

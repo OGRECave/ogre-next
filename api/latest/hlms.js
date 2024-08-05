@@ -37,7 +37,7 @@ var hlms =
     [ "Run-time rendering", "hlms.html#HlmsRuntimeRendering", [
       [ "preparePassHash", "hlms.html#HlmsRuntimeRenderingPreparePassHash", null ],
       [ "fillBuffersFor", "hlms.html#HlmsRuntimeRenderingFillBuffersFor", null ],
-      [ "Multithreaded Shader Compilation", "hlms.html#autotoc_md106", null ]
+      [ "Multithreaded Shader Compilation", "hlms.html#autotoc_md107", null ]
     ] ],
     [ "Using the HLMS implementations", "hlms.html#UsingHlmsImplementation", [
       [ "Initialization", "hlms.html#UsingHlmsImplementationInitialization", null ],
@@ -59,14 +59,14 @@ var hlms =
     [ "Troubleshooting", "hlms.html#HlmsTroubleshooting", [
       [ "My shadows don't show up or are very glitchy", "hlms.html#HlmsTroubleshootingShadow", null ]
     ] ],
-    [ "Precision / Quality", "hlms.html#autotoc_md107", null ],
+    [ "Precision / Quality", "hlms.html#autotoc_md108", null ],
     [ "Multithreaded Shader Compilation", "_hlms_threading.html", [
       [ "CMake Options", "_hlms_threading.html#HlmsThreading_CMakeOptions", null ],
       [ "The tid (Thread ID) argument", "_hlms_threading.html#HlmsThreading_tidArgument", [
-        [ "API when OGRE_SHADER_COMPILATION_THREADING_MODE = 1", "_hlms_threading.html#autotoc_md95", null ]
+        [ "API when OGRE_SHADER_COMPILATION_THREADING_MODE = 1", "_hlms_threading.html#autotoc_md96", null ]
       ] ],
-      [ "How does threaded Hlms work?", "_hlms_threading.html#autotoc_md96", [
-        [ "What is the range of tid argument?", "_hlms_threading.html#autotoc_md97", null ]
+      [ "How does threaded Hlms work?", "_hlms_threading.html#autotoc_md97", [
+        [ "What is the range of tid argument?", "_hlms_threading.html#autotoc_md98", null ]
       ] ]
     ] ]
 ];

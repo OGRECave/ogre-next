@@ -1,5 +1,6 @@
 var NAVTREEINDEX9 =
 {
+"_ogre_point_emitter_8h.html":[9,0,673],
 "_ogre_point_emitter_factory_8h.html":[9,0,675],
 "_ogre_polygon_8h.html":[9,0,676],
 "_ogre_pose_8h.html":[9,0,677],
@@ -248,6 +249,5 @@ var NAVTREEINDEX9 =
 "_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a2d66ad2e2ce38c274d21f39551d2abe8":[9,0,702,6,0],
 "_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a33babe0bc67d09ef934c73a84b1a25fb":[9,0,702,6,8],
 "_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a39ecb7f5b44964fe66db54c9043731fc":[9,0,702,6,18],
-"_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a505f1dc88797793728f8997b73491658":[9,0,702,6,7],
-"_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a5753a78e9d99c0d1c878d1c6adc5a83b":[9,0,702,6,4]
+"_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a505f1dc88797793728f8997b73491658":[9,0,702,6,7]
 };
