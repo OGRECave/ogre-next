@@ -25,7 +25,7 @@
 	}
 @end
 
-	@property( syntax == metal )
+	@property( syntax == metal && hlms_blue_noise )
 		#define ALPHA_HASHING_ARG_DECL , texture2d_array<float> blueNoiseTex
 		#define ALPHA_HASHING_ARG , blueNoiseTex
 	@else
