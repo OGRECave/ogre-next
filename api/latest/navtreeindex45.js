@@ -1,5 +1,7 @@
 var NAVTREEINDEX45 =
 {
+"class_ogre_1_1_lod_input_provider_buffer.html":[8,0,0,567],
+"class_ogre_1_1_lod_input_provider_buffer.html#a7174a85c6ada830c23a3c4002310881f":[8,0,0,567,0],
 "class_ogre_1_1_lod_input_provider_buffer.html#a99588a042ce72f9a2499460a535139f0":[8,0,0,567,1],
 "class_ogre_1_1_lod_input_provider_mesh.html":[8,0,0,568],
 "class_ogre_1_1_lod_input_provider_mesh.html#a46fae4fac33c9e5f99de77d729454bdc":[8,0,0,568,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX45 =
 "class_ogre_1_1_manual_object_1_1_manual_object_section.html#a46f5107b9631b7e065fc310135234534":[8,0,0,591,0,2],
 "class_ogre_1_1_manual_object_1_1_manual_object_section.html#a71f195167dd4bd6aa48af0531b5afec9":[8,0,0,591,0,0],
 "class_ogre_1_1_manual_object_1_1_manual_object_section.html#aa9660b2704e5fbc08bcc7029f0ccbe15":[8,0,0,591,0,7],
-"class_ogre_1_1_manual_object_1_1_manual_object_section.html#ae9dbb17713ba4a21d22d153a9428e15f":[8,0,0,591,0,8],
-"class_ogre_1_1_manual_object_1_1_manual_object_section.html#aec310e287603c00b41046fdd5a8d59a9":[8,0,0,591,0,3],
-"class_ogre_1_1_manual_object_factory.html":[8,0,0,592]
+"class_ogre_1_1_manual_object_1_1_manual_object_section.html#ae9dbb17713ba4a21d22d153a9428e15f":[8,0,0,591,0,8]
 };

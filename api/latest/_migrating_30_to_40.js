@@ -5,6 +5,7 @@ var _migrating_30_to_40 =
       [ "Hlms implementations and listeners", "_ogre40_changes.html#autotoc_md57", [
         [ "Porting tips (from <= 3.0)", "_ogre40_changes.html#Ogre40Changes_PortingTips", null ]
       ] ],
-      [ "Compositor Script changes", "_ogre40_changes.html#autotoc_md58", null ]
+      [ "Compositor Script changes", "_ogre40_changes.html#autotoc_md58", null ],
+      [ "New initialization step", "_ogre40_changes.html#autotoc_md59", null ]
     ] ]
 ];

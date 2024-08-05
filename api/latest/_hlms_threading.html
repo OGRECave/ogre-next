@@ -163,7 +163,7 @@ The tid (Thread ID) argument</h1>
 <div class="ttc" id="aclass_ogre_1_1_hlms_html_a3b41b85c9b51fe6794d25e95bd5ea31f"><div class="ttname"><a href="class_ogre_1_1_hlms.html#a3b41b85c9b51fe6794d25e95bd5ea31f">Ogre::Hlms::kNoTid</a></div><div class="ttdeci">static constexpr size_t kNoTid</div><div class="ttdoc">For single-threaded operations.</div><div class="ttdef"><b>Definition:</b> OgreHlms.h:147</div></div>
 </div><!-- fragment --><p>If you're overriding the <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Ogre::Hlms</a> class instead of <a class="el" href="class_ogre_1_1_hlms_listener.html" title="Listener that can be hooked to an Hlms implementation for extending it with custom code.">Ogre::HlmsListener</a>, the same rules apply. However you might override a function that is expected to be called from a worker thread but does not pass a tid value because the original Hlms implementations never needed it.</p>
 <p>The rule is that anything called as part of Ogre::Hlms::createShaderCacheEntry needs a tid, while everything else is called from the main thread.</p>
-<h2><a class="anchor" id="autotoc_md94"></a>
+<h2><a class="anchor" id="autotoc_md95"></a>
 API when OGRE_SHADER_COMPILATION_THREADING_MODE = 1</h2>
 <p>This option is used to facilitate porting from OgreNext 3.0.</p>
 <p>All listener functions still provide a tid value. However OgreNext provides setProperty/getProperty functions that don't ask for one. Therefore it is possible to do this:</p>
@@ -185,7 +185,7 @@ API when OGRE_SHADER_COMPILATION_THREADING_MODE = 1</h2>
 <div class="line">        }</div>
 <div class="line">    };</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md95"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md96"></a>
 How does threaded Hlms work?</h1>
 <p>Hlms shaders are not randomly generated at any time from anywhere. It's not chaotic.</p>
 <p>Shader generation requests can originate from 3 locations:</p>
@@ -220,7 +220,7 @@ How does threaded Hlms work?</h1>
 <p>That's why we must call <code>waitForHlmsJobs()</code> before calling <code>executeAllCommands()</code>.</p>
 <p>Therefore OgreNext will process and iterate through many Items while worker threads compile shaders that were seen for the first time.</p>
 <p>With a bit of luck, if the worker threads finish compiling before we reach <code>waitForHlmsJobs()</code> then there will be no stalls at all. If not, then the wait has likely reduced by a little. Furthermore, if multiple new PSOs are encountered, they will be delivered to different worker threads thus compiling in parallel.</p>
-<h2><a class="anchor" id="autotoc_md96"></a>
+<h2><a class="anchor" id="autotoc_md97"></a>
 What is the range of tid argument?</h2>
 <p>The range is <code>[0; num_threads)</code>. </p>
 </div></div><!-- contents -->

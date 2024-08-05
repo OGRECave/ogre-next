@@ -96,9 +96,11 @@ $(document).ready(function(){initNavTree('_particle_system2.html',''); initResiz
 <li class="level1"><a href="#ParticleSystem2DiffWithPFX2">Differences with ParticleFX2</a><ul><li class="level2"><a href="#ParticleSystem2DistToCamera">Distance to Camera</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#ParticleSystem2Oit">Using OIT (Order Independent Transparency)</a></li>
-<li class="level1"><a href="#autotoc_md75">Thread Safe RandomValueProvider</a></li>
-<li class="level1"><a href="#autotoc_md76">New settings</a></li>
+<li class="level1"><a href="#ParticleSystem2Oit">Using OIT (Order Independent Transparency)</a><ul><li class="level2"><a href="#AlphaHashingBlueNoiseSetup">Alpha Hashing: Blue Noise vs White Noise</a></li>
+</ul>
+</li>
+<li class="level1"><a href="#autotoc_md76">Thread Safe RandomValueProvider</a></li>
+<li class="level1"><a href="#autotoc_md77">New settings</a></li>
 </ul>
 </div>
 <div class="textblock"><p><a class="anchor" id="md_manual_Plugins_ParticleSystem2"></a></p>
@@ -210,11 +212,31 @@ Using OIT (Order Independent Transparency)</h1>
 <p><b>Alpha Hashing + A2C (4x MSAA):</b></p>
 <p><img src="AlphaHashA2C.jpg" alt="" class="inline"/></p>
 <p>Note that the noise may look terrible but it quite different in motion. See <code>Samples/2.0/ApiUsage/ParticleFX2</code> sample.</p>
-<h1><a class="anchor" id="autotoc_md75"></a>
+<h2><a class="anchor" id="AlphaHashingBlueNoiseSetup"></a>
+Alpha Hashing: Blue Noise vs White Noise</h2>
+<p>The Hlms implementation provide both blue noise and white noise implementations.</p>
+<p>Blue Noise requires you include the file <code>LDR_R_0.png</code> and during initialization time call:</p>
+<div class="fragment"><div class="line"><span class="keywordflow">try</span></div>
+<div class="line">{</div>
+<div class="line">    mRoot-&gt;getHlmsManager()-&gt;loadBlueNoise();</div>
+<div class="line">}</div>
+<div class="line"><span class="keywordflow">catch</span>( <a class="code" href="class_ogre_1_1_file_not_found_exception.html">Ogre::FileNotFoundException</a> &amp;e )</div>
+<div class="line">{</div>
+<div class="line">    <a class="code" href="class_ogre_1_1_log_manager.html#a902232428113a662c9edef05660d5b27">Ogre::LogManager::getSingleton</a>().<a class="code" href="class_ogre_1_1_log_manager.html#a0c4faae4a0fbe6f8df7583cfa4c63b52">logMessage</a>( e.<a class="code" href="class_ogre_1_1_exception.html#afac7bd5132f02a3a4fe002aa66e3ccda">getFullDescription</a>(), <a class="code" href="group___general.html#gga124456c1616299612ac9f46e7d69268da5210f9fef7f2093878f02f2757606f33">Ogre::LML_CRITICAL</a> );</div>
+<div class="line">    <a class="code" href="class_ogre_1_1_log_manager.html#a902232428113a662c9edef05660d5b27">Ogre::LogManager::getSingleton</a>().<a class="code" href="class_ogre_1_1_log_manager.html#a0c4faae4a0fbe6f8df7583cfa4c63b52">logMessage</a>(</div>
+<div class="line">        <span class="stringliteral">&quot;WARNING: Blue Noise textures could not be loaded.&quot;</span>, <a class="code" href="group___general.html#gga124456c1616299612ac9f46e7d69268da5210f9fef7f2093878f02f2757606f33">Ogre::LML_CRITICAL</a> );</div>
+<div class="line">}</div>
+<div class="ttc" id="aclass_ogre_1_1_exception_html_afac7bd5132f02a3a4fe002aa66e3ccda"><div class="ttname"><a href="class_ogre_1_1_exception.html#afac7bd5132f02a3a4fe002aa66e3ccda">Ogre::Exception::getFullDescription</a></div><div class="ttdeci">virtual const String &amp; getFullDescription() const</div><div class="ttdoc">Returns a string with the full description of this error.</div></div>
+<div class="ttc" id="aclass_ogre_1_1_file_not_found_exception_html"><div class="ttname"><a href="class_ogre_1_1_file_not_found_exception.html">Ogre::FileNotFoundException</a></div><div class="ttdef"><b>Definition:</b> OgreException.h:207</div></div>
+<div class="ttc" id="aclass_ogre_1_1_log_manager_html_a0c4faae4a0fbe6f8df7583cfa4c63b52"><div class="ttname"><a href="class_ogre_1_1_log_manager.html#a0c4faae4a0fbe6f8df7583cfa4c63b52">Ogre::LogManager::logMessage</a></div><div class="ttdeci">void logMessage(const String &amp;message, LogMessageLevel lml=LML_NORMAL, bool maskDebug=false)</div><div class="ttdoc">Log a message to the default log.</div></div>
+<div class="ttc" id="aclass_ogre_1_1_log_manager_html_a902232428113a662c9edef05660d5b27"><div class="ttname"><a href="class_ogre_1_1_log_manager.html#a902232428113a662c9edef05660d5b27">Ogre::LogManager::getSingleton</a></div><div class="ttdeci">static LogManager &amp; getSingleton()</div><div class="ttdoc">Override standard Singleton retrieval.</div></div>
+<div class="ttc" id="agroup___general_html_gga124456c1616299612ac9f46e7d69268da5210f9fef7f2093878f02f2757606f33"><div class="ttname"><a href="group___general.html#gga124456c1616299612ac9f46e7d69268da5210f9fef7f2093878f02f2757606f33">Ogre::LML_CRITICAL</a></div><div class="ttdeci">@ LML_CRITICAL</div><div class="ttdef"><b>Definition:</b> OgreLog.h:69</div></div>
+</div><!-- fragment --><p>When blue noise is not available, OgreNext will automatically fallback to a white noise implementation. Which one looks better is a bit subjective.</p>
+<h1><a class="anchor" id="autotoc_md76"></a>
 Thread Safe RandomValueProvider</h1>
 <p>PFX2 relies on <code>Math::UnitRandom</code> being thread safe.</p>
 <p>If you've registered a custom random provider via <code>Math::SetRandomValueProvider</code>, then make sure <code>RandomValueProvider::getRandomUnit</code> is thread safe (e.g. use TLS).</p>
-<h1><a class="anchor" id="autotoc_md76"></a>
+<h1><a class="anchor" id="autotoc_md77"></a>
 New settings</h1>
 <p>scaler TBD </p>
 </div></div><!-- contents -->

@@ -1,5 +1,7 @@
 var NAVTREEINDEX54 =
 {
+"class_ogre_1_1_paged_world_section.html#ad5623dc85e1cb81f7a7b0d1fb5dfcd3f":[6,1,0,9,2],
+"class_ogre_1_1_paged_world_section.html#ad5f43b304e2c51ca1c3a0390230bf45c":[6,1,0,9,10],
 "class_ogre_1_1_paged_world_section.html#ae228d76c74b2b30b584abc22191887ec":[6,1,0,9,35],
 "class_ogre_1_1_paged_world_section.html#ae70969b195c560958b225d8783bfea6c":[6,1,0,9,9],
 "class_ogre_1_1_paged_world_section.html#aeb00ceddc4315000f13b86256e365644":[6,1,0,9,37],
@@ -247,7 +249,5 @@ var NAVTREEINDEX54 =
 "class_ogre_1_1_particle_emitter.html#aea1a8b6daaed8e525510be22fcaa333f":[6,2,1,40,26],
 "class_ogre_1_1_particle_emitter.html#aeb086f851624a470e1b5592b81418d39":[6,2,1,40,32],
 "class_ogre_1_1_particle_emitter.html#aef756f0d236964369f790e8f4004993f":[6,2,1,40,51],
-"class_ogre_1_1_particle_emitter.html#af05abefb4cf775522fc3cc8bf1cd57f9":[6,2,1,40,43],
-"class_ogre_1_1_particle_emitter.html#af12947b9fbc92565fd63b733d106b88e":[6,2,1,40,31],
-"class_ogre_1_1_particle_emitter.html#af41030fee74fd28fa295975da55404d4":[6,2,1,40,37]
+"class_ogre_1_1_particle_emitter.html#af05abefb4cf775522fc3cc8bf1cd57f9":[6,2,1,40,43]
 };

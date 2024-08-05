@@ -63,7 +63,7 @@ var _j_s_o_n__materials =
       ] ],
       [ "PBS Datablock Parameters", "hlmspbsdatablockref.html#dbPBSParameters", [
         [ "Parameter: brdf", "hlmspbsdatablockref.html#dbParamBRDF", null ],
-        [ "Parameter: refraction_strength", "hlmspbsdatablockref.html#autotoc_md107", null ],
+        [ "Parameter: refraction_strength", "hlmspbsdatablockref.html#autotoc_md108", null ],
         [ "Parameter: detail_diffuse[X]", "hlmspbsdatablockref.html#dbParamDetailDiffuse", null ],
         [ "Parameter: detail_normal[X]", "hlmspbsdatablockref.html#dbParamDetailNormal", null ],
         [ "Parameter: detail_weight", "hlmspbsdatablockref.html#dbParamDetailWeight", null ],
