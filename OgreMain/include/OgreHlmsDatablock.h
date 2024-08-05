@@ -502,11 +502,13 @@ namespace Ogre
             For best results:
 
             @code
-                // Disable alpha test (default)
+                // Disable alpha test (default).
                 datablock->setAlphaTest( CMPF_ALWAYS_PASS );
-                // Do NOT enable alpha blending in the HlmsBlendblock (default)
+                // Do NOT enable alpha blending in the HlmsBlendblock (default).
                 HlmsBlendblock blendblock;
                 blendblock.setBlendType( SBT_REPLACE );
+                // Recommended: Enable A2C when using MSAA.
+                blendblock.mAlphaToCoverage = Ogre::HlmsBlendblock::A2cEnabledMsaaOnly;
                 datablock->setBlendblock( blendblock );
 
                 datablock->setAlphaHashing( true );
