@@ -118,6 +118,28 @@ The key settings are:
 
 Note that the noise may look terrible but it quite different in motion. See `Samples/2.0/ApiUsage/ParticleFX2` sample.
 
+### Alpha Hashing: Blue Noise vs White Noise {#AlphaHashingBlueNoiseSetup}
+
+The Hlms implementation provide both blue noise and white noise implementations.
+
+Blue Noise requires you include the file `LDR_R_0.png` and during initialization time call:
+
+```cpp
+try
+{
+    mRoot->getHlmsManager()->loadBlueNoise();
+}
+catch( Ogre::FileNotFoundException &e )
+{
+    Ogre::LogManager::getSingleton().logMessage( e.getFullDescription(), Ogre::LML_CRITICAL );
+    Ogre::LogManager::getSingleton().logMessage(
+        "WARNING: Blue Noise textures could not be loaded.", Ogre::LML_CRITICAL );
+}
+```
+
+When blue noise is not available, OgreNext will automatically fallback to a white noise implementation.
+Which one looks better is a bit subjective.
+
 ## Thread Safe RandomValueProvider
 
 PFX2 relies on `Math::UnitRandom` being thread safe.

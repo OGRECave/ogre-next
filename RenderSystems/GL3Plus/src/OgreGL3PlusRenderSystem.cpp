@@ -2248,7 +2248,7 @@ namespace Ogre
             mClipDistances = newClipDistances;
         }
 
-        mUseAdjacency = false;
+        mUseAdjacency = pso != nullptr && ( pso->operationType & OT_DETAIL_ADJACENCY_BIT ) != 0;
         mPso = 0;
 
         if( !pso )
@@ -2272,7 +2272,8 @@ namespace Ogre
             mActiveGeometryGpuProgramParameters = mPso->geometryShader->getDefaultParameters();
             mGeometryProgramBound = true;
 
-            mUseAdjacency = mPso->geometryShader->isAdjacencyInfoRequired();
+            if( mPso->geometryShader->isAdjacencyInfoRequired() )
+                mUseAdjacency = true;
         }
         if( mPso->hullShader )
         {
@@ -2615,28 +2616,45 @@ namespace Ogre
 
         activateGLTextureUnit( 0 );
 
+        int operationType = op.operationType;
+        // Use adjacency if there is a geometry program and it requested adjacency info
+        if( mGeometryProgramBound && mPso->geometryShader &&
+            mPso->geometryShader->isAdjacencyInfoRequired() )
+        {
+            operationType |= OT_DETAIL_ADJACENCY_BIT;
+        }
+
         // Determine the correct primitive type to render.
         GLenum primType;
-        // Use adjacency if there is a geometry program and it requested adjacency info.
-        bool useAdjacency = ( mGeometryProgramBound && mPso->geometryShader &&
-                              mPso->geometryShader->isAdjacencyInfoRequired() );
-        switch( op.operationType )
+        switch( operationType )
         {
         case OT_POINT_LIST:
             primType = GL_POINTS;
             break;
         case OT_LINE_LIST:
-            primType = useAdjacency ? GL_LINES_ADJACENCY : GL_LINES;
+            primType = GL_LINES;
+            break;
+        case OT_LINE_LIST_ADJ:
+            primType = GL_LINES_ADJACENCY;
             break;
         case OT_LINE_STRIP:
-            primType = useAdjacency ? GL_LINE_STRIP_ADJACENCY : GL_LINE_STRIP;
+            primType = GL_LINE_STRIP;
+            break;
+        case OT_LINE_STRIP_ADJ:
+            primType = GL_LINE_STRIP_ADJACENCY;
             break;
         default:
         case OT_TRIANGLE_LIST:
-            primType = useAdjacency ? GL_TRIANGLES_ADJACENCY : GL_TRIANGLES;
+            primType = GL_TRIANGLES;
+            break;
+        case OT_TRIANGLE_LIST_ADJ:
+            primType = GL_TRIANGLES_ADJACENCY;
             break;
         case OT_TRIANGLE_STRIP:
-            primType = useAdjacency ? GL_TRIANGLE_STRIP_ADJACENCY : GL_TRIANGLE_STRIP;
+            primType = GL_TRIANGLE_STRIP;
+            break;
+        case OT_TRIANGLE_STRIP_ADJ:
+            primType = GL_TRIANGLE_STRIP_ADJACENCY;
             break;
         case OT_TRIANGLE_FAN:
             primType = GL_TRIANGLE_FAN;

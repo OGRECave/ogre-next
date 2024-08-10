@@ -266,6 +266,18 @@ namespace v1 {
         case OT_TRIANGLE_STRIP:
             subMeshNode->SetAttribute("operationtype", "triangle_strip");
             break;
+        case OT_TRIANGLE_LIST_ADJ:
+            subMeshNode->SetAttribute( "operationtype", "triangle_list_adj" );
+            break;
+        case OT_TRIANGLE_STRIP_ADJ:
+            subMeshNode->SetAttribute( "operationtype", "triangle_strip_adj" );
+            break;
+        case OT_LINE_LIST_ADJ:
+            subMeshNode->SetAttribute( "operationtype", "line_list_adj" );
+            break;
+        case OT_LINE_STRIP_ADJ:
+            subMeshNode->SetAttribute( "operationtype", "line_strip_adj" );
+            break;
         }
 
         if (s->indexData[VpNormal]->indexCount > 0)
@@ -719,7 +731,24 @@ namespace v1 {
                     sm->operationType = OT_POINT_LIST;
                     readFaces = false;
                 }
-
+                else if( !strcmp( optype, "triangle_list_adj" ) )
+                {
+                    sm->operationType = OT_TRIANGLE_LIST_ADJ;
+                }
+                else if( !strcmp( optype, "triangle_strip_adj" ) )
+                {
+                    sm->operationType = OT_TRIANGLE_STRIP_ADJ;
+                }
+                else if( !strcmp( optype, "line_strip_adj" ) )
+                {
+                    sm->operationType = OT_LINE_STRIP_ADJ;
+                    readFaces = false;
+                }
+                else if( !strcmp( optype, "line_list_adj" ) )
+                {
+                    sm->operationType = OT_LINE_LIST_ADJ;
+                    readFaces = false;
+                }
             }
 
             const char* tmp = smElem->Attribute("usesharedvertices");

@@ -65,3 +65,10 @@ compositor_node RenderingNodeMsaa
 	out 0 rt_renderwindow
 }
 ```
+
+## New initialization step
+
+If you plan on using Alpha Hashing, we provide both blue and white noise.
+
+But blue noise requires you to call `mRoot->getHlmsManager()->loadBlueNoise()` during start up.
+[See its new section in the manual](@ref AlphaHashingBlueNoiseSetup) for more information.

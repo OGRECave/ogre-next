@@ -648,12 +648,15 @@ namespace Ogre
     String GpuProgram::CmdAdjacency::doGet( const void *target ) const
     {
         const GpuProgram *t = static_cast<const GpuProgram *>( target );
-        return StringConverter::toString( t->isAdjacencyInfoRequired() );
+        return StringConverter::toString( t->mNeedsAdjacencyInfo );
     }
     void GpuProgram::CmdAdjacency::doSet( void *target, const String &val )
     {
+        LogManager::getSingleton().logMessage(
+            "'uses_adjacency_information' is deprecated. "
+            "Set the respective RenderOperation::OperationType instead." );
         GpuProgram *t = static_cast<GpuProgram *>( target );
-        t->setAdjacencyInfoRequired( StringConverter::parseBool( val ) );
+        t->mNeedsAdjacencyInfo = StringConverter::parseBool( val );
     }
     //-----------------------------------------------------------------------
     String GpuProgram::CmdComputeGroupDims::doGet( const void *target ) const
