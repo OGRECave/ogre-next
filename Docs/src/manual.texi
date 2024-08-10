@@ -1985,12 +1985,6 @@ If your vertex program makes use of @ref{Vertex Texture Fetch}, you should decla
 	uses_vertex_texture_fetch true
 @end example
 	
-@subheading Adjacency information in Geometry Programs
-Some geometry programs require adjacency information from the geometry. It means that a geometry shader doesn't only get the information of the primitive it operates on, it also has access to its neighbours (in the case of lines or triangles). This directive will tell Ogre to send the information to the geometry shader.
-@example
-	uses_adjacency_information true
-@end example
-	
 @subheading Vertex Programs With Shadows
 When using shadows (@xref{Shadows}), the use of vertex programs can add some additional complexities, because Ogre can only automatically deal with everything when using the fixed-function pipeline. If you use vertex programs, and you are also using shadows, you may need to make some adjustments. @*@*
 
