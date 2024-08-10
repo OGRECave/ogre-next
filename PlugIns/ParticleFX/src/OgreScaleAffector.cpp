@@ -54,6 +54,12 @@ namespace Ogre
                                               "components of particles per second.",
                                               PT_REAL ),
                                 &msScaleCmd );
+
+            dict->addParameter( ParameterDef( "multiply_mode",
+                                              "When false (default), we do scale += factor * time. "
+                                              "When true, we do scale *= pow( factor, time ).",
+                                              PT_BOOL ),
+                                &msMultiplyModeCmd );
         }
     }
     //-----------------------------------------------------------------------
