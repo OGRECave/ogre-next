@@ -181,7 +181,8 @@ namespace Ogre
 
         /** Clears all the connection between channels of the nodes @see connect
         @remarks
-            1. We don't clear the output connection (see CompositorNode::connectExternalRT, see clearOutputConnections())
+            1. We don't clear the output connection (see CompositorNode::connectExternalRT, see
+        clearOutputConnections())
             2. The node aliases (both implicit and explicit) will still exist. see clearAll.
             3. A node with incomplete inputs should be disabled before the workspace is instantiated
                (see CompositorNodeDef::setStartEnabled). If the workspace has already been instantiated,
@@ -194,7 +195,8 @@ namespace Ogre
         /** Clears the connection from the "final output RenderTarget" (i.e., usually the RenderWindow)
             that goes to the input channel of one of our nodes. See CompositorNode::connectExternalRT.
         @remarks
-            1. We don't clear other type of connections (see connect(), see clearAllInterNodeConnections())
+            1. We don't clear other type of connections (see connect(), see
+        clearAllInterNodeConnections())
             2. The node aliases (both implicit and explicit) will still exist. see clearAll.
             3. A node with incomplete inputs should be disabled before the workspace is instantiated
                (see CompositorNodeDef::setStartEnabled). If the workspace has already been instantiated,
