@@ -46,11 +46,11 @@ namespace Ogre
     /** \addtogroup Scene
      *  @{
      */
-    /** Class representing a general-purpose node an articulated scene graph.
+    /** Class representing a general-purpose node in an articulated scene graph.
     @remarks
         A node in the scene graph is a node in a structured tree. A node contains
         information about the transformation which will apply to
-        it and all of it's children. Child nodes can have transforms of their own, which
+        it and all of its children. Child nodes can have transforms of their own, which
         are combined with their parent's transformations.
     @par
         This is an abstract class - concrete classes are based on this for specific purposes,
@@ -86,7 +86,7 @@ namespace Ogre
             /** Called when a node gets updated.
             @remarks
                 Note that this happens when the node's derived update happens,
-                not every time a method altering it's state occurs. There may
+                not every time a method altering its state occurs. There may
                 be several state-changing calls but only one of these calls,
                 when the node graph is fully updated.
             */
@@ -143,10 +143,10 @@ namespace Ogre
         /// Notification from parent that we need to migrate to a different depth level
         void parentDepthLevelChanged();
 
-        /** Triggers the node to update it's combined transforms.
+        /** Triggers the node to update its combined transforms.
         @par
             This method is called internally by Ogre to ask the node
-            to update it's complete transformation based on it's parents
+            to update its complete transformation based on its parents
             derived transform.
         */
         void _updateFromParent();
@@ -272,7 +272,7 @@ namespace Ogre
             of a parent node to apply to a child node (e.g. where the child node is a part of
             the same object, so you want it to be the same relative orientation based on the
             parent's orientation), but not in other cases (e.g. where the child node is just
-            for positioning another object, you want it to maintain it's own orientation).
+            for positioning another object, you want it to maintain its own orientation).
             The default is to inherit as with other transforms.
             Don't call this function too often, as we need to convert to SoA
         @par
@@ -288,7 +288,7 @@ namespace Ogre
             of a parent node to apply to a child node (e.g. where the child node is a part of
             the same object, so you want it to be the same relative orientation based on the
             parent's orientation), but not in other cases (e.g. where the child node is just
-            for positioning another object, you want it to maintain it's own orientation).
+            for positioning another object, you want it to maintain its own orientation).
             The default is to inherit as with other transforms.
             Don't call this function too often, as we need to convert to SoA
         @par
@@ -304,26 +304,26 @@ namespace Ogre
             of a parent node to apply to a child node (e.g. where the child node is a part of
             the same object, so you want it to be the same relative orientation based on the
             parent's orientation), but not in other cases (e.g. where the child node is just
-            for positioning another object, you want it to maintain it's own orientation).
+            for positioning another object, you want it to maintain its own orientation).
             The default is to inherit as with other transforms.
         @par
             Note that rotations are oriented around the node's origin.
         */
         virtual_l1 void resetOrientation();
 
-        /** Sets the position of the node relative to it's parent.
+        /** Sets the position of the node relative to its parent.
         @remarks
             Don't call this function too often, as we need to convert to SoA
         */
         virtual_l1 void setPosition( const Vector3 &pos );
 
-        /** Sets the position of the node relative to it's parent.
+        /** Sets the position of the node relative to its parent.
         @remarks
             Don't call this function too often, as we need to convert to SoA
         */
         virtual_l1 void setPosition( Real x, Real y, Real z );
 
-        /** Gets the position of the node relative to it's parent.
+        /** Gets the position of the node relative to its parent.
             @remarks
                 Don't call this function too often, as we need to convert from SoA
         */
@@ -336,7 +336,7 @@ namespace Ogre
             option of the child. In some cases you want a scaling factor of a parent node to apply to
             a child node (e.g. where the child node is a part of the same object, so you want it to be
             the same relative size based on the parent's size), but not in other cases (e.g. where the
-            child node is just for positioning another object, you want it to maintain it's own size).
+            child node is just for positioning another object, you want it to maintain its own size).
             The default is to inherit as with other transforms.
             Don't call this function too often, as we need to convert to SoA
         @par
@@ -351,7 +351,7 @@ namespace Ogre
             option of the child. In some cases you want a scaling factor of a parent node to apply to
             a child node (e.g. where the child node is a part of the same object, so you want it to be
             the same relative size based on the parent's size), but not in other cases (e.g. where the
-            child node is just for positioning another object, you want it to maintain it's own size).
+            child node is just for positioning another object, you want it to maintain its own size).
             The default is to inherit as with other transforms.
             Don't call this function too often, as we need to convert to SoA
         @par
@@ -365,7 +365,7 @@ namespace Ogre
         */
         virtual_l2 Vector3 getScale() const;
 
-        /** Tells the node whether it should inherit orientation from it's parent node.
+        /** Tells the node whether it should inherit orientation from its parent node.
         @remarks
             Orientations, unlike other transforms, are not always inherited by child nodes.
             Whether or not orientations affect the orientation of the child nodes depends on
@@ -373,7 +373,7 @@ namespace Ogre
             of a parent node to apply to a child node (e.g. where the child node is a part of
             the same object, so you want it to be the same relative orientation based on the
             parent's orientation), but not in other cases (e.g. where the child node is just
-            for positioning another object, you want it to maintain it's own orientation).
+            for positioning another object, you want it to maintain its own orientation).
             The default is to inherit as with other transforms.
         @param inherit If true, this node's orientation will be affected by its parent's orientation.
             If false, it will not be affected.
@@ -388,21 +388,21 @@ namespace Ogre
             of a parent node to apply to a child node (e.g. where the child node is a part of
             the same object, so you want it to be the same relative orientation based on the
             parent's orientation), but not in other cases (e.g. where the child node is just
-            for positioning another object, you want it to maintain it's own orientation).
+            for positioning another object, you want it to maintain its own orientation).
             The default is to inherit as with other transforms.
         @remarks
             See setInheritOrientation for more info.
         */
         virtual_l2 bool getInheritOrientation() const;
 
-        /** Tells the node whether it should inherit scaling factors from it's parent node.
+        /** Tells the node whether it should inherit scaling factors from its parent node.
         @remarks
             Scaling factors, unlike other transforms, are not always inherited by child nodes.
             Whether or not scalings affect the size of the child nodes depends on the setInheritScale
             option of the child. In some cases you want a scaling factor of a parent node to apply to
             a child node (e.g. where the child node is a part of the same object, so you want it to be
             the same relative size based on the parent's size), but not in other cases (e.g. where the
-            child node is just for positioning another object, you want it to maintain it's own size).
+            child node is just for positioning another object, you want it to maintain its own size).
             The default is to inherit as with other transforms.
         @param inherit If true, this node's scale will be affected by its parent's scale. If false,
             it will not be affected.
@@ -415,10 +415,10 @@ namespace Ogre
         */
         virtual_l2 bool getInheritScale() const;
 
-        /** Scales the node, combining it's current scale with the passed in scaling factor.
+        /** Scales the node, combining its current scale with the passed in scaling factor.
         @remarks
             This method applies an extra scaling factor to the node's existing scale, (unlike setScale
-            which overwrites it) combining it's current scale with the new one. E.g. calling this
+            which overwrites it) combining its current scale with the new one. E.g. calling this
             method twice with Vector3(2,2,2) would have the same effect as setScale(Vector3(4,4,4)) if
             the existing scale was 1.
         @par
@@ -426,10 +426,10 @@ namespace Ogre
         */
         virtual_l2 void scale( const Vector3 &scale );
 
-        /** Scales the node, combining it's current scale with the passed in scaling factor.
+        /** Scales the node, combining its current scale with the passed in scaling factor.
         @remarks
             This method applies an extra scaling factor to the node's existing scale, (unlike setScale
-            which overwrites it) combining it's current scale with the new one. E.g. calling this
+            which overwrites it) combining its current scale with the new one. E.g. calling this
             method twice with Vector3(2,2,2) would have the same effect as setScale(Vector3(4,4,4)) if
             the existing scale was 1.
         @par
@@ -530,7 +530,7 @@ namespace Ogre
         virtual_l2 void rotate( const Quaternion &q, TransformSpace relativeTo = TS_LOCAL );
 
         /** Gets a matrix whose columns are the local axes based on
-            the nodes orientation relative to it's parent. */
+            the nodes orientation relative to its parent. */
         virtual_l2 Matrix3 getLocalAxes() const;
 
         /** Creates an unnamed new Node as a child of this node.
@@ -805,7 +805,7 @@ namespace Ogre
         void _setNullNodeMemoryManager() { mNodeMemoryManager = 0; }
 
         /** Internal use, notifies all attached objects that our memory pointers
-            (i.e. Transform) may have changed (e.g. during cleanups, change of parent, etc)
+            (i.e., Transform) may have changed (e.g., during cleanups, change of parent, etc)
         */
         virtual void _callMemoryChangeListeners() = 0;
 
