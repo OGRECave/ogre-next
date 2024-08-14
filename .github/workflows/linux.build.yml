@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Run Linux C++11
         working-directory: ./
         run: ./Scripts/BuildScripts/build_ci_linux.sh
@@ -24,7 +24,7 @@ jobs:
         if: ${{ (github.ref != 'refs/heads/master' && github.event_name == 'push') || (github.event_name == 'pull_request' && github.event.pull_request.base.ref != 'master') }}
         run: ./Scripts/BuildScripts/abi_checker.sh 2 $GITHUB_BASE_REF
       - name: ABI Checker Upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ (github.ref != 'refs/heads/master' && github.event_name == 'push') || (github.event_name == 'pull_request' && github.event.pull_request.base.ref != 'master') }}
         with:
           name: abi-checker-reports
