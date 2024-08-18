@@ -713,10 +713,8 @@ var files_dup =
     ] ],
     [ "EGL/OgreGL3PlusUtil.h", "_e_g_l_2_ogre_g_l3_plus_util_8h.html", "_e_g_l_2_ogre_g_l3_plus_util_8h" ],
     [ "GLX/OgreGL3PlusUtil.h", "_g_l_x_2_ogre_g_l3_plus_util_8h.html", "_g_l_x_2_ogre_g_l3_plus_util_8h" ],
-    [ "gtk/OgreGL3PlusUtil.h", "gtk_2_ogre_g_l3_plus_util_8h.html", "gtk_2_ogre_g_l3_plus_util_8h" ],
     [ "OgreGL3PlusUtil.h", "_ogre_g_l3_plus_util_8h.html", "_ogre_g_l3_plus_util_8h" ],
     [ "OSX/OgreGL3PlusUtil.h", "_o_s_x_2_ogre_g_l3_plus_util_8h.html", "_o_s_x_2_ogre_g_l3_plus_util_8h" ],
-    [ "SDL/OgreGL3PlusUtil.h", "_s_d_l_2_ogre_g_l3_plus_util_8h.html", "_s_d_l_2_ogre_g_l3_plus_util_8h" ],
     [ "win32/OgreGL3PlusUtil.h", "win32_2_ogre_g_l3_plus_util_8h.html", "win32_2_ogre_g_l3_plus_util_8h" ],
     [ "OgreGL3PlusVaoManager.h", "_ogre_g_l3_plus_vao_manager_8h.html", [
       [ "GL3PlusVaoManager", "class_ogre_1_1_g_l3_plus_vao_manager.html", "class_ogre_1_1_g_l3_plus_vao_manager" ],
@@ -937,13 +935,6 @@ var files_dup =
     [ "OgreGpuResource.h", "_ogre_gpu_resource_8h.html", "_ogre_gpu_resource_8h" ],
     [ "OgreGrid2DPageStrategy.h", "_ogre_grid2_d_page_strategy_8h.html", "_ogre_grid2_d_page_strategy_8h" ],
     [ "OgreGrid3DPageStrategy.h", "_ogre_grid3_d_page_strategy_8h.html", null ],
-    [ "OgreGTKGLSupport.h", "_ogre_g_t_k_g_l_support_8h.html", [
-      [ "GTKGLSupport", "class_ogre_1_1_g_t_k_g_l_support.html", "class_ogre_1_1_g_t_k_g_l_support" ]
-    ] ],
-    [ "OgreGTKWindow.h", "_ogre_g_t_k_window_8h.html", [
-      [ "GTKWindow", "class_ogre_1_1_g_t_k_window.html", "class_ogre_1_1_g_t_k_window" ],
-      [ "OGREWidget", "class_ogre_1_1_o_g_r_e_widget.html", "class_ogre_1_1_o_g_r_e_widget" ]
-    ] ],
     [ "OgreHardwareBuffer.h", "_ogre_hardware_buffer_8h.html", null ],
     [ "OgreHardwareBufferManager.h", "_ogre_hardware_buffer_manager_8h.html", null ],
     [ "OgreHardwareIndexBuffer.h", "_ogre_hardware_index_buffer_8h.html", "_ogre_hardware_index_buffer_8h" ],
@@ -1655,13 +1646,6 @@ var files_dup =
     [ "OgreScriptLoader.h", "_ogre_script_loader_8h.html", null ],
     [ "OgreScriptParser.h", "_ogre_script_parser_8h.html", null ],
     [ "OgreScriptTranslator.h", "_ogre_script_translator_8h.html", null ],
-    [ "OgreSDLGLSupport.h", "_ogre_s_d_l_g_l_support_8h.html", [
-      [ "SDLGLSupport", "class_ogre_1_1_s_d_l_g_l_support.html", "class_ogre_1_1_s_d_l_g_l_support" ]
-    ] ],
-    [ "OgreSDLPrerequisites.h", "_ogre_s_d_l_prerequisites_8h.html", null ],
-    [ "OgreSDLWindow.h", "_ogre_s_d_l_window_8h.html", [
-      [ "SDLWindow", "class_ogre_1_1_s_d_l_window.html", "class_ogre_1_1_s_d_l_window" ]
-    ] ],
     [ "OgreSearchOps.h", "_ogre_search_ops_8h.html", "_ogre_search_ops_8h" ],
     [ "OgreSemaphore.h", "_ogre_semaphore_8h.html", [
       [ "Semaphore", "class_ogre_1_1_semaphore.html", "class_ogre_1_1_semaphore" ]

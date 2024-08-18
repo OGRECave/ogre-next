@@ -179,9 +179,6 @@ var hierarchy =
     [ "GLSLESProgramCommon MANAGED_RESOURCE", null, [
       [ "Ogre::GLSLESLinkProgram", "class_ogre_1_1_g_l_s_l_e_s_link_program.html", null ]
     ] ],
-    [ "Gtk::GL::DrawingArea", null, [
-      [ "Ogre::OGREWidget", "class_ogre_1_1_o_g_r_e_widget.html", null ]
-    ] ],
     [ "HardwareIndexBuffer MANAGED_RESOURCE", null, [
       [ "Ogre::v1::GLES2HardwareIndexBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_index_buffer.html", null ]
     ] ],
@@ -1224,10 +1221,8 @@ var hierarchy =
       [ "Ogre::EGLGLSupport", "class_ogre_1_1_e_g_l_g_l_support.html", null ],
       [ "Ogre::EglPBufferSupport", "class_ogre_1_1_egl_p_buffer_support.html", null ],
       [ "Ogre::GLXGLSupport", "class_ogre_1_1_g_l_x_g_l_support.html", null ],
-      [ "Ogre::GTKGLSupport", "class_ogre_1_1_g_t_k_g_l_support.html", null ],
       [ "Ogre::GlSwitchableSupport", "class_ogre_1_1_gl_switchable_support.html", null ],
       [ "Ogre::OSXGL3PlusSupport", "class_ogre_1_1_o_s_x_g_l3_plus_support.html", null ],
-      [ "Ogre::SDLGLSupport", "class_ogre_1_1_s_d_l_g_l_support.html", null ],
       [ "Ogre::Win32GLSupport", "class_ogre_1_1_win32_g_l_support.html", null ]
     ] ],
     [ "Ogre::GL3PlusVaoManager::Block", "struct_ogre_1_1_g_l3_plus_vao_manager_1_1_block.html", null ],
@@ -2077,14 +2072,9 @@ var hierarchy =
       [ "Ogre::v1::GLES2RenderToVertexBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_render_to_vertex_buffer.html", null ]
     ] ],
     [ "RenderWindow", null, [
-      [ "Ogre::EGLWindow", "class_ogre_1_1_e_g_l_window.html", null ],
-      [ "Ogre::GTKWindow", "class_ogre_1_1_g_t_k_window.html", null ],
-      [ "Ogre::SDLWindow", "class_ogre_1_1_s_d_l_window.html", null ]
+      [ "Ogre::EGLWindow", "class_ogre_1_1_e_g_l_window.html", null ]
     ] ],
     [ "Rotation", "class_rotation.html", null ],
-    [ "SigC::Object", null, [
-      [ "Ogre::GTKWindow", "class_ogre_1_1_g_t_k_window.html", null ]
-    ] ],
     [ "SimpleRenderable", null, [
       [ "Ogre::Volume::Chunk", "class_ogre_1_1_volume_1_1_chunk.html", null ]
     ] ],
@@ -2131,9 +2121,6 @@ var hierarchy =
     ] ],
     [ "Ogre::Singleton< GpuProgramManager >", "class_ogre_1_1_singleton.html", [
       [ "Ogre::GpuProgramManager", "class_ogre_1_1_gpu_program_manager.html", null ]
-    ] ],
-    [ "Ogre::Singleton< GTKGLSupport >", "class_ogre_1_1_singleton.html", [
-      [ "Ogre::GTKGLSupport", "class_ogre_1_1_g_t_k_g_l_support.html", null ]
     ] ],
     [ "Ogre::Singleton< HardwareBufferManager >", "class_ogre_1_1_singleton.html", [
       [ "Ogre::v1::HardwareBufferManager", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html", null ]

@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="class_ogre_1_1_stack_vector.html" target="_top" xlink:title="Compact implementation similar to std::array.">
+<g id="a_node1"><a xlink:href="struct_ogre_1_1_staging_buffer_1_1_destination.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="0,-0.5 0,-30.5 112,-30.5 112,-0.5 0,-0.5"/>
-<text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::StackVector&lt;</text>
-<text text-anchor="middle" x="56" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00"> T, Capacity &gt;</text>
+<text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::StagingBuffer</text>
+<text text-anchor="middle" x="56" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::Destination</text>
 </a>
 </g>
 </g>
