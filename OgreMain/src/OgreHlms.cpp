@@ -1876,6 +1876,18 @@ namespace Ogre
 
         mDataFolder = newDataFolder;
         enumeratePieceFiles();
+
+        // Reload datablock pieces (those that can be reloaded from disk).
+        for( auto &itor : mDatablockCustomPieceFiles )
+        {
+            DatablockCustomPieceFile &datablockCustomPiece = itor.second;
+            if( datablockCustomPiece.isCacheable() )
+            {
+                const DataStreamPtr stream = ResourceGroupManager::getSingleton().openResource(
+                    datablockCustomPiece.filename, datablockCustomPiece.resourceGroup );
+                datablockCustomPiece.sourceCode = stream->getAsString();
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     ArchiveVec Hlms::getPiecesLibraryAsArchiveVec() const
