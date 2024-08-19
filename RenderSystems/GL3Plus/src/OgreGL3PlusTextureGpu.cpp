@@ -158,8 +158,16 @@ namespace Ogre
                 OCGE( glBindRenderbuffer( GL_RENDERBUFFER, 0 ) );
 
                 // Set debug name for RenderDoc and similar tools
-                ogreGlObjectLabel( GL_RENDERBUFFER, mMsaaFramebufferName,
-                                   getNameStr() + "/MsaaImplicit" );
+                if( !hasMsaaExplicitResolves() )
+                {
+                    ogreGlObjectLabel( GL_RENDERBUFFER, mMsaaFramebufferName,
+                                       getNameStr() + "/MsaaImplicit" );
+                }
+                else
+                {
+                    ogreGlObjectLabel( GL_RENDERBUFFER, mMsaaFramebufferName,
+                                       getNameStr() + "/MsaaExplicit" );
+                }
             }
             else
             {
@@ -240,7 +248,9 @@ namespace Ogre
     void GL3PlusTextureGpu::notifyDataIsReady()
     {
         assert( mResidencyStatus == GpuResidency::Resident );
-        assert( mFinalTextureName || mPixelFormat == PFG_NULL );
+        assert(
+            mFinalTextureName || mPixelFormat == PFG_NULL ||
+            ( mMsaaFramebufferName && !isTexture() && isMultisample() && hasMsaaExplicitResolves() ) );
 
         OGRE_ASSERT_LOW( mDataPreparationsPending > 0u &&
                          "Calling notifyDataIsReady too often! Remove this call"
