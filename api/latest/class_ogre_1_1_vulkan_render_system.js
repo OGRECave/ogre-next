@@ -138,7 +138,7 @@ var class_ogre_1_1_vulkan_render_system =
     [ "setSwappyFramePacing", "class_ogre_1_1_vulkan_render_system.html#a300e5b9e5f7bfab2d131a04baaed6f4f", null ],
     [ "sharedVkInitialization", "class_ogre_1_1_vulkan_render_system.html#acf4ba4fa8ff3b5387cd18f617538516f", null ],
     [ "shutdown", "class_ogre_1_1_vulkan_render_system.html#a2c7caf82ac2d6d9ddb335f0ee0effb10", null ],
-    [ "supportsMultithreadedShaderCompliation", "class_ogre_1_1_vulkan_render_system.html#a926fe6f398b994c0cf1468bf8625b8a2", null ],
+    [ "supportsMultithreadedShaderCompilation", "class_ogre_1_1_vulkan_render_system.html#affa135b4ada8ca1f4afb9a1135235772", null ],
     [ "unregisterThread", "class_ogre_1_1_vulkan_render_system.html#a6cd050d0488813ce414f5a2bb3e99f38", null ],
     [ "validateConfigOptions", "class_ogre_1_1_vulkan_render_system.html#a20202748993a987073131d6b8ea43c6a", null ],
     [ "validateSampleDescription", "class_ogre_1_1_vulkan_render_system.html#ac42ab52d4a6af396a79d0648a7953afa", null ]
