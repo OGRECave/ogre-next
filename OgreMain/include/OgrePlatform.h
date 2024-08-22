@@ -218,7 +218,7 @@ THE SOFTWARE.
 #define OGRE_WARN( x ) message( __FILE__ "(" QUOTE( __LINE__ ) ") : " x "\n" )
 
 // For marking functions as deprecated
-#if __cplusplus >= 201402L
+#if __cplusplus >= 201402L || OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER >= 1900
 #    define OGRE_DEPRECATED [[deprecated]]
 #    define OGRE_DEPRECATED_VER( x ) [[deprecated]]
 #    define OGRE_DEPRECATED_ENUM_VER( x ) [[deprecated]]
