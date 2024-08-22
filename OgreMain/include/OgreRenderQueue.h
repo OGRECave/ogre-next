@@ -110,7 +110,7 @@ namespace Ogre
 
             The work is done in updateThread() and is in charge of compiling shaders AND generating PSOs.
         @remarks
-            This function must not be called if RenderSystem::supportsMultithreadedShaderCompliation
+            This function must not be called if RenderSystem::supportsMultithreadedShaderCompilation
             is false.
         @param sceneManager
         */
@@ -137,7 +137,7 @@ namespace Ogre
                                  const HlmsCache *passCaches );
 
         /// Serial alternative of fireWarmUpParallel() + updateWarmUpThread() for when
-        /// RenderSystem::supportsMultithreadedShaderCompliation is false.
+        /// RenderSystem::supportsMultithreadedShaderCompilation is false.
         void warmUpSerial( HlmsManager *hlmsManager, const HlmsCache *passCaches );
     };
 

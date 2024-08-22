@@ -167,7 +167,7 @@ namespace Ogre
         void setConfigOption( const String &name, const String &value ) override;
         const char *getPriorityConfigOption( size_t idx ) const override;
         size_t getNumPriorityConfigOptions() const override;
-        bool supportsMultithreadedShaderCompliation() const override;
+        bool supportsMultithreadedShaderCompilation() const override;
 
         HardwareOcclusionQuery *createHardwareOcclusionQuery() override;
 
