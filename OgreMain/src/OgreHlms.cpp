@@ -2763,7 +2763,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::setupSharedBasicProperties( Renderable *renderable )
+    void Hlms::setupSharedBasicProperties( Renderable *renderable, const bool bCasterPass )
     {
         HlmsDatablock *datablock = renderable->getDatablock();
 
@@ -2779,9 +2779,9 @@ namespace Ogre
         setProperty( kNoTid, HlmsBaseProp::AlphaTestShadowCasterOnly,
                      datablock->getAlphaTestShadowCasterOnly() );
         setProperty( kNoTid, HlmsBaseProp::AlphaBlend,
-                     datablock->getBlendblock( false )->isAutoTransparent() );
+                     datablock->getBlendblock( bCasterPass )->isAutoTransparent() );
         setProperty( kNoTid, HlmsBaseProp::AlphaToCoverage,
-                     datablock->getBlendblock( false )->mAlphaToCoverage );
+                     datablock->getBlendblock( bCasterPass )->mAlphaToCoverage );
         if( datablock->getAlphaHashing() )
             setProperty( kNoTid, HlmsBaseProp::AlphaHash, 1 );
 
@@ -2857,7 +2857,7 @@ namespace Ogre
 
         setProperty( kNoTid, HlmsBaseProp::UvCount, numTexCoords );
 
-        setupSharedBasicProperties( renderable );
+        setupSharedBasicProperties( renderable, false );
 
         HlmsDatablock *datablock = renderable->getDatablock();
 
