@@ -1717,6 +1717,7 @@ var group___resources =
       [ "notifyTextureChanged", "group___resources.html#ga60a15fc79617712b9335ad900bd79bb0", null ],
       [ "preload", "group___resources.html#ga33c79f56b0993d1921c87c18040211da", null ],
       [ "saveTextures", "group___resources.html#gaa174345a2019a718cfcd2aa274abe595", null ],
+      [ "setAlphaTestThreshold", "group___resources.html#ga519082f98e52e2cc5ffaecdb94c9c4ba", null ],
       [ "setSamplerblock", "group___resources.html#ga91e2326f0550a4e8b59f08a321d28cf5", null ],
       [ "setTexture", "group___resources.html#ga42172622f82ce643f2cab2f746152da8", null ],
       [ "shouldStayLoaded", "group___resources.html#ga912c2e67f80ed4e5f40e9143ab3855ab", null ]
@@ -3112,6 +3113,7 @@ var group___resources =
     [ "OrderPropertyByIdString", "group___resources.html#gad7efc30646f8ceddb7949a0fc17ad380", null ],
     [ "preload", "group___resources.html#ga33c79f56b0993d1921c87c18040211da", null ],
     [ "saveTextures", "group___resources.html#gaa174345a2019a718cfcd2aa274abe595", null ],
+    [ "setAlphaTestThreshold", "group___resources.html#ga519082f98e52e2cc5ffaecdb94c9c4ba", null ],
     [ "setSamplerblock", "group___resources.html#ga91e2326f0550a4e8b59f08a321d28cf5", null ],
     [ "setTexture", "group___resources.html#ga42172622f82ce643f2cab2f746152da8", null ],
     [ "shouldStayLoaded", "group___resources.html#ga912c2e67f80ed4e5f40e9143ab3855ab", null ],
