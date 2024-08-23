@@ -91,16 +91,16 @@ $(document).ready(function(){initNavTree('_terra_system.html',''); initResizable
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
-<ul><li class="level1"><a href="#autotoc_md79">Vertex-bufferless rendering</a></li>
-<li class="level1"><a href="#autotoc_md80">Vertex Trick in Terra</a></li>
-<li class="level1"><a href="#autotoc_md81">Terra cells</a><ul><li class="level2"><a href="#autotoc_md82">First layer, the 4x4 block</a></li>
-<li class="level2"><a href="#autotoc_md83">Outer layers</a></li>
+<ul><li class="level1"><a href="#autotoc_md80">Vertex-bufferless rendering</a></li>
+<li class="level1"><a href="#autotoc_md81">Vertex Trick in Terra</a></li>
+<li class="level1"><a href="#autotoc_md82">Terra cells</a><ul><li class="level2"><a href="#autotoc_md83">First layer, the 4x4 block</a></li>
+<li class="level2"><a href="#autotoc_md84">Outer layers</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md84">Skirts</a></li>
-<li class="level1"><a href="#autotoc_md85">Shadows</a></li>
-<li class="level1"><a href="#autotoc_md86">Shading</a></li>
-<li class="level1"><a href="#autotoc_md87">Why is it not a component?</a></li>
+<li class="level1"><a href="#autotoc_md85">Skirts</a></li>
+<li class="level1"><a href="#autotoc_md86">Shadows</a></li>
+<li class="level1"><a href="#autotoc_md87">Shading</a></li>
+<li class="level1"><a href="#autotoc_md88">Why is it not a component?</a></li>
 </ul>
 </div>
 <div class="textblock"><p><a class="anchor" id="md_manual_Plugins_TerraSystem"></a></p>
@@ -111,7 +111,7 @@ $(document).ready(function(){initNavTree('_terra_system.html',''); initResizable
 <li>Modifying this data could cause stalls (if it's in use by the GPU)</li>
 </ul>
 <p>Modern APIs simplify this a lot because <b>we can render vertex data without a vertex buffer at all</b></p>
-<h1><a class="anchor" id="autotoc_md79"></a>
+<h1><a class="anchor" id="autotoc_md80"></a>
 Vertex-bufferless rendering</h1>
 <p>The core of this technique is explored in detail in <a href="https://www.gdcvault.com/play/1020624/Advanced-Visual-Effects-with-DirectX">Vertex Shader Tricks by Bill Bilodeau</a> (<a href="http://amd-dev.wpengine.netdna-cdn.com/wordpress/media/2012/10/Vertex-Shader-Tricks-Bill-Bilodeau.ppsx">PPT</a>).</p>
 <p>The short version is this: Let's forget about terrains for a sec. We want to render a screen-aligned quad. It is composed of either</p>
@@ -162,14 +162,14 @@ Vertex-bufferless rendering</h1>
 <li>Because the vertices are procedurally generated, <em>we could tessellate dynamically</em>. This example deals with 6 vertices, but we could modify it to have a dynamic amount. e.g. we could send num_vertices_per_quad instead of hardcoding it to 6. This way, rather than having multiple vertex buffers for each LOD, generating them on the fly, caching them, and then deciding which one to use based on the LOD setting, we just send a variable containing the tessellation factor and it will 'just work'</li>
 </ol>
 <p>This technique can be used to perform all sort of tricks: Quad rendering, particle FXs, grass rendering (generate the blades in 2D, then slightly bend them in 3D), and of course Terrains.</p>
-<h1><a class="anchor" id="autotoc_md80"></a>
+<h1><a class="anchor" id="autotoc_md81"></a>
 Vertex Trick in Terra</h1>
 <p>Ok now that we've explained what newer APIs enable us to do, Terra uses the same trick: Heightmap-based terrains are essentially 2D quads on the XZ plane stacked together while the height Y is fetch from a heightmap texture.</p>
 <p>Terra uses triangle strips rather than triangle lists because it lets the vertex shader run less, but this also means we need to generate a few <a href="https://www.learnopengles.com/tag/degenerate-triangles/">degenerate triangles</a> (i.e. triangles with 0 area) to start from the end of a row of quads, into the next row of quads.</p>
 <p>The actual code is in <a href="https://github.com/OGRECave/ogre-next/blob/e8486341da0e0f9780e943a001adda33df00a268/Samples/Media/Hlms/Terra/Any/800.VertexShader_piece_vs.any#L58">Samples/Media/Hlms/Terra/Any/800.VertexShader_piece_vs.any</a></p>
-<h1><a class="anchor" id="autotoc_md81"></a>
+<h1><a class="anchor" id="autotoc_md82"></a>
 Terra cells</h1>
-<h2><a class="anchor" id="autotoc_md82"></a>
+<h2><a class="anchor" id="autotoc_md83"></a>
 First layer, the 4x4 block</h2>
 <p>Terra divides the terrain into blocks or cells, a TerrainCell.</p>
 <p>Every frame, when <code>Terra::update</code> is called, we calculate the visibility (frustum cull) of the first 4x4 blocks around the camera.</p>
@@ -179,7 +179,7 @@ First layer, the 4x4 block</h2>
 <p>Let's say that each block has 4096 vertices (64 width x 64 depth)</p>
 <p>In a DX9-style API, this would translate to 9 Draw calls: There's 9 chunks visible, we need 9 draws of 4096 vertices each.</p>
 <p>However we're doing this procedurally, thus <code>Terra::optimizeCellsAndAdd</code> will attempt to merge these blocks as much as possible. This one is an easy case because the whole 3x3 is contiguous <b>thus it can be rendered as 1 block of 331776 vertices</b> (192 width x 192 depth)</p>
-<h2><a class="anchor" id="autotoc_md83"></a>
+<h2><a class="anchor" id="autotoc_md84"></a>
 Outer layers</h2>
 <p>Like an onion, Terra will now start iterating around the circunscript blocks around this 4x4 starting block; while doubling its size and halving tessellation factor (tessellation factor is determined by <code>lodLevel</code> parameter <code>Terra::addRenderable</code>) every time:</p>
 <p><img src="TerraBlocks02.png" alt="" class="inline"/></p>
@@ -194,7 +194,7 @@ Outer layers</h2>
 <blockquote class="doxtable">
 <p><b>Note 2:</b> If you need maximum accuracy (i.e. disable LODs) modern GPUs are extremely fast and can render the whole terrain at lod 0 at real time framerates thanks to our procedural approach. LOD is meant to save GPU time that can be dedicated to other tasks such as PBR or GI. </p>
 </blockquote>
-<h1><a class="anchor" id="autotoc_md84"></a>
+<h1><a class="anchor" id="autotoc_md85"></a>
 Skirts</h1>
 <p>Every jump in LOD produces a discontinuity. In 2D it looks like this:</p>
 <p><img src="TerraLod01.png" alt="" class="inline"/></p>
@@ -204,7 +204,7 @@ Skirts</h1>
 <p><img src="TerraLod03.png" alt="" class="inline"/></p>
 <p>This is a simple yet effective solution. Although clearly wrong when looking up close, this skirt is in the distance therefore it's often only a few pixels wide, and colour shading is done in a way that pretends the normal is pointing upwards, therefore it's contiguous.</p>
 <p>Additionally, the skirts would be most noticeable on high frequency heightmaps (i.e. large differences between pixels), which is extremely rare as natural-occurring heightmaps are low frequency.</p>
-<h1><a class="anchor" id="autotoc_md85"></a>
+<h1><a class="anchor" id="autotoc_md86"></a>
 Shadows</h1>
 <p>When it comes to directional lights, standard shadow mapping quality is very poor. Additionally, the number of vertices multiplies with each shadow map which can put a strain on the GPU.</p>
 <p>Directional lights are instead handled differently, using a compute shader that performs 2D raymarching, generating a shadow texture in real time.</p>
@@ -216,7 +216,7 @@ Shadows</h1>
 </ul>
 <p>Skyline Game Engine has a <a href="https://www.youtube.com/watch?v=4Q-0ALA6Cik">video</a> of Terra's sun shadows being modified in real time (in less than 2ms).</p>
 <p>Point &amp; spot lights use traditional shadow maps. They often have much higher quality and limited range, thus vertex count is also not an issue.</p>
-<h1><a class="anchor" id="autotoc_md86"></a>
+<h1><a class="anchor" id="autotoc_md87"></a>
 Shading</h1>
 <p>Starting <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2, HlmsTerra derives from HlmsPbs therefore all or most features available to PBS are also available to Terra. That includes multiple light sources, multiple BRDFs, Forward+, PCC, etc.</p>
 <p>Terra shader <a href="https://github.com/OGRECave/ogre-next/blob/e8486341da0e0f9780e943a001adda33df00a268/Samples/Media/Hlms/Terra/Any/800.PixelShader_piece_ps.any#L125">overrides texturing code</a> via <code>@undefpiece</code> to perform blending between detail maps in a manner that is most common to terrain tools.</p>
@@ -228,7 +228,7 @@ Shading</h1>
 <p><img src="TerraSample03.jpg" alt="" class="inline"/></p>
 <p><img src="TerraSample04.jpg" alt="" class="inline"/></p>
 <p>Examples of Terra in real world use are <a href="https://store.steampowered.com/app/346610/Racecraft/">Racecraft</a>, <a href="https://apps.apple.com/us/app/alliance-air-war/id1059604202">Alliance Air War</a>, <a href="https://store.steampowered.com/app/559340/Sunset_Rangers/">Sunset Rangers</a>.</p>
-<h1><a class="anchor" id="autotoc_md87"></a>
+<h1><a class="anchor" id="autotoc_md88"></a>
 Why is it not a component?</h1>
 <p>Terrain rendering often needs heavy customizations to suit the user needs. </p>
 </div></div><!-- contents -->

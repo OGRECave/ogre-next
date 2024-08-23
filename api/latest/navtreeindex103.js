@@ -1,5 +1,6 @@
 var NAVTREEINDEX103 =
 {
+"hlmsblendblockref.html#bbParamSourceAlphaBlendFactor":[4,2,3,0,0,5],
 "hlmsblendblockref.html#bbParameters":[4,2,3,0,0],
 "hlmsblendblockref.html#btAdd":[4,2,3,0,2,2],
 "hlmsblendblockref.html#btModulate":[4,2,3,0,2,3],
@@ -19,7 +20,7 @@ var NAVTREEINDEX103 =
 "hlmsmacroblockref.html#mbParamScissorText":[4,2,3,1,0,0],
 "hlmsmacroblockref.html#mbParameters":[4,2,3,1,0],
 "hlmspbsdatablockref.html":[4,2,3,3],
-"hlmspbsdatablockref.html#autotoc_md109":[4,2,3,3,1,1],
+"hlmspbsdatablockref.html#autotoc_md110":[4,2,3,3,1,1],
 "hlmspbsdatablockref.html#dbCommonParameters":[4,2,3,3,0],
 "hlmspbsdatablockref.html#dbExample":[4,2,3,3,2],
 "hlmspbsdatablockref.html#dbLinks":[4,2,3,3,2,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX103 =
 "namespace_ogre.html#a5c4c0c56ea9f824c49e331f6fad33ddb":[7,0,0,1206],
 "namespace_ogre.html#a5e0882c3b9f7ca32a795f98cf034e428":[7,0,0,1106],
 "namespace_ogre.html#a617f201d9cbae270480ce958d29d89b4":[7,0,0,1454],
-"namespace_ogre.html#a6190e7c0a19190277aeadf25f536ac8c":[7,0,0,1096],
-"namespace_ogre.html#a626dceff763286830a1ef619f5468ab0":[7,0,0,1186]
+"namespace_ogre.html#a6190e7c0a19190277aeadf25f536ac8c":[7,0,0,1096]
 };

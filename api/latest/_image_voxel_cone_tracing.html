@@ -133,13 +133,13 @@ Step 1: Image Voxelizer</h1>
 Downside</h2>
 <p>There is a downside of this (aside from VRAM usage): We need to voxelize each mesh + material combo. Meaning that if you have a mesh and want to apply different materials, we need to consume 2-3MB per material</p>
 <p>This is rarely a problem though because most meshes only use one set of materials. And for those that do, you may be able to get away with baking a material set that is either white or similar; the end results after calculating GI may not vary that much to worth the extra VRAM cost.</p>
-<h3><a class="anchor" id="autotoc_md99"></a>
+<h3><a class="anchor" id="autotoc_md100"></a>
 Non-researched solutions:</h3>
 <ul>
 <li>For simple colour swaps (e.g. RTS games, FPS with multiplayer teams), this should be workaroundeable by adding a single multiplier value, rather than voxelizing the mesh per material</li>
 <li>It should be possible to apply some sort of BC1-like compression, given that the mesh opaqueness and shape is the same. The only thing that changes is colour; thus a delta colour compression scheme could work well</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md100"></a>
+<h2><a class="anchor" id="autotoc_md101"></a>
 Trivia</h2>
 <p>At first I panicked a little while developing the Image Voxelizer because the initial quality was far inferior than that of the original voxelizer.</p>
 <p>The problem was that the original VCT is a 'perfect' voxelization. i.e. if a triangle touches a single voxel, then that voxel adopts the colour of the triangle. Its neighbour voxels will remain empty. Simple. That results in a 'thin' voxel result.</p>
@@ -162,12 +162,12 @@ Step 2: Row Translation</h1>
 <h1><a class="anchor" id="IVCT_Step3"></a>
 Step 3: Cascades</h1>
 <p><b>This step is currently a work in progress</b>. The implementation is planned to have N cascades (N user defined). During cone tracing, after we reach the end of a cascade we move on to the next cascade, which covers more ground but has coarser resolution, hence lower quality.</p>
-<h1><a class="anchor" id="autotoc_md101"></a>
+<h1><a class="anchor" id="autotoc_md102"></a>
 Wait isn't this what UE5's Lumen does?</h1>
 <p>AFAIK Lumen is also a Voxel Cone Tracer. Therefore it's normal there will be many similarities. I don't know if they use cascades though.</p>
 <p>As far as I've read, Lumen uses an entirely different approach to voxelizing which involves rasterizing from all 6 sides, which makes it very user hostile as meshes must be broken down to individual components (e.g. instead of submitting a house, each wall, column, floor and ceiling must be its own mesh).</p>
 <p>With Ogre-Next you just provide the mesh and it will just work (although with manual tunning you could achieve greater memory savings if e.g. the columns are split and voxelized separately).</p>
-<h1><a class="anchor" id="autotoc_md102"></a>
+<h1><a class="anchor" id="autotoc_md103"></a>
 Wait isn't this what Godot does?</h1>
 <p>Well, I was involved in <a href="https://godotengine.org/article/godot-40-gets-sdf-based-real-time-global-illumination">SDFGI advising Juan</a> on the subject, thus of course there are a lot of similarities.</p>
 <p>The main difference is that Godot generates a cascade of SDFs (signed distance fields), while Ogre-Next is generating a cascade of voxels.</p>

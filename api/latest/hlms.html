@@ -127,7 +127,7 @@ $(document).ready(function(){initNavTree('hlms.html',''); initResizable(); });
 </li>
 <li class="level1"><a href="#HlmsRuntimeRendering">Run-time rendering</a><ul><li class="level2"><a href="#HlmsRuntimeRenderingPreparePassHash">preparePassHash</a></li>
 <li class="level2"><a href="#HlmsRuntimeRenderingFillBuffersFor">fillBuffersFor</a></li>
-<li class="level2"><a href="#autotoc_md107">Multithreaded Shader Compilation</a></li>
+<li class="level2"><a href="#autotoc_md108">Multithreaded Shader Compilation</a></li>
 </ul>
 </li>
 <li class="level1"><a href="#UsingHlmsImplementation">Using the HLMS implementations</a><ul><li class="level2"><a href="#UsingHlmsImplementationInitialization">Initialization</a></li>
@@ -150,7 +150,7 @@ $(document).ready(function(){initNavTree('hlms.html',''); initResizable(); });
 <li class="level1"><a href="#HlmsTroubleshooting">Troubleshooting</a><ul><li class="level2"><a href="#HlmsTroubleshootingShadow">My shadows don&#39;t show up or are very glitchy</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md108">Precision / Quality</a></li>
+<li class="level1"><a href="#autotoc_md109">Precision / Quality</a></li>
 </ul>
 </div>
 <div class="textblock"><p><a class="anchor" id="md_manual_Rendering_hlms"></a></p>
@@ -631,7 +631,7 @@ preparePassHash</h2>
 <h2><a class="anchor" id="HlmsRuntimeRenderingFillBuffersFor"></a>
 fillBuffersFor</h2>
 <p>This function gets executed for every Renderable that is going to be rendered. Implementations are meant to read the Renderable's data and fill their GPU data structures, like world matrix, bone matrices (if skeletally animated), set the textures. They can rely on parameters like <code>lastCache</code> and <code>lastTextureHash</code> to obtain information about the previously rendered object and avoid setting again many shared paremeters.</p>
-<h2><a class="anchor" id="autotoc_md107"></a>
+<h2><a class="anchor" id="autotoc_md108"></a>
 Multithreaded Shader Compilation</h2>
 <p>For details see the dedicated section <a class="el" href="_hlms_threading.html">Multithreaded Shader Compilation</a>.</p>
 <h1><a class="anchor" id="UsingHlmsImplementation"></a>
@@ -934,7 +934,7 @@ My shadows don't show up or are very glitchy</h2>
 <li>Checkout the <code>Sample_ShadowMapDebugging</code> sample on how to debug shadows. Those techniques may give you useful hints about what's going on.</li>
 </ol>
 <p>[^12]: GL3+ and GLES3: extension ARB_sampler_objects. D3D11: ID3D11SamplerState</p>
-<h1><a class="anchor" id="autotoc_md108"></a>
+<h1><a class="anchor" id="autotoc_md109"></a>
 Precision / Quality</h1>
 <p><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.4 added <code>Hlms::setPrecisionMode</code> with the following options:</p>
 <ul>

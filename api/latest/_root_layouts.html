@@ -93,7 +93,7 @@ $(document).ready(function(){initNavTree('_root_layouts.html',''); initResizable
 <div class="toc"><h3>Table of Contents</h3>
 <ul><li class="level1"><a href="#RootLayoutsOldAPIs">Old APIs (i.e. D3D11 and GL)</a></li>
 <li class="level1"><a href="#RootLayoutsNewAPIs">New APIs and Root Layouts</a></li>
-<li class="level1"><a href="#RootLayoutsSettingUp">Setting up root layouts</a><ul><li class="level2"><a href="#autotoc_md104">Could you have used e.g. &quot;const_buffers&quot; : [0,7] instead of [4,7]?</a></li>
+<li class="level1"><a href="#RootLayoutsSettingUp">Setting up root layouts</a><ul><li class="level2"><a href="#autotoc_md105">Could you have used e.g. &quot;const_buffers&quot; : [0,7] instead of [4,7]?</a></li>
 </ul>
 </li>
 <li class="level1"><a href="#RootLayoutsDeclaringInShaders">Declaring Root Layouts in shaders</a></li>
@@ -102,8 +102,8 @@ $(document).ready(function(){initNavTree('_root_layouts.html',''); initResizable
 <li class="level1"><a href="#RootLayoutsArraysOfTextures">Arrays of Textures</a><ul><li class="level2"><a href="#RootLayoutsAoTCpp">C++</a></li>
 <li class="level2"><a href="#RootLayoutsAoTInlineShader">Inline shader declaration</a></li>
 <li class="level2"><a href="#RootLayoutsAoTAuto">Automatic</a></li>
-<li class="level2"><a href="#RootLayoutsGLSLForGLandVK">Making GLSL shaders compatible with both Vulkan and OpenGL</a><ul><li class="level3"><a href="#RootLayoutsGLSLForGLandVKExample">Example:</a><ul><li class="level4"><a href="#autotoc_md105">OpenGL</a></li>
-<li class="level4"><a href="#autotoc_md106">Vulkan</a></li>
+<li class="level2"><a href="#RootLayoutsGLSLForGLandVK">Making GLSL shaders compatible with both Vulkan and OpenGL</a><ul><li class="level3"><a href="#RootLayoutsGLSLForGLandVKExample">Example:</a><ul><li class="level4"><a href="#autotoc_md106">OpenGL</a></li>
+<li class="level4"><a href="#autotoc_md107">Vulkan</a></li>
 </ul>
 </li>
 </ul>
@@ -223,7 +223,7 @@ Setting up root layouts</h1>
 <div class="line">};</div>
 <div class="line"> </div>
 <div class="line">layout( ogre_t3 ) uniform texture2D myTexture;</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md104"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md105"></a>
 Could you have used e.g. "const_buffers" : [0,7] instead of [4,7]?</h2>
 <p>i.e. declare slots in range [0;4) even though they won't be used?</p>
 <p>Yes. But you would be consuming more memory.</p>
@@ -398,7 +398,7 @@ Example:</h3>
 <div class="line">    uniform float3 aspectRatioFixer;</div>
 <div class="line">vulkan( }; )</div>
 <div class="ttc" id="anamespace_ogre_html_ab6e842a18caf062ed73a5d3badd0dd4c"><div class="ttname"><a href="namespace_ogre.html#ab6e842a18caf062ed73a5d3badd0dd4c">Ogre::uint</a></div><div class="ttdeci">unsigned int uint</div><div class="ttdef"><b>Definition:</b> OgrePrerequisites.h:117</div></div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md105"></a>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md106"></a>
 OpenGL</h4>
 <div class="fragment"><div class="line"><span class="preprocessor">#version 330</span></div>
 <div class="line"> </div>
@@ -416,7 +416,7 @@ OpenGL</h4>
 <div class="line"> </div>
 <div class="line">    uniform uint3 numProbes;</div>
 <div class="line">    uniform float3 aspectRatioFixer;</div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md106"></a>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md107"></a>
 Vulkan</h4>
 <div class="fragment"><div class="line"><span class="preprocessor">#version 450</span></div>
 <div class="line"> </div>
