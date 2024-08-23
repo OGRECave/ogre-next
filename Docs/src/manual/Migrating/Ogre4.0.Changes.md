@@ -72,3 +72,13 @@ If you plan on using Alpha Hashing, we provide both blue and white noise.
 
 But blue noise requires you to call `mRoot->getHlmsManager()->loadBlueNoise()` during start up.
 [See its new section in the manual](@ref AlphaHashingBlueNoiseSetup) for more information.
+
+## HlmsUnlit changes
+
+[HlmsUnlit now behaves like HlmsPbs](https://github.com/OGRECave/ogre-next/commit/9ee6dd793481b5378e9a68fd445a34435b802e1b) when it comes to the use of mReservedTexBufferSlots & mReservedTexSlots.
+
+The variable `HlmsUnlit::mSamplerUnitSlotStart` was removed and `HlmsUnlit::mTexUnitSlotStart` is now autocalculated every pass, which means users must not rely on overriding this value.
+
+Users deriving from HlmsUnlit must set mReservedTexBufferSlots & mReservedTexSlots instead, like it is done for HlmsPbs.
+
+See [Colibri project's commit](https://github.com/darksylinc/colibrigui/commit/87e74824973007ee9f7f3f46719d2a6ba4948678) for an example of how the change was ported.
