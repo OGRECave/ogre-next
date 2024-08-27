@@ -1100,7 +1100,7 @@ namespace Ogre
                 if( subString.startWith( counterVar ) )
                 {
                     char tmp[16];
-                    sprintf( tmp, "%lu", (unsigned long)passNum );
+                    std::snprintf( tmp, sizeof( tmp ), "%lu", (unsigned long)passNum );
                     outBuffer += tmp;
                     itor += static_cast<ptrdiff_t>( counterVar.size() + 1u );
                 }
@@ -1588,7 +1588,7 @@ namespace Ogre
 
                     //@value & @counter write, the others are invisible
                     char tmp[16];
-                    sprintf( tmp, "%i", op1Value );
+                    std::snprintf( tmp, sizeof( tmp ), "%i", op1Value );
                     outBuffer += tmp;
 
                     if( keyword == 0 )

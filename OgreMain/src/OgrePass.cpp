@@ -433,9 +433,8 @@ namespace Ogre
 
                     // allow 8 digit hex number. there should never be that many texture units.
                     // This sprintf replaced a call to StringConverter::toString for performance reasons
-                    char buff[9];
-                    memset( buff, 0, 9 );
-                    sprintf( buff, "%lx", static_cast<long>( idx ) );
+                    char buff[9] = {};
+                    std::snprintf( buff, sizeof( buff ), "%lx", static_cast<long>( idx ) );
                     state->setName( buff );
 
                     /** since the name was never set and a default one has been made, clear the alias
