@@ -1,7 +1,5 @@
 var NAVTREEINDEX90 =
 {
-"compositor.html#CompositorPass_load_warn_if_rtv_was_flushed":[4,2,4,0,2,0,20],
-"compositor.html#CompositorPass_num_initial":[4,2,4,0,2,0,1],
 "compositor.html#CompositorPass_pass":[4,2,4,0,2,0,0],
 "compositor.html#CompositorPass_profiling_id":[4,2,4,0,2,0,7],
 "compositor.html#CompositorPass_skip_load_store_semantics":[4,2,4,0,2,0,10],
@@ -249,5 +247,7 @@ var NAVTREEINDEX90 =
 "globals_s.html":[9,1,0,13],
 "globals_t.html":[9,1,0,14],
 "globals_type.html":[9,1,2],
-"globals_u.html":[9,1,0,15]
+"globals_u.html":[9,1,0,15],
+"globals_v.html":[9,1,0,16],
+"globals_w.html":[9,1,0,17]
 };

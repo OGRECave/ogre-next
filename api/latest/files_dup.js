@@ -1152,7 +1152,11 @@ var files_dup =
     [ "OgreLwConstString.h", "_ogre_lw_const_string_8h.html", [
       [ "LwConstString", "class_ogre_1_1_lw_const_string.html", "class_ogre_1_1_lw_const_string" ]
     ] ],
-    [ "OgreLwString.h", "_ogre_lw_string_8h.html", "_ogre_lw_string_8h" ],
+    [ "OgreLwString.h", "_ogre_lw_string_8h.html", [
+      [ "LwString", "class_ogre_1_1_lw_string.html", "class_ogre_1_1_lw_string" ],
+      [ "Double", "struct_ogre_1_1_lw_string_1_1_double.html", "struct_ogre_1_1_lw_string_1_1_double" ],
+      [ "Float", "struct_ogre_1_1_lw_string_1_1_float.html", "struct_ogre_1_1_lw_string_1_1_float" ]
+    ] ],
     [ "OgreManualObject.h", "_ogre_manual_object_8h.html", [
       [ "ManualObjectSection", "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html", "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section" ]
     ] ],

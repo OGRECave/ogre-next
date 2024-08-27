@@ -1,7 +1,5 @@
 var NAVTREEINDEX46 =
 {
-"class_ogre_1_1_material.html#a284464b0561a6f2915f04b0245b987f0":[6,2,5,14,53],
-"class_ogre_1_1_material.html#a28e13cc77ce7deb5f0cbe2388251224d":[6,2,5,14,8],
 "class_ogre_1_1_material.html#a2c26e56f120a9de63a5a85329ce95844":[6,2,5,14,30],
 "class_ogre_1_1_material.html#a2ec3cb2e887c2d589eca7d6e208ba320":[6,2,5,14,21],
 "class_ogre_1_1_material.html#a329e758eca8bedadf01edc49f29c5b2e":[6,2,5,14,16],
@@ -249,5 +247,7 @@ var NAVTREEINDEX46 =
 "class_ogre_1_1_mathlib_c.html#acd167580daf5c5faa1f0f9b1c3c48972":[8,0,0,600,44],
 "class_ogre_1_1_mathlib_c.html#ad1247bb457f65e41e895b4567fe27299":[8,0,0,600,10],
 "class_ogre_1_1_mathlib_c.html#ad177f9a579f78ca3f4256c0d8c6e3660":[8,0,0,600,1],
-"class_ogre_1_1_mathlib_c.html#ad4fa9fd62f40d834e897958ce74e0453":[8,0,0,600,39]
+"class_ogre_1_1_mathlib_c.html#ad4fa9fd62f40d834e897958ce74e0453":[8,0,0,600,39],
+"class_ogre_1_1_mathlib_c.html#adcfb12520c51062df3faff5b12db8a2d":[8,0,0,600,12],
+"class_ogre_1_1_mathlib_c.html#ae021872692cf293c08ea9ed34886f27f":[8,0,0,600,29]
 };
