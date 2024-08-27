@@ -344,10 +344,14 @@ namespace Ogre
                 interpTR[1] = Math::lerp( topRight[0], topRight[1], fW );
 
                 // Find the rectangle that encloses both the front and back faces.
-                const Vector2 finalBL( std::min( interpBL[0].x, interpBL[1].x ),
-                                       std::min( interpBL[0].y, interpBL[1].y ) );
-                const Vector2 finalTR( std::max( interpTR[0].x, interpTR[1].x ),
-                                       std::max( interpTR[0].y, interpTR[1].y ) );
+                const Vector2 finalBL( std::min( std::min( interpBL[0].x, interpBL[1].x ),
+                                                 std::min( interpTR[0].x, interpTR[1].x ) ),
+                                       std::min( std::min( interpBL[0].y, interpBL[1].y ),
+                                                 std::min( interpTR[0].y, interpTR[1].y ) ) );
+                const Vector2 finalTR( std::max( std::max( interpTR[0].x, interpTR[1].x ),
+                                                 std::max( interpBL[0].x, interpBL[1].x ) ),
+                                       std::max( std::max( interpTR[0].y, interpTR[1].y ),
+                                                 std::max( interpBL[0].y, interpBL[1].y ) ) );
 
                 uint32 startX, startY, endX, endY;
                 projectionSpaceToGridSpace( finalBL, slice, startX, startY );
