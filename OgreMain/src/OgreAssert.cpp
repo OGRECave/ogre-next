@@ -44,7 +44,7 @@
 #include "OgreAssert.h"
 
 #include <stdarg.h>
-#include <cstdio> // std::snprintf
+#include <cstdio>  // std::snprintf
 
 namespace Ogre
 {

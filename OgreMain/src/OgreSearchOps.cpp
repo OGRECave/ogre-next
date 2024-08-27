@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <cstdio> // std::snprintf
+#include <cstdio>  // std::snprintf
 
 /* Win32 directory operations emulation */
 #if OGRE_PLATFORM != OGRE_PLATFORM_WIN32 && OGRE_PLATFORM != OGRE_PLATFORM_WINRT
