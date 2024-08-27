@@ -569,7 +569,7 @@ namespace Ogre
 
         if( !mClearWorkspace )
             return;
-        
+
         mClearWorkspace->_update();
 
         if( mStatic )
