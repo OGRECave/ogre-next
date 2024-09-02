@@ -117,7 +117,7 @@ Macros</h2></td></tr>
 <tr class="separator:aa53bd6664703b81b8a3ba25059ad06c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53230793c393c7f171198d02e427dd4a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a53230793c393c7f171198d02e427dd4a">checkVkResult</a>(result,  functionName)</td></tr>
 <tr class="separator:a53230793c393c7f171198d02e427dd4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6787338cb3eaf24539f5c018ee2e4cec"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6787338cb3eaf24539f5c018ee2e4cec">OGRE_VK_EXCEPT</a>(code,  num,  desc,  src)&#160;&#160;&#160;    <a class="el" href="group___general.html#gaf27f0d64dfeb225d37a513c253eaa1a0">OGRE_EXCEPT</a>( code, desc + ( &quot;\nVkResult = &quot; + vkResultToString( num ) ), src )</td></tr>
+<tr class="memitem:a6787338cb3eaf24539f5c018ee2e4cec"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6787338cb3eaf24539f5c018ee2e4cec">OGRE_VK_EXCEPT</a>(code,  num,  desc,  src)&#160;&#160;&#160;    <a class="el" href="group___general.html#ga158d9c8ba6320aa37b7c9c05a2f2fd8f">OGRE_EXCEPT_EX</a>( code, num, desc + ( &quot;\nVkResult = &quot; + vkResultToString( num ) ), src )</td></tr>
 <tr class="separator:a6787338cb3eaf24539f5c018ee2e4cec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1163bdf5ce5186a3112f47162c545d36"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a1163bdf5ce5186a3112f47162c545d36">OGRE_VK_NON_DISPATCHABLE_HANDLE</a>(object)&#160;&#160;&#160;typedef uint64_t object;</td></tr>
 <tr class="separator:a1163bdf5ce5186a3112f47162c545d36"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -259,7 +259,7 @@ Enumerations</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;    <a class="el" href="group___general.html#gaf27f0d64dfeb225d37a513c253eaa1a0">OGRE_EXCEPT</a>( code, desc + ( &quot;\nVkResult = &quot; + vkResultToString( num ) ), src )</td>
+          <td></td><td>&#160;&#160;&#160;    <a class="el" href="group___general.html#ga158d9c8ba6320aa37b7c9c05a2f2fd8f">OGRE_EXCEPT_EX</a>( code, num, desc + ( &quot;\nVkResult = &quot; + vkResultToString( num ) ), src )</td>
         </tr>
       </table>
 </div><div class="memdoc">
