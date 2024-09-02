@@ -106,6 +106,17 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanAndroidWindow::destroy()
     {
+        if( mNativeWindow )
+        {
+            // Android is destroying our window. Possibly user pressed the home or power
+            // button.
+            //
+            // We must flush all our references to the old swapchain otherwise when
+            // the app goes to foreground again and submit that stale content Mali
+            // will return DEVICE_LOST
+            mDevice->stall();
+        }
+
         VulkanWindowSwapChainBased::destroy();
 
         if( mClosed )
@@ -349,22 +360,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::setNativeWindow( ANativeWindow *nativeWindow )
     {
-        if( mNativeWindow && !nativeWindow )
-        {
-            // Android is destroying our window. Likely user pressed the home or power
-            // button.
-            //
-            // We must flush all our references to the old swapchain otherwise when
-            // the app goes to foreground again and submit that stale content Mali
-            // will return DEVICE_LOST
-            mDevice->stall();
-        }
-
 #ifdef OGRE_VULKAN_USE_SWAPPY
         if( mSwapchain && mDevice->mRenderSystem->getSwappyFramePacing() )
             SwappyVk_setWindow( mDevice->mDevice, mSwapchain, mNativeWindow );
 #endif
-
         destroy();
 
         // Depth & Stencil buffer are normal textures; thus they need to be reeinitialized normally
