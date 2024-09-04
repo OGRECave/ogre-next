@@ -125,6 +125,11 @@ namespace Ogre
         mClosed = true;
         mFocused = false;
 
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        if( mSwapchain && mDevice->mRenderSystem->getSwappyFramePacing() )
+            SwappyVk_setWindow( mDevice->mDevice, mSwapchain, mNativeWindow );
+#endif
+
         // WindowEventUtilities::_removeRenderWindow( this );
 
         if( mFullscreenMode )
@@ -360,10 +365,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::setNativeWindow( ANativeWindow *nativeWindow )
     {
-#ifdef OGRE_VULKAN_USE_SWAPPY
-        if( mSwapchain && mDevice->mRenderSystem->getSwappyFramePacing() )
-            SwappyVk_setWindow( mDevice->mDevice, mSwapchain, mNativeWindow );
-#endif
         destroy();
 
         // Depth & Stencil buffer are normal textures; thus they need to be reeinitialized normally
