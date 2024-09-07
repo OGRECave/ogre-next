@@ -8,9 +8,6 @@ environment:
 #    - PLATFORM: x86
 #      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
 #      BUILD_SCRIPT: build_ogre_Visual_Studio_14_2015_Win32.bat
-#    - PLATFORM: x86
-#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
-#      BUILD_SCRIPT: build_ogre_Visual_Studio_12_2013_Win32.bat
 #    - PLATFORM: x64
 #      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 #      BUILD_SCRIPT: build_ogre_Visual_Studio_15_2017_x64.bat

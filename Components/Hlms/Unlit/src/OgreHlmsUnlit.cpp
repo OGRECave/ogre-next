@@ -570,7 +570,7 @@ namespace Ogre
             inOutPieces[PixelShader] = normalPassPieces[PixelShader];
         }
 
-        setupSharedBasicProperties( renderable );
+        setupSharedBasicProperties( renderable, true );
 
         if( mFastShaderBuildHack )
             setProperty( kNoTid, UnlitProperty::MaterialsPerBuffer, static_cast<int>( 2 ) );

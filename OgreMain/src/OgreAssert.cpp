@@ -44,7 +44,7 @@
 #include "OgreAssert.h"
 
 #include <stdarg.h>
-#include <stdio.h>
+#include <cstdio>  // std::snprintf
 
 namespace Ogre
 {
@@ -60,18 +60,18 @@ namespace Ogre
             char path[MAX_PATH];
             GetModuleFileNameA( NULL, path, MAX_PATH );
 
-            _snprintf( fullmsg, sizeof( fullmsg ),
-                       "Assertion failed!\n\n"
-                       "Program: %s\n"
-                       "File: %s\n"
-                       "Line: %d\n",
-                       path, file, line );
+            std::snprintf( fullmsg, sizeof( fullmsg ),
+                           "Assertion failed!\n\n"
+                           "Program: %s\n"
+                           "File: %s\n"
+                           "Line: %d\n",
+                           path, file, line );
 
             if( condition != NULL )
-                _snprintf( fullmsg, sizeof( fullmsg ), "%s\nExpresson: %s\n", fullmsg, condition );
+                std::snprintf( fullmsg, sizeof( fullmsg ), "%s\nExpresson: %s\n", fullmsg, condition );
 
             if( msg != NULL )
-                _snprintf( fullmsg, sizeof( fullmsg ), "%s\n%s\n", fullmsg, msg );
+                std::snprintf( fullmsg, sizeof( fullmsg ), "%s\n%s\n", fullmsg, msg );
 
             strncat( fullmsg, "\n\n(Press Retry to debug application)", sizeof( fullmsg ) );
 

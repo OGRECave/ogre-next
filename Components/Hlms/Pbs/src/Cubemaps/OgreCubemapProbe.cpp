@@ -555,7 +555,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CubemapProbe::_clearCubemap()
     {
-        if( !mClearWorkspace )
+        if( !mClearWorkspace && mWorkspace )
         {
             CompositorWorkspaceDef const *workspaceDef = mCreator->getDefaultWorkspaceDef();
             CompositorManager2 *compositorManager = workspaceDef->getCompositorManager();
@@ -566,6 +566,9 @@ namespace Ogre
                 sceneManager, channels, mCamera, "AutoGen_ParallaxCorrectedCubemapClear_Workspace",
                 false );
         }
+
+        if( !mClearWorkspace )
+            return;
 
         mClearWorkspace->_update();
 

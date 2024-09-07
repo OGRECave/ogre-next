@@ -54,7 +54,7 @@ namespace Ogre
     OGRE_TEMPL_DECL
     void cbitsetN<OGRE_TEMPL_USE>::setAllUntil( size_t position )
     {
-        OGRE_ASSERT_MEDIUM( position < _N );
+        OGRE_ASSERT_MEDIUM( position <= _N );
 
         const size_t numValuesFullSet = position >> _bits;
 
@@ -228,7 +228,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void bitset64::setAllUntil( size_t position )
     {
-        OGRE_ASSERT_MEDIUM( position < mBitsCapacity );
+        OGRE_ASSERT_MEDIUM( position <= mBitsCapacity );
 
         const size_t numValuesFullSet = position >> 6u;
 
@@ -284,7 +284,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     size_t bitset64::numBitsSet( const size_t positionEnd ) const
     {
-        OGRE_ASSERT_MEDIUM( positionEnd < mBitsCapacity );
+        OGRE_ASSERT_MEDIUM( positionEnd <= mBitsCapacity );
         size_t retVal = 0u;
         for( size_t i = 0u; i < positionEnd; )
         {

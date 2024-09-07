@@ -30,10 +30,10 @@ THE SOFTWARE.
 #include "OgreSearchOps.h"
 #include <dirent.h>
 #include <fnmatch.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <cstdio>  // std::snprintf
 
 /* Win32 directory operations emulation */
 #if OGRE_PLATFORM != OGRE_PLATFORM_WIN32 && OGRE_PLATFORM != OGRE_PLATFORM_WINRT
@@ -113,8 +113,9 @@ int _findnext( intptr_t id, struct _finddata_t *data )
     data->name = fs->curfn = strdup( entry->d_name );
 
     size_t namelen = strlen( entry->d_name );
-    char *xfn = new char[static_cast<size_t>( fs->dirlen ) + 1 + namelen + 1];
-    sprintf( xfn, "%s/%s", fs->directory, entry->d_name );
+    const size_t xfnlen = static_cast<size_t>( fs->dirlen ) + 1 + namelen + 1;
+    char *xfn = new char[xfnlen];
+    std::snprintf( xfn, xfnlen, "%s/%s", fs->directory, entry->d_name );
 
     /* stat the file to get if it's a subdir and to find its length */
     struct stat stat_buf;

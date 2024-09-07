@@ -5,7 +5,7 @@
 # Requirements {#RequirementsWindows}
     * [CMake 3.x](https://cmake.org/download/)
     * Git
-    * Visual Studio 2013 - 2019 (2022 not tested). MinGW may work but we strongly recommend Visual Studio.
+    * Visual Studio 2015 - 2022. MinGW may work but we strongly recommend Visual Studio.
     * [DirectX June 2010 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=6812). Optional.
       Needed if you use older Visual Studio versions and want the D3D11 plugin. Also comes with useful tools.
     * Windows 10 SDK. Contains the latest DirectX SDK, thus recommended over the DX June 2010 SDK,
@@ -28,7 +28,7 @@
 -# Open CMake GUI.
 -# Point "Where is the source code" to C:\\OgreDepsRepo\\; and
    "Where to build the binaries" pointing to "C:\\OgreDepsRepo\\build"
--# Click 'Configure' and select the generator (i.e. if you're using Visual Studio 2013, select Visual Studio 12)
+-# Click 'Configure' and select the generator (i.e. if you're using Visual Studio 2015, select Visual Studio 14)
 ![](images/CMakeWindowsDependencies.png)
 -# Answer 'Ok' when asked if you want to create the build directory
 -# Sometimes on bleeding edge repos there might be CMake syntax warnings. Ignore them.

@@ -152,7 +152,7 @@ namespace Ogre
         const v1::VertexElement *elemNormal =
             vertexData->vertexDeclaration->findElementBySemantic( VES_NORMAL );
 
-        const bool bNormalIsQTangent = elemNormal->getType() == VET_SHORT4_SNORM;
+        const bool bNormalIsQTangent = elemNormal && elemNormal->getType() == VET_SHORT4_SNORM;
 
         data->mUseVertexNormals &= ( elemNormal != NULL );
         if( data->mUseVertexNormals )

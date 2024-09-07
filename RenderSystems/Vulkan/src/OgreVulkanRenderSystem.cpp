@@ -454,7 +454,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     size_t VulkanRenderSystem::getNumPriorityConfigOptions() const { return 1u; }
     //-------------------------------------------------------------------------
-    bool VulkanRenderSystem::supportsMultithreadedShaderCompliation() const
+    bool VulkanRenderSystem::supportsMultithreadedShaderCompilation() const
     {
 #ifndef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
         return true;
