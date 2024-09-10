@@ -110,6 +110,16 @@ var group___render_system =
         [ "~Listener", "class_ogre_1_1_render_system_1_1_listener.html#a92f2b3702187d4893f0a28993510f759", null ],
         [ "eventOccurred", "class_ogre_1_1_render_system_1_1_listener.html#aafc262fea83eae3a360aeb16d1cc7ef9", null ]
       ] ],
+      [ "PipelineCachePrefixHeader", "struct_ogre_1_1_render_system_1_1_pipeline_cache_prefix_header.html", [
+        [ "dataHash", "struct_ogre_1_1_render_system_1_1_pipeline_cache_prefix_header.html#a04f240ee651dab35dc4522258424e066", null ],
+        [ "dataSize", "struct_ogre_1_1_render_system_1_1_pipeline_cache_prefix_header.html#ac77d07b0e6bc0473b1b1aff4e740deea", null ],
+        [ "deviceID", "struct_ogre_1_1_render_system_1_1_pipeline_cache_prefix_header.html#ad310e23d8de3cbde5e53aa1300d39cae", null ],
+        [ "driverABI", "struct_ogre_1_1_render_system_1_1_pipeline_cache_prefix_header.html#abbb4c2c927e325e07a7ac3b0df0d8d2e", null ],
+        [ "driverVersion", "struct_ogre_1_1_render_system_1_1_pipeline_cache_prefix_header.html#af9d344027344cac649cbf88c8818a8ff", null ],
+        [ "magic", "struct_ogre_1_1_render_system_1_1_pipeline_cache_prefix_header.html#a2256624b997afdd46d7f2a63cfd6da93", null ],
+        [ "uuid", "struct_ogre_1_1_render_system_1_1_pipeline_cache_prefix_header.html#a965dc4178f058aa47f2731428d2c8fa3", null ],
+        [ "vendorID", "struct_ogre_1_1_render_system_1_1_pipeline_cache_prefix_header.html#a5035d632dcd0c2af378a0aa9eb9a6c4e", null ]
+      ] ],
       [ "RenderSystemContext", "struct_ogre_1_1_render_system_1_1_render_system_context.html", null ],
       [ "RenderSystem", "class_ogre_1_1_render_system.html#a3391b683d588628272d8d9de633e472e", null ],
       [ "~RenderSystem", "class_ogre_1_1_render_system.html#a785f83ff8a4ee8fb21a11c9d6fe5c928", null ],
@@ -275,6 +285,7 @@ var group___render_system =
       [ "isReverseDepth", "class_ogre_1_1_render_system.html#a0f6d872e0df3b080da903d9e0f4af6ba", null ],
       [ "isSameLayout", "class_ogre_1_1_render_system.html#a387d5fa07b1c096496ce6a97c4f68505", null ],
       [ "isStaticBufferLockable", "class_ogre_1_1_render_system.html#a319564dc746b19bb9a1490a473227b20", null ],
+      [ "loadPipelineCache", "class_ogre_1_1_render_system.html#a8378cd3e1aa2ccd4a26214fefdb10ce0", null ],
       [ "loadRenderDocApi", "class_ogre_1_1_render_system.html#add71b4fa521a3d13c727c5afe9225bbb", null ],
       [ "markProfileEvent", "class_ogre_1_1_render_system.html#aaafa1dfb6fcf978786add8ee2b02dfb5", null ],
       [ "postExtraThreadsStarted", "class_ogre_1_1_render_system.html#a460fb2b67acdea8e3a72933e0348a82d", null ],
@@ -286,6 +297,7 @@ var group___render_system =
       [ "removeSharedListener", "class_ogre_1_1_render_system.html#a0c9650fccf5a5e54b8b933786bdbe4fb", null ],
       [ "resetClipPlanes", "class_ogre_1_1_render_system.html#a46a9b1385638112a80bf22fa1a5bf531", null ],
       [ "reverseCompareFunction", "class_ogre_1_1_render_system.html#a6a34f2ded473d4cbaeda6e954f76dbaf", null ],
+      [ "savePipelineCache", "class_ogre_1_1_render_system.html#a7fa3447da967174c882bbc445d715eab", null ],
       [ "setClipPlanes", "class_ogre_1_1_render_system.html#a23cc0a7d87b77ec3d0a34e92335bec1a", null ],
       [ "setConfigOption", "class_ogre_1_1_render_system.html#a606200a27a8adebfa62b3e388a49cf39", null ],
       [ "setCurrentPassIterationCount", "class_ogre_1_1_render_system.html#a207d38c53699525e2e49ee167f9c8eb5", null ],

@@ -1712,6 +1712,7 @@ var hierarchy =
       [ "Ogre::ParallaxCorrectedCubemapBase", "class_ogre_1_1_parallax_corrected_cubemap_base.html", null ],
       [ "Ogre::v1::OverlaySystem", "class_ogre_1_1v1_1_1_overlay_system.html", null ]
     ] ],
+    [ "Ogre::RenderSystem::PipelineCachePrefixHeader", "struct_ogre_1_1_render_system_1_1_pipeline_cache_prefix_header.html", null ],
     [ "Ogre::RenderSystem::RenderSystemContext", "struct_ogre_1_1_render_system_1_1_render_system_context.html", null ],
     [ "Ogre::RenderTargetViewDef", "struct_ogre_1_1_render_target_view_def.html", null ],
     [ "Ogre::RenderTargetViewEntry", "struct_ogre_1_1_render_target_view_entry.html", null ],

@@ -114,6 +114,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system_1_1_listener.html">Listener</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a listener on the custom events that this render system can raise.  <a href="class_ogre_1_1_render_system_1_1_listener.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_render_system_1_1_pipeline_cache_prefix_header.html">PipelineCachePrefixHeader</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">When serializing pipeline cache data to the file, we use a header that is filled with enough information to be able to validate the data, with the pipeline cache data following immediately afterwards.  <a href="struct_ogre_1_1_render_system_1_1_pipeline_cache_prefix_header.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_render_system_1_1_render_system_context.html">RenderSystemContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -537,6 +540,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a387d5fa07b1c096496ce6a97c4f68505"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a319564dc746b19bb9a1490a473227b20"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a319564dc746b19bb9a1490a473227b20">isStaticBufferLockable</a> () const</td></tr>
 <tr class="separator:a319564dc746b19bb9a1490a473227b20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8378cd3e1aa2ccd4a26214fefdb10ce0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a8378cd3e1aa2ccd4a26214fefdb10ce0">loadPipelineCache</a> (<a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> stream)</td></tr>
+<tr class="memdesc:a8378cd3e1aa2ccd4a26214fefdb10ce0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the pipeline cache from disk.  <a href="class_ogre_1_1_render_system.html#a8378cd3e1aa2ccd4a26214fefdb10ce0">More...</a><br /></td></tr>
+<tr class="separator:a8378cd3e1aa2ccd4a26214fefdb10ce0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add71b4fa521a3d13c727c5afe9225bbb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#add71b4fa521a3d13c727c5afe9225bbb">loadRenderDocApi</a> ()</td></tr>
 <tr class="memdesc:add71b4fa521a3d13c727c5afe9225bbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicitly loads RenderDoc.  <a href="class_ogre_1_1_render_system.html#add71b4fa521a3d13c727c5afe9225bbb">More...</a><br /></td></tr>
 <tr class="separator:add71b4fa521a3d13c727c5afe9225bbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -563,6 +569,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a46a9b1385638112a80bf22fa1a5bf531"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a46a9b1385638112a80bf22fa1a5bf531">resetClipPlanes</a> ()</td></tr>
 <tr class="memdesc:a46a9b1385638112a80bf22fa1a5bf531"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the user clipping region.  <a href="class_ogre_1_1_render_system.html#a46a9b1385638112a80bf22fa1a5bf531">More...</a><br /></td></tr>
 <tr class="separator:a46a9b1385638112a80bf22fa1a5bf531"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fa3447da967174c882bbc445d715eab"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a7fa3447da967174c882bbc445d715eab">savePipelineCache</a> (<a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> stream) const</td></tr>
+<tr class="memdesc:a7fa3447da967174c882bbc445d715eab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the pipeline cache to disk.  <a href="class_ogre_1_1_render_system.html#a7fa3447da967174c882bbc445d715eab">More...</a><br /></td></tr>
+<tr class="separator:a7fa3447da967174c882bbc445d715eab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23cc0a7d87b77ec3d0a34e92335bec1a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a23cc0a7d87b77ec3d0a34e92335bec1a">setClipPlanes</a> (const <a class="el" href="group___math.html#gaa4714a0d3d8a5ddd765acb42b78499ad">PlaneList</a> &amp;clipPlanes)</td></tr>
 <tr class="memdesc:a23cc0a7d87b77ec3d0a34e92335bec1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the user clipping region.  <a href="class_ogre_1_1_render_system.html#a23cc0a7d87b77ec3d0a34e92335bec1a">More...</a><br /></td></tr>
 <tr class="separator:a23cc0a7d87b77ec3d0a34e92335bec1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -6097,6 +6106,42 @@ See _createRenderWindow for details about each member. </td></tr>
 
 </div>
 </div>
+<a id="a8378cd3e1aa2ccd4a26214fefdb10ce0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8378cd3e1aa2ccd4a26214fefdb10ce0">&#9670;&nbsp;</a></span>loadPipelineCache()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::RenderSystem::loadPipelineCache </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a>&#160;</td>
+          <td class="paramname"><em>stream</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Loads the pipeline cache from disk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stream</td><td>The source stream, optional, starts with struct <a class="el" href="struct_ogre_1_1_render_system_1_1_pipeline_cache_prefix_header.html" title="When serializing pipeline cache data to the file, we use a header that is filled with enough informat...">PipelineCachePrefixHeader</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_vulkan_render_system.html#a1196674dbcf3e670eebd31aa3dd66557">Ogre::VulkanRenderSystem</a>.</p>
+
+</div>
+</div>
 <a id="add71b4fa521a3d13c727c5afe9225bbb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#add71b4fa521a3d13c727c5afe9225bbb">&#9670;&nbsp;</a></span>loadRenderDocApi()</h2>
 
@@ -6412,6 +6457,42 @@ Once this init sequence is completed the threads are independent but this startu
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a7fa3447da967174c882bbc445d715eab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fa3447da967174c882bbc445d715eab">&#9670;&nbsp;</a></span>savePipelineCache()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::RenderSystem::savePipelineCache </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a>&#160;</td>
+          <td class="paramname"><em>stream</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Saves the pipeline cache to disk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stream</td><td>The destination stream </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_vulkan_render_system.html#a527ab38871b74197884097b36c22ec54">Ogre::VulkanRenderSystem</a>.</p>
 
 </div>
 </div>

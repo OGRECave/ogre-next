@@ -30,6 +30,7 @@ var struct_ogre_1_1_vulkan_device =
     [ "mInstance", "struct_ogre_1_1_vulkan_device.html#ad03bde234046f81d5840f88bda6f8193", null ],
     [ "mIsExternal", "struct_ogre_1_1_vulkan_device.html#ae748f30c1f0bc89c9b376873f68a7582", null ],
     [ "mPhysicalDevice", "struct_ogre_1_1_vulkan_device.html#a9a5164e2fdbec15196ad2809148e00ff", null ],
+    [ "mPipelineCache", "struct_ogre_1_1_vulkan_device.html#a48075b233c7028b12edf7ecb7aac0f82", null ],
     [ "mPresentQueue", "struct_ogre_1_1_vulkan_device.html#a41b96fdf17d1bd57d73f0037aaebfe04", null ],
     [ "mQueueProps", "struct_ogre_1_1_vulkan_device.html#a4abeb2705259c215a6a19b45e1ea309d", null ],
     [ "mRenderSystem", "struct_ogre_1_1_vulkan_device.html#a85ef8bb90f196ed4d99daac696a377ac", null ],

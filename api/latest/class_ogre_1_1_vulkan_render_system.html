@@ -407,6 +407,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad31de78889d42552467cdf2ee49cada3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#ad31de78889d42552467cdf2ee49cada3">isSameLayout</a> (<a class="el" href="namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7">ResourceLayout::Layout</a> a, <a class="el" href="namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7">ResourceLayout::Layout</a> b, const <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, bool bIsDebugCheck) const override</td></tr>
 <tr class="memdesc:ad31de78889d42552467cdf2ee49cada3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if 'a' and 'b' internally map to the same layout and should be considered equivalent for a given texture.  <a href="class_ogre_1_1_vulkan_render_system.html#ad31de78889d42552467cdf2ee49cada3">More...</a><br /></td></tr>
 <tr class="separator:ad31de78889d42552467cdf2ee49cada3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1196674dbcf3e670eebd31aa3dd66557"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a1196674dbcf3e670eebd31aa3dd66557">loadPipelineCache</a> (<a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> stream) override</td></tr>
+<tr class="memdesc:a1196674dbcf3e670eebd31aa3dd66557"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the pipeline cache from disk.  <a href="class_ogre_1_1_vulkan_render_system.html#a1196674dbcf3e670eebd31aa3dd66557">More...</a><br /></td></tr>
+<tr class="separator:a1196674dbcf3e670eebd31aa3dd66557"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a691b5029fbd88f511e9d20595cf5f9ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a691b5029fbd88f511e9d20595cf5f9ed">markProfileEvent</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;event) override</td></tr>
 <tr class="memdesc:a691b5029fbd88f511e9d20595cf5f9ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks an instantaneous event for graphics profilers.  <a href="class_ogre_1_1_vulkan_render_system.html#a691b5029fbd88f511e9d20595cf5f9ed">More...</a><br /></td></tr>
 <tr class="separator:a691b5029fbd88f511e9d20595cf5f9ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -431,6 +434,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae6cd5ef669825e97daef81b21289ffa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15290519d1a610069dcb48c2ac47eeb2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a15290519d1a610069dcb48c2ac47eeb2">resetAllBindings</a> ()</td></tr>
 <tr class="separator:a15290519d1a610069dcb48c2ac47eeb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a527ab38871b74197884097b36c22ec54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a527ab38871b74197884097b36c22ec54">savePipelineCache</a> (<a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> stream) const override</td></tr>
+<tr class="memdesc:a527ab38871b74197884097b36c22ec54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the pipeline cache to disk.  <a href="class_ogre_1_1_vulkan_render_system.html#a527ab38871b74197884097b36c22ec54">More...</a><br /></td></tr>
+<tr class="separator:a527ab38871b74197884097b36c22ec54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7513b77817608023432b466fe844a404"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a7513b77817608023432b466fe844a404">setClipPlanesImpl</a> (const <a class="el" href="group___math.html#gaa4714a0d3d8a5ddd765acb42b78499ad">PlaneList</a> &amp;clipPlanes) override</td></tr>
 <tr class="memdesc:a7513b77817608023432b466fe844a404"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method used to set the underlying clip planes when needed.  <a href="class_ogre_1_1_vulkan_render_system.html#a7513b77817608023432b466fe844a404">More...</a><br /></td></tr>
 <tr class="separator:a7513b77817608023432b466fe844a404"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -4769,6 +4775,42 @@ However <a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> cann
 
 </div>
 </div>
+<a id="a1196674dbcf3e670eebd31aa3dd66557"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1196674dbcf3e670eebd31aa3dd66557">&#9670;&nbsp;</a></span>loadPipelineCache()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::VulkanRenderSystem::loadPipelineCache </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a>&#160;</td>
+          <td class="paramname"><em>stream</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Loads the pipeline cache from disk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stream</td><td>The source stream, optional, starts with struct PipelineCachePrefixHeader </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_render_system.html#a8378cd3e1aa2ccd4a26214fefdb10ce0">Ogre::RenderSystem</a>.</p>
+
+</div>
+</div>
 <a id="a691b5029fbd88f511e9d20595cf5f9ed"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a691b5029fbd88f511e9d20595cf5f9ed">&#9670;&nbsp;</a></span>markProfileEvent()</h2>
 
@@ -5012,6 +5054,42 @@ Once this init sequence is completed the threads are independent but this startu
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a527ab38871b74197884097b36c22ec54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a527ab38871b74197884097b36c22ec54">&#9670;&nbsp;</a></span>savePipelineCache()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::VulkanRenderSystem::savePipelineCache </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a>&#160;</td>
+          <td class="paramname"><em>stream</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Saves the pipeline cache to disk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stream</td><td>The destination stream </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_render_system.html#a7fa3447da967174c882bbc445d715eab">Ogre::RenderSystem</a>.</p>
 
 </div>
 </div>
