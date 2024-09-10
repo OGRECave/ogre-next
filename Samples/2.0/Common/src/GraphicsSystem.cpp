@@ -701,7 +701,7 @@ namespace Demo
             {
                 const Ogre::String filename = "pipelineCache.cache";
                 Ogre::DataStreamPtr shaderCacheFile = rwAccessFolderArchive->create( filename );
-                mRoot->getRenderSystem().savePipelineCache( shaderCacheFile );
+                mRoot->getRenderSystem()->savePipelineCache( shaderCacheFile );
             }
 
             archiveManager.unload( mWriteAccessFolder );
