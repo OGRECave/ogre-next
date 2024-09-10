@@ -1373,13 +1373,9 @@ namespace Ogre
         mGlobalInstanceVertexBufferVertexDeclaration = val;
     }
     //---------------------------------------------------------------------
-    void RenderSystem::loadPipelineCache( DataStreamPtr stream )
-    {
-    }
+    void RenderSystem::loadPipelineCache( DataStreamPtr stream ) {}
     //---------------------------------------------------------------------
-    void RenderSystem::savePipelineCache( DataStreamPtr stream ) const
-    {
-    }
+    void RenderSystem::savePipelineCache( DataStreamPtr stream ) const {}
     //---------------------------------------------------------------------
     bool RenderSystem::startGpuDebuggerFrameCapture( Window *window )
     {
