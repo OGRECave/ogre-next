@@ -604,6 +604,16 @@ namespace Demo
         Ogre::Archive *rwAccessFolderArchive =
             archiveManager.load( mWriteAccessFolder, "FileSystem", true );
 
+        if( mUseMicrocodeCache /* mUsePipelineCache */ )
+        {
+            const Ogre::String filename = "pipelineCache.cache";
+            if( rwAccessFolderArchive->exists( filename ) )
+            {
+                Ogre::DataStreamPtr pipelineCacheFile = rwAccessFolderArchive->open( filename );
+                mRoot->getRenderSystem()->loadPipelineCache( pipelineCacheFile );
+            }
+        }
+
         if( mUseMicrocodeCache )
         {
             // Make sure the microcode cache is enabled.
@@ -685,6 +695,13 @@ namespace Demo
                 const Ogre::String filename = "microcodeCodeCache.cache";
                 Ogre::DataStreamPtr shaderCacheFile = rwAccessFolderArchive->create( filename );
                 Ogre::GpuProgramManager::getSingleton().saveMicrocodeCache( shaderCacheFile );
+            }
+
+            if( mUseMicrocodeCache /* mUsePipelineCache */ )
+            {
+                const Ogre::String filename = "pipelineCache.cache";
+                Ogre::DataStreamPtr shaderCacheFile = rwAccessFolderArchive->create( filename );
+                mRoot->getRenderSystem().savePipelineCache( shaderCacheFile );
             }
 
             archiveManager.unload( mWriteAccessFolder );

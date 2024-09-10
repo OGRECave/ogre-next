@@ -168,6 +168,8 @@ namespace Ogre
         const char *getPriorityConfigOption( size_t idx ) const override;
         size_t getNumPriorityConfigOptions() const override;
         bool supportsMultithreadedShaderCompilation() const override;
+        void loadPipelineCache( DataStreamPtr stream ) override;
+        void savePipelineCache( DataStreamPtr stream ) const override;
 
         HardwareOcclusionQuery *createHardwareOcclusionQuery() override;
 

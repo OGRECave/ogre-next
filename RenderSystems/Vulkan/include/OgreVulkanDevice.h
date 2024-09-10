@@ -95,6 +95,7 @@ namespace Ogre
         VkInstance          mInstance;
         VkPhysicalDevice    mPhysicalDevice;
         VkDevice            mDevice;
+        VkPipelineCache     mPipelineCache;
 
         VkQueue             mPresentQueue;
         /// Graphics queue is *guaranteed by spec* to also be able to run compute and transfer

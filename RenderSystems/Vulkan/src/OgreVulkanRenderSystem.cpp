@@ -87,6 +87,12 @@ THE SOFTWARE.
 
 #define TODO_addVpCount_to_passpso
 
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
+#    define OGRE_HASH128_FUNC MurmurHash3_x86_128
+#else
+#    define OGRE_HASH128_FUNC MurmurHash3_x64_128
+#endif
+
 namespace Ogre
 {
     /*static bool checkLayers( const FastArray<layer_properties> &layer_props,
@@ -465,6 +471,108 @@ namespace Ogre
         return false;
 #    endif
 #endif
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::loadPipelineCache( DataStreamPtr stream )
+    {
+        if( stream && stream->size() > sizeof( PipelineCachePrefixHeader ) )
+        {
+            std::vector<unsigned char> buf;  // PipelineCachePrefixHeader + payload
+            buf.resize( stream->size() );
+            stream->read( buf.data(), buf.size() );
+
+            // validate blob
+            VkResult result = VK_ERROR_FORMAT_NOT_SUPPORTED;
+            auto &hdr = *(PipelineCachePrefixHeader *)buf.data();
+            if( hdr.magic == ( 'V' | ( 'K' << 8 ) | ( 'P' << 16 ) | ( 'C' << 24 ) ) &&
+                hdr.dataSize == buf.size() - sizeof( PipelineCachePrefixHeader ) &&
+                hdr.vendorID == mActiveDevice->mDeviceProperties.vendorID &&
+                hdr.deviceID == mActiveDevice->mDeviceProperties.deviceID &&
+                hdr.driverVersion == mActiveDevice->mDeviceProperties.driverVersion &&
+                hdr.driverABI == sizeof( void * ) &&
+                0 == memcmp( hdr.uuid, mActiveDevice->mDeviceProperties.pipelineCacheUUID,
+                             VK_UUID_SIZE ) )
+            {
+                auto dataHash = hdr.dataHash;
+                hdr.dataHash = 0;
+                uint64 hashResult[2] = {};
+                OGRE_HASH128_FUNC( buf.data(), (int)buf.size(), IdString::Seed, hashResult );
+                if( dataHash == hashResult[0] )
+                    result = VK_SUCCESS;
+            }
+
+            if( result != VK_SUCCESS )
+                LogManager::getSingleton().logMessage( "[Vulkan] Pipeline cache outdated, not loaded." );
+            else
+            {
+                VkPipelineCacheCreateInfo pipelineCacheCreateInfo;
+                makeVkStruct( pipelineCacheCreateInfo, VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO );
+                pipelineCacheCreateInfo.initialDataSize =
+                    buf.size() - sizeof( PipelineCachePrefixHeader );
+                pipelineCacheCreateInfo.pInitialData = buf.data() + sizeof( PipelineCachePrefixHeader );
+
+                VkPipelineCache pipelineCache{};
+                result = vkCreatePipelineCache( mActiveDevice->mDevice, &pipelineCacheCreateInfo,
+                                                nullptr, &pipelineCache );
+                if( VK_SUCCESS == result && pipelineCache != 0 )
+                    std::swap( mActiveDevice->mPipelineCache, pipelineCache );
+                else
+                    LogManager::getSingleton().logMessage(
+                        "[Vulkan] Pipeline cache loading failed. VkResult = " +
+                        vkResultToString( result ) );
+                if( pipelineCache != 0 )
+                    vkDestroyPipelineCache( mActiveDevice->mDevice, pipelineCache, nullptr );
+            }
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::savePipelineCache( DataStreamPtr stream ) const
+    {
+        static_assert( sizeof( PipelineCachePrefixHeader ) == 48 );
+        if( mActiveDevice->mPipelineCache )
+        {
+            size_t size{};
+            VkResult result = vkGetPipelineCacheData( mActiveDevice->mDevice,
+                                                      mActiveDevice->mPipelineCache, &size, nullptr );
+            if( result == VK_SUCCESS && size > 0 && size <= 0x7FFFFFFF )
+            {
+                std::vector<unsigned char> buf;  // PipelineCachePrefixHeader + payload
+                do
+                {
+                    buf.resize( sizeof( PipelineCachePrefixHeader ) + size );
+                    result = vkGetPipelineCacheData( mActiveDevice->mDevice,
+                                                     mActiveDevice->mPipelineCache, &size,
+                                                     buf.data() + sizeof( PipelineCachePrefixHeader ) );
+                } while( result == VK_INCOMPLETE );
+
+                if( result == VK_SUCCESS && size > 0 && size <= 0x7FFFFFFF )
+                {
+                    if( sizeof( PipelineCachePrefixHeader ) + size < buf.size() )
+                        buf.resize( sizeof( PipelineCachePrefixHeader ) + size );
+
+                    auto &hdr = *(PipelineCachePrefixHeader *)buf.data();
+                    hdr.magic = 'V' | ( 'K' << 8 ) | ( 'P' << 16 ) | ( 'C' << 24 );
+                    hdr.dataSize = (uint32_t)size;
+                    hdr.dataHash = 0;
+                    hdr.vendorID = mActiveDevice->mDeviceProperties.vendorID;
+                    hdr.deviceID = mActiveDevice->mDeviceProperties.deviceID;
+                    hdr.driverVersion = mActiveDevice->mDeviceProperties.driverVersion;
+                    hdr.driverABI = sizeof( void * );
+                    memcpy( hdr.uuid, mActiveDevice->mDeviceProperties.pipelineCacheUUID, VK_UUID_SIZE );
+                    static_assert( VK_UUID_SIZE == 16 );
+
+                    uint64 hashResult[2] = {};
+                    OGRE_HASH128_FUNC( buf.data(), (int)buf.size(), IdString::Seed, hashResult );
+                    hdr.dataHash = hashResult[0];
+
+                    stream->write( buf.data(), buf.size() );
+                    LogManager::getSingleton().logMessage( "[Vulkan] Pipeline cache saved." );
+                }
+            }
+            if( result != VK_SUCCESS )
+                LogManager::getSingleton().logMessage( "[Vulkan] Pipeline cache not saved. VkResult = " +
+                                                       vkResultToString( result ) );
+        }
     }
     //-------------------------------------------------------------------------
     String VulkanRenderSystem::validateConfigOptions()
@@ -3531,8 +3639,8 @@ namespace Ogre
 #endif
 
         VkPipeline vulkanPso = 0;
-        VkResult result = vkCreateGraphicsPipelines( mActiveDevice->mDevice, VK_NULL_HANDLE, 1u,
-                                                     &pipeline, 0, &vulkanPso );
+        VkResult result = vkCreateGraphicsPipelines(
+            mActiveDevice->mDevice, mActiveDevice->mPipelineCache, 1u, &pipeline, 0, &vulkanPso );
         checkVkResult( result, "vkCreateGraphicsPipelines" );
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
