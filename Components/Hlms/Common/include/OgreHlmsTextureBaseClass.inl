@@ -99,6 +99,12 @@ namespace Ogre
         datablockImpl->scheduleConstBufferUpdate( hasDirtyTextures, hasDirtySamplers );
     }
     //-----------------------------------------------------------------------------------
+    void OGRE_HLMS_TEXTURE_BASE_CLASS::setAlphaTestThreshold( float threshold )
+    {
+        HlmsDatablock::setAlphaTestThreshold( threshold );
+        scheduleConstBufferUpdate();
+    }
+    //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::preload() { loadAllTextures(); }
     //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::saveTextures( const String &folderPath,

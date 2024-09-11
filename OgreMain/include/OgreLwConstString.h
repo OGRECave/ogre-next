@@ -38,15 +38,10 @@
 #include <assert.h>
 #include <string.h>
 #include <algorithm>
+#include <cstdio>
 
 #if !defined( _MSC_VER ) || ( _MSC_VER > 1600 )
 #    include <stdint.h>
-#endif
-#include <stdio.h>
-
-#ifdef _MSC_VER
-#    pragma warning( push )  // CRT deprecation
-#    pragma warning( disable : 4996 )
 #endif
 
 namespace Ogre
@@ -178,9 +173,5 @@ namespace Ogre
         bool operator>( const char *other ) const { return strcmp( mStrPtr, other ) > 0; }
     };
 }  // namespace Ogre
-
-#ifdef _MSC_VER
-#    pragma warning( pop )
-#endif
 
 #endif

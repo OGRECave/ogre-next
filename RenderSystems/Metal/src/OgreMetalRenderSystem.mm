@@ -255,7 +255,7 @@ namespace Ogre
         return SampleDescription( samples, sampleDesc.getMsaaPattern() );
     }
     //-------------------------------------------------------------------------
-    bool MetalRenderSystem::supportsMultithreadedShaderCompliation() const
+    bool MetalRenderSystem::supportsMultithreadedShaderCompilation() const
     {
 #ifndef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
         return true;

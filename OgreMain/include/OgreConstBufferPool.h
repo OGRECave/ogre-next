@@ -188,7 +188,9 @@ namespace Ogre
     inline bool OrderConstBufferPoolUserByPoolThenSlot( const ConstBufferPoolUser *_l,
                                                         const ConstBufferPoolUser *_r )
     {
-        return _l->mAssignedPool < _r->mAssignedPool && _l->mAssignedSlot < _r->mAssignedSlot;
+        if( _l->mAssignedPool != _r->mAssignedPool )
+            return _l->mAssignedPool < _r->mAssignedPool;
+        return _l->mAssignedSlot < _r->mAssignedSlot;
     }
 
     /** @} */

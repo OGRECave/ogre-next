@@ -315,7 +315,7 @@ namespace Ogre
 
         const size_t numWorkerThreads = mSceneManager->getNumWorkerThreads();
         const bool bUseMultithreadedShaderCompliation =
-            mRoot->getRenderSystem()->supportsMultithreadedShaderCompliation() &&
+            mRoot->getRenderSystem()->supportsMultithreadedShaderCompilation() &&
             mSceneManager->getNumWorkerThreads() > 1u;
 
         for( size_t i = 0; i < HLMS_MAX; ++i )
@@ -374,7 +374,7 @@ namespace Ogre
 
         ParallelHlmsCompileQueue *parallelCompileQueue = 0;
 
-        if( rs->supportsMultithreadedShaderCompliation() && mSceneManager->getNumWorkerThreads() > 1u )
+        if( rs->supportsMultithreadedShaderCompilation() && mSceneManager->getNumWorkerThreads() > 1u )
         {
             parallelCompileQueue = &mParallelHlmsCompileQueue;
             mParallelHlmsCompileQueue.start( mSceneManager );
@@ -574,7 +574,7 @@ namespace Ogre
     {
         OgreProfileBeginGroup( "RenderQueue::warmUpShadersTrigger", OGREPROF_RENDERING );
 
-        if( rs->supportsMultithreadedShaderCompliation() && mSceneManager->getNumWorkerThreads() > 1u )
+        if( rs->supportsMultithreadedShaderCompilation() && mSceneManager->getNumWorkerThreads() > 1u )
             mParallelHlmsCompileQueue.fireWarmUpParallel( mSceneManager );
         else
             mParallelHlmsCompileQueue.warmUpSerial( mHlmsManager, mPendingPassCaches.data() );

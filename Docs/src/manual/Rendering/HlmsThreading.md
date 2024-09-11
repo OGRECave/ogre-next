@@ -5,7 +5,7 @@ Starting OgreNext 4.0, the following features were added:
  - Multithreaded shader compilation.
  - Multithreaded PSO generation.
 
-Actual support depends on RenderSystems & CMake build settings. The user can call `Ogre::RenderSystems::supportsMultithreadedShaderCompliation` to query whether it is currently supported.
+Actual support depends on RenderSystems & CMake build settings. The user can call `Ogre::RenderSystems::supportsMultithreadedShaderCompilation` to query whether it is currently supported.
 
 # CMake Options {#HlmsThreading_CMakeOptions}
 

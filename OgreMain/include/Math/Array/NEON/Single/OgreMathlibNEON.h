@@ -727,17 +727,17 @@ namespace Ogre
 #    if OGRE_COMPILER != OGRE_COMPILER_CLANG && OGRE_COMPILER != OGRE_COMPILER_GNUC
     // clang-format off
     inline ArrayReal operator - ( ArrayReal l )                 { return vnegq_f32( l ); }
-//  inline ArrayReal operator + ( ArrayReal l, Real r )         { return vaddq_f32( l, vdupq_n_f32( r ) ); }
+    inline ArrayReal operator + ( ArrayReal l, Real r )         { return vaddq_f32( l, vdupq_n_f32( r ) ); }
 //  inline ArrayReal operator + ( Real l, ArrayReal r )         { return vaddq_f32( vdupq_n_f32( l ), r ); }
     inline ArrayReal operator + ( ArrayReal l, ArrayReal r )    { return vaddq_f32( l, r ); }
 //  inline ArrayReal operator - ( ArrayReal l, Real r )         { return vsubq_f32( l, vdupq_n_f32( r ) ); }
 //  inline ArrayReal operator - ( Real l, ArrayReal r )         { return vsubq_f32( vdupq_n_f32( l ), r ); }
     inline ArrayReal operator - ( ArrayReal l, ArrayReal r )    { return vsubq_f32( l, r ); }
 //  inline ArrayReal operator * ( ArrayReal l, Real r )         { return vmulq_f32( l, vdupq_n_f32( r ) ); }
-//  inline ArrayReal operator * ( Real l, ArrayReal r )         { return vmulq_f32( vdupq_n_f32( l ), r ); }
+    inline ArrayReal operator * ( Real l, ArrayReal r )         { return vmulq_f32( vdupq_n_f32( l ), r ); }
     inline ArrayReal operator * ( ArrayReal l, ArrayReal r )    { return vmulq_f32( l, r ); }
-//  inline ArrayReal operator / ( ArrayReal l, Real r )         { return _mm_div_ps( l, vdupq_n_f32( r ) ); }
-//  inline ArrayReal operator / ( Real l, ArrayReal r )         { return _mm_div_ps( vdupq_n_f32( l ), r ); }
+    inline ArrayReal operator / ( ArrayReal l, Real r )         { return vdivq_f32( l, vdupq_n_f32( r ) ); }
+//  inline ArrayReal operator / ( Real l, ArrayReal r )         { return vdivq_f32( vdupq_n_f32( l ), r ); }
     inline ArrayReal operator / ( ArrayReal l, ArrayReal r )    { return vdivq_f32( l, r ); }
 // clang-format on
 #    endif

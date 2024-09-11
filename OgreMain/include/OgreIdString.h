@@ -32,8 +32,8 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 
 #include <inttypes.h>  // PRIx64
-#include <stdio.h>     // sprintf
 #include <string.h>    // strlen
+#include <cstdio>      // std::snprintf
 #include <string>
 
 #include "Hash/MurmurHash3.h"
@@ -145,10 +145,6 @@ namespace Ogre
         }
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM || OGRE_IDSTRING_ALWAYS_READABLE
-#    if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#        pragma warning( push )
-#        pragma warning( disable : 4996 )  // Unsecure CRT deprecation warning
-#    endif
 
         void OGRE_COPY_DEBUG_STRING( const char *string )
         {
@@ -184,8 +180,7 @@ namespace Ogre
 
         void OGRE_COPY_DEBUG_STRING( uint32 value )
         {
-            sprintf( mDebugString, "[Value 0x%.8x]", value );
-            mDebugString[OGRE_DEBUG_STR_SIZE - 1] = '\0';
+            std::snprintf( mDebugString, OGRE_DEBUG_STR_SIZE, "[Value 0x%.8x]", value );
         }
 
         void OGRE_APPEND_DEBUG_STRING( const char *string )
@@ -217,9 +212,6 @@ namespace Ogre
             }
         }
 
-#    if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#        pragma warning( pop )
-#    endif
 #endif
 
         void operator+=( IdString idString )
@@ -308,23 +300,14 @@ namespace Ogre
         /// Always returns "[Hash 0x0a0100ef]" strings in any mode
         std::string getReleaseText() const
         {
-#if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#    pragma warning( push )
-#    pragma warning( disable : 4996 )  // Unsecure CRT deprecation warning
-#endif
-
-            char tmp[( OGRE_HASH_BITS >> 2 ) + 10];
+            const size_t tmplen = ( OGRE_HASH_BITS >> 2 ) + 10;
+            char         tmp[tmplen];
 #ifdef OGRE_IDSTRING_USE_128
-            sprintf( tmp, "[Hash 0x%.16" PRIx64 "%.16" PRIx64 "]", mHash[0], mHash[1] );
+            std::snprintf( tmp, tmplen, "[Hash 0x%.16" PRIx64 "%.16" PRIx64 "]", mHash[0], mHash[1] );
 #else
-            sprintf( tmp, "[Hash 0x%.8x]", mHash );
+            std::snprintf( tmp, tmplen, "[Hash 0x%.8x]", mHash );
 #endif
-            tmp[( OGRE_HASH_BITS >> 2 ) + 10 - 1] = '\0';
             return std::string( tmp );
-
-#if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#    pragma warning( pop )
-#endif
         }
 
         /** C String version. Zero allocations.
@@ -347,38 +330,11 @@ namespace Ogre
         /// C String version. Zero allocations. See getFriendlyText.
         void getReleaseText( char *outCStr, size_t stringSize ) const
         {
-#if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#    pragma warning( push )
-#    pragma warning( disable : 4996 )  // Unsecure CRT deprecation warning
-#endif
-
-            if( stringSize < ( OGRE_HASH_BITS >> 2u ) + 10u )
-            {
-                // Not big enough. Use a temp buffer and then copy + truncate.
-                char tmp[( OGRE_HASH_BITS >> 2 ) + 10];
 #ifdef OGRE_IDSTRING_USE_128
-                sprintf( tmp, "[Hash 0x%.16" PRIx64 "%.16" PRIx64 "]", mHash[0], mHash[1] );
+            std::snprintf( outCStr, stringSize, "[Hash 0x%.16" PRIx64 "%.16" PRIx64 "]", mHash[0],
+                           mHash[1] );
 #else
-                sprintf( tmp, "[Hash 0x%.8x]", mHash );
-#endif
-                tmp[( OGRE_HASH_BITS >> 2 ) + 10 - 1] = '\0';
-
-                memcpy( outCStr, tmp, stringSize );
-                outCStr[stringSize - 1u] = '\0';
-            }
-            else
-            {
-// Write directly to the output buffer. It's big enough.
-#ifdef OGRE_IDSTRING_USE_128
-                sprintf( outCStr, "[Hash 0x%.16" PRIx64 "%.16" PRIx64 "]", mHash[0], mHash[1] );
-#else
-                sprintf( outCStr, "[Hash 0x%.8x]", mHash );
-#endif
-                outCStr[( OGRE_HASH_BITS >> 2 ) + 10 - 1] = '\0';
-            }
-
-#if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#    pragma warning( pop )
+            std::snprintf( outCStr, stringSize, "[Hash 0x%.8x]", mHash );
 #endif
         }
 

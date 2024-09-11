@@ -54,6 +54,7 @@ namespace Ogre
         mInstance( instance ),
         mPhysicalDevice( 0 ),
         mDevice( 0 ),
+        mPipelineCache( 0 ),
         mPresentQueue( 0 ),
         mVaoManager( 0 ),
         mRenderSystem( renderSystem ),
@@ -69,6 +70,7 @@ namespace Ogre
         mInstance( instance ),
         mPhysicalDevice( externalDevice.physicalDevice ),
         mDevice( externalDevice.device ),
+        mPipelineCache( 0 ),
         mPresentQueue( 0 ),
         mVaoManager( 0 ),
         mRenderSystem( renderSystem ),
@@ -207,6 +209,12 @@ namespace Ogre
             mGraphicsQueue.destroy();
             destroyQueues( mComputeQueues );
             destroyQueues( mTransferQueues );
+
+            if( mPipelineCache )
+            {
+                vkDestroyPipelineCache( mDevice, mPipelineCache, nullptr );
+                mPipelineCache = 0;
+            }
 
             // Must be done externally (this' destructor has yet to free more Vulkan stuff)
             // vkDestroyDevice( mDevice, 0 );
@@ -619,6 +627,12 @@ namespace Ogre
 
         VkResult result = vkCreateDevice( mPhysicalDevice, &createInfo, NULL, &mDevice );
         checkVkResult( result, "vkCreateDevice" );
+
+        VkPipelineCacheCreateInfo pipelineCacheCreateInfo;
+        makeVkStruct( pipelineCacheCreateInfo, VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO );
+
+        result = vkCreatePipelineCache( mDevice, &pipelineCacheCreateInfo, nullptr, &mPipelineCache );
+        checkVkResult( result, "vkCreatePipelineCache" );
 
         initUtils( mDevice );
     }

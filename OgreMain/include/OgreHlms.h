@@ -859,7 +859,7 @@ namespace Ogre
         static bool findParamInVec( const HlmsParamVec &paramVec, IdString key, String &inOut );
 
     protected:
-        void setupSharedBasicProperties( Renderable *renderable );
+        void setupSharedBasicProperties( Renderable *renderable, const bool bCasterPass );
 
     public:
         /** Called by the renderable when either it changes the material,

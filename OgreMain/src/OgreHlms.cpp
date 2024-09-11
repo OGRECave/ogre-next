@@ -1100,7 +1100,7 @@ namespace Ogre
                 if( subString.startWith( counterVar ) )
                 {
                     char tmp[16];
-                    sprintf( tmp, "%lu", (unsigned long)passNum );
+                    std::snprintf( tmp, sizeof( tmp ), "%lu", (unsigned long)passNum );
                     outBuffer += tmp;
                     itor += static_cast<ptrdiff_t>( counterVar.size() + 1u );
                 }
@@ -1588,7 +1588,7 @@ namespace Ogre
 
                     //@value & @counter write, the others are invisible
                     char tmp[16];
-                    sprintf( tmp, "%i", op1Value );
+                    std::snprintf( tmp, sizeof( tmp ), "%i", op1Value );
                     outBuffer += tmp;
 
                     if( keyword == 0 )
@@ -1876,6 +1876,18 @@ namespace Ogre
 
         mDataFolder = newDataFolder;
         enumeratePieceFiles();
+
+        // Reload datablock pieces (those that can be reloaded from disk).
+        for( auto &itor : mDatablockCustomPieceFiles )
+        {
+            DatablockCustomPieceFile &datablockCustomPiece = itor.second;
+            if( datablockCustomPiece.isCacheable() )
+            {
+                const DataStreamPtr stream = ResourceGroupManager::getSingleton().openResource(
+                    datablockCustomPiece.filename, datablockCustomPiece.resourceGroup );
+                datablockCustomPiece.sourceCode = stream->getAsString();
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     ArchiveVec Hlms::getPiecesLibraryAsArchiveVec() const
@@ -2751,7 +2763,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::setupSharedBasicProperties( Renderable *renderable )
+    void Hlms::setupSharedBasicProperties( Renderable *renderable, const bool bCasterPass )
     {
         HlmsDatablock *datablock = renderable->getDatablock();
 
@@ -2767,9 +2779,9 @@ namespace Ogre
         setProperty( kNoTid, HlmsBaseProp::AlphaTestShadowCasterOnly,
                      datablock->getAlphaTestShadowCasterOnly() );
         setProperty( kNoTid, HlmsBaseProp::AlphaBlend,
-                     datablock->getBlendblock( false )->isAutoTransparent() );
+                     datablock->getBlendblock( bCasterPass )->isAutoTransparent() );
         setProperty( kNoTid, HlmsBaseProp::AlphaToCoverage,
-                     datablock->getBlendblock( false )->mAlphaToCoverage );
+                     datablock->getBlendblock( bCasterPass )->mAlphaToCoverage );
         if( datablock->getAlphaHashing() )
             setProperty( kNoTid, HlmsBaseProp::AlphaHash, 1 );
 
@@ -2845,7 +2857,7 @@ namespace Ogre
 
         setProperty( kNoTid, HlmsBaseProp::UvCount, numTexCoords );
 
-        setupSharedBasicProperties( renderable );
+        setupSharedBasicProperties( renderable, false );
 
         HlmsDatablock *datablock = renderable->getDatablock();
 

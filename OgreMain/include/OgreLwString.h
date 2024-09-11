@@ -43,14 +43,6 @@
 #    include <inttypes.h>
 #endif
 
-#ifndef _MSC_VER
-#    define OGRE_LWSTRING_SNPRINTF_DEFINED
-#    define _snprintf snprintf
-#else
-#    pragma warning( push )  // CRT deprecation
-#    pragma warning( disable : 4996 )
-#endif
-
 namespace Ogre
 {
     /** This is a Light-weight string wrapper around the C string interface.
@@ -60,7 +52,7 @@ namespace Ogre
 
         The goals are:
             + No dynamic allocation.
-            + Easier to read and control than sprintf()
+            + Easier to read and control than snprintf()
             + Type-safe (in as much as C can ever be type-safe - bloody auto-converts).
             + Overflow-safe (i.e. it will refuse to scribble, and will assert in debug mode).
 
@@ -247,37 +239,33 @@ namespace Ogre
 
         LwString &a( int32 a0 )
         {
-            int written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%i", a0 );
-            assert( ( written >= 0 ) && ( (size_t)written < mCapacity ) );
-            mStrPtr[mCapacity - 1] = '\0';
-            mSize = std::min<size_t>( mSize + (size_t)std::max( written, 0 ), mCapacity - 1u );
+            int required = std::snprintf( mStrPtr + mSize, mCapacity - mSize, "%i", a0 );
+            assert( ( required >= 0 ) && ( (size_t)required < mCapacity - mSize ) );
+            mSize = std::min<size_t>( mSize + (size_t)std::max( required, 0 ), mCapacity - 1u );
             return *this;
         }
 
         LwString &a( uint32 a0 )
         {
-            int written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%u", a0 );
-            assert( ( written >= 0 ) && ( (size_t)written < mCapacity ) );
-            mStrPtr[mCapacity - 1] = '\0';
-            mSize = std::min<size_t>( mSize + (size_t)std::max( written, 0 ), mCapacity - 1u );
+            int required = std::snprintf( mStrPtr + mSize, mCapacity - mSize, "%u", a0 );
+            assert( ( required >= 0 ) && ( (size_t)required < mCapacity - mSize ) );
+            mSize = std::min<size_t>( mSize + (size_t)std::max( required, 0 ), mCapacity - 1u );
             return *this;
         }
 
         LwString &a( int64 a0 )
         {
-            int written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%" PRIi64, a0 );
-            assert( ( written >= 0 ) && ( (size_t)written < mCapacity ) );
-            mStrPtr[mCapacity - 1] = '\0';
-            mSize = std::min<size_t>( mSize + (size_t)std::max( written, 0 ), mCapacity - 1u );
+            int required = std::snprintf( mStrPtr + mSize, mCapacity - mSize, "%" PRIi64, a0 );
+            assert( ( required >= 0 ) && ( (size_t)required < mCapacity - mSize ) );
+            mSize = std::min<size_t>( mSize + (size_t)std::max( required, 0 ), mCapacity - 1u );
             return *this;
         }
 
         LwString &a( uint64 a0 )
         {
-            int written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%" PRIu64, a0 );
-            assert( ( written >= 0 ) && ( (size_t)written < mCapacity ) );
-            mStrPtr[mCapacity - 1] = '\0';
-            mSize = std::min<size_t>( mSize + (size_t)std::max( written, 0 ), mCapacity - 1u );
+            int required = std::snprintf( mStrPtr + mSize, mCapacity - mSize, "%" PRIu64, a0 );
+            assert( ( required >= 0 ) && ( (size_t)required < mCapacity - mSize ) );
+            mSize = std::min<size_t>( mSize + (size_t)std::max( required, 0 ), mCapacity - 1u );
             return *this;
         }
 
@@ -317,36 +305,36 @@ namespace Ogre
 
         LwString &a( Float a0 )
         {
-            int written = -1;
+            int required = -1;
             if( a0.mMinWidth < 0 )
             {
                 if( a0.mPrecision < 0 )
                 {
-                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%f", (double)a0.mValue );
+                    required =
+                        std::snprintf( mStrPtr + mSize, mCapacity - mSize, "%f", (double)a0.mValue );
                 }
                 else
                 {
-                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%.*f", a0.mPrecision,
-                                         (double)a0.mValue );
+                    required = std::snprintf( mStrPtr + mSize, mCapacity - mSize, "%.*f", a0.mPrecision,
+                                              (double)a0.mValue );
                 }
             }
             else
             {
                 if( a0.mPrecision < 0 )
                 {
-                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%*f", a0.mMinWidth,
-                                         (double)a0.mValue );
+                    required = std::snprintf( mStrPtr + mSize, mCapacity - mSize, "%*f", a0.mMinWidth,
+                                              (double)a0.mValue );
                 }
                 else
                 {
-                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%*.*f", a0.mMinWidth,
-                                         a0.mPrecision, (double)a0.mValue );
+                    required = std::snprintf( mStrPtr + mSize, mCapacity - mSize, "%*.*f", a0.mMinWidth,
+                                              a0.mPrecision, (double)a0.mValue );
                 }
             }
 
-            mStrPtr[mCapacity - 1] = '\0';
-            assert( ( written >= 0 ) && ( (unsigned)written < mCapacity ) );
-            mSize = std::min<size_t>( mSize + (size_t)std::max( written, 0 ), mCapacity - 1u );
+            assert( ( required >= 0 ) && ( (unsigned)required < mCapacity - mSize ) );
+            mSize = std::min<size_t>( mSize + (size_t)std::max( required, 0 ), mCapacity - 1u );
             return *this;
         }
 
@@ -386,36 +374,35 @@ namespace Ogre
 
         LwString &a( Double a0 )
         {
-            int written = -1;
+            int required = -1;
             if( a0.mMinWidth < 0 )
             {
                 if( a0.mPrecision < 0 )
                 {
-                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%lf", a0.mValue );
+                    required = std::snprintf( mStrPtr + mSize, mCapacity - mSize, "%lf", a0.mValue );
                 }
                 else
                 {
-                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%.*lf", a0.mPrecision,
-                                         a0.mValue );
+                    required = std::snprintf( mStrPtr + mSize, mCapacity - mSize, "%.*lf", a0.mPrecision,
+                                              a0.mValue );
                 }
             }
             else
             {
                 if( a0.mPrecision < 0 )
                 {
-                    written =
-                        _snprintf( mStrPtr + mSize, mCapacity - mSize, "%*lf", a0.mMinWidth, a0.mValue );
+                    required = std::snprintf( mStrPtr + mSize, mCapacity - mSize, "%*lf", a0.mMinWidth,
+                                              a0.mValue );
                 }
                 else
                 {
-                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%*.*lf", a0.mMinWidth,
-                                         a0.mPrecision, a0.mValue );
+                    required = std::snprintf( mStrPtr + mSize, mCapacity - mSize, "%*.*lf", a0.mMinWidth,
+                                              a0.mPrecision, a0.mValue );
                 }
             }
 
-            mStrPtr[mCapacity - 1] = '\0';
-            assert( ( written >= 0 ) && ( (unsigned)written < mCapacity ) );
-            mSize = std::min<size_t>( mSize + static_cast<size_t>( std::max( written, 0 ) ),
+            assert( ( required >= 0 ) && ( (unsigned)required < mCapacity - mSize ) );
+            mSize = std::min<size_t>( mSize + static_cast<size_t>( std::max( required, 0 ) ),
                                       static_cast<size_t>( mCapacity - 1u ) );
             return *this;
         }
@@ -492,11 +479,5 @@ namespace Ogre
         }
     };
 }  // namespace Ogre
-
-#ifdef OGRE_LWSTRING_SNPRINTF_DEFINED
-#    undef _snprintf
-#else
-#    pragma warning( pop )
-#endif
 
 #endif

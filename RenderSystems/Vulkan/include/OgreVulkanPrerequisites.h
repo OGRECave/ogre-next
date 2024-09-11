@@ -149,7 +149,7 @@ namespace Ogre
 }  // namespace Ogre
 
 #define OGRE_VK_EXCEPT( code, num, desc, src ) \
-    OGRE_EXCEPT( code, desc + ( "\nVkResult = " + vkResultToString( num ) ), src )
+    OGRE_EXCEPT_EX( code, num, desc + ( "\nVkResult = " + vkResultToString( num ) ), src )
 
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
 #    define checkVkResult( result, functionName ) \

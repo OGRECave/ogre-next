@@ -1,0 +1,9 @@
+@property( use_arbitrary_colour )
+
+// This file gets parsed by the pixel shader stage (because it ends in piece_ps.any)
+
+@piece( custom_ps_posExecution )
+	outPs_colour0.xyzw += inPs.myCustomColour.xyzw;
+@end
+
+@end

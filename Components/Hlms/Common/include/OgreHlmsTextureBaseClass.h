@@ -105,6 +105,8 @@ namespace Ogre
                                       const HlmsBlendblock *blendblock, const HlmsParamVec &params );
         ~OGRE_HLMS_TEXTURE_BASE_CLASS() override;
 
+        void setAlphaTestThreshold( float threshold ) override;
+
         void preload() override;
 
         void saveTextures( const String &folderPath, set<String>::type &savedTextures, bool saveOitd,

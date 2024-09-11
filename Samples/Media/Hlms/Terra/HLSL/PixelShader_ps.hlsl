@@ -45,6 +45,7 @@ struct PS_INPUT
 
 @insertpiece( DeclPlanarReflTextures )
 @insertpiece( DeclAreaApproxTextures )
+@insertpiece( DeclBlueNoiseTexture )
 
 Texture2D<float3> terrainNormals	: register(t@value(terrainNormals));
 Texture2D<float4> terrainShadows	: register(t@value(terrainShadows));

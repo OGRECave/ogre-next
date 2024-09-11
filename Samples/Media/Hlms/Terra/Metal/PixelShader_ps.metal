@@ -101,6 +101,7 @@ fragment @insertpiece( output_type ) main_metal
 
 	@insertpiece( DeclPlanarReflTextures )
 	@insertpiece( DeclAreaApproxTextures )
+	@insertpiece( DeclBlueNoiseTexture )
 
 
 	@property( irradiance_volumes )

@@ -1,0 +1,7 @@
+@property( use_arbitrary_colour )
+
+@piece( custom_VStoPS )
+  FLAT_INTERPOLANT( float4 myCustomColour, @counter(texcoord) );
+@end
+
+@end

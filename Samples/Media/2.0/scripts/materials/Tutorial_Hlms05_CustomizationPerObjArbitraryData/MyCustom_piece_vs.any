@@ -1,0 +1,25 @@
+@property( use_arbitrary_colour )
+
+@property( syntax != metal )
+  @piece( custom_vs_uniformDeclaration )
+	// Uniforms that change per Item/Entity
+	CONST_BUFFER( MyPerObjectData, @value(MyPerObjectDataSlot) )
+	{
+	  @property( fast_shader_build_hack )
+		float4 myPerObjectData[2];
+	  @else
+		float4 myPerObjectData[4096];
+	  @end
+	};
+  @end
+@else
+  @piece( custom_vs_uniformDeclaration )
+	, constant float4 *myPerObjectData [[buffer(CONST_SLOT_START+@value(MyPerObjectDataSlot))]]
+  @end
+@end
+
+@piece( custom_vs_posExecution )
+  outVs.myCustomColour = myPerObjectData[inVs_drawId];
+@end
+
+@end

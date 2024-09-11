@@ -157,7 +157,7 @@ namespace Ogre
         ConfigOptionMap &getConfigOptions() override { return mOptions; }
         void             setConfigOption( const String &name, const String &value ) override;
 
-        bool supportsMultithreadedShaderCompliation() const override;
+        bool supportsMultithreadedShaderCompilation() const override;
 
         HardwareOcclusionQuery *createHardwareOcclusionQuery() override;
 
