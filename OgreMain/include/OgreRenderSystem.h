@@ -1547,6 +1547,32 @@ namespace Ogre
 
         BarrierSolver &getBarrierSolver() { return mBarrierSolver; }
 
+        /** Loads the pipeline cache from disk.
+        @param stream The source stream, optional, starts with struct PipelineCachePrefixHeader
+        */
+        virtual void loadPipelineCache( DataStreamPtr stream );
+        /** Saves the pipeline cache to disk.
+        @param stream The destination stream
+        */
+        virtual void savePipelineCache( DataStreamPtr stream ) const;
+
+        /// When serializing pipeline cache data to the file, we use a header that is filled with
+        /// enough information to be able to validate the data, with the pipeline cache data following
+        /// immediately afterwards. https://zeux.io/2019/07/17/serializing-pipeline-cache/#fn:1
+        struct PipelineCachePrefixHeader
+        {
+            uint32_t magic;     // an arbitrary magic header to make sure this is actually our file
+            uint32_t dataSize;  // equal to *pDataSize returned by vkGetPipelineCacheData
+            uint64_t dataHash;  // a hash of pipeline cache data, including the header
+
+            uint32_t vendorID;       // equal to VkPhysicalDeviceProperties::vendorID
+            uint32_t deviceID;       // equal to VkPhysicalDeviceProperties::deviceID
+            uint32_t driverVersion;  // equal to VkPhysicalDeviceProperties::driverVersion
+            uint32_t driverABI;      // equal to sizeof(void*)
+
+            uint8_t uuid[16];  // equal to VkPhysicalDeviceProperties::pipelineCacheUUID
+        };
+
     protected:
         void destroyAllRenderPassDescriptors();
 
