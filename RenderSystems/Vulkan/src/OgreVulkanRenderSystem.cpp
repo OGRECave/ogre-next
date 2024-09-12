@@ -2060,8 +2060,8 @@ namespace Ogre
 #endif
 
         VkPipeline vulkanPso = 0u;
-        VkResult result = vkCreateComputePipelines( mActiveDevice->mDevice, VK_NULL_HANDLE, 1u,
-                                                    &computeInfo, 0, &vulkanPso );
+        VkResult result = vkCreateComputePipelines(
+            mActiveDevice->mDevice, mActiveDevice->mPipelineCache, 1u, &computeInfo, 0, &vulkanPso );
         checkVkResult( result, "vkCreateComputePipelines" );
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
