@@ -3351,6 +3351,15 @@ namespace Ogre
         debugLogPso( newPso );
 #endif
 
+        if( ( newPso->geometryShader && !mActiveDevice->mDeviceFeatures.geometryShader ) ||
+            ( newPso->tesselationHullShader && !mActiveDevice->mDeviceFeatures.tessellationShader ) ||
+            ( newPso->tesselationDomainShader && !mActiveDevice->mDeviceFeatures.tessellationShader ) )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Geometry or tesselation shaders are not supported",
+                         "VulkanRenderSystem::_hlmsPipelineStateObjectCreated" );
+        }
+
         size_t numShaderStages = 0u;
         VkPipelineShaderStageCreateInfo shaderStages[NumShaderTypes];
 
@@ -3476,6 +3485,9 @@ namespace Ogre
 
         VkPipelineTessellationStateCreateInfo tessStateCi;
         makeVkStruct( tessStateCi, VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO );
+        tessStateCi.patchControlPoints = 1u;
+        bool useTesselationState = mActiveDevice->mDeviceFeatures.tessellationShader &&
+                                   ( newPso->tesselationHullShader || newPso->tesselationDomainShader );
 
         VkPipelineViewportStateCreateInfo viewportStateCi;
         makeVkStruct( viewportStateCi, VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO );
@@ -3625,7 +3637,7 @@ namespace Ogre
         pipeline.pStages = shaderStages;
         pipeline.pVertexInputState = &vertexFormatCi;
         pipeline.pInputAssemblyState = &inputAssemblyCi;
-        pipeline.pTessellationState = &tessStateCi;
+        pipeline.pTessellationState = useTesselationState ? &tessStateCi : nullptr;
         pipeline.pViewportState = &viewportStateCi;
         pipeline.pRasterizationState = &rasterState;
         pipeline.pMultisampleState = &mssCi;
