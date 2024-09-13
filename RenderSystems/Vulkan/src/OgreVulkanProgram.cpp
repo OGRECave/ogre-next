@@ -687,7 +687,7 @@ namespace Ogre
             checkVkResult( result, "vkCreateShaderModule" );
 
             setObjectName( mDevice->mDevice, (uint64_t)mShaderModule,
-                           VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, mName.c_str() );
+                           VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT, mName.c_str() );
         }
 
         if( !mSpirv.empty() && mType == GPT_VERTEX_PROGRAM )

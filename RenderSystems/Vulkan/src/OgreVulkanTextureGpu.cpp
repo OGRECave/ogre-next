@@ -808,7 +808,7 @@ namespace Ogre
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         const String textureName = getNameStr() + "(View)";
-        setObjectName( device->mDevice, (uint64_t)imageView, VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT,
+        setObjectName( device->mDevice, (uint64_t)imageView, VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT,
                        textureName.c_str() );
 #endif
 
