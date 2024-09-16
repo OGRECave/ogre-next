@@ -3292,20 +3292,28 @@ namespace Ogre
                 if( texture->isMultisample() && !texture->hasMsaaExplicitResolves() )
                 {
                     // Rare case where we render to an implicit resolve without resolving
-                    // (otherwise newLayout = ResolveDest)
-                    //
-                    // Or more common case if we need to copy to/from an MSAA texture
+                    // (otherwise newLayout = ResolveDest), or more common case if we need
+                    // to copy to/from an MSAA texture. We can also try to sample from texture.
+                    // In all these cases keep MSAA texture in predictable layout.
                     //
                     // This cannot catch all use cases, but if you fall into something this
                     // doesn't catch, then you should probably be using explicit resolves
-                    if( itor->newLayout == ResourceLayout::RenderTarget ||
-                        itor->newLayout == ResourceLayout::ResolveDest ||
-                        itor->newLayout == ResourceLayout::CopySrc ||
-                        itor->newLayout == ResourceLayout::CopyDst )
-                    {
-                        imageBarrier.image = texture->getMsaaFramebufferName();
-                        mImageBarriers.push_back( imageBarrier );
-                    }
+                    bool useNewLayoutForMsaa =
+                            itor->newLayout == ResourceLayout::RenderTarget ||
+                            itor->newLayout == ResourceLayout::ResolveDest ||
+                            itor->newLayout == ResourceLayout::CopySrc ||
+                            itor->newLayout == ResourceLayout::CopyDst;
+                    bool useOldLayoutForMsaa =
+                            itor->oldLayout == ResourceLayout::RenderTarget ||
+                            itor->oldLayout == ResourceLayout::ResolveDest ||
+                            itor->oldLayout == ResourceLayout::CopySrc ||
+                            itor->oldLayout == ResourceLayout::CopyDst;
+                    if( !useNewLayoutForMsaa )
+                        imageBarrier.newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                    if( !useOldLayoutForMsaa )
+                        imageBarrier.oldLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                    imageBarrier.image = texture->getMsaaFramebufferName();
+                    mImageBarriers.push_back( imageBarrier );
                 }
             }
             else
