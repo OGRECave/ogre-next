@@ -317,13 +317,19 @@ namespace Ogre
         if( !casterBlock && overrideCasterBlock )
         {
             mIgnoreFlushRenderables = true;
-            if( !mBlendblock[0]->mAlphaToCoverageEnabled )
+            if( mBlendblock[0]->mAlphaToCoverageEnabled &&
+                mBlendblock[0]->mSourceBlendFactor == SBF_ONE &&
+                mBlendblock[0]->mDestBlendFactor == SBF_ZERO &&
+                ( !mBlendblock[0]->mSeparateBlend ||
+                  ( mBlendblock[0]->mSourceBlendFactorAlpha == SBF_ONE &&
+                    mBlendblock[0]->mDestBlendFactorAlpha == SBF_ZERO ) ) )
                 setBlendblock( mBlendblock[0], true );
             else
             {
-                HlmsBlendblock blendblockNoAC = *mBlendblock[0];
-                blendblockNoAC.mAlphaToCoverageEnabled = false;
-                setBlendblock( blendblockNoAC, true );
+                HlmsBlendblock casterBlendblock = *mBlendblock[0];
+                casterBlendblock.mAlphaToCoverageEnabled = false;
+                casterBlendblock.setBlendType( SBT_REPLACE );
+                setBlendblock( casterBlendblock, true );
             }
             mIgnoreFlushRenderables = false;
         }
@@ -354,13 +360,19 @@ namespace Ogre
         if( !casterBlock && overrideCasterBlock )
         {
             mIgnoreFlushRenderables = true;
-            if( !mBlendblock[0]->mAlphaToCoverageEnabled )
+            if( mBlendblock[0]->mAlphaToCoverageEnabled &&
+                mBlendblock[0]->mSourceBlendFactor == SBF_ONE &&
+                mBlendblock[0]->mDestBlendFactor == SBF_ZERO &&
+                ( !mBlendblock[0]->mSeparateBlend ||
+                  ( mBlendblock[0]->mSourceBlendFactorAlpha == SBF_ONE &&
+                    mBlendblock[0]->mDestBlendFactorAlpha == SBF_ZERO ) ) )
                 setBlendblock( mBlendblock[0], true );
             else
             {
-                HlmsBlendblock blendblockNoAC = *mBlendblock[0];
-                blendblockNoAC.mAlphaToCoverageEnabled = false;
-                setBlendblock( blendblockNoAC, true );
+                HlmsBlendblock casterBlendblock = *mBlendblock[0];
+                casterBlendblock.mAlphaToCoverageEnabled = false;
+                casterBlendblock.setBlendType( SBT_REPLACE );
+                setBlendblock( casterBlendblock, true );
             }
             mIgnoreFlushRenderables = false;
         }
