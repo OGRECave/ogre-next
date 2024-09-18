@@ -1121,8 +1121,7 @@ namespace Ogre
         {
             // vkEnumerateInstanceVersion is available since Vulkan 1.1
             PFN_vkEnumerateInstanceVersion enumerateInstanceVersion =
-                (PFN_vkEnumerateInstanceVersion)vkGetInstanceProcAddr( mVkInstance,
-                                                                       "vkEnumerateInstanceVersion" );
+                (PFN_vkEnumerateInstanceVersion)vkGetInstanceProcAddr( 0, "vkEnumerateInstanceVersion" );
             if( enumerateInstanceVersion )
             {
                 uint32_t apiVersion;
