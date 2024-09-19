@@ -2140,7 +2140,7 @@ namespace Ogre
         ++mFrameCount;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::getAvailableSempaphores( VkSemaphoreArray &semaphoreArray,
+    void VulkanVaoManager::getAvailableSemaphores( VkSemaphoreArray &semaphoreArray,
                                                     size_t numSemaphores )
     {
         semaphoreArray.reserve( semaphoreArray.size() + numSemaphores );
@@ -2171,7 +2171,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    VkSemaphore VulkanVaoManager::getAvailableSempaphore()
+    VkSemaphore VulkanVaoManager::getAvailableSemaphore()
     {
         VkSemaphore retVal;
         if( mAvailableSemaphores.empty() )
