@@ -532,7 +532,7 @@ namespace Ogre
 
         VulkanVaoManager *vaoManager = mDevice->mVaoManager;
 
-        mSwapchainSemaphore = vaoManager->getAvailableSempaphore();
+        mSwapchainSemaphore = vaoManager->getAvailableSemaphore();
 
         uint32 swapchainIdx = 0u;
         VkResult result = vkAcquireNextImageKHR( mDevice->mDevice, mSwapchain, UINT64_MAX,

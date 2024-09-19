@@ -1220,8 +1220,8 @@ namespace Ogre
                 // Get some semaphores so that presentation can wait for this job to finish rendering
                 // (one for each window that will be swapped)
                 numWindowsPendingSwap = mWindowsPendingSwap.size();
-                mVaoManager->getAvailableSempaphores( mGpuSignalSemaphForCurrCmdBuff,
-                                                      numWindowsPendingSwap );
+                mVaoManager->getAvailableSemaphores( mGpuSignalSemaphForCurrCmdBuff,
+                                                     numWindowsPendingSwap );
             }
 
             if( !mGpuSignalSemaphForCurrCmdBuff.empty() )
