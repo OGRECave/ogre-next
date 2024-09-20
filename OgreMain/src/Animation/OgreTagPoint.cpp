@@ -99,7 +99,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     Matrix3 TagPoint::_getDerivedOrientationMatrix() const
     {
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         assert( !mCachedTransformOutOfDate );
 #endif
         Matrix3 retVal;
@@ -165,7 +165,7 @@ namespace Ogre
 
             finalMat.decomposition( *t.mDerivedPosition, *t.mDerivedScale, *t.mDerivedOrientation );
 
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
             for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
             {
                 if( t.mOwner[j] )
@@ -212,7 +212,7 @@ namespace Ogre
 
             finalMat.decomposition( *t.mDerivedPosition, *t.mDerivedScale, *t.mDerivedOrientation );
 
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
             for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
             {
                 if( t.mOwner[j] )
