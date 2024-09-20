@@ -117,7 +117,7 @@ Macros</h2></td></tr>
 <tr class="separator:a50ae004f7a84a50ad9b488ac46632b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a021e730e2112608c954a5c7cab00be4a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_assert_8h.html#a021e730e2112608c954a5c7cab00be4a">OGRE_HALT</a>()&#160;&#160;&#160;debug_break()</td></tr>
 <tr class="separator:a021e730e2112608c954a5c7cab00be4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66098bdc7a592672d4f0404ae660dd2e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_assert_8h.html#a66098bdc7a592672d4f0404ae660dd2e">OGRE_STATIC_ASSERT</a>(x)</td></tr>
+<tr class="memitem:a66098bdc7a592672d4f0404ae660dd2e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_assert_8h.html#a66098bdc7a592672d4f0404ae660dd2e">OGRE_STATIC_ASSERT</a>(x)&#160;&#160;&#160;static_assert( x, #    x )</td></tr>
 <tr class="separator:a66098bdc7a592672d4f0404ae660dd2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af67a1318e558adb346212b7c1f9da002"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_assert_8h.html#af67a1318e558adb346212b7c1f9da002">OGRE_UNUSED</a>(x)</td></tr>
 <tr class="separator:af67a1318e558adb346212b7c1f9da002"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -281,13 +281,11 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">x</td><td>)</td>
-          <td></td>
+          <td>&#160;&#160;&#160;static_assert( x, #    x )</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">        <span class="keyword">typedef</span> <span class="keywordtype">char</span> OgreStaticAssert[( x ) ? 1 : -1]; \</div>
-<div class="line">        OGRE_UNUSED( OgreStaticAssert );</div>
-</div><!-- fragment -->
+
 </div>
 </div>
 <a id="af67a1318e558adb346212b7c1f9da002"></a>
