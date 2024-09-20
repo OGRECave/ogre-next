@@ -369,7 +369,7 @@ namespace Ogre
 #    ifdef OGRE_STATIC_LIB
             hInstance = GetModuleHandle( NULL );
 #    else
-#        if OGRE_DEBUG_MODE == 1
+#        if OGRE_DEBUG_MODE
             hInstance = GetModuleHandle( "RenderSystem_Vulkan_d.dll" );
 #        else
             hInstance = GetModuleHandle( "RenderSystem_Vulkan.dll" );
