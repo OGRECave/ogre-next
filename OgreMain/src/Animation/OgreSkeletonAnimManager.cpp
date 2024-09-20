@@ -112,7 +112,7 @@ namespace Ogre
 
         skeletonsArray.insert( it, newInstance );
 
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE && !defined( NDEBUG )
         {
             // Check all depth levels respect the same ordering
             FastArray<SkeletonInstance *>::const_iterator itSkel = skeletonsArray.begin();

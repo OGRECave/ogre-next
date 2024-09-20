@@ -39,7 +39,7 @@ namespace Ogre
 {
     void DescriptorSetTexture::checkValidity() const
     {
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE && !defined( NDEBUG )
         size_t totalTexturesUsed = 0u;
 
         for( size_t i = 0; i < NumShaderTypes; ++i )
@@ -72,7 +72,7 @@ namespace Ogre
                 "This DescriptorSetTexture2 doesn't use any texture/buffer! "
                 "Perhaps incorrectly setup?" );
 
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE && !defined( NDEBUG )
         size_t totalTexturesUsed = 0u;
 
         for( size_t i = 0; i < NumShaderTypes; ++i )

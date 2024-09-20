@@ -108,7 +108,7 @@ namespace Ogre
 
         void checkValidity() const
         {
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE && !defined( NDEBUG )
             size_t totalSamplersUsed = 0u;
 
             for( size_t i = 0; i < NumShaderTypes; ++i )
