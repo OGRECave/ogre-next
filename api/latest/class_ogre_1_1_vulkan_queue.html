@@ -155,6 +155,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a56cf2386195d4fefc73f0cace3e873d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affa78f52be9822ce962cdc65875edd10"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_queue.html#affa78f52be9822ce962cdc65875edd10">getCopyEncoderV1Buffer</a> (const bool bDownload)</td></tr>
 <tr class="separator:affa78f52be9822ce962cdc65875edd10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39b6e9817fba374684fbcd1b3349fa70"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#ac45cc67c448b7eb97bc0ddc9d4ce2422">VkCommandBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_queue.html#a39b6e9817fba374684fbcd1b3349fa70">getCurrentCmdBuffer</a> ()</td></tr>
+<tr class="separator:a39b6e9817fba374684fbcd1b3349fa70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a643ba4b203d2859598a0e483d4e4ca54"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vulkan_queue.html#a784887cb760d1d5548528e47a8806c2f">EncoderState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_queue.html#a643ba4b203d2859598a0e483d4e4ca54">getEncoderState</a> () const</td></tr>
 <tr class="separator:a643ba4b203d2859598a0e483d4e4ca54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a424e609f3f750db0c72ad16fb36d3af3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_queue.html#a424e609f3f750db0c72ad16fb36d3af3">getFamilyIdx</a> () const</td></tr>
@@ -179,8 +181,6 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ad22ea4969d6b297d83e1af3c954c9c6f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#ac45cc67c448b7eb97bc0ddc9d4ce2422">VkCommandBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_queue.html#ad22ea4969d6b297d83e1af3c954c9c6f">mCurrentCmdBuffer</a></td></tr>
-<tr class="separator:ad22ea4969d6b297d83e1af3c954c9c6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8248a57438f2e4fdb31151f61257988f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_queue.html#a8248a57438f2e4fdb31151f61257988f">mDevice</a></td></tr>
 <tr class="separator:a8248a57438f2e4fdb31151f61257988f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a637a41330cc77495c52c490747364c4b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vulkan_queue.html#a467d51923bda10ff87b144d4327da925">QueueFamily</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_queue.html#a637a41330cc77495c52c490747364c4b">mFamily</a></td></tr>
@@ -572,6 +572,33 @@ VulkanQueue::prepareForDownload </dd></dl>
 
 </div>
 </div>
+<a id="a39b6e9817fba374684fbcd1b3349fa70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39b6e9817fba374684fbcd1b3349fa70">&#9670;&nbsp;</a></span>getCurrentCmdBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#ac45cc67c448b7eb97bc0ddc9d4ce2422">VkCommandBuffer</a> Ogre::VulkanQueue::getCurrentCmdBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_ogre_platform_8h.html#ab3866559f9f429eda0a6a4a5adc9da84">OGRE_ASSERT_LOW</a>.</p>
+
+</div>
+</div>
 <a id="a643ba4b203d2859598a0e483d4e4ca54"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a643ba4b203d2859598a0e483d4e4ca54">&#9670;&nbsp;</a></span>getEncoderState()</h2>
 
@@ -830,20 +857,6 @@ VulkanQueue::prepareForDownload </dd></dl>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="ad22ea4969d6b297d83e1af3c954c9c6f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad22ea4969d6b297d83e1af3c954c9c6f">&#9670;&nbsp;</a></span>mCurrentCmdBuffer</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#ac45cc67c448b7eb97bc0ddc9d4ce2422">VkCommandBuffer</a> Ogre::VulkanQueue::mCurrentCmdBuffer</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a8248a57438f2e4fdb31151f61257988f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8248a57438f2e4fdb31151f61257988f">&#9670;&nbsp;</a></span>mDevice</h2>
 
