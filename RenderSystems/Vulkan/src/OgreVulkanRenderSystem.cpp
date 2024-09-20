@@ -2182,7 +2182,7 @@ namespace Ogre
             if( mPso )
                 oldRootLayout = reinterpret_cast<VulkanHlmsPso *>( mPso->rsData )->rootLayout;
 
-            VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+            VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
             OGRE_ASSERT_LOW( pso->rsData );
             VulkanHlmsPso *vulkanPso = reinterpret_cast<VulkanHlmsPso *>( pso->rsData );
             vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanPso->pso );
@@ -2212,7 +2212,7 @@ namespace Ogre
             {
                 OGRE_ASSERT_LOW( pso->rsData );
                 vulkanPso = reinterpret_cast<VulkanHlmsPso *>( pso->rsData );
-                VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+                VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
                 vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, vulkanPso->pso );
 
                 if( vulkanPso->rootLayout != oldRootLayout )
@@ -2232,7 +2232,7 @@ namespace Ogre
     {
         flushRootLayoutCS();
 
-        vkCmdDispatch( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, pso.mNumThreadGroups[0],
+        vkCmdDispatch( mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer(), pso.mNumThreadGroups[0],
                        pso.mNumThreadGroups[1], pso.mNumThreadGroups[2] );
     }
     //-------------------------------------------------------------------------
@@ -2258,7 +2258,7 @@ namespace Ogre
 
         OGRE_ASSERT_LOW( numVertexBuffers < 15u );
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
         if( numVertexBuffers > 0u )
         {
             vkCmdBindVertexBuffers( cmdBuffer, 0, static_cast<uint32>( numVertexBuffers ),
@@ -2304,7 +2304,7 @@ namespace Ogre
     {
         flushRootLayout();
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
         vkCmdDrawIndexedIndirect( cmdBuffer, mIndirectBuffer,
                                   reinterpret_cast<VkDeviceSize>( cmd->indirectBufferOffset ),
                                   cmd->numDraws, sizeof( CbDrawIndexed ) );
@@ -2314,7 +2314,7 @@ namespace Ogre
     {
         flushRootLayout();
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
         vkCmdDrawIndirect( cmdBuffer, mIndirectBuffer,
                            reinterpret_cast<VkDeviceSize>( cmd->indirectBufferOffset ), cmd->numDraws,
                            sizeof( CbDrawStrip ) );
@@ -2327,7 +2327,7 @@ namespace Ogre
         CbDrawIndexed *drawCmd = reinterpret_cast<CbDrawIndexed *>( mSwIndirectBufferPtr +
                                                                     (size_t)cmd->indirectBufferOffset );
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
 
         for( uint32 i = cmd->numDraws; i--; )
         {
@@ -2345,7 +2345,7 @@ namespace Ogre
         CbDrawStrip *drawCmd =
             reinterpret_cast<CbDrawStrip *>( mSwIndirectBufferPtr + (size_t)cmd->indirectBufferOffset );
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
 
         for( uint32 i = cmd->numDraws; i--; )
         {
@@ -2359,7 +2359,7 @@ namespace Ogre
     {
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
 
         VkBuffer vulkanVertexBuffers[16];
         VkDeviceSize offsets[16];
@@ -2420,7 +2420,7 @@ namespace Ogre
     {
         flushRootLayout();
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
         vkCmdDrawIndexed( cmdBuffer, cmd->primCount, cmd->instanceCount, cmd->firstVertexIndex,
                           (int32_t)mCurrentVertexBuffer->vertexStart, cmd->baseInstance );
     }
@@ -2429,7 +2429,7 @@ namespace Ogre
     {
         flushRootLayout();
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
         vkCmdDraw( cmdBuffer, cmd->primCount, cmd->instanceCount, cmd->firstVertexIndex,
                    cmd->baseInstance );
     }
@@ -2443,7 +2443,7 @@ namespace Ogre
 
         const size_t numberOfInstances = op.numberOfInstances;
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
 
         // Render to screen!
         if( op.useIndexes )
@@ -2692,7 +2692,7 @@ namespace Ogre
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         if( !CmdBeginDebugUtilsLabelEXT )
             return;  // VK_EXT_debug_utils not available
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
         VkDebugUtilsLabelEXT markerInfo;
         makeVkStruct( markerInfo, VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT );
         markerInfo.pLabelName = event.c_str();
@@ -2705,7 +2705,7 @@ namespace Ogre
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         if( !CmdEndDebugUtilsLabelEXT )
             return;  // VK_EXT_debug_utils not available
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
         CmdEndDebugUtilsLabelEXT( cmdBuffer );
 #endif
     }
@@ -2905,11 +2905,11 @@ namespace Ogre
             mActiveDevice->mGraphicsQueue.getGraphicsEncoder();
 
             VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-            vaoManager->bindDrawIdVertexBuffer( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer );
+            vaoManager->bindDrawIdVertexBuffer( mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer() );
 
             if( mStencilEnabled )
             {
-                vkCmdSetStencilReference( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer,
+                vkCmdSetStencilReference( mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer(),
                                           VK_STENCIL_FACE_FRONT_AND_BACK, mStencilRefValue );
             }
 
@@ -2943,7 +2943,8 @@ namespace Ogre
 #endif
             }
 
-            vkCmdSetViewport( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, 0u, numViewports, vkVp );
+            vkCmdSetViewport( mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer(), 0u, numViewports,
+                              vkVp );
         }
 
         if( mVpChanged || numViewports > 1u )
@@ -2966,7 +2967,7 @@ namespace Ogre
 #endif
             }
 
-            vkCmdSetScissor( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, 0u, numViewports,
+            vkCmdSetScissor( mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer(), 0u, numViewports,
                              scissorRect );
         }
 
@@ -3340,10 +3341,11 @@ namespace Ogre
         if( dstStage == 0 )
             dstStage = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
 
-        vkCmdPipelineBarrier(
-            mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, srcStage & mActiveDevice->mSupportedStages,
-            dstStage & mActiveDevice->mSupportedStages, 0, numMemBarriers, &memBarrier, 0u, 0,
-            static_cast<uint32>( mImageBarriers.size() ), mImageBarriers.begin() );
+        vkCmdPipelineBarrier( mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer(),
+                              srcStage & mActiveDevice->mSupportedStages,
+                              dstStage & mActiveDevice->mSupportedStages, 0, numMemBarriers, &memBarrier,
+                              0u, 0, static_cast<uint32>( mImageBarriers.size() ),
+                              mImageBarriers.begin() );
         mImageBarriers.clear();
     }
     //-------------------------------------------------------------------------
@@ -3864,7 +3866,7 @@ namespace Ogre
 
             if( mActiveDevice->mGraphicsQueue.getEncoderState() == VulkanQueue::EncoderGraphicsOpen )
             {
-                vkCmdSetStencilReference( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer,
+                vkCmdSetStencilReference( mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer(),
                                           VK_STENCIL_FACE_FRONT_AND_BACK, mStencilRefValue );
             }
         }

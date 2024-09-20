@@ -96,7 +96,7 @@ namespace Ogre
                     region.srcOffset = ( *itor )->getBlockStart() + oldBuffer.mInternalBufferStart;
                     region.dstOffset = ( *itor )->getBlockStart() + mBuffer.mInternalBufferStart;
                     region.size = ( *itor )->getBlockSize();
-                    vkCmdCopyBuffer( mDevice->mGraphicsQueue.mCurrentCmdBuffer, oldBuffer.mVboName,
+                    vkCmdCopyBuffer( mDevice->mGraphicsQueue.getCurrentCmdBuffer(), oldBuffer.mVboName,
                                      mBuffer.mVboName, 1u, &region );
                     ( *itor )->mLastFrameUsed = currentFrame;
                 }
