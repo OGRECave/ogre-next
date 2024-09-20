@@ -528,7 +528,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::savePipelineCache( DataStreamPtr stream ) const
     {
-        static_assert( sizeof( PipelineCachePrefixHeader ) == 48 );
+        OGRE_STATIC_ASSERT( sizeof( PipelineCachePrefixHeader ) == 48 );
         if( mActiveDevice->mPipelineCache )
         {
             size_t size{};
@@ -559,7 +559,7 @@ namespace Ogre
                     hdr.driverVersion = mActiveDevice->mDeviceProperties.driverVersion;
                     hdr.driverABI = sizeof( void * );
                     memcpy( hdr.uuid, mActiveDevice->mDeviceProperties.pipelineCacheUUID, VK_UUID_SIZE );
-                    static_assert( VK_UUID_SIZE == 16 );
+                    OGRE_STATIC_ASSERT( VK_UUID_SIZE == 16 );
 
                     uint64 hashResult[2] = {};
                     OGRE_HASH128_FUNC( buf.data(), (int)buf.size(), IdString::Seed, hashResult );

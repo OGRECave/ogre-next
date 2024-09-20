@@ -126,12 +126,10 @@ namespace Ogre
 #    define OGRE_VERIFY_MSG( cond, msg, ... ) ( (void)0 )
 #endif
 
-#if __cplusplus >= 201103L
+#if __cplusplus >= 201703L || defined( _MSVC_LANG ) && _MSVC_LANG >= 201703L
+#    define OGRE_STATIC_ASSERT( x ) static_assert( x )
+#else  // C++11
 #    define OGRE_STATIC_ASSERT( x ) static_assert( x, #    x )
-#else
-#    define OGRE_STATIC_ASSERT( x ) \
-        typedef char OgreStaticAssert[( x ) ? 1 : -1]; \
-        OGRE_UNUSED( OgreStaticAssert );
 #endif
 
 #endif
