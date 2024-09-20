@@ -86,8 +86,8 @@ namespace Ogre
         Windows::Foundation::Rect rc = mCoreWindow->Bounds;
         mLeft = (int)floorf( rc.X * scale + 0.5f );
         mTop = (int)floorf( rc.Y * scale + 0.5f );
-        mRequestedWidth = rc.Width;
-        mRequestedHeight = rc.Height;
+        mRequestedWidth = (int)floorf( rc.Width + 0.5f );
+        mRequestedHeight = (int)floorf( rc.Height + 0.5f );
     }
     //-----------------------------------------------------------------------------------
     D3D11WindowCoreWindow::~D3D11WindowCoreWindow() { destroy(); }
@@ -176,8 +176,8 @@ namespace Ogre
         Windows::Foundation::Rect rc = mCoreWindow->Bounds;
         mLeft = (int)floorf( rc.X * scale + 0.5f );
         mTop = (int)floorf( rc.Y * scale + 0.5f );
-        mRequestedWidth = rc.Width;
-        mRequestedHeight = rc.Height;
+        mRequestedWidth = (int)floorf( rc.Width + 0.5f );
+        mRequestedHeight = (int)floorf( rc.Height + 0.5f );
 
         resizeSwapChainBuffers( 0, 0 );  // pass zero to autodetect size
     }
@@ -245,8 +245,8 @@ namespace Ogre
                                        static_cast<float>( mSwapChainPanel->ActualHeight ) );
         mCompositionScale = Windows::Foundation::Size( mSwapChainPanel->CompositionScaleX,
                                                        mSwapChainPanel->CompositionScaleY );
-        mRequestedWidth = sz.Width;
-        mRequestedHeight = sz.Height;
+        mRequestedWidth = (int)floorf( sz.Width + 0.5f );
+        mRequestedHeight = (int)floorf( sz.Height + 0.5f );
     }
     //-----------------------------------------------------------------------------------
     D3D11WindowSwapChainPanel::~D3D11WindowSwapChainPanel() { destroy(); }
@@ -363,8 +363,8 @@ namespace Ogre
                                        static_cast<float>( mSwapChainPanel->ActualHeight ) );
         mCompositionScale = Windows::Foundation::Size( mSwapChainPanel->CompositionScaleX,
                                                        mSwapChainPanel->CompositionScaleY );
-        mRequestedWidth = sz.Width;
-        mRequestedHeight = sz.Height;
+        mRequestedWidth = (int)floorf( sz.Width + 0.5f );
+        mRequestedHeight = (int)floorf( sz.Height + 0.5f );
 
         int widthPx = std::max( 1, (int)floorf( mRequestedWidth * mCompositionScale.Width + 0.5f ) );
         int heightPx = std::max( 1, (int)floorf( mRequestedHeight * mCompositionScale.Height + 0.5f ) );
