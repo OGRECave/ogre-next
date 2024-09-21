@@ -112,7 +112,7 @@ namespace Ogre
 
         skeletonsArray.insert( it, newInstance );
 
-#if OGRE_DEBUG_MODE && !defined( NDEBUG )
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         {
             // Check all depth levels respect the same ordering
             FastArray<SkeletonInstance *>::const_iterator itSkel = skeletonsArray.begin();
@@ -128,7 +128,7 @@ namespace Ogre
                     {
                         Bone **owner1 = transf1[i].mOwner + transf1[i].mIndex;
                         Bone **owner2 = transf2[i].mOwner + transf2[i].mIndex;
-                        assert( owner1 < owner2 );
+                        OGRE_ASSERT_HIGH( owner1 < owner2 );
                     }
 
                     ++itSkel2;
