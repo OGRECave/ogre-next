@@ -255,7 +255,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     /*const Matrix4& Node::_getFullTransform() const
     {
-        assert( !mCachedTransformOutOfDate );
+        OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
         return mTransform.mDerivedTransform[mTransform.mIndex];
     }*/
     //-----------------------------------------------------------------------

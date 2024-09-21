@@ -251,9 +251,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     Matrix4 Bone::_getDerivedTransform() const
     {
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-        assert( !mCachedTransformOutOfDate );
-#endif
+        OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
         OGRE_ALIGNED_DECL( Matrix4, localSpaceBone, OGRE_SIMD_ALIGNMENT );
         OGRE_ALIGNED_DECL( Matrix4, parentNodeTransform, OGRE_SIMD_ALIGNMENT );
 
