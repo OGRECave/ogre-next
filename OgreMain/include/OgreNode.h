@@ -677,9 +677,7 @@ namespace Ogre
         */
         virtual_l2 FORCEINLINE const Matrix4 &_getFullTransform() const
         {
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-            assert( !mCachedTransformOutOfDate );
-#endif
+            OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
             return mTransform.mDerivedTransform[mTransform.mIndex];
         }
 

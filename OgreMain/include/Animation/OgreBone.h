@@ -281,9 +281,7 @@ namespace Ogre
         */
         FORCEINLINE const SimpleMatrixAf4x3 &_getLocalSpaceTransform() const
         {
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-            assert( !mCachedTransformOutOfDate );
-#endif
+            OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
             return mTransform.mDerivedTransform[mTransform.mIndex];
         }
 
