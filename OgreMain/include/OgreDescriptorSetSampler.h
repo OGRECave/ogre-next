@@ -108,17 +108,18 @@ namespace Ogre
 
         void checkValidity() const
         {
-#if OGRE_DEBUG_MODE && !defined( NDEBUG )
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
             size_t totalSamplersUsed = 0u;
 
             for( size_t i = 0; i < NumShaderTypes; ++i )
                 totalSamplersUsed += mShaderTypeSamplerCount[i];
 
-            assert( totalSamplersUsed > 0 &&
-                    "This DescriptorSetSampler doesn't use any sampler! Perhaps incorrectly setup?" );
-            assert( totalSamplersUsed == mSamplers.size() &&
-                    "This DescriptorSetSampler doesn't use as many samplers as it "
-                    "claims to have, or uses more than it has provided" );
+            OGRE_ASSERT_MEDIUM(
+                totalSamplersUsed > 0 &&
+                "This DescriptorSetSampler doesn't use any sampler! Perhaps incorrectly setup?" );
+            OGRE_ASSERT_MEDIUM( totalSamplersUsed == mSamplers.size() &&
+                                "This DescriptorSetSampler doesn't use as many samplers as it "
+                                "claims to have, or uses more than it has provided" );
 #endif
         }
     };
