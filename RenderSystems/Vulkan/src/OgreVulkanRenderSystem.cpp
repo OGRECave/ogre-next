@@ -142,7 +142,8 @@ namespace Ogre
             sprintf(message, "INFORMATION: [%s] Code %d : %s", pLayerPrefix, msgCode, pMsg);
         }
 
-        LogManager::getSingleton().logMessage( message );
+        LogManager::getSingleton().logMessage( message,
+            msgFlags & VK_DEBUG_REPORT_ERROR_BIT_EXT ? LML_CRITICAL : LML_NORMAL );
 
         free(message);
 
