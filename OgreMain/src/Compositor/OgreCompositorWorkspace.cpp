@@ -676,6 +676,15 @@ namespace Ogre
         return finalTarget;
     }
     //-----------------------------------------------------------------------------------
+    void CompositorWorkspace::setEnabled( bool bEnabled )
+    {
+        if( mEnabled != bEnabled )
+        {
+            mEnabled = bEnabled;
+            _notifyBarriersDirty();
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorWorkspace::_notifyBarriersDirty() { getCompositorManager()->_notifyBarriersDirty(); }
     //-----------------------------------------------------------------------------------
     CompositorManager2 *CompositorWorkspace::getCompositorManager()
