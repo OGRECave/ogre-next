@@ -159,7 +159,7 @@ namespace Ogre
         /// Only valid workspaces can update without crashing
         bool isValid() const { return mValid; }
 
-        void setEnabled( bool bEnabled ) { mEnabled = bEnabled; }
+        void setEnabled( bool bEnabled );
         bool getEnabled() const { return mEnabled; }
 
         /** When building with OGRE_PROFILING enabled, setting this option to true
