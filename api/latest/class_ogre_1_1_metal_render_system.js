@@ -109,5 +109,5 @@ var class_ogre_1_1_metal_render_system =
     [ "unregisterThread", "class_ogre_1_1_metal_render_system.html#a9f4ba98e059508597e1eaf840f0f9cbe", null ],
     [ "updateCompositorManager", "class_ogre_1_1_metal_render_system.html#ab4df2ce9888c73ad4c28e53494aac9c8", null ],
     [ "validateConfigOptions", "class_ogre_1_1_metal_render_system.html#a5828774815232707266737b42b6046ae", null ],
-    [ "validateSampleDescription", "class_ogre_1_1_metal_render_system.html#aaea45e928ae43588fe4104e30c0fa85b", null ]
+    [ "validateSampleDescription", "class_ogre_1_1_metal_render_system.html#af3617a26dc60a91cfbac29275db53792", null ]
 ];

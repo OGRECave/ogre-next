@@ -143,5 +143,5 @@ var class_ogre_1_1_vulkan_render_system =
     [ "supportsMultithreadedShaderCompilation", "class_ogre_1_1_vulkan_render_system.html#affa135b4ada8ca1f4afb9a1135235772", null ],
     [ "unregisterThread", "class_ogre_1_1_vulkan_render_system.html#a6cd050d0488813ce414f5a2bb3e99f38", null ],
     [ "validateConfigOptions", "class_ogre_1_1_vulkan_render_system.html#a20202748993a987073131d6b8ea43c6a", null ],
-    [ "validateSampleDescription", "class_ogre_1_1_vulkan_render_system.html#ac42ab52d4a6af396a79d0648a7953afa", null ]
+    [ "validateSampleDescription", "class_ogre_1_1_vulkan_render_system.html#a73ff97a1715d0c2382692774aa1b3f07", null ]
 ];
