@@ -297,8 +297,8 @@ namespace Ogre
         unsigned int getDisplayMonitorCount() const override { return 1; }
 
         SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
-                                                     PixelFormatGpu format, uint32 textureFlags,
-                                                     uint32 depthTextureFlags ) override;
+                                                     PixelFormatGpu           format,
+                                                     uint32                   textureFlags ) override;
 
         const PixelFormatToShaderType *getPixelFormatToShaderType() const override;
 

@@ -316,16 +316,15 @@ namespace Ogre
             See TextureFlags::TextureFlags.
             Relevant flags are:
                 NotTexture
+                RenderToTexture
                 Uav
-        @param depthTextureFlags
-            Only used if format is a colour pixel format.
-            Same as textureFlags, but for associated depth buffer if format.
+                RenderWindowSpecific
         @return
             Supported sample description for requested FSAA mode, with graceful downgrading.
         */
         virtual SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
-                                                             PixelFormatGpu format, uint32 textureFlags,
-                                                             uint32 depthTextureFlags );
+                                                             PixelFormatGpu           format,
+                                                             uint32                   textureFlags );
 
         /** Creates a new rendering window.
         @remarks

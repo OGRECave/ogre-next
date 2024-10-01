@@ -406,8 +406,8 @@ namespace Ogre
         void _descriptorSetUavDestroyed( DescriptorSetUav *set ) override;
 
         SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
-                                                     PixelFormatGpu format, uint32 textureFlags,
-                                                     uint32 depthTextureFlags ) override;
+                                                     PixelFormatGpu format,
+                                                     uint32 textureFlags ) override;
         VulkanDevice *getVulkanDevice() const { return mDevice; }
         void _notifyDeviceStalled();
 

@@ -157,10 +157,12 @@ namespace Ogre
                 mStencilBuffer = mDepthBuffer;
         }
 
-        mTexture->setSampleDescription( mRequestedSampleDescription );
+        mSampleDescription = mDevice->mRenderSystem->validateSampleDescription(
+            mRequestedSampleDescription, mTexture->getPixelFormat(),
+            TextureFlags::NotTexture | TextureFlags::RenderWindowSpecific );
+        mTexture->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
         if( mDepthBuffer )
-            mDepthBuffer->setSampleDescription( mRequestedSampleDescription );
-        mSampleDescription = mRequestedSampleDescription;
+            mDepthBuffer->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
 
         if( mDepthBuffer )
         {
