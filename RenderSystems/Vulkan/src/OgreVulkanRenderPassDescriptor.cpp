@@ -906,6 +906,7 @@ namespace Ogre
 
         VkCommandBuffer cmdBuffer = mQueue->getCurrentCmdBuffer();
 
+        OGRE_ASSERT_LOW( mSharedFboItor != mRenderSystem->_getFrameBufferDescMap().end() );
         const VulkanFrameBufferDescValue &fboDesc = mSharedFboItor->second;
 
         size_t fboIdx = 0u;
