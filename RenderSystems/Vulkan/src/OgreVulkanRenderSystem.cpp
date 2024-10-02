@@ -3902,7 +3902,7 @@ namespace Ogre
         else
         {
             // MSAA.
-            VkSampleCountFlags supportedSampleCounts = (VK_SAMPLE_COUNT_64_BIT << 1) - 1;
+            VkSampleCountFlags supportedSampleCounts = ( VK_SAMPLE_COUNT_64_BIT << 1 ) - 1;
 
             if( format == PFG_NULL )
             {
@@ -3911,12 +3911,14 @@ namespace Ogre
                 supportedSampleCounts = deviceLimits.framebufferNoAttachmentsSampleCounts;
             }
             else if( textureFlags & TextureFlags::Uav )
+            {
                 supportedSampleCounts &= deviceLimits.storageImageSampleCounts;
+            }
             else
             {
-                bool isDepth = PixelFormatGpuUtils::isDepth( format );
-                bool isStencil = PixelFormatGpuUtils::isStencil( format );
-                bool isInteger = PixelFormatGpuUtils::isInteger( format );
+                const bool isDepth = PixelFormatGpuUtils::isDepth( format );
+                const bool isStencil = PixelFormatGpuUtils::isStencil( format );
+                const bool isInteger = PixelFormatGpuUtils::isInteger( format );
 
                 if( textureFlags & ( TextureFlags::NotTexture | TextureFlags::RenderToTexture |
                                      TextureFlags::RenderWindowSpecific ) )
@@ -3928,8 +3930,12 @@ namespace Ogre
                         supportedSampleCounts &= deviceLimits.framebufferDepthSampleCounts;
                     if( isStencil || ( textureFlags & TextureFlags::RenderWindowSpecific ) )
                         supportedSampleCounts &= deviceLimits.framebufferStencilSampleCounts;
-                    if( isInteger ) // TODO: Query Vulkan 1.2 / extensions to get framebufferIntegerColorSampleCounts.
+                    if( isInteger )
+                    {
+                        // TODO: Query Vulkan 1.2 / extensions to get
+                        // framebufferIntegerColorSampleCounts.
                         supportedSampleCounts &= VK_SAMPLE_COUNT_1_BIT;
+                    }
                 }
 
                 if( 0 == ( textureFlags & TextureFlags::NotTexture ) )
