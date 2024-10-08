@@ -241,6 +241,11 @@ namespace Ogre
         if( mClosed || !mNativeWindow )
             return;
 
+        const uint32 newWidth = static_cast<uint32>( ANativeWindow_getWidth( mNativeWindow ) );
+        const uint32 newHeight = static_cast<uint32>( ANativeWindow_getHeight( mNativeWindow ) );
+        if( newWidth == getWidth() && newHeight == getHeight() && !mRebuildingSwapchain )
+            return;
+
         mDevice->stall();
 
 #ifdef OGRE_VULKAN_USE_SWAPPY
@@ -284,9 +289,6 @@ namespace Ogre
         {
             mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
         }
-
-        const uint32 newWidth = static_cast<uint32>( ANativeWindow_getWidth( mNativeWindow ) );
-        const uint32 newHeight = static_cast<uint32>( ANativeWindow_getHeight( mNativeWindow ) );
 
         setFinalResolution( newWidth, newHeight );
 

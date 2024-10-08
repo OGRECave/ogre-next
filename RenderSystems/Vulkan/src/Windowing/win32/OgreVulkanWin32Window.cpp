@@ -727,6 +727,9 @@ namespace Ogre
 
         updateWindowRect();
 
+        if( mRequestedWidth == getWidth() && mRequestedHeight == getHeight() && !mRebuildingSwapchain )
+            return;
+
         mDevice->stall();
 
         destroySwapchain();
