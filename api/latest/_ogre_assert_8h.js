@@ -3,7 +3,6 @@ var _ogre_assert_8h =
     [ "OGRE_ASSERT", "_ogre_assert_8h.html#a6c00cb9a3201c65dee15669fd41028bc", null ],
     [ "OGRE_ASSERT_FAIL", "_ogre_assert_8h.html#a88ebce881b05bcfeb60ccb573a779d3a", null ],
     [ "OGRE_ASSERT_MSG", "_ogre_assert_8h.html#a50ae004f7a84a50ad9b488ac46632b55", null ],
-    [ "OGRE_HALT", "_ogre_assert_8h.html#a021e730e2112608c954a5c7cab00be4a", null ],
     [ "OGRE_STATIC_ASSERT", "_ogre_assert_8h.html#a66098bdc7a592672d4f0404ae660dd2e", null ],
     [ "OGRE_UNUSED", "_ogre_assert_8h.html#af67a1318e558adb346212b7c1f9da002", null ],
     [ "OGRE_VERIFY", "_ogre_assert_8h.html#a57a57bc1aa093896d3d2fa00a6a87995", null ],

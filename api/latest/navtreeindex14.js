@@ -1,6 +1,5 @@
 var NAVTREEINDEX14 =
 {
-"_samples.html#terrain":[4,4,49],
 "_samples.html#texturebaking":[4,4,50],
 "_samples.html#tut_distortion":[4,4,41],
 "_samples.html#tutorial00":[4,4,32],
@@ -249,5 +248,6 @@ var NAVTREEINDEX14 =
 "class_ogre_1_1_any.html#ac1df40ae0c766635b60427035ce2a76d":[6,2,2,3,9],
 "class_ogre_1_1_any.html#ace912cd3c6c53f0ebd6c7146e460cc20":[6,2,2,3,11],
 "class_ogre_1_1_any.html#ad52fddf4aadae22e9471b6d76cf9749f":[6,2,2,3,15],
-"class_ogre_1_1_any.html#adc16537bcc7e1ef5ea0a0cae7bbc37bc":[6,2,2,3,3]
+"class_ogre_1_1_any.html#adc16537bcc7e1ef5ea0a0cae7bbc37bc":[6,2,2,3,3],
+"class_ogre_1_1_any.html#adeded586bbc395a3e2d075d63c19f0f6":[6,2,2,3,16]
 };

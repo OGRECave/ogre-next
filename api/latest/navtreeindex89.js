@@ -1,6 +1,5 @@
 var NAVTREEINDEX89 =
 {
-"class_ogre_1_1v1_1_1_vertex_data.html#a49f492a7ae93beeaad4671bd91707e13":[6,2,9,32,25],
 "class_ogre_1_1v1_1_1_vertex_data.html#a4bf9ba40d289924bfc094e5292272b4b":[6,2,9,32,21],
 "class_ogre_1_1v1_1_1_vertex_data.html#a4db82cfa2d11d2f6049a1c05c0566e9e":[6,2,9,32,17],
 "class_ogre_1_1v1_1_1_vertex_data.html#a5e0e3b5ba4894503f5f7dec69362706d":[6,2,9,32,10],
@@ -249,5 +248,6 @@ var NAVTREEINDEX89 =
 "compositor.html#CompositorPass_load_clear_colour_reverse_depth_aware":[4,2,4,0,2,0,17],
 "compositor.html#CompositorPass_load_clear_depth":[4,2,4,0,2,0,18],
 "compositor.html#CompositorPass_load_clear_stencil":[4,2,4,0,2,0,19],
-"compositor.html#CompositorPass_load_colour":[4,2,4,0,2,0,13]
+"compositor.html#CompositorPass_load_colour":[4,2,4,0,2,0,13],
+"compositor.html#CompositorPass_load_depth":[4,2,4,0,2,0,14]
 };

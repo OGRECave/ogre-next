@@ -97,7 +97,6 @@ $(document).ready(function(){initNavTree('_ogre_assert_8h.html',''); initResizab
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="_ogre_prerequisites_8h.html">OgrePrerequisites.h</a>&quot;</code><br />
-<code>#include &quot;debugbreak/debugbreak.h&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
@@ -115,8 +114,6 @@ Macros</h2></td></tr>
 <tr class="separator:a88ebce881b05bcfeb60ccb573a779d3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50ae004f7a84a50ad9b488ac46632b55"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_assert_8h.html#a50ae004f7a84a50ad9b488ac46632b55">OGRE_ASSERT_MSG</a>(cond,  msg, ...)</td></tr>
 <tr class="separator:a50ae004f7a84a50ad9b488ac46632b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a021e730e2112608c954a5c7cab00be4a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_assert_8h.html#a021e730e2112608c954a5c7cab00be4a">OGRE_HALT</a>()&#160;&#160;&#160;debug_break()</td></tr>
-<tr class="separator:a021e730e2112608c954a5c7cab00be4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66098bdc7a592672d4f0404ae660dd2e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_assert_8h.html#a66098bdc7a592672d4f0404ae660dd2e">OGRE_STATIC_ASSERT</a>(x)&#160;&#160;&#160;static_assert( x, #    x )</td></tr>
 <tr class="separator:a66098bdc7a592672d4f0404ae660dd2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af67a1318e558adb346212b7c1f9da002"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_assert_8h.html#af67a1318e558adb346212b7c1f9da002">OGRE_UNUSED</a>(x)</td></tr>
@@ -172,7 +169,7 @@ Functions</h2></td></tr>
 <div class="line">            } \</div>
 <div class="line">        } <span class="keywordflow">while</span>( 0 )</div>
 <div class="ttc" id="anamespace_ogre_1_1_assert_html_a99558f55885f66769bf2a0906b97d7b6"><div class="ttname"><a href="namespace_ogre_1_1_assert.html#a99558f55885f66769bf2a0906b97d7b6">Ogre::Assert::ReportFailure</a></div><div class="ttdeci">_OgreExport FailBehavior ReportFailure(const char *condition, const char *file, int line, const char *msg,...)</div></div>
-<div class="ttc" id="anamespace_ogre_1_1_assert_html_ae7407cfb5a2a4b74bec50d13c1a41eccad17452815fd57a330cf2cdc8d71e7ce1"><div class="ttname"><a href="namespace_ogre_1_1_assert.html#ae7407cfb5a2a4b74bec50d13c1a41eccad17452815fd57a330cf2cdc8d71e7ce1">Ogre::Assert::Halt</a></div><div class="ttdeci">@ Halt</div><div class="ttdef"><b>Definition:</b> OgreAssert.h:45</div></div>
+<div class="ttc" id="anamespace_ogre_1_1_assert_html_ae7407cfb5a2a4b74bec50d13c1a41eccad17452815fd57a330cf2cdc8d71e7ce1"><div class="ttname"><a href="namespace_ogre_1_1_assert.html#ae7407cfb5a2a4b74bec50d13c1a41eccad17452815fd57a330cf2cdc8d71e7ce1">Ogre::Assert::Halt</a></div><div class="ttdeci">@ Halt</div><div class="ttdef"><b>Definition:</b> OgreAssert.h:44</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -251,23 +248,6 @@ Functions</h2></td></tr>
 <div class="line">                } \</div>
 <div class="line">            } <span class="keywordflow">while</span>( 0 )</div>
 </div><!-- fragment -->
-</div>
-</div>
-<a id="a021e730e2112608c954a5c7cab00be4a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a021e730e2112608c954a5c7cab00be4a">&#9670;&nbsp;</a></span>OGRE_HALT</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define OGRE_HALT</td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td>&#160;&#160;&#160;debug_break()</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
 </div>
 </div>
 <a id="a66098bdc7a592672d4f0404ae660dd2e"></a>

@@ -1,6 +1,5 @@
 var NAVTREEINDEX8 =
 {
-"_ogre_pass_8h.html":[9,0,654],
 "_ogre_patch_mesh_8h.html":[9,0,655],
 "_ogre_patch_surface_8h.html":[9,0,656],
 "_ogre_pcc_per_pixel_grid_placement_8h.html":[9,0,657],
@@ -249,5 +248,6 @@ var NAVTREEINDEX8 =
 "_ogre_point_emitter2_8h.html":[9,0,670],
 "_ogre_point_emitter_8h.html":[9,0,669],
 "_ogre_point_emitter_factory_8h.html":[9,0,671],
-"_ogre_polygon_8h.html":[9,0,672]
+"_ogre_polygon_8h.html":[9,0,672],
+"_ogre_pose_8h.html":[9,0,673]
 };

@@ -1,6 +1,5 @@
 var NAVTREEINDEX67 =
 {
-"class_ogre_1_1_script_compiler_listener.html#a24910b11f8daa374e432336620ac9385":[6,2,2,102,3],
 "class_ogre_1_1_script_compiler_listener.html#a2822f17d9ebae54955ceb220eb0421e0":[6,2,2,102,1],
 "class_ogre_1_1_script_compiler_listener.html#a5ef77364e46586313bbe52bd80286fd7":[6,2,2,102,0],
 "class_ogre_1_1_script_compiler_listener.html#acacf340d804e9ed92d27ae2c45d675ea":[6,2,2,102,6],
@@ -82,8 +81,8 @@ var NAVTREEINDEX67 =
 "class_ogre_1_1_shadow_camera_setup.html#ab6e8a9669102634c5a9a1273133f8240":[6,0,1,53,4],
 "class_ogre_1_1_shadow_camera_setup.html#acdd9ee220860b6c914feb28de74e3304":[6,0,1,53,0],
 "class_ogre_1_1_shadow_camera_setup.html#acdd9ee220860b6c914feb28de74e3304":[6,2,11,53,0],
-"class_ogre_1_1_shadow_camera_setup.html#ada64716374ef5839054ebb8b9d5ecd19":[6,0,1,53,3],
 "class_ogre_1_1_shadow_camera_setup.html#ada64716374ef5839054ebb8b9d5ecd19":[6,2,11,53,3],
+"class_ogre_1_1_shadow_camera_setup.html#ada64716374ef5839054ebb8b9d5ecd19":[6,0,1,53,3],
 "class_ogre_1_1_shadow_node_helper.html":[6,2,1,51],
 "class_ogre_1_1_shadow_node_helper.html#a365e9a945dc2cdb574d0e1424e82113a":[6,2,1,51,2],
 "class_ogre_1_1_shadow_node_helper.html#a4625121cc23dc52f31c9dc2821a08faa":[6,2,1,51,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX67 =
 "class_ogre_1_1_skeleton_instance.html#a40bc8568f64b07ce7e54267319536234":[6,2,0,6,2],
 "class_ogre_1_1_skeleton_instance.html#a5a39c103787641b7bf04e31ba624cb68":[6,2,0,6,22],
 "class_ogre_1_1_skeleton_instance.html#a653a189ea7b2506d1788a6a1f5cf47e2":[6,2,0,6,10],
-"class_ogre_1_1_skeleton_instance.html#a688c8d85bb2bd4f747fd780872089250":[6,2,0,6,30]
+"class_ogre_1_1_skeleton_instance.html#a688c8d85bb2bd4f747fd780872089250":[6,2,0,6,30],
+"class_ogre_1_1_skeleton_instance.html#a696805c293d38f474a2fa0b39c9f1af1":[6,2,0,6,0]
 };

@@ -1,6 +1,5 @@
 var NAVTREEINDEX63 =
 {
-"class_ogre_1_1_rotational_spline.html#a03c02db56a492ce3ea1e225fa4c2cb81":[6,2,6,27,4],
 "class_ogre_1_1_rotational_spline.html#a40537aff8d0e9a31f2041bab0a6207e1":[6,2,6,27,5],
 "class_ogre_1_1_rotational_spline.html#a4fd498ecda341877bed16614f99513f3":[6,2,6,27,6],
 "class_ogre_1_1_rotational_spline.html#a50e4fac029abebe1f318a80da015f544":[6,2,6,27,7],
@@ -249,5 +248,6 @@ var NAVTREEINDEX63 =
 "class_ogre_1_1_scene_manager.html#a22a3f58bff113aaac870c18741f7cd76":[6,2,11,45,128],
 "class_ogre_1_1_scene_manager.html#a237a09e65919b808473c543fb886723f":[6,2,11,45,262],
 "class_ogre_1_1_scene_manager.html#a237a09e65919b808473c543fb886723f":[6,0,1,45,262],
-"class_ogre_1_1_scene_manager.html#a2392e8d6a6849a4fa1839a085733a695":[6,0,1,45,46]
+"class_ogre_1_1_scene_manager.html#a2392e8d6a6849a4fa1839a085733a695":[6,0,1,45,46],
+"class_ogre_1_1_scene_manager.html#a2392e8d6a6849a4fa1839a085733a695":[6,2,11,45,46]
 };
