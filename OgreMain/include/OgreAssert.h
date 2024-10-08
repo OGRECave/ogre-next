@@ -34,7 +34,6 @@
 #define _OgreAssert_H_
 
 #include "OgrePrerequisites.h"
-#include "debugbreak/debugbreak.h"
 
 namespace Ogre
 {
@@ -57,7 +56,46 @@ namespace Ogre
     }  // namespace Assert
 }  // namespace Ogre
 
-#define OGRE_HALT() debug_break()
+// We want to halt using macro + builtin rather than inline function, to generate debug information
+// with assertion line number rather than halting machinery line number. Inspired by
+// https://github.com/nemequ/portable-snippets/blob/master/debug-trap/debug-trap.h
+// https://github.com/scottt/debugbreak/blob/master/debugbreak.h
+#if defined( __has_builtin )
+#    if __has_builtin( __builtin_debugtrap )
+#        define OGRE_HALT() __builtin_debugtrap()
+#    elif __has_builtin( __debugbreak )
+#        define OGRE_HALT() __debugbreak()
+#    endif
+#endif
+#if !defined( OGRE_HALT )
+#    if defined( _MSC_VER ) || defined( __INTEL_COMPILER )
+#        define OGRE_HALT() __debugbreak()
+#    elif defined( __DMC__ ) && defined( _M_IX86 )
+#        define OGRE_HALT() __asm int 3h
+#    elif defined( __i386__ ) || defined( __x86_64__ )
+#        define OGRE_HALT() __asm__ __volatile__( "int3" )
+#    elif defined( __thumb__ )
+#        define OGRE_HALT() __asm__ __volatile__( ".inst 0xde01" )
+#    elif defined( __aarch64__ )
+#        define OGRE_HALT() __asm__ __volatile__( ".inst 0xd4200000" )
+#    elif defined( __arm__ )
+#        define OGRE_HALT() __asm__ __volatile__( ".inst 0xe7f001f0" )
+#    elif defined( __alpha__ ) && !defined( __osf__ )
+#        define OGRE_HALT() __asm__ __volatile__( "bpt" )
+#    elif defined( __powerpc__ )
+#        define OGRE_HALT() __asm__ __volatile__( ".4byte 0x7d821008" )
+#    elif defined( __riscv )
+#        define OGRE_HALT() __asm__ __volatile__( ".4byte 0x00100073" )
+#    else
+#        include <signal.h>
+#        if defined( SIGTRAP )
+#            define OGRE_HALT() raise( SIGTRAP )
+#        else
+#            define OGRE_HALT() raise( SIGABRT )
+#        endif
+#    endif
+#endif
+
 #define OGRE_UNUSED( x ) \
     do \
     { \
