@@ -516,11 +516,18 @@ namespace Ogre
                 result = vkCreatePipelineCache( mActiveDevice->mDevice, &pipelineCacheCreateInfo,
                                                 nullptr, &pipelineCache );
                 if( VK_SUCCESS == result && pipelineCache != 0 )
+                {
                     std::swap( mActiveDevice->mPipelineCache, pipelineCache );
+                    LogManager::getSingleton().logMessage( "[Vulkan] Pipeline cache loaded, " +
+                                                           StringConverter::toString( buf.size() ) +
+                                                           " bytes." );
+                }
                 else
+                {
                     LogManager::getSingleton().logMessage(
                         "[Vulkan] Pipeline cache loading failed. VkResult = " +
                         vkResultToString( result ) );
+                }
                 if( pipelineCache != 0 )
                     vkDestroyPipelineCache( mActiveDevice->mDevice, pipelineCache, nullptr );
             }
@@ -567,7 +574,9 @@ namespace Ogre
                     hdr.dataHash = hashResult[0];
 
                     stream->write( buf.data(), buf.size() );
-                    LogManager::getSingleton().logMessage( "[Vulkan] Pipeline cache saved." );
+                    LogManager::getSingleton().logMessage( "[Vulkan] Pipeline cache saved, " +
+                                                           StringConverter::toString( buf.size() ) +
+                                                           " bytes." );
                 }
             }
             if( result != VK_SUCCESS )
