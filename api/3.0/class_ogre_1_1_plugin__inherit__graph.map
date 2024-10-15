@@ -1,0 +1,11 @@
+<map id="Ogre::Plugin" name="Ogre::Plugin">
+<area shape="rect" id="node1" title="Class defining a generic OGRE plugin." alt="" coords="189,157,291,184"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_plugin.html" title="Plugin instance for D3D11 Manager." alt="" coords="349,5,495,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_plugin.html" title="Plugin instance for GL3Plus Manager." alt="" coords="345,56,499,83"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_e_s2_plugin.html" title="Plugin instance for GL ES 2 Manager." alt="" coords="351,107,493,133"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_metal_plugin.html" title="Plugin instance for Metal Manager." alt="" coords="353,157,491,184"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_plugin.html" title="Plugin instance for NULL Manager." alt="" coords="355,208,489,235"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_particle_f_x_plugin.html" title="Plugin instance for ParticleFX Manager." alt="" coords="339,259,505,285"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_vulkan_plugin.html" title="Plugin instance for Vulkan Manager." alt="" coords="350,309,494,336"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,157,141,184"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="Ogre::WorkQueue::RequestHandler" name="Ogre::WorkQueue::RequestHandler">
+<area shape="rect" id="node1" title="Interface definition for a handler of requests." alt="" coords="5,78,203,119"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_lod_work_queue_worker.html" title="Processes requests." alt="" coords="254,5,458,32"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_page.html" title="Page class." alt="" coords="310,56,402,83"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_resource_background_queue.html" title="This class is used to perform Resource operations in a background thread." alt="" coords="257,107,455,149"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_volume_1_1_chunk_handler.html" title="Handles the WorkQueue management of the chunks." alt="" coords="251,173,461,200"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="Ogre::v1::GL3PlusDefaultHardwareVertexBuffer" name="Ogre::v1::GL3PlusDefaultHardwareVertexBuffer">
+<area shape="rect" id="node1" title="Specialisation of HardwareVertexBuffer for emulation." alt="" coords="8,244,193,285"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_hardware_vertex_buffer.html" title="Specialisation of HardwareBuffer for a vertex buffer." alt="" coords="5,155,196,196"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_hardware_buffer.html" title="Abstract class defining common features of hardware buffers." alt="" coords="7,80,194,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="33,5,169,32"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="Ogre::CompositorWorkspaceTranslator" name="Ogre::CompositorWorkspaceTranslator">
+<area shape="rect" id="node1" title=" " alt="" coords="10,244,217,285"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_compositor_texture_base_translator.html" title=" " alt="" coords="5,155,221,196"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="32,80,195,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="45,5,181,32"/>
+</map>

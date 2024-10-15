@@ -1,0 +1,5 @@
+<map id="Ogre::CompositorWorkspace" name="Ogre::CompositorWorkspace">
+<area shape="rect" id="node1" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re..." alt="" coords="45,80,251,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,141,32"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="165,5,280,32"/>
+</map>

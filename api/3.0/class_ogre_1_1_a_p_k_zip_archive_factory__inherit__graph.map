@@ -1,0 +1,8 @@
+<map id="Ogre::APKZipArchiveFactory" name="Ogre::APKZipArchiveFactory">
+<area shape="rect" id="node1" title=" " alt="" coords="107,319,311,345"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_embedded_zip_archive_factory.html" title="Specialisation of ZipArchiveFactory for embedded Zip files." alt="" coords="109,229,309,271"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_zip_archive_factory.html" title="Specialisation of ArchiveFactory for Zip files." alt="" coords="119,155,298,181"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_archive_factory.html" title="Abstract factory class, archive codec plugins can register concrete subclasses of this." alt="" coords="130,80,287,107"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_factory_obj.html" title=" " alt="" coords="5,5,215,32"/>
+<area shape="rect" id="node6" title=" " alt="" coords="239,5,375,32"/>
+</map>

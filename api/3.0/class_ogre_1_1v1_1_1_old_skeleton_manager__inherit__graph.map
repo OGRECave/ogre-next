@@ -1,0 +1,7 @@
+<map id="Ogre::v1::OldSkeletonManager" name="Ogre::v1::OldSkeletonManager">
+<area shape="rect" id="node1" title="Handles the management of skeleton resources." alt="" coords="159,169,379,196"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler." alt="" coords="69,87,247,114"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,5,148,32"/>
+<area shape="rect" id="node4" title=" " alt="" coords="173,5,309,32"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="272,80,487,121"/>
+</map>

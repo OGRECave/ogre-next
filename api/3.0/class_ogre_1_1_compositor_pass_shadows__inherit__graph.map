@@ -1,0 +1,5 @@
+<map id="Ogre::CompositorPassShadows" name="Ogre::CompositorPassShadows">
+<area shape="rect" id="node1" title="CompositorPassShadows This class enables force&#45;updating multiple shadow nodes in batch in its own pas..." alt="" coords="5,155,228,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes." alt="" coords="34,80,199,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="49,5,185,32"/>
+</map>

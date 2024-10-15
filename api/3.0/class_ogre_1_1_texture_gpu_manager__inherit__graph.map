@@ -1,0 +1,10 @@
+<map id="Ogre::TextureGpuManager" name="Ogre::TextureGpuManager">
+<area shape="rect" id="node1" title="This class manages all textures (i.e." alt="" coords="240,107,432,133"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d11_texture_gpu_manager.html" title=" " alt="" coords="484,5,720,32"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_g_l3_plus_texture_gpu_manager.html" title=" " alt="" coords="480,56,724,83"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_metal_texture_gpu_manager.html" title=" " alt="" coords="487,107,717,133"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_texture_gpu_manager.html" title=" " alt="" coords="489,157,715,184"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_texture_gpu_manager.html" title=" " alt="" coords="485,208,719,235"/>
+<area shape="rect" id="node2" title=" " alt="" coords="31,81,167,108"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="5,132,192,159"/>
+</map>

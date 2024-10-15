@@ -1,0 +1,9 @@
+<map id="Ogre::v1::WireBoundingBox" name="Ogre::v1::WireBoundingBox">
+<area shape="rect" id="node1" title="Allows the rendering of a wireframe bounding box." alt="" coords="247,229,449,256"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_simple_renderable.html" title="Simple implementation of MovableObject and Renderable for single&#45;part custom objects." alt="" coords="246,155,450,181"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="183,80,342,107"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,171,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="195,5,331,32"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="355,5,469,32"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="366,80,501,107"/>
+</map>

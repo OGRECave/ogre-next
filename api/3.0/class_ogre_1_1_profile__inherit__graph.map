@@ -1,0 +1,4 @@
+<map id="Ogre::Profile" name="Ogre::Profile">
+<area shape="rect" id="node1" title="An individual profile that will be processed by the Profiler." alt="" coords="22,80,125,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,141,32"/>
+</map>

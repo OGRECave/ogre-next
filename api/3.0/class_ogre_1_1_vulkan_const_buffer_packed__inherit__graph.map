@@ -1,0 +1,7 @@
+<map id="Ogre::VulkanConstBufferPacked" name="Ogre::VulkanConstBufferPacked">
+<area shape="rect" id="node1" title=" " alt="" coords="85,229,311,256"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_const_buffer_packed.html" title="Represents constant buffers (also known as Uniform Buffers in GL)" alt="" coords="107,155,289,181"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_buffer_packed.html" title=" " alt="" coords="125,80,271,107"/>
+<area shape="rect" id="node4" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,5,201,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="226,5,362,32"/>
+</map>

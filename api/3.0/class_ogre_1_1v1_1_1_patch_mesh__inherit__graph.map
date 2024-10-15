@@ -1,0 +1,8 @@
+<map id="Ogre::v1::PatchMesh" name="Ogre::v1::PatchMesh">
+<area shape="rect" id="node1" title="Patch specialisation of Mesh." alt="" coords="188,229,343,256"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_mesh.html" title="Resource holding data about 3D mesh." alt="" coords="205,155,325,181"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g." alt="" coords="109,80,230,107"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,5,163,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="187,5,323,32"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1v1_1_1_animation_container.html" title="An animation container interface, which allows generic access to sibling animations." alt="" coords="254,80,469,107"/>
+</map>

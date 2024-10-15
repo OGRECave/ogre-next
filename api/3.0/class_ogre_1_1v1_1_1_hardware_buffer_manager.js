@@ -1,0 +1,25 @@
+var class_ogre_1_1v1_1_1_hardware_buffer_manager =
+[
+    [ "HardwareBufferManager", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a3d052ba43c323137194e3df2144e6d9a", null ],
+    [ "~HardwareBufferManager", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a5ae639e9725379af8eb4fe8bce5cffd0", null ],
+    [ "_forceReleaseBufferCopies", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a704f13dfbb251f877235107f05bd7658", null ],
+    [ "_forceReleaseBufferCopies", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#aceaae052b526bb9949439e6e8b0c7807", null ],
+    [ "_freeUnusedBufferCopies", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a75e51104afd032ec36b7174540ccc7bb", null ],
+    [ "_notifyIndexBufferDestroyed", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#affc9ded1625ecbd07556ba24a15b6429", null ],
+    [ "_notifyVertexBufferDestroyed", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#ab3fc128d148ce3954e184a505199e0d2", null ],
+    [ "_releaseBufferCopies", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a5985f14c02e9045bbb6cc88c99c86d5f", null ],
+    [ "allocateVertexBufferCopy", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a4290b1d29059b40215b0833ce7a54d53", null ],
+    [ "createIndexBuffer", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a4227ab96dd7e88be580a4c73a89e8bae", null ],
+    [ "createVertexBuffer", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a4b8fb4c4d0794a796c846fa41389f117", null ],
+    [ "createVertexBufferBinding", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a6b24559242d55d724b58310db24d68eb", null ],
+    [ "createVertexDeclaration", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a69f191c7c974672474c846fccfb95508", null ],
+    [ "destroyVertexBufferBinding", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a36c38ab3d9eb1fbc6c4e8e14618e7582", null ],
+    [ "destroyVertexDeclaration", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a42dbc0c949a4c097717e48590c02aa2c", null ],
+    [ "getSingleton", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a24fd77dd27bec8df69d57a32827e0943", null ],
+    [ "getSingletonPtr", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a25f30589709c3ce24990965aa4efcfa0", null ],
+    [ "registerVertexBufferSourceAndCopy", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#af9ee8d3dbb9824f9d496192e36bd9d38", null ],
+    [ "releaseVertexBufferCopy", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a7835f603973c41a9602a5dac80edfa08", null ],
+    [ "touchVertexBufferCopy", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a587815d85f94e9a7bc50e1c0834a7f10", null ],
+    [ "HardwareIndexBufferSharedPtr", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#ac301d86fde854d92c82283660c10ca58", null ],
+    [ "HardwareVertexBufferSharedPtr", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#abdb4b01e9cf06263b1bae7fbb0bb2e9e", null ]
+];

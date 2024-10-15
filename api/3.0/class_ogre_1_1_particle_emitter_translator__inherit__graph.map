@@ -1,0 +1,5 @@
+<map id="Ogre::ParticleEmitterTranslator" name="Ogre::ParticleEmitterTranslator">
+<area shape="rect" id="node1" title=" " alt="" coords="5,155,227,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="35,80,197,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="48,5,184,32"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="Ogre::MetalReadOnlyBufferPacked" name="Ogre::MetalReadOnlyBufferPacked">
+<area shape="rect" id="node1" title=" " alt="" coords="9,304,209,345"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_metal_tex_buffer_packed.html" title="In Metal, Tex and ReadOnly buffers are exactly the same, thus we derive from ReadOnlyBufferPacked to ..." alt="" coords="7,229,211,256"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_read_only_buffer_packed.html" title="Represents the best way to access read&#45;only data." alt="" coords="5,155,213,181"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_tex_buffer_packed.html" title="Represents Texture buffers (also known as tbuffers in D3D11)" alt="" coords="26,80,193,107"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_buffer_packed.html" title=" " alt="" coords="37,5,182,32"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="Ogre::GL3PlusRenderPassDescriptor" name="Ogre::GL3PlusRenderPassDescriptor">
+<area shape="rect" id="node1" title="GL3+ will share FBO handles between all GL3PlusRenderPassDescriptor that share the same FBO setup." alt="" coords="5,155,260,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_render_pass_descriptor.html" title=" " alt="" coords="31,80,234,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="65,5,201,32"/>
+</map>

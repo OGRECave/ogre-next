@@ -1,0 +1,6 @@
+<map id="Ogre::ETCCodec" name="Ogre::ETCCodec">
+<area shape="rect" id="node1" title="Codec specialized in loading ETC (Ericsson Texture Compression) images." alt="" coords="18,229,143,256"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_image_codec2.html" title="Codec specialized in images." alt="" coords="5,155,156,181"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_codec.html" title="Abstract class that defines a &#39;codec&#39;." alt="" coords="30,80,131,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="13,5,149,32"/>
+</map>

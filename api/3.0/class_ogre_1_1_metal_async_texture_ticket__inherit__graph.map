@@ -1,0 +1,6 @@
+<map id="Ogre::MetalAsyncTextureTicket" name="Ogre::MetalAsyncTextureTicket">
+<area shape="rect" id="node1" title="See AsyncTextureTicket." alt="" coords="53,155,277,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_async_texture_ticket.html" title="In Ogre 2.2 reading data from GPU back to CPU is asynchronous." alt="" coords="72,80,259,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,141,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="165,5,352,32"/>
+</map>

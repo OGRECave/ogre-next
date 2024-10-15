@@ -1,0 +1,24 @@
+<map id="Ogre::Renderable" name="Ogre::Renderable">
+<area shape="rect" id="node1" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="5,325,140,352"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_frustum.html" title="A frustum represents a pyramid, capped at the near and far end which is used to represent either a vi..." alt="" coords="233,5,347,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_manual_object_1_1_manual_object_section.html" title="Built, renderable section of geometry." alt="" coords="206,57,374,98"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_rectangle2_d.html" title=" " alt="" coords="218,123,362,149"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_renderable_animated.html" title=" " alt="" coords="191,173,389,200"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_wire_aabb.html" title="Helper class to display the Aabb of a MovableObject as lines." alt="" coords="228,224,352,251"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1v1_1_1_billboard_chain.html" title="Allows the rendering of a chain of connected billboards." alt="" coords="200,275,380,301"/>
+<area shape="rect" id="node11" href="$class_ogre_1_1v1_1_1_billboard_set.html" title="A collection of billboards (faces which are always facing the given direction) with the same (default..." alt="" coords="208,325,372,352"/>
+<area shape="rect" id="node12" href="$class_ogre_1_1v1_1_1_border_renderable.html" title="Class for rendering the border of a BorderPanelOverlayElement." alt="" coords="189,376,391,403"/>
+<area shape="rect" id="node13" href="$class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html" title="Built, renderable section of geometry." alt="" coords="203,427,377,469"/>
+<area shape="rect" id="node14" href="$class_ogre_1_1v1_1_1_overlay_element.html" title="Abstract definition of a 2D element to be displayed in an Overlay." alt="" coords="195,493,385,520"/>
+<area shape="rect" id="node19" href="$class_ogre_1_1v1_1_1_rectangle2_d.html" title="Allows the rendering of a simple 2D rectangle This class renders a simple 2D rectangle; this rectangl..." alt="" coords="206,544,374,571"/>
+<area shape="rect" id="node20" href="$class_ogre_1_1v1_1_1_simple_renderable.html" title="Simple implementation of MovableObject and Renderable for single&#45;part custom objects." alt="" coords="188,595,392,621"/>
+<area shape="rect" id="node22" href="$class_ogre_1_1v1_1_1_sub_entity.html" title="Utility class which defines the sub&#45;parts of an Entity." alt="" coords="217,645,363,672"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_camera.html" title="A viewpoint from which the scene will be rendered." alt="" coords="485,5,597,32"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_sub_item.html" title="Utility class which defines the sub&#45;parts of an Item." alt="" coords="483,173,598,200"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1v1_1_1_ribbon_trail.html" title="Subclass of BillboardChain which automatically leaves a trail behind one or more Node instances." alt="" coords="462,275,619,301"/>
+<area shape="rect" id="node15" href="$class_ogre_1_1v1_1_1_overlay_container.html" title="A 2D element which contains other OverlayElement instances." alt="" coords="441,456,640,483"/>
+<area shape="rect" id="node18" href="$class_ogre_1_1v1_1_1_text_area_overlay_element.html" title="This class implements an overlay element which contains simple unformatted text." alt="" coords="444,507,637,549"/>
+<area shape="rect" id="node16" href="$class_ogre_1_1v1_1_1_panel_overlay_element.html" title="OverlayElement representing a flat, single&#45;material (or transparent) panel which can contain other el..." alt="" coords="689,456,915,483"/>
+<area shape="rect" id="node17" href="$class_ogre_1_1v1_1_1_border_panel_overlay_element.html" title="A specialisation of the PanelOverlayElement to provide a panel with a border." alt="" coords="963,449,1177,490"/>
+<area shape="rect" id="node21" href="$class_ogre_1_1v1_1_1_wire_bounding_box.html" title="Allows the rendering of a wireframe bounding box." alt="" coords="440,595,641,621"/>
+</map>

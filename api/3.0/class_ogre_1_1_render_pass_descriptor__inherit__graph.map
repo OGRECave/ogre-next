@@ -1,0 +1,8 @@
+<map id="Ogre::RenderPassDescriptor" name="Ogre::RenderPassDescriptor">
+<area shape="rect" id="node1" title=" " alt="" coords="189,81,392,108"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_render_pass_descriptor.html" title="D3D11 will share groups of ID3D11RenderTargetView all D3D11RenderPassDescriptor that share the same R..." alt="" coords="444,5,691,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_render_pass_descriptor.html" title="GL3+ will share FBO handles between all GL3PlusRenderPassDescriptor that share the same FBO setup." alt="" coords="440,56,695,83"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_metal_render_pass_descriptor.html" title=" " alt="" coords="447,107,687,133"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_vulkan_render_pass_descriptor.html" title=" " alt="" coords="444,157,691,184"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,81,141,108"/>
+</map>

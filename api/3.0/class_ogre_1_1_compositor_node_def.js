@@ -1,0 +1,27 @@
+var class_ogre_1_1_compositor_node_def =
+[
+    [ "CompositorNodeDef", "class_ogre_1_1_compositor_node_def.html#ac7e71f2163946d249c1d024fb78107ab", null ],
+    [ "~CompositorNodeDef", "class_ogre_1_1_compositor_node_def.html#a7e284a9c15c86d341a43738a09626a41", null ],
+    [ "addTargetPass", "class_ogre_1_1_compositor_node_def.html#ad003f09aa38ab2a05b9e37a877588331", null ],
+    [ "calculateNumPasses", "class_ogre_1_1_compositor_node_def.html#a8c2dc88882309b7a2d6a2d0feaa129e6", null ],
+    [ "getCompositorManager", "class_ogre_1_1_compositor_node_def.html#ac12fd954e9882e51d839abf56bf61844", null ],
+    [ "getName", "class_ogre_1_1_compositor_node_def.html#a832a169cc9a320607c44565938a573f7", null ],
+    [ "getNameStr", "class_ogre_1_1_compositor_node_def.html#a4dfe601546980f3797570b23e8139efe", null ],
+    [ "getNumOutputChannels", "class_ogre_1_1_compositor_node_def.html#a79f1a9f3d875e57e084c8403b81381cd", null ],
+    [ "getNumTargetPasses", "class_ogre_1_1_compositor_node_def.html#aac651e2bd2e69115ef0bff0ad634e1f7", null ],
+    [ "getPassNumber", "class_ogre_1_1_compositor_node_def.html#a6fa98a167d723f5296d48926980aa4f6", null ],
+    [ "getStartEnabled", "class_ogre_1_1_compositor_node_def.html#a91d33b30162b786937a56395fd63522c", null ],
+    [ "getTargetPass", "class_ogre_1_1_compositor_node_def.html#a25399907b63825d292a0d6ac6eb47030", null ],
+    [ "getTextureSource", "class_ogre_1_1_compositor_node_def.html#a0b832d936fde223d0e19076097e95054", null ],
+    [ "getTextureSource", "class_ogre_1_1_compositor_node_def.html#afb36d1872d6b36cd67575740cc115087", null ],
+    [ "mapOutputBufferChannel", "class_ogre_1_1_compositor_node_def.html#afc0e6772dfb0b5907acf048d128597fd", null ],
+    [ "mapOutputChannel", "class_ogre_1_1_compositor_node_def.html#a6c9e43cc146b6a057a18a864340c10d1", null ],
+    [ "postInitializePassDef", "class_ogre_1_1_compositor_node_def.html#a0625c81b8567ba8711a1aafd7335c933", null ],
+    [ "removeTexture", "class_ogre_1_1_compositor_node_def.html#a1df44271ff48b2f986f30e8fb9233b15", null ],
+    [ "setNumOutputBufferChannels", "class_ogre_1_1_compositor_node_def.html#abd1ef8adbde74c44ce7147aae63d35fe", null ],
+    [ "setNumOutputChannels", "class_ogre_1_1_compositor_node_def.html#a5fcf367ed1c8e9781549d3bcf79c6d8d", null ],
+    [ "setNumTargetPass", "class_ogre_1_1_compositor_node_def.html#ab84105d5b109ca471e5e582902740676", null ],
+    [ "setStartEnabled", "class_ogre_1_1_compositor_node_def.html#abdaf6d8ca26ad0396e2a6efbe8d75a29", null ],
+    [ "CompositorNode", "class_ogre_1_1_compositor_node_def.html#aa9dbbda8ea72eba1cf3c77f13e23fcdf", null ],
+    [ "mCustomIdentifier", "class_ogre_1_1_compositor_node_def.html#a36e47a50b2435b56a804cef26f8e86fe", null ]
+];

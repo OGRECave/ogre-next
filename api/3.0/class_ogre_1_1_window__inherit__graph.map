@@ -1,0 +1,23 @@
+<map id="Ogre::Window" name="Ogre::Window">
+<area shape="rect" id="node1" title=" " alt="" coords="189,223,303,250"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_cocoa_window.html" title=" " alt="" coords="364,21,517,47"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d11_window.html" title=" " alt="" coords="362,71,519,98"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_e_g_l_window.html" title=" " alt="" coords="372,122,509,149"/>
+<area shape="rect" id="node11" href="$class_ogre_1_1_egl_p_buffer_window.html" title="PBuffer implementation of EGL When supported, PBuffer is a surface&#45;less implementation of OpenGL." alt="" coords="351,173,531,199"/>
+<area shape="rect" id="node12" href="$class_ogre_1_1_g_l_x_window.html" title=" " alt="" coords="371,223,510,250"/>
+<area shape="rect" id="node13" href="$class_ogre_1_1_metal_window.html" title=" " alt="" coords="365,274,516,301"/>
+<area shape="rect" id="node14" href="$class_ogre_1_1_n_u_l_l_window.html" title=" " alt="" coords="367,325,514,351"/>
+<area shape="rect" id="node15" href="$class_ogre_1_1_vulkan_window.html" title=" " alt="" coords="363,375,519,402"/>
+<area shape="rect" id="node21" href="$class_ogre_1_1_win32_window.html" title=" " alt="" coords="363,426,518,453"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,223,141,250"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_window_swap_chain_based.html" title=" " alt="" coords="579,5,808,47"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_android_e_g_l_window.html" title=" " alt="" coords="600,71,787,98"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_emscripten_e_g_l_window.html" title=" " alt="" coords="588,122,799,149"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_win32_e_g_l_window.html" title=" " alt="" coords="604,173,783,199"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_x11_e_g_l_window.html" title=" " alt="" coords="612,223,775,250"/>
+<area shape="rect" id="node16" href="$class_ogre_1_1_vulkan_window_null.html" title=" " alt="" coords="602,346,785,373"/>
+<area shape="rect" id="node17" href="$class_ogre_1_1_vulkan_window_swap_chain_based.html" title=" " alt="" coords="579,397,807,439"/>
+<area shape="rect" id="node18" href="$class_ogre_1_1_vulkan_android_window.html" title=" " alt="" coords="856,354,1063,381"/>
+<area shape="rect" id="node19" href="$class_ogre_1_1_vulkan_win32_window.html" title=" " alt="" coords="861,405,1058,431"/>
+<area shape="rect" id="node20" href="$class_ogre_1_1_vulkan_xcb_window.html" title=" " alt="" coords="869,455,1049,482"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="Ogre::CompositorNode" name="Ogre::CompositorNode">
+<area shape="rect" id="node1" title="Compositor nodes are the core subject of compositing." alt="" coords="63,80,233,107"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_compositor_shadow_node.html" title="Shadow Nodes are special nodes (not to be confused with CompositorNode) that are only used for render..." alt="" coords="37,155,259,181"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,141,32"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="165,5,280,32"/>
+</map>

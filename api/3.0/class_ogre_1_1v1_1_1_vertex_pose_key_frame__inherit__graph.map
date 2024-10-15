@@ -1,0 +1,5 @@
+<map id="Ogre::v1::VertexPoseKeyFrame" name="Ogre::v1::VertexPoseKeyFrame">
+<area shape="rect" id="node1" title="Specialised KeyFrame which references a Mesh::Pose at a certain influence level, which stores offsets..." alt="" coords="5,155,228,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_key_frame.html" title="A key frame in an animation sequence defined by an AnimationTrack." alt="" coords="41,80,192,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="49,5,185,32"/>
+</map>

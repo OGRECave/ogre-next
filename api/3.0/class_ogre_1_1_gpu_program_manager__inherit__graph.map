@@ -1,0 +1,12 @@
+<map id="Ogre::GpuProgramManager" name="Ogre::GpuProgramManager">
+<area shape="rect" id="node1" title=" " alt="" coords="463,107,661,133"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_d3_d11_gpu_program_manager.html" title=" " alt="" coords="709,5,952,32"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_g_l_e_s2_gpu_program_manager.html" title=" " alt="" coords="711,56,951,83"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_g_l_s_l_shader_manager.html" title=" " alt="" coords="733,107,928,133"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_metal_gpu_program_manager.html" title=" " alt="" coords="713,157,949,184"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_vulkan_gpu_program_manager.html" title=" " alt="" coords="709,208,952,235"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler." alt="" coords="216,77,395,104"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,52,148,79"/>
+<area shape="rect" id="node4" title=" " alt="" coords="9,103,145,129"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="196,129,415,170"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="Ogre::v1::TransformKeyFrame" name="Ogre::v1::TransformKeyFrame">
+<area shape="rect" id="node1" title="Specialised KeyFrame which stores a full transform." alt="" coords="5,155,220,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_key_frame.html" title="A key frame in an animation sequence defined by an AnimationTrack." alt="" coords="37,80,188,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="45,5,181,32"/>
+</map>

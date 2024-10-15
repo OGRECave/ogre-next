@@ -1,0 +1,7 @@
+<map id="Ogre::Volume::CSGUnarySource" name="Ogre::Volume::CSGUnarySource">
+<area shape="rect" id="node1" title="Source which does a unary operation to another one." alt="" coords="216,56,444,83"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_volume_1_1_c_s_g_negate_source.html" title="Negates the given volume." alt="" coords="492,5,728,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_volume_1_1_c_s_g_noise_source.html" title=" " alt="" coords="497,56,723,83"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_volume_1_1_c_s_g_scale_source.html" title="Scales the given volume source." alt="" coords="498,107,722,133"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="5,56,168,83"/>
+</map>

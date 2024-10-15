@@ -1,0 +1,4 @@
+<map id="Ogre::NodeMemoryManager" name="Ogre::NodeMemoryManager">
+<area shape="rect" id="node1" title="Wrap&#45;around class that contains multiple ArrayMemoryManager, one per hierarchy depth." alt="" coords="5,95,212,121"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_array_memory_manager_1_1_rebase_listener.html" title="When mUsedMemory &gt;= mMaxMemory (that is, we&#39;ve exhausted all our preallocated memory) ArrayMemoryMana..." alt="" coords="5,5,212,47"/>
+</map>

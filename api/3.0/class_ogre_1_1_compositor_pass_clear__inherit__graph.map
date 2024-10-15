@@ -1,0 +1,5 @@
+<map id="Ogre::CompositorPassClear" name="Ogre::CompositorPassClear">
+<area shape="rect" id="node1" title="Implementation of CompositorPass This implementation will clear the RenderTarget using the parameters..." alt="" coords="5,155,204,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes." alt="" coords="22,80,187,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="37,5,173,32"/>
+</map>

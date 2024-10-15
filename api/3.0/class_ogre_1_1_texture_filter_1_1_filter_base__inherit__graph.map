@@ -1,0 +1,9 @@
+<map id="Ogre::TextureFilter::FilterBase" name="Ogre::TextureFilter::FilterBase">
+<area shape="rect" id="node1" title=" " alt="" coords="189,136,332,177"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_texture_filter_1_1_generate_hw_mipmaps.html" title=" " alt="" coords="397,5,567,47"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_texture_filter_1_1_generate_sw_mipmaps.html" title=" " alt="" coords="397,71,567,112"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_texture_filter_1_1_leave_channel_r.html" title=" " alt="" coords="411,136,553,177"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_texture_filter_1_1_premultiply_alpha.html" title=" " alt="" coords="411,201,553,243"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_texture_filter_1_1_prepare_for_normal_mapping.html" title=" " alt="" coords="380,267,584,308"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,143,141,170"/>
+</map>

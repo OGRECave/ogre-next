@@ -1,0 +1,5 @@
+<map id="Ogre::VulkanStagingBuffer" name="Ogre::VulkanStagingBuffer">
+<area shape="rect" id="node1" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="5,155,197,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="27,80,176,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="33,5,169,32"/>
+</map>

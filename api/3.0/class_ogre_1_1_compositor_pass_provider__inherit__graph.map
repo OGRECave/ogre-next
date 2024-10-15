@@ -1,0 +1,4 @@
+<map id="Ogre::CompositorPassProvider" name="Ogre::CompositorPassProvider">
+<area shape="rect" id="node1" title="Base class that users can derive from in order to implement custom passes for the compositor." alt="" coords="5,80,224,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="47,5,183,32"/>
+</map>

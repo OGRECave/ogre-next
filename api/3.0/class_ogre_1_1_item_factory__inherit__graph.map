@@ -1,0 +1,5 @@
+<map id="Ogre::ItemFactory" name="Ogre::ItemFactory">
+<area shape="rect" id="node1" title="FItemy object for creating Item instances." alt="" coords="39,155,178,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_movable_object_factory.html" title="Interface definition for a factory class which produces a certain kind of MovableObject,..." alt="" coords="5,80,212,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="41,5,177,32"/>
+</map>

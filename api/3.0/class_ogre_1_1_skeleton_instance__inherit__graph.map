@@ -1,0 +1,4 @@
+<map id="Ogre::SkeletonInstance" name="Ogre::SkeletonInstance">
+<area shape="rect" id="node1" title="Instance of a Skeleton, main external interface for retrieving bone positions and applying animations..." alt="" coords="5,80,177,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="23,5,159,32"/>
+</map>

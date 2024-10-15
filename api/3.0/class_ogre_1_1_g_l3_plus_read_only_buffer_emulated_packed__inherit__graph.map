@@ -1,0 +1,8 @@
+<map id="Ogre::GL3PlusReadOnlyBufferEmulatedPacked" name="Ogre::GL3PlusReadOnlyBufferEmulatedPacked">
+<area shape="rect" id="node1" title=" " alt="" coords="91,304,305,345"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_read_only_buffer_packed.html" title="Represents the best way to access read&#45;only data." alt="" coords="94,229,302,256"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_tex_buffer_packed.html" title="Represents Texture buffers (also known as tbuffers in D3D11)" alt="" coords="115,155,281,181"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_buffer_packed.html" title=" " alt="" coords="125,80,271,107"/>
+<area shape="rect" id="node5" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,5,201,32"/>
+<area shape="rect" id="node6" title=" " alt="" coords="226,5,362,32"/>
+</map>

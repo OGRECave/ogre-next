@@ -1,0 +1,16 @@
+<map id="Ogre::CompositorPass" name="Ogre::CompositorPass">
+<area shape="rect" id="node1" title="Abstract class for compositor passes." alt="" coords="189,284,355,311"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_compositor_pass_clear.html" title="Implementation of CompositorPass This implementation will clear the RenderTarget using the parameters..." alt="" coords="422,5,621,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_compositor_pass_compute.html" title="Implementation of CompositorPass This implementation will render a fullscreen triangle/quad to the Re..." alt="" coords="409,56,633,83"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_compositor_pass_depth_copy.html" title="Implementation of CompositorPass This implementation will copy one DepthBuffer to another DepthBuffer..." alt="" coords="403,107,640,133"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_compositor_pass_ibl_specular.html" title="Implementation of CompositorPass This implementation will generate IblSpeculars for the specified tex..." alt="" coords="403,157,640,184"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_compositor_pass_mipmap.html" title="Implementation of CompositorPass This implementation will generate mipmaps for the specified texture." alt="" coords="412,208,631,235"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_compositor_pass_quad.html" title="Implementation of CompositorPass This implementation will render a fullscreen triangle/quad to the Re..." alt="" coords="422,259,621,285"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_compositor_pass_scene.html" title="Implementation of CompositorPass This implementation will perform main rendering, selecting several p..." alt="" coords="419,309,623,336"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_compositor_pass_shadows.html" title="CompositorPassShadows This class enables force&#45;updating multiple shadow nodes in batch in its own pas..." alt="" coords="410,360,633,387"/>
+<area shape="rect" id="node11" href="$class_ogre_1_1_compositor_pass_stencil.html" title="Implementation of CompositorPass This implementation will clear the RenderTarget using the parameters..." alt="" coords="417,411,626,437"/>
+<area shape="rect" id="node12" href="$class_ogre_1_1_compositor_pass_target_barrier.html" title=" " alt="" coords="419,462,624,503"/>
+<area shape="rect" id="node13" href="$class_ogre_1_1_compositor_pass_uav.html" title="Implementation of CompositorPass This implementation will set UAVs." alt="" coords="426,528,617,555"/>
+<area shape="rect" id="node14" href="$class_ogre_1_1_compositor_pass_warm_up.html" title="Implementation of CompositorPass." alt="" coords="411,579,632,605"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,284,141,311"/>
+</map>

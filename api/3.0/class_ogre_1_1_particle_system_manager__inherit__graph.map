@@ -1,0 +1,6 @@
+<map id="Ogre::ParticleSystemManager" name="Ogre::ParticleSystemManager">
+<area shape="rect" id="node1" title="Manages particle systems, particle system scripts (templates) and the available emitter &amp; affector fa..." alt="" coords="179,95,393,121"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,191,47"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="215,13,357,39"/>
+<area shape="rect" id="node4" title=" " alt="" coords="382,13,518,39"/>
+</map>

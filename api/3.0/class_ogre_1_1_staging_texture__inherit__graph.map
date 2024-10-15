@@ -1,0 +1,10 @@
+<map id="Ogre::StagingTexture" name="Ogre::StagingTexture">
+<area shape="rect" id="node1" title="A StagingTexture is an intermediate texture that can be read and be written from both CPU &amp; GPU." alt="" coords="189,56,348,83"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_staging_texture.html" title=" " alt="" coords="408,31,611,57"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_staging_texture_buffer_impl.html" title="This implementation can be used by all RenderSystem APIs except D3D11, which is why this implementati..." alt="" coords="396,81,623,108"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,56,141,83"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_g_l3_plus_staging_texture.html" title=" " alt="" coords="671,5,881,32"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_metal_staging_texture.html" title=" " alt="" coords="679,56,873,83"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_staging_texture.html" title=" " alt="" coords="680,107,872,133"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_staging_texture.html" title=" " alt="" coords="675,157,877,184"/>
+</map>

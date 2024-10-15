@@ -1,0 +1,12 @@
+<map id="Ogre::ConstBufferPacked" name="Ogre::ConstBufferPacked">
+<area shape="rect" id="node1" title="Represents constant buffers (also known as Uniform Buffers in GL)" alt="" coords="443,148,625,175"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_const_buffer_packed.html" title=" " alt="" coords="673,5,900,32"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_g_l3_plus_const_buffer_packed.html" title=" " alt="" coords="692,57,881,98"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_g_l_e_s2_const_buffer_packed.html" title=" " alt="" coords="675,123,898,149"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_metal_const_buffer_packed.html" title=" " alt="" coords="677,173,896,200"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_n_u_l_l_const_buffer_packed.html" title=" " alt="" coords="679,224,895,251"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_vulkan_const_buffer_packed.html" title=" " alt="" coords="674,275,899,301"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_buffer_packed.html" title=" " alt="" coords="249,148,395,175"/>
+<area shape="rect" id="node3" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,123,201,149"/>
+<area shape="rect" id="node4" title=" " alt="" coords="35,173,171,200"/>
+</map>

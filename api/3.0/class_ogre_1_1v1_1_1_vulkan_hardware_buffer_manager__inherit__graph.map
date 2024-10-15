@@ -1,0 +1,7 @@
+<map id="Ogre::v1::VulkanHardwareBufferManager" name="Ogre::v1::VulkanHardwareBufferManager">
+<area shape="rect" id="node1" title=" " alt="" coords="111,259,302,300"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_hardware_buffer_manager.html" title="Singleton wrapper for hardware buffer manager." alt="" coords="113,169,300,211"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html" title="Base definition of a hardware buffer manager." alt="" coords="5,80,192,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="31,5,167,32"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="216,80,416,121"/>
+</map>

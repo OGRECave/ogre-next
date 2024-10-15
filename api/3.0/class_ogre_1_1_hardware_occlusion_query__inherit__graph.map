@@ -1,0 +1,6 @@
+<map id="Ogre::HardwareOcclusionQuery" name="Ogre::HardwareOcclusionQuery">
+<area shape="rect" id="node1" title="This is a abstract class that that provides the interface for the query class for hardware occlusion." alt="" coords="137,80,363,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_hardware_occlusion_query.html" title="This is a class that is the DirectX9 implementation of hardware occlusion testing." alt="" coords="5,155,236,196"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_hardware_occlusion_query.html" title="This is a class that is the base class of the query class for hardware occlusion." alt="" coords="260,155,499,196"/>
+<area shape="rect" id="node2" title=" " alt="" coords="182,5,318,32"/>
+</map>

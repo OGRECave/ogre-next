@@ -1,0 +1,7 @@
+<map id="Ogre::PixelCountLodStrategyBase" name="Ogre::PixelCountLodStrategyBase">
+<area shape="rect" id="node1" title="Abstract base class for level of detail strategy based on pixel count approximations from bounding sp..." alt="" coords="89,155,329,181"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_absolute_pixel_count_lod_strategy.html" title="The AbsolutePixelCountLodStrategy class LOD strategy that works like ScreenRatioPixelCountLodStrategy..." alt="" coords="5,229,192,271"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_screen_ratio_pixel_count_lod_strategy.html" title="The ScreenRatioPixelCountLodStrategy class Implement a strategy which calculates LOD ratios based on ..." alt="" coords="216,229,424,271"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_lod_strategy.html" title="Strategy for determining level of detail." alt="" coords="140,80,279,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="141,5,277,32"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="Ogre::v1::OverlaySystem" name="Ogre::v1::OverlaySystem">
+<area shape="rect" id="node1" title="This class simplify initialization / finalization of the overlay system." alt="" coords="174,95,359,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,13,141,39"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_render_queue_listener.html" title="Abstract interface which classes must implement if they wish to receive events from the render queue." alt="" coords="166,13,367,39"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_render_system_1_1_listener.html" title="Defines a listener on the custom events that this render system can raise." alt="" coords="391,5,547,47"/>
+</map>

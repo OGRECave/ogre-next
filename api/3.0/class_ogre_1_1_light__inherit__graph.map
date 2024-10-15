@@ -1,0 +1,8 @@
+<map id="Ogre::Light" name="Ogre::Light">
+<area shape="rect" id="node1" title="Representation of a dynamic light source in the scene." alt="" coords="315,155,408,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="183,80,342,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,171,32"/>
+<area shape="rect" id="node4" title=" " alt="" coords="195,5,331,32"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="355,5,469,32"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="367,80,553,107"/>
+</map>
