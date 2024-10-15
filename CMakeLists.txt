@@ -45,7 +45,7 @@ endif ()
 # OgreAddTargets and OgreConfigTargets make use of OGRE_NEXT and OGRE_NEXT_PREFIX
 option(OGRE_USE_NEW_PROJECT_NAME
 	"Libraries containing Ogre name will be called OgreNext, e.g. 'OgreNext.dll' instead of 'Ogre.dll'"
-	FALSE)
+	TRUE)
 
 if( OGRE_USE_NEW_PROJECT_NAME )
 	set( OGRE_NEXT "OgreNext" )
