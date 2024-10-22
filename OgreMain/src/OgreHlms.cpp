@@ -3660,13 +3660,8 @@ namespace Ogre
                 // Low level is a special case because it doesn't (yet?) support parallel compilation
                 if( !parallelQueue || mType == HLMS_LOW_LEVEL )
                 {
-                    bool saveShadowCasterProp = getProperty( kNoTid, HlmsBaseProp::ShadowCaster );
-                    if( saveShadowCasterProp != casterPass )
-                        setProperty( kNoTid, HlmsBaseProp::ShadowCaster, casterPass );
                     lastReturnedValue = createShaderCacheEntry( hash[0], passCache, finalHash,
                                                                 queuedRenderable, nullptr, kNoTid );
-                    if( saveShadowCasterProp != casterPass )
-                        setProperty( kNoTid, HlmsBaseProp::ShadowCaster, saveShadowCasterProp );
                 }
                 else
                 {
