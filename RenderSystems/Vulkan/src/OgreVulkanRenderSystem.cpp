@@ -808,6 +808,9 @@ namespace Ogre
         rsc->setCapability( RSC_CUBEMAPPING );
         rsc->setCapability( RSC_TEXTURE_COMPRESSION );
         rsc->setCapability( RSC_VBO );
+        // VK_INDEX_TYPE_UINT32 is always supported with range at least 2^24-1
+        // and even 2^32-1 if mActiveDevice->mDeviceFeatures.fullDrawIndexUint32
+        rsc->setCapability( RSC_32BIT_INDEX ); 
         rsc->setCapability( RSC_TWO_SIDED_STENCIL );
         rsc->setCapability( RSC_STENCIL_WRAP );
         if( mActiveDevice->mDeviceFeatures.shaderClipDistance )
