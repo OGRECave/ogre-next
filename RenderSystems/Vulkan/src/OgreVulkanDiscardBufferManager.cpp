@@ -110,7 +110,7 @@ namespace Ogre
         }
 
         LogManager::getSingleton().logMessage(
-            "PERFORMANCE WARNING: MetalDiscardBufferManager::growToFit must stall."
+            "PERFORMANCE WARNING: VulkanDiscardBufferManager::growToFit must stall."
             "Consider increasing the default discard capacity to at least " +
             StringConverter::toString( newCapacity ) + " bytes" );
 
