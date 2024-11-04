@@ -705,6 +705,11 @@ namespace Ogre
                                           const VkPhysicalDeviceMemoryProperties &memProperties,
                                           const uint32 memoryTypeIdx )
     {
+        // Skip zero size heaps, as in https://vulkan.gpuinfo.org/displayreport.php?id=34174#memory
+        // on Vulkan Compatibility Pack for Arm64 Windows over Parallels Display Adapter (WDDM)
+        if( memProperties.memoryHeaps[memProperties.memoryTypes[memoryTypeIdx].heapIndex].size == 0 )
+            return;
+
         FastArray<uint32>::iterator itor = mBestVkMemoryTypeIndex[vboFlag].begin();
         FastArray<uint32>::iterator endt = mBestVkMemoryTypeIndex[vboFlag].end();
 
