@@ -148,8 +148,6 @@ namespace Ogre
         /// Creates a dummy VkRenderPass for use in PSO creation
         VkRenderPass getVkRenderPass( HlmsPassPso passPso, uint8 &outMrtCount );
 
-        void bindDescriptorSet() const;
-
         void flushRootLayout();
         void flushRootLayoutCS();
 
@@ -161,7 +159,6 @@ namespace Ogre
 
         const String &getName() const override;
         const String &getFriendlyName() const override;
-        void refreshConfig();
         void initConfigOptions();
         ConfigOptionMap &getConfigOptions() override;
         void setConfigOption( const String &name, const String &value ) override;
@@ -274,14 +271,9 @@ namespace Ogre
         void _dispatch( const HlmsComputePso &pso ) override;
 
         void _setVertexArrayObject( const VertexArrayObject *vao ) override;
-        void flushDescriptorState(
-            VkPipelineBindPoint pipeline_bind_point, const VulkanConstBufferPacked &constBuffer,
-            const size_t bindOffset, const size_t bytesToWrite,
-            const unordered_map<unsigned, VulkanConstantDefinitionBindingParam>::type &shaderBindings );
 
         void _render( const CbDrawCallIndexed *cmd ) override;
         void _render( const CbDrawCallStrip *cmd ) override;
-        void bindDescriptorSet( VulkanVaoManager *&vaoManager );
         void _renderEmulated( const CbDrawCallIndexed *cmd ) override;
         void _renderEmulated( const CbDrawCallStrip *cmd ) override;
 
