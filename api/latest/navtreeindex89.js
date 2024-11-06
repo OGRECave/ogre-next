@@ -1,8 +1,5 @@
 var NAVTREEINDEX89 =
 {
-"class_ogre_1_1v1_1_1_vertex_data.html#a4bf9ba40d289924bfc094e5292272b4b":[6,2,9,32,21],
-"class_ogre_1_1v1_1_1_vertex_data.html#a4db82cfa2d11d2f6049a1c05c0566e9e":[6,2,9,32,17],
-"class_ogre_1_1v1_1_1_vertex_data.html#a5e0e3b5ba4894503f5f7dec69362706d":[6,2,9,32,10],
 "class_ogre_1_1v1_1_1_vertex_data.html#a5eb7ad084cbc6c5af4dbed455c5cfc1b":[6,2,9,32,14],
 "class_ogre_1_1v1_1_1_vertex_data.html#a6b6fc02592866abcc89cf0d82fb26188":[6,2,9,32,3],
 "class_ogre_1_1v1_1_1_vertex_data.html#a6ea59566c246cf959ecdc6b4f6381fb9":[6,2,9,32,13],
@@ -249,5 +246,8 @@ var NAVTREEINDEX89 =
 "compositor.html#CompositorPass_load_clear_depth":[4,2,4,0,2,0,18],
 "compositor.html#CompositorPass_load_clear_stencil":[4,2,4,0,2,0,19],
 "compositor.html#CompositorPass_load_colour":[4,2,4,0,2,0,13],
-"compositor.html#CompositorPass_load_depth":[4,2,4,0,2,0,14]
+"compositor.html#CompositorPass_load_depth":[4,2,4,0,2,0,14],
+"compositor.html#CompositorPass_load_stencil":[4,2,4,0,2,0,15],
+"compositor.html#CompositorPass_load_warn_if_rtv_was_flushed":[4,2,4,0,2,0,20],
+"compositor.html#CompositorPass_num_initial":[4,2,4,0,2,0,1]
 };
