@@ -1253,6 +1253,8 @@ namespace Ogre
         VkFence fence = mCurrentFence;  // Note: mCurrentFence may be nullptr
 
         VkResult result = vkQueueSubmit( mQueue, 1u, &submitInfo, fence );
+        if( result != VK_SUCCESS )
+            mOwnerDevice->mIsDeviceLost = true;
         checkVkResult( result, "vkQueueSubmit" );
 
         mGpuWaitSemaphForCurrCmdBuff.clear();

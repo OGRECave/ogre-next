@@ -163,6 +163,7 @@ namespace Ogre
 
         uint32 mSupportedStages;
 
+        bool mIsDeviceLost;
         bool mIsExternal;
 
         void fillDeviceFeatures();

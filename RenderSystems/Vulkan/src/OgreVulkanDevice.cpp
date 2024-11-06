@@ -507,6 +507,7 @@ namespace Ogre
         mVaoManager( 0 ),
         mRenderSystem( renderSystem ),
         mSupportedStages( 0xFFFFFFFF ),
+        mIsDeviceLost( false ),
         mIsExternal( false )
     {
     }

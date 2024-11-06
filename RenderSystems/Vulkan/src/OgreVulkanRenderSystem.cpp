@@ -48,6 +48,7 @@ THE SOFTWARE.
 #include "Vao/OgreVertexArrayObject.h"
 
 #include "CommandBuffer/OgreCbDrawCall.h"
+#include "Compositor/OgreCompositorManager2.h"
 
 #include "OgreVulkanHlmsPso.h"
 #include "Vao/OgreIndirectBufferPacked.h"
@@ -67,7 +68,10 @@ THE SOFTWARE.
 #include "Vao/OgreVulkanUavBufferPacked.h"
 
 #include "OgreDepthBuffer.h"
+#include "OgreMeshManager.h"
+#include "OgreMeshManager2.h"
 #include "OgreRoot.h"
+#include "OgreTimer.h"
 
 #ifdef OGRE_VULKAN_WINDOW_WIN32
 #    include "Windowing/win32/OgreVulkanWin32Window.h"
@@ -1251,6 +1255,105 @@ namespace Ogre
     const FastArray<VulkanPhysicalDevice> &VulkanRenderSystem::getVulkanPhysicalDevices() const
     {
         return mInstance->mVulkanPhysicalDevices;
+    }
+    //-------------------------------------------------------------------------
+    bool VulkanRenderSystem::validateDevice( bool forceDeviceElection )
+    {
+        if( mDevice == nullptr || mDevice->mIsExternal || mInstance->mVkInstanceIsExternal )
+            return false;
+
+        bool anotherIsElected = false;
+        if( forceDeviceElection )
+        {
+            // elect new physical device
+            LogManager::getSingleton().logMessage( "Vulkan: Create new instance for device detection" );
+            std::shared_ptr<VulkanInstance> freshInstance = std::make_shared<VulkanInstance>(
+                Root::getSingleton().getAppName(), nullptr, dbgFunc, this );
+            auto device = freshInstance->findByName( mVulkanSupport->getSelectedDeviceName() );
+            if( device == nullptr )
+                return false;
+
+            anotherIsElected = device->physicalDeviceID[0] != mActiveDevice.physicalDeviceID[0] ||
+                               device->physicalDeviceID[1] != mActiveDevice.physicalDeviceID[1];
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+            anotherIsElected = true;  // simulate switching instance and physical device
+#endif
+            if( anotherIsElected )
+            {
+                LogManager::getSingleton().logMessage(
+                    "Vulkan: Another device was elected, switching VkInstance and active device" );
+                mInstance = freshInstance;
+                mActiveDevice = *device;
+            }
+        }
+
+        // recreate logical device with all resources
+        if( anotherIsElected || mDevice->mIsDeviceLost )
+        {
+            handleDeviceLost();
+
+            return !mDevice->mIsDeviceLost;
+        }
+
+        return true;
+
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::handleDeviceLost()
+    {
+        // recreate logical device with all resources
+        LogManager::getSingleton().logMessage( "Vulkan: Device was lost, recreating." );
+
+        Timer timer;
+        uint64 startTime = timer.getMicroseconds();
+
+        // release device depended resources
+        fireEvent( "DeviceLost" );
+
+        Root::getSingleton().getCompositorManager2()->_releaseManualHardwareResources();
+        SceneManagerEnumerator::SceneManagerIterator scnIt =
+            SceneManagerEnumerator::getSingleton().getSceneManagerIterator();
+        while( scnIt.hasMoreElements() )
+            scnIt.getNext()->_releaseManualHardwareResources();
+
+        Root::getSingleton().getHlmsManager()->_changeRenderSystem( (RenderSystem *)0 );
+
+        MeshManager::getSingleton().unloadAll( Resource::LF_MARKED_FOR_RELOAD );
+
+        notifyDeviceLost();
+
+//        static_cast<D3D11TextureGpuManager *>( mTextureGpuManager )->_destroyD3DResources();
+//        static_cast<D3D11VaoManager *>( mVaoManager )->_destroyD3DResources();
+
+        // Release all automatic temporary buffers and free unused
+        // temporary buffers, so we doesn't need to recreate them,
+        // and they will reallocate on demand.
+        v1::HardwareBufferManager::getSingleton()._releaseBufferCopies( true );
+
+        // recreate device
+        mDevice->setPhysicalDevice( mInstance, mActiveDevice, nullptr );
+
+//        static_cast<D3D11VaoManager *>( mVaoManager )->_createD3DResources();
+//        static_cast<D3D11TextureGpuManager *>( mTextureGpuManager )->_createD3DResources();
+
+        // recreate device depended resources
+        notifyDeviceRestored();
+
+        Root::getSingleton().getHlmsManager()->_changeRenderSystem( this );
+
+        v1::MeshManager::getSingleton().reloadAll( Resource::LF_PRESERVE_STATE );
+        MeshManager::getSingleton().reloadAll( Resource::LF_MARKED_FOR_RELOAD );
+
+        Root::getSingleton().getCompositorManager2()->_restoreManualHardwareResources();
+        scnIt = SceneManagerEnumerator::getSingleton().getSceneManagerIterator();
+        while( scnIt.hasMoreElements() )
+            scnIt.getNext()->_restoreManualHardwareResources();
+
+        fireEvent( "DeviceRestored" );
+
+        uint64 passedTime = ( timer.getMicroseconds() - startTime ) / 1000;
+        LogManager::getSingleton().logMessage( "Vulkan: Device was restored in " +
+                                               StringConverter::toString( passedTime ) + "ms" );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_notifyDeviceStalled()
