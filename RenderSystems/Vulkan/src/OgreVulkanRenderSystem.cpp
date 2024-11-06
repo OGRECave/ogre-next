@@ -179,7 +179,6 @@ namespace Ogre
         mAutoParamsBufferIdx( 0 ),
         mCurrentAutoParamsBufferPtr( 0 ),
         mCurrentAutoParamsBufferSpaceLeft( 0 ),
-        mActiveDevice( 0 ),
         mDevice( 0 ),
         mCache( 0 ),
         mPso( 0 ),
@@ -347,13 +346,13 @@ namespace Ogre
 
         if( mDummySampler )
         {
-            vkDestroySampler( mActiveDevice->mDevice, mDummySampler, 0 );
+            vkDestroySampler( mDevice->mDevice, mDummySampler, 0 );
             mDummySampler = 0;
         }
 
         if( mDummyTextureView )
         {
-            vkDestroyImageView( mActiveDevice->mDevice, mDummyTextureView, 0 );
+            vkDestroyImageView( mDevice->mDevice, mDummyTextureView, 0 );
             mDummyTextureView = 0;
         }
 
@@ -487,12 +486,11 @@ namespace Ogre
             auto &hdr = *(PipelineCachePrefixHeader *)buf.data();
             if( hdr.magic == ( 'V' | ( 'K' << 8 ) | ( 'P' << 16 ) | ( 'C' << 24 ) ) &&
                 hdr.dataSize == buf.size() - sizeof( PipelineCachePrefixHeader ) &&
-                hdr.vendorID == mActiveDevice->mDeviceProperties.vendorID &&
-                hdr.deviceID == mActiveDevice->mDeviceProperties.deviceID &&
-                hdr.driverVersion == mActiveDevice->mDeviceProperties.driverVersion &&
+                hdr.vendorID == mDevice->mDeviceProperties.vendorID &&
+                hdr.deviceID == mDevice->mDeviceProperties.deviceID &&
+                hdr.driverVersion == mDevice->mDeviceProperties.driverVersion &&
                 hdr.driverABI == sizeof( void * ) &&
-                0 == memcmp( hdr.uuid, mActiveDevice->mDeviceProperties.pipelineCacheUUID,
-                             VK_UUID_SIZE ) )
+                0 == memcmp( hdr.uuid, mDevice->mDeviceProperties.pipelineCacheUUID, VK_UUID_SIZE ) )
             {
                 auto dataHash = hdr.dataHash;
                 hdr.dataHash = 0;
@@ -513,11 +511,11 @@ namespace Ogre
                 pipelineCacheCreateInfo.pInitialData = buf.data() + sizeof( PipelineCachePrefixHeader );
 
                 VkPipelineCache pipelineCache{};
-                result = vkCreatePipelineCache( mActiveDevice->mDevice, &pipelineCacheCreateInfo,
+                result = vkCreatePipelineCache( mDevice->mDevice, &pipelineCacheCreateInfo,
                                                 nullptr, &pipelineCache );
                 if( VK_SUCCESS == result && pipelineCache != 0 )
                 {
-                    std::swap( mActiveDevice->mPipelineCache, pipelineCache );
+                    std::swap( mDevice->mPipelineCache, pipelineCache );
                     LogManager::getSingleton().logMessage( "[Vulkan] Pipeline cache loaded, " +
                                                            StringConverter::toString( buf.size() ) +
                                                            " bytes." );
@@ -529,7 +527,7 @@ namespace Ogre
                         vkResultToString( result ) );
                 }
                 if( pipelineCache != 0 )
-                    vkDestroyPipelineCache( mActiveDevice->mDevice, pipelineCache, nullptr );
+                    vkDestroyPipelineCache( mDevice->mDevice, pipelineCache, nullptr );
             }
         }
     }
@@ -537,19 +535,18 @@ namespace Ogre
     void VulkanRenderSystem::savePipelineCache( DataStreamPtr stream ) const
     {
         OGRE_STATIC_ASSERT( sizeof( PipelineCachePrefixHeader ) == 48 );
-        if( mActiveDevice->mPipelineCache )
+        if( mDevice->mPipelineCache )
         {
             size_t size{};
-            VkResult result = vkGetPipelineCacheData( mActiveDevice->mDevice,
-                                                      mActiveDevice->mPipelineCache, &size, nullptr );
+            VkResult result = vkGetPipelineCacheData( mDevice->mDevice, mDevice->mPipelineCache, &size,
+                                                      nullptr );
             if( result == VK_SUCCESS && size > 0 && size <= 0x7FFFFFFF )
             {
                 std::vector<unsigned char> buf;  // PipelineCachePrefixHeader + payload
                 do
                 {
                     buf.resize( sizeof( PipelineCachePrefixHeader ) + size );
-                    result = vkGetPipelineCacheData( mActiveDevice->mDevice,
-                                                     mActiveDevice->mPipelineCache, &size,
+                    result = vkGetPipelineCacheData( mDevice->mDevice, mDevice->mPipelineCache, &size,
                                                      buf.data() + sizeof( PipelineCachePrefixHeader ) );
                 } while( result == VK_INCOMPLETE );
 
@@ -562,11 +559,11 @@ namespace Ogre
                     hdr.magic = 'V' | ( 'K' << 8 ) | ( 'P' << 16 ) | ( 'C' << 24 );
                     hdr.dataSize = (uint32_t)size;
                     hdr.dataHash = 0;
-                    hdr.vendorID = mActiveDevice->mDeviceProperties.vendorID;
-                    hdr.deviceID = mActiveDevice->mDeviceProperties.deviceID;
-                    hdr.driverVersion = mActiveDevice->mDeviceProperties.driverVersion;
+                    hdr.vendorID = mDevice->mDeviceProperties.vendorID;
+                    hdr.deviceID = mDevice->mDeviceProperties.deviceID;
+                    hdr.driverVersion = mDevice->mDeviceProperties.driverVersion;
                     hdr.driverABI = sizeof( void * );
-                    memcpy( hdr.uuid, mActiveDevice->mDeviceProperties.pipelineCacheUUID, VK_UUID_SIZE );
+                    memcpy( hdr.uuid, mDevice->mDeviceProperties.pipelineCacheUUID, VK_UUID_SIZE );
                     OGRE_STATIC_ASSERT( VK_UUID_SIZE == 16 );
 
                     uint64 hashResult[2] = {};
@@ -650,10 +647,10 @@ namespace Ogre
         // We would like to save the device properties for the device capabilities limits.
         // These limits are needed for buffers' binding alignments.
         VkPhysicalDeviceProperties *vkProperties =
-            const_cast<VkPhysicalDeviceProperties *>( &mActiveDevice->mDeviceProperties );
-        vkGetPhysicalDeviceProperties( mActiveDevice->mPhysicalDevice, vkProperties );
+            const_cast<VkPhysicalDeviceProperties *>( &mDevice->mDeviceProperties );
+        vkGetPhysicalDeviceProperties( mDevice->mPhysicalDevice, vkProperties );
 
-        VkPhysicalDeviceProperties &properties = mActiveDevice->mDeviceProperties;
+        VkPhysicalDeviceProperties &properties = mDevice->mDeviceProperties;
 
         LogManager::getSingleton().logMessage(
             "[Vulkan] API Version: " +
@@ -720,10 +717,10 @@ namespace Ogre
             rsc->setDriverVersion( driverVersion );
         }
 
-        if( mActiveDevice->mDeviceFeatures.imageCubeArray )
+        if( mDevice->mDeviceFeatures.imageCubeArray )
             rsc->setCapability( RSC_TEXTURE_CUBE_MAP_ARRAY );
 
-        if( mActiveDevice->hasDeviceExtension( VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME ) )
+        if( mDevice->hasDeviceExtension( VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME ) )
             rsc->setCapability( RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER );
 
         rsc->setCapability( RSC_SHADER_RELAXED_FLOAT );
@@ -734,7 +731,7 @@ namespace Ogre
             rsc->setCapability( RSC_SHADER_FLOAT16 );
         }
 
-        if( mActiveDevice->mDeviceFeatures.depthClamp )
+        if( mDevice->mDeviceFeatures.depthClamp )
             rsc->setCapability( RSC_DEPTH_CLAMP );
 
         {
@@ -777,7 +774,7 @@ namespace Ogre
         rsc->setMaxThreadsPerThreadgroupAxis( deviceLimits.maxComputeWorkGroupSize );
         rsc->setMaxThreadsPerThreadgroup( deviceLimits.maxComputeWorkGroupInvocations );
 
-        if( mActiveDevice->mDeviceFeatures.samplerAnisotropy && deviceLimits.maxSamplerAnisotropy > 1u )
+        if( mDevice->mDeviceFeatures.samplerAnisotropy && deviceLimits.maxSamplerAnisotropy > 1u )
         {
             rsc->setCapability( RSC_ANISOTROPY );
             rsc->setMaxSupportedAnisotropy( deviceLimits.maxSamplerAnisotropy );
@@ -809,11 +806,11 @@ namespace Ogre
         rsc->setCapability( RSC_TEXTURE_COMPRESSION );
         rsc->setCapability( RSC_VBO );
         // VK_INDEX_TYPE_UINT32 is always supported with range at least 2^24-1
-        // and even 2^32-1 if mActiveDevice->mDeviceFeatures.fullDrawIndexUint32
+        // and even 2^32-1 if mDevice->mDeviceFeatures.fullDrawIndexUint32
         rsc->setCapability( RSC_32BIT_INDEX ); 
         rsc->setCapability( RSC_TWO_SIDED_STENCIL );
         rsc->setCapability( RSC_STENCIL_WRAP );
-        if( mActiveDevice->mDeviceFeatures.shaderClipDistance )
+        if( mDevice->mDeviceFeatures.shaderClipDistance )
             rsc->setCapability( RSC_USER_CLIP_PLANES );
         rsc->setCapability( RSC_VERTEX_FORMAT_UBYTE4 );
         rsc->setCapability( RSC_INFINITE_FAR_PLANE );
@@ -1422,7 +1419,6 @@ namespace Ogre
                 mDevice = new VulkanDevice( mVkInstance, mVulkanSupport->getSelectedDeviceIdx(), this );
             else
                 mDevice = new VulkanDevice( mVkInstance, *externalDevice, this );
-            mActiveDevice = mDevice;
 
             mNativeShadingLanguageVersion = 450;
 
@@ -1536,8 +1532,8 @@ namespace Ogre
             mVaoManager = vaoManager;
             mHardwareBufferManager = OGRE_NEW v1::VulkanHardwareBufferManager( mDevice, mVaoManager );
 
-            mActiveDevice->mVaoManager = vaoManager;
-            mActiveDevice->initQueues();
+            mDevice->mVaoManager = vaoManager;
+            mDevice->initQueues();
             vaoManager->initDrawIdVertexBuffer();
 
             FastArray<PixelFormatGpu> depthFormatCandidates( 5u );
@@ -1602,21 +1598,20 @@ namespace Ogre
                 imageViewCi.subresourceRange.layerCount = 1u;
 
                 VkResult result =
-                    vkCreateImageView( mActiveDevice->mDevice, &imageViewCi, 0, &mDummyTextureView );
+                    vkCreateImageView( mDevice->mDevice, &imageViewCi, 0, &mDummyTextureView );
                 checkVkResult( result, "vkCreateImageView" );
             }
 
             {
                 VkSamplerCreateInfo samplerDescriptor;
                 makeVkStruct( samplerDescriptor, VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO );
-                float maxAllowedAnisotropy =
-                    mActiveDevice->mDeviceProperties.limits.maxSamplerAnisotropy;
+                float maxAllowedAnisotropy = mDevice->mDeviceProperties.limits.maxSamplerAnisotropy;
                 samplerDescriptor.maxAnisotropy = maxAllowedAnisotropy;
                 samplerDescriptor.anisotropyEnable = VK_FALSE;
                 samplerDescriptor.minLod = -std::numeric_limits<float>::max();
                 samplerDescriptor.maxLod = std::numeric_limits<float>::max();
                 VkResult result =
-                    vkCreateSampler( mActiveDevice->mDevice, &samplerDescriptor, 0, &mDummySampler );
+                    vkCreateSampler( mDevice->mDevice, &samplerDescriptor, 0, &mDummySampler );
                 checkVkResult( result, "vkCreateSampler" );
             }
 
@@ -1633,7 +1628,7 @@ namespace Ogre
             mInitialized = true;
         }
 
-        win->_setDevice( mActiveDevice );
+        win->_setDevice( mDevice );
         win->_initialize( mTextureGpuManager, miscParams );
 
         return win;
@@ -2047,7 +2042,7 @@ namespace Ogre
     RenderPassDescriptor *VulkanRenderSystem::createRenderPassDescriptor()
     {
         VulkanRenderPassDescriptor *retVal =
-            OGRE_NEW VulkanRenderPassDescriptor( &mActiveDevice->mGraphicsQueue, this );
+            OGRE_NEW VulkanRenderPassDescriptor( &mDevice->mGraphicsQueue, this );
         mRenderPassDescs.insert( retVal );
         return retVal;
     }
@@ -2073,8 +2068,8 @@ namespace Ogre
 #endif
 
         VkPipeline vulkanPso = 0u;
-        VkResult result = vkCreateComputePipelines(
-            mActiveDevice->mDevice, mActiveDevice->mPipelineCache, 1u, &computeInfo, 0, &vulkanPso );
+        VkResult result = vkCreateComputePipelines( mDevice->mDevice, mDevice->mPipelineCache, 1u,
+                                                    &computeInfo, 0, &vulkanPso );
         checkVkResult( result, "vkCreateComputePipelines" );
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
@@ -2109,7 +2104,7 @@ namespace Ogre
 
         OGRE_ASSERT_LOW( pso->rsData );
         VulkanHlmsPso *vulkanPso = static_cast<VulkanHlmsPso *>( pso->rsData );
-        delayed_vkDestroyPipeline( mVaoManager, mActiveDevice->mDevice, vulkanPso->pso, 0 );
+        delayed_vkDestroyPipeline( mVaoManager, mDevice->mDevice, vulkanPso->pso, 0 );
         delete vulkanPso;
         pso->rsData = 0;
     }
@@ -2146,7 +2141,7 @@ namespace Ogre
     {
         RenderSystem::_endFrameOnce();
         endRenderPassDescriptor( false );
-        mActiveDevice->commitAndNextCommandBuffer( SubmissionType::EndFrameAndSwap );
+        mDevice->commitAndNextCommandBuffer( SubmissionType::EndFrameAndSwap );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock )
@@ -2181,7 +2176,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setPipelineStateObject( const HlmsPso *pso )
     {
-        if( pso && mActiveDevice->mGraphicsQueue.getEncoderState() != VulkanQueue::EncoderGraphicsOpen )
+        if( pso && mDevice->mGraphicsQueue.getEncoderState() != VulkanQueue::EncoderGraphicsOpen )
         {
             OGRE_ASSERT_LOW(
                 mInterruptedRenderCommandEncoder &&
@@ -2196,7 +2191,7 @@ namespace Ogre
             if( mPso )
                 oldRootLayout = reinterpret_cast<VulkanHlmsPso *>( mPso->rsData )->rootLayout;
 
-            VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
+            VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
             OGRE_ASSERT_LOW( pso->rsData );
             VulkanHlmsPso *vulkanPso = reinterpret_cast<VulkanHlmsPso *>( pso->rsData );
             vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanPso->pso );
@@ -2212,7 +2207,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setComputePso( const HlmsComputePso *pso )
     {
-        mActiveDevice->mGraphicsQueue.getComputeEncoder();
+        mDevice->mGraphicsQueue.getComputeEncoder();
 
         if( mComputePso != pso )
         {
@@ -2226,7 +2221,7 @@ namespace Ogre
             {
                 OGRE_ASSERT_LOW( pso->rsData );
                 vulkanPso = reinterpret_cast<VulkanHlmsPso *>( pso->rsData );
-                VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
+                VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
                 vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, vulkanPso->pso );
 
                 if( vulkanPso->rootLayout != oldRootLayout )
@@ -2246,7 +2241,7 @@ namespace Ogre
     {
         flushRootLayoutCS();
 
-        vkCmdDispatch( mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer(), pso.mNumThreadGroups[0],
+        vkCmdDispatch( mDevice->mGraphicsQueue.getCurrentCmdBuffer(), pso.mNumThreadGroups[0],
                        pso.mNumThreadGroups[1], pso.mNumThreadGroups[2] );
     }
     //-------------------------------------------------------------------------
@@ -2272,7 +2267,7 @@ namespace Ogre
 
         OGRE_ASSERT_LOW( numVertexBuffers < 15u );
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
+        VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
         if( numVertexBuffers > 0u )
         {
             vkCmdBindVertexBuffers( cmdBuffer, 0, static_cast<uint32>( numVertexBuffers ),
@@ -2318,7 +2313,7 @@ namespace Ogre
     {
         flushRootLayout();
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
+        VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
         vkCmdDrawIndexedIndirect( cmdBuffer, mIndirectBuffer,
                                   reinterpret_cast<VkDeviceSize>( cmd->indirectBufferOffset ),
                                   cmd->numDraws, sizeof( CbDrawIndexed ) );
@@ -2328,7 +2323,7 @@ namespace Ogre
     {
         flushRootLayout();
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
+        VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
         vkCmdDrawIndirect( cmdBuffer, mIndirectBuffer,
                            reinterpret_cast<VkDeviceSize>( cmd->indirectBufferOffset ), cmd->numDraws,
                            sizeof( CbDrawStrip ) );
@@ -2341,7 +2336,7 @@ namespace Ogre
         CbDrawIndexed *drawCmd = reinterpret_cast<CbDrawIndexed *>( mSwIndirectBufferPtr +
                                                                     (size_t)cmd->indirectBufferOffset );
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
+        VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
 
         for( uint32 i = cmd->numDraws; i--; )
         {
@@ -2359,7 +2354,7 @@ namespace Ogre
         CbDrawStrip *drawCmd =
             reinterpret_cast<CbDrawStrip *>( mSwIndirectBufferPtr + (size_t)cmd->indirectBufferOffset );
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
+        VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
 
         for( uint32 i = cmd->numDraws; i--; )
         {
@@ -2373,7 +2368,7 @@ namespace Ogre
     {
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
+        VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
 
         VkBuffer vulkanVertexBuffers[16];
         VkDeviceSize offsets[16];
@@ -2434,7 +2429,7 @@ namespace Ogre
     {
         flushRootLayout();
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
+        VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
         vkCmdDrawIndexed( cmdBuffer, cmd->primCount, cmd->instanceCount, cmd->firstVertexIndex,
                           (int32_t)mCurrentVertexBuffer->vertexStart, cmd->baseInstance );
     }
@@ -2443,7 +2438,7 @@ namespace Ogre
     {
         flushRootLayout();
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
+        VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
         vkCmdDraw( cmdBuffer, cmd->primCount, cmd->instanceCount, cmd->firstVertexIndex,
                    cmd->baseInstance );
     }
@@ -2457,7 +2452,7 @@ namespace Ogre
 
         const size_t numberOfInstances = op.numberOfInstances;
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
+        VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
 
         // Render to screen!
         if( op.useIndexes )
@@ -2692,7 +2687,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::flushCommands()
     {
-        mActiveDevice->commitAndNextCommandBuffer( SubmissionType::FlushOnly );
+        mDevice->commitAndNextCommandBuffer( SubmissionType::FlushOnly );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::beginProfileEvent( const String &eventName ) {}
@@ -2706,7 +2701,7 @@ namespace Ogre
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         if( !CmdBeginDebugUtilsLabelEXT )
             return;  // VK_EXT_debug_utils not available
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
+        VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
         VkDebugUtilsLabelEXT markerInfo;
         makeVkStruct( markerInfo, VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT );
         markerInfo.pLabelName = event.c_str();
@@ -2719,7 +2714,7 @@ namespace Ogre
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         if( !CmdEndDebugUtilsLabelEXT )
             return;  // VK_EXT_debug_utils not available
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer();
+        VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
         CmdEndDebugUtilsLabelEXT( cmdBuffer );
 #endif
     }
@@ -2735,7 +2730,7 @@ namespace Ogre
     void VulkanRenderSystem::endGpuDebuggerFrameCapture( Window *window, const bool bDiscard )
     {
         if( mRenderDocApi && !bDiscard )
-            mActiveDevice->commitAndNextCommandBuffer( SubmissionType::FlushOnly );
+            mDevice->commitAndNextCommandBuffer( SubmissionType::FlushOnly );
         RenderSystem::endGpuDebuggerFrameCapture( window, bDiscard );
     }
     //-------------------------------------------------------------------------
@@ -2781,18 +2776,18 @@ namespace Ogre
     void VulkanRenderSystem::initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
                                                                      Window *primary )
     {
-        mShaderManager = OGRE_NEW VulkanGpuProgramManager( mActiveDevice );
-        mVulkanProgramFactory0 = OGRE_NEW VulkanProgramFactory( mActiveDevice, "glslvk", true );
-        mVulkanProgramFactory1 = OGRE_NEW VulkanProgramFactory( mActiveDevice, "glsl", false );
-        mVulkanProgramFactory2 = OGRE_NEW VulkanProgramFactory( mActiveDevice, "hlslvk", false );
-        mVulkanProgramFactory3 = OGRE_NEW VulkanProgramFactory( mActiveDevice, "hlsl", false );
+        mShaderManager = OGRE_NEW VulkanGpuProgramManager( mDevice );
+        mVulkanProgramFactory0 = OGRE_NEW VulkanProgramFactory( mDevice, "glslvk", true );
+        mVulkanProgramFactory1 = OGRE_NEW VulkanProgramFactory( mDevice, "glsl", false );
+        mVulkanProgramFactory2 = OGRE_NEW VulkanProgramFactory( mDevice, "hlslvk", false );
+        mVulkanProgramFactory3 = OGRE_NEW VulkanProgramFactory( mDevice, "hlsl", false );
 
         HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory0 );
         // HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory1 );
         HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory2 );
         // HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory3 );
 
-        mCache = OGRE_NEW VulkanCache( mActiveDevice );
+        mCache = OGRE_NEW VulkanCache( mDevice );
 
         Log *defaultLog = LogManager::getSingleton().getDefaultLog();
         if( defaultLog )
@@ -2818,7 +2813,7 @@ namespace Ogre
             // If we get a validation layer here; then the error was generated by the
             // Pass that last called beginRenderPassDescriptor (i.e. not this one)
             endRenderPassDescriptor( false );
-            mActiveDevice->commitAndNextCommandBuffer( SubmissionType::FlushOnly );
+            mDevice->commitAndNextCommandBuffer( SubmissionType::FlushOnly );
         }
 
         const int oldWidth = mCurrentRenderViewport[0].getActualWidth();
@@ -2901,11 +2896,11 @@ namespace Ogre
             mInterruptedRenderCommandEncoder = false;
 
         const bool wasGraphicsOpen =
-            mActiveDevice->mGraphicsQueue.getEncoderState() != VulkanQueue::EncoderGraphicsOpen;
+            mDevice->mGraphicsQueue.getEncoderState() != VulkanQueue::EncoderGraphicsOpen;
 
         if( mEntriesToFlush )
         {
-            mActiveDevice->mGraphicsQueue.endAllEncoders( false );
+            mDevice->mGraphicsQueue.endAllEncoders( false );
 
             VulkanRenderPassDescriptor *newPassDesc =
                 static_cast<VulkanRenderPassDescriptor *>( mCurrentRenderPassDescriptor );
@@ -2916,14 +2911,14 @@ namespace Ogre
         // This is a new command buffer / encoder. State needs to be set again
         if( mEntriesToFlush || !wasGraphicsOpen )
         {
-            mActiveDevice->mGraphicsQueue.getGraphicsEncoder();
+            mDevice->mGraphicsQueue.getGraphicsEncoder();
 
             VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-            vaoManager->bindDrawIdVertexBuffer( mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer() );
+            vaoManager->bindDrawIdVertexBuffer( mDevice->mGraphicsQueue.getCurrentCmdBuffer() );
 
             if( mStencilEnabled )
             {
-                vkCmdSetStencilReference( mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer(),
+                vkCmdSetStencilReference( mDevice->mGraphicsQueue.getCurrentCmdBuffer(),
                                           VK_STENCIL_FACE_FRONT_AND_BACK, mStencilRefValue );
             }
 
@@ -2957,7 +2952,7 @@ namespace Ogre
 #endif
             }
 
-            vkCmdSetViewport( mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer(), 0u, numViewports,
+            vkCmdSetViewport( mDevice->mGraphicsQueue.getCurrentCmdBuffer(), 0u, numViewports,
                               vkVp );
         }
 
@@ -2981,7 +2976,7 @@ namespace Ogre
 #endif
             }
 
-            vkCmdSetScissor( mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer(), 0u, numViewports,
+            vkCmdSetScissor( mDevice->mGraphicsQueue.getCurrentCmdBuffer(), 0u, numViewports,
                              scissorRect );
         }
 
@@ -3220,7 +3215,7 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::endCopyEncoder() { mActiveDevice->mGraphicsQueue.endCopyEncoder(); }
+    void VulkanRenderSystem::endCopyEncoder() { mDevice->mGraphicsQueue.endCopyEncoder(); }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::executeResourceTransition( const ResourceTransitionArray &rstCollection )
     {
@@ -3228,7 +3223,7 @@ namespace Ogre
             return;
 
         // Needs to be done now, as it may change layouts of textures we're about to change
-        mActiveDevice->mGraphicsQueue.endAllEncoders();
+        mDevice->mGraphicsQueue.endAllEncoders();
 
         VkPipelineStageFlags srcStage = 0u;
         VkPipelineStageFlags dstStage = 0u;
@@ -3355,9 +3350,9 @@ namespace Ogre
         if( dstStage == 0 )
             dstStage = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
 
-        vkCmdPipelineBarrier( mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer(),
-                              srcStage & mActiveDevice->mSupportedStages,
-                              dstStage & mActiveDevice->mSupportedStages, 0, numMemBarriers, &memBarrier,
+        vkCmdPipelineBarrier( mDevice->mGraphicsQueue.getCurrentCmdBuffer(),
+                              srcStage & mDevice->mSupportedStages,
+                              dstStage & mDevice->mSupportedStages, 0, numMemBarriers, &memBarrier,
                               0u, 0, static_cast<uint32>( mImageBarriers.size() ),
                               mImageBarriers.begin() );
         mImageBarriers.clear();
@@ -3369,9 +3364,9 @@ namespace Ogre
         debugLogPso( newPso );
 #endif
 
-        if( ( newPso->geometryShader && !mActiveDevice->mDeviceFeatures.geometryShader ) ||
-            ( newPso->tesselationHullShader && !mActiveDevice->mDeviceFeatures.tessellationShader ) ||
-            ( newPso->tesselationDomainShader && !mActiveDevice->mDeviceFeatures.tessellationShader ) )
+        if( ( newPso->geometryShader && !mDevice->mDeviceFeatures.geometryShader ) ||
+            ( newPso->tesselationHullShader && !mDevice->mDeviceFeatures.tessellationShader ) ||
+            ( newPso->tesselationDomainShader && !mDevice->mDeviceFeatures.tessellationShader ) )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Geometry or tesselation shaders are not supported",
@@ -3504,7 +3499,7 @@ namespace Ogre
         VkPipelineTessellationStateCreateInfo tessStateCi;
         makeVkStruct( tessStateCi, VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO );
         tessStateCi.patchControlPoints = 1u;
-        bool useTesselationState = mActiveDevice->mDeviceFeatures.tessellationShader &&
+        bool useTesselationState = mDevice->mDeviceFeatures.tessellationShader &&
                                    ( newPso->tesselationHullShader || newPso->tesselationDomainShader );
 
         VkPipelineViewportStateCreateInfo viewportStateCi;
@@ -3669,8 +3664,8 @@ namespace Ogre
 #endif
 
         VkPipeline vulkanPso = 0;
-        VkResult result = vkCreateGraphicsPipelines(
-            mActiveDevice->mDevice, mActiveDevice->mPipelineCache, 1u, &pipeline, 0, &vulkanPso );
+        VkResult result = vkCreateGraphicsPipelines( mDevice->mDevice, mDevice->mPipelineCache, 1u,
+                                                     &pipeline, 0, &vulkanPso );
         checkVkResult( result, "vkCreateGraphicsPipelines" );
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
@@ -3711,7 +3706,7 @@ namespace Ogre
 
         OGRE_ASSERT_LOW( pso->rsData );
         VulkanHlmsPso *vulkanPso = static_cast<VulkanHlmsPso *>( pso->rsData );
-        delayed_vkDestroyPipeline( mVaoManager, mActiveDevice->mDevice, vulkanPso->pso, 0 );
+        delayed_vkDestroyPipeline( mVaoManager, mDevice->mDevice, vulkanPso->pso, 0 );
         delete vulkanPso;
         pso->rsData = 0;
     }
@@ -3752,12 +3747,12 @@ namespace Ogre
         samplerDescriptor.magFilter = VulkanMappings::get( newBlock->mMagFilter );
         samplerDescriptor.mipmapMode = VulkanMappings::getMipFilter( newBlock->mMipFilter );
         samplerDescriptor.mipLodBias = newBlock->mMipLodBias;
-        float maxAllowedAnisotropy = mActiveDevice->mDeviceProperties.limits.maxSamplerAnisotropy;
+        float maxAllowedAnisotropy = mDevice->mDeviceProperties.limits.maxSamplerAnisotropy;
         samplerDescriptor.maxAnisotropy = newBlock->mMaxAnisotropy > maxAllowedAnisotropy
                                               ? maxAllowedAnisotropy
                                               : newBlock->mMaxAnisotropy;
         samplerDescriptor.anisotropyEnable =
-            ( mActiveDevice->mDeviceFeatures.samplerAnisotropy == VK_TRUE ) &&
+            ( mDevice->mDeviceFeatures.samplerAnisotropy == VK_TRUE ) &&
             ( samplerDescriptor.maxAnisotropy > 1.0f ? VK_TRUE : VK_FALSE );
         samplerDescriptor.addressModeU = VulkanMappings::get( newBlock->mU );
         samplerDescriptor.addressModeV = VulkanMappings::get( newBlock->mV );
@@ -3773,8 +3768,7 @@ namespace Ogre
         }
 
         VkSampler textureSampler;
-        VkResult result =
-            vkCreateSampler( mActiveDevice->mDevice, &samplerDescriptor, 0, &textureSampler );
+        VkResult result = vkCreateSampler( mDevice->mDevice, &samplerDescriptor, 0, &textureSampler );
         checkVkResult( result, "vkCreateSampler" );
 
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
@@ -3793,7 +3787,7 @@ namespace Ogre
         VkSampler textureSampler = *static_cast<VkSampler *>( block->mRsData );
         delete(uint64 *)block->mRsData;
 #endif
-        delayed_vkDestroySampler( mVaoManager, mActiveDevice->mDevice, textureSampler, 0 );
+        delayed_vkDestroySampler( mVaoManager, mDevice->mDevice, textureSampler, 0 );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_descriptorSetTextureCreated( DescriptorSetTexture *newSet )
@@ -3822,7 +3816,7 @@ namespace Ogre
         OGRE_ASSERT_LOW( set->mRsData );
         VulkanDescriptorSetTexture2 *vulkanSet =
             static_cast<VulkanDescriptorSetTexture2 *>( set->mRsData );
-        vulkanSet->destroy( mVaoManager, mActiveDevice->mDevice, *set );
+        vulkanSet->destroy( mVaoManager, mDevice->mDevice, *set );
         delete vulkanSet;
         set->mRsData = 0;
     }
@@ -3878,9 +3872,9 @@ namespace Ogre
         {
             mStencilRefValue = refValue;
 
-            if( mActiveDevice->mGraphicsQueue.getEncoderState() == VulkanQueue::EncoderGraphicsOpen )
+            if( mDevice->mGraphicsQueue.getEncoderState() == VulkanQueue::EncoderGraphicsOpen )
             {
-                vkCmdSetStencilReference( mActiveDevice->mGraphicsQueue.getCurrentCmdBuffer(),
+                vkCmdSetStencilReference( mDevice->mGraphicsQueue.getCurrentCmdBuffer(),
                                           VK_STENCIL_FACE_FRONT_AND_BACK, mStencilRefValue );
             }
         }

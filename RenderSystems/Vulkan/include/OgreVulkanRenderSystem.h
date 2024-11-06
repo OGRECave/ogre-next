@@ -91,8 +91,6 @@ namespace Ogre
         v1::VertexData *mCurrentVertexBuffer;
         VkPrimitiveTopology mCurrentPrimType;
 
-        VulkanDevice *mActiveDevice;
-
         VulkanDevice *mDevice;
 
         VulkanCache *mCache;
