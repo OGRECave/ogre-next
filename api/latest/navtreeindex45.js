@@ -1,5 +1,6 @@
 var NAVTREEINDEX45 =
 {
+"class_ogre_1_1_lod_output_provider_compressed_mesh.html#aafc0f6d9af796c2033bc41d2c659583a":[8,0,0,573,1],
 "class_ogre_1_1_lod_output_provider_compressed_mesh.html#ae163955b91b3da5da34926607c889eff":[8,0,0,573,7],
 "class_ogre_1_1_lod_output_provider_mesh.html":[8,0,0,574],
 "class_ogre_1_1_lod_output_provider_mesh.html#a2717811709e73b9376755fecf68d2725":[8,0,0,574,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX45 =
 "class_ogre_1_1_material.html#a255bc92a45a8740b388a2b3f0691ee67":[6,2,5,14,10],
 "class_ogre_1_1_material.html#a27911290eaa7990dea483f62d27c9285":[6,2,5,14,44],
 "class_ogre_1_1_material.html#a284464b0561a6f2915f04b0245b987f0":[6,2,5,14,53],
-"class_ogre_1_1_material.html#a28e13cc77ce7deb5f0cbe2388251224d":[6,2,5,14,8],
-"class_ogre_1_1_material.html#a2c26e56f120a9de63a5a85329ce95844":[6,2,5,14,30]
+"class_ogre_1_1_material.html#a28e13cc77ce7deb5f0cbe2388251224d":[6,2,5,14,8]
 };

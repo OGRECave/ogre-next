@@ -1,5 +1,6 @@
 var NAVTREEINDEX42 =
 {
+"class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382cebaab2d3d5abd16b997476cf4ee7bb6cdfa":[6,2,10,61,0,2],
 "class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382cebab44e86e71d625be994fd999d1b5200c0":[6,2,10,61,0,1],
 "class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382cebae6f957e8a548c22ddc66c7c02ab9a94a":[6,2,10,61,0,3],
 "class_ogre_1_1_hlms_pbs_datablock.html#af4e6244ccf12f096691668eb9fe9f468":[6,2,10,61,26],
@@ -248,6 +249,5 @@ var NAVTREEINDEX42 =
 "class_ogre_1_1_internal_cubemap_probe.html":[8,0,0,504],
 "class_ogre_1_1_internal_cubemap_probe.html#a2822e705cf8eb83dbb78bab36a1d4c2d":[8,0,0,504,2],
 "class_ogre_1_1_internal_cubemap_probe.html#a2e99a4879f95a938d99b6b737c3186f0":[8,0,0,504,1],
-"class_ogre_1_1_internal_cubemap_probe.html#a8fa64724e820a7c7f7abd047b3a67510":[8,0,0,504,3],
-"class_ogre_1_1_internal_cubemap_probe.html#a959b164af4e28ef9c895840a4cf411d5":[8,0,0,504,0]
+"class_ogre_1_1_internal_cubemap_probe.html#a8fa64724e820a7c7f7abd047b3a67510":[8,0,0,504,3]
 };

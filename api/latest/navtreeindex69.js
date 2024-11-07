@@ -1,5 +1,6 @@
 var NAVTREEINDEX69 =
 {
+"class_ogre_1_1_std_vector.html":[8,0,0,905],
 "class_ogre_1_1_stream_serialiser.html":[6,2,10,107],
 "class_ogre_1_1_stream_serialiser.html#a072077ff56678e964608a7451db7c3f0":[6,2,10,107,1],
 "class_ogre_1_1_stream_serialiser.html#a072077ff56678e964608a7451db7c3f0a344ebede556d120f89fbfd35b544a0fb":[6,2,10,107,1,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX69 =
 "class_ogre_1_1_technique.html#a27d9a9fc7c1d2f7288320929c2ef8626":[6,2,5,19,32],
 "class_ogre_1_1_technique.html#a28bab7548009bc18723bc0dc20a44f6a":[6,2,5,19,54],
 "class_ogre_1_1_technique.html#a2acb60df20fcd4e4ef5d59c83daff3c0":[6,2,5,19,25],
-"class_ogre_1_1_technique.html#a2fa15fe6701f9aec1acc8e00e6386e2d":[6,2,5,19,12],
-"class_ogre_1_1_technique.html#a365b0e6313b646d0ecc13c1c52a6d3ad":[6,2,5,19,61]
+"class_ogre_1_1_technique.html#a2fa15fe6701f9aec1acc8e00e6386e2d":[6,2,5,19,12]
 };

@@ -223,6 +223,7 @@ var NAVTREEINDEX12 =
 "_ogre_vulkan_render_pass_descriptor_8h.html#ga0c0e627b2b7b2d19c81eb55d43b1026e":[9,0,889,0],
 "_ogre_vulkan_render_pass_descriptor_8h.html#ga464831ff8c2b7ceeeaf002a724e40e67":[9,0,889,1],
 "_ogre_vulkan_render_system_8h.html":[9,0,890],
+"_ogre_vulkan_render_system_8h.html#acb35404346ec6124637b0fc8b0b91772":[9,0,890,2],
 "_ogre_vulkan_resource_transition_8h.html":[9,0,891],
 "_ogre_vulkan_root_layout_8h.html":[9,0,892],
 "_ogre_vulkan_root_layout_8h.html#a54b016c4e2c889e828672d8222f911f4":[9,0,892,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX12 =
 "_ogre_vulkan_utils_8h.html#ae1ce15cb4176db694f6c257c9d9e4dcd":[9,0,901,8],
 "_ogre_vulkan_vao_manager_8h.html":[9,0,902],
 "_ogre_vulkan_win32_support_8h.html":[9,0,903],
-"_ogre_vulkan_win32_support_8h.html#a0172fbace36625330d5f0f163a1ddc1a":[9,0,903,2],
-"_ogre_vulkan_win32_support_8h.html#a687c4460355e5b2230b2ac9715ede6a0":[9,0,903,1]
+"_ogre_vulkan_win32_support_8h.html#a0172fbace36625330d5f0f163a1ddc1a":[9,0,903,2]
 };

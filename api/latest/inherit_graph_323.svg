@@ -11,9 +11,9 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="class_ogre_1_1_hlms_listener.html" target="_top" xlink:title="Listener that can be hooked to an Hlms implementation for extending it with custom code.">
+<g id="a_node1"><a xlink:href="struct_ogre_1_1_hlms_pass_pso.html" target="_top" xlink:title="IT&#39;S MEMBERS MUST BE KEPT POD (Otherwise HlmsPso needs to be modified).">
 <polygon fill="none" stroke="black" points="0,-0.5 0,-19.5 110,-19.5 110,-0.5 0,-0.5"/>
-<text text-anchor="middle" x="55" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::HlmsListener</text>
+<text text-anchor="middle" x="55" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::HlmsPassPso</text>
 </a>
 </g>
 </g>

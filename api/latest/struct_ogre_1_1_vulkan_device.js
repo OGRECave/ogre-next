@@ -2,7 +2,7 @@ var struct_ogre_1_1_vulkan_device =
 [
     [ "ExtraVkFeatures", "struct_ogre_1_1_vulkan_device_1_1_extra_vk_features.html", "struct_ogre_1_1_vulkan_device_1_1_extra_vk_features" ],
     [ "SelectedQueue", "struct_ogre_1_1_vulkan_device_1_1_selected_queue.html", "struct_ogre_1_1_vulkan_device_1_1_selected_queue" ],
-    [ "VulkanDevice", "struct_ogre_1_1_vulkan_device.html#a99a35ff646d43bb6b35d192074e877e6", null ],
+    [ "VulkanDevice", "struct_ogre_1_1_vulkan_device.html#a19c64f47f86427ae7327a763fd4369c1", null ],
     [ "VulkanDevice", "struct_ogre_1_1_vulkan_device.html#aeadd599baa942564b959b53910ee47ad", null ],
     [ "~VulkanDevice", "struct_ogre_1_1_vulkan_device.html#af497fbe8f23d8a1def3ba2a111db3214", null ],
     [ "addExternalInstanceExtensions", "struct_ogre_1_1_vulkan_device.html#a08360b6163664b233a32b7b552bc871a", null ],

@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="struct_ogre_1_1_gpu_program_parameters_1_1_auto_constant_definition.html" target="_top" xlink:title="Structure defining an auto constant that&#39;s available for use in a parameters object.">
+<g id="a_node1"><a xlink:href="class_ogre_1_1_gpu_program_parameters___auto_constant_entry.html" target="_top" xlink:title="Structure recording the use of an automatic parameter.">
 <polygon fill="none" stroke="black" points="0,-0.5 0,-30.5 162,-30.5 162,-0.5 0,-0.5"/>
 <text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::GpuProgramParameters</text>
-<text text-anchor="middle" x="81" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::AutoConstantDefinition</text>
+<text text-anchor="middle" x="81" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">_AutoConstantEntry</text>
 </a>
 </g>
 </g>

@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="class_ogre_1_1_scene_manager_1_1_listener.html" target="_top" xlink:title="Class that allows listening in on the various stages of SceneManager processing, so that custom behav...">
+<g id="a_node1"><a xlink:href="struct_ogre_1_1_scene_manager_1_1_render_context.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="0,-0.5 0,-30.5 118,-30.5 118,-0.5 0,-0.5"/>
 <text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::SceneManager</text>
-<text text-anchor="middle" x="59" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::Listener</text>
+<text text-anchor="middle" x="59" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::RenderContext</text>
 </a>
 </g>
 </g>
