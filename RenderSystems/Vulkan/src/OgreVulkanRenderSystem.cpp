@@ -1321,6 +1321,37 @@ namespace Ogre
 #endif
     }
     //-------------------------------------------------------------------------
+    const FastArray<VkPhysicalDevice>& VulkanRenderSystem::getVkPhysicalDevices( bool refreshList )
+    {
+        if( refreshList || mVkPhysicalDeviceList.empty() )
+        {
+            mVkPhysicalDeviceList.clear();
+
+            VkResult result = VK_SUCCESS;
+            do
+            {
+                uint32 numDevices = 0u;
+                result = vkEnumeratePhysicalDevices( mVkInstance, &numDevices, NULL );
+                checkVkResult( result, "vkEnumeratePhysicalDevices" );
+
+                if( numDevices == 0u )
+                {
+                    OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "No Vulkan devices found.",
+                                 "VulkanRenderSystem::getVkPhysicalDevices" );
+                }
+
+                mVkPhysicalDeviceList.resize( numDevices );
+                result = vkEnumeratePhysicalDevices( mVkInstance, &numDevices,
+                                                     mVkPhysicalDeviceList.begin() );
+                mVkPhysicalDeviceList.resize( numDevices );
+                if( result != VK_INCOMPLETE )
+                    checkVkResult( result, "vkEnumeratePhysicalDevices" );
+
+            } while( result == VK_INCOMPLETE );
+        }
+        return mVkPhysicalDeviceList;
+    }
+    //-------------------------------------------------------------------------
     Window *VulkanRenderSystem::_initialise( bool autoCreateWindow, const String &windowTitle )
     {
         Window *autoWindow = 0;

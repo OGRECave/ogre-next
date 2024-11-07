@@ -38,20 +38,8 @@ namespace Ogre
     {
         mDevices.clear();
 
-        VkInstance instance = renderSystem->getVkInstance();
-
-        VkResult result = VK_SUCCESS;
-
-        uint32 numDevices = 0u;
-        result = vkEnumeratePhysicalDevices( instance, &numDevices, NULL );
-        checkVkResult( result, "vkEnumeratePhysicalDevices" );
-
-        if( numDevices == 0u )
-        {
-            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "No Vulkan devices found.",
-                         "VulkanSupport::enumerateDevices" );
-            return;
-        }
+        const FastArray<VkPhysicalDevice> &devices = renderSystem->getVkPhysicalDevices();
+        uint numDevices = devices.size();
 
         char tmpBuffer[VK_MAX_PHYSICAL_DEVICE_NAME_SIZE + 32];
         LwString logStr( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
@@ -60,18 +48,13 @@ namespace Ogre
         logStr.a( "[Vulkan] Found ", numDevices, " devices" );
         LogManager::getSingleton().logMessage( logStr.c_str() );
 
-        FastArray<VkPhysicalDevice> pd;
-        pd.resize( numDevices );
-        result = vkEnumeratePhysicalDevices( instance, &numDevices, pd.begin() );
-        checkVkResult( result, "vkEnumeratePhysicalDevices" );
-
         LogManager::getSingleton().logMessage( "[Vulkan] Found devices:" );
 
         mDevices.reserve( numDevices );
         for( uint32 i = 0u; i < numDevices; ++i )
         {
             VkPhysicalDeviceProperties deviceProps;
-            vkGetPhysicalDeviceProperties( pd[i], &deviceProps );
+            vkGetPhysicalDeviceProperties( devices[i], &deviceProps );
 
             logStr.clear();
             logStr.a( deviceProps.deviceName, " #", i );
