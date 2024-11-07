@@ -501,7 +501,7 @@ namespace Ogre
             }
 
             if( result != VK_SUCCESS )
-                LogManager::getSingleton().logMessage( "[Vulkan] Pipeline cache outdated, not loaded." );
+                LogManager::getSingleton().logMessage( "Vulkan: Pipeline cache outdated, not loaded." );
             else
             {
                 VkPipelineCacheCreateInfo pipelineCacheCreateInfo;
@@ -516,14 +516,14 @@ namespace Ogre
                 if( VK_SUCCESS == result && pipelineCache != 0 )
                 {
                     std::swap( mDevice->mPipelineCache, pipelineCache );
-                    LogManager::getSingleton().logMessage( "[Vulkan] Pipeline cache loaded, " +
+                    LogManager::getSingleton().logMessage( "Vulkan: Pipeline cache loaded, " +
                                                            StringConverter::toString( buf.size() ) +
                                                            " bytes." );
                 }
                 else
                 {
                     LogManager::getSingleton().logMessage(
-                        "[Vulkan] Pipeline cache loading failed. VkResult = " +
+                        "Vulkan: Pipeline cache loading failed. VkResult = " +
                         vkResultToString( result ) );
                 }
                 if( pipelineCache != 0 )
@@ -571,13 +571,13 @@ namespace Ogre
                     hdr.dataHash = hashResult[0];
 
                     stream->write( buf.data(), buf.size() );
-                    LogManager::getSingleton().logMessage( "[Vulkan] Pipeline cache saved, " +
+                    LogManager::getSingleton().logMessage( "Vulkan: Pipeline cache saved, " +
                                                            StringConverter::toString( buf.size() ) +
                                                            " bytes." );
                 }
             }
             if( result != VK_SUCCESS )
-                LogManager::getSingleton().logMessage( "[Vulkan] Pipeline cache not saved. VkResult = " +
+                LogManager::getSingleton().logMessage( "Vulkan: Pipeline cache not saved. VkResult = " +
                                                        vkResultToString( result ) );
         }
     }
@@ -598,14 +598,14 @@ namespace Ogre
         if( !CreateDebugReportCallback )
         {
             LogManager::getSingleton().logMessage(
-                "[Vulkan] GetProcAddr: Unable to find vkCreateDebugReportCallbackEXT. "
+                "Vulkan: GetProcAddr: Unable to find vkCreateDebugReportCallbackEXT. "
                 "Debug reporting won't be available" );
             return;
         }
         if( !DestroyDebugReportCallback )
         {
             LogManager::getSingleton().logMessage(
-                "[Vulkan] GetProcAddr: Unable to find vkDestroyDebugReportCallbackEXT. "
+                "Vulkan: GetProcAddr: Unable to find vkDestroyDebugReportCallbackEXT. "
                 "Debug reporting won't be available" );
             return;
         }
@@ -653,19 +653,19 @@ namespace Ogre
         VkPhysicalDeviceProperties &properties = mDevice->mDeviceProperties;
 
         LogManager::getSingleton().logMessage(
-            "[Vulkan] API Version: " +
+            "Vulkan: API Version: " +
             StringConverter::toString( VK_VERSION_MAJOR( properties.apiVersion ) ) + "." +
             StringConverter::toString( VK_VERSION_MINOR( properties.apiVersion ) ) + "." +
             StringConverter::toString( VK_VERSION_PATCH( properties.apiVersion ) ) + " (" +
             StringConverter::toString( properties.apiVersion, 0, ' ', std::ios::hex ) + ")" );
         LogManager::getSingleton().logMessage(
-            "[Vulkan] Driver Version (raw): " +
+            "Vulkan: Driver Version (raw): " +
             StringConverter::toString( properties.driverVersion, 0, ' ', std::ios::hex ) );
         LogManager::getSingleton().logMessage(
-            "[Vulkan] Vendor ID: " +
+            "Vulkan: Vendor ID: " +
             StringConverter::toString( properties.vendorID, 0, ' ', std::ios::hex ) );
         LogManager::getSingleton().logMessage(
-            "[Vulkan] Device ID: " +
+            "Vulkan: Device ID: " +
             StringConverter::toString( properties.deviceID, 0, ' ', std::ios::hex ) );
 
         rsc->setDeviceName( properties.deviceName );
@@ -1030,7 +1030,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::initializeExternalVkInstance( VulkanExternalInstance *externalInstance )
     {
-        LogManager::getSingleton().logMessage( "[Vulkan] VkInstance is provided externally" );
+        LogManager::getSingleton().logMessage( "Vulkan: VkInstance is provided externally" );
 
         OGRE_ASSERT_LOW( !mVkInstance );
 
@@ -1053,7 +1053,8 @@ namespace Ogre
             for( size_t i = 0u; i < numExtensions; ++i )
             {
                 const String extensionName = availableExtensions[i].extensionName;
-                LogManager::getSingleton().logMessage( "Found instance extension: " + extensionName );
+                LogManager::getSingleton().logMessage( "Vulkan: Found instance extension: " +
+                                                       extensionName );
                 extensions.insert( extensionName );
             }
 
@@ -1066,7 +1067,7 @@ namespace Ogre
                 if( extensions.find( itor->extensionName ) == extensions.end() )
                 {
                     LogManager::getSingleton().logMessage(
-                        "[Vulkan][INFO] External Instance claims extension " +
+                        "Vulkan: [INFO] External Instance claims extension " +
                         String( itor->extensionName ) +
                         " is present but it's not. This is normal. Ignoring." );
                     itor = efficientVectorRemove( externalInstance->instanceExtensions, itor );
@@ -1111,7 +1112,7 @@ namespace Ogre
             for( size_t i = 0u; i < numInstanceLayers; ++i )
             {
                 const String layerName = instanceLayerProps[i].layerName;
-                LogManager::getSingleton().logMessage( "Found instance layer: " + layerName );
+                LogManager::getSingleton().logMessage( "Vulkan: Found instance layer: " + layerName );
                 layers.insert( layerName );
             }
 
@@ -1123,7 +1124,7 @@ namespace Ogre
                 if( layers.find( itor->layerName ) == layers.end() )
                 {
                     LogManager::getSingleton().logMessage(
-                        "[Vulkan][INFO] External Instance claims layer " + String( itor->layerName ) +
+                        "Vulkan: [INFO] External Instance claims layer " + String( itor->layerName ) +
                         " is present but it's not. This is normal. Ignoring." );
                     itor = efficientVectorRemove( externalInstance->instanceLayers, itor );
                     endt = externalInstance->instanceLayers.end();
@@ -1148,7 +1149,7 @@ namespace Ogre
         if( mVkInstance )
             return;
 
-        LogManager::getSingleton().logMessage( "[Vulkan] Initializing VkInstance" );
+        LogManager::getSingleton().logMessage( "Vulkan: Initializing VkInstance" );
 
 #ifdef OGRE_VULKAN_WINDOW_NULL
         mAvailableVulkanSupports["null"]->setSupported();
@@ -1169,7 +1170,8 @@ namespace Ogre
         for( size_t i = 0u; i < numExtensions; ++i )
         {
             const String extensionName = availableExtensions[i].extensionName;
-            LogManager::getSingleton().logMessage( "Found instance extension: " + extensionName );
+            LogManager::getSingleton().logMessage( "Vulkan: Found instance extension: " +
+                                                   extensionName );
 
 #ifdef OGRE_VULKAN_WINDOW_WIN32
             if( extensionName == VulkanWin32Window::getRequiredExtensionName() )
@@ -1251,7 +1253,7 @@ namespace Ogre
         for( size_t i = 0u; i < numInstanceLayers; ++i )
         {
             const String layerName = instanceLayerProps[i].layerName;
-            LogManager::getSingleton().logMessage( "Found instance layer: " + layerName );
+            LogManager::getSingleton().logMessage( "Vulkan: Found instance layer: " + layerName );
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
             if( layerName == "VK_LAYER_KHRONOS_validation" )
             {
@@ -1326,7 +1328,7 @@ namespace Ogre
 
         if( refreshList || mVulkanPhysicalDeviceList.empty() )
         {
-            LogManager::getSingleton().logMessage( "[Vulkan] Device detection starts" );
+            LogManager::getSingleton().logMessage( "Vulkan: Device detection starts" );
 
             // enumerate
             std::vector<VkPhysicalDevice> devices;
@@ -1365,11 +1367,11 @@ namespace Ogre
                 if( sameNameIndex != 0 )
                     name += " (" + Ogre::StringConverter::toString( sameNameIndex + 1 ) + ")";
 
-                LogManager::getSingleton().logMessage( "[Vulkan] \"" + name + "\"" );
+                LogManager::getSingleton().logMessage( "Vulkan: \"" + name + "\"" );
                 mVulkanPhysicalDeviceList.push_back( { device, name } );
             }
 
-            LogManager::getSingleton().logMessage( "[Vulkan] Device detection ends" );
+            LogManager::getSingleton().logMessage( "Vulkan: Device detection ends" );
         }
         return mVulkanPhysicalDeviceList;
     }
@@ -1499,7 +1501,8 @@ namespace Ogre
                 for( size_t i = 0u; i < numExtensions; ++i )
                 {
                     const String extensionName = availableExtensions[i].extensionName;
-                    LogManager::getSingleton().logMessage( "Found device extension: " + extensionName );
+                    LogManager::getSingleton().logMessage( "Vulkan: Found device extension: " +
+                                                           extensionName );
 
                     if( extensionName == VK_KHR_MAINTENANCE2_EXTENSION_NAME )
                     {

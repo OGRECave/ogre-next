@@ -77,7 +77,8 @@ namespace Ogre
         mSupportedStages( 0xFFFFFFFF ),
         mIsExternal( true )
     {
-        LogManager::getSingleton().logMessage( "Creating Vulkan Device from External VkVulkan handle" );
+        LogManager::getSingleton().logMessage(
+            "Vulkan: Creating Vulkan Device from External VkVulkan handle" );
 
         memset( &mDeviceMemoryProperties, 0, sizeof( mDeviceMemoryProperties ) );
 
@@ -123,7 +124,8 @@ namespace Ogre
             for( size_t i = 0u; i < numExtensions; ++i )
             {
                 const String extensionName = availableExtensions[i].extensionName;
-                LogManager::getSingleton().logMessage( "Found device extension: " + extensionName );
+                LogManager::getSingleton().logMessage( "Vulkan: Found device extension: " +
+                                                       extensionName );
                 extensions.insert( extensionName );
             }
 
@@ -136,7 +138,7 @@ namespace Ogre
                 if( extensions.find( itor->extensionName ) == extensions.end() )
                 {
                     LogManager::getSingleton().logMessage(
-                        "[Vulkan][INFO] External Device claims extension " +
+                        "Vulkan: [INFO] External Device claims extension " +
                         String( itor->extensionName ) +
                         " is present but it's not. This is normal. Ignoring." );
                     itor = efficientVectorRemove( deviceExtensionsCopy, itor );
@@ -152,8 +154,8 @@ namespace Ogre
             itor = deviceExtensionsCopy.begin();
             while( itor != endt )
             {
-                LogManager::getSingleton().logMessage( "Externally requested Device Extension: " +
-                                                       String( itor->extensionName ) );
+                LogManager::getSingleton().logMessage(
+                    "Vulkan: Externally requested Device Extension: " + String( itor->extensionName ) );
                 mDeviceExtensions.push_back( itor->extensionName );
                 ++itor;
             }
@@ -362,7 +364,7 @@ namespace Ogre
 
             while( itor != endt )
             {
-                LogManager::getSingleton().logMessage( "Requesting Instance Extension: " +
+                LogManager::getSingleton().logMessage( "Vulkan: Requesting Instance Extension: " +
                                                        String( *itor ) );
                 msInstanceExtensions.push_back( *itor );
                 ++itor;
@@ -388,7 +390,7 @@ namespace Ogre
 
         while( itor != endt )
         {
-            LogManager::getSingleton().logMessage( "Externally requested Instance Extension: " +
+            LogManager::getSingleton().logMessage( "Vulkan: Externally requested Instance Extension: " +
                                                    String( itor->extensionName ) );
             msInstanceExtensions.push_back( itor->extensionName );
             ++itor;
@@ -408,7 +410,7 @@ namespace Ogre
                 break;
             }
 
-        LogManager::getSingleton().logMessage( "[Vulkan] Requested \"" + deviceName + "\", selected \"" +
+        LogManager::getSingleton().logMessage( "Vulkan: Requested \"" + deviceName + "\", selected \"" +
                                                devices[deviceIdx].title + "\"" );
 
         mPhysicalDevice = devices[deviceIdx].physicalDevice;
@@ -557,7 +559,8 @@ namespace Ogre
 
             while( itor != endt )
             {
-                LogManager::getSingleton().logMessage( "Requesting Extension: " + String( *itor ) );
+                LogManager::getSingleton().logMessage( "Vulkan: Requesting Extension: " +
+                                                       String( *itor ) );
                 mDeviceExtensions.push_back( *itor );
                 ++itor;
             }
