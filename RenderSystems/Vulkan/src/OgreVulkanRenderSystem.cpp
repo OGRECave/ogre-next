@@ -1321,12 +1321,15 @@ namespace Ogre
 #endif
     }
     //-------------------------------------------------------------------------
-    const FastArray<VkPhysicalDevice>& VulkanRenderSystem::getVkPhysicalDevices( bool refreshList )
+    const VulkanPhysicalDeviceList &VulkanRenderSystem::getVulkanPhysicalDevices( bool refreshList )
     {
-        if( refreshList || mVkPhysicalDeviceList.empty() )
-        {
-            mVkPhysicalDeviceList.clear();
 
+        if( refreshList || mVulkanPhysicalDeviceList.empty() )
+        {
+            LogManager::getSingleton().logMessage( "[Vulkan] Device detection starts" );
+
+            // enumerate
+            std::vector<VkPhysicalDevice> devices;
             VkResult result = VK_SUCCESS;
             do
             {
@@ -1340,16 +1343,35 @@ namespace Ogre
                                  "VulkanRenderSystem::getVkPhysicalDevices" );
                 }
 
-                mVkPhysicalDeviceList.resize( numDevices );
-                result = vkEnumeratePhysicalDevices( mVkInstance, &numDevices,
-                                                     mVkPhysicalDeviceList.begin() );
-                mVkPhysicalDeviceList.resize( numDevices );
+                devices.resize( numDevices );
+                result = vkEnumeratePhysicalDevices( mVkInstance, &numDevices, devices.data() );
+                devices.resize( numDevices );
                 if( result != VK_INCOMPLETE )
                     checkVkResult( result, "vkEnumeratePhysicalDevices" );
 
             } while( result == VK_INCOMPLETE );
+
+            // assign unique names, allowing reordering/inserting/removing
+            map<String, unsigned>::type sameNameCounter;
+            mVulkanPhysicalDeviceList.clear();
+            mVulkanPhysicalDeviceList.reserve(devices.size());
+            for (auto device : devices)
+            {
+                VkPhysicalDeviceProperties deviceProps;
+                vkGetPhysicalDeviceProperties( device, &deviceProps );
+
+                String name( deviceProps.deviceName );
+                unsigned sameNameIndex = sameNameCounter[name]++; // inserted entry is zero-initialized
+                if( sameNameIndex != 0 )
+                    name += " (" + Ogre::StringConverter::toString( sameNameIndex + 1 ) + ")";
+
+                LogManager::getSingleton().logMessage( "[Vulkan] \"" + name + "\"" );
+                mVulkanPhysicalDeviceList.push_back( { device, name } );
+            }
+
+            LogManager::getSingleton().logMessage( "[Vulkan] Device detection ends" );
         }
-        return mVkPhysicalDeviceList;
+        return mVulkanPhysicalDeviceList;
     }
     //-------------------------------------------------------------------------
     Window *VulkanRenderSystem::_initialise( bool autoCreateWindow, const String &windowTitle )
@@ -1447,7 +1469,7 @@ namespace Ogre
             initializeVkInstance();
 
             if( !externalDevice )
-                mDevice = new VulkanDevice( mVkInstance, mVulkanSupport->getSelectedDeviceIdx(), this );
+                mDevice = new VulkanDevice( mVkInstance, mVulkanSupport->getSelectedDeviceName(), this );
             else
                 mDevice = new VulkanDevice( mVkInstance, *externalDevice, this );
 

@@ -41,11 +41,7 @@ namespace Ogre
 
     class _OgreVulkanExport VulkanSupport
     {
-        FastArray<String> mDevices;
-
         bool mSupported;
-
-        void enumerateDevices( VulkanRenderSystem *renderSystem );
 
         void initialize( VulkanRenderSystem *renderSystem );
 
@@ -66,7 +62,7 @@ namespace Ogre
 
         virtual String validateConfigOptions();
 
-        uint32 getSelectedDeviceIdx() const;
+        String getSelectedDeviceName() const;
 
         ConfigOptionMap &getConfigOptions( VulkanRenderSystem *renderSystem );
 

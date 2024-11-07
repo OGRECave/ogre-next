@@ -51,6 +51,13 @@ namespace Ogre
     struct VulkanHlmsPso;
     class VulkanSupport;
 
+    struct VulkanPhysicalDevice
+    {
+        VkPhysicalDevice physicalDevice;
+        String title;
+    };
+    typedef std::vector<VulkanPhysicalDevice> VulkanPhysicalDeviceList;
+
     /**
        Implementation of Vulkan as a rendering system.
     */
@@ -74,7 +81,7 @@ namespace Ogre
         VulkanProgramFactory *mVulkanProgramFactory3;
 
         VkInstance mVkInstance;
-        FastArray<VkPhysicalDevice> mVkPhysicalDeviceList;
+        VulkanPhysicalDeviceList mVulkanPhysicalDeviceList;
         VulkanSupport *mVulkanSupport;
 
         std::map<IdString, VulkanSupport *> mAvailableVulkanSupports;
@@ -200,7 +207,7 @@ namespace Ogre
         void sharedVkInitialization();
 
         VkInstance getVkInstance() const { return mVkInstance; }
-        const FastArray<VkPhysicalDevice> &getVkPhysicalDevices( bool refreshList = false );
+        const VulkanPhysicalDeviceList &getVulkanPhysicalDevices( bool refreshList = false );
 
         Window *_initialise( bool autoCreateWindow,
                              const String &windowTitle = "OGRE Render Window" ) override;

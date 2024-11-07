@@ -49,7 +49,7 @@ namespace Ogre
 {
     static FastArray<IdString> msInstanceExtensions;
 
-    VulkanDevice::VulkanDevice( VkInstance instance, uint32 deviceIdx,
+    VulkanDevice::VulkanDevice( VkInstance instance, const String &deviceName,
                                 VulkanRenderSystem *renderSystem ) :
         mInstance( instance ),
         mPhysicalDevice( 0 ),
@@ -62,7 +62,7 @@ namespace Ogre
         mIsExternal( false )
     {
         memset( &mDeviceMemoryProperties, 0, sizeof( mDeviceMemoryProperties ) );
-        createPhysicalDevice( deviceIdx );
+        createPhysicalDevice( deviceName );
     }
     //-------------------------------------------------------------------------
     VulkanDevice::VulkanDevice( VkInstance instance, const VulkanExternalDevice &externalDevice,
@@ -397,30 +397,21 @@ namespace Ogre
         std::sort( msInstanceExtensions.begin(), msInstanceExtensions.end() );
     }
     //-------------------------------------------------------------------------
-    void VulkanDevice::createPhysicalDevice( uint32 deviceIdx )
+    void VulkanDevice::createPhysicalDevice( const String &deviceName )
     {
-        VkResult result = VK_SUCCESS;
+        const auto& devices = mRenderSystem->getVulkanPhysicalDevices();
+        size_t deviceIdx = 0;
+        for( size_t i = 0; i < devices.size(); ++i )
+            if( devices[i].title == deviceName )
+            {
+                deviceIdx = i;
+                break;
+            }
 
-        const FastArray<VkPhysicalDevice>& devices = mRenderSystem->getVkPhysicalDevices();
-        uint numDevices = devices.size();
+        LogManager::getSingleton().logMessage( "[Vulkan] Requested \"" + deviceName + "\", selected \"" +
+                                               devices[deviceIdx].title + "\"" );
 
-        const String numDevicesStr = StringConverter::toString( numDevices );
-        String deviceIdsStr = StringConverter::toString( deviceIdx );
-
-        LogManager::getSingleton().logMessage( "[Vulkan] Found " + numDevicesStr + " devices" );
-
-        if( deviceIdx >= numDevices )
-        {
-            LogManager::getSingleton().logMessage( "[Vulkan] Requested device index " + deviceIdsStr +
-                                                   " but there's only " +
-                                                   StringConverter::toString( numDevices ) + "devices" );
-            deviceIdx = 0u;
-            deviceIdsStr = "0";
-        }
-
-        LogManager::getSingleton().logMessage( "[Vulkan] Selecting device " + deviceIdsStr );
-
-        mPhysicalDevice = devices[deviceIdx];
+        mPhysicalDevice = devices[deviceIdx].physicalDevice;
 
         vkGetPhysicalDeviceMemoryProperties( mPhysicalDevice, &mDeviceMemoryProperties );
 
