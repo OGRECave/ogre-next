@@ -60,7 +60,7 @@ add_library(${OGRE_SAMPLES_COMMON_LIBRARY} STATIC ${SOURCE_FILES} ${HEADER_FILES
 
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(${OGRE_SAMPLES_COMMON_LIBRARY} ${SDL2_LIBRARY} ${OGRE_NEXT}HlmsPbs ${OGRE_NEXT}HlmsUnlit)
+target_link_libraries(${OGRE_SAMPLES_COMMON_LIBRARY} SDL2::SDL2 ${OGRE_NEXT}HlmsPbs ${OGRE_NEXT}HlmsUnlit)
 if( OGRE_BUILD_COMPONENT_ATMOSPHERE )
 	target_link_libraries(${OGRE_SAMPLES_COMMON_LIBRARY} ${OGRE_NEXT}Atmosphere)
 endif()
