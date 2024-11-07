@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$struct_ogre_1_1_particle_gpu_data.html" title=" " alt="" coords="5,5,172,32"/>
+<area shape="rect" id="node1" href="$class_ogre_1_1_particle_emitter_def_data_factory.html" title="Abstract class defining the interface to be implemented by creators of EmitterDefData subclasses." alt="" coords="5,129,185,170"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_box_emitter_factory2.html" title=" " alt="" coords="248,5,437,32"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_cylinder_emitter_factory2.html" title=" " alt="" coords="233,56,452,83"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_ellipsoid_emitter_factory2.html" title=" " alt="" coords="233,107,452,133"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_hollow_ellipsoid_emitter_factory2.html" title=" " alt="" coords="238,158,447,199"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_point_emitter_factory2.html" title=" " alt="" coords="244,224,441,251"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_ring_emitter_factory2.html" title=" " alt="" coords="246,275,439,301"/>
 </map>

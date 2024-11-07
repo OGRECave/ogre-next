@@ -1,5 +1,6 @@
 var NAVTREEINDEX111 =
 {
+"struct_ogre_1_1_hlms_texture_pack.html#a60468bc4cd9cffabdbb855f4a4a34cdb":[6,2,10,67,4],
 "struct_ogre_1_1_hlms_texture_pack.html#a8af0efdfde628299896a66c8c63e63be":[6,2,10,67,9],
 "struct_ogre_1_1_hlms_texture_pack.html#a97b6cd0d6a116d7f10a5b2a3c362e741":[6,2,10,67,10],
 "struct_ogre_1_1_hlms_texture_pack.html#abe03b079ad2ba0a5c7ae519ca17aea29":[6,2,10,67,1],
@@ -28,10 +29,10 @@ var NAVTREEINDEX111 =
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#aac84518f8d8108d7f7875516128b3474":[6,0,0,13,0,1],
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#acd53cb3f6a58dbf08f1baa12bcb03033":[6,0,0,13,0,2],
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#ad94bec02d71f91fd2f543f3488d25d61":[6,0,0,13,0,0],
-"struct_ogre_1_1_intersection_scene_query_result.html":[6,0,1,22],
 "struct_ogre_1_1_intersection_scene_query_result.html":[6,2,11,22],
-"struct_ogre_1_1_intersection_scene_query_result.html#a7f5b38d7ff668a368bcef9886fff1941":[6,2,11,22,1],
+"struct_ogre_1_1_intersection_scene_query_result.html":[6,0,1,22],
 "struct_ogre_1_1_intersection_scene_query_result.html#a7f5b38d7ff668a368bcef9886fff1941":[6,0,1,22,1],
+"struct_ogre_1_1_intersection_scene_query_result.html#a7f5b38d7ff668a368bcef9886fff1941":[6,2,11,22,1],
 "struct_ogre_1_1_intersection_scene_query_result.html#ae58676373c408a358f7cc01874703abc":[6,2,11,22,0],
 "struct_ogre_1_1_intersection_scene_query_result.html#ae58676373c408a358f7cc01874703abc":[6,0,1,22,0],
 "struct_ogre_1_1_irradiance_field_settings.html":[8,0,0,516],
@@ -248,6 +249,5 @@ var NAVTREEINDEX111 =
 "struct_ogre_1_1_metal_device.html#a28a2d90834659ad248611d6acb370943":[8,0,0,618,6],
 "struct_ogre_1_1_metal_device.html#a28ffa138d4bf01e8c8b6eb808546526a":[8,0,0,618,2],
 "struct_ogre_1_1_metal_device.html#a3c2914a26f607a4e1f2264f0cf5c3200":[8,0,0,618,5],
-"struct_ogre_1_1_metal_device.html#a50f9c00467fa7f7cd0367466dee54c4e":[8,0,0,618,13],
-"struct_ogre_1_1_metal_device.html#a57db350efd3f3b4ce38457d7b83bcb21":[8,0,0,618,3]
+"struct_ogre_1_1_metal_device.html#a50f9c00467fa7f7cd0367466dee54c4e":[8,0,0,618,13]
 };

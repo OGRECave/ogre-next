@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="struct_ogre_1_1_resource_group_manager_1_1_resource_location.html" target="_top" xlink:title="Resource location entry.">
+<g id="a_node1"><a xlink:href="struct_ogre_1_1_resource_group_manager_1_1_resource_declaration.html" target="_top" xlink:title="Nested struct defining a resource declaration.">
 <polygon fill="none" stroke="black" points="0,-0.5 0,-30.5 163,-30.5 163,-0.5 0,-0.5"/>
 <text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ResourceGroupManager</text>
-<text text-anchor="middle" x="81.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::ResourceLocation</text>
+<text text-anchor="middle" x="81.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::ResourceDeclaration</text>
 </a>
 </g>
 </g>

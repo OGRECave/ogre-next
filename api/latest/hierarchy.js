@@ -170,6 +170,7 @@ var hierarchy =
     [ "Ogre::FastArray< VkImageMemoryBarrier >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< VkImageView >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< VkLayerProperties >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< VkPhysicalDevice >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< VkPipelineStageFlags >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< VkQueueFamilyProperties >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< VkSemaphore >", "class_ogre_1_1_fast_array.html", null ],
