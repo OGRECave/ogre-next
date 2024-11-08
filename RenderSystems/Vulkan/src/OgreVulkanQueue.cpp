@@ -54,8 +54,8 @@ namespace Ogre
         mFamilyIdx( 0u ),
         mQueueIdx( 0u ),
         mQueue( 0 ),
-        mCurrentCmdBuffer( 0 ),
         mOwnerDevice( 0 ),
+        mCurrentCmdBuffer( 0 ),
         mVaoManager( 0 ),
         mRenderSystem( 0 ),
         mCurrentFence( 0 ),
@@ -635,7 +635,7 @@ namespace Ogre
 
             // Wait until earlier render, compute and transfers are done so we can copy what
             // they wrote (unless we're only here for a texture transition)
-            vkCmdPipelineBarrier( mCurrentCmdBuffer, srcStage & mOwnerDevice->mSupportedStages,
+            vkCmdPipelineBarrier( getCurrentCmdBuffer(), srcStage & mOwnerDevice->mSupportedStages,
                                   VK_PIPELINE_STAGE_TRANSFER_BIT, 0, numMemBarriers, &memBarrier, 0u, 0,
                                   numImageMemBarriers, &imageMemBarrier );
         }
@@ -839,7 +839,7 @@ namespace Ogre
 
             // Wait until earlier render, compute and transfers are done so we can copy what
             // they wrote (unless we're only here for a texture transition)
-            vkCmdPipelineBarrier( mCurrentCmdBuffer, srcStage & mOwnerDevice->mSupportedStages,
+            vkCmdPipelineBarrier( getCurrentCmdBuffer(), srcStage & mOwnerDevice->mSupportedStages,
                                   VK_PIPELINE_STAGE_TRANSFER_BIT, 0, numMemBarriers, &memBarrier, 0u, 0,
                                   numImageMemBarriers, &imageMemBarrier );
         }
@@ -937,7 +937,7 @@ namespace Ogre
                 numMemBarriers = 1u;
 
                 // GPU must stop using this buffer before we can write into it
-                vkCmdPipelineBarrier( mCurrentCmdBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,
+                vkCmdPipelineBarrier( getCurrentCmdBuffer(), VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,
                                       VK_PIPELINE_STAGE_TRANSFER_BIT, 0, numMemBarriers, &memBarrier, 0u,
                                       0, 0u, 0 );
             }
@@ -997,7 +997,7 @@ namespace Ogre
 
             // Wait until earlier render, compute and transfers are done
             // Block render, compute and transfers until we're done
-            vkCmdPipelineBarrier( mCurrentCmdBuffer, VK_PIPELINE_STAGE_TRANSFER_BIT,
+            vkCmdPipelineBarrier( getCurrentCmdBuffer(), VK_PIPELINE_STAGE_TRANSFER_BIT,
                                   dstStage & mOwnerDevice->mSupportedStages, 0, numMemBarriers,
                                   &memBarrier, 0u, 0, static_cast<uint32_t>( mImageMemBarriers.size() ),
                                   mImageMemBarriers.begin() );
@@ -1220,8 +1220,8 @@ namespace Ogre
                 // Get some semaphores so that presentation can wait for this job to finish rendering
                 // (one for each window that will be swapped)
                 numWindowsPendingSwap = mWindowsPendingSwap.size();
-                mVaoManager->getAvailableSempaphores( mGpuSignalSemaphForCurrCmdBuff,
-                                                      numWindowsPendingSwap );
+                mVaoManager->getAvailableSemaphores( mGpuSignalSemaphForCurrCmdBuff,
+                                                     numWindowsPendingSwap );
             }
 
             if( !mGpuSignalSemaphForCurrCmdBuff.empty() )

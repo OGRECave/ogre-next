@@ -297,7 +297,7 @@ namespace Ogre
                 region.srcOffset = srcOffset + srcOffsetStart;
                 region.dstOffset = dstOffset + dstOffsetStart;
                 region.size = alignToNextMultiple<size_t>( length, 4u );
-                vkCmdCopyBuffer( mDevice->mGraphicsQueue.mCurrentCmdBuffer, srcBuf, dstBuf, 1u,
+                vkCmdCopyBuffer( mDevice->mGraphicsQueue.getCurrentCmdBuffer(), srcBuf, dstBuf, 1u,
                                  &region );
 
                 if( this->mDiscardBuffer )

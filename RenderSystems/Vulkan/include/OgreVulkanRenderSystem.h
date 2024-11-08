@@ -51,6 +51,13 @@ namespace Ogre
     struct VulkanHlmsPso;
     class VulkanSupport;
 
+    struct VulkanPhysicalDevice
+    {
+        VkPhysicalDevice physicalDevice;
+        String title;
+    };
+    typedef std::vector<VulkanPhysicalDevice> VulkanPhysicalDeviceList;
+
     /**
        Implementation of Vulkan as a rendering system.
     */
@@ -74,6 +81,7 @@ namespace Ogre
         VulkanProgramFactory *mVulkanProgramFactory3;
 
         VkInstance mVkInstance;
+        VulkanPhysicalDeviceList mVulkanPhysicalDeviceList;
         VulkanSupport *mVulkanSupport;
 
         std::map<IdString, VulkanSupport *> mAvailableVulkanSupports;
@@ -90,8 +98,6 @@ namespace Ogre
         v1::IndexData *mCurrentIndexBuffer;
         v1::VertexData *mCurrentVertexBuffer;
         VkPrimitiveTopology mCurrentPrimType;
-
-        VulkanDevice *mActiveDevice;
 
         VulkanDevice *mDevice;
 
@@ -148,8 +154,6 @@ namespace Ogre
         /// Creates a dummy VkRenderPass for use in PSO creation
         VkRenderPass getVkRenderPass( HlmsPassPso passPso, uint8 &outMrtCount );
 
-        void bindDescriptorSet() const;
-
         void flushRootLayout();
         void flushRootLayoutCS();
 
@@ -161,7 +165,6 @@ namespace Ogre
 
         const String &getName() const override;
         const String &getFriendlyName() const override;
-        void refreshConfig();
         void initConfigOptions();
         ConfigOptionMap &getConfigOptions() override;
         void setConfigOption( const String &name, const String &value ) override;
@@ -204,6 +207,7 @@ namespace Ogre
         void sharedVkInitialization();
 
         VkInstance getVkInstance() const { return mVkInstance; }
+        const VulkanPhysicalDeviceList &getVulkanPhysicalDevices( bool refreshList = false );
 
         Window *_initialise( bool autoCreateWindow,
                              const String &windowTitle = "OGRE Render Window" ) override;
@@ -274,14 +278,9 @@ namespace Ogre
         void _dispatch( const HlmsComputePso &pso ) override;
 
         void _setVertexArrayObject( const VertexArrayObject *vao ) override;
-        void flushDescriptorState(
-            VkPipelineBindPoint pipeline_bind_point, const VulkanConstBufferPacked &constBuffer,
-            const size_t bindOffset, const size_t bytesToWrite,
-            const unordered_map<unsigned, VulkanConstantDefinitionBindingParam>::type &shaderBindings );
 
         void _render( const CbDrawCallIndexed *cmd ) override;
         void _render( const CbDrawCallStrip *cmd ) override;
-        void bindDescriptorSet( VulkanVaoManager *&vaoManager );
         void _renderEmulated( const CbDrawCallIndexed *cmd ) override;
         void _renderEmulated( const CbDrawCallStrip *cmd ) override;
 
@@ -406,8 +405,8 @@ namespace Ogre
         void _descriptorSetUavDestroyed( DescriptorSetUav *set ) override;
 
         SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
-                                                     PixelFormatGpu format, uint32 textureFlags,
-                                                     uint32 depthTextureFlags ) override;
+                                                     PixelFormatGpu format,
+                                                     uint32 textureFlags ) override;
         VulkanDevice *getVulkanDevice() const { return mDevice; }
         void _notifyDeviceStalled();
 

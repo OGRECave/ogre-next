@@ -221,7 +221,7 @@ namespace Ogre
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
         VulkanDevice *device = vaoManager->getDevice();
 
-        VkCommandBuffer cmdBuffer = device->mGraphicsQueue.mCurrentCmdBuffer;
+        VkCommandBuffer cmdBuffer = device->mGraphicsQueue.getCurrentCmdBuffer();
 
         OGRE_ASSERT_MEDIUM( mUnmapTicket != std::numeric_limits<size_t>::max() &&
                             "VulkanStagingBuffer already unmapped!" );
@@ -313,7 +313,7 @@ namespace Ogre
         OGRE_ASSERT_HIGH( !Workarounds::mPowerVRAlignment ||
                           ( region.dstOffset % Workarounds::mPowerVRAlignment ) == 0u );
 #endif
-        vkCmdCopyBuffer( device->mGraphicsQueue.mCurrentCmdBuffer, bufferInterface->getVboName(),
+        vkCmdCopyBuffer( device->mGraphicsQueue.getCurrentCmdBuffer(), bufferInterface->getVboName(),
                          mVboName, 1u, &region );
 
         return freeRegionOffset;
@@ -354,7 +354,7 @@ namespace Ogre
         OGRE_ASSERT_HIGH( !Workarounds::mPowerVRAlignment ||
                           ( region.dstOffset % Workarounds::mPowerVRAlignment ) == 0u );
 #endif
-        vkCmdCopyBuffer( device->mGraphicsQueue.mCurrentCmdBuffer, mVboName, dstBuffer, 1u, &region );
+        vkCmdCopyBuffer( device->mGraphicsQueue.getCurrentCmdBuffer(), mVboName, dstBuffer, 1u, &region );
 
         if( mUploadOnly )
         {
@@ -417,7 +417,7 @@ namespace Ogre
         OGRE_ASSERT_HIGH( !Workarounds::mPowerVRAlignment ||
                           ( region.dstOffset % Workarounds::mPowerVRAlignment ) == 0u );
 #endif
-        vkCmdCopyBuffer( device->mGraphicsQueue.mCurrentCmdBuffer, srcBuffer, mVboName, 1u, &region );
+        vkCmdCopyBuffer( device->mGraphicsQueue.getCurrentCmdBuffer(), srcBuffer, mVboName, 1u, &region );
 
         return freeRegionOffset + extraOffset;
     }

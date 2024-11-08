@@ -3707,11 +3707,9 @@ namespace Ogre
     //---------------------------------------------------------------------
     SampleDescription D3D11RenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
                                                                     PixelFormatGpu format,
-                                                                    uint32 textureFlags,
-                                                                    uint32 depthTextureFlags )
+                                                                    uint32 textureFlags )
     {
         OGRE_UNUSED_VAR( textureFlags );
-        OGRE_UNUSED_VAR( depthTextureFlags );
 
         SampleDescription res;
         DXGI_FORMAT dxgiFormat = D3D11Mappings::get( format );

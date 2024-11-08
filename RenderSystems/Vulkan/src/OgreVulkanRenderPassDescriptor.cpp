@@ -904,8 +904,9 @@ namespace Ogre
         if( mInformationOnly )
             return;
 
-        VkCommandBuffer cmdBuffer = mQueue->mCurrentCmdBuffer;
+        VkCommandBuffer cmdBuffer = mQueue->getCurrentCmdBuffer();
 
+        OGRE_ASSERT_LOW( mSharedFboItor != mRenderSystem->_getFrameBufferDescMap().end() );
         const VulkanFrameBufferDescValue &fboDesc = mSharedFboItor->second;
 
         size_t fboIdx = 0u;
@@ -967,7 +968,7 @@ namespace Ogre
         if( mQueue->getEncoderState() != VulkanQueue::EncoderGraphicsOpen )
             return;
 
-        vkCmdEndRenderPass( mQueue->mCurrentCmdBuffer );
+        vkCmdEndRenderPass( mQueue->getCurrentCmdBuffer() );
 
         if( isInterruptingRendering )
         {

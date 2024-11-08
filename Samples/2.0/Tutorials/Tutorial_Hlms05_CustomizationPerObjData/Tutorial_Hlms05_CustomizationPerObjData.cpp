@@ -1,7 +1,7 @@
 
-#include "Tutorial_Hlms05_CustomizationPerObjArbitraryData.h"
+#include "Tutorial_Hlms05_CustomizationPerObjData.h"
 
-#include "Tutorial_Hlms05_CustomizationPerObjArbitraryDataGameState.h"
+#include "Tutorial_Hlms05_CustomizationPerObjDataGameState.h"
 
 // Declares WinMain / main
 #include "MainEntryPointHelper.h"
@@ -25,9 +25,9 @@ namespace Demo
                                          GraphicsSystem **outGraphicsSystem,
                                          GameState **outLogicGameState, LogicSystem **outLogicSystem )
     {
-        Hlms05CustomizationPerObjArbitraryDataGameState *gfxGameState =
-            new Hlms05CustomizationPerObjArbitraryDataGameState(
-                "Tutorial_Hlms02_CustomizationPerObj showed how to show send a custom colour.\n"
+        Hlms05CustomizationPerObjDataGameState *gfxGameState =
+            new Hlms05CustomizationPerObjDataGameState(
+                "Tutorial_Hlms05_CustomizationPerObjData showed how to show send a custom colour.\n"
                 "However such sample forces all customized objects to share the same colour\n"
                 "(or at most, a limited number of multiple colours).\n"
                 "\n"
@@ -53,10 +53,9 @@ namespace Demo
                 "\n"
                 "\n"
                 "This sample depends on the media files:\n"
-                "   * Samples/Media/2.0/materials/Tutorial_Hlms05_CustomizationPerObjArbitraryData\n" );
+                "   * Samples/Media/2.0/materials/Tutorial_Hlms05_CustomizationPerObjData\n" );
 
-        GraphicsSystem *graphicsSystem =
-            new Hlms05CustomizationPerObjArbitraryDataGraphicsSystem( gfxGameState );
+        GraphicsSystem *graphicsSystem = new Hlms05CustomizationPerObjDataGraphicsSystem( gfxGameState );
 
         gfxGameState->_notifyGraphicsSystem( graphicsSystem );
 

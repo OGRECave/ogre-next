@@ -77,7 +77,6 @@ namespace Ogre
         uint32 mQueueIdx;
 
         VkQueue mQueue;
-        VkCommandBuffer mCurrentCmdBuffer;
 
         VulkanDevice *mOwnerDevice;
 
@@ -116,6 +115,7 @@ namespace Ogre
         FastArray<VulkanWindowSwapChainBased *> mWindowsPendingSwap;
 
     protected:
+        VkCommandBuffer mCurrentCmdBuffer;
         FastArray<VkCommandBuffer> mPendingCmds;
 
         VulkanVaoManager *mVaoManager;
@@ -220,6 +220,11 @@ namespace Ogre
         void endCommandBuffer();
 
     public:
+        VkCommandBuffer getCurrentCmdBuffer()
+        {
+            OGRE_ASSERT_LOW( mCurrentCmdBuffer );
+            return mCurrentCmdBuffer;
+        }
         EncoderState getEncoderState() const { return mEncoderState; }
 
         void getGraphicsEncoder();

@@ -45,7 +45,7 @@ endif ()
 # OgreAddTargets and OgreConfigTargets make use of OGRE_NEXT and OGRE_NEXT_PREFIX
 option(OGRE_USE_NEW_PROJECT_NAME
 	"Libraries containing Ogre name will be called OgreNext, e.g. 'OgreNext.dll' instead of 'Ogre.dll'"
-	FALSE)
+	TRUE)
 
 if( OGRE_USE_NEW_PROJECT_NAME )
 	set( OGRE_NEXT "OgreNext" )
@@ -559,7 +559,7 @@ set( OGRE_DEBUG_LEVEL_DEBUG 3 CACHE STRING
     3 - High. We perform intensive validation without concerns for performance."
 )
 set( OGRE_DEBUG_LEVEL_RELEASE 0 CACHE STRING
-    "Specify debug level for Release, RelWithDebInfo and MinSizeRel builds. See OGRE_MAX_DEBUG_LEVEL_DEBUG" )
+    "Specify debug level for Release, RelWithDebInfo and MinSizeRel builds. See OGRE_DEBUG_LEVEL_DEBUG" )
 
 cmake_dependent_option(OGRE_CONFIG_CONTAINERS_USE_CUSTOM_ALLOCATOR "STL containers in Ogre use the custom allocator" TRUE "" FALSE)
 if( OGRE_CONFIG_ALLOCATOR EQUAL 0 )

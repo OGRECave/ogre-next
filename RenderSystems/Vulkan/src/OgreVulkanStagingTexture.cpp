@@ -183,7 +183,7 @@ namespace Ogre
         region.imageExtent.height = srcBox.height;
         region.imageExtent.depth = srcBox.depth;
 
-        vkCmdCopyBufferToImage( device->mGraphicsQueue.mCurrentCmdBuffer, mVboName,
+        vkCmdCopyBufferToImage( device->mGraphicsQueue.getCurrentCmdBuffer(), mVboName,
                                 dstTextureVulkan->getFinalTextureName(),
                                 VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1u, &region );
     }

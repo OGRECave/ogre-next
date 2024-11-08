@@ -240,8 +240,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     SampleDescription MetalRenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
                                                                     PixelFormatGpu format,
-                                                                    uint32 textureFlags,
-                                                                    uint32 depthTextureFlags )
+                                                                    uint32 textureFlags )
     {
         uint8 samples = sampleDesc.getMaxSamples();
         if( @available( iOS 9.0, * ) )

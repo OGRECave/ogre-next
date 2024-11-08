@@ -237,10 +237,12 @@ namespace Ogre
                 mStencilBuffer = mDepthBuffer;
         }
 
-        mTexture->setSampleDescription( mRequestedSampleDescription );
+        mSampleDescription = mDevice->mRenderSystem->validateSampleDescription(
+            mRequestedSampleDescription, mTexture->getPixelFormat(),
+            TextureFlags::NotTexture | TextureFlags::RenderWindowSpecific );
+        mTexture->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
         if( mDepthBuffer )
-            mDepthBuffer->setSampleDescription( mRequestedSampleDescription );
-        mSampleDescription = mRequestedSampleDescription;
+            mDepthBuffer->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
 
         if( mDepthBuffer )
         {
@@ -515,6 +517,14 @@ namespace Ogre
             mTop = geom->y;
         }
 
+        auto newWidth = geom->width;
+        auto newHeight = geom->height;
+
+        free( geom );
+
+        if( newWidth == getWidth() && newHeight == getHeight() && !mRebuildingSwapchain )
+            return;
+
         mDevice->stall();
 
         destroySwapchain();
@@ -525,11 +535,9 @@ namespace Ogre
         if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
             mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
 
-        setFinalResolution( geom->width, geom->height );
+        setFinalResolution( newWidth, newHeight );
 
         createSwapchain();
-
-        free( geom );
     }
     //-------------------------------------------------------------------------
     void VulkanXcbWindow::_setVisible( bool visible ) { mVisible = visible; }

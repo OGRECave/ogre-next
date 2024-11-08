@@ -49,7 +49,7 @@ namespace Ogre
 {
     static FastArray<IdString> msInstanceExtensions;
 
-    VulkanDevice::VulkanDevice( VkInstance instance, uint32 deviceIdx,
+    VulkanDevice::VulkanDevice( VkInstance instance, const String &deviceName,
                                 VulkanRenderSystem *renderSystem ) :
         mInstance( instance ),
         mPhysicalDevice( 0 ),
@@ -62,7 +62,7 @@ namespace Ogre
         mIsExternal( false )
     {
         memset( &mDeviceMemoryProperties, 0, sizeof( mDeviceMemoryProperties ) );
-        createPhysicalDevice( deviceIdx );
+        createPhysicalDevice( deviceName );
     }
     //-------------------------------------------------------------------------
     VulkanDevice::VulkanDevice( VkInstance instance, const VulkanExternalDevice &externalDevice,
@@ -77,7 +77,8 @@ namespace Ogre
         mSupportedStages( 0xFFFFFFFF ),
         mIsExternal( true )
     {
-        LogManager::getSingleton().logMessage( "Creating Vulkan Device from External VkVulkan handle" );
+        LogManager::getSingleton().logMessage(
+            "Vulkan: Creating Vulkan Device from External VkVulkan handle" );
 
         memset( &mDeviceMemoryProperties, 0, sizeof( mDeviceMemoryProperties ) );
 
@@ -123,7 +124,8 @@ namespace Ogre
             for( size_t i = 0u; i < numExtensions; ++i )
             {
                 const String extensionName = availableExtensions[i].extensionName;
-                LogManager::getSingleton().logMessage( "Found device extension: " + extensionName );
+                LogManager::getSingleton().logMessage( "Vulkan: Found device extension: " +
+                                                       extensionName );
                 extensions.insert( extensionName );
             }
 
@@ -136,7 +138,7 @@ namespace Ogre
                 if( extensions.find( itor->extensionName ) == extensions.end() )
                 {
                     LogManager::getSingleton().logMessage(
-                        "[Vulkan][INFO] External Device claims extension " +
+                        "Vulkan: [INFO] External Device claims extension " +
                         String( itor->extensionName ) +
                         " is present but it's not. This is normal. Ignoring." );
                     itor = efficientVectorRemove( deviceExtensionsCopy, itor );
@@ -152,8 +154,8 @@ namespace Ogre
             itor = deviceExtensionsCopy.begin();
             while( itor != endt )
             {
-                LogManager::getSingleton().logMessage( "Externally requested Device Extension: " +
-                                                       String( itor->extensionName ) );
+                LogManager::getSingleton().logMessage(
+                    "Vulkan: Externally requested Device Extension: " + String( itor->extensionName ) );
                 mDeviceExtensions.push_back( itor->extensionName );
                 ++itor;
             }
@@ -362,7 +364,7 @@ namespace Ogre
 
             while( itor != endt )
             {
-                LogManager::getSingleton().logMessage( "Requesting Instance Extension: " +
+                LogManager::getSingleton().logMessage( "Vulkan: Requesting Instance Extension: " +
                                                        String( *itor ) );
                 msInstanceExtensions.push_back( *itor );
                 ++itor;
@@ -388,7 +390,7 @@ namespace Ogre
 
         while( itor != endt )
         {
-            LogManager::getSingleton().logMessage( "Externally requested Instance Extension: " +
+            LogManager::getSingleton().logMessage( "Vulkan: Externally requested Instance Extension: " +
                                                    String( itor->extensionName ) );
             msInstanceExtensions.push_back( itor->extensionName );
             ++itor;
@@ -397,41 +399,21 @@ namespace Ogre
         std::sort( msInstanceExtensions.begin(), msInstanceExtensions.end() );
     }
     //-------------------------------------------------------------------------
-    void VulkanDevice::createPhysicalDevice( uint32 deviceIdx )
+    void VulkanDevice::createPhysicalDevice( const String &deviceName )
     {
-        VkResult result = VK_SUCCESS;
+        const auto& devices = mRenderSystem->getVulkanPhysicalDevices();
+        size_t deviceIdx = 0;
+        for( size_t i = 0; i < devices.size(); ++i )
+            if( devices[i].title == deviceName )
+            {
+                deviceIdx = i;
+                break;
+            }
 
-        uint32 numDevices = 0u;
-        result = vkEnumeratePhysicalDevices( mInstance, &numDevices, NULL );
-        checkVkResult( result, "vkEnumeratePhysicalDevices" );
+        LogManager::getSingleton().logMessage( "Vulkan: Requested \"" + deviceName + "\", selected \"" +
+                                               devices[deviceIdx].title + "\"" );
 
-        if( numDevices == 0u )
-        {
-            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "No Vulkan devices found.",
-                         "VulkanDevice::createPhysicalDevice" );
-        }
-
-        const String numDevicesStr = StringConverter::toString( numDevices );
-        String deviceIdsStr = StringConverter::toString( deviceIdx );
-
-        LogManager::getSingleton().logMessage( "[Vulkan] Found " + numDevicesStr + " devices" );
-
-        if( deviceIdx >= numDevices )
-        {
-            LogManager::getSingleton().logMessage( "[Vulkan] Requested device index " + deviceIdsStr +
-                                                   " but there's only " +
-                                                   StringConverter::toString( numDevices ) + "devices" );
-            deviceIdx = 0u;
-            deviceIdsStr = "0";
-        }
-
-        LogManager::getSingleton().logMessage( "[Vulkan] Selecting device " + deviceIdsStr );
-
-        FastArray<VkPhysicalDevice> pd;
-        pd.resize( numDevices );
-        result = vkEnumeratePhysicalDevices( mInstance, &numDevices, pd.begin() );
-        checkVkResult( result, "vkEnumeratePhysicalDevices" );
-        mPhysicalDevice = pd[deviceIdx];
+        mPhysicalDevice = devices[deviceIdx].physicalDevice;
 
         vkGetPhysicalDeviceMemoryProperties( mPhysicalDevice, &mDeviceMemoryProperties );
 
@@ -577,7 +559,8 @@ namespace Ogre
 
             while( itor != endt )
             {
-                LogManager::getSingleton().logMessage( "Requesting Extension: " + String( *itor ) );
+                LogManager::getSingleton().logMessage( "Vulkan: Requesting Extension: " +
+                                                       String( *itor ) );
                 mDeviceExtensions.push_back( *itor );
                 ++itor;
             }

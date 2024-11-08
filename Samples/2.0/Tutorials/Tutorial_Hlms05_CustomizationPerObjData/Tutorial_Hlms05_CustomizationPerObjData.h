@@ -1,6 +1,6 @@
 
-#ifndef Demo_Tutorial_Hlms05_CustomizationPerObjArbitraryData_H
-#define Demo_Tutorial_Hlms05_CustomizationPerObjArbitraryData_H
+#ifndef Demo_Tutorial_Hlms05_CustomizationPerObjData_H
+#define Demo_Tutorial_Hlms05_CustomizationPerObjData_H
 
 #include "GraphicsSystem.h"
 
@@ -20,7 +20,7 @@
 
 namespace Demo
 {
-    class Hlms05CustomizationPerObjArbitraryDataGraphicsSystem final : public GraphicsSystem
+    class Hlms05CustomizationPerObjDataGraphicsSystem final : public GraphicsSystem
     {
         Ogre::CompositorWorkspace *setupCompositor() override
         {
@@ -110,8 +110,7 @@ namespace Demo
                     // The order in which we push to archivePbsLibraryFolders DOES matter
                     // since script order parsing matters.
                     Ogre::Archive *archiveLibrary = archiveManager.load(
-                        rootHlmsFolder +
-                            "2.0/scripts/materials/Tutorial_Hlms05_CustomizationPerObjArbitraryData",
+                        rootHlmsFolder + "2.0/scripts/materials/Tutorial_Hlms05_CustomizationPerObjData",
                         archiveType, true );
                     archivePbsLibraryFolders.push_back( archiveLibrary );
                 }
@@ -137,8 +136,7 @@ namespace Demo
         }
 
     public:
-        Hlms05CustomizationPerObjArbitraryDataGraphicsSystem( GameState *gameState ) :
-            GraphicsSystem( gameState )
+        Hlms05CustomizationPerObjDataGraphicsSystem( GameState *gameState ) : GraphicsSystem( gameState )
         {
         }
     };

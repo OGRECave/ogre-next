@@ -157,10 +157,12 @@ namespace Ogre
                 mStencilBuffer = mDepthBuffer;
         }
 
-        mTexture->setSampleDescription( mRequestedSampleDescription );
+        mSampleDescription = mDevice->mRenderSystem->validateSampleDescription(
+            mRequestedSampleDescription, mTexture->getPixelFormat(),
+            TextureFlags::NotTexture | TextureFlags::RenderWindowSpecific );
+        mTexture->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
         if( mDepthBuffer )
-            mDepthBuffer->setSampleDescription( mRequestedSampleDescription );
-        mSampleDescription = mRequestedSampleDescription;
+            mDepthBuffer->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
 
         if( mDepthBuffer )
         {
@@ -295,15 +297,6 @@ namespace Ogre
                                          surfaceCaps.maxImageExtent.width ),
                             Math::Clamp( getHeight(), surfaceCaps.minImageExtent.height,
                                          surfaceCaps.maxImageExtent.height ) );
-
-        // We need to retransition the main texture now to create MSAA surfaces (if any).
-        // We need to do it now, because doing it later will overwrite the VkImage handles with NULL.
-        //
-        // mTexture is supposed to always be at Resident once it transitions there,
-        // so maintain that guarantee.
-        if( mTexture->getResidencyStatus() != GpuResidency::OnStorage )
-            mTexture->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-        mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
 
         VkBool32 supported;
         result = vkGetPhysicalDeviceSurfaceSupportKHR(
@@ -496,6 +489,12 @@ namespace Ogre
                                           mSwapchainImages.begin() );
         checkVkResult( result, "vkGetSwapchainImagesKHR" );
 
+        // We need to retransition the main texture now to re-create MSAA surfaces (if any).
+        // We need to do it now, because doing it later will overwrite the VkImage handles with NULL.
+        if( mTexture->getResidencyStatus() != GpuResidency::OnStorage )
+            mTexture->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+        mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
+
         acquireNextSwapchain();
 
         if( mDepthBuffer )
@@ -532,7 +531,7 @@ namespace Ogre
 
         VulkanVaoManager *vaoManager = mDevice->mVaoManager;
 
-        mSwapchainSemaphore = vaoManager->getAvailableSempaphore();
+        mSwapchainSemaphore = vaoManager->getAvailableSemaphore();
 
         uint32 swapchainIdx = 0u;
         VkResult result = vkAcquireNextImageKHR( mDevice->mDevice, mSwapchain, UINT64_MAX,

@@ -538,15 +538,15 @@ namespace Ogre
 
         /// Insert into the end of semaphoreArray 'numSemaphores'
         /// number of semaphores that are safe for use.
-        void getAvailableSempaphores( VkSemaphoreArray &semaphoreArray, size_t numSemaphores );
-        VkSemaphore getAvailableSempaphore();
+        void getAvailableSemaphores( VkSemaphoreArray &semaphoreArray, size_t numSemaphores );
+        VkSemaphore getAvailableSemaphore();
 
         /// Call this function after you've submitted to the GPU a VkSemaphore that will be waited on.
         /// i.e. 'semaphore' is part of VkSubmitInfo::pWaitSemaphores or part of
         /// VkPresentInfoKHR::pWaitSemaphores
         ///
         /// After enough frames have passed, this semaphore goes
-        /// back to a pool for getAvailableSempaphores to use
+        /// back to a pool for getAvailableSemaphores to use
         void notifyWaitSemaphoreSubmitted( VkSemaphore semaphore );
         void notifyWaitSemaphoresSubmitted( const VkSemaphoreArray &semaphores );
         void notifySemaphoreUnused( VkSemaphore semaphore );

@@ -331,9 +331,12 @@ THE SOFTWARE.
 // No checks done at all
 #define OGRE_DEBUG_NONE 0
 // We perform basic assert checks and other non-performance intensive checks
+// This setting must NOT break the ABI. i.e. a binary compiled with OGRE_DEBUG_LOW
+// must be ABI compatible with a binary compiled without it.
 #define OGRE_DEBUG_LOW 1
 // We alter classes to add some debug variables for a bit more thorough checking
 // and also perform checks that may cause some performance hit
+// This setting or higher is allowed to break the ABI.
 #define OGRE_DEBUG_MEDIUM 2
 // We perform intensive validation without concerns for performance
 #define OGRE_DEBUG_HIGH 3

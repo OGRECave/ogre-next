@@ -37,6 +37,9 @@ struct PS_INPUT
 @insertpiece( VStoPS_block )
 	float4 gl_Position [[position]];
 
+	@property( hlms_instanced_stereo )
+		uint gl_ViewportIndex [[viewport_array_index]];
+	@end
 	@property( hlms_pso_clip_distances )
 		float gl_ClipDistance [[clip_distance]] [@value( hlms_pso_clip_distances )];
 	@end

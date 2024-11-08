@@ -18,8 +18,8 @@ ogre_add_component_include_dir(Hlms/Pbs)
 
 add_recursive( ./ SOURCE_FILES )
 
-ogre_add_executable(Tutorial_Hlms05_CustomizationPerObjArbitraryData WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAMPLE_COMMON_RESOURCES})
+ogre_add_executable(Tutorial_Hlms05_CustomizationPerObjData WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAMPLE_COMMON_RESOURCES})
 
-target_link_libraries(Tutorial_Hlms05_CustomizationPerObjArbitraryData ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
-ogre_config_sample_lib(Tutorial_Hlms05_CustomizationPerObjArbitraryData)
-ogre_config_sample_pkg(Tutorial_Hlms05_CustomizationPerObjArbitraryData)
+target_link_libraries(Tutorial_Hlms05_CustomizationPerObjData ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
+ogre_config_sample_lib(Tutorial_Hlms05_CustomizationPerObjData)
+ogre_config_sample_pkg(Tutorial_Hlms05_CustomizationPerObjData)
