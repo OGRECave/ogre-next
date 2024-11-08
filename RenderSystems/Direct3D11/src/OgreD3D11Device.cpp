@@ -224,13 +224,8 @@ namespace Ogre
             char tmp[64];
             sprintf( tmp, "deviceRemovedReason = 0x%08X\n", (unsigned)deviceRemovedReason );
             res.append( tmp );
+            OGRE_FALLTHROUGH;
         }
-        // No 'break', fallthrough to the next switch statement
-#if OGRE_COMPILER == OGRE_COMPILER_GNUC || OGRE_COMPILER == OGRE_COMPILER_CLANG
-            __attribute__( ( fallthrough ) );
-#elif __cplusplus >= 201703L
-            [[fallthrough]];
-#endif
         default:
         {
             char tmp[64];

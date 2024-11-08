@@ -39,17 +39,18 @@ namespace Ogre
 {
     void DescriptorSetTexture::checkValidity() const
     {
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         size_t totalTexturesUsed = 0u;
 
         for( size_t i = 0; i < NumShaderTypes; ++i )
             totalTexturesUsed += mShaderTypeTexCount[i];
 
-        assert( totalTexturesUsed > 0 &&
-                "This DescriptorSetTexture doesn't use any texture! Perhaps incorrectly setup?" );
-        assert( totalTexturesUsed == mTextures.size() &&
-                "This DescriptorSetTexture doesn't use as many textures as it "
-                "claims to have, or uses more than it has provided" );
+        OGRE_ASSERT_MEDIUM(
+            totalTexturesUsed > 0 &&
+            "This DescriptorSetTexture doesn't use any texture! Perhaps incorrectly setup?" );
+        OGRE_ASSERT_MEDIUM( totalTexturesUsed == mTextures.size() &&
+                            "This DescriptorSetTexture doesn't use as many textures as it "
+                            "claims to have, or uses more than it has provided" );
 #endif
     }
     //-----------------------------------------------------------------------------------
@@ -72,17 +73,18 @@ namespace Ogre
                 "This DescriptorSetTexture2 doesn't use any texture/buffer! "
                 "Perhaps incorrectly setup?" );
 
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         size_t totalTexturesUsed = 0u;
 
         for( size_t i = 0; i < NumShaderTypes; ++i )
             totalTexturesUsed += mShaderTypeTexCount[i];
 
-        assert( totalTexturesUsed > 0 &&
-                "This DescriptorSetTexture doesn't use any texture! Perhaps incorrectly setup?" );
-        assert( totalTexturesUsed == mTextures.size() &&
-                "This DescriptorSetTexture doesn't use as many textures as it "
-                "claims to have, or uses more than it has provided" );
+        OGRE_ASSERT_MEDIUM(
+            totalTexturesUsed > 0 &&
+            "This DescriptorSetTexture doesn't use any texture! Perhaps incorrectly setup?" );
+        OGRE_ASSERT_MEDIUM( totalTexturesUsed == mTextures.size() &&
+                            "This DescriptorSetTexture doesn't use as many textures as it "
+                            "claims to have, or uses more than it has provided" );
 #endif
 
         FastArray<Slot>::const_iterator itor = mTextures.begin();

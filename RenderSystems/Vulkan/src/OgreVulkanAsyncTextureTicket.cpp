@@ -132,7 +132,7 @@ namespace Ogre
             memBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
 
             // GPU must stop using this buffer before we can write into it
-            vkCmdPipelineBarrier( mQueue->mCurrentCmdBuffer, VK_PIPELINE_STAGE_TRANSFER_BIT,
+            vkCmdPipelineBarrier( mQueue->getCurrentCmdBuffer(), VK_PIPELINE_STAGE_TRANSFER_BIT,
                                   VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 1u, &memBarrier, 0u, 0, 0u, 0 );
         }
 
@@ -168,7 +168,7 @@ namespace Ogre
         region.imageExtent.height = srcTextureBox.height;
         region.imageExtent.depth = srcTextureBox.depth;
 
-        vkCmdCopyImageToBuffer( mQueue->mCurrentCmdBuffer, srcTextureVk->getFinalTextureName(),
+        vkCmdCopyImageToBuffer( mQueue->getCurrentCmdBuffer(), srcTextureVk->getFinalTextureName(),
                                 VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, mVboName.mVboName, 1u, &region );
 
         if( accurateTracking )

@@ -319,7 +319,7 @@ namespace Ogre
 
         NodeMemoryManager *getDefaultNodeMemoryManager( SceneMemoryMgrTypes sceneType ) override;
 
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         void _setCachedTransformOutOfDate() override;
 #endif
     };

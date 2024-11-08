@@ -450,13 +450,9 @@ namespace Ogre
                 uint32 msaaTextureFlags = TextureFlags::NotTexture;
                 if( hasMsaaExplicitResolves() )
                     msaaTextureFlags = mTextureFlags;
-                uint32 depthFormatTextureFlags = 0u;
-                if( !getPreferDepthTexture() )
-                    depthFormatTextureFlags = TextureFlags::NotTexture;
 
                 mSampleDescription = mTextureManager->getRenderSystem()->validateSampleDescription(
-                    mRequestedSampleDescription, mPixelFormat, msaaTextureFlags,
-                    depthFormatTextureFlags );
+                    mRequestedSampleDescription, mPixelFormat, msaaTextureFlags );
             }
             if( !( mSampleDescription == mRequestedSampleDescription ) )
                 notifyAllListenersTextureChanged( TextureGpuListener::FsaaSettingAlteredByApi, 0 );

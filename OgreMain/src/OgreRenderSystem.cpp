@@ -811,8 +811,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     SampleDescription RenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
                                                                PixelFormatGpu format,
-                                                               uint32 textureFlags,
-                                                               uint32 depthTextureFlags )
+                                                               uint32 textureFlags )
     {
         SampleDescription retVal( sampleDesc.getMaxSamples(), sampleDesc.getMsaaPattern() );
         return retVal;

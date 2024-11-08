@@ -122,6 +122,7 @@ namespace Ogre
         if( mLastHazardousTex != hazardousTexIdx )
         {
             const size_t realNumTextures = descSet.mTextures.size();
+            mTextures.reserve( 2 * realNumTextures );
             mTextures.resize( realNumTextures );
             mTextures.appendPOD( mTextures.begin(), mTextures.end() );
             mWriteDescSetHazardous.pImageInfo = mTextures.begin() + realNumTextures;

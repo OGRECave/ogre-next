@@ -1,7 +1,7 @@
 
-#include "Tutorial_Hlms05_CustomizationPerObjArbitraryDataGameState.h"
+#include "Tutorial_Hlms05_CustomizationPerObjDataGameState.h"
 
-#include "Tutorial_Hlms05_CustomizationPerObjArbitraryData.h"
+#include "Tutorial_Hlms05_CustomizationPerObjData.h"
 #include "Tutorial_Hlms05_MyHlmsPbs.h"
 
 #include "CameraController.h"
@@ -23,13 +23,13 @@
 
 using namespace Demo;
 
-Hlms05CustomizationPerObjArbitraryDataGameState::Hlms05CustomizationPerObjArbitraryDataGameState(
+Hlms05CustomizationPerObjDataGameState::Hlms05CustomizationPerObjDataGameState(
     const Ogre::String &helpDescription ) :
     TutorialGameState( helpDescription )
 {
 }
 //-----------------------------------------------------------------------------
-void Hlms05CustomizationPerObjArbitraryDataGameState::createScene01()
+void Hlms05CustomizationPerObjDataGameState::createScene01()
 {
     Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -153,7 +153,7 @@ void Hlms05CustomizationPerObjArbitraryDataGameState::createScene01()
     TutorialGameState::createScene01();
 }
 //-----------------------------------------------------------------------------
-void Hlms05CustomizationPerObjArbitraryDataGameState::update( float timeSinceLast )
+void Hlms05CustomizationPerObjDataGameState::update( float timeSinceLast )
 {
     for( Ogre::Item *item : mChangingItems )
     {

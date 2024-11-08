@@ -331,7 +331,7 @@ namespace Ogre
 
         bool hasMinVersion( int minMajor, int minMinor, int minRel ) const
         {
-            return major > minMajor || ( major == minMajor && minor >= minMinor ) ||
+            return major > minMajor || ( major == minMajor && minor > minMinor ) ||
                    ( major == minMajor && minor == minMinor && release >= minRel );
         }
     };

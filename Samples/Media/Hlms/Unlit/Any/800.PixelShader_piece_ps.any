@@ -126,7 +126,7 @@
 		outPs_colour0 = diffuseCol;
 
 		@property( hlms_alpha_hash && hlms_alpha_to_coverage )
-			outPs_colour0.w = AlphaHashReject( diffuseCol.w, inPs.uv0.xy ALPHA_HASHING_ARG );
+			outPs_colour0.w = midf_c( AlphaHashReject( diffuseCol.w, inPs.uv0.xy ALPHA_HASHING_ARG ) );
 		@end
 	@end
 @end

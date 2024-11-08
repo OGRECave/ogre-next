@@ -611,7 +611,7 @@ namespace Ogre
         if( firstDirtySet < mSets.size() )
         {
             vkCmdBindDescriptorSets(
-                device->mGraphicsQueue.mCurrentCmdBuffer,
+                device->mGraphicsQueue.getCurrentCmdBuffer(),
                 mCompute ? VK_PIPELINE_BIND_POINT_COMPUTE : VK_PIPELINE_BIND_POINT_GRAPHICS, mRootLayout,
                 firstDirtySet, static_cast<uint32_t>( mSets.size() ) - firstDirtySet,
                 &descSets[firstDirtySet], 0u, 0 );

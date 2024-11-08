@@ -47,7 +47,7 @@ namespace Ogre
 #    ifdef OGRE_STATIC_LIB
         mHInstance = GetModuleHandle( NULL );
 #    else
-#        if OGRE_DEBUG_MODE == 1
+#        if OGRE_DEBUG_MODE
         mHInstance = GetModuleHandle( "OgreMain_d.dll" );
 #        else
         mHInstance = GetModuleHandle( "OgreMain.dll" );

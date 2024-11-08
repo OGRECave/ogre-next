@@ -98,7 +98,7 @@ namespace Ogre
         if( pass->hasFragmentProgram() )
             pso.pixelShader = pass->getFragmentProgram();
 
-        bool casterPass = getProperty( tid, HlmsBaseProp::ShadowCaster ) != 0;
+        bool casterPass = getProperty( passCache.setProperties, HlmsBaseProp::ShadowCaster ) != 0;
 
         const HlmsDatablock *datablock = queuedRenderable.renderable->getDatablock();
         pso.macroblock = datablock->getMacroblock( casterPass );

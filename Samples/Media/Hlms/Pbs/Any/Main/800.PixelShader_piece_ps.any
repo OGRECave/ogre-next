@@ -367,9 +367,9 @@
 
 @property( two_sided_lighting )
 	@property( hlms_forwardplus_flipY )
-		@piece( two_sided_flip_normal )* (gl_FrontFacing ? -1.0 : 1.0)@end
+		@piece( two_sided_flip_normal )* (gl_FrontFacing ? _h(-1.0) : _h(1.0))@end
 	@else
-		@piece( two_sided_flip_normal )* (gl_FrontFacing ? 1.0 : -1.0)@end
+		@piece( two_sided_flip_normal )* (gl_FrontFacing ? _h(1.0) : _h(-1.0))@end
 	@end
 @end
 @piece( LoadGeomNormalData )
@@ -665,7 +665,7 @@
 @end
 
 @piece( CubemapManualPcc )
-	midf3 posInProbSpace = midf3_c( toProbeLocalSpace( inPs.pos, @insertpiece( pccProbeSource ) ) );
+	midf3 posInProbSpace = toProbeLocalSpace( inPs.pos, @insertpiece( pccProbeSource ) );
 	midf probeFade = getProbeFade( posInProbSpace, @insertpiece( pccProbeSource ) );
 @property( vct_num_probes )
 	if( probeFade > _h( 0 ) && (pixelData.roughness < _h( 1.0f ) || vctSpecular.w == 0) )
@@ -751,14 +751,14 @@
 @piece( ProcessAlpha )
 	@property( hlms_alphablend || hlms_alpha_to_coverage || hlms_alpha_hash )
 		@property( use_texture_alpha )
-			float finalAlpha = midf_c( material.F0.w ) * pixelData.diffuse.w;
+            midf finalAlpha = midf_c( material.F0.w ) * midf_c( pixelData.diffuse.w );
 		@else
-			float finalAlpha = midf_c( material.F0.w );
+            midf finalAlpha = midf_c( material.F0.w );
 		@end
 
 		@property( hlms_alpha_hash )
 			@property( hlms_alpha_to_coverage )
-				finalAlpha = AlphaHashReject( finalAlpha, inPs.uv0.xy ALPHA_HASHING_ARG );
+				finalAlpha = midf_c( AlphaHashReject( finalAlpha, inPs.uv0.xy ALPHA_HASHING_ARG ) );
 			@else
 				if( AlphaHashReject( finalAlpha, inPs.uv0.xy ALPHA_HASHING_ARG ) )
 					discard;

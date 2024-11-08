@@ -505,7 +505,7 @@ namespace Ogre
         return &mCreator->_getNodeMemoryManager( sceneType );
     }
     //-----------------------------------------------------------------------
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
     void SceneNode::_setCachedTransformOutOfDate()
     {
         Node::_setCachedTransformOutOfDate();

@@ -185,7 +185,7 @@ namespace Ogre
             imageBarrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
             vkCmdPipelineBarrier(
-                device->mGraphicsQueue.mCurrentCmdBuffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                device->mGraphicsQueue.getCurrentCmdBuffer(), VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
                 VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0u, 0, 0u, 0, 1u, &imageBarrier );
 
             mCurrLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -223,7 +223,7 @@ namespace Ogre
                 imageBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
                 imageBarrier.newLayout = mCurrLayout;
                 vkCmdPipelineBarrier(
-                    device->mGraphicsQueue.mCurrentCmdBuffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                    device->mGraphicsQueue.getCurrentCmdBuffer(), VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
                     VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 0, 0u, 0, 0u, 0, 1u, &imageBarrier );
             }
         }
@@ -525,7 +525,7 @@ namespace Ogre
         if( dstTexture->isMultisample() && !dstTexture->hasMsaaExplicitResolves() )
             dstTextureName = dstTexture->mMsaaFramebufferName;
 
-        vkCmdCopyImage( device->mGraphicsQueue.mCurrentCmdBuffer, srcTextureName, mCurrLayout,
+        vkCmdCopyImage( device->mGraphicsQueue.getCurrentCmdBuffer(), srcTextureName, mCurrLayout,
                         dstTextureName, dstTexture->mCurrLayout, 1u, &region );
 
         if( dstTexture->isMultisample() && !dstTexture->hasMsaaExplicitResolves() &&
@@ -542,7 +542,7 @@ namespace Ogre
             resolve.extent.height = getInternalHeight();
             resolve.extent.depth = getDepth();
 
-            vkCmdResolveImage( device->mGraphicsQueue.mCurrentCmdBuffer,
+            vkCmdResolveImage( device->mGraphicsQueue.getCurrentCmdBuffer(),
                                dstTexture->mMsaaFramebufferName, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                dstTexture->mFinalTextureName, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1u,
                                &resolve );
@@ -602,7 +602,7 @@ namespace Ogre
             imageBarrier[1].newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
             imageBarrier[1].srcAccessMask = 0;
             imageBarrier[1].dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-            vkCmdPipelineBarrier( device->mGraphicsQueue.mCurrentCmdBuffer,
+            vkCmdPipelineBarrier( device->mGraphicsQueue.getCurrentCmdBuffer(),
                                   VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0u,
                                   0, 0u, 0, 1u, &imageBarrier[1] );
         }
@@ -641,7 +641,7 @@ namespace Ogre
             region.dstOffsets[1].y = static_cast<int32_t>( std::max( internalHeight >> i, 1u ) );
             region.dstOffsets[1].z = static_cast<int32_t>( std::max( getDepth() >> i, 1u ) );
 
-            vkCmdBlitImage( device->mGraphicsQueue.mCurrentCmdBuffer, mFinalTextureName, mCurrLayout,
+            vkCmdBlitImage( device->mGraphicsQueue.getCurrentCmdBuffer(), mFinalTextureName, mCurrLayout,
                             mFinalTextureName, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1u, &region,
                             VK_FILTER_LINEAR );
 
@@ -656,7 +656,7 @@ namespace Ogre
             // Wait for vkCmdBlitImage on mip i to finish before advancing to mip i+1
             // Also transition src mip 'i' to TRANSFER_SRC_OPTIMAL
             // Also transition src mip 'i+1' to TRANSFER_DST_OPTIMAL
-            vkCmdPipelineBarrier( device->mGraphicsQueue.mCurrentCmdBuffer,
+            vkCmdPipelineBarrier( device->mGraphicsQueue.getCurrentCmdBuffer(),
                                   VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0u,
                                   0, 0u, 0, numBarriers, imageBarrier );
         }
@@ -818,7 +818,7 @@ namespace Ogre
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         const String textureName = getNameStr() + "(View)";
-        setObjectName( device->mDevice, (uint64_t)imageView, VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT,
+        setObjectName( device->mDevice, (uint64_t)imageView, VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT,
                        textureName.c_str() );
 #endif
 
@@ -1008,7 +1008,7 @@ namespace Ogre
         imageBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         imageBarrier.newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         imageBarrier.image = mMsaaFramebufferName;
-        vkCmdPipelineBarrier( device->mGraphicsQueue.mCurrentCmdBuffer,
+        vkCmdPipelineBarrier( device->mGraphicsQueue.getCurrentCmdBuffer(),
                               VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
                               PixelFormatGpuUtils::isDepth( finalPixelFormat )
                                   ? ( VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |

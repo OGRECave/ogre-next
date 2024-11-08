@@ -848,7 +848,7 @@ namespace Ogre
                 GET_SIZE_OF_NAMES( memberTypeNameSize, mMemberTypeName, Name );
 
                 // clang-format off
-                int sizeOfData =   sizeof(uint32) +  mMicroCode.size()
+                size_t sizeOfData = sizeof(uint32) +  mMicroCode.size()
                                  + sizeof(uint32) // mConstantBufferSize
                                  + sizeof(uint32) // mConstantBufferNr
                                  + sizeof(uint32) // mNumSlots
@@ -973,7 +973,7 @@ namespace Ogre
 
                 // create microcode
                 GpuProgramManager::Microcode newMicrocode =
-                    GpuProgramManager::getSingleton().createMicrocode( sizeOfData );
+                    GpuProgramManager::getSingleton().createMicrocode( (uint32)sizeOfData );
 
 #    define WRITE_START( curlist, memberType ) \
         { \

@@ -503,7 +503,7 @@ namespace Ogre
 #    ifdef OGRE_STATIC_LIB
         hinst = GetModuleHandle( NULL );
 #    else
-#        if OGRE_DEBUG_MODE == 1
+#        if OGRE_DEBUG_MODE
         hinst = GetModuleHandle( "RenderSystem_GL3Plus_d.dll" );
 #        else
         hinst = GetModuleHandle( "RenderSystem_GL3Plus.dll" );

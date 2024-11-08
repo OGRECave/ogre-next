@@ -203,7 +203,7 @@ namespace Ogre
         region.srcOffset = srcOffsetBytes;
         region.dstOffset = dstOffsetBytes;
         region.size = sizeBytes;
-        vkCmdCopyBuffer( device->mGraphicsQueue.mCurrentCmdBuffer, mVboName, dstBufferVk->getVboName(),
-                         1u, &region );
+        vkCmdCopyBuffer( device->mGraphicsQueue.getCurrentCmdBuffer(), mVboName,
+                         dstBufferVk->getVboName(), 1u, &region );
     }
 }  // namespace Ogre

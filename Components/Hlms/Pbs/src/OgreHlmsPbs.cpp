@@ -1146,9 +1146,16 @@ namespace Ogre
         if( getProperty( tid, HlmsBaseProp::Pose ) > 0 )
             setProperty( tid, HlmsBaseProp::VertexId, 1 );
 
-        const int32 envProbeMapVal = getProperty( tid, PbsProperty::EnvProbeMap );
-        const bool canUseManualProbe =
-            envProbeMapVal && envProbeMapVal != getProperty( tid, PbsProperty::TargetEnvprobeMap );
+        const int32 envProbeMap = getProperty( tid, PbsProperty::EnvProbeMap );
+        const int32 targetEnvProbeMap = getProperty( tid, PbsProperty::TargetEnvprobeMap );
+        const bool canUseManualProbe = envProbeMap && envProbeMap != targetEnvProbeMap;
+
+        // Reduce shaders variability, reset EnvProbeMap and TargetEnvprobeMap to 1 or 0
+        // preserving outcome of predicate 'envprobe_map && envprobe_map != target_envprobe_map'
+        if( envProbeMap )
+            setProperty( tid, PbsProperty::EnvProbeMap, 1 );
+        setProperty( tid, PbsProperty::TargetEnvprobeMap, envProbeMap == targetEnvProbeMap );
+
         if( canUseManualProbe || getProperty( tid, PbsProperty::ParallaxCorrectCubemaps ) )
         {
             setProperty( tid, PbsProperty::UseEnvProbeMap, 1 );
@@ -1368,8 +1375,6 @@ namespace Ogre
             }
         }
 
-        const int32 envProbeMap = getProperty( tid, PbsProperty::EnvProbeMap );
-        const int32 targetEnvProbeMap = getProperty( tid, PbsProperty::TargetEnvprobeMap );
         if( ( envProbeMap && envProbeMap != targetEnvProbeMap ) || parallaxCorrectCubemaps )
         {
             if( !envProbeMap || envProbeMap == targetEnvProbeMap )

@@ -82,7 +82,7 @@ namespace Ogre
 
 #define OGRE_UNUSED_VAR( x ) ( (void)x )
 
-#if __cplusplus >= 201703L
+#if __cplusplus >= 201703L || defined( _MSVC_LANG ) && _MSVC_LANG >= 201703L
 #    define OGRE_FALLTHROUGH [[fallthrough]]
 #else
 #    if OGRE_COMPILER == OGRE_COMPILER_CLANG

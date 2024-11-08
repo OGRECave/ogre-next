@@ -158,9 +158,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HRESULT D3D11WindowHwnd::_createSwapChainImpl()
     {
-        // D3D11 doesn't care about texture flags, so we leave them as 0.
-        mSampleDescription = mRenderSystem->validateSampleDescription( mRequestedSampleDescription,
-                                                                       _getRenderFormat(), 0u, 0u );
+        mSampleDescription = mRenderSystem->validateSampleDescription(
+            mRequestedSampleDescription, _getRenderFormat(),
+            TextureFlags::NotTexture | TextureFlags::RenderWindowSpecific );
         HRESULT hr;
 
         // Create swap chain

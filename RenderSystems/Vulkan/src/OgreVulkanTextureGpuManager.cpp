@@ -190,7 +190,7 @@ namespace Ogre
             ++barrierCount;
         }
 
-        vkCmdPipelineBarrier( device->mGraphicsQueue.mCurrentCmdBuffer,
+        vkCmdPipelineBarrier( device->mGraphicsQueue.getCurrentCmdBuffer(),
                               VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0u,
                               0, 0u, 0, static_cast<uint32>( barrierCount ), imageMemBarrier );
 
@@ -229,7 +229,7 @@ namespace Ogre
             else
                 region.imageExtent.height = 4u;
 
-            vkCmdCopyBufferToImage( device->mGraphicsQueue.mCurrentCmdBuffer, stagingBuffVboName,
+            vkCmdCopyBufferToImage( device->mGraphicsQueue.getCurrentCmdBuffer(), stagingBuffVboName,
                                     mBlankTexture[i].vkImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1u,
                                     &region );
         }
@@ -250,9 +250,9 @@ namespace Ogre
             ++barrierCount;
         }
 
-        vkCmdPipelineBarrier( device->mGraphicsQueue.mCurrentCmdBuffer, VK_PIPELINE_STAGE_TRANSFER_BIT,
-                              VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, 0, 0u, 0, 0u, 0,
-                              static_cast<uint32>( barrierCount ), imageMemBarrier );
+        vkCmdPipelineBarrier( device->mGraphicsQueue.getCurrentCmdBuffer(),
+                              VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, 0, 0u,
+                              0, 0u, 0, static_cast<uint32>( barrierCount ), imageMemBarrier );
 
         mBlankTexture[TextureTypes::Unknown] = mBlankTexture[TextureTypes::Type2D];
         if( c_bSkipAliasable )

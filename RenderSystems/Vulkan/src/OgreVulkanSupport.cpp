@@ -34,60 +34,10 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 
 namespace Ogre
 {
-    void VulkanSupport::enumerateDevices( VulkanRenderSystem *renderSystem )
-    {
-        mDevices.clear();
-
-        VkInstance instance = renderSystem->getVkInstance();
-
-        VkResult result = VK_SUCCESS;
-
-        uint32 numDevices = 0u;
-        result = vkEnumeratePhysicalDevices( instance, &numDevices, NULL );
-        checkVkResult( result, "vkEnumeratePhysicalDevices" );
-
-        if( numDevices == 0u )
-        {
-            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "No Vulkan devices found.",
-                         "VulkanSupport::enumerateDevices" );
-            return;
-        }
-
-        char tmpBuffer[VK_MAX_PHYSICAL_DEVICE_NAME_SIZE + 32];
-        LwString logStr( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
-
-        logStr.clear();
-        logStr.a( "[Vulkan] Found ", numDevices, " devices" );
-        LogManager::getSingleton().logMessage( logStr.c_str() );
-
-        FastArray<VkPhysicalDevice> pd;
-        pd.resize( numDevices );
-        result = vkEnumeratePhysicalDevices( instance, &numDevices, pd.begin() );
-        checkVkResult( result, "vkEnumeratePhysicalDevices" );
-
-        LogManager::getSingleton().logMessage( "[Vulkan] Found devices:" );
-
-        mDevices.reserve( numDevices );
-        for( uint32 i = 0u; i < numDevices; ++i )
-        {
-            VkPhysicalDeviceProperties deviceProps;
-            vkGetPhysicalDeviceProperties( pd[i], &deviceProps );
-
-            logStr.clear();
-            logStr.a( deviceProps.deviceName, " #", i );
-            mDevices.push_back( logStr.c_str() );
-
-            LogManager::getSingleton().logMessage( logStr.c_str() );
-        }
-    }
-    //-------------------------------------------------------------------------
     void VulkanSupport::initialize( VulkanRenderSystem *renderSystem )
     {
         if( !renderSystem->getVkInstance() )
             renderSystem->initializeVkInstance();
-
-        if( mDevices.empty() )
-            enumerateDevices( renderSystem );
     }
     //-------------------------------------------------------------------------
     void VulkanSupport::setSupported() { mSupported = true; }
@@ -102,16 +52,11 @@ namespace Ogre
         ConfigOption optSRGB;
 
         optDevices.name = "Device";
-
-        FastArray<String>::const_iterator itor = mDevices.begin();
-        FastArray<String>::const_iterator endt = mDevices.end();
-
         optDevices.possibleValues.push_back( "(default)" );
-
-        while( itor != endt )
-            optDevices.possibleValues.push_back( *itor++ );
-
-        optDevices.currentValue = mDevices.front();
+        const auto &devices = renderSystem->getVulkanPhysicalDevices();
+        for( auto &device : devices )
+            optDevices.possibleValues.push_back( device.title );
+        optDevices.currentValue = optDevices.possibleValues.front();
         optDevices.immutable = false;
 
         optInterfaces.name = "Interface";
@@ -186,8 +131,8 @@ namespace Ogre
         if( it != mOptions.end() )
         {
             const String deviceName = it->second.currentValue;
-            if( deviceName != "(default)" &&
-                std::find( mDevices.begin(), mDevices.end(), deviceName ) == mDevices.end() )
+            if( std::find( it->second.possibleValues.begin(), it->second.possibleValues.end(),
+                           deviceName ) == it->second.possibleValues.end() )
             {
                 setConfigOption( "Device", "(default)" );
                 return "Requested rendering device could not be found, default will be used instead.";
@@ -197,21 +142,13 @@ namespace Ogre
         return BLANKSTRING;
     }
     //-------------------------------------------------------------------------
-    uint32 VulkanSupport::getSelectedDeviceIdx() const
+    String VulkanSupport::getSelectedDeviceName() const
     {
-        uint32 deviceIdx = 0u;
-
         ConfigOptionMap::const_iterator it = mOptions.find( "Device" );
         if( it != mOptions.end() )
-        {
-            const String deviceName = it->second.currentValue;
-            FastArray<String>::const_iterator itDevice =
-                std::find( mDevices.begin(), mDevices.end(), deviceName );
-            if( itDevice != mDevices.end() )
-                deviceIdx = uint32( itDevice - mDevices.begin() );
-        }
+            return it->second.currentValue;
 
-        return deviceIdx;
+        return "(default)";
     }
     //-------------------------------------------------------------------------
     ConfigOptionMap &VulkanSupport::getConfigOptions( VulkanRenderSystem *renderSystem )

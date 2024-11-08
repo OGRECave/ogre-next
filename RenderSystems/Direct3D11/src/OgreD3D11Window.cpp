@@ -336,9 +336,9 @@ namespace Ogre
         if( mUseFlipMode )
         {
             // swapchain is not multisampled in flip sequential mode, so we reuse it
-            // D3D11 doesn't care about texture flags, so we leave them as 0.
-            mSampleDescription = mRenderSystem->validateSampleDescription( mRequestedSampleDescription,
-                                                                           _getRenderFormat(), 0u, 0u );
+            mSampleDescription = mRenderSystem->validateSampleDescription(
+                mRequestedSampleDescription, _getRenderFormat(),
+                TextureFlags::NotTexture | TextureFlags::RenderWindowSpecific );
         }
         else
         {

@@ -68,7 +68,7 @@ namespace Ogre
         ArrayMatrixAf4x3 const *RESTRICT_ALIAS mReverseBind;
         BoneTransform                          mTransform;
 
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         mutable bool mCachedTransformOutOfDate;
         Node        *mDebugParentNode;
         bool         mInitialized;
@@ -281,9 +281,7 @@ namespace Ogre
         */
         FORCEINLINE const SimpleMatrixAf4x3 &_getLocalSpaceTransform() const
         {
-#if OGRE_DEBUG_MODE
-            assert( !mCachedTransformOutOfDate );
-#endif
+            OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
             return mTransform.mDerivedTransform[mTransform.mIndex];
         }
 

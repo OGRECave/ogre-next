@@ -169,7 +169,7 @@
 		float4 probeInnerRange = readOnlyFetch( f3dLightList, int(idx + 6u) ).xyzw;
 		float4 probeOuterRange = readOnlyFetch( f3dLightList, int(idx + 7u) ).xyzw;
 
-		midf3 posInProbSpace = midf3_c( toProbeLocalSpace( inPs.pos, probe ) );
+		midf3 posInProbSpace = toProbeLocalSpace( inPs.pos, probe );
 		midf probeFade = getProbeFade( posInProbSpace, probe );
 
 		if( probeFade > _h( 0 ) )

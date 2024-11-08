@@ -61,7 +61,7 @@ INLINE midf4 localCorrect( midf3 reflDir, midf3 posLS, CubemapProbe probe )
 \return
 	Position in local space.
 */
-@property( syntax == metal )inline @end float3 toProbeLocalSpace( float3 pos, CubemapProbe probe )
+@property( syntax == metal )inline @end midf3 toProbeLocalSpace( float3 pos, CubemapProbe probe )
 {
 	float3 probeShapeCenterVS = float3( probe.row0_centerX.w,
 										probe.row1_centerY.w,
@@ -78,7 +78,7 @@ INLINE midf4 localCorrect( midf3 reflDir, midf3 posLS, CubemapProbe probe )
 		posLS = posLS * viewSpaceToProbeLocal;
 	@end
 
-	return posLS;
+	return midf3_c( posLS );
 }
 
 /// Returns true if position (in local space) is inside the probe. False otherwise
