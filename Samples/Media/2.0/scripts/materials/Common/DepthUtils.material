@@ -65,3 +65,71 @@ material Ogre/Depth/DownscaleMax
 		}
 	}
 }
+
+
+fragment_program Ogre/Depth/DownscaleMax_Subsample0_ps_GLSL glsl
+{
+	source DepthDownscaleMax_Subsample0_ps.glsl
+	default_params
+	{
+		param_named depthTexture int 0
+	}
+}
+
+fragment_program Ogre/Depth/DownscaleMax_Subsample0_ps_VK glslvk
+{
+	source DepthDownscaleMax_Subsample0_ps.glsl
+}
+
+fragment_program Ogre/Depth/DownscaleMax_Subsample0_ps_HLSL hlsl
+{
+	source DepthDownscaleMax_Subsample0_ps.hlsl
+	entry_point main
+	target ps_5_0 ps_4_0 ps_4_0_level_9_1 ps_4_0_level_9_3
+}
+
+fragment_program Ogre/Depth/DownscaleMax_Subsample0_ps_Metal metal
+{
+	source DepthDownscaleMax_Subsample0_ps.metal
+	shader_reflection_pair_hint Ogre/Compositor/Quad_vs
+}
+
+fragment_program Ogre/Depth/DownscaleMax_Subsample0_ps unified
+{
+	delegate Ogre/Depth/DownscaleMax_Subsample0_ps_GLSL
+	delegate Ogre/Depth/DownscaleMax_Subsample0_ps_VK
+	delegate Ogre/Depth/DownscaleMax_Subsample0_ps_HLSL
+	delegate Ogre/Depth/DownscaleMax_Subsample0_ps_Metal
+}
+
+// Downscales resolution of input depth texture by half (w/2 x h/2)
+// using a max filter (max depth of all 4 neighbours), MSAA version that reads only subsample 0.
+material Ogre/Depth/DownscaleMax_Subsample0
+{
+	technique
+	{
+		pass
+		{
+			depth_check on
+			depth_write on
+
+			depth_func always_pass
+
+			cull_hardware none
+
+			vertex_program_ref Ogre/Compositor/Quad_vs
+			{
+			}
+
+			fragment_program_ref Ogre/Depth/DownscaleMax_Subsample0_ps
+			{
+			}
+
+			texture_unit depthTexture
+			{
+				filtering			none
+				tex_address_mode	clamp
+			}
+		}
+	}
+}

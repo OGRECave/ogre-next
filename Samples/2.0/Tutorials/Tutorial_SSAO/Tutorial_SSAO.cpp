@@ -32,7 +32,10 @@ namespace Demo
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
-                                                    "SSAOWorkspace", true );
+                                                    mRenderWindow->getSampleDescription().isMultisample()
+                                                        ? "SSAOWorkspaceMSAA"
+                                                        : "SSAOWorkspace",
+                                                    true );
         }
 
         void setupResources() override
