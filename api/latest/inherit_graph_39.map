@@ -650,9 +650,9 @@
 <area shape="rect" id="node648" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="627,335,895,361"/>
 <area shape="rect" id="node650" href="$class_ogre_1_1_const_buffer_pool.html" title="Maintains a pool of buffers grouped by hash ID." alt="" coords="678,56,843,83"/>
 <area shape="rect" id="node651" href="$class_ogre_1_1_const_buffer_pool_user.html" title=" " alt="" coords="346,1624,541,1651"/>
-<area shape="rect" id="node652" href="$class_ogre_1_1_d3_d11_device_resource.html" title="Represents a Direct3D rendering resource." alt="" coords="338,6245,549,6272"/>
+<area shape="rect" id="node652" href="$class_ogre_1_1_device_depended_resource.html" title="Represents a GPU device depended resource." alt="" coords="327,6245,559,6272"/>
 <area shape="rect" id="node653" href="$class_ogre_1_1_d3_d11_dynamic_buffer.html" title="D3D11 doesn&#39;t support mapping the same buffer twice even if the regions don&#39;t overlap." alt="" coords="659,6364,862,6391"/>
-<area shape="rect" id="node654" href="$class_ogre_1_1_d3_d11_device_resource_manager.html" title="Singleton that is used to propagate device state changed notifications." alt="" coords="338,14978,549,15019"/>
+<area shape="rect" id="node654" href="$class_ogre_1_1_device_depended_resource_manager.html" title="Singleton that is used to propagate device state changed notifications." alt="" coords="327,14978,559,15019"/>
 <area shape="rect" id="node655" href="$class_ogre_1_1_frame_listener.html" title="A interface class defining a listener which can be used to receive notifications of frame events." alt="" coords="366,399,521,425"/>
 <area shape="rect" id="node656" href="$class_ogre_1_1_volume_1_1_chunk.html" title="A single volume chunk mesh." alt="" coords="681,284,840,311"/>
 <area shape="rect" id="node657" href="$class_ogre_1_1_g_l3_plus_context.html" title="Class that encapsulates an GL context." alt="" coords="51,3912,215,3939"/>

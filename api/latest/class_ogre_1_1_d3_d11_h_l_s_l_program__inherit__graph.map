@@ -1,9 +1,9 @@
 <map id="Ogre::D3D11HLSLProgram" name="Ogre::D3D11HLSLProgram">
-<area shape="rect" id="node1" title="Specialization of HighLevelGpuProgram to provide support for D3D11 High&#45;Level Shader Language (HLSL)." alt="" coords="189,304,381,331"/>
+<area shape="rect" id="node1" title="Specialization of HighLevelGpuProgram to provide support for D3D11 High&#45;Level Shader Language (HLSL)." alt="" coords="195,304,387,331"/>
 <area shape="rect" id="node2" href="$class_ogre_1_1_high_level_gpu_program.html" title="Abstract base class representing a high&#45;level program (a vertex or fragment program)." alt="" coords="66,229,273,256"/>
 <area shape="rect" id="node3" href="$class_ogre_1_1_gpu_program.html" title="Defines a program which runs on the GPU such as a vertex or fragment program." alt="" coords="98,155,241,181"/>
 <area shape="rect" id="node4" href="$class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g." alt="" coords="109,80,230,107"/>
 <area shape="rect" id="node5" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,5,163,32"/>
 <area shape="rect" id="node6" title=" " alt="" coords="187,5,323,32"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_d3_d11_device_resource.html" title="Represents a Direct3D rendering resource." alt="" coords="297,229,508,256"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_device_depended_resource.html" title="Represents a GPU device depended resource." alt="" coords="297,229,529,256"/>
 </map>
