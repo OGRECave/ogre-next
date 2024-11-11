@@ -1,8 +1,8 @@
 <map id="Ogre::D3D11UavBufferPacked" name="Ogre::D3D11UavBufferPacked">
-<area shape="rect" id="node1" title=" " alt="" coords="203,229,417,256"/>
+<area shape="rect" id="node1" title=" " alt="" coords="197,229,412,256"/>
 <area shape="rect" id="node2" href="$class_ogre_1_1_uav_buffer_packed.html" title="Represents UAV buffers (also known as SSBOs in OpenGL) Uav buffers are supported in DX10/DX10...." alt="" coords="113,155,283,181"/>
 <area shape="rect" id="node3" href="$class_ogre_1_1_buffer_packed.html" title=" " alt="" coords="125,80,271,107"/>
 <area shape="rect" id="node4" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,5,201,32"/>
 <area shape="rect" id="node5" title=" " alt="" coords="226,5,362,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_device_depended_resource.html" title="Represents a GPU device depended resource." alt="" coords="307,155,539,181"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_d3_d11_device_resource.html" title="Represents a Direct3D rendering resource." alt="" coords="307,155,518,181"/>
 </map>

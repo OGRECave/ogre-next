@@ -1,7 +1,7 @@
 <map id="Ogre::D3D11WindowSwapChainBased" name="Ogre::D3D11WindowSwapChainBased">
-<area shape="rect" id="node1" title=" " alt="" coords="57,229,287,271"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_d3_d11_window.html" title=" " alt="" coords="93,155,251,181"/>
+<area shape="rect" id="node1" title=" " alt="" coords="52,229,281,271"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_d3_d11_window.html" title=" " alt="" coords="88,155,245,181"/>
 <area shape="rect" id="node3" href="$class_ogre_1_1_window.html" title=" " alt="" coords="17,80,130,107"/>
 <area shape="rect" id="node4" title=" " alt="" coords="5,5,141,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_device_depended_resource.html" title="Represents a GPU device depended resource." alt="" coords="155,80,387,107"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_device_resource.html" title="Represents a Direct3D rendering resource." alt="" coords="155,80,365,107"/>
 </map>

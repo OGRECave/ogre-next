@@ -2,6 +2,6 @@
 <area shape="rect" id="node1" title="For D3D11, most (if not all) buffers, can be treated with the same code." alt="" coords="115,80,349,107"/>
 <area shape="rect" id="node4" href="$class_ogre_1_1_d3_d11_buffer_interface.html" title="For D3D11, most (if not all) buffers, can be treated with the same code." alt="" coords="5,155,208,181"/>
 <area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_compat_buffer_interface.html" title="In D3D11, const buffers can&#39;t be bound by offset." alt="" coords="232,155,485,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_buffer_interface.html" title="Most (if not all) buffers, can be treated with the same code." alt="" coords="43,5,202,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_device_depended_resource.html" title="Represents a GPU device depended resource." alt="" coords="227,5,459,32"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_buffer_interface.html" title="Most (if not all) buffers, can be treated with the same code." alt="" coords="49,5,207,32"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_device_resource.html" title="Represents a Direct3D rendering resource." alt="" coords="232,5,443,32"/>
 </map>
