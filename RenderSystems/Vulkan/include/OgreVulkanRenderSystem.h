@@ -33,6 +33,7 @@ THE SOFTWARE.
 
 #include "OgreHlmsPso.h"
 #include "OgreRenderSystem.h"
+#include "OgreVulkanDeviceResource.h"
 #include "OgreVulkanGlobalBindingTable.h"
 #include "OgreVulkanPixelFormatToShaderType.h"
 #include "OgreVulkanProgram.h"
@@ -61,7 +62,8 @@ namespace Ogre
     /**
        Implementation of Vulkan as a rendering system.
     */
-    class _OgreVulkanExport VulkanRenderSystem final : public RenderSystem
+    class _OgreVulkanExport VulkanRenderSystem final : public RenderSystem,
+                                                       protected VulkanDeviceResourceManager
     {
         bool mInitialized;
 #ifdef OGRE_VULKAN_USE_SWAPPY
