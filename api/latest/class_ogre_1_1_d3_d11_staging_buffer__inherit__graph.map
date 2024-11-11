@@ -1,6 +1,6 @@
 <map id="Ogre::D3D11StagingBuffer" name="Ogre::D3D11StagingBuffer">
-<area shape="rect" id="node1" title="NOTE FOR D3D12 PORTING: The GL3Plus implementation should be used as reference, since it is much lowe..." alt="" coords="85,155,278,181"/>
+<area shape="rect" id="node1" title="NOTE FOR D3D12 PORTING: The GL3Plus implementation should be used as reference, since it is much lowe..." alt="" coords="90,155,283,181"/>
 <area shape="rect" id="node2" href="$class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="5,80,155,107"/>
 <area shape="rect" id="node3" title=" " alt="" coords="12,5,148,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d11_device_resource.html" title="Represents a Direct3D rendering resource." alt="" coords="179,80,389,107"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_device_depended_resource.html" title="Represents a GPU device depended resource." alt="" coords="179,80,411,107"/>
 </map>

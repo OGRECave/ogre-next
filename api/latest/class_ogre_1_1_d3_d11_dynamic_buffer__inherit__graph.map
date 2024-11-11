@@ -1,4 +1,4 @@
 <map id="Ogre::D3D11DynamicBuffer" name="Ogre::D3D11DynamicBuffer">
-<area shape="rect" id="node1" title="D3D11 doesn&#39;t support mapping the same buffer twice even if the regions don&#39;t overlap." alt="" coords="9,80,212,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_d3_d11_device_resource.html" title="Represents a Direct3D rendering resource." alt="" coords="5,5,216,32"/>
+<area shape="rect" id="node1" title="D3D11 doesn&#39;t support mapping the same buffer twice even if the regions don&#39;t overlap." alt="" coords="20,80,223,107"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_device_depended_resource.html" title="Represents a GPU device depended resource." alt="" coords="5,5,237,32"/>
 </map>

@@ -1,0 +1,19 @@
+<map id="Ogre::DeviceDependedResource" name="Ogre::DeviceDependedResource">
+<area shape="rect" id="node1" title="Represents a GPU device depended resource." alt="" coords="5,300,237,327"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_d3_d11_buffer_interface_base.html" title="For D3D11, most (if not all) buffers, can be treated with the same code." alt="" coords="291,31,526,57"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_dynamic_buffer.html" title="D3D11 doesn&#39;t support mapping the same buffer twice even if the regions don&#39;t overlap." alt="" coords="307,81,510,108"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_d3_d11_h_l_s_l_program.html" title="Specialization of HighLevelGpuProgram to provide support for D3D11 High&#45;Level Shader Language (HLSL)." alt="" coords="313,132,505,159"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_d3_d11_read_only_buffer_packed.html" title=" " alt="" coords="305,183,512,225"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_d3_d11_render_pass_descriptor.html" title="D3D11 will share groups of ID3D11RenderTargetView all D3D11RenderPassDescriptor that share the same R..." alt="" coords="285,249,532,276"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_d3_d11_staging_buffer.html" title="NOTE FOR D3D12 PORTING: The GL3Plus implementation should be used as reference, since it is much lowe..." alt="" coords="312,300,505,327"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_d3_d11_tex_buffer_packed.html" title=" " alt="" coords="303,351,514,377"/>
+<area shape="rect" id="node11" href="$class_ogre_1_1_d3_d11_texture_gpu.html" title=" " alt="" coords="319,401,498,428"/>
+<area shape="rect" id="node14" href="$class_ogre_1_1_d3_d11_uav_buffer_packed.html" title=" " alt="" coords="301,452,516,479"/>
+<area shape="rect" id="node15" href="$class_ogre_1_1_d3_d11_window.html" title=" " alt="" coords="330,503,487,529"/>
+<area shape="rect" id="node17" href="$class_ogre_1_1v1_1_1_d3_d11_hardware_buffer.html" title="Base implementation of a D3D11 buffer, dealing with all the common aspects." alt="" coords="293,553,524,580"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_buffer_interface.html" title="For D3D11, most (if not all) buffers, can be treated with the same code." alt="" coords="605,5,808,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d11_compat_buffer_interface.html" title="In D3D11, const buffers can&#39;t be bound by offset." alt="" coords="580,56,833,83"/>
+<area shape="rect" id="node12" href="$class_ogre_1_1_d3_d11_texture_gpu_render_target.html" title=" " alt="" coords="594,394,819,435"/>
+<area shape="rect" id="node13" href="$class_ogre_1_1_d3_d11_texture_gpu_window.html" title=" " alt="" coords="881,401,1112,428"/>
+<area shape="rect" id="node16" href="$class_ogre_1_1_d3_d11_window_swap_chain_based.html" title=" " alt="" coords="592,495,821,537"/>
+</map>

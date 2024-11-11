@@ -1,9 +1,9 @@
 <map id="Ogre::D3D11TextureGpuWindow" name="Ogre::D3D11TextureGpuWindow">
-<area shape="rect" id="node1" title=" " alt="" coords="184,319,415,345"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_d3_d11_texture_gpu_render_target.html" title=" " alt="" coords="187,229,412,271"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_texture_gpu.html" title=" " alt="" coords="210,155,389,181"/>
+<area shape="rect" id="node1" title=" " alt="" coords="189,319,420,345"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_d3_d11_texture_gpu_render_target.html" title=" " alt="" coords="192,229,417,271"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_texture_gpu.html" title=" " alt="" coords="215,155,394,181"/>
 <area shape="rect" id="node4" href="$class_ogre_1_1_texture_gpu.html" title=" " alt="" coords="133,80,268,107"/>
 <area shape="rect" id="node5" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,5,201,32"/>
 <area shape="rect" id="node6" href="$class_ogre_1_1_gpu_resource.html" title=" " alt="" coords="226,5,373,32"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_d3_d11_device_resource.html" title="Represents a Direct3D rendering resource." alt="" coords="293,80,503,107"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_device_depended_resource.html" title="Represents a GPU device depended resource." alt="" coords="293,80,525,107"/>
 </map>
