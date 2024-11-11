@@ -9917,105 +9917,105 @@
 <path fill="none" stroke="midnightblue" d="M411.65,-13079C436.32,-13079 463.31,-13079 487.7,-13079"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="411.59,-13075.5 401.59,-13079 411.59,-13082.5 411.59,-13075.5"/>
 </g>
-<!-- Node961 -->
+<!-- Node933 -->
 <g id="node652" class="node">
-<title>Node961</title>
-<g id="a_node652"><a xlink:href="class_ogre_1_1_device_depended_resource.html" target="_top" xlink:title="Represents a GPU device depended resource.">
-<polygon fill="none" stroke="black" points="241.5,-9603.5 241.5,-9622.5 415.5,-9622.5 415.5,-9603.5 241.5,-9603.5"/>
-<text text-anchor="middle" x="328.5" y="-9610.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::DeviceDependedResource</text>
+<title>Node933</title>
+<g id="a_node652"><a xlink:href="class_ogre_1_1_d3_d11_device_resource.html" target="_top" xlink:title="Represents a Direct3D rendering resource.">
+<polygon fill="none" stroke="black" points="249.5,-9603.5 249.5,-9622.5 407.5,-9622.5 407.5,-9603.5 249.5,-9603.5"/>
+<text text-anchor="middle" x="328.5" y="-9610.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::D3D11DeviceResource</text>
 </a>
 </g>
 </g>
-<!-- Node961&#45;&gt;Node266 -->
+<!-- Node933&#45;&gt;Node266 -->
 <g id="edge655" class="edge">
-<title>Node961&#45;&gt;Node266</title>
+<title>Node933&#45;&gt;Node266</title>
 <path fill="none" stroke="#8b1a1a" d="M383.94,-9601.38C408.88,-9596.27 438.87,-9590.44 466,-9586 552.21,-9571.89 651.67,-9559.49 718.87,-9551.67"/>
 <polygon fill="#8b1a1a" stroke="#8b1a1a" points="383.02,-9597.99 373.94,-9603.44 384.44,-9604.85 383.02,-9597.99"/>
 </g>
-<!-- Node961&#45;&gt;Node272 -->
+<!-- Node933&#45;&gt;Node272 -->
 <g id="edge652" class="edge">
-<title>Node961&#45;&gt;Node272</title>
+<title>Node933&#45;&gt;Node272</title>
 <path fill="none" stroke="#8b1a1a" d="M413.93,-9599.37C419.7,-9596.52 425.14,-9593.1 430,-9589 461.06,-9562.83 432.15,-9527.45 466,-9505 541.51,-9454.91 807.2,-9477.38 939.9,-9492.4"/>
 <polygon fill="#8b1a1a" stroke="#8b1a1a" points="412.41,-9596.22 404.63,-9603.41 415.2,-9602.64 412.41,-9596.22"/>
 </g>
-<!-- Node961&#45;&gt;Node282 -->
+<!-- Node933&#45;&gt;Node282 -->
 <g id="edge657" class="edge">
-<title>Node961&#45;&gt;Node282</title>
+<title>Node933&#45;&gt;Node282</title>
 <path fill="none" stroke="#8b1a1a" d="M350.11,-9628.6C375.84,-9647.29 421.86,-9678.19 466,-9695 550.96,-9727.36 599.3,-9672.32 667,-9733 707.83,-9769.6 682.39,-9800.19 703,-9851 730.92,-9919.84 775.53,-9997.63 791.27,-10024.37"/>
 <polygon fill="#8b1a1a" stroke="#8b1a1a" points="352.01,-9625.66 341.89,-9622.54 347.86,-9631.29 352.01,-9625.66"/>
 </g>
-<!-- Node961&#45;&gt;Node363 -->
+<!-- Node933&#45;&gt;Node363 -->
 <g id="edge656" class="edge">
-<title>Node961&#45;&gt;Node363</title>
+<title>Node933&#45;&gt;Node363</title>
 <path fill="none" stroke="#8b1a1a" d="M368.12,-9599.53C389.23,-9590.33 414.21,-9576.11 430,-9556 466.23,-9509.85 422.7,-9468.59 466,-9429 533.09,-9367.65 595.05,-9446.57 667,-9391 696.58,-9368.15 673.56,-9338.03 703,-9315 711.13,-9308.64 720.84,-9304.24 730.88,-9301.24"/>
 <polygon fill="#8b1a1a" stroke="#8b1a1a" points="366.64,-9596.36 358.74,-9603.41 369.32,-9602.82 366.64,-9596.36"/>
 </g>
-<!-- Node961&#45;&gt;Node530 -->
+<!-- Node933&#45;&gt;Node530 -->
 <g id="edge653" class="edge">
-<title>Node961&#45;&gt;Node530</title>
-<path fill="none" stroke="#8b1a1a" d="M425.85,-9623.21C442.29,-9624.95 459.3,-9626.75 475.57,-9628.47"/>
-<polygon fill="#8b1a1a" stroke="#8b1a1a" points="426.02,-9619.7 415.7,-9622.13 425.28,-9626.67 426.02,-9619.7"/>
+<title>Node933&#45;&gt;Node530</title>
+<path fill="none" stroke="#8b1a1a" d="M417.82,-9622.36C436.7,-9624.36 456.67,-9626.47 475.61,-9628.48"/>
+<polygon fill="#8b1a1a" stroke="#8b1a1a" points="418.07,-9618.86 407.76,-9621.29 417.33,-9625.82 418.07,-9618.86"/>
 </g>
-<!-- Node961&#45;&gt;Node549 -->
+<!-- Node933&#45;&gt;Node549 -->
 <g id="edge651" class="edge">
-<title>Node961&#45;&gt;Node549</title>
-<path fill="none" stroke="#8b1a1a" d="M425.9,-9610.16C578.5,-9606.7 861.73,-9604.91 893,-9638 943.5,-9691.44 917.93,-10888.31 929,-10961 947.48,-11082.35 998.6,-11223.51 1012.8,-11261.29"/>
-<polygon fill="#8b1a1a" stroke="#8b1a1a" points="425.5,-9606.67 415.59,-9610.4 425.67,-9613.67 425.5,-9606.67"/>
+<title>Node933&#45;&gt;Node549</title>
+<path fill="none" stroke="#8b1a1a" d="M417.9,-9610.35C568.37,-9606.78 861.18,-9604.32 893,-9638 943.5,-9691.44 917.93,-10888.31 929,-10961 947.48,-11082.35 998.6,-11223.51 1012.8,-11261.29"/>
+<polygon fill="#8b1a1a" stroke="#8b1a1a" points="417.67,-9606.85 407.76,-9610.59 417.84,-9613.85 417.67,-9606.85"/>
 </g>
-<!-- Node961&#45;&gt;Node659 -->
+<!-- Node933&#45;&gt;Node659 -->
 <g id="edge654" class="edge">
-<title>Node961&#45;&gt;Node659</title>
+<title>Node933&#45;&gt;Node659</title>
 <path fill="none" stroke="#8b1a1a" d="M369.41,-9599.48C390.46,-9590.37 414.98,-9576.26 430,-9556 473.42,-9497.45 414.86,-9447.93 466,-9396 473.73,-9388.15 483.55,-9382.69 494,-9378.93"/>
 <polygon fill="#8b1a1a" stroke="#8b1a1a" points="367.96,-9596.29 360.03,-9603.32 370.61,-9602.77 367.96,-9596.29"/>
 </g>
-<!-- Node961&#45;&gt;Node723 -->
+<!-- Node933&#45;&gt;Node723 -->
 <g id="edge658" class="edge">
-<title>Node961&#45;&gt;Node723</title>
+<title>Node933&#45;&gt;Node723</title>
 <path fill="none" stroke="#8b1a1a" d="M371.91,-9599.73C393,-9590.83 416.76,-9576.85 430,-9556 486.03,-9467.76 396.34,-9164.94 466,-9087 476.49,-9075.26 491.81,-9069.41 507.29,-9066.76"/>
 <polygon fill="#8b1a1a" stroke="#8b1a1a" points="370.47,-9596.53 362.46,-9603.46 373.04,-9603.04 370.47,-9596.53"/>
 </g>
-<!-- Node961&#45;&gt;Node758 -->
+<!-- Node933&#45;&gt;Node758 -->
 <g id="edge659" class="edge">
-<title>Node961&#45;&gt;Node758</title>
+<title>Node933&#45;&gt;Node758</title>
 <path fill="none" stroke="#8b1a1a" d="M372.57,-9599.67C393.61,-9590.81 417.11,-9576.87 430,-9556 470.75,-9490.02 415.05,-8917.46 466,-8859 469.93,-8854.49 474.57,-8850.85 479.66,-8847.91"/>
 <polygon fill="#8b1a1a" stroke="#8b1a1a" points="371.14,-9596.47 363.12,-9603.39 373.71,-9602.98 371.14,-9596.47"/>
 </g>
-<!-- Node961&#45;&gt;Node869 -->
+<!-- Node933&#45;&gt;Node869 -->
 <g id="edge649" class="edge">
-<title>Node961&#45;&gt;Node869</title>
+<title>Node933&#45;&gt;Node869</title>
 <path fill="none" stroke="#8b1a1a" d="M372.74,-9599.77C393.82,-9590.93 417.31,-9576.99 430,-9556 494,-9450.1 385.61,-8537.06 466,-8443 469.54,-8438.86 473.69,-8435.44 478.23,-8432.63"/>
 <polygon fill="#8b1a1a" stroke="#8b1a1a" points="371.3,-9596.58 363.27,-9603.48 373.85,-9603.09 371.3,-9596.58"/>
 </g>
-<!-- Node962 -->
+<!-- Node934 -->
 <g id="node653" class="node">
-<title>Node962</title>
+<title>Node934</title>
 <g id="a_node653"><a xlink:href="class_ogre_1_1_d3_d11_dynamic_buffer.html" target="_top" xlink:title="D3D11 doesn&#39;t support mapping the same buffer twice even if the regions don&#39;t overlap.">
 <polygon fill="none" stroke="black" points="490.5,-9514.5 490.5,-9533.5 642.5,-9533.5 642.5,-9514.5 490.5,-9514.5"/>
 <text text-anchor="middle" x="566.5" y="-9521.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::D3D11DynamicBuffer</text>
 </a>
 </g>
 </g>
-<!-- Node961&#45;&gt;Node962 -->
+<!-- Node933&#45;&gt;Node934 -->
 <g id="edge650" class="edge">
-<title>Node961&#45;&gt;Node962</title>
+<title>Node933&#45;&gt;Node934</title>
 <path fill="none" stroke="#8b1a1a" d="M404.91,-9600.44C413.7,-9597.41 422.27,-9593.66 430,-9589 450.77,-9576.48 445.24,-9560.54 466,-9548 476.49,-9541.66 488.56,-9536.99 500.59,-9533.56"/>
 <polygon fill="#8b1a1a" stroke="#8b1a1a" points="403.82,-9597.11 395.33,-9603.44 405.92,-9603.79 403.82,-9597.11"/>
 </g>
-<!-- Node963 -->
+<!-- Node935 -->
 <g id="node654" class="node">
-<title>Node963</title>
-<g id="a_node654"><a xlink:href="class_ogre_1_1_device_depended_resource_manager.html" target="_top" xlink:title="Singleton that is used to propagate device state changed notifications.">
-<polygon fill="none" stroke="black" points="241.5,-3043 241.5,-3073 415.5,-3073 415.5,-3043 241.5,-3043"/>
-<text text-anchor="start" x="249.5" y="-3061" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::DeviceDependedResource</text>
+<title>Node935</title>
+<g id="a_node654"><a xlink:href="class_ogre_1_1_d3_d11_device_resource_manager.html" target="_top" xlink:title="Singleton that is used to propagate device state changed notifications.">
+<polygon fill="none" stroke="black" points="249.5,-3043 249.5,-3073 407.5,-3073 407.5,-3043 249.5,-3043"/>
+<text text-anchor="start" x="257.5" y="-3061" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::D3D11DeviceResource</text>
 <text text-anchor="middle" x="328.5" y="-3050" font-family="Helvetica,sans-Serif" font-size="10.00">Manager</text>
 </a>
 </g>
 </g>
-<!-- Node963&#45;&gt;Node536 -->
+<!-- Node935&#45;&gt;Node536 -->
 <g id="edge660" class="edge">
-<title>Node963&#45;&gt;Node536</title>
-<path fill="none" stroke="#8b1a1a" d="M425.96,-3061.68C447.73,-3062.51 470.51,-3063.38 491.2,-3064.17"/>
-<polygon fill="#8b1a1a" stroke="#8b1a1a" points="425.83,-3058.17 415.7,-3061.29 425.56,-3065.17 425.83,-3058.17"/>
+<title>Node935&#45;&gt;Node536</title>
+<path fill="none" stroke="#8b1a1a" d="M418,-3061.38C442.2,-3062.3 468.16,-3063.29 491.45,-3064.18"/>
+<polygon fill="#8b1a1a" stroke="#8b1a1a" points="417.88,-3057.87 407.76,-3060.98 417.62,-3064.86 417.88,-3057.87"/>
 </g>
 <!-- Node986 -->
 <g id="node655" class="node">

@@ -377,6 +377,10 @@ var files_dup =
     [ "OgreD3D11Device.h", "_ogre_d3_d11_device_8h.html", [
       [ "D3D11Device", "class_ogre_1_1_d3_d11_device.html", "class_ogre_1_1_d3_d11_device" ]
     ] ],
+    [ "OgreD3D11DeviceResource.h", "_ogre_d3_d11_device_resource_8h.html", [
+      [ "D3D11DeviceResource", "class_ogre_1_1_d3_d11_device_resource.html", "class_ogre_1_1_d3_d11_device_resource" ],
+      [ "D3D11DeviceResourceManager", "class_ogre_1_1_d3_d11_device_resource_manager.html", "class_ogre_1_1_d3_d11_device_resource_manager" ]
+    ] ],
     [ "OgreD3D11Driver.h", "_ogre_d3_d11_driver_8h.html", [
       [ "D3D11Driver", "class_ogre_1_1_d3_d11_driver.html", "class_ogre_1_1_d3_d11_driver" ]
     ] ],
@@ -518,10 +522,6 @@ var files_dup =
       [ "BufferSlot", "struct_ogre_1_1_descriptor_set_uav_1_1_buffer_slot.html", "struct_ogre_1_1_descriptor_set_uav_1_1_buffer_slot" ],
       [ "Slot", "struct_ogre_1_1_descriptor_set_uav_1_1_slot.html", "struct_ogre_1_1_descriptor_set_uav_1_1_slot" ],
       [ "TextureSlot", "struct_ogre_1_1_descriptor_set_uav_1_1_texture_slot.html", "struct_ogre_1_1_descriptor_set_uav_1_1_texture_slot" ]
-    ] ],
-    [ "OgreDeviceDependedResource.h", "_ogre_device_depended_resource_8h.html", [
-      [ "DeviceDependedResource", "class_ogre_1_1_device_depended_resource.html", "class_ogre_1_1_device_depended_resource" ],
-      [ "DeviceDependedResourceManager", "class_ogre_1_1_device_depended_resource_manager.html", "class_ogre_1_1_device_depended_resource_manager" ]
     ] ],
     [ "OgreDirectionRandomiserAffector.h", "_ogre_direction_randomiser_affector_8h.html", [
       [ "DirectionRandomiserAffector", "class_ogre_1_1_direction_randomiser_affector.html", "class_ogre_1_1_direction_randomiser_affector" ],

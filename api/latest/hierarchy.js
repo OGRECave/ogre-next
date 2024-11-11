@@ -1123,6 +1123,22 @@ var hierarchy =
     ] ],
     [ "Ogre::CustomCompositionPass", "class_ogre_1_1_custom_composition_pass.html", null ],
     [ "Ogre::D3D11Device", "class_ogre_1_1_d3_d11_device.html", null ],
+    [ "Ogre::D3D11DeviceResource", "class_ogre_1_1_d3_d11_device_resource.html", [
+      [ "Ogre::D3D11BufferInterfaceBase", "class_ogre_1_1_d3_d11_buffer_interface_base.html", null ],
+      [ "Ogre::D3D11DynamicBuffer", "class_ogre_1_1_d3_d11_dynamic_buffer.html", null ],
+      [ "Ogre::D3D11HLSLProgram", "class_ogre_1_1_d3_d11_h_l_s_l_program.html", null ],
+      [ "Ogre::D3D11ReadOnlyBufferPacked", "class_ogre_1_1_d3_d11_read_only_buffer_packed.html", null ],
+      [ "Ogre::D3D11RenderPassDescriptor", "class_ogre_1_1_d3_d11_render_pass_descriptor.html", null ],
+      [ "Ogre::D3D11StagingBuffer", "class_ogre_1_1_d3_d11_staging_buffer.html", null ],
+      [ "Ogre::D3D11TexBufferPacked", "class_ogre_1_1_d3_d11_tex_buffer_packed.html", null ],
+      [ "Ogre::D3D11TextureGpu", "class_ogre_1_1_d3_d11_texture_gpu.html", null ],
+      [ "Ogre::D3D11UavBufferPacked", "class_ogre_1_1_d3_d11_uav_buffer_packed.html", null ],
+      [ "Ogre::D3D11Window", "class_ogre_1_1_d3_d11_window.html", null ],
+      [ "Ogre::v1::D3D11HardwareBuffer", "class_ogre_1_1v1_1_1_d3_d11_hardware_buffer.html", null ]
+    ] ],
+    [ "Ogre::D3D11DeviceResourceManager", "class_ogre_1_1_d3_d11_device_resource_manager.html", [
+      [ "Ogre::D3D11RenderSystem", "class_ogre_1_1_d3_d11_render_system.html", null ]
+    ] ],
     [ "Ogre::D3D11Driver", "class_ogre_1_1_d3_d11_driver.html", null ],
     [ "Ogre::D3D11DriverList", "class_ogre_1_1_d3_d11_driver_list.html", null ],
     [ "Ogre::D3D11FrameBufferDescValue", "struct_ogre_1_1_d3_d11_frame_buffer_desc_value.html", null ],
@@ -1153,22 +1169,6 @@ var hierarchy =
     [ "Ogre::DescriptorSetUav::BufferSlot", "struct_ogre_1_1_descriptor_set_uav_1_1_buffer_slot.html", null ],
     [ "Ogre::DescriptorSetUav::Slot", "struct_ogre_1_1_descriptor_set_uav_1_1_slot.html", null ],
     [ "Ogre::DescriptorSetUav::TextureSlot", "struct_ogre_1_1_descriptor_set_uav_1_1_texture_slot.html", null ],
-    [ "Ogre::DeviceDependedResource", "class_ogre_1_1_device_depended_resource.html", [
-      [ "Ogre::D3D11BufferInterfaceBase", "class_ogre_1_1_d3_d11_buffer_interface_base.html", null ],
-      [ "Ogre::D3D11DynamicBuffer", "class_ogre_1_1_d3_d11_dynamic_buffer.html", null ],
-      [ "Ogre::D3D11HLSLProgram", "class_ogre_1_1_d3_d11_h_l_s_l_program.html", null ],
-      [ "Ogre::D3D11ReadOnlyBufferPacked", "class_ogre_1_1_d3_d11_read_only_buffer_packed.html", null ],
-      [ "Ogre::D3D11RenderPassDescriptor", "class_ogre_1_1_d3_d11_render_pass_descriptor.html", null ],
-      [ "Ogre::D3D11StagingBuffer", "class_ogre_1_1_d3_d11_staging_buffer.html", null ],
-      [ "Ogre::D3D11TexBufferPacked", "class_ogre_1_1_d3_d11_tex_buffer_packed.html", null ],
-      [ "Ogre::D3D11TextureGpu", "class_ogre_1_1_d3_d11_texture_gpu.html", null ],
-      [ "Ogre::D3D11UavBufferPacked", "class_ogre_1_1_d3_d11_uav_buffer_packed.html", null ],
-      [ "Ogre::D3D11Window", "class_ogre_1_1_d3_d11_window.html", null ],
-      [ "Ogre::v1::D3D11HardwareBuffer", "class_ogre_1_1v1_1_1_d3_d11_hardware_buffer.html", null ]
-    ] ],
-    [ "Ogre::DeviceDependedResourceManager", "class_ogre_1_1_device_depended_resource_manager.html", [
-      [ "Ogre::D3D11RenderSystem", "class_ogre_1_1_d3_d11_render_system.html", null ]
-    ] ],
     [ "Ogre::DriverVersion", "struct_ogre_1_1_driver_version.html", null ],
     [ "Ogre::DualQuaternion", "class_ogre_1_1_dual_quaternion.html", null ],
     [ "Ogre::EglPBufferSupport::DeviceData", "struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html", null ],
