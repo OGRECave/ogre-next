@@ -70,9 +70,18 @@ namespace Ogre
         VulkanInstance( VulkanExternalInstance *externalInstance );
         ~VulkanInstance();
 
+        void initDebugFeatures( PFN_vkDebugReportCallbackEXT callback, void *userdata, bool hasRenderDocApi );
+
     public:
         VkInstance mVkInstance;
         bool mVkInstanceIsExternal;
+
+        PFN_vkCreateDebugReportCallbackEXT CreateDebugReportCallback;
+        PFN_vkDestroyDebugReportCallbackEXT DestroyDebugReportCallback;
+        VkDebugReportCallbackEXT mDebugReportCallback;
+
+        PFN_vkCmdBeginDebugUtilsLabelEXT CmdBeginDebugUtilsLabelEXT;
+        PFN_vkCmdEndDebugUtilsLabelEXT CmdEndDebugUtilsLabelEXT;
     };
     typedef std::shared_ptr<VulkanInstance> VulkanInstancePtr;
 
@@ -154,19 +163,8 @@ namespace Ogre
         bool mHasValidationLayers;
 #endif
 
-        PFN_vkCreateDebugReportCallbackEXT CreateDebugReportCallback;
-        PFN_vkDestroyDebugReportCallbackEXT DestroyDebugReportCallback;
-        VkDebugReportCallbackEXT mDebugReportCallback;
-
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-        PFN_vkCmdBeginDebugUtilsLabelEXT CmdBeginDebugUtilsLabelEXT;
-        PFN_vkCmdEndDebugUtilsLabelEXT CmdEndDebugUtilsLabelEXT;
-#endif
-
         /// Declared here to avoid constant reallocations
         FastArray<VkImageMemoryBarrier> mImageBarriers;
-
-        void addInstanceDebugCallback();
 
         /// Creates a dummy VkRenderPass for use in PSO creation
         VkRenderPass getVkRenderPass( HlmsPassPso passPso, uint8 &outMrtCount );
