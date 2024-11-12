@@ -60,6 +60,23 @@ namespace Ogre
     typedef std::vector<VulkanPhysicalDevice> VulkanPhysicalDeviceList;
 
     /**
+       We need the ability to re-enumerate devices to handle physical device removing, that
+       requires fresh VkInstance instance, as otherwise Vulkan returns obsolete physical devices list.
+    */
+    class VulkanInstance final
+    {
+    public:
+        VulkanInstance();
+        VulkanInstance( VulkanExternalInstance *externalInstance );
+        ~VulkanInstance();
+
+    public:
+        VkInstance mVkInstance;
+        bool mVkInstanceIsExternal;
+    };
+    typedef std::shared_ptr<VulkanInstance> VulkanInstancePtr;
+
+    /**
        Implementation of Vulkan as a rendering system.
     */
     class _OgreVulkanExport VulkanRenderSystem final : public RenderSystem,
@@ -82,7 +99,7 @@ namespace Ogre
         VulkanProgramFactory *mVulkanProgramFactory2;
         VulkanProgramFactory *mVulkanProgramFactory3;
 
-        VkInstance mVkInstance;
+        VulkanInstancePtr mInstance;
         VulkanPhysicalDeviceList mVulkanPhysicalDeviceList;
         VulkanSupport *mVulkanSupport;
 
@@ -110,8 +127,6 @@ namespace Ogre
 
         uint32_t mStencilRefValue;
         bool mStencilEnabled;
-
-        bool mVkInstanceIsExternal;
 
         bool mTableDirty;
         bool mComputeTableDirty;
@@ -208,7 +223,6 @@ namespace Ogre
 
         void sharedVkInitialization();
 
-        VkInstance getVkInstance() const { return mVkInstance; }
         const VulkanPhysicalDeviceList &getVulkanPhysicalDevices( bool refreshList = false );
 
         Window *_initialise( bool autoCreateWindow,

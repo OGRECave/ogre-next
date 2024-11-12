@@ -161,6 +161,27 @@ namespace Ogre
     }
 
     //-------------------------------------------------------------------------
+    VulkanInstance::VulkanInstance() :
+        mVkInstance( 0 ),
+        mVkInstanceIsExternal( false )
+    {
+    }
+    //-------------------------------------------------------------------------
+    VulkanInstance::VulkanInstance( VulkanExternalInstance *externalInstance ) :
+        mVkInstance( externalInstance->instance ),
+        mVkInstanceIsExternal( true )
+    {
+    }
+    //-------------------------------------------------------------------------
+    VulkanInstance::~VulkanInstance()
+    {
+        if( mVkInstance && !mVkInstanceIsExternal )
+        {
+            vkDestroyInstance( mVkInstance, 0 );
+            mVkInstance = 0;
+        }
+    }
+    //-------------------------------------------------------------------------
     VulkanRenderSystem::VulkanRenderSystem( const NameValuePairList *options ) :
         RenderSystem(),
         mInitialized( false ),
@@ -174,7 +195,6 @@ namespace Ogre
         mVulkanProgramFactory1( 0 ),
         mVulkanProgramFactory2( 0 ),
         mVulkanProgramFactory3( 0 ),
-        mVkInstance( 0 ),
         mFirstUnflushedAutoParamsBuffer( 0 ),
         mAutoParamsBufferIdx( 0 ),
         mCurrentAutoParamsBufferPtr( 0 ),
@@ -185,7 +205,6 @@ namespace Ogre
         mComputePso( 0 ),
         mStencilRefValue( 0u ),
         mStencilEnabled( false ),
-        mVkInstanceIsExternal( false ),
         mTableDirty( false ),
         mComputeTableDirty( false ),
         mDummyBuffer( 0 ),
@@ -237,6 +256,7 @@ namespace Ogre
                 VulkanExternalInstance *externalInstance = reinterpret_cast<VulkanExternalInstance *>(
                     StringConverter::parseUnsignedLong( itOption->second ) );
 
+                mInstance = std::make_shared<VulkanInstance>( externalInstance );
                 initializeExternalVkInstance( externalInstance );
 
 #ifndef OGRE_VULKAN_WINDOW_NULL
@@ -246,6 +266,12 @@ namespace Ogre
                 mVulkanSupport = vulkanSupport;
 #endif
             }
+        }
+
+        if( !mInstance )
+        {
+            mInstance = std::make_shared<VulkanInstance>();
+            initializeVkInstance();
         }
 
         initConfigOptions();
@@ -286,14 +312,8 @@ namespace Ogre
 
         if( mDebugReportCallback )
         {
-            DestroyDebugReportCallback( mVkInstance, mDebugReportCallback, 0 );
+            DestroyDebugReportCallback( mInstance->mVkInstance, mDebugReportCallback, 0 );
             mDebugReportCallback = 0;
-        }
-
-        if( mVkInstance && !mVkInstanceIsExternal )
-        {
-            vkDestroyInstance( mVkInstance, 0 );
-            mVkInstance = 0;
         }
     }
     //-------------------------------------------------------------------------
@@ -592,9 +612,9 @@ namespace Ogre
     void VulkanRenderSystem::addInstanceDebugCallback()
     {
         CreateDebugReportCallback = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(
-            mVkInstance, "vkCreateDebugReportCallbackEXT" );
+            mInstance->mVkInstance, "vkCreateDebugReportCallbackEXT" );
         DestroyDebugReportCallback = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(
-            mVkInstance, "vkDestroyDebugReportCallbackEXT" );
+            mInstance->mVkInstance, "vkDestroyDebugReportCallbackEXT" );
         if( !CreateDebugReportCallback )
         {
             LogManager::getSingleton().logMessage(
@@ -618,8 +638,8 @@ namespace Ogre
         dbgCreateInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT |
                               VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
         dbgCreateInfo.pUserData = this;
-        VkResult result =
-            CreateDebugReportCallback( mVkInstance, &dbgCreateInfo, 0, &mDebugReportCallback );
+        VkResult result = CreateDebugReportCallback( mInstance->mVkInstance, &dbgCreateInfo, 0,
+                                                     &mDebugReportCallback );
         switch( result )
         {
         case VK_SUCCESS:
@@ -1032,10 +1052,8 @@ namespace Ogre
     {
         LogManager::getSingleton().logMessage( "Vulkan: VkInstance is provided externally" );
 
-        OGRE_ASSERT_LOW( !mVkInstance );
-
-        mVkInstance = externalInstance->instance;
-        mVkInstanceIsExternal = true;
+        OGRE_ASSERT_LOW( mInstance->mVkInstance );
+        OGRE_ASSERT_LOW( mInstance->mVkInstanceIsExternal );
 
         {
             // Filter wrongly-provided extensions
@@ -1146,8 +1164,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::initializeVkInstance()
     {
-        if( mVkInstance )
-            return;
+        OGRE_ASSERT_LOW( !mInstance->mVkInstance );
+        OGRE_ASSERT_LOW( !mInstance->mVkInstanceIsExternal );
 
         LogManager::getSingleton().logMessage( "Vulkan: Initializing VkInstance" );
 
@@ -1273,7 +1291,7 @@ namespace Ogre
         }
 #endif
 
-        mVkInstance = VulkanDevice::createInstance(
+        mInstance->mVkInstance = VulkanDevice::createInstance(
             Root::getSingleton().getAppName(), reqInstanceExtensions, instanceLayers, dbgFunc, this );
 
         sharedVkInitialization();
@@ -1316,9 +1334,9 @@ namespace Ogre
         {
             // Use VK_EXT_debug_utils.
             CmdBeginDebugUtilsLabelEXT = (PFN_vkCmdBeginDebugUtilsLabelEXT)vkGetInstanceProcAddr(
-                mVkInstance, "vkCmdBeginDebugUtilsLabelEXT" );
+                mInstance->mVkInstance, "vkCmdBeginDebugUtilsLabelEXT" );
             CmdEndDebugUtilsLabelEXT = (PFN_vkCmdEndDebugUtilsLabelEXT)vkGetInstanceProcAddr(
-                mVkInstance, "vkCmdEndDebugUtilsLabelEXT" );
+                mInstance->mVkInstance, "vkCmdEndDebugUtilsLabelEXT" );
         }
 #endif
     }
@@ -1335,7 +1353,7 @@ namespace Ogre
             do
             {
                 uint32 numDevices = 0u;
-                result = vkEnumeratePhysicalDevices( mVkInstance, &numDevices, NULL );
+                result = vkEnumeratePhysicalDevices( mInstance->mVkInstance, &numDevices, NULL );
                 checkVkResult( result, "vkEnumeratePhysicalDevices" );
 
                 if( numDevices == 0u )
@@ -1345,7 +1363,8 @@ namespace Ogre
                 }
 
                 devices.resize( numDevices );
-                result = vkEnumeratePhysicalDevices( mVkInstance, &numDevices, devices.data() );
+                result =
+                    vkEnumeratePhysicalDevices( mInstance->mVkInstance, &numDevices, devices.data() );
                 devices.resize( numDevices );
                 if( result != VK_INCOMPLETE )
                     checkVkResult( result, "vkEnumeratePhysicalDevices" );
@@ -1467,12 +1486,11 @@ namespace Ogre
                 }
             }
 
-            initializeVkInstance();
-
             if( !externalDevice )
-                mDevice = new VulkanDevice( mVkInstance, mVulkanSupport->getSelectedDeviceName(), this );
+                mDevice = new VulkanDevice( mInstance->mVkInstance,
+                                            mVulkanSupport->getSelectedDeviceName(), this );
             else
-                mDevice = new VulkanDevice( mVkInstance, *externalDevice, this );
+                mDevice = new VulkanDevice( mInstance->mVkInstance, *externalDevice, this );
 
             mNativeShadingLanguageVersion = 450;
 

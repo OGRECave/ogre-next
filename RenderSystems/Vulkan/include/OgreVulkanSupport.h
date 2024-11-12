@@ -43,8 +43,6 @@ namespace Ogre
     {
         bool mSupported;
 
-        void initialize( VulkanRenderSystem *renderSystem );
-
     public:
         VulkanSupport() : mSupported( false ) {}
         virtual ~VulkanSupport() {}

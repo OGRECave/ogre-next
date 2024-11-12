@@ -34,18 +34,10 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 
 namespace Ogre
 {
-    void VulkanSupport::initialize( VulkanRenderSystem *renderSystem )
-    {
-        if( !renderSystem->getVkInstance() )
-            renderSystem->initializeVkInstance();
-    }
-    //-------------------------------------------------------------------------
     void VulkanSupport::setSupported() { mSupported = true; }
     //-------------------------------------------------------------------------
     void VulkanSupport::addConfig( VulkanRenderSystem *renderSystem )
     {
-        initialize( renderSystem );
-
         ConfigOption optDevices;
         ConfigOption optInterfaces;
         ConfigOption optFSAA;
@@ -153,7 +145,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     ConfigOptionMap &VulkanSupport::getConfigOptions( VulkanRenderSystem *renderSystem )
     {
-        initialize( renderSystem );
+        assert( !mOptions.empty() ); // addConfig() already called
         return mOptions;
     }
     //-------------------------------------------------------------------------
