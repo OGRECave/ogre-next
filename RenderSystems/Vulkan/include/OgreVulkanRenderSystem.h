@@ -219,8 +219,6 @@ namespace Ogre
         void initializeExternalVkInstance( VulkanExternalInstance *externalInstance );
         void initializeVkInstance();
 
-        void sharedVkInitialization();
-
         const VulkanPhysicalDeviceList &getVulkanPhysicalDevices( bool refreshList = false );
 
         Window *_initialise( bool autoCreateWindow,

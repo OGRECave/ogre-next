@@ -374,6 +374,11 @@ namespace Ogre
             initializeVkInstance();
         }
 
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        loadRenderDocApi();
+        mInstance->initDebugFeatures( dbgFunc, this, mRenderDocApi );
+#endif
+
         initConfigOptions();
 
         const ConfigOptionMap &configOptions =
@@ -1207,8 +1212,6 @@ namespace Ogre
                 mHasValidationLayers = true;
 #endif
         }
-
-        sharedVkInitialization();
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::initializeVkInstance()
@@ -1342,16 +1345,6 @@ namespace Ogre
 
         mInstance->mVkInstance = VulkanDevice::createInstance(
             Root::getSingleton().getAppName(), reqInstanceExtensions, instanceLayers, dbgFunc, this );
-
-        sharedVkInitialization();
-    }
-    //-------------------------------------------------------------------------
-    void VulkanRenderSystem::sharedVkInitialization()
-    {
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-        loadRenderDocApi();
-        mInstance->initDebugFeatures( dbgFunc, this, mRenderDocApi );
-#endif
     }
     //-------------------------------------------------------------------------
     const VulkanPhysicalDeviceList &VulkanRenderSystem::getVulkanPhysicalDevices( bool refreshList )
