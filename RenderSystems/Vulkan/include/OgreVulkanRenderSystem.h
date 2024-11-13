@@ -51,6 +51,7 @@ namespace Ogre
     struct VulkanExternalInstance;
     struct VulkanHlmsPso;
     class VulkanSupport;
+    class VulkanInstance;
 
     struct VulkanPhysicalDevice
     {
@@ -58,32 +59,6 @@ namespace Ogre
         String title;
     };
     typedef std::vector<VulkanPhysicalDevice> VulkanPhysicalDeviceList;
-
-    /**
-       We need the ability to re-enumerate devices to handle physical device removing, that
-       requires fresh VkInstance instance, as otherwise Vulkan returns obsolete physical devices list.
-    */
-    class VulkanInstance final
-    {
-    public:
-        VulkanInstance();
-        VulkanInstance( VulkanExternalInstance *externalInstance );
-        ~VulkanInstance();
-
-        void initDebugFeatures( PFN_vkDebugReportCallbackEXT callback, void *userdata, bool hasRenderDocApi );
-
-    public:
-        VkInstance mVkInstance;
-        bool mVkInstanceIsExternal;
-
-        PFN_vkCreateDebugReportCallbackEXT CreateDebugReportCallback;
-        PFN_vkDestroyDebugReportCallbackEXT DestroyDebugReportCallback;
-        VkDebugReportCallbackEXT mDebugReportCallback;
-
-        PFN_vkCmdBeginDebugUtilsLabelEXT CmdBeginDebugUtilsLabelEXT;
-        PFN_vkCmdEndDebugUtilsLabelEXT CmdEndDebugUtilsLabelEXT;
-    };
-    typedef std::shared_ptr<VulkanInstance> VulkanInstancePtr;
 
     /**
        Implementation of Vulkan as a rendering system.
@@ -108,7 +83,7 @@ namespace Ogre
         VulkanProgramFactory *mVulkanProgramFactory2;
         VulkanProgramFactory *mVulkanProgramFactory3;
 
-        VulkanInstancePtr mInstance;
+        std::shared_ptr<VulkanInstance> mInstance;
         VulkanPhysicalDeviceList mVulkanPhysicalDeviceList;
         VulkanSupport *mVulkanSupport;
 

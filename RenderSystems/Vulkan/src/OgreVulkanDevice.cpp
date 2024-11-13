@@ -49,6 +49,137 @@ namespace Ogre
 {
     static FastArray<IdString> msInstanceExtensions;
 
+    //-------------------------------------------------------------------------
+    VulkanInstance::VulkanInstance() :
+        mVkInstance( 0 ),
+        mVkInstanceIsExternal( false ),
+        CreateDebugReportCallback( 0 ),
+        DestroyDebugReportCallback( 0 ),
+        mDebugReportCallback( 0 ),
+        CmdBeginDebugUtilsLabelEXT( 0 ),
+        CmdEndDebugUtilsLabelEXT( 0 )
+
+    {
+    }
+    //-------------------------------------------------------------------------
+    VulkanInstance::VulkanInstance( VulkanExternalInstance *externalInstance ) :
+        mVkInstance( externalInstance->instance ),
+        mVkInstanceIsExternal( true ),
+        CreateDebugReportCallback( 0 ),
+        DestroyDebugReportCallback( 0 ),
+        mDebugReportCallback( 0 ),
+        CmdBeginDebugUtilsLabelEXT( 0 ),
+        CmdEndDebugUtilsLabelEXT( 0 )
+    {
+    }
+    //-------------------------------------------------------------------------
+    VulkanInstance::~VulkanInstance()
+    {
+        if( mDebugReportCallback )
+        {
+            DestroyDebugReportCallback( mVkInstance, mDebugReportCallback, 0 );
+            mDebugReportCallback = 0;
+        }
+
+        if( mVkInstance && !mVkInstanceIsExternal )
+        {
+            vkDestroyInstance( mVkInstance, 0 );
+            mVkInstance = 0;
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanInstance::initDebugFeatures( PFN_vkDebugReportCallbackEXT callback, void *userdata,
+                                            bool hasRenderDocApi )
+    {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH  // VK_EXT_debug_report, instance debug callback
+        if( !mDebugReportCallback )
+        {
+            CreateDebugReportCallback = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(
+                mVkInstance, "vkCreateDebugReportCallbackEXT" );
+            DestroyDebugReportCallback = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(
+                mVkInstance, "vkDestroyDebugReportCallbackEXT" );
+            if( !CreateDebugReportCallback )
+            {
+                LogManager::getSingleton().logMessage(
+                    "Vulkan: GetProcAddr: Unable to find vkCreateDebugReportCallbackEXT. "
+                    "Debug reporting won't be available" );
+                return;
+            }
+            if( !DestroyDebugReportCallback )
+            {
+                LogManager::getSingleton().logMessage(
+                    "Vulkan: GetProcAddr: Unable to find vkDestroyDebugReportCallbackEXT. "
+                    "Debug reporting won't be available" );
+                return;
+            }
+
+            VkDebugReportCallbackCreateInfoEXT dbgCreateInfo;
+            makeVkStruct( dbgCreateInfo, VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT );
+            dbgCreateInfo.pfnCallback = callback;
+            dbgCreateInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT |
+                                  VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
+            dbgCreateInfo.pUserData = userdata;
+            VkResult result =
+                CreateDebugReportCallback( mVkInstance, &dbgCreateInfo, 0, &mDebugReportCallback );
+            switch( result )
+            {
+            case VK_SUCCESS:
+                break;
+            case VK_ERROR_OUT_OF_HOST_MEMORY:
+                OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result,
+                                "CreateDebugReportCallback: out of host memory",
+                                "VulkanInstance::addInstanceDebugCallback" );
+            default:
+                OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result,
+                                "vkCreateDebugReportCallbackEXT",
+                                "VulkanInstance::addInstanceDebugCallback" );
+            }
+        }
+#endif
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM  // VK_EXT_debug_utils, command buffer labels
+        if( !CmdBeginDebugUtilsLabelEXT && !CmdEndDebugUtilsLabelEXT )
+        {
+            bool bAllow_VK_EXT_debug_utils = false;
+            if( hasRenderDocApi )
+            {
+                // RenderDoc fixes VK_EXT_debug_utils even in older SDKs
+                bAllow_VK_EXT_debug_utils = true;
+            }
+            else
+            {
+                // vkEnumerateInstanceVersion is available since Vulkan 1.1
+                PFN_vkEnumerateInstanceVersion enumerateInstanceVersion =
+                    (PFN_vkEnumerateInstanceVersion)vkGetInstanceProcAddr(
+                        0, "vkEnumerateInstanceVersion" );
+                if( enumerateInstanceVersion )
+                {
+                    uint32_t apiVersion;
+                    VkResult result = enumerateInstanceVersion( &apiVersion );
+                    if( result == VK_SUCCESS && apiVersion >= VK_MAKE_VERSION( 1, 1, 114 ) )
+                    {
+                        // Loader version < 1.1.114 is blacklisted as it will just crash.
+                        // See https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/258
+                        bAllow_VK_EXT_debug_utils =
+                            VulkanDevice::hasInstanceExtension( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
+                    }
+                }
+            }
+
+            if( bAllow_VK_EXT_debug_utils )
+            {
+                // Use VK_EXT_debug_utils.
+                CmdBeginDebugUtilsLabelEXT = (PFN_vkCmdBeginDebugUtilsLabelEXT)vkGetInstanceProcAddr(
+                    mVkInstance, "vkCmdBeginDebugUtilsLabelEXT" );
+                CmdEndDebugUtilsLabelEXT = (PFN_vkCmdEndDebugUtilsLabelEXT)vkGetInstanceProcAddr(
+                    mVkInstance, "vkCmdEndDebugUtilsLabelEXT" );
+            }
+        }
+#endif
+    }
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     VulkanDevice::VulkanDevice( VkInstance instance, const String &deviceName,
                                 VulkanRenderSystem *renderSystem ) :
         mInstance( instance ),
