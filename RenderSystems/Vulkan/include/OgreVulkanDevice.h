@@ -88,9 +88,13 @@ namespace Ogre
         void initDebugFeatures( PFN_vkDebugReportCallbackEXT callback, void *userdata,
                                 bool hasRenderDocApi );
 
+        void initPhysicalDeviceList();
+
     public:
         VkInstance mVkInstance;
         bool mVkInstanceIsExternal;
+
+        FastArray<VulkanPhysicalDevice> mVulkanPhysicalDevices;
 
         PFN_vkCreateDebugReportCallbackEXT CreateDebugReportCallback;
         PFN_vkDestroyDebugReportCallbackEXT DestroyDebugReportCallback;

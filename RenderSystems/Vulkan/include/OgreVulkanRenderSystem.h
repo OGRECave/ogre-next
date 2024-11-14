@@ -58,7 +58,6 @@ namespace Ogre
         VkPhysicalDevice physicalDevice;
         String title;
     };
-    typedef std::vector<VulkanPhysicalDevice> VulkanPhysicalDeviceList;
 
     /**
        Implementation of Vulkan as a rendering system.
@@ -84,9 +83,8 @@ namespace Ogre
         VulkanProgramFactory *mVulkanProgramFactory3;
 
         std::shared_ptr<VulkanInstance> mInstance;
-        VulkanPhysicalDeviceList mVulkanPhysicalDeviceList;
-        VulkanSupport *mVulkanSupport;
 
+        VulkanSupport *mVulkanSupport;
         std::map<IdString, VulkanSupport *> mAvailableVulkanSupports;
 
         // TODO: AutoParamsBuffer probably belongs to MetalDevice (because it's per device?)
@@ -148,6 +146,7 @@ namespace Ogre
         ~VulkanRenderSystem() override;
 
         void shutdown() override;
+        const FastArray<VulkanPhysicalDevice> &getVulkanPhysicalDevices() const;
 
         const String &getName() const override;
         const String &getFriendlyName() const override;
@@ -186,8 +185,6 @@ namespace Ogre
         void resetAllBindings();
 
         void reinitialise() override;
-
-        const VulkanPhysicalDeviceList &getVulkanPhysicalDevices( bool refreshList = false );
 
         Window *_initialise( bool autoCreateWindow,
                              const String &windowTitle = "OGRE Render Window" ) override;

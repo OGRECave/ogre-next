@@ -286,6 +286,7 @@ namespace Ogre
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         initDebugFeatures( debugCallback, renderSystem, renderSystem->getRenderDocApi() );
 #endif
+        initPhysicalDeviceList();
     }
     //-------------------------------------------------------------------------
     VulkanInstance::~VulkanInstance()
@@ -391,6 +392,47 @@ namespace Ogre
             }
         }
 #endif
+    }
+    //-------------------------------------------------------------------------
+    void VulkanInstance::initPhysicalDeviceList()
+    {
+        LogManager::getSingleton().logMessage( "Vulkan: Device detection starts" );
+
+        // enumerate physical devices - list never changes for the same VkInstance
+        FastArray<VkPhysicalDevice> devices;
+        uint32 numDevices = 0u;
+        VkResult result = vkEnumeratePhysicalDevices( mVkInstance, &numDevices, NULL );
+        checkVkResult( result, "vkEnumeratePhysicalDevices" );
+
+        devices.resize( numDevices );
+        result = vkEnumeratePhysicalDevices( mVkInstance, &numDevices, devices.begin() );
+        checkVkResult( result, "vkEnumeratePhysicalDevices" );
+
+        if( numDevices == 0u )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "No Vulkan devices found.",
+                         "VulkanRenderSystem::getVkPhysicalDevices" );
+        }
+
+        // assign unique names, allowing reordering/inserting/removing
+        map<String, unsigned>::type sameNameCounter;
+        mVulkanPhysicalDevices.clear();
+        mVulkanPhysicalDevices.reserve( devices.size() );
+        for( auto device : devices )
+        {
+            VkPhysicalDeviceProperties deviceProps;
+            vkGetPhysicalDeviceProperties( device, &deviceProps );
+
+            String name( deviceProps.deviceName );
+            unsigned sameNameIndex = sameNameCounter[name]++;  // inserted entry is zero-initialized
+            if( sameNameIndex != 0 )
+                name += " (" + Ogre::StringConverter::toString( sameNameIndex + 1 ) + ")";
+
+            LogManager::getSingleton().logMessage( "Vulkan: \"" + name + "\"" );
+            mVulkanPhysicalDevices.push_back( { device, name } );
+        }
+
+        LogManager::getSingleton().logMessage( "Vulkan: Device detection ends" );
     }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -654,7 +696,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanDevice::createPhysicalDevice( const String &deviceName )
     {
-        const VulkanPhysicalDeviceList &devices = mRenderSystem->getVulkanPhysicalDevices();
+        auto &devices = mRenderSystem->getVulkanPhysicalDevices();
         size_t deviceIdx = 0;
         for( size_t i = 0; i < devices.size(); ++i )
         {

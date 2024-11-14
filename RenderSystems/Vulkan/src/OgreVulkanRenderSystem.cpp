@@ -994,59 +994,6 @@ namespace Ogre
         this->_initialise( true );
     }
     //-------------------------------------------------------------------------
-    const VulkanPhysicalDeviceList &VulkanRenderSystem::getVulkanPhysicalDevices( bool refreshList )
-    {
-        if( refreshList || mVulkanPhysicalDeviceList.empty() )
-        {
-            LogManager::getSingleton().logMessage( "Vulkan: Device detection starts" );
-
-            // enumerate
-            std::vector<VkPhysicalDevice> devices;
-            VkResult result = VK_SUCCESS;
-            do
-            {
-                uint32 numDevices = 0u;
-                result = vkEnumeratePhysicalDevices( mInstance->mVkInstance, &numDevices, NULL );
-                checkVkResult( result, "vkEnumeratePhysicalDevices" );
-
-                if( numDevices == 0u )
-                {
-                    OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "No Vulkan devices found.",
-                                 "VulkanRenderSystem::getVkPhysicalDevices" );
-                }
-
-                devices.resize( numDevices );
-                result =
-                    vkEnumeratePhysicalDevices( mInstance->mVkInstance, &numDevices, devices.data() );
-                devices.resize( numDevices );
-                if( result != VK_INCOMPLETE )
-                    checkVkResult( result, "vkEnumeratePhysicalDevices" );
-
-            } while( result == VK_INCOMPLETE );
-
-            // assign unique names, allowing reordering/inserting/removing
-            map<String, unsigned>::type sameNameCounter;
-            mVulkanPhysicalDeviceList.clear();
-            mVulkanPhysicalDeviceList.reserve( devices.size() );
-            for( VkPhysicalDevice device : devices )
-            {
-                VkPhysicalDeviceProperties deviceProps;
-                vkGetPhysicalDeviceProperties( device, &deviceProps );
-
-                String name( deviceProps.deviceName );
-                unsigned sameNameIndex = sameNameCounter[name]++;  // inserted entry is zero-initialized
-                if( sameNameIndex != 0 )
-                    name += " (" + Ogre::StringConverter::toString( sameNameIndex + 1 ) + ")";
-
-                LogManager::getSingleton().logMessage( "Vulkan: \"" + name + "\"" );
-                mVulkanPhysicalDeviceList.push_back( { device, name } );
-            }
-
-            LogManager::getSingleton().logMessage( "Vulkan: Device detection ends" );
-        }
-        return mVulkanPhysicalDeviceList;
-    }
-    //-------------------------------------------------------------------------
     Window *VulkanRenderSystem::_initialise( bool autoCreateWindow, const String &windowTitle )
     {
         Window *autoWindow = 0;
@@ -1366,6 +1313,11 @@ namespace Ogre
         win->_initialize( mTextureGpuManager, miscParams );
 
         return win;
+    }
+    //-------------------------------------------------------------------------
+    const FastArray<VulkanPhysicalDevice> &VulkanRenderSystem::getVulkanPhysicalDevices() const
+    {
+        return mInstance->mVulkanPhysicalDevices;
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_notifyDeviceStalled()

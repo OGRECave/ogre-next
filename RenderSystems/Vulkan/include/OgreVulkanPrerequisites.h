@@ -99,6 +99,7 @@ namespace Ogre
     class VulkanDynamicBuffer;
     struct VulkanGlobalBindingTable;
     class VulkanGpuProgramManager;
+    struct VulkanPhysicalDevice;
     class VulkanProgram;
     class VulkanProgramFactory;
     class VulkanQueue;
