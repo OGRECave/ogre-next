@@ -78,8 +78,11 @@ namespace Ogre
     class VulkanInstance final
     {
     public:
-        VulkanInstance();
-        VulkanInstance( VulkanExternalInstance *externalInstance );
+        static void enumerateExtensionsAndLayers( VulkanExternalInstance *externalInstance );
+        static bool hasExtension( const char *extension );
+
+        VulkanInstance( const String &appName, VulkanExternalInstance *externalInstance,
+                        PFN_vkDebugReportCallbackEXT debugCallback, RenderSystem *renderSystem );
         ~VulkanInstance();
 
         void initDebugFeatures( PFN_vkDebugReportCallbackEXT callback, void *userdata,
@@ -95,6 +98,12 @@ namespace Ogre
 
         PFN_vkCmdBeginDebugUtilsLabelEXT CmdBeginDebugUtilsLabelEXT;
         PFN_vkCmdEndDebugUtilsLabelEXT CmdEndDebugUtilsLabelEXT;
+
+        static FastArray<const char *> enabledExtensions;  // sorted
+        static FastArray<const char *> enabledLayers;      // sorted
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+        static bool hasValidationLayers;
+#endif
     };
 
 
@@ -168,18 +177,6 @@ namespace Ogre
         ~VulkanDevice();
 
     protected:
-        static VkDebugReportCallbackCreateInfoEXT addDebugCallback(
-            PFN_vkDebugReportCallbackEXT debugCallback, RenderSystem *renderSystem );
-
-    public:
-        static VkInstance createInstance( const String &appName, FastArray<const char *> &extensions,
-                                          FastArray<const char *> &layers,
-                                          PFN_vkDebugReportCallbackEXT debugCallback,
-                                          RenderSystem *renderSystem );
-
-        static void addExternalInstanceExtensions( FastArray<VkExtensionProperties> &extensions );
-
-    protected:
         void createPhysicalDevice( const String &deviceName );
 
     public:
@@ -187,8 +184,6 @@ namespace Ogre
                            uint32 maxTransferQueues );
 
         bool hasDeviceExtension( const IdString extension ) const;
-
-        static bool hasInstanceExtension( const IdString extension );
 
         void initQueues();
 

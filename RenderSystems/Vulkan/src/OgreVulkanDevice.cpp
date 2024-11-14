@@ -43,34 +43,249 @@ THE SOFTWARE.
 #    include "swappy/swappyVk.h"
 #endif
 
+#define OGRE_VK_KHR_WIN32_SURFACE_EXTENSION_NAME "VK_KHR_win32_surface"
+#define OGRE_VK_KHR_XCB_SURFACE_EXTENSION_NAME "VK_KHR_xcb_surface"
+#define OGRE_VK_KHR_ANDROID_SURFACE_EXTENSION_NAME "VK_KHR_android_surface"
+
 #define TODO_findRealPresentQueue
 
 namespace Ogre
 {
-    static FastArray<IdString> msInstanceExtensions;
+    FastArray<const char *> VulkanInstance::enabledExtensions;  // sorted
+    FastArray<const char *> VulkanInstance::enabledLayers;      // sorted
+    bool VulkanInstance::hasValidationLayers = false;
+
+    bool StrCmpLess( const char *a, const char *b ) { return strcmp( a, b ) < 0; }
+
+    void sortAndRelocate( FastArray<const char *> &ar, String &hostStr ) 
+    {
+        std::sort( ar.begin(), ar.end(), StrCmpLess );
+
+        size_t sz = 0;
+        for( auto p : ar )
+            sz += strlen( p ) + 1;
+
+        hostStr.resize( 0 );
+        hostStr.reserve( sz );
+
+        for( auto &p : ar )
+        {
+            sz = hostStr.size();
+            hostStr.append( p, strlen( p ) + 1 );  // embedded '\0'
+            p = &hostStr[sz];
+        }
+    };
 
     //-------------------------------------------------------------------------
-    VulkanInstance::VulkanInstance() :
-        mVkInstance( 0 ),
-        mVkInstanceIsExternal( false ),
-        CreateDebugReportCallback( 0 ),
-        DestroyDebugReportCallback( 0 ),
-        mDebugReportCallback( 0 ),
-        CmdBeginDebugUtilsLabelEXT( 0 ),
-        CmdEndDebugUtilsLabelEXT( 0 )
-
+    void VulkanInstance::enumerateExtensionsAndLayers( VulkanExternalInstance *externalInstance )
     {
+        LogManager::getSingleton().logMessage( externalInstance == nullptr
+                                                   ? "Vulkan: Initializing"
+                                                   : "Vulkan: Initializing with external VkInstance" );
+
+        // Enumerate supported extensions
+        FastArray<VkExtensionProperties> availableExtensions;
+        uint32 numExtensions = 0u;
+        VkResult result = vkEnumerateInstanceExtensionProperties( 0, &numExtensions, 0 );
+        checkVkResult( result, "vkEnumerateInstanceExtensionProperties" );
+
+        availableExtensions.resize( numExtensions );
+        result =
+            vkEnumerateInstanceExtensionProperties( 0, &numExtensions, availableExtensions.begin() );
+        checkVkResult( result, "vkEnumerateInstanceExtensionProperties" );
+
+        for( auto &ext : availableExtensions )
+            LogManager::getSingleton().logMessage( "Vulkan: Found instance extension: " +
+                                                   String( ext.extensionName ) );
+
+        // Enumerate supported layers
+        FastArray<VkLayerProperties> availableLayers;
+        uint32 numInstanceLayers = 0u;
+        result = vkEnumerateInstanceLayerProperties( &numInstanceLayers, 0 );
+        checkVkResult( result, "vkEnumerateInstanceLayerProperties" );
+
+        availableLayers.resize( numInstanceLayers );
+        result = vkEnumerateInstanceLayerProperties( &numInstanceLayers, availableLayers.begin() );
+        checkVkResult( result, "vkEnumerateInstanceLayerProperties" );
+
+        for( auto &layer : availableLayers )
+            LogManager::getSingleton().logMessage( "Vulkan: Found instance layer: " +
+                                                   String( layer.layerName ) );
+
+        if( !externalInstance )
+        {
+            // Enable supported extensions we may want
+            enabledExtensions.push_back( VK_KHR_SURFACE_EXTENSION_NAME );
+            for( auto &ext : availableExtensions )
+            {
+                const String extensionName = ext.extensionName;
+#ifdef OGRE_VULKAN_WINDOW_WIN32
+                if( extensionName == OGRE_VK_KHR_WIN32_SURFACE_EXTENSION_NAME )
+                    enabledExtensions.push_back( OGRE_VK_KHR_WIN32_SURFACE_EXTENSION_NAME );
+#endif
+#ifdef OGRE_VULKAN_WINDOW_XCB
+                if( extensionName == OGRE_VK_KHR_XCB_SURFACE_EXTENSION_NAME )
+                    enabledExtensions.push_back( OGRE_VK_KHR_XCB_SURFACE_EXTENSION_NAME );
+#endif
+#ifdef OGRE_VULKAN_WINDOW_ANDROID
+                if( extensionName == OGRE_VK_KHR_ANDROID_SURFACE_EXTENSION_NAME )
+                    enabledExtensions.push_back( OGRE_VK_KHR_ANDROID_SURFACE_EXTENSION_NAME );
+#endif
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+                if( extensionName == VK_EXT_DEBUG_REPORT_EXTENSION_NAME )
+                    enabledExtensions.push_back( VK_EXT_DEBUG_REPORT_EXTENSION_NAME );
+#endif
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+                if( extensionName == VK_EXT_DEBUG_UTILS_EXTENSION_NAME )
+                    enabledExtensions.push_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
+#endif
+                if( extensionName == VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME )
+                    enabledExtensions.push_back(
+                        VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME );
+            }
+
+            // Enable supported layers we may want
+            for( auto &layer : availableLayers )
+            {
+                const String layerName = layer.layerName;
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+                if( layerName == "VK_LAYER_KHRONOS_validation" )
+                {
+                    enabledLayers.push_back( "VK_LAYER_KHRONOS_validation" );
+                    hasValidationLayers = true;
+                }
+#endif
+            }
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+            if( !hasValidationLayers )
+            {
+                LogManager::getSingleton().logMessage(
+                    "WARNING: VK_LAYER_KHRONOS_validation layer not present. "
+                    "Extension " VK_EXT_DEBUG_MARKER_EXTENSION_NAME " not found",
+                    LML_CRITICAL );
+            }
+#endif
+        }
+        else  // externalInstance
+        {
+            // Filter wrongly-provided extensions
+            std::set<String> extensions;
+            for( auto &ext : availableExtensions )
+                extensions.insert( ext.extensionName );
+            auto extFilter = [&extensions]( const VkExtensionProperties &elem ) {
+                if( extensions.find( elem.extensionName ) != extensions.end() )
+                    return false;
+                LogManager::getSingleton().logMessage(
+                    "Vulkan: [INFO] External Instance claims extension " + String( elem.extensionName ) +
+                    " is present but it's not. This is normal. Ignoring." );
+                return true;
+            };
+            auto &eix = externalInstance->instanceExtensions;
+            eix.resize( std::remove_if( eix.begin(), eix.end(), extFilter ) - eix.begin() );
+            availableExtensions = eix;
+            for( auto &ext : eix )
+                enabledExtensions.push_back( ext.extensionName );
+
+            // Filter wrongly-provided layers
+            std::set<String> layers;
+            for( auto &layer : availableLayers )
+                layers.insert( layer.layerName );
+            auto layerFilter = [&layers]( const VkLayerProperties &elem ) {
+                if( layers.find( elem.layerName ) != layers.end() )
+                    return false;
+                LogManager::getSingleton().logMessage(
+                    "Vulkan: [INFO] External Instance claims layer " + String( elem.layerName ) +
+                    " is present but it's not. This is normal. Ignoring." );
+                return true;
+            };
+            auto &eil = externalInstance->instanceLayers;
+            eil.resize( std::remove_if( eil.begin(), eil.end(), layerFilter ) - eil.begin() );
+            availableLayers = eil;
+            for( auto &layer : eil )
+                enabledLayers.push_back( layer.layerName );
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+            if( layers.find( "VK_LAYER_KHRONOS_validation" ) != layers.end() )
+                hasValidationLayers = true;
+#endif
+        }
+
+        // sort enabled extensions and layers and relocate to heap memory
+        static String enabledExtensionsHost, enabledLayersHost;
+        sortAndRelocate( enabledExtensions, enabledExtensionsHost );
+        sortAndRelocate( enabledLayers, enabledLayersHost );
     }
     //-------------------------------------------------------------------------
-    VulkanInstance::VulkanInstance( VulkanExternalInstance *externalInstance ) :
-        mVkInstance( externalInstance->instance ),
-        mVkInstanceIsExternal( true ),
+    bool VulkanInstance::hasExtension( const char *extension )
+    {
+        auto itor = std::lower_bound( enabledExtensions.begin(), enabledExtensions.end(), extension,
+                                      StrCmpLess );
+        return itor != enabledExtensions.end() && 0 == strcmp( *itor, extension );
+    }
+    //-------------------------------------------------------------------------
+    VulkanInstance::VulkanInstance( const String &appName, VulkanExternalInstance *externalInstance,
+                                    PFN_vkDebugReportCallbackEXT debugCallback,
+                                    RenderSystem *renderSystem ) :
+        mVkInstance( externalInstance ? externalInstance->instance : nullptr ),
+        mVkInstanceIsExternal( externalInstance && externalInstance->instance ),
         CreateDebugReportCallback( 0 ),
         DestroyDebugReportCallback( 0 ),
         mDebugReportCallback( 0 ),
         CmdBeginDebugUtilsLabelEXT( 0 ),
         CmdEndDebugUtilsLabelEXT( 0 )
     {
+        // Log enabled extensions and layers here, so it would be repeated each VkInstance recreation
+        String prefix = mVkInstanceIsExternal ? "Vulkan: Externally requested instance extension: "
+                                              : "Vulkan: Requesting instance extension: ";
+        for( auto &ext : enabledExtensions )
+            LogManager::getSingleton().logMessage( prefix + ext );
+
+        prefix = mVkInstanceIsExternal ? "Vulkan: Externally requested instance layer: "
+                                       : "Vulkan: Requesting instance layer: ";
+        for( auto &layer : enabledLayers )
+            LogManager::getSingleton().logMessage( prefix + layer );
+
+        // Create VkInstance if not externally provided
+        if( !mVkInstanceIsExternal )
+        {
+            VkApplicationInfo appInfo;
+            makeVkStruct( appInfo, VK_STRUCTURE_TYPE_APPLICATION_INFO );
+            if( !appName.empty() )
+                appInfo.pApplicationName = appName.c_str();
+            appInfo.pEngineName = "Ogre3D Vulkan Engine";
+            appInfo.engineVersion = OGRE_VERSION;
+            appInfo.apiVersion = VK_MAKE_VERSION( 1, 0, 2 );
+
+            VkInstanceCreateInfo createInfo;
+            makeVkStruct( createInfo, VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO );
+            createInfo.pApplicationInfo = &appInfo;
+            createInfo.enabledLayerCount = static_cast<uint32>( enabledLayers.size() );
+            createInfo.ppEnabledLayerNames = enabledLayers.begin();
+            createInfo.enabledExtensionCount = static_cast<uint32>( enabledExtensions.size() );
+            createInfo.ppEnabledExtensionNames = enabledExtensions.begin();
+
+            // Workaround: skip following code on Android as it causes crash in vkCreateInstance() on
+            // Android Emulator 35.1.4, macOS 14.4.1, M1 Pro, despite declared support for rev.10
+            // VK_EXT_debug_report
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH && !defined OGRE_VULKAN_WINDOW_ANDROID
+            // This is info for a temp callback to use during CreateInstance.
+            // After the instance is created, we use the instance-based
+            // function to register the final callback.
+            VkDebugReportCallbackCreateInfoEXT debugCb;
+            makeVkStruct( debugCb, VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT );
+            debugCb.pfnCallback = debugCallback;
+            debugCb.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
+            debugCb.pUserData = renderSystem;
+            createInfo.pNext = &debugCb;
+#endif
+
+            VkResult result = vkCreateInstance( &createInfo, 0, &mVkInstance );
+            checkVkResult( result, "vkCreateInstance" );
+        }
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        initDebugFeatures( debugCallback, renderSystem, renderSystem->getRenderDocApi() );
+#endif
     }
     //-------------------------------------------------------------------------
     VulkanInstance::~VulkanInstance()
@@ -161,7 +376,7 @@ namespace Ogre
                         // Loader version < 1.1.114 is blacklisted as it will just crash.
                         // See https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/258
                         bAllow_VK_EXT_debug_utils =
-                            VulkanDevice::hasInstanceExtension( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
+                            VulkanInstance::hasExtension( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
                     }
                 }
             }
@@ -295,7 +510,7 @@ namespace Ogre
         }
 
         // Initialize mDeviceExtraFeatures
-        if( hasInstanceExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
+        if( VulkanInstance::hasExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
         {
             VkPhysicalDeviceFeatures2 deviceFeatures2;
             makeVkStruct( deviceFeatures2, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2 );
@@ -435,99 +650,6 @@ namespace Ogre
             ++itor;
         }
         queueArray.clear();
-    }
-    //-------------------------------------------------------------------------
-    VkDebugReportCallbackCreateInfoEXT VulkanDevice::addDebugCallback(
-        PFN_vkDebugReportCallbackEXT debugCallback, RenderSystem *renderSystem )
-    {
-        // This is info for a temp callback to use during CreateInstance.
-        // After the instance is created, we use the instance-based
-        // function to register the final callback.
-        VkDebugReportCallbackCreateInfoEXT dbgCreateInfoTemp;
-        makeVkStruct( dbgCreateInfoTemp, VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT );
-        dbgCreateInfoTemp.pfnCallback = debugCallback;
-        dbgCreateInfoTemp.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
-        dbgCreateInfoTemp.pUserData = renderSystem;
-        return dbgCreateInfoTemp;
-    }
-    //-------------------------------------------------------------------------
-    VkInstance VulkanDevice::createInstance( const String &appName, FastArray<const char *> &extensions,
-                                             FastArray<const char *> &layers,
-                                             PFN_vkDebugReportCallbackEXT debugCallback,
-                                             RenderSystem *renderSystem )
-    {
-        VkInstanceCreateInfo createInfo;
-        VkApplicationInfo appInfo;
-        memset( &createInfo, 0, sizeof( createInfo ) );
-        memset( &appInfo, 0, sizeof( appInfo ) );
-
-        appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-        if( !appName.empty() )
-            appInfo.pApplicationName = appName.c_str();
-        appInfo.pEngineName = "Ogre3D Vulkan Engine";
-        appInfo.engineVersion = OGRE_VERSION;
-        appInfo.apiVersion = VK_MAKE_VERSION( 1, 0, 2 );
-
-        createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-        createInfo.pApplicationInfo = &appInfo;
-
-        createInfo.enabledLayerCount = static_cast<uint32>( layers.size() );
-        createInfo.ppEnabledLayerNames = layers.begin();
-
-        extensions.push_back( VK_KHR_SURFACE_EXTENSION_NAME );
-
-        createInfo.enabledExtensionCount = static_cast<uint32>( extensions.size() );
-        createInfo.ppEnabledExtensionNames = extensions.begin();
-
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH && !defined OGRE_VULKAN_WINDOW_ANDROID
-        // Workaround: skip following code on Android as it causes crash in vkCreateInstance() on Android
-        // Emulator 35.1.4, macOS 14.4.1, M1 Pro, despite declared support for rev.10 VK_EXT_debug_report
-        VkDebugReportCallbackCreateInfoEXT debugCb = addDebugCallback( debugCallback, renderSystem );
-        createInfo.pNext = &debugCb;
-#endif
-
-        {
-            msInstanceExtensions.clear();
-            msInstanceExtensions.reserve( extensions.size() );
-
-            FastArray<const char *>::const_iterator itor = extensions.begin();
-            FastArray<const char *>::const_iterator endt = extensions.end();
-
-            while( itor != endt )
-            {
-                LogManager::getSingleton().logMessage( "Vulkan: Requesting Instance Extension: " +
-                                                       String( *itor ) );
-                msInstanceExtensions.push_back( *itor );
-                ++itor;
-            }
-
-            std::sort( msInstanceExtensions.begin(), msInstanceExtensions.end() );
-        }
-
-        VkInstance instance;
-        VkResult result = vkCreateInstance( &createInfo, 0, &instance );
-        checkVkResult( result, "vkCreateInstance" );
-
-        return instance;
-    }
-    //-------------------------------------------------------------------------
-    void VulkanDevice::addExternalInstanceExtensions( FastArray<VkExtensionProperties> &extensions )
-    {
-        msInstanceExtensions.clear();
-        msInstanceExtensions.reserve( extensions.size() );
-
-        FastArray<VkExtensionProperties>::const_iterator itor = extensions.begin();
-        FastArray<VkExtensionProperties>::const_iterator endt = extensions.end();
-
-        while( itor != endt )
-        {
-            LogManager::getSingleton().logMessage( "Vulkan: Externally requested Instance Extension: " +
-                                                   String( itor->extensionName ) );
-            msInstanceExtensions.push_back( itor->extensionName );
-            ++itor;
-        }
-
-        std::sort( msInstanceExtensions.begin(), msInstanceExtensions.end() );
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::createPhysicalDevice( const String &deviceName )
@@ -678,7 +800,7 @@ namespace Ogre
         createInfo.queueCreateInfoCount = static_cast<uint32>( queueCreateInfo.size() );
         createInfo.pQueueCreateInfos = &queueCreateInfo[0];
 
-        if( hasInstanceExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
+        if( VulkanInstance::hasExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
             createInfo.pEnabledFeatures = nullptr;
         else
             createInfo.pEnabledFeatures = &mDeviceFeatures;
@@ -711,7 +833,7 @@ namespace Ogre
                       VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES );
 
         // Initialize mDeviceExtraFeatures
-        if( hasInstanceExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
+        if( VulkanInstance::hasExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
         {
             PFN_vkGetPhysicalDeviceFeatures2KHR GetPhysicalDeviceFeatures2KHR =
                 (PFN_vkGetPhysicalDeviceFeatures2KHR)vkGetInstanceProcAddr(
@@ -758,13 +880,6 @@ namespace Ogre
         FastArray<IdString>::const_iterator itor =
             std::lower_bound( mDeviceExtensions.begin(), mDeviceExtensions.end(), extension );
         return itor != mDeviceExtensions.end() && *itor == extension;
-    }
-    //-------------------------------------------------------------------------
-    bool VulkanDevice::hasInstanceExtension( const IdString extension )
-    {
-        FastArray<IdString>::const_iterator itor =
-            std::lower_bound( msInstanceExtensions.begin(), msInstanceExtensions.end(), extension );
-        return itor != msInstanceExtensions.end() && *itor == extension;
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::initQueues()

@@ -134,10 +134,6 @@ namespace Ogre
 
         bool mValidationError;
 
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
-        bool mHasValidationLayers;
-#endif
-
         /// Declared here to avoid constant reallocations
         FastArray<VkImageMemoryBarrier> mImageBarriers;
 
@@ -190,9 +186,6 @@ namespace Ogre
         void resetAllBindings();
 
         void reinitialise() override;
-
-        void initializeExternalVkInstance( VulkanExternalInstance *externalInstance );
-        void initializeVkInstance();
 
         const VulkanPhysicalDeviceList &getVulkanPhysicalDevices( bool refreshList = false );
 
