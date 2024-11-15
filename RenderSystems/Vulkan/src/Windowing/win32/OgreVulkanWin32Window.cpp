@@ -477,7 +477,7 @@ namespace Ogre
 
         VkSurfaceKHR surface;
 
-        VkResult result = vkCreateWin32SurfaceKHR( mDevice->mInstance, &createInfo, 0, &surface );
+        VkResult result = vkCreateWin32SurfaceKHR( mDevice->mInstance->mVkInstance, &createInfo, 0, &surface );
         checkVkResult( result, "vkCreateWin32SurfaceKHR" );
 
         mSurfaceKHR = surface;

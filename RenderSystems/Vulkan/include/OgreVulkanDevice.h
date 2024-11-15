@@ -134,7 +134,7 @@ namespace Ogre
         };
 
         // clang-format off
-        VkInstance          mInstance;
+        std::shared_ptr<VulkanInstance> mInstance;
         VkPhysicalDevice    mPhysicalDevice;
         VkDevice            mDevice;
         VkPipelineCache     mPipelineCache;
@@ -177,10 +177,10 @@ namespace Ogre
                                     FastArray<VkDeviceQueueCreateInfo> &outQueueCiArray );
 
     public:
-        VulkanDevice( VkInstance instance, const VulkanPhysicalDevice &physicalDevice,
-                      VulkanRenderSystem *renderSystem );
-        VulkanDevice( VkInstance instance, const VulkanExternalDevice &externalDevice,
-                      VulkanRenderSystem *renderSystem );
+        VulkanDevice( const std::shared_ptr<VulkanInstance> &instance,
+                      const VulkanPhysicalDevice &physicalDevice, VulkanRenderSystem *renderSystem );
+        VulkanDevice( const std::shared_ptr<VulkanInstance> &instance,
+                      const VulkanExternalDevice &externalDevice, VulkanRenderSystem *renderSystem );
         ~VulkanDevice();
 
     protected:

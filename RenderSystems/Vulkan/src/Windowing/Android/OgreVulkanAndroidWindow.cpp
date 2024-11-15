@@ -400,8 +400,8 @@ namespace Ogre
         VkAndroidSurfaceCreateInfoKHR andrSurfCreateInfo;
         makeVkStruct( andrSurfCreateInfo, VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR );
         andrSurfCreateInfo.window = mNativeWindow;
-        VkResult result =
-            vkCreateAndroidSurfaceKHR( mDevice->mInstance, &andrSurfCreateInfo, 0, &mSurfaceKHR );
+        VkResult result = vkCreateAndroidSurfaceKHR( mDevice->mInstance->mVkInstance,
+                                                     &andrSurfCreateInfo, 0, &mSurfaceKHR );
         checkVkResult( result, "vkCreateAndroidSurfaceKHR" );
 
         const uint32 newWidth = static_cast<uint32>( ANativeWindow_getWidth( mNativeWindow ) );

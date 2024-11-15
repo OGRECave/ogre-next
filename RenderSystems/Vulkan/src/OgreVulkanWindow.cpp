@@ -564,7 +564,7 @@ namespace Ogre
         destroySwapchain();
         if( mSurfaceKHR )
         {
-            vkDestroySurfaceKHR( mDevice->mInstance, mSurfaceKHR, 0 );
+            vkDestroySurfaceKHR( mDevice->mInstance->mVkInstance, mSurfaceKHR, 0 );
             mSurfaceKHR = 0;
         }
     }
@@ -719,7 +719,7 @@ namespace Ogre
     {
         if( name == "RENDERDOC_DEVICE" )
         {
-            *static_cast<VkInstance *>( pData ) = mDevice->mInstance;
+            *static_cast<VkInstance *>( pData ) = mDevice->mInstance->mVkInstance;
             return;
         }
         else

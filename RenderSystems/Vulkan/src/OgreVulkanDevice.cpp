@@ -452,7 +452,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    VulkanDevice::VulkanDevice( VkInstance instance, const VulkanPhysicalDevice &physicalDevice,
+    VulkanDevice::VulkanDevice( const std::shared_ptr<VulkanInstance> &instance,
+                                const VulkanPhysicalDevice &physicalDevice,
                                 VulkanRenderSystem *renderSystem ) :
         mInstance( instance ),
         mPhysicalDevice( 0 ),
@@ -468,7 +469,8 @@ namespace Ogre
         setPhysicalDevice( physicalDevice );
     }
     //-------------------------------------------------------------------------
-    VulkanDevice::VulkanDevice( VkInstance instance, const VulkanExternalDevice &externalDevice,
+    VulkanDevice::VulkanDevice( const std::shared_ptr<VulkanInstance> &instance,
+                                const VulkanExternalDevice &externalDevice,
                                 VulkanRenderSystem *renderSystem ) :
         mInstance( instance ),
         mPhysicalDevice( externalDevice.physicalDevice ),
@@ -580,7 +582,7 @@ namespace Ogre
 
             PFN_vkGetPhysicalDeviceFeatures2KHR GetPhysicalDeviceFeatures2KHR =
                 (PFN_vkGetPhysicalDeviceFeatures2KHR)vkGetInstanceProcAddr(
-                    mInstance, "vkGetPhysicalDeviceFeatures2KHR" );
+                    mInstance->mVkInstance, "vkGetPhysicalDeviceFeatures2KHR" );
 
             void **lastNext = &deviceFeatures2.pNext;
 
@@ -884,7 +886,7 @@ namespace Ogre
         {
             PFN_vkGetPhysicalDeviceFeatures2KHR GetPhysicalDeviceFeatures2KHR =
                 (PFN_vkGetPhysicalDeviceFeatures2KHR)vkGetInstanceProcAddr(
-                    mInstance, "vkGetPhysicalDeviceFeatures2KHR" );
+                    mInstance->mVkInstance, "vkGetPhysicalDeviceFeatures2KHR" );
 
             void **lastNext = &deviceFeatures2.pNext;
 

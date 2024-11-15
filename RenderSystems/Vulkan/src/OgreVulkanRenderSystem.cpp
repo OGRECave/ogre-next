@@ -1101,9 +1101,9 @@ namespace Ogre
                                 : *mInstance->findByName( mVulkanSupport->getSelectedDeviceName() );
 
             if( !externalDevice )
-                mDevice = new VulkanDevice( mInstance->mVkInstance, mActiveDevice, this );
+                mDevice = new VulkanDevice( mInstance, mActiveDevice, this );
             else
-                mDevice = new VulkanDevice( mInstance->mVkInstance, *externalDevice, this );
+                mDevice = new VulkanDevice( mInstance, *externalDevice, this );
 
             mNativeShadingLanguageVersion = 450;
 
@@ -2437,7 +2437,7 @@ namespace Ogre
     {
         if( name == "VkInstance" )
         {
-            *(VkInstance *)pData = mDevice->mInstance;
+            *(VkInstance *)pData = mDevice->mInstance->mVkInstance;
             return;
         }
         else if( name == "VkPhysicalDevice" )
