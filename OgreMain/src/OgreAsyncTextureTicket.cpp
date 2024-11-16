@@ -87,6 +87,8 @@ namespace Ogre
         assert( ( !textureSrc->isMultisample() || !textureSrc->hasMsaaExplicitResolves() ||
                   textureSrc->isOpenGLRenderWindow() ) &&
                 "Cannot download from an explicitly resolved MSAA texture!" );
+        OGRE_ASSERT_LOW( !textureSrc->isTilerMemoryless() &&
+                         "Cannot download from a memoryless texture!" );
     }
     //-----------------------------------------------------------------------------------
     void AsyncTextureTicket::notifyTextureChanged( TextureGpu *texture,

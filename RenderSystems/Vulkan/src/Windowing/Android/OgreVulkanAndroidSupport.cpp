@@ -46,7 +46,6 @@ namespace Ogre
         ConfigOption optVSync;
         ConfigOption optVSyncInterval;
         ConfigOption optVSyncMethod;
-        ConfigOption optRTTMode;
 
         // Video mode possibilities
         optVideoMode.name = "Video Mode";
@@ -95,7 +94,6 @@ namespace Ogre
         mOptions[optVSync.name] = optVSync;
         mOptions[optVSyncInterval.name] = optVSyncInterval;
         mOptions[optVSyncMethod.name] = optVSyncMethod;
-        mOptions[optRTTMode.name] = optRTTMode;
 
         refreshConfig();
     }

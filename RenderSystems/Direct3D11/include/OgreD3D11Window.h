@@ -123,7 +123,8 @@ namespace Ogre
                                    D3D11RenderSystem *renderSystem );
         ~D3D11WindowSwapChainBased() override;
 
-        void _initialize( TextureGpuManager *textureGpuManager ) override;
+        void _initialize( TextureGpuManager                     *textureGpuManager,
+                          const NameValuePairList *ogre_nullable miscParams ) override;
         void destroy() override;
 
         /// @copydoc Window::setFsaa

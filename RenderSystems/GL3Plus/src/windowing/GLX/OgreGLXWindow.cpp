@@ -541,7 +541,7 @@ namespace Ogre
         mClosed = false;
     }
     //-----------------------------------------------------------------------------------
-    void GLXWindow::_initialize( TextureGpuManager *_textureManager )
+    void GLXWindow::_initialize( TextureGpuManager *_textureManager, const NameValuePairList * )
     {
         GL3PlusTextureGpuManager *textureManager =
             static_cast<GL3PlusTextureGpuManager *>( _textureManager );

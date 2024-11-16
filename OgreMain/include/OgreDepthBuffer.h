@@ -89,6 +89,11 @@ namespace Ogre
             POOL_NO_DEPTH = 0,
             POOL_MANUAL_USAGE OGRE_DEPRECATED_ENUM_VER( 3 ) = 0,
             POOL_DEFAULT = 1,
+
+            /// The depth buffer doesn't does not have memory backing it.
+            /// It will be created with TextureFlags::TilerMemoryless.
+            POOL_MEMORYLESS = 65533,
+
             /// Deprecated.
             ///
             /// Do NOT use this flag directly. It made sense in Ogre 2.1

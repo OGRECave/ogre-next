@@ -675,7 +675,7 @@ namespace Ogre
         if( !preferDepthTexture )
             textureFlags |= TextureFlags::NotTexture | TextureFlags::DiscardableContent;
 
-        if( colourTexture->isTilerMemoryless() || colourTexture->isTilerDepthMemoryless() )
+        if( colourTexture->getDepthBufferPoolId() == DepthBuffer::POOL_MEMORYLESS )
             textureFlags |= TextureFlags::TilerMemoryless;
 
         char tmpBuffer[64];

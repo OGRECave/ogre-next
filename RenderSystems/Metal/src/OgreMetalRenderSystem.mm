@@ -614,7 +614,7 @@ namespace Ogre
         Window *win = OGRE_NEW MetalWindow( name, width, height, fullScreen, miscParams, &mDevice );
         mWindows.insert( win );
 
-        win->_initialize( mTextureGpuManager );
+        win->_initialize( mTextureGpuManager, miscParams );
         return win;
     }
     //-------------------------------------------------------------------------

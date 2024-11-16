@@ -63,13 +63,6 @@ namespace Ogre
         mDevice = device;
     }
     //-------------------------------------------------------------------------
-    void VulkanWindow::_initialize( TextureGpuManager *textureGpuManager )
-    {
-        OGRE_EXCEPT( Exception::ERR_INVALID_CALL,
-                     "Call _initialize( TextureGpuManager*, const NameValuePairList * ) instead",
-                     "VulkanWindow::_initialize" );
-    }
-    //-------------------------------------------------------------------------
     VulkanWindowNull::VulkanWindowNull( const String &title, uint32 width, uint32 height,
                                         bool fullscreenMode ) :
         VulkanWindow( title, width, height, fullscreenMode )

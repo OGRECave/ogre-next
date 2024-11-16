@@ -163,6 +163,47 @@ namespace Ogre
             mRequiresTextureFlipping = mColour[0].resolveTexture->requiresTextureFlipping();
     }
     //-----------------------------------------------------------------------------------
+    void RenderPassDescriptor::validateMemorylessTexture( const TextureGpu *texture,
+                                                          const LoadAction::LoadAction loadAction,
+                                                          const StoreAction::StoreAction storeAction,
+                                                          const bool bIsDepthStencil )
+    {
+        if( !texture->isTilerMemoryless() )
+            return;
+
+        if( loadAction != LoadAction::Clear && loadAction != LoadAction::DontCare &&
+            loadAction != LoadAction::ClearOnTilers )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Texture '" + texture->getNameStr() +
+                             "' is TilerMemoryless. For load actions it can only use clear, "
+                             "dont_care or clear_on_tilers.",
+                         "RenderPassDescriptor::validateMemorylessTexture" );
+        }
+
+        if( !texture->isMultisample() || bIsDepthStencil )
+        {
+            if( storeAction != StoreAction::DontCare )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "Texture '" + texture->getNameStr() +
+                                 "' is TilerMemoryless. For store actions it can only use dont_care.",
+                             "RenderPassDescriptor::validateMemorylessTexture" );
+            }
+        }
+        else
+        {
+            if( storeAction != StoreAction::DontCare && storeAction != StoreAction::MultisampleResolve )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "MSAA Texture '" + texture->getNameStr() +
+                                 "' is TilerMemoryless. For store actions it can only use dont_care "
+                                 "or resolve.",
+                             "RenderPassDescriptor::validateMemorylessTexture" );
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void RenderPassDescriptor::colourEntriesModified()
     {
         mNumColourEntries = 0;
@@ -175,6 +216,9 @@ namespace Ogre
                mColour[mNumColourEntries].texture )
         {
             const RenderPassColourTarget &colourEntry = mColour[mNumColourEntries];
+
+            validateMemorylessTexture( colourEntry.texture, colourEntry.loadAction,
+                                       colourEntry.storeAction, false );
 
             if( colourEntry.texture->isRenderWindowSpecific() )
             {
@@ -205,6 +249,14 @@ namespace Ogre
                                  "Resolve Texture '" + colourEntry.resolveTexture->getNameStr() +
                                      "' specified, but texture to render to '" +
                                      colourEntry.texture->getNameStr() + "' is not MSAA",
+                                 "RenderPassDescriptor::colourEntriesModified" );
+                }
+
+                if( colourEntry.resolveTexture->isTilerMemoryless() )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                 "Resolving to Texture '" + colourEntry.resolveTexture->getNameStr() +
+                                     "' which is memoryless!",
                                  "RenderPassDescriptor::colourEntriesModified" );
                 }
 
@@ -305,6 +357,8 @@ namespace Ogre
                                  "RenderPassDescriptor::entriesModified" );
                 }
             }
+
+            validateMemorylessTexture( mDepth.texture, mDepth.loadAction, mDepth.storeAction, true );
         }
 
         if( mStencil.texture && mStencil.texture != mDepth.texture )
@@ -323,6 +377,9 @@ namespace Ogre
                                  "RenderPassDescriptor::entriesModified" );
                 }
             }
+
+            validateMemorylessTexture( mStencil.texture, mStencil.loadAction, mStencil.storeAction,
+                                       true );
         }
 
         checkRequiresTextureFlipping();

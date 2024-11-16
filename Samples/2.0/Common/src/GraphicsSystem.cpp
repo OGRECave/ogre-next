@@ -323,6 +323,7 @@ namespace Demo
         params.insert( std::make_pair( "FSAA", cfgOpts["FSAA"].currentValue ) );
         params.insert( std::make_pair( "vsync", cfgOpts["VSync"].currentValue ) );
         params.insert( std::make_pair( "reverse_depth", "Yes" ) );
+        params.insert( std::make_pair( "memoryless_depth_buffer", "Yes" ) );
 
         initMiscParamsListener( params );
 

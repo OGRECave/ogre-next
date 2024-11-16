@@ -34,13 +34,12 @@ THE SOFTWARE.
 #include "OgrePixelFormatGpuUtils.h"
 
 #include "OgreException.h"
+#include "OgreRenderSystem.h"
 #include "OgreTextureBox.h"
 #include "OgreVector2.h"
 #include "OgreVulkanMappings.h"
 #include "OgreVulkanTextureGpuManager.h"
 #include "OgreVulkanUtils.h"
-#include "OgreRoot.h"
-#include "OgreRenderSystem.h"
 
 #define TODO_add_resource_transitions
 
@@ -64,7 +63,10 @@ namespace Ogre
         _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
-    VulkanTextureGpu::~VulkanTextureGpu() { destroyInternalResourcesImpl(); }
+    VulkanTextureGpu::~VulkanTextureGpu()
+    {
+        destroyInternalResourcesImpl();
+    }
     //-----------------------------------------------------------------------------------
     PixelFormatGpu VulkanTextureGpu::getWorkaroundedPixelFormat( const PixelFormatGpu pixelFormat ) const
     {
@@ -146,23 +148,15 @@ namespace Ogre
         if( isUav() )
             imageInfo.usage |= VK_IMAGE_USAGE_STORAGE_BIT;
 
-        RenderSystem* rs = Root::getSingleton().getRenderSystem();
-        const RenderSystemCapabilities *capabilities = rs->getCapabilities();
-        bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
-        if(isTiler && isRenderWindowSpecific() && isRenderToTexture())
+        const RenderSystemCapabilities *capabilities =
+            mTextureManager->getRenderSystem()->getCapabilities();
+        const bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
+        if( isTiler && isTilerMemoryless() )
         {
-            ConfigOptionMap& options = rs->getConfigOptions();
-            Ogre::ConfigOptionMap::iterator opt = options.find("WindowMemoryless");
-            if(opt!=options.end())
-                isTiler = opt->second.currentValue=="Yes";
-        }
-        if(isTiler && !isUav() && !isPoolOwner() && isRenderToTexture())
-        {
-            if( isTilerMemoryless() || (isMultisample() && hasMsaaExplicitResolves() && !isTexture() && isDiscardableContent()) )
-            {
-                imageInfo.usage |= VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
-                imageInfo.usage &= (VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
-            }
+            imageInfo.usage |= VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
+            imageInfo.usage &=
+                ( VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
+                  VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT );
         }
 
         String textureName = getNameStr();
@@ -1000,23 +994,17 @@ namespace Ogre
                                ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
                                : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-        RenderSystem* rs = Root::getSingleton().getRenderSystem();
-        const RenderSystemCapabilities *capabilities = rs->getCapabilities();
-        bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
-        if(isTiler && isRenderWindowSpecific() && isRenderToTexture())
+        const RenderSystemCapabilities *capabilities =
+            mTextureManager->getRenderSystem()->getCapabilities();
+        const bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
+        if( isTiler )
         {
-            ConfigOptionMap& options = rs->getConfigOptions();
-            Ogre::ConfigOptionMap::iterator opt = options.find("WindowMemoryless");
-            if(opt!=options.end())
-                isTiler = opt->second.currentValue=="Yes";
-        }
-        if(isTiler && isRenderToTexture())
-        {
-            if((isTilerMemoryless() || isTilerDepthMemoryless()) || (!isTexture() && isDiscardableContent()) )
-            {
-                imageInfo.usage |= VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
-                imageInfo.usage &= (VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
-            }
+            // mMsaaFramebufferName is always Memoryless because the user *NEVER* has access to it
+            // and we always auto-resolve in the same pass, thus MSAA contents are always transient.
+            imageInfo.usage |= VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
+            imageInfo.usage &=
+                ( VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
+                  VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT );
         }
 
         String textureName = getNameStr() + "/MsaaImplicit";

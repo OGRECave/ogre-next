@@ -81,6 +81,8 @@ namespace Ogre
 
         void setFinalResolution( uint32 widthPx, uint32 heightPx );
 
+        static bool requestedMemoryless( const NameValuePairList *ogre_nullable miscParams );
+
     public:
         Window( const String &title, uint32 widthPt, uint32 heightPt, bool fullscreenMode );
         virtual ~Window();
@@ -288,7 +290,8 @@ namespace Ogre
         void _setPrimary();
         bool isPrimary() const;
 
-        virtual void _initialize( TextureGpuManager *textureGpuManager ) = 0;
+        virtual void _initialize( TextureGpuManager                     *textureGpuManager,
+                                  const NameValuePairList *ogre_nullable miscParams ) = 0;
 
         /// Overloaded version of getMetrics from RenderTarget, including extra details
         /// specific to windowing systems. Result is in pixels.

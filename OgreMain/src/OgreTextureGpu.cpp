@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgreTextureGpu.h"
 
+#include "OgreDepthBuffer.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
 #include "OgreLwString.h"
@@ -668,6 +669,8 @@ namespace Ogre
         assert( this != dst || !srcBox.overlaps( dstBox ) );
         assert( srcMipLevel < this->getNumMipmaps() && dstMipLevel < dst->getNumMipmaps() );
         OGRE_ASSERT_LOW( ( this->getOrientationMode() & 0x01 ) == ( dst->getOrientationMode() & 0x01 ) );
+        OGRE_ASSERT_LOW( !this->isTilerMemoryless() );
+        OGRE_ASSERT_LOW( !dst->isTilerMemoryless() );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
@@ -913,7 +916,7 @@ namespace Ogre
             this->getInternalHeight() == colourTarget->getInternalHeight() &&
             this->getSampleDescription() == colourTarget->getSampleDescription() &&
             this->isTilerMemoryless() ==
-                ( colourTarget->isTilerMemoryless() || colourTarget->isTilerDepthMemoryless() ) &&
+                ( colourTarget->getDepthBufferPoolId() == DepthBuffer::POOL_MEMORYLESS ) &&
             this->isRenderWindowSpecific() == colourTarget->isRenderWindowSpecific() )
         {
             return true;

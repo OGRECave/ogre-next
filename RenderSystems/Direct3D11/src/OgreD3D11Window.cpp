@@ -171,7 +171,8 @@ namespace Ogre
         return mUseFlipMode ? 2 : mRenderSystem->getVaoManager()->getDynamicBufferMultiplier() - 1u;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11WindowSwapChainBased::_initialize( TextureGpuManager *textureGpuManager )
+    void D3D11WindowSwapChainBased::_initialize( TextureGpuManager *textureGpuManager,
+                                                 const NameValuePairList * )
     {
         _createSwapChain();
 

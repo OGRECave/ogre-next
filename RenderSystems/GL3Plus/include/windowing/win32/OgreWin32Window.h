@@ -73,7 +73,8 @@ namespace Ogre
                      Win32GLSupport &glsupport );
         virtual ~Win32Window();
 
-        virtual void _initialize( TextureGpuManager *textureGpuManager );
+        virtual void _initialize( TextureGpuManager                     *textureGpuManager,
+                                  const NameValuePairList *ogre_nullable miscParams );
         virtual void destroy();
 
         virtual void reposition( int32 left, int32 top );

@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreMetalDevice.h"
 #include "OgreMetalMappings.h"
 #include "OgreMetalTextureGpuManager.h"
+#include "OgreRenderSystem.h"
 #include "OgreStringConverter.h"
 #include "OgreTextureBox.h"
 #include "OgreTextureGpuListener.h"
@@ -39,7 +40,6 @@ THE SOFTWARE.
 #include "Vao/OgreVaoManager.h"
 
 #import "Metal/MTLBlitCommandEncoder.h"
-#include "OgreRoot.h"
 
 namespace Ogre
 {
@@ -55,10 +55,7 @@ namespace Ogre
         _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
-    MetalTextureGpu::~MetalTextureGpu()
-    {
-        destroyInternalResourcesImpl();
-    }
+    MetalTextureGpu::~MetalTextureGpu() { destroyInternalResourcesImpl(); }
     //-----------------------------------------------------------------------------------
     void MetalTextureGpu::createInternalResourcesImpl()
     {
@@ -83,27 +80,13 @@ namespace Ogre
         if( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray )
             desc.arrayLength /= 6u;
 
-        RenderSystem *rs = Root::getSingleton().getRenderSystem();
-        const RenderSystemCapabilities *capabilities = rs->getCapabilities();
-        bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
-        if( isTiler && isRenderWindowSpecific() && isRenderToTexture() )
-        {
-            ConfigOptionMap &options = rs->getConfigOptions();
-            Ogre::ConfigOptionMap::iterator opt = options.find( "WindowMemoryless" );
-            if( opt != options.end() )
-                isTiler = opt->second.currentValue == "Yes";
-        }
-        if( isTiler )
+        const RenderSystemCapabilities *capabilities =
+            mTextureManager->getRenderSystem()->getCapabilities();
+        const bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
+        if( isTiler && isTilerMemoryless() )
         {
             if( @available( iOS 10, macOS 11, * ) )
-            {
-                if( ( isTilerMemoryless() && isRenderToTexture() ) ||
-                    ( isMultisample() && hasMsaaExplicitResolves() && !isTexture() &&
-                      isRenderToTexture() && isDiscardableContent() ) )
-                {
-                    desc.storageMode = MTLStorageModeMemoryless;
-                }
-            }
+                desc.storageMode = MTLStorageModeMemoryless;
         }
         if( isMultisample() && hasMsaaExplicitResolves() )
         {
@@ -140,14 +123,10 @@ namespace Ogre
         {
             if( isTiler )
             {
+                // mMsaaFramebufferName is always Memoryless because the user *NEVER* has access to it
+                // and we always auto-resolve in the same pass, thus MSAA contents are always transient.
                 if( @available( iOS 10, macOS 11, * ) )
-                {
-                    if( ( ( isTilerMemoryless() || isTilerDepthMemoryless() ) && isRenderToTexture() ) ||
-                        ( !isTexture() && isRenderToTexture() && isDiscardableContent() ) )
-                    {
-                        desc.storageMode = MTLStorageModeMemoryless;
-                    }
-                }
+                    desc.storageMode = MTLStorageModeMemoryless;
             }
             desc.textureType = MTLTextureType2DMultisample;
             desc.depth = 1u;
@@ -486,15 +465,9 @@ namespace Ogre
         mDesiredDepthBufferFormat = desiredDepthBufferFormat;
     }
     //-----------------------------------------------------------------------------------
-    uint16 MetalTextureGpuRenderTarget::getDepthBufferPoolId() const
-    {
-        return mDepthBufferPoolId;
-    }
+    uint16 MetalTextureGpuRenderTarget::getDepthBufferPoolId() const { return mDepthBufferPoolId; }
     //-----------------------------------------------------------------------------------
-    bool MetalTextureGpuRenderTarget::getPreferDepthTexture() const
-    {
-        return mPreferDepthTexture;
-    }
+    bool MetalTextureGpuRenderTarget::getPreferDepthTexture() const { return mPreferDepthTexture; }
     //-----------------------------------------------------------------------------------
     PixelFormatGpu MetalTextureGpuRenderTarget::getDesiredDepthBufferFormat() const
     {
@@ -509,9 +482,6 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-    OrientationMode MetalTextureGpuRenderTarget::getOrientationMode() const
-    {
-        return mOrientationMode;
-    }
+    OrientationMode MetalTextureGpuRenderTarget::getOrientationMode() const { return mOrientationMode; }
 #endif
 }  // namespace Ogre

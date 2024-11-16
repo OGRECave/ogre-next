@@ -34,6 +34,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    OGRE_ASSUME_NONNULL_BEGIN
+
     class NULLWindow : public Window
     {
         bool mClosed;
@@ -55,9 +57,12 @@ namespace Ogre
         bool isVisible() const override;
         void setHidden( bool hidden ) override;
         bool isHidden() const override;
-        void _initialize( TextureGpuManager *textureGpuManager ) override;
+        void _initialize( TextureGpuManager                     *textureGpuManager,
+                          const NameValuePairList *ogre_nullable miscParams ) override;
         void swapBuffers() override;
     };
+
+    OGRE_ASSUME_NONNULL_END
 }  // namespace Ogre
 
 #endif
