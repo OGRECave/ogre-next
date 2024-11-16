@@ -138,7 +138,7 @@ namespace Ogre
             return MTLLoadActionDontCare;
         case LoadAction::Clear:
             return MTLLoadActionClear;
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS || ( OGRE_PLATFORM == OGRE_PLATFORM_APPLE && OGRE_CPU == OGRE_CPU_ARM && OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64 )
         case LoadAction::ClearOnTilers:
             return MTLLoadActionClear;
 #else

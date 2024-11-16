@@ -39,6 +39,8 @@ THE SOFTWARE.
 #include "OgreVulkanMappings.h"
 #include "OgreVulkanTextureGpuManager.h"
 #include "OgreVulkanUtils.h"
+#include "OgreRoot.h"
+#include "OgreRenderSystem.h"
 
 #define TODO_add_resource_transitions
 
@@ -143,6 +145,25 @@ namespace Ogre
         }
         if( isUav() )
             imageInfo.usage |= VK_IMAGE_USAGE_STORAGE_BIT;
+
+        RenderSystem* rs = Root::getSingleton().getRenderSystem();
+        const RenderSystemCapabilities *capabilities = rs->getCapabilities();
+        bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
+        if(isTiler && isRenderWindowSpecific() && isRenderToTexture())
+        {
+            ConfigOptionMap& options = rs->getConfigOptions();
+            Ogre::ConfigOptionMap::iterator opt = options.find("WindowMemoryless");
+            if(opt!=options.end())
+                isTiler = opt->second.currentValue=="Yes";
+        }
+        if(isTiler && !isUav() && !isPoolOwner() && isRenderToTexture())
+        {
+            if( isTilerMemoryless() || (isMultisample() && hasMsaaExplicitResolves() && !isTexture() && isDiscardableContent()) )
+            {
+                imageInfo.usage |= VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
+                imageInfo.usage &= (VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
+            }
+        }
 
         String textureName = getNameStr();
 
@@ -978,6 +999,25 @@ namespace Ogre
         imageInfo.usage |= PixelFormatGpuUtils::isDepth( finalPixelFormat )
                                ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
                                : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+
+        RenderSystem* rs = Root::getSingleton().getRenderSystem();
+        const RenderSystemCapabilities *capabilities = rs->getCapabilities();
+        bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
+        if(isTiler && isRenderWindowSpecific() && isRenderToTexture())
+        {
+            ConfigOptionMap& options = rs->getConfigOptions();
+            Ogre::ConfigOptionMap::iterator opt = options.find("WindowMemoryless");
+            if(opt!=options.end())
+                isTiler = opt->second.currentValue=="Yes";
+        }
+        if(isTiler && isRenderToTexture())
+        {
+            if((isTilerMemoryless() || isTilerDepthMemoryless()) || (!isTexture() && isDiscardableContent()) )
+            {
+                imageInfo.usage |= VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
+                imageInfo.usage &= (VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
+            }
+        }
 
         String textureName = getNameStr() + "/MsaaImplicit";
 

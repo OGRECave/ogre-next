@@ -40,6 +40,7 @@ THE SOFTWARE.
 #include "Vao/OgreMetalVaoManager.h"
 
 #include "OgreException.h"
+#include "OgreRoot.h"
 
 namespace Ogre
 {
@@ -150,8 +151,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TextureGpu *MetalTextureGpuManager::createTextureGpuWindow( MetalWindow *window )
     {
+        const RenderSystemCapabilities *capabilities = Root::getSingleton().getRenderSystem()->getCapabilities();
+        const bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
         return OGRE_NEW MetalTextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager, "RenderWindow",
                                                TextureFlags::NotTexture | TextureFlags::RenderToTexture |
+                                                   (isTiler ? TextureFlags::TilerDepthMemoryless : 0) |
                                                    TextureFlags::RenderWindowSpecific |
                                                    TextureFlags::DiscardableContent,
                                                TextureTypes::Type2D, this, window );
@@ -159,9 +163,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TextureGpu *MetalTextureGpuManager::createWindowDepthBuffer()
     {
+        const RenderSystemCapabilities *capabilities = Root::getSingleton().getRenderSystem()->getCapabilities();
+        const bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
         return OGRE_NEW MetalTextureGpuRenderTarget(
             GpuPageOutStrategy::Discard, mVaoManager, "RenderWindow DepthBuffer",
             TextureFlags::NotTexture | TextureFlags::RenderToTexture |
+                (isTiler ? TextureFlags::TilerMemoryless : 0) |
                 TextureFlags::RenderWindowSpecific | TextureFlags::DiscardableContent,
             TextureTypes::Type2D, this );
     }

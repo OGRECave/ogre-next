@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "OgreStringConverter.h"
 #include "OgreViewport.h"
 #include "OgreWindowEventUtilities.h"
+#include "OgreRoot.h"
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
 
@@ -197,6 +198,22 @@ namespace Ogre
                 desc.sampleCount = mSampleDescription.getColourSamples();
                 desc.usage = MTLTextureUsageRenderTarget;
                 desc.storageMode = MTLStorageModePrivate;
+                RenderSystem* rs = Root::getSingleton().getRenderSystem();
+                assert(rs);
+                const RenderSystemCapabilities *capabilities = rs->getCapabilities();
+                bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
+                if(isTiler)
+                {
+                    ConfigOptionMap& options = rs->getConfigOptions();
+                    Ogre::ConfigOptionMap::iterator opt = options.find("WindowMemoryless");
+                    if(opt!=options.end())
+                        isTiler = opt->second.currentValue=="Yes";
+                }
+                if(isTiler)
+                {
+                    if(@available(iOS 10, macOS 11, *))
+                        desc.storageMode = MTLStorageModeMemoryless;
+                }
 
                 id<MTLTexture> msaaTex = [mDevice->mDevice newTextureWithDescriptor:desc];
                 if( !msaaTex )

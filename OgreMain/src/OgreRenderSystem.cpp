@@ -675,6 +675,9 @@ namespace Ogre
         if( !preferDepthTexture )
             textureFlags |= TextureFlags::NotTexture | TextureFlags::DiscardableContent;
 
+        if( colourTexture->isTilerMemoryless() || colourTexture->isTilerDepthMemoryless() )
+            textureFlags |= TextureFlags::TilerMemoryless;
+
         char tmpBuffer[64];
         LwString depthBufferName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
         depthBufferName.a( "DepthBuffer_", Id::generateNewId<TextureGpu>() );
