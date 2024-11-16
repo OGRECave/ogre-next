@@ -912,7 +912,8 @@ namespace Ogre
         if( this->getInternalWidth() == colourTarget->getInternalWidth() &&
             this->getInternalHeight() == colourTarget->getInternalHeight() &&
             this->getSampleDescription() == colourTarget->getSampleDescription() &&
-            this->isTilerMemoryless() == (colourTarget->isTilerMemoryless() || colourTarget->isTilerDepthMemoryless()) &&
+            this->isTilerMemoryless() ==
+                ( colourTarget->isTilerMemoryless() || colourTarget->isTilerDepthMemoryless() ) &&
             this->isRenderWindowSpecific() == colourTarget->isRenderWindowSpecific() )
         {
             return true;

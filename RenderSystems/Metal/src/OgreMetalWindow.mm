@@ -35,10 +35,10 @@ THE SOFTWARE.
 #include "OgreMetalTextureGpuWindow.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreRenderSystem.h"
+#include "OgreRoot.h"
 #include "OgreStringConverter.h"
 #include "OgreViewport.h"
 #include "OgreWindowEventUtilities.h"
-#include "OgreRoot.h"
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
 
@@ -198,20 +198,20 @@ namespace Ogre
                 desc.sampleCount = mSampleDescription.getColourSamples();
                 desc.usage = MTLTextureUsageRenderTarget;
                 desc.storageMode = MTLStorageModePrivate;
-                RenderSystem* rs = Root::getSingleton().getRenderSystem();
-                assert(rs);
+                RenderSystem *rs = Root::getSingleton().getRenderSystem();
+                assert( rs );
                 const RenderSystemCapabilities *capabilities = rs->getCapabilities();
                 bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
-                if(isTiler)
+                if( isTiler )
                 {
-                    ConfigOptionMap& options = rs->getConfigOptions();
-                    Ogre::ConfigOptionMap::iterator opt = options.find("WindowMemoryless");
-                    if(opt!=options.end())
-                        isTiler = opt->second.currentValue=="Yes";
+                    ConfigOptionMap &options = rs->getConfigOptions();
+                    Ogre::ConfigOptionMap::iterator opt = options.find( "WindowMemoryless" );
+                    if( opt != options.end() )
+                        isTiler = opt->second.currentValue == "Yes";
                 }
-                if(isTiler)
+                if( isTiler )
                 {
-                    if(@available(iOS 10, macOS 11, *))
+                    if( @available( iOS 10, macOS 11, * ) )
                         desc.storageMode = MTLStorageModeMemoryless;
                 }
 
