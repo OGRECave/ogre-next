@@ -122,6 +122,26 @@ namespace Ogre
                                             uint64_t srcObject, size_t location, int32_t msgCode,
                                             const char *pLayerPrefix, const char *pMsg, void *pUserData )
     {
+        VulkanRenderSystem *renderSystem = static_cast<VulkanRenderSystem *>( pUserData );
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+        if( renderSystem->getActiveVulkanPhysicalDevice().driverID == 23 /* VK_DRIVER_ID_MESA_DOZEN */
+            && ( msgFlags & VK_DEBUG_REPORT_ERROR_BIT_EXT ) )
+        {
+            // According to VkQueueFamilyProperties, graphics and compute capable queues must be declared
+            // with a minImageTransferGranularity of (1,1,1). Currently, dozen is hardcoded to a value of
+            // (0,0,0). https://gitlab.freedesktop.org/mesa/mesa/-/issues/10617
+            static String ignoredFalsePositiveErrors[] = {
+                "Validation Error: [ VUID-vkCmdCopyImage-srcOffset-01783 ]",
+                "Validation Error: [ VUID-vkCmdCopyImage-dstOffset-01784 ]",
+                "Validation Error: [ VUID-vkCmdCopyBufferToImage-imageOffset-07738 ]"
+            };
+            for( auto &err : ignoredFalsePositiveErrors )
+                if( 0 == strncmp( pMsg, err.c_str(), err.size() ) )
+                    return false;
+        }
+#endif
+
         // clang-format off
         char *message = (char *)malloc(strlen(pMsg) + 100);
 
@@ -135,7 +155,7 @@ namespace Ogre
             sprintf(message, "PERFORMANCE WARNING: [%s] Code %d : %s", pLayerPrefix, msgCode, pMsg);
         } else if (msgFlags & VK_DEBUG_REPORT_ERROR_BIT_EXT) {
             sprintf(message, "ERROR: [%s] Code %d : %s", pLayerPrefix, msgCode, pMsg);
-            static_cast<VulkanRenderSystem*>( pUserData )->debugCallback();
+            renderSystem->debugCallback();
         } else if (msgFlags & VK_DEBUG_REPORT_DEBUG_BIT_EXT) {
             sprintf(message, "DEBUG: [%s] Code %d : %s", pLayerPrefix, msgCode, pMsg);
         } else {
