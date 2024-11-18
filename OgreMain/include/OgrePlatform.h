@@ -81,7 +81,8 @@ THE SOFTWARE.
 #if defined( __x86_64__ ) || defined( _M_X64 ) || defined( _M_X64 ) || defined( _M_AMD64 ) || \
     defined( __ppc64__ ) || defined( __PPC64__ ) || defined( __arm64__ ) || defined( __aarch64__ ) || \
     defined( _M_ARM64 ) || defined( __mips64 ) || defined( __mips64_ ) || defined( __alpha__ ) || \
-    defined( __ia64__ ) || defined( __e2k__ ) || defined( __s390__ ) || defined( __s390x__ )
+    defined( __ia64__ ) || defined( __e2k__ ) || defined( __s390__ ) || defined( __s390x__ ) || \
+    (defined(__riscv) && __riscv_xlen == 64)
 #    define OGRE_ARCH_TYPE OGRE_ARCHITECTURE_64
 #else
 #    define OGRE_ARCH_TYPE OGRE_ARCHITECTURE_32
