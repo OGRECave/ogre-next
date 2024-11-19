@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 #include "Vao/OgreReadOnlyBufferPacked.h"
 
-#include <vulkan/vulkan.h>
+#include "vulkan/vulkan_core.h"
 
 namespace Ogre
 {

@@ -37,7 +37,7 @@ THE SOFTWARE.
 
 #include "OgreVulkanUtils.h"
 
-#include <vulkan/vulkan.h>
+#include "vulkan/vulkan_core.h"
 
 #ifdef OGRE_VULKAN_USE_SWAPPY
 #    include "swappy/swappyVk.h"

@@ -29,10 +29,10 @@ THE SOFTWARE.
 #ifndef _OgreVulkanTextureGpu_H_
 #define _OgreVulkanTextureGpu_H_
 
-#include "OgreDescriptorSetTexture.h"
-#include "OgreDescriptorSetUav.h"
 #include "OgreVulkanPrerequisites.h"
 
+#include "OgreDescriptorSetTexture.h"
+#include "OgreDescriptorSetUav.h"
 #include "OgreTextureGpu.h"
 
 #include "vulkan/vulkan_core.h"
