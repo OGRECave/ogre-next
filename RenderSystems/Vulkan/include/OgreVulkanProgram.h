@@ -32,6 +32,7 @@ THE SOFTWARE.
 
 #include "OgreHardwareVertexBuffer.h"
 #include "OgreHighLevelGpuProgram.h"
+#include "OgreVulkanDeviceResource.h"
 
 struct VkVertexInputBindingDescription;
 struct VkVertexInputAttributeDescription;
@@ -69,7 +70,8 @@ namespace Ogre
         not create a program object.  It's up to VulkanGpuProgram class to request a program object
         to link the shader object to.
     */
-    class _OgreVulkanExport VulkanProgram final : public HighLevelGpuProgram
+    class _OgreVulkanExport VulkanProgram final : public HighLevelGpuProgram,
+                                                  protected VulkanDeviceResource
     {
     public:
         /// Command object for setting macro defines
@@ -136,6 +138,9 @@ namespace Ogre
 
     protected:
         static CmdPreprocessorDefines msCmdPreprocessorDefines;
+
+        void notifyDeviceLost() override;
+        void notifyDeviceRestored( unsigned pass ) override;
 
         uint32 getEshLanguage() const;
 

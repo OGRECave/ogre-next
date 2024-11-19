@@ -143,7 +143,7 @@ namespace Ogre
         mShaderSyntax = ( languageName.find( "hlsl" ) != String::npos ) ? HLSL : GLSL;
         mDrawIdLocation = ( mShaderSyntax == GLSL ) ? 15 : 0;
     }
-    //---------------------------------------------------------------------------
+    //-----------------------------------------------------------------------
     VulkanProgram::~VulkanProgram()
     {
         // Have to call this here rather than in Resource destructor
@@ -155,6 +155,31 @@ namespace Ogre
         else
         {
             unloadHighLevel();
+        }
+    }
+    //-----------------------------------------------------------------------
+    void VulkanProgram::notifyDeviceLost()
+    {
+        if( mShaderModule )
+        {
+            vkDestroyShaderModule( mDevice->mDevice, mShaderModule, 0 );
+            mShaderModule = 0;
+        }
+    }
+    //-----------------------------------------------------------------------
+    void VulkanProgram::notifyDeviceRestored( unsigned pass )
+    {
+        if( pass == 0 && mCompiled && !mSpirv.empty() )
+        {
+            VkShaderModuleCreateInfo moduleCi;
+            makeVkStruct( moduleCi, VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO );
+            moduleCi.codeSize = mSpirv.size() * sizeof( uint32 );
+            moduleCi.pCode = mSpirv.data();
+            VkResult result = vkCreateShaderModule( mDevice->mDevice, &moduleCi, 0, &mShaderModule );
+            checkVkResult( result, "vkCreateShaderModule" );
+
+            setObjectName( mDevice->mDevice, (uint64_t)mShaderModule,
+                           VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT, mName.c_str() );
         }
     }
     //-----------------------------------------------------------------------
