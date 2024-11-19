@@ -107,6 +107,27 @@ namespace Ogre
         mSupportsNonCoherentMemory( false ),
         mReadMemoryIsCoherent( false )
     {
+        if( params )
+        {
+            NameValuePairList::const_iterator itor =
+                params->find( "VaoManager::mDelayedBlocksFlushThreshold" );
+            if( itor != params->end() )
+            {
+                mDelayedBlocksFlushThreshold =
+                    StringConverter::parseSizeT( itor->second, mDelayedBlocksFlushThreshold );
+            }
+        }
+  
+        createVkResources();
+    }
+    //-----------------------------------------------------------------------------------
+    VulkanVaoManager::~VulkanVaoManager()
+    {
+        destroyVkResources( true );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::createVkResources()
+    {
         mConstBufferAlignment =
             (uint32)mDevice->mDeviceProperties.limits.minUniformBufferOffsetAlignment;
         mTexBufferAlignment = (uint32)mDevice->mDeviceProperties.limits.minTexelBufferOffsetAlignment;
@@ -178,20 +199,9 @@ namespace Ogre
         mDelayedFuncs.resize( mDynamicBufferMultiplier );
 
         determineBestMemoryTypes();
-
-        if( params )
-        {
-            NameValuePairList::const_iterator itor =
-                params->find( "VaoManager::mDelayedBlocksFlushThreshold" );
-            if( itor != params->end() )
-            {
-                mDelayedBlocksFlushThreshold =
-                    StringConverter::parseSizeT( itor->second, mDelayedBlocksFlushThreshold );
-            }
-        }
     }
     //-----------------------------------------------------------------------------------
-    VulkanVaoManager::~VulkanVaoManager()
+    void VulkanVaoManager::destroyVkResources( bool finalDestruction )
     {
         destroyAllVertexArrayObjects();
         deleteAllBuffers();

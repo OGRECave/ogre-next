@@ -53,6 +53,16 @@ namespace Ogre
         mDevice( device ),
         mCanRestrictImageViewUsage( bCanRestrictImageViewUsage )
     {
+        createVkResources();
+    }
+    //-----------------------------------------------------------------------------------
+    VulkanTextureGpuManager::~VulkanTextureGpuManager()
+    {
+        destroyVkResources( true );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanTextureGpuManager::createVkResources()
+    {
         VkImageCreateInfo imageInfo;
         makeVkStruct( imageInfo, VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO );
         imageInfo.extent.width = 4u;
@@ -94,6 +104,7 @@ namespace Ogre
 
         // Use a VulkanStagingTexture but we will manually handle the upload.
         // The barriers are easy because there is no work using any of this data
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager ); 
         VulkanStagingTexture *stagingTex =
             vaoManager->createStagingTexture( PFG_RGBA8_UNORM, sizeof( c_whiteData ) * 2u );
 
@@ -149,19 +160,20 @@ namespace Ogre
             }
 
             VkResult imageResult =
-                vkCreateImage( device->mDevice, &imageInfo, 0, &mBlankTexture[i].vkImage );
+                vkCreateImage( mDevice->mDevice, &imageInfo, 0, &mBlankTexture[i].vkImage );
             checkVkResult( imageResult, "vkCreateImage" );
 
-            setObjectName( device->mDevice, (uint64_t)mBlankTexture[i].vkImage,
+            setObjectName( mDevice->mDevice, (uint64_t)mBlankTexture[i].vkImage,
                            VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, dummyNames[i] );
 
             VkMemoryRequirements memRequirements;
-            vkGetImageMemoryRequirements( device->mDevice, mBlankTexture[i].vkImage, &memRequirements );
+            vkGetImageMemoryRequirements( mDevice->mDevice, mBlankTexture[i].vkImage, &memRequirements );
 
             VkDeviceMemory deviceMemory = vaoManager->allocateTexture(
                 memRequirements, mBlankTexture[i].vboPoolIdx, mBlankTexture[i].internalBufferStart );
 
-            VkResult result = vkBindImageMemory( device->mDevice, mBlankTexture[i].vkImage, deviceMemory,
+            VkResult result = vkBindImageMemory( mDevice->mDevice, mBlankTexture[i].vkImage,
+                                                 deviceMemory,
                                                  mBlankTexture[i].internalBufferStart );
             checkVkResult( result, "vkBindImageMemory" );
         }
@@ -190,7 +202,7 @@ namespace Ogre
             ++barrierCount;
         }
 
-        vkCmdPipelineBarrier( device->mGraphicsQueue.getCurrentCmdBuffer(),
+        vkCmdPipelineBarrier( mDevice->mGraphicsQueue.getCurrentCmdBuffer(),
                               VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0u,
                               0, 0u, 0, static_cast<uint32>( barrierCount ), imageMemBarrier );
 
@@ -229,7 +241,7 @@ namespace Ogre
             else
                 region.imageExtent.height = 4u;
 
-            vkCmdCopyBufferToImage( device->mGraphicsQueue.getCurrentCmdBuffer(), stagingBuffVboName,
+            vkCmdCopyBufferToImage( mDevice->mGraphicsQueue.getCurrentCmdBuffer(), stagingBuffVboName,
                                     mBlankTexture[i].vkImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1u,
                                     &region );
         }
@@ -250,7 +262,7 @@ namespace Ogre
             ++barrierCount;
         }
 
-        vkCmdPipelineBarrier( device->mGraphicsQueue.getCurrentCmdBuffer(),
+        vkCmdPipelineBarrier( mDevice->mGraphicsQueue.getCurrentCmdBuffer(),
                               VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, 0, 0u,
                               0, 0u, 0, static_cast<uint32>( barrierCount ), imageMemBarrier );
 
@@ -280,7 +292,7 @@ namespace Ogre
             imageViewCi.subresourceRange.layerCount = VK_REMAINING_ARRAY_LAYERS;
 
             VkResult result =
-                vkCreateImageView( device->mDevice, &imageViewCi, 0, &mBlankTexture[i].defaultView );
+                vkCreateImageView( mDevice->mDevice, &imageViewCi, 0, &mBlankTexture[i].defaultView );
             checkVkResult( result, "vkCreateImageView" );
         }
 
@@ -292,11 +304,21 @@ namespace Ogre
         delete stagingTex;
     }
     //-----------------------------------------------------------------------------------
-    VulkanTextureGpuManager::~VulkanTextureGpuManager()
+    void VulkanTextureGpuManager::destroyVkResources( bool finalDestruction )
     {
-        destroyAll();
+        if( finalDestruction )
+            destroyAll();
+        else
+        {
+            // device lost handling, preserve dehydrated textures shells
+            mMutex.lock();
+            abortAllRequests();
+            destroyAllStagingBuffers();
+            destroyAllPools();
+            mMutex.unlock();
+        }
 
-        for( size_t i = 1u; i < TextureTypes::Type3D + 1u; ++i )
+        for( size_t i = TextureTypes::Type3D; i >= 1u; --i )
         {
             vkDestroyImageView( mDevice->mDevice, mBlankTexture[i].defaultView, 0 );
             mBlankTexture[i].defaultView = 0;

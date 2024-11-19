@@ -495,6 +495,9 @@ namespace Ogre
                           const NameValuePairList *params );
         ~VulkanVaoManager() override;
 
+        void createVkResources();
+        void destroyVkResources( bool finalDestruction = false );
+
         void initDrawIdVertexBuffer();
         void bindDrawIdVertexBuffer( VkCommandBuffer cmdBuffer, uint32 binding = 15 );
 

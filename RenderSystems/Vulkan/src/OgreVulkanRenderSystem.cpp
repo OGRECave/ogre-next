@@ -1322,8 +1322,8 @@ namespace Ogre
 
         notifyDeviceLost();
 
-//        static_cast<D3D11TextureGpuManager *>( mTextureGpuManager )->_destroyD3DResources();
-//        static_cast<D3D11VaoManager *>( mVaoManager )->_destroyD3DResources();
+        static_cast<VulkanTextureGpuManager *>( mTextureGpuManager )->destroyVkResources();
+        static_cast<VulkanVaoManager *>( mVaoManager )->destroyVkResources();
 
         // Release all automatic temporary buffers and free unused
         // temporary buffers, so we doesn't need to recreate them,
@@ -1333,8 +1333,8 @@ namespace Ogre
         // recreate device
         mDevice->setPhysicalDevice( mInstance, mActiveDevice, nullptr );
 
-//        static_cast<D3D11VaoManager *>( mVaoManager )->_createD3DResources();
-//        static_cast<D3D11TextureGpuManager *>( mTextureGpuManager )->_createD3DResources();
+        static_cast<VulkanVaoManager *>( mVaoManager )->createVkResources();
+        static_cast<VulkanTextureGpuManager *>( mTextureGpuManager )->createVkResources();
 
         // recreate device depended resources
         notifyDeviceRestored();
