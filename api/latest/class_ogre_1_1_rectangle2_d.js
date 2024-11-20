@@ -9,6 +9,8 @@ var class_ogre_1_1_rectangle2_d =
     ] ],
     [ "Rectangle2D", "class_ogre_1_1_rectangle2_d.html#a681dfba8af73fa8766188453cf4d02d3", null ],
     [ "~Rectangle2D", "class_ogre_1_1_rectangle2_d.html#a36c6ed8c163933dc87c3358b65827ea7", null ],
+    [ "_releaseManualHardwareResources", "class_ogre_1_1_rectangle2_d.html#a055f7f99382679d04a14a2c3b23049e8", null ],
+    [ "_restoreManualHardwareResources", "class_ogre_1_1_rectangle2_d.html#ab3fb52ebee59d7569477eee23efe7d27", null ],
     [ "calculateNumVertices", "class_ogre_1_1_rectangle2_d.html#aee84114c3297b5d3f5c9d8f4296e198e", null ],
     [ "getBufferType", "class_ogre_1_1_rectangle2_d.html#a2f8aa61b2eb7bc115afe3cbeaaa2bdc2", null ],
     [ "getCastsShadows", "class_ogre_1_1_rectangle2_d.html#a17ad9d70be9dea3509a032287ff5a723", null ],

@@ -130,6 +130,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a681dfba8af73fa8766188453cf4d02d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36c6ed8c163933dc87c3358b65827ea7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_rectangle2_d.html#a36c6ed8c163933dc87c3358b65827ea7">~Rectangle2D</a> () override</td></tr>
 <tr class="separator:a36c6ed8c163933dc87c3358b65827ea7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a055f7f99382679d04a14a2c3b23049e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_rectangle2_d.html#a055f7f99382679d04a14a2c3b23049e8">_releaseManualHardwareResources</a> () override</td></tr>
+<tr class="memdesc:a055f7f99382679d04a14a2c3b23049e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies the movable object that hardware resources were lost.  <a href="class_ogre_1_1_rectangle2_d.html#a055f7f99382679d04a14a2c3b23049e8">More...</a><br /></td></tr>
+<tr class="separator:a055f7f99382679d04a14a2c3b23049e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3fb52ebee59d7569477eee23efe7d27"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_rectangle2_d.html#ab3fb52ebee59d7569477eee23efe7d27">_restoreManualHardwareResources</a> () override</td></tr>
+<tr class="memdesc:ab3fb52ebee59d7569477eee23efe7d27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies the movable object that hardware resources should be restored.  <a href="class_ogre_1_1_rectangle2_d.html#ab3fb52ebee59d7569477eee23efe7d27">More...</a><br /></td></tr>
+<tr class="separator:ab3fb52ebee59d7569477eee23efe7d27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee84114c3297b5d3f5c9d8f4296e198e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_rectangle2_d.html#aee84114c3297b5d3f5c9d8f4296e198e">calculateNumVertices</a> () const</td></tr>
 <tr class="separator:aee84114c3297b5d3f5c9d8f4296e198e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f8aa61b2eb7bc115afe3cbeaaa2bdc2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9">BufferType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_rectangle2_d.html#a2f8aa61b2eb7bc115afe3cbeaaa2bdc2">getBufferType</a> () const</td></tr>
@@ -202,12 +208,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abd08983d4f1a71012e2da670be169587 inherit pub_methods_class_ogre_1_1_movable_object"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#abd08983d4f1a71012e2da670be169587">_notifyStaticDirty</a> () const</td></tr>
 <tr class="memdesc:abd08983d4f1a71012e2da670be169587 inherit pub_methods_class_ogre_1_1_movable_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a> when it is telling we're a static <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> being dirty Don't call this directly.  <a href="class_ogre_1_1_movable_object.html#abd08983d4f1a71012e2da670be169587">More...</a><br /></td></tr>
 <tr class="separator:abd08983d4f1a71012e2da670be169587 inherit pub_methods_class_ogre_1_1_movable_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57123ae4fec1b472f25270c1dd6abe59 inherit pub_methods_class_ogre_1_1_movable_object"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a57123ae4fec1b472f25270c1dd6abe59">_releaseManualHardwareResources</a> ()</td></tr>
-<tr class="memdesc:a57123ae4fec1b472f25270c1dd6abe59 inherit pub_methods_class_ogre_1_1_movable_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies the movable object that hardware resources were lost.  <a href="class_ogre_1_1_movable_object.html#a57123ae4fec1b472f25270c1dd6abe59">More...</a><br /></td></tr>
-<tr class="separator:a57123ae4fec1b472f25270c1dd6abe59 inherit pub_methods_class_ogre_1_1_movable_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd5561a07f78291e327351fe83e64a9b inherit pub_methods_class_ogre_1_1_movable_object"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#abd5561a07f78291e327351fe83e64a9b">_restoreManualHardwareResources</a> ()</td></tr>
-<tr class="memdesc:abd5561a07f78291e327351fe83e64a9b inherit pub_methods_class_ogre_1_1_movable_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies the movable object that hardware resources should be restored.  <a href="class_ogre_1_1_movable_object.html#abd5561a07f78291e327351fe83e64a9b">More...</a><br /></td></tr>
-<tr class="separator:abd5561a07f78291e327351fe83e64a9b inherit pub_methods_class_ogre_1_1_movable_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8561b8de767cf64740c37eb1aeddd529 inherit pub_methods_class_ogre_1_1_movable_object"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a8561b8de767cf64740c37eb1aeddd529">_updateRenderQueue</a> (<a class="el" href="class_ogre_1_1_render_queue.html">RenderQueue</a> *queue, <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *camera, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *lodCamera)</td></tr>
 <tr class="memdesc:a8561b8de767cf64740c37eb1aeddd529 inherit pub_methods_class_ogre_1_1_movable_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method by which the movable object must add <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement.">Renderable</a> subclass instances to the rendering queue.  <a href="class_ogre_1_1_movable_object.html#a8561b8de767cf64740c37eb1aeddd529">More...</a><br /></td></tr>
 <tr class="separator:a8561b8de767cf64740c37eb1aeddd529 inherit pub_methods_class_ogre_1_1_movable_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -655,6 +655,66 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a055f7f99382679d04a14a2c3b23049e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a055f7f99382679d04a14a2c3b23049e8">&#9670;&nbsp;</a></span>_releaseManualHardwareResources()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::Rectangle2D::_releaseManualHardwareResources </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Notifies the movable object that hardware resources were lost. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Called automatically by <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> if hardware resources were lost and can not be restored using some internal mechanism. Among affected resources are nested shadow renderables, ManualObjects, etc. </dd></dl>
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_movable_object.html#a57123ae4fec1b472f25270c1dd6abe59">Ogre::MovableObject</a>.</p>
+
+</div>
+</div>
+<a id="ab3fb52ebee59d7569477eee23efe7d27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3fb52ebee59d7569477eee23efe7d27">&#9670;&nbsp;</a></span>_restoreManualHardwareResources()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::Rectangle2D::_restoreManualHardwareResources </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Notifies the movable object that hardware resources should be restored. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Called automatically by <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> if hardware resources were lost and can not be restored using some internal mechanism. Among affected resources are nested shadow renderables, ManualObjects, etc. </dd></dl>
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_movable_object.html#abd5561a07f78291e327351fe83e64a9b">Ogre::MovableObject</a>.</p>
+
+</div>
+</div>
 <a id="aee84114c3297b5d3f5c9d8f4296e198e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aee84114c3297b5d3f5c9d8f4296e198e">&#9670;&nbsp;</a></span>calculateNumVertices()</h2>
 

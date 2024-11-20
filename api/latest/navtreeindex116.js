@@ -1,5 +1,7 @@
 var NAVTREEINDEX116 =
 {
+"struct_ogre_1_1_volume_1_1_vertex.html#ae596bbfde75042c6bb5aae682d1c1c1f":[8,0,0,3,30,7],
+"struct_ogre_1_1_volume_1_1_vertex.html#af1ba6049f69b847ea4db2adf3e7895cf":[8,0,0,3,30,4],
 "struct_ogre_1_1_voxelized_mesh_cache_1_1_voxelized_mesh.html":[8,0,0,978,0],
 "struct_ogre_1_1_voxelized_mesh_cache_1_1_voxelized_mesh.html#a047280952d84a3764b13e153f8295ac6":[8,0,0,978,0,0],
 "struct_ogre_1_1_voxelized_mesh_cache_1_1_voxelized_mesh.html#a40971929e88c06c0623011f3fad71f27":[8,0,0,978,0,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX116 =
 "struct_ogre_1_1is_pod_like_3_01unsigned_01long_01_4.html#adec72abe913e1bc14391665224983dc0":[8,0,0,531,0],
 "struct_ogre_1_1is_pod_like_3_01unsigned_01short_01_4.html":[8,0,0,532],
 "struct_ogre_1_1is_pod_like_3_01unsigned_01short_01_4.html#ac3ee02602a15f576e07ccfe4954eef84":[8,0,0,532,0],
-"struct_ogre_1_1type4.html":[8,0,0,941],
-"struct_ogre_1_1type4.html#a455f96a54be42ed640cfbd6fe873f197":[8,0,0,941,4],
-"struct_ogre_1_1type4.html#a56555542a27c5839a605413be354a2c3":[8,0,0,941,1]
+"struct_ogre_1_1type4.html":[8,0,0,941]
 };
