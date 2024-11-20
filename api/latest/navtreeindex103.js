@@ -1,5 +1,6 @@
 var NAVTREEINDEX103 =
 {
+"hlms.html#setWorkerThreadMinimumBudget":[4,1,1,8,2,1],
 "hlmsblendblockref.html":[4,2,3,0],
 "hlmsblendblockref.html#bbBlendtypes":[4,2,3,0,2],
 "hlmsblendblockref.html#bbExample":[4,2,3,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX103 =
 "namespace_ogre.html#a5094f9a144406ca29fcdbbe3a9e49edf":[7,0,0,1258],
 "namespace_ogre.html#a5126a9c9fbccbfe4c78070263098acb2":[7,0,0,1217],
 "namespace_ogre.html#a54b016c4e2c889e828672d8222f911f4":[7,0,0,1457],
-"namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9":[7,0,0,1305],
-"namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9a169d359155879c68b8462d3cb0be8a4a":[7,0,0,1305,4]
+"namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9":[7,0,0,1305]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX116 =
 {
+"struct_ogre_1_1_volume_1_1_vertex.html#acf719c1a0ed364e6090efe9b2b17f603":[8,0,0,3,30,6],
 "struct_ogre_1_1_volume_1_1_vertex.html#ae596bbfde75042c6bb5aae682d1c1c1f":[8,0,0,3,30,7],
 "struct_ogre_1_1_volume_1_1_vertex.html#af1ba6049f69b847ea4db2adf3e7895cf":[8,0,0,3,30,4],
 "struct_ogre_1_1_voxelized_mesh_cache_1_1_voxelized_mesh.html":[8,0,0,978,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX116 =
 "struct_ogre_1_1is_pod_like_3_01unsigned_01long_01_4.html":[8,0,0,531],
 "struct_ogre_1_1is_pod_like_3_01unsigned_01long_01_4.html#adec72abe913e1bc14391665224983dc0":[8,0,0,531,0],
 "struct_ogre_1_1is_pod_like_3_01unsigned_01short_01_4.html":[8,0,0,532],
-"struct_ogre_1_1is_pod_like_3_01unsigned_01short_01_4.html#ac3ee02602a15f576e07ccfe4954eef84":[8,0,0,532,0],
-"struct_ogre_1_1type4.html":[8,0,0,941]
+"struct_ogre_1_1is_pod_like_3_01unsigned_01short_01_4.html#ac3ee02602a15f576e07ccfe4954eef84":[8,0,0,532,0]
 };

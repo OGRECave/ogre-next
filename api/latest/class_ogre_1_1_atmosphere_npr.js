@@ -16,6 +16,7 @@ var class_ogre_1_1_atmosphere_npr =
     [ "_update", "class_ogre_1_1_atmosphere_npr.html#a225831a30b0769411c691919c43e6aa3", null ],
     [ "bindConstBuffers", "class_ogre_1_1_atmosphere_npr.html#adf406575d9420c60b802a838988c0b10", null ],
     [ "destroySky", "class_ogre_1_1_atmosphere_npr.html#a7464532a53ab0c5164dad383e4d65b36", null ],
+    [ "eventOccurred", "class_ogre_1_1_atmosphere_npr.html#a36d83215e37caed36abccfd11dda27dc", null ],
     [ "getAtmosphereAt", "class_ogre_1_1_atmosphere_npr.html#a18ec6e783b487f4c1d2c4a443c36f2d1", null ],
     [ "getNumConstBuffersSlots", "class_ogre_1_1_atmosphere_npr.html#a55b07b289bcb7015236f63fd9a2264ce", null ],
     [ "getPreset", "class_ogre_1_1_atmosphere_npr.html#adbf6852e9d6a7eb2c085b8a0d24680bc", null ],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX109 =
 {
+"struct_ogre_1_1_entity_mesh_lod_changed_event.html#a296d3f28b84001e84a6153a6b8892dc7":[6,2,4,4,2],
 "struct_ogre_1_1_entity_mesh_lod_changed_event.html#a5776be6e6bfcafad43bbf2f3ca2f1b8d":[6,2,4,4,3],
 "struct_ogre_1_1_entity_mesh_lod_changed_event.html#a96ceab8917968af723ceb61255b32176":[6,2,4,4,0],
 "struct_ogre_1_1_entity_mesh_lod_changed_event.html#aee9b9e65d091afd53df6a5b79e52c7dc":[6,2,4,4,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX109 =
 "struct_ogre_1_1_hlms_base_prop.html#a312b15037ab21a8e1b74940f41765d55":[6,2,10,47,83],
 "struct_ogre_1_1_hlms_base_prop.html#a322ec6cb64387f9887a571cdb752efa2":[6,2,10,47,26],
 "struct_ogre_1_1_hlms_base_prop.html#a331c39fb20c11a18fe8677aad9abca78":[6,2,10,47,53],
-"struct_ogre_1_1_hlms_base_prop.html#a3334bb54c4e940796ca27d59a7ab29e4":[6,2,10,47,96],
-"struct_ogre_1_1_hlms_base_prop.html#a3400aace76177d8ce24cc11eb8ef1680":[6,2,10,47,10]
+"struct_ogre_1_1_hlms_base_prop.html#a3334bb54c4e940796ca27d59a7ab29e4":[6,2,10,47,96]
 };

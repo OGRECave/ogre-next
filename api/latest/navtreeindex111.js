@@ -1,5 +1,6 @@
 var NAVTREEINDEX111 =
 {
+"struct_ogre_1_1_hlms_samplerblock.html#aa5997a8cd5825b0daceb4d72b0afc858":[6,2,10,65,0],
 "struct_ogre_1_1_hlms_samplerblock.html#aa8cd61ec10b3304a149e0c58e1445169":[6,2,10,65,10],
 "struct_ogre_1_1_hlms_samplerblock.html#aa99714532431f7a2e17398cfadb5d0a5":[6,2,10,65,8],
 "struct_ogre_1_1_hlms_samplerblock.html#aadfcc32dcdac86ef6fe2ebbdfe42b5da":[6,2,10,65,12],
@@ -43,12 +44,12 @@ var NAVTREEINDEX111 =
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#aac84518f8d8108d7f7875516128b3474":[6,0,0,13,0,1],
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#acd53cb3f6a58dbf08f1baa12bcb03033":[6,0,0,13,0,2],
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#ad94bec02d71f91fd2f543f3488d25d61":[6,0,0,13,0,0],
-"struct_ogre_1_1_intersection_scene_query_result.html":[6,0,1,22],
 "struct_ogre_1_1_intersection_scene_query_result.html":[6,2,11,22],
-"struct_ogre_1_1_intersection_scene_query_result.html#a7f5b38d7ff668a368bcef9886fff1941":[6,0,1,22,1],
+"struct_ogre_1_1_intersection_scene_query_result.html":[6,0,1,22],
 "struct_ogre_1_1_intersection_scene_query_result.html#a7f5b38d7ff668a368bcef9886fff1941":[6,2,11,22,1],
-"struct_ogre_1_1_intersection_scene_query_result.html#ae58676373c408a358f7cc01874703abc":[6,2,11,22,0],
+"struct_ogre_1_1_intersection_scene_query_result.html#a7f5b38d7ff668a368bcef9886fff1941":[6,0,1,22,1],
 "struct_ogre_1_1_intersection_scene_query_result.html#ae58676373c408a358f7cc01874703abc":[6,0,1,22,0],
+"struct_ogre_1_1_intersection_scene_query_result.html#ae58676373c408a358f7cc01874703abc":[6,2,11,22,0],
 "struct_ogre_1_1_irradiance_field_settings.html":[8,0,0,516],
 "struct_ogre_1_1_irradiance_field_settings.html#a133d81cee0826d5616fcf1c62b5f743c":[8,0,0,516,0],
 "struct_ogre_1_1_irradiance_field_settings.html#a3871b731f4ee54e880c3af30f19ba250":[8,0,0,516,15],
@@ -248,6 +249,5 @@ var NAVTREEINDEX111 =
 "struct_ogre_1_1_material_script_program_definition.html#ae1581e882fed968d73656a5a389679ca":[6,2,5,16,7],
 "struct_ogre_1_1_metal_buffer_region.html":[6,2,10,78],
 "struct_ogre_1_1_metal_buffer_region.html#a9f3f0ff1faa7aedf3533be9838d5fa0d":[6,2,10,78,2],
-"struct_ogre_1_1_metal_buffer_region.html#abc73f3c2c048c8c6fc420a95865efa5b":[6,2,10,78,3],
-"struct_ogre_1_1_metal_buffer_region.html#ac2844f9e2be6ea380c80c2da89177a40":[6,2,10,78,1]
+"struct_ogre_1_1_metal_buffer_region.html#abc73f3c2c048c8c6fc420a95865efa5b":[6,2,10,78,3]
 };

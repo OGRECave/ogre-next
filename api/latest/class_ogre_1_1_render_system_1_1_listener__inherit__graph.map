@@ -1,8 +1,9 @@
 <map id="Ogre::RenderSystem::Listener" name="Ogre::RenderSystem::Listener">
-<area shape="rect" id="node1" title="Defines a listener on the custom events that this render system can raise." alt="" coords="5,49,161,90"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_d3_d11_render_pass_descriptor.html" title="D3D11 will share groups of ID3D11RenderTargetView all D3D11RenderPassDescriptor that share the same R..." alt="" coords="221,5,468,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_parallax_corrected_cubemap_base.html" title=" " alt="" coords="209,56,480,83"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1v1_1_1_overlay_system.html" title="This class simplify initialization / finalization of the overlay system." alt="" coords="252,107,437,133"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="543,31,781,57"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="528,81,796,108"/>
+<area shape="rect" id="node1" title="Defines a listener on the custom events that this render system can raise." alt="" coords="5,74,161,115"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_atmosphere_npr.html" title="Non&#45;physically&#45;based&#45;render (NPR) Atmosphere solution." alt="" coords="263,5,426,32"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_render_pass_descriptor.html" title="D3D11 will share groups of ID3D11RenderTargetView all D3D11RenderPassDescriptor that share the same R..." alt="" coords="221,56,468,83"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_parallax_corrected_cubemap_base.html" title=" " alt="" coords="209,107,480,133"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1v1_1_1_overlay_system.html" title="This class simplify initialization / finalization of the overlay system." alt="" coords="252,157,437,184"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="543,81,781,108"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="528,132,796,159"/>
 </map>
