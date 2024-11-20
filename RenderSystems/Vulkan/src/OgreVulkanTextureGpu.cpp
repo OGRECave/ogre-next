@@ -64,6 +64,51 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     VulkanTextureGpu::~VulkanTextureGpu() { destroyInternalResourcesImpl(); }
     //-----------------------------------------------------------------------------------
+    void VulkanTextureGpu::notifyDeviceLost()
+    {
+        // release VkImage
+        mPendingResidencyChanges = 0;  // we already cleared D3D11TextureGpuManager::mScheduledTasks
+        mTexturePool = 0;              // texture pool is already destroyed
+        mInternalSliceStart = 0;
+        if( getResidencyStatus() == GpuResidency::Resident )
+        {
+            _transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+            mNextResidencyStatus = GpuResidency::Resident;
+        }
+        mDisplayTextureName = 0;
+
+        // release VkImageView
+        if( mDefaultDisplaySrv && mOwnsSrv )
+        {
+            VulkanTextureGpuManager *textureManager =
+                static_cast<VulkanTextureGpuManager *>( mTextureManager );
+            VulkanDevice *device = textureManager->getDevice();
+
+            vkDestroyImageView( device->mDevice, mDefaultDisplaySrv, 0 );
+            mDefaultDisplaySrv = 0;
+            mOwnsSrv = false;
+        }
+        mDefaultDisplaySrv = 0;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanTextureGpu::notifyDeviceRestored( unsigned pass )
+    {
+        if( pass == 0 )
+        {
+            // VulkanWindow*::notifyDeviceRestored handles RenderWindow-specific textures
+            if( !isRenderWindowSpecific() )
+            {
+                _setToDisplayDummyTexture();
+
+                if( getNextResidencyStatus() == GpuResidency::Resident )
+                {
+                    mNextResidencyStatus = mResidencyStatus;
+                    scheduleTransitionTo( GpuResidency::Resident );
+                }
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     PixelFormatGpu VulkanTextureGpu::getWorkaroundedPixelFormat( const PixelFormatGpu pixelFormat ) const
     {
         PixelFormatGpu retVal = pixelFormat;
