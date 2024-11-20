@@ -60,7 +60,9 @@ namespace Ogre
         mRenderables.push_back( this );
     }
     //-----------------------------------------------------------------------------------
-    Rectangle2D::~Rectangle2D()
+    Rectangle2D::~Rectangle2D() { _releaseManualHardwareResources(); }
+    //-----------------------------------------------------------------------------------
+    void Rectangle2D::_releaseManualHardwareResources()
     {
         VaoManager *vaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
 
@@ -88,7 +90,10 @@ namespace Ogre
 
             ++itor;
         }
+        mVaoPerLod->clear();
     }
+    //-----------------------------------------------------------------------------------
+    void Rectangle2D::_restoreManualHardwareResources() { createBuffers(); }
     //-----------------------------------------------------------------------------------
     bool Rectangle2D::isQuad() const { return ( mGeometryFlags & GeometryFlagQuad ) != 0u; }
     //-----------------------------------------------------------------------------------

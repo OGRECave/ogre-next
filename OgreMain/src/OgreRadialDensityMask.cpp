@@ -65,9 +65,7 @@ namespace Ogre
     {
         memcpy( mRadius, radius, sizeof( mRadius ) );
 
-        mRectangle =
-            OGRE_NEW Rectangle2D( Id::generateNewId<MovableObject>(),
-                                  &sceneManager->_getEntityMemoryManager( SCENE_STATIC ), sceneManager );
+        mRectangle = sceneManager->createRectangle2D( SCENE_STATIC );
 
         mRectangle->setHollowRectRadius( mRadius[0] );
         mRectangle->setGeometry( mLeftEyeCenter, mRightEyeCenter );
@@ -142,7 +140,8 @@ namespace Ogre
         MaterialPtr material = mRectangle->getMaterial();
         MaterialManager::getSingleton().remove( material );
 
-        OGRE_DELETE mRectangle;
+        SceneManager *sceneManager = mRectangle->_getManager();
+        sceneManager->destroyRectangle2D( mRectangle );
         mRectangle = 0;
     }
     //-------------------------------------------------------------------------
@@ -224,10 +223,9 @@ namespace Ogre
             MaterialPtr material = mRectangle->getMaterial();
             SceneManager *sceneManager = mRectangle->_getManager();
 
-            OGRE_DELETE mRectangle;
-            mRectangle = OGRE_NEW Rectangle2D( Id::generateNewId<MovableObject>(),
-                                               &sceneManager->_getEntityMemoryManager( SCENE_STATIC ),
-                                               sceneManager );
+            sceneManager->destroyRectangle2D( mRectangle );
+            mRectangle = 0;
+            mRectangle = sceneManager->createRectangle2D( SCENE_STATIC );
 
             mRectangle->setHollowRectRadius( mRadius[0] );
             mRectangle->initialize(
