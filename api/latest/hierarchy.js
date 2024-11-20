@@ -1978,6 +1978,10 @@ var hierarchy =
     [ "Ogre::VulkanDevice", "struct_ogre_1_1_vulkan_device.html", null ],
     [ "Ogre::VulkanDevice::ExtraVkFeatures", "struct_ogre_1_1_vulkan_device_1_1_extra_vk_features.html", null ],
     [ "Ogre::VulkanDevice::SelectedQueue", "struct_ogre_1_1_vulkan_device_1_1_selected_queue.html", null ],
+    [ "Ogre::VulkanDeviceResource", "class_ogre_1_1_vulkan_device_resource.html", null ],
+    [ "Ogre::VulkanDeviceResourceManager", "class_ogre_1_1_vulkan_device_resource_manager.html", [
+      [ "Ogre::VulkanRenderSystem", "class_ogre_1_1_vulkan_render_system.html", null ]
+    ] ],
     [ "Ogre::VulkanDynamicBuffer", "class_ogre_1_1_vulkan_dynamic_buffer.html", null ],
     [ "Ogre::VulkanExternalDevice", "struct_ogre_1_1_vulkan_external_device.html", null ],
     [ "Ogre::VulkanExternalInstance", "struct_ogre_1_1_vulkan_external_instance.html", null ],

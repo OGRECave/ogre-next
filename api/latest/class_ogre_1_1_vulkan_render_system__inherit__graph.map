@@ -1,5 +1,6 @@
 <map id="Ogre::VulkanRenderSystem" name="Ogre::VulkanRenderSystem">
-<area shape="rect" id="node1" title="Implementation of Vulkan as a rendering system." alt="" coords="5,155,204,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API." alt="" coords="27,80,183,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="37,5,173,32"/>
+<area shape="rect" id="node1" title="Implementation of Vulkan as a rendering system." alt="" coords="87,169,285,196"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API." alt="" coords="5,87,161,114"/>
+<area shape="rect" id="node3" title=" " alt="" coords="15,5,151,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_vulkan_device_resource_manager.html" title="Singleton that is used to propagate device state changed notifications." alt="" coords="185,80,395,121"/>
 </map>

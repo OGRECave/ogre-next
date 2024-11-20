@@ -1226,6 +1226,8 @@ var annotated_dup =
       [ "VulkanDescriptorSetTexture2", "struct_ogre_1_1_vulkan_descriptor_set_texture2.html", "struct_ogre_1_1_vulkan_descriptor_set_texture2" ],
       [ "VulkanDescriptorSetUav", "struct_ogre_1_1_vulkan_descriptor_set_uav.html", "struct_ogre_1_1_vulkan_descriptor_set_uav" ],
       [ "VulkanDevice", "struct_ogre_1_1_vulkan_device.html", "struct_ogre_1_1_vulkan_device" ],
+      [ "VulkanDeviceResource", "class_ogre_1_1_vulkan_device_resource.html", "class_ogre_1_1_vulkan_device_resource" ],
+      [ "VulkanDeviceResourceManager", "class_ogre_1_1_vulkan_device_resource_manager.html", "class_ogre_1_1_vulkan_device_resource_manager" ],
       [ "VulkanDiscardBuffer", "class_ogre_1_1_vulkan_discard_buffer.html", "class_ogre_1_1_vulkan_discard_buffer" ],
       [ "VulkanDiscardBufferManager", "class_ogre_1_1_vulkan_discard_buffer_manager.html", "class_ogre_1_1_vulkan_discard_buffer_manager" ],
       [ "VulkanDynamicBuffer", "class_ogre_1_1_vulkan_dynamic_buffer.html", "class_ogre_1_1_vulkan_dynamic_buffer" ],

@@ -1,5 +1,15 @@
 var NAVTREEINDEX109 =
 {
+"struct_ogre_1_1_entity_mesh_lod_changed_event.html#aee9b9e65d091afd53df6a5b79e52c7dc":[6,2,4,4,1],
+"struct_ogre_1_1_file_info.html":[6,2,10,20],
+"struct_ogre_1_1_file_info.html#a66c7bf4f59feb619016a5c70e4ded4ee":[6,2,10,20,5],
+"struct_ogre_1_1_file_info.html#a841227629a26a422c3ba6c4bd1877d62":[6,2,10,20,3],
+"struct_ogre_1_1_file_info.html#abfa635472f6acfaca380a4a6be39f853":[6,2,10,20,0],
+"struct_ogre_1_1_file_info.html#ac48eca5413e87a3efd1f3355b994f5fd":[6,2,10,20,1],
+"struct_ogre_1_1_file_info.html#ac9634cdb326f2b11575a8cc7fc509b96":[6,2,10,20,2],
+"struct_ogre_1_1_file_info.html#ad2e54ca7979d9c87a255e6eb532a33f2":[6,2,10,20,4],
+"struct_ogre_1_1_filter_kernel.html":[6,2,3,3],
+"struct_ogre_1_1_filter_kernel.html#a17fba608e01aacbcdcec89ca700e424d":[6,2,3,3,3],
 "struct_ogre_1_1_filter_kernel.html#a93574bfded04faa589728d1a437a14f2":[6,2,3,3,0],
 "struct_ogre_1_1_filter_kernel.html#ab5e8d585d8b7a7f398703be291a7b76b":[6,2,3,3,4],
 "struct_ogre_1_1_filter_kernel.html#ac077fb95195f8bb4514f9204ef614ff0":[6,2,3,3,2],
@@ -239,15 +249,5 @@ var NAVTREEINDEX109 =
 "struct_ogre_1_1_hlms_base_prop.html#a3334bb54c4e940796ca27d59a7ab29e4":[6,2,10,47,96],
 "struct_ogre_1_1_hlms_base_prop.html#a3400aace76177d8ce24cc11eb8ef1680":[6,2,10,47,10],
 "struct_ogre_1_1_hlms_base_prop.html#a3661631118aba995c5cd57c4f753d85b":[6,2,10,47,59],
-"struct_ogre_1_1_hlms_base_prop.html#a3b8acad8c34ebf26aa156fc038a75eb2":[6,2,10,47,29],
-"struct_ogre_1_1_hlms_base_prop.html#a3d2531c2b91fa4f3f177e741c008cfa7":[6,2,10,47,113],
-"struct_ogre_1_1_hlms_base_prop.html#a3e7e5ba36ed918214172e13a6bea9f9f":[6,2,10,47,89],
-"struct_ogre_1_1_hlms_base_prop.html#a3e8220675b550c77bc578c371b22818f":[6,2,10,47,22],
-"struct_ogre_1_1_hlms_base_prop.html#a3ecd6cf8034add88af97e2ae134aa28d":[6,2,10,47,76],
-"struct_ogre_1_1_hlms_base_prop.html#a44c68b1348efc7a02e5d4c4678e85dcb":[6,2,10,47,17],
-"struct_ogre_1_1_hlms_base_prop.html#a480c3eb222e2a5c2d918cdd3e1d5f4d3":[6,2,10,47,70],
-"struct_ogre_1_1_hlms_base_prop.html#a48af42a428f3b83fcce9488eda730004":[6,2,10,47,115],
-"struct_ogre_1_1_hlms_base_prop.html#a49ade5066126e40f37a12f3ad4575b7f":[6,2,10,47,90],
-"struct_ogre_1_1_hlms_base_prop.html#a4b7ddf591a68bcb0ad4b1cf344c3d139":[6,2,10,47,72],
-"struct_ogre_1_1_hlms_base_prop.html#a510df6bc21561c82fa8e8a52e9dfb479":[6,2,10,47,49]
+"struct_ogre_1_1_hlms_base_prop.html#a3b8acad8c34ebf26aa156fc038a75eb2":[6,2,10,47,29]
 };
