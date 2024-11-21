@@ -94,7 +94,7 @@ namespace Ogre
     {
         /* GUI constants */
         static const int wWidth = 600;   // Width of window
-        static const int wHeight = 380;  // Height of window
+        static const int wHeight = 420;  // Height of window
         static const int col1x = 20;     // Starting x of column 1 (labels)
         static const int col2x = 220;    // Starting x of column 2 (options)
         static const int col1w = 180;    // Width of column 1 (labels)

@@ -47,9 +47,6 @@ namespace Ogre
         VulkanWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
 
         void _setDevice( VulkanDevice *device );
-        void _initialize( TextureGpuManager *textureGpuManager ) override;
-        virtual void _initialize( TextureGpuManager *textureGpuManager,
-                                  const NameValuePairList *ogre_nullable miscParams ) = 0;
     };
 
     class VulkanWindowNull : public VulkanWindow

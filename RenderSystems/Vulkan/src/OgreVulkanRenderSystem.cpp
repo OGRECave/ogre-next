@@ -1356,14 +1356,14 @@ namespace Ogre
             // assign unique names, allowing reordering/inserting/removing
             map<String, unsigned>::type sameNameCounter;
             mVulkanPhysicalDeviceList.clear();
-            mVulkanPhysicalDeviceList.reserve(devices.size());
-            for (auto device : devices)
+            mVulkanPhysicalDeviceList.reserve( devices.size() );
+            for( VkPhysicalDevice device : devices )
             {
                 VkPhysicalDeviceProperties deviceProps;
                 vkGetPhysicalDeviceProperties( device, &deviceProps );
 
                 String name( deviceProps.deviceName );
-                unsigned sameNameIndex = sameNameCounter[name]++; // inserted entry is zero-initialized
+                unsigned sameNameIndex = sameNameCounter[name]++;  // inserted entry is zero-initialized
                 if( sameNameIndex != 0 )
                     name += " (" + Ogre::StringConverter::toString( sameNameIndex + 1 ) + ")";
 
@@ -1634,6 +1634,14 @@ namespace Ogre
             VulkanTextureGpuManager *textureGpuManager = OGRE_NEW VulkanTextureGpuManager(
                 vaoManager, this, mDevice, bCanRestrictImageViewUsage );
             mTextureGpuManager = textureGpuManager;
+            {
+                ConfigOptionMap::const_iterator it = getConfigOptions().find( "Allow Memoryless RTT" );
+                if( it != getConfigOptions().end() )
+                {
+                    mTextureGpuManager->setAllowMemoryless(
+                        StringConverter::parseBool( it->second.currentValue, true ) );
+                }
+            }
 
             uint32 dummyData = 0u;
             mDummyBuffer = vaoManager->createConstBuffer( 4u, BT_IMMUTABLE, &dummyData, false );

@@ -135,6 +135,14 @@ namespace Ogre
                 "Did you modify it? Did it get corrupted?" );
         assert( ( !cpuSrcBox || srcBox.equalSize( *cpuSrcBox ) ) && "Src & cpuSrcBox must be equal" );
 
+        if( dstTexture->isTilerMemoryless() )
+        {
+            OGRE_EXCEPT(
+                Exception::ERR_INVALIDPARAMS,
+                "Cannot upload to texture '" + dstTexture->getNameStr() + "' because it's memoryless.",
+                "StagingTexture::upload" );
+        }
+
         if( dstTexture->isMultisample() )
         {
             OGRE_EXCEPT(

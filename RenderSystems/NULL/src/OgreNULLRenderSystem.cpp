@@ -147,7 +147,7 @@ namespace Ogre
             mInitialized = true;
         }
 
-        win->_initialize( mTextureGpuManager );
+        win->_initialize( mTextureGpuManager, miscParams );
 
         return win;
     }

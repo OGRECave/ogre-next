@@ -1029,7 +1029,7 @@ namespace Ogre
             mSecondaryWindows.push_back( win );
         }
 
-        win->_initialize( mTextureGpuManager );
+        win->_initialize( mTextureGpuManager, miscParams );
 
         return win;
     }

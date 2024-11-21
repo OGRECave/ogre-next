@@ -338,15 +338,17 @@ namespace Ogre
                                                       TextureTypes::Type2D, this );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu *VulkanTextureGpuManager::createWindowDepthBuffer()
+    TextureGpu *VulkanTextureGpuManager::createWindowDepthBuffer( const bool bMemoryLess )
     {
-        return OGRE_NEW VulkanTextureGpuRenderTarget( GpuPageOutStrategy::Discard, mVaoManager,
-                                                      "RenderWindow DepthBuffer",          //
-                                                      TextureFlags::NotTexture |           //
-                                                          TextureFlags::RenderToTexture |  //
-                                                          TextureFlags::RenderWindowSpecific |
-                                                          TextureFlags::DiscardableContent,
-                                                      TextureTypes::Type2D, this );
+        return OGRE_NEW VulkanTextureGpuRenderTarget(
+            GpuPageOutStrategy::Discard, mVaoManager,
+            "RenderWindow DepthBuffer",               //
+            TextureFlags::NotTexture |                //
+                TextureFlags::RenderToTexture |       //
+                TextureFlags::RenderWindowSpecific |  //
+                TextureFlags::DiscardableContent |    //
+                ( bMemoryLess ? TextureFlags::TilerMemoryless : 0 ),
+            TextureTypes::Type2D, this );
     }
     //-----------------------------------------------------------------------------------
     TextureGpu *VulkanTextureGpuManager::createTextureImpl(

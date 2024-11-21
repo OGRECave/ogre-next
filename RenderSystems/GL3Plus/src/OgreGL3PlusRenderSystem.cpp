@@ -889,7 +889,7 @@ namespace Ogre
             mTextureGpuManager->_update( true );
         }
 
-        win->_initialize( mTextureGpuManager );
+        win->_initialize( mTextureGpuManager, miscParams );
 
         return win;
     }

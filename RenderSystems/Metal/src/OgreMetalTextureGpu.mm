@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreMetalDevice.h"
 #include "OgreMetalMappings.h"
 #include "OgreMetalTextureGpuManager.h"
+#include "OgreRenderSystem.h"
 #include "OgreStringConverter.h"
 #include "OgreTextureBox.h"
 #include "OgreTextureGpuListener.h"
@@ -79,6 +80,12 @@ namespace Ogre
         if( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray )
             desc.arrayLength /= 6u;
 
+        const bool bAllowMemoryless = mTextureManager->allowMemoryless();
+        if( bAllowMemoryless && isTilerMemoryless() )
+        {
+            if( @available( iOS 10, macOS 11, * ) )
+                desc.storageMode = MTLStorageModeMemoryless;
+        }
         if( isMultisample() && hasMsaaExplicitResolves() )
         {
             desc.textureType = MTLTextureType2DMultisample;
@@ -112,6 +119,13 @@ namespace Ogre
 
         if( isMultisample() && !hasMsaaExplicitResolves() )
         {
+            if( bAllowMemoryless )
+            {
+                // mMsaaFramebufferName is always Memoryless because the user *NEVER* has access to it
+                // and we always auto-resolve in the same pass, thus MSAA contents are always transient.
+                if( @available( iOS 10, macOS 11, * ) )
+                    desc.storageMode = MTLStorageModeMemoryless;
+            }
             desc.textureType = MTLTextureType2DMultisample;
             desc.depth = 1u;
             desc.arrayLength = 1u;
@@ -468,4 +482,4 @@ namespace Ogre
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
     OrientationMode MetalTextureGpuRenderTarget::getOrientationMode() const { return mOrientationMode; }
 #endif
-}
+}  // namespace Ogre
