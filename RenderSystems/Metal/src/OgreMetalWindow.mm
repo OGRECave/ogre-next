@@ -202,14 +202,9 @@ namespace Ogre
                 assert( rs );
                 const RenderSystemCapabilities *capabilities = rs->getCapabilities();
                 bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
-                if( isTiler )
-                {
-                    ConfigOptionMap &options = rs->getConfigOptions();
-                    Ogre::ConfigOptionMap::iterator opt = options.find( "WindowMemoryless" );
-                    if( opt != options.end() )
-                        isTiler = opt->second.currentValue == "Yes";
-                }
-                if( isTiler )
+                TextureGpuManager *textureGpuManager = rs->getTextureGpuManager();
+                bool bAllowMemoryless = textureGpuManager->allowMemoryless();
+                if( isTiler && bAllowMemoryless )
                 {
                     if( @available( iOS 10, macOS 11, * ) )
                         desc.storageMode = MTLStorageModeMemoryless;
