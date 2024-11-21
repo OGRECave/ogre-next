@@ -401,14 +401,16 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanDevice::createPhysicalDevice( const String &deviceName )
     {
-        const auto& devices = mRenderSystem->getVulkanPhysicalDevices();
+        const VulkanPhysicalDeviceList &devices = mRenderSystem->getVulkanPhysicalDevices();
         size_t deviceIdx = 0;
         for( size_t i = 0; i < devices.size(); ++i )
+        {
             if( devices[i].title == deviceName )
             {
                 deviceIdx = i;
                 break;
             }
+        }
 
         LogManager::getSingleton().logMessage( "Vulkan: Requested \"" + deviceName + "\", selected \"" +
                                                devices[deviceIdx].title + "\"" );
