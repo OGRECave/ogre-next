@@ -80,10 +80,8 @@ namespace Ogre
         if( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray )
             desc.arrayLength /= 6u;
 
-        const RenderSystemCapabilities *capabilities =
-            mTextureManager->getRenderSystem()->getCapabilities();
-        const bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
-        if( isTiler && isTilerMemoryless() )
+        const bool bAllowMemoryless = mTextureManager->allowMemoryless();
+        if( bAllowMemoryless && isTilerMemoryless() )
         {
             if( @available( iOS 10, macOS 11, * ) )
                 desc.storageMode = MTLStorageModeMemoryless;
@@ -121,7 +119,7 @@ namespace Ogre
 
         if( isMultisample() && !hasMsaaExplicitResolves() )
         {
-            if( isTiler )
+            if( bAllowMemoryless )
             {
                 // mMsaaFramebufferName is always Memoryless because the user *NEVER* has access to it
                 // and we always auto-resolve in the same pass, thus MSAA contents are always transient.

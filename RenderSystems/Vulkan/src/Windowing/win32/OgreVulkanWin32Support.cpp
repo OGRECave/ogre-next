@@ -70,6 +70,7 @@ namespace Ogre
         ConfigOption optVSync;
         ConfigOption optVSyncInterval;
         ConfigOption optVSyncMethod;
+        ConfigOption optAllowMemoryless;
 
         // FS setting possibilities
         optFullScreen.name = "Full Screen";
@@ -140,6 +141,12 @@ namespace Ogre
         optVSyncMethod.possibleValues.push_back( "Lowest Latency" );
         optVSyncMethod.currentValue = optVSyncMethod.possibleValues.front();
 
+        optAllowMemoryless.name = "Allow Memoryless RTT";
+        optAllowMemoryless.immutable = false;
+        optAllowMemoryless.possibleValues.push_back( "Yes" );
+        optAllowMemoryless.possibleValues.push_back( "No" );
+        optAllowMemoryless.currentValue = optAllowMemoryless.possibleValues.front();
+
         mOptions[optFullScreen.name] = optFullScreen;
         mOptions[optVideoMode.name] = optVideoMode;
         mOptions[optColourDepth.name] = optColourDepth;
@@ -147,6 +154,7 @@ namespace Ogre
         mOptions[optVSync.name] = optVSync;
         mOptions[optVSyncInterval.name] = optVSyncInterval;
         mOptions[optVSyncMethod.name] = optVSyncMethod;
+        mOptions[optAllowMemoryless.name] = optAllowMemoryless;
 
         refreshConfig();
     }

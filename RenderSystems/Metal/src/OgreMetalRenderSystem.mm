@@ -158,6 +158,7 @@ namespace Ogre
         ConfigOption optDevice;
         ConfigOption optFSAA;
         ConfigOption optSRGB;
+        ConfigOption optAllowMemoryless;
 
         optDevice.name = "Rendering Device";
         optDevice.currentValue = "(default)";
@@ -179,9 +180,16 @@ namespace Ogre
         optSRGB.currentValue = "Yes";
         optSRGB.immutable = false;
 
+        optAllowMemoryless.name = "Allow Memoryless RTT";
+        optAllowMemoryless.immutable = false;
+        optAllowMemoryless.possibleValues.push_back( "Yes" );
+        optAllowMemoryless.possibleValues.push_back( "No" );
+        optAllowMemoryless.currentValue = optAllowMemoryless.possibleValues.front();
+
         mOptions[optDevice.name] = optDevice;
         mOptions[optFSAA.name] = optFSAA;
         mOptions[optSRGB.name] = optSRGB;
+        mOptions[optAllowMemoryless.name] = optAllowMemoryless;
 
         refreshFSAAOptions();
     }
@@ -607,6 +615,14 @@ namespace Ogre
             OGRE_ASSERT_LOW( mVaoManager->getDynamicBufferMultiplier() == dynamicBufferMultiplier );
             mHardwareBufferManager = new v1::MetalHardwareBufferManager( &mDevice, mVaoManager );
             mTextureGpuManager = OGRE_NEW MetalTextureGpuManager( mVaoManager, this, &mDevice );
+            {
+                ConfigOptionMap::const_iterator it = getConfigOptions().find( "Allow Memoryless RTT" );
+                if( it != getConfigOptions().end() )
+                {
+                    mTextureGpuManager->setAllowMemoryless(
+                        StringConverter::parseBool( it->second.currentValue, true ) );
+                }
+            }
 
             mInitialized = true;
         }

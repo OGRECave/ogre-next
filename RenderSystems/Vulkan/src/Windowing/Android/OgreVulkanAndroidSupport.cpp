@@ -46,6 +46,7 @@ namespace Ogre
         ConfigOption optVSync;
         ConfigOption optVSyncInterval;
         ConfigOption optVSyncMethod;
+        ConfigOption optAllowMemoryless;
 
         // Video mode possibilities
         optVideoMode.name = "Video Mode";
@@ -89,11 +90,18 @@ namespace Ogre
         optVSyncMethod.possibleValues.push_back( "Lowest Latency" );
         optVSyncMethod.currentValue = optVSyncMethod.possibleValues.front();
 
+        optAllowMemoryless.name = "Allow Memoryless RTT";
+        optAllowMemoryless.immutable = false;
+        optAllowMemoryless.possibleValues.push_back( "Yes" );
+        optAllowMemoryless.possibleValues.push_back( "No" );
+        optAllowMemoryless.currentValue = optAllowMemoryless.possibleValues.front();
+
         mOptions[optVideoMode.name] = optVideoMode;
         mOptions[optDisplayFrequency.name] = optDisplayFrequency;
         mOptions[optVSync.name] = optVSync;
         mOptions[optVSyncInterval.name] = optVSyncInterval;
         mOptions[optVSyncMethod.name] = optVSyncMethod;
+        mOptions[optAllowMemoryless.name] = optAllowMemoryless;
 
         refreshConfig();
     }

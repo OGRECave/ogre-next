@@ -34,7 +34,6 @@ THE SOFTWARE.
 #include "OgrePixelFormatGpuUtils.h"
 
 #include "OgreException.h"
-#include "OgreRenderSystem.h"
 #include "OgreTextureBox.h"
 #include "OgreVector2.h"
 #include "OgreVulkanMappings.h"
@@ -148,10 +147,8 @@ namespace Ogre
         if( isUav() )
             imageInfo.usage |= VK_IMAGE_USAGE_STORAGE_BIT;
 
-        const RenderSystemCapabilities *capabilities =
-            mTextureManager->getRenderSystem()->getCapabilities();
-        const bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
-        if( isTiler && isTilerMemoryless() )
+        const bool bAllowMemoryless = mTextureManager->allowMemoryless();
+        if( bAllowMemoryless && isTilerMemoryless() )
         {
             imageInfo.usage |= VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
             imageInfo.usage &=
@@ -994,10 +991,8 @@ namespace Ogre
                                ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
                                : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-        const RenderSystemCapabilities *capabilities =
-            mTextureManager->getRenderSystem()->getCapabilities();
-        const bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
-        if( isTiler )
+        const bool bAllowMemoryless = mTextureManager->allowMemoryless();
+        if( bAllowMemoryless )
         {
             // mMsaaFramebufferName is always Memoryless because the user *NEVER* has access to it
             // and we always auto-resolve in the same pass, thus MSAA contents are always transient.

@@ -527,6 +527,7 @@ namespace Ogre
 
         DefaultMipmapGen::DefaultMipmapGen mDefaultMipmapGen;
         DefaultMipmapGen::DefaultMipmapGen mDefaultMipmapGenCubemaps;
+        bool                               mAllowMemoryLess;
         bool                               mShuttingDown;
         std::atomic<bool>                  mUseMultiload;
         ThreadHandlePtr                    mWorkerThread;
@@ -753,6 +754,15 @@ namespace Ogre
                                          DefaultMipmapGen::DefaultMipmapGen defaultMipmapGenCubemaps );
         DefaultMipmapGen::DefaultMipmapGen getDefaultMipmapGeneration() const;
         DefaultMipmapGen::DefaultMipmapGen getDefaultMipmapGenerationCubemaps() const;
+
+        /** When false, TextureFlags::TilerMemoryless will be ignored (including implicit MSAA surfaces).
+            Useful if you're rendering a heavy scene and run out of tile memory on mobile / TBDR.
+        @param bAllowMemoryLess
+            True to allow TilerMemoryless. False otherwise.
+            If HW does not support TilerMemoryless, this value will be forced to false.
+        */
+        void setAllowMemoryless( const bool bAllowMemoryLess );
+        bool allowMemoryless() const { return mAllowMemoryLess; }
 
         const ResourceEntryMap &getEntries() const { return mEntries; }
 
