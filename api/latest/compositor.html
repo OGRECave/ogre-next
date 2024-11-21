@@ -533,7 +533,7 @@ target_level_barrier</h4>
 <div class="line">        shadows     NormalShadows reuse</div>
 <div class="line">    }</div>
 <div class="line">}</div>
-<div class="ttc" id="anamespace_ogre_1_1_texture_source_type_html_a487889f4cfc926c4eaaf01e2f4e68c5aa602ee38ea2347d313beab4dabced99fb"><div class="ttname"><a href="namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aa602ee38ea2347d313beab4dabced99fb">Ogre::TextureSourceType::Compositor</a></div><div class="ttdeci">@ Compositor</div><div class="ttdoc">Created by compositor.</div><div class="ttdef"><b>Definition:</b> OgreTextureGpu.h:181</div></div>
+<div class="ttc" id="anamespace_ogre_1_1_texture_source_type_html_a487889f4cfc926c4eaaf01e2f4e68c5aa602ee38ea2347d313beab4dabced99fb"><div class="ttname"><a href="namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aa602ee38ea2347d313beab4dabced99fb">Ogre::TextureSourceType::Compositor</a></div><div class="ttdeci">@ Compositor</div><div class="ttdoc">Created by compositor.</div><div class="ttdef"><b>Definition:</b> OgreTextureGpu.h:195</div></div>
 </div><!-- fragment --><p><b>Note that not always <code>target_level_barrier yes</code> can be successful.</b></p>
 <p>For example if pass <code>A</code> needs texture <code>X</code> to be in state <code>Texture</code> for sampling but pass <code>C</code> needs that same texture in state <code>Uav</code> then we have a contradiction as we can't transition to two states at the same time.</p>
 <p>The only solution is to break up the passes and issue two barriers. Note that you can however issue break ups manually:</p>

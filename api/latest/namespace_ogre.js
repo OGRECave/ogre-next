@@ -312,7 +312,8 @@ var namespace_ogre =
         [ "ManualTexture", "namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434af3d439b1fb1b1aedfbea2c633da4e2b1", null ],
         [ "AutomaticBatching", "namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434a2f298fbaec7db976ba6616430b1f52a3", null ],
         [ "PoolOwner", "namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434aeb8acf9388488f12f4edd8de80b5dcf9", null ],
-        [ "DiscardableContent", "namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434ab642f1ba2bbf902301791a2b6f976ac2", null ]
+        [ "DiscardableContent", "namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434ab642f1ba2bbf902301791a2b6f976ac2", null ],
+        [ "TilerMemoryless", "namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434a26dd876274f4a4e96dbaef4216b7cb29", null ]
       ] ]
     ] ],
     [ "TextureSourceType", "namespace_ogre_1_1_texture_source_type.html", [

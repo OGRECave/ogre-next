@@ -8,7 +8,7 @@ var class_ogre_1_1_vulkan_texture_gpu_manager =
     [ "createTextureGpuWindow", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a47f53fb28df0ada8ea7888192f11a9da", null ],
     [ "createView", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a2004ed04a92b7bbe8001521a7d060a43", null ],
     [ "createView", "class_ogre_1_1_vulkan_texture_gpu_manager.html#ac3b9a6f92929930e55371e15d4b00eaf", null ],
-    [ "createWindowDepthBuffer", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a1a58429dab8c48e92e056d49a086c010", null ],
+    [ "createWindowDepthBuffer", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a01c8e000e0d0a903849bafee2c4de603", null ],
     [ "destroyView", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a899ae784a461fde4dbd09dcd63ce8837", null ],
     [ "destroyView", "class_ogre_1_1_vulkan_texture_gpu_manager.html#aaa5a2bf5a1d6426b02da324b2a5e119e", null ],
     [ "getBlankTextureView", "class_ogre_1_1_vulkan_texture_gpu_manager.html#ad48cadc684f6052d6fdb2ccede94df7e", null ],

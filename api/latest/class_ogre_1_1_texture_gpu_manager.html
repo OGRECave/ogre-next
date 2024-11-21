@@ -189,6 +189,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac55e0672860ad3ed3695374d9e12c7ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#ac55e0672860ad3ed3695374d9e12c7ba">_waitForPendingGpuToCpuSyncs</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture)</td></tr>
 <tr class="memdesc:ac55e0672860ad3ed3695374d9e12c7ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do not use directly. See TextureGpu::waitForPendingSyncs.  <a href="class_ogre_1_1_texture_gpu_manager.html#ac55e0672860ad3ed3695374d9e12c7ba">More...</a><br /></td></tr>
 <tr class="separator:ac55e0672860ad3ed3695374d9e12c7ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93876dbbd75d6640ff9717b3d65cf897"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a93876dbbd75d6640ff9717b3d65cf897">allowMemoryless</a> () const</td></tr>
+<tr class="separator:a93876dbbd75d6640ff9717b3d65cf897"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4cace3a36dcc63cb0ba5662f2c29b8a"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#ae4cace3a36dcc63cb0ba5662f2c29b8a">checkSupport</a> (<a class="el" href="group___image.html#ga71f09fe41a1db41186262f1aa5814a18">PixelFormatGpu</a> format, <a class="el" href="namespace_ogre_1_1_texture_types.html#aa364e348564060700791c9940d5ced82">TextureTypes::TextureTypes</a> textureType, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> textureFlags) const</td></tr>
 <tr class="memdesc:ae4cace3a36dcc63cb0ba5662f2c29b8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the given format with the texture flags combination is supported.  <a href="class_ogre_1_1_texture_gpu_manager.html#ae4cace3a36dcc63cb0ba5662f2c29b8a">More...</a><br /></td></tr>
 <tr class="separator:ae4cace3a36dcc63cb0ba5662f2c29b8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -273,6 +275,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a09d2107487d758a1fb49591bff242ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3796bc1de6a5a6efc208620686982b54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a3796bc1de6a5a6efc208620686982b54">saveTexture</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;folderPath, set&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &gt;::type &amp;savedTextures, bool saveOitd, bool saveOriginal, <a class="el" href="class_ogre_1_1_hlms_texture_export_listener.html">HlmsTextureExportListener</a> *listener)</td></tr>
 <tr class="separator:a3796bc1de6a5a6efc208620686982b54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a295407d82cb9d8b6f4fbbd18d06b8b7a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a295407d82cb9d8b6f4fbbd18d06b8b7a">setAllowMemoryless</a> (const bool bAllowMemoryLess)</td></tr>
+<tr class="memdesc:a295407d82cb9d8b6f4fbbd18d06b8b7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">When false, <a class="el" href="namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434a26dd876274f4a4e96dbaef4216b7cb29" title="When this flag is present, we can save VRAM by using memoryless storage mode (Metal on iOS and Apple ...">TextureFlags::TilerMemoryless</a> will be ignored (including implicit MSAA surfaces).  <a href="class_ogre_1_1_texture_gpu_manager.html#a295407d82cb9d8b6f4fbbd18d06b8b7a">More...</a><br /></td></tr>
+<tr class="separator:a295407d82cb9d8b6f4fbbd18d06b8b7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe21fe76416e68bcfc8fe57f2655e868"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#abe21fe76416e68bcfc8fe57f2655e868">setDefaultMipmapGeneration</a> (<a class="el" href="namespace_ogre_1_1_default_mipmap_gen.html#a3eb99f91a07b98f3713bf8c23069e9fb">DefaultMipmapGen::DefaultMipmapGen</a> defaultMipmapGen, <a class="el" href="namespace_ogre_1_1_default_mipmap_gen.html#a3eb99f91a07b98f3713bf8c23069e9fb">DefaultMipmapGen::DefaultMipmapGen</a> defaultMipmapGenCubemaps)</td></tr>
 <tr class="memdesc:abe21fe76416e68bcfc8fe57f2655e868"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether to use HW or SW mipmap generation when specifying <a class="el" href="namespace_ogre_1_1_texture_filter.html#ad1f488159fb867da13bf2ae96f04b054a537f83d75be40b8f38b5f9dc03912afa">TextureFilter::TypeGenerateDefaultMipmaps</a> for loading files from textures.  <a href="class_ogre_1_1_texture_gpu_manager.html#abe21fe76416e68bcfc8fe57f2655e868">More...</a><br /></td></tr>
 <tr class="separator:abe21fe76416e68bcfc8fe57f2655e868"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -816,6 +821,31 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Do not use directly. See TextureGpu::waitForPendingSyncs. </p>
+
+</div>
+</div>
+<a id="a93876dbbd75d6640ff9717b3d65cf897"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93876dbbd75d6640ff9717b3d65cf897">&#9670;&nbsp;</a></span>allowMemoryless()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::TextureGpuManager::allowMemoryless </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -2082,6 +2112,32 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a295407d82cb9d8b6f4fbbd18d06b8b7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a295407d82cb9d8b6f4fbbd18d06b8b7a">&#9670;&nbsp;</a></span>setAllowMemoryless()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::TextureGpuManager::setAllowMemoryless </td>
+          <td>(</td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>bAllowMemoryLess</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>When false, <a class="el" href="namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434a26dd876274f4a4e96dbaef4216b7cb29" title="When this flag is present, we can save VRAM by using memoryless storage mode (Metal on iOS and Apple ...">TextureFlags::TilerMemoryless</a> will be ignored (including implicit MSAA surfaces). </p>
+<p>Useful if you're rendering a heavy scene and run out of tile memory on mobile / TBDR. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bAllowMemoryLess</td><td>True to allow TilerMemoryless. False otherwise. If HW does not support TilerMemoryless, this value will be forced to false. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

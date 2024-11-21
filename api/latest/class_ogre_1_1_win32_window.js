@@ -2,7 +2,7 @@ var class_ogre_1_1_win32_window =
 [
     [ "Win32Window", "class_ogre_1_1_win32_window.html#a20a1e6e44d479a0e79ae9dd161c84023", null ],
     [ "~Win32Window", "class_ogre_1_1_win32_window.html#a9b47404e1d2c7911a5527b2184b9ad51", null ],
-    [ "_initialize", "class_ogre_1_1_win32_window.html#a348193834484f651ab263a72c0e1f4f3", null ],
+    [ "_initialize", "class_ogre_1_1_win32_window.html#aac8bcf4188936dad4afbdb506001e8e2", null ],
     [ "_setVisible", "class_ogre_1_1_win32_window.html#a6e360bf2145ed5a75359fa4080bca9bb", null ],
     [ "destroy", "class_ogre_1_1_win32_window.html#a9a4654befc4f43e886fcda1188de1d7e", null ],
     [ "getCustomAttribute", "class_ogre_1_1_win32_window.html#a68f013af5be31a8907a3caa22e9139dd", null ],

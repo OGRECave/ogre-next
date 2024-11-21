@@ -2,7 +2,7 @@ var class_ogre_1_1_metal_window =
 [
     [ "MetalWindow", "class_ogre_1_1_metal_window.html#ac0ecc7227207e2760318f689c94581c2", null ],
     [ "~MetalWindow", "class_ogre_1_1_metal_window.html#a66f8ae5e23debab045c0b45bbc3db7fe", null ],
-    [ "_initialize", "class_ogre_1_1_metal_window.html#afb69c6bed69b5cdfe4cf5553a9154cbd", null ],
+    [ "_initialize", "class_ogre_1_1_metal_window.html#abc00c21b0398609e586bb5d68ae89fce", null ],
     [ "_setVisible", "class_ogre_1_1_metal_window.html#a40611f1efce4e9a6b8f8fa8b810caf26", null ],
     [ "canDownloadData", "class_ogre_1_1_metal_window.html#a534dff92f24a7d15dc6d2357f5baae56", null ],
     [ "create", "class_ogre_1_1_metal_window.html#a5ccc4ddcdd716c8229fe1da9594f3a6d", null ],

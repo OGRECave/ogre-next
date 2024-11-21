@@ -2,7 +2,7 @@ var class_ogre_1_1_window =
 [
     [ "Window", "class_ogre_1_1_window.html#a49a7d6306862194bac7a1c04478970bd", null ],
     [ "~Window", "class_ogre_1_1_window.html#ae22d41815ce3e3a20545be40d90eda7d", null ],
-    [ "_initialize", "class_ogre_1_1_window.html#a9a3958eb8e9dbcd44ad87f480f3bd40d", null ],
+    [ "_initialize", "class_ogre_1_1_window.html#a6e42c032a2ba53a6982ba2f40ea13964", null ],
     [ "_setPrimary", "class_ogre_1_1_window.html#afa119bcfb8aea2fe559ab5d80a41e18a", null ],
     [ "_setVisible", "class_ogre_1_1_window.html#aa7ac08a06bc2a2c4d2638a844f6b4351", null ],
     [ "canDownloadData", "class_ogre_1_1_window.html#adc03604e73554f6f1d7abe3a29bcf03d", null ],

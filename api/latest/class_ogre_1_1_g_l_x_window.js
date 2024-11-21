@@ -2,7 +2,7 @@ var class_ogre_1_1_g_l_x_window =
 [
     [ "GLXWindow", "class_ogre_1_1_g_l_x_window.html#a98504ff745483d85638d64843424aec3", null ],
     [ "~GLXWindow", "class_ogre_1_1_g_l_x_window.html#aad98fedf33498066f8b00d762847b0fc", null ],
-    [ "_initialize", "class_ogre_1_1_g_l_x_window.html#ac22fcc5b24467c337f5e42d1af67ea87", null ],
+    [ "_initialize", "class_ogre_1_1_g_l_x_window.html#a32158e36221cb8bbfa44074011680446", null ],
     [ "_setVisible", "class_ogre_1_1_g_l_x_window.html#a44832a0849c65b795e3074e8bcebcfe9", null ],
     [ "destroy", "class_ogre_1_1_g_l_x_window.html#ae162b0fd6056b34eac9ae8975c9d6310", null ],
     [ "getCustomAttribute", "class_ogre_1_1_g_l_x_window.html#afa0a0738384683d06efbe9ae6decf182", null ],

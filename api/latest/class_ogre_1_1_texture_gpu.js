@@ -75,6 +75,7 @@ var class_ogre_1_1_texture_gpu =
     [ "isRenderWindowSpecific", "class_ogre_1_1_texture_gpu.html#aadda46635a310a0b5a24b7bf93cfee19", null ],
     [ "isTexture", "class_ogre_1_1_texture_gpu.html#a4b7d52501e9da7655079f9c4d6f1c037", null ],
     [ "isTextureGpu", "class_ogre_1_1_texture_gpu.html#abdcab7d39a3d28af67cccee42f37c73f", null ],
+    [ "isTilerMemoryless", "class_ogre_1_1_texture_gpu.html#a67a7e79bbd4ff468fd69b9737888810e", null ],
     [ "isUav", "class_ogre_1_1_texture_gpu.html#afb1abe749069021e4e83cdaa7668b3bc", null ],
     [ "notifyAllListenersTextureChanged", "class_ogre_1_1_texture_gpu.html#a52acdc930dff7ae7f455256822d9520d", null ],
     [ "notifyDataIsReady", "class_ogre_1_1_texture_gpu.html#a73d480691663c93439835ff7d11f7739", null ],

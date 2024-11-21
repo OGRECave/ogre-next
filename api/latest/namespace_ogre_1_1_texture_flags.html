@@ -113,6 +113,7 @@ Enumerations</h2></td></tr>
 , <br />
 &#160;&#160;<a class="el" href="namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434aeb8acf9388488f12f4edd8de80b5dcf9">PoolOwner</a> = 1u &lt;&lt; 13u
 , <a class="el" href="namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434ab642f1ba2bbf902301791a2b6f976ac2">DiscardableContent</a> = 1u &lt;&lt; 14u
+, <a class="el" href="namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434a26dd876274f4a4e96dbaef4216b7cb29">TilerMemoryless</a> = 1u &lt;&lt; 15u
 <br />
  }</td></tr>
 <tr class="separator:a59b71e36a14465bd82595d6d467e1434"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,6 +181,12 @@ Enumerations</h2></td></tr>
 <p>Useful for RenderToTexture which are written or cleared first.</p>
 <p>Must not be used on textures whose contents need to be preserved between frames (e.g. HDR luminance change over time)</p>
 <p>If this flag is present, either RenderToTexture or Uav must be present </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a59b71e36a14465bd82595d6d467e1434a26dd876274f4a4e96dbaef4216b7cb29"></a>TilerMemoryless&#160;</td><td class="fielddoc"><p>When this flag is present, we can save VRAM by using memoryless storage mode (Metal on iOS and Apple Silicon macOS) aka TRANSIENT memory (Vulkan). </p>
+<p>With this flag set, the texture will not be backed by memory, it will only ever live in cache. Only TBDR GPUs support this. It will be ignored if unsupported.</p>
+<p>Many operations are unsupported with TilerMemoryless textures (e.g. copy operations) because there is no memory behind them.</p>
+<p>An example is a depth or stencil texture thatʼs used only within a render pass and isnʼt needed before or after GPU execution.</p>
+<p>This flag requires RenderToTexture. </p>
 </td></tr>
 </table>
 

@@ -27,7 +27,8 @@ var _ogre_texture_gpu_8h =
       [ "ManualTexture", "_ogre_texture_gpu_8h.html#a59b71e36a14465bd82595d6d467e1434af3d439b1fb1b1aedfbea2c633da4e2b1", null ],
       [ "AutomaticBatching", "_ogre_texture_gpu_8h.html#a59b71e36a14465bd82595d6d467e1434a2f298fbaec7db976ba6616430b1f52a3", null ],
       [ "PoolOwner", "_ogre_texture_gpu_8h.html#a59b71e36a14465bd82595d6d467e1434aeb8acf9388488f12f4edd8de80b5dcf9", null ],
-      [ "DiscardableContent", "_ogre_texture_gpu_8h.html#a59b71e36a14465bd82595d6d467e1434ab642f1ba2bbf902301791a2b6f976ac2", null ]
+      [ "DiscardableContent", "_ogre_texture_gpu_8h.html#a59b71e36a14465bd82595d6d467e1434ab642f1ba2bbf902301791a2b6f976ac2", null ],
+      [ "TilerMemoryless", "_ogre_texture_gpu_8h.html#a59b71e36a14465bd82595d6d467e1434a26dd876274f4a4e96dbaef4216b7cb29", null ]
     ] ],
     [ "TextureSourceType", "_ogre_texture_gpu_8h.html#a487889f4cfc926c4eaaf01e2f4e68c5a", [
       [ "Standard", "_ogre_texture_gpu_8h.html#a487889f4cfc926c4eaaf01e2f4e68c5aae58d19079db522fb8c06bb4dd3ece311", null ],

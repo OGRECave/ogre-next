@@ -110,8 +110,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a49a7d6306862194bac7a1c04478970bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae22d41815ce3e3a20545be40d90eda7d"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_window.html#ae22d41815ce3e3a20545be40d90eda7d">~Window</a> ()</td></tr>
 <tr class="separator:ae22d41815ce3e3a20545be40d90eda7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a3958eb8e9dbcd44ad87f480f3bd40d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_window.html#a9a3958eb8e9dbcd44ad87f480f3bd40d">_initialize</a> (<a class="el" href="class_ogre_1_1_texture_gpu_manager.html">TextureGpuManager</a> *textureGpuManager)=0</td></tr>
-<tr class="separator:a9a3958eb8e9dbcd44ad87f480f3bd40d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e42c032a2ba53a6982ba2f40ea13964"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_window.html#a6e42c032a2ba53a6982ba2f40ea13964">_initialize</a> (<a class="el" href="class_ogre_1_1_texture_gpu_manager.html">TextureGpuManager</a> *textureGpuManager, const <a class="el" href="group___general.html#gad887d0555b483f6499fcd3a4dab0e0c6">NameValuePairList</a> *<a class="el" href="_ogre_prerequisites_8h.html#a309bade5bfd3b8e9630f497e27e0bd6b">ogre_nullable</a> miscParams)=0</td></tr>
+<tr class="separator:a6e42c032a2ba53a6982ba2f40ea13964"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa119bcfb8aea2fe559ab5d80a41e18a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_window.html#afa119bcfb8aea2fe559ab5d80a41e18a">_setPrimary</a> ()</td></tr>
 <tr class="memdesc:afa119bcfb8aea2fe559ab5d80a41e18a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates that this is the primary window.  <a href="class_ogre_1_1_window.html#afa119bcfb8aea2fe559ab5d80a41e18a">More...</a><br /></td></tr>
 <tr class="separator:afa119bcfb8aea2fe559ab5d80a41e18a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -293,8 +293,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a9a3958eb8e9dbcd44ad87f480f3bd40d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9a3958eb8e9dbcd44ad87f480f3bd40d">&#9670;&nbsp;</a></span>_initialize()</h2>
+<a id="a6e42c032a2ba53a6982ba2f40ea13964"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e42c032a2ba53a6982ba2f40ea13964">&#9670;&nbsp;</a></span>_initialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -306,8 +306,18 @@ Public Member Functions</h2></td></tr>
           <td class="memname">virtual void Ogre::Window::_initialize </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html">TextureGpuManager</a> *&#160;</td>
-          <td class="paramname"><em>textureGpuManager</em></td><td>)</td>
+          <td class="paramname"><em>textureGpuManager</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const <a class="el" href="group___general.html#gad887d0555b483f6499fcd3a4dab0e0c6">NameValuePairList</a> *<a class="el" href="_ogre_prerequisites_8h.html#a309bade5bfd3b8e9630f497e27e0bd6b">ogre_nullable</a>&#160;</td>
+          <td class="paramname"><em>miscParams</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -317,7 +327,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_cocoa_window.html#a2cbb0eab1eabc36e098f3f82fb727a80">Ogre::CocoaWindow</a>, <a class="el" href="class_ogre_1_1_g_l_x_window.html#ac22fcc5b24467c337f5e42d1af67ea87">Ogre::GLXWindow</a>, <a class="el" href="class_ogre_1_1_egl_p_buffer_window.html#a88a4164162cf67ca28f4cda6e40d4455">Ogre::EglPBufferWindow</a>, <a class="el" href="class_ogre_1_1_e_g_l_window.html#a008f63c8d729fe7328366170b5ed2d72">Ogre::EGLWindow</a>, <a class="el" href="class_ogre_1_1_vulkan_window.html#a95c79431ef5e02a234b0119e288324ee">Ogre::VulkanWindow</a>, <a class="el" href="class_ogre_1_1_n_u_l_l_window.html#ac92f9116d09e5129ce8b3911b0ccc759">Ogre::NULLWindow</a>, <a class="el" href="class_ogre_1_1_metal_window.html#afb69c6bed69b5cdfe4cf5553a9154cbd">Ogre::MetalWindow</a>, <a class="el" href="class_ogre_1_1_d3_d11_window_swap_chain_based.html#a3bf3879de1fba8516de9f1c34e3208ce">Ogre::D3D11WindowSwapChainBased</a>, and <a class="el" href="class_ogre_1_1_win32_window.html#a348193834484f651ab263a72c0e1f4f3">Ogre::Win32Window</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l_x_window.html#a32158e36221cb8bbfa44074011680446">Ogre::GLXWindow</a>, <a class="el" href="class_ogre_1_1_vulkan_window_null.html#a1024a54c950b642cb205fc0faa56be22">Ogre::VulkanWindowNull</a>, <a class="el" href="class_ogre_1_1_n_u_l_l_window.html#adb35729dcd5289f35917e5fb6f220f46">Ogre::NULLWindow</a>, <a class="el" href="class_ogre_1_1_d3_d11_window_swap_chain_based.html#ad1c64361b23edd40fb1e892b3ccad281">Ogre::D3D11WindowSwapChainBased</a>, and <a class="el" href="class_ogre_1_1_win32_window.html#aac8bcf4188936dad4afbdb506001e8e2">Ogre::Win32Window</a>.</p>
 
 </div>
 </div>
@@ -1348,7 +1358,7 @@ Public Member Functions</h2></td></tr>
 <div class="line">window-&gt;setManualSwapRelease( <span class="keyword">false</span> );</div>
 <div class="ttc" id="aclass_ogre_1_1_image2_html"><div class="ttname"><a href="class_ogre_1_1_image2.html">Ogre::Image2</a></div><div class="ttdoc">Class representing an image file.</div><div class="ttdef"><b>Definition:</b> OgreImage2.h:57</div></div>
 <div class="ttc" id="aclass_ogre_1_1_image2_html_aaf13aa1cedd6abda976a6f837d1bd29b"><div class="ttname"><a href="class_ogre_1_1_image2.html#aaf13aa1cedd6abda976a6f837d1bd29b">Ogre::Image2::convertFromTexture</a></div><div class="ttdeci">void convertFromTexture(TextureGpu *texture, uint8 minMip, uint8 maxMip, bool automaticResolve=true)</div><div class="ttdoc">Synchronously downloads the selected mips from a TextureGpu into this Image.</div></div>
-<div class="ttc" id="aclass_ogre_1_1_texture_gpu_html"><div class="ttname"><a href="class_ogre_1_1_texture_gpu.html">Ogre::TextureGpu</a></div><div class="ttdef"><b>Definition:</b> OgreTextureGpu.h:291</div></div>
+<div class="ttc" id="aclass_ogre_1_1_texture_gpu_html"><div class="ttname"><a href="class_ogre_1_1_texture_gpu.html">Ogre::TextureGpu</a></div><div class="ttdef"><b>Definition:</b> OgreTextureGpu.h:305</div></div>
 <div class="ttc" id="aclass_ogre_1_1_texture_gpu_html_a2f193236caf39fcaa5f90ae613f355a0"><div class="ttname"><a href="class_ogre_1_1_texture_gpu.html#a2f193236caf39fcaa5f90ae613f355a0">Ogre::TextureGpu::getNumMipmaps</a></div><div class="ttdeci">uint8 getNumMipmaps() const</div></div>
 </div><!-- fragment --><p>Technically you can do setManualSwapRelease( true ) and leave it like that, but then you MUST call performManualRelease and that's bug prone.</p>
 <dl class="section remark"><dt>Remarks</dt><dd>Incorrect usage of this functionality may result in crashes or leaks</dd></dl>
