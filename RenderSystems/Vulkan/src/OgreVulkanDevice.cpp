@@ -57,7 +57,7 @@ namespace Ogre
 
     bool StrCmpLess( const char *a, const char *b ) { return strcmp( a, b ) < 0; }
 
-    void sortAndRelocate( FastArray<const char *> &ar, String &hostStr ) 
+    void sortAndRelocate( FastArray<const char *> &ar, String &hostStr )
     {
         std::sort( ar.begin(), ar.end(), StrCmpLess );
 

@@ -145,7 +145,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     ConfigOptionMap &VulkanSupport::getConfigOptions( VulkanRenderSystem *renderSystem )
     {
-        assert( !mOptions.empty() ); // addConfig() already called
+        assert( !mOptions.empty() );  // addConfig() already called
         return mOptions;
     }
     //-------------------------------------------------------------------------

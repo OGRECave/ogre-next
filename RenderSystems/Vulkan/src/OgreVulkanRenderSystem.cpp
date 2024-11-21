@@ -208,7 +208,6 @@ namespace Ogre
 
         mInvertedClipSpaceY = true;
 
-
         VulkanExternalInstance *externalInstance = nullptr;
         if( options )
         {
@@ -224,8 +223,8 @@ namespace Ogre
         loadRenderDocApi();
 #endif
 
-        mInstance = std::make_shared<VulkanInstance>( 
-            Root::getSingleton().getAppName(), externalInstance, dbgFunc, this );
+        mInstance = std::make_shared<VulkanInstance>( Root::getSingleton().getAppName(),
+                                                      externalInstance, dbgFunc, this );
 
         initConfigOptions();
     }

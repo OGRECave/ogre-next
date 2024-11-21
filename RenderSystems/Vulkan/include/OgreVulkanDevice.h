@@ -110,7 +110,6 @@ namespace Ogre
 #endif
     };
 
-
     struct _OgreVulkanExport VulkanDevice
     {
         struct SelectedQueue
