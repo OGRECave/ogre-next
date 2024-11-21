@@ -152,8 +152,13 @@ namespace Ogre
 /// First seen: Unknown
 /// Last seen: 2022-05-13
 #        define OGRE_VK_WORKAROUND_PVR_ALIGNMENT
-		static uint32 mPowerVRAlignment;
+        static uint32 mPowerVRAlignment;
 #    endif
+
+/// Swappy causes the Swapchain to be recreated indefinitely, slowing down FPS to a crawl.
+/// On Android 14 (latest at the time of writing) Google Pixel (and a few other phones)
+/// cause a crash. The blocklist is maintained by hand.
+#    define OGRE_VK_WORKAROUND_SWAPPY_CRASH
 #endif
     };
 }  // namespace Ogre

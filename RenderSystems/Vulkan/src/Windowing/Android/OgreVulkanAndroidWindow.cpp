@@ -47,11 +47,38 @@ THE SOFTWARE.
 #include <android/native_window.h>
 
 #ifdef OGRE_VULKAN_USE_SWAPPY
+#    include <sys/system_properties.h>
 #    include "swappy/swappyVk.h"
 #endif
 
 namespace Ogre
 {
+#ifdef OGRE_VULKAN_USE_SWAPPY
+    static String getSystemProperty( const char *propname )
+    {
+        char propCStr[PROP_VALUE_MAX + 1];
+        const int len = __system_property_get( propname, propCStr );
+        if( len > 0 )
+        {
+            return String( propCStr );
+        }
+        else
+        {
+            return "";
+        }
+    }
+
+    static int getSdkVersion()
+    {
+        int sdkVersion = 0;
+        char sdk[PROP_VALUE_MAX] = { 0 };
+        if( __system_property_get( "ro.build.version.sdk", sdk ) > 0 )
+            sdkVersion = atoi( sdk );
+
+        return sdkVersion;
+    }
+#endif
+
 #ifdef OGRE_VULKAN_USE_SWAPPY
     // Same default as Swappy.
     VulkanAndroidWindow::FramePacingSwappyModes VulkanAndroidWindow::msFramePacingSwappyMode =
@@ -251,7 +278,43 @@ namespace Ogre
 
         mDevice->stall();
 
-#ifdef OGRE_VULKAN_USE_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY &&defined( OGRE_VK_WORKAROUND_SWAPPY_CRASH )
+        const String manufacturer = getSystemProperty( "ro.product.manufacturer" );
+        const String model = getSystemProperty( "ro.product.model" );
+        const bool bIsAndroid14 = getSdkVersion() >= 34;
+
+        if( bIsAndroid14 &&
+            ( ( manufacturer == "Google" && model.find( "Pixel" ) != String::npos ) ||
+              ( manufacturer == "Xiaomi" && ( model.find( "Redmi Note 7" ) != String::npos ||
+                                              model.find( "MI PAD 4" ) != String::npos ) ) ||
+              ( manufacturer == "Samsung" && model.find( "Galaxy S20 FE 5G" ) ) ) )
+        {
+            // There must be something we're doing wrong because Google Pixel devices (!!!) on Android 14
+            // crash with the following:
+            //
+            // clang-format off
+            //  Fatal Exception: java.util.concurrent.RejectedExecutionException: Handler (android.os.Handler) {a347fc8} is shutting down
+            // at android.os.HandlerExecutor.execute(HandlerExecutor.java:44)
+            //     at android.hardware.display.DisplayManagerGlobal$DisplayListenerDelegate.sendDisplayEvent(DisplayManagerGlobal.java:1219)
+            //     at android.hardware.display.DisplayManagerGlobal.handleDisplayEvent(DisplayManagerGlobal.java:517)
+            //     at android.hardware.display.DisplayManagerGlobal.handleDisplayChangeFromWindowManager(DisplayManagerGlobal.java:425)
+            //     at android.app.servertransaction.ClientTransactionListenerController.onDisplayChanged(ClientTransactionListenerController.java:76)
+            //     at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:131)
+            //     at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2595)
+            //     at android.os.Handler.dispatchMessage(Handler.java:107)
+            //     at android.os.Looper.loopOnce(Looper.java:232)
+            //     at android.os.Looper.loop(Looper.java:317)
+            //     at android.app.ActivityThread.main(ActivityThread.java:8592)
+            //     at java.lang.reflect.Method.invoke(Method.java)
+            //     at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:580)
+            //     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:878)
+            // clang-format on
+            mRecreateCount = 200u;
+
+            LogManager::getSingleton().logMessage(
+                "Device is in blocklist. Disabling Swappy Frame Pacing.", LML_CRITICAL );
+        }
+
         // Code to detect buggy devices (if it's buggy, we disable Swappy).
         if( mRecreateCount == 255u )
         {
