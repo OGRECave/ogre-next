@@ -1,3 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$struct_ogre_1_1_vulkan_descriptor_set_texture.html" title=" " alt="" coords="5,5,197,47"/>
+<area shape="rect" id="node1" href="$class_ogre_1_1_vulkan_delayed_func_base.html" title=" " alt="" coords="5,242,225,269"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_vulkan_delayed__vk_destroy_buffer_view.html" title=" " alt="" coords="285,5,451,47"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_vulkan_delayed__vk_destroy_framebuffer.html" title=" " alt="" coords="281,71,455,112"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_vulkan_delayed__vk_destroy_image.html" title=" " alt="" coords="289,136,447,177"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_vulkan_delayed__vk_destroy_image_view.html" title=" " alt="" coords="283,201,453,243"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_vulkan_delayed__vk_destroy_pipeline.html" title=" " alt="" coords="289,267,447,308"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_vulkan_delayed__vk_destroy_render_pass.html" title=" " alt="" coords="283,332,453,373"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_delayed__vk_destroy_sampler.html" title=" " alt="" coords="289,397,447,439"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_vulkan_delayed__vk_destroy_shader_module.html" title=" " alt="" coords="273,463,463,504"/>
 </map>

@@ -1239,6 +1239,7 @@ var annotated_dup =
       [ "VulkanGlobalBindingTable", "struct_ogre_1_1_vulkan_global_binding_table.html", "struct_ogre_1_1_vulkan_global_binding_table" ],
       [ "VulkanGpuProgramManager", "class_ogre_1_1_vulkan_gpu_program_manager.html", "class_ogre_1_1_vulkan_gpu_program_manager" ],
       [ "VulkanHlmsPso", "struct_ogre_1_1_vulkan_hlms_pso.html", "struct_ogre_1_1_vulkan_hlms_pso" ],
+      [ "VulkanInstance", "class_ogre_1_1_vulkan_instance.html", "class_ogre_1_1_vulkan_instance" ],
       [ "VulkanMappings", "class_ogre_1_1_vulkan_mappings.html", "class_ogre_1_1_vulkan_mappings" ],
       [ "VulkanPhysicalDevice", "struct_ogre_1_1_vulkan_physical_device.html", "struct_ogre_1_1_vulkan_physical_device" ],
       [ "VulkanPixelFormatToShaderType", "class_ogre_1_1_vulkan_pixel_format_to_shader_type.html", "class_ogre_1_1_vulkan_pixel_format_to_shader_type" ],

@@ -1367,6 +1367,7 @@ var namespace_ogre =
     [ "VulkanGlobalBindingTable", "struct_ogre_1_1_vulkan_global_binding_table.html", "struct_ogre_1_1_vulkan_global_binding_table" ],
     [ "VulkanGpuProgramManager", "class_ogre_1_1_vulkan_gpu_program_manager.html", "class_ogre_1_1_vulkan_gpu_program_manager" ],
     [ "VulkanHlmsPso", "struct_ogre_1_1_vulkan_hlms_pso.html", "struct_ogre_1_1_vulkan_hlms_pso" ],
+    [ "VulkanInstance", "class_ogre_1_1_vulkan_instance.html", "class_ogre_1_1_vulkan_instance" ],
     [ "VulkanMappings", "class_ogre_1_1_vulkan_mappings.html", "class_ogre_1_1_vulkan_mappings" ],
     [ "VulkanPhysicalDevice", "struct_ogre_1_1_vulkan_physical_device.html", "struct_ogre_1_1_vulkan_physical_device" ],
     [ "VulkanPixelFormatToShaderType", "class_ogre_1_1_vulkan_pixel_format_to_shader_type.html", "class_ogre_1_1_vulkan_pixel_format_to_shader_type" ],
@@ -1618,7 +1619,6 @@ var namespace_ogre =
     [ "VulkanDiscardBufferVec", "namespace_ogre.html#ade47b5db929afab7a04bbc1662b702a1", null ],
     [ "VulkanFlushOnlyDescMap", "group___resources.html#ga0c0e627b2b7b2d19c81eb55d43b1026e", null ],
     [ "VulkanFrameBufferDescMap", "group___resources.html#ga464831ff8c2b7ceeeaf002a724e40e67", null ],
-    [ "VulkanPhysicalDeviceList", "namespace_ogre.html#acb35404346ec6124637b0fc8b0b91772", null ],
     [ "VulkanSingleSetLayoutDesc", "namespace_ogre.html#ad9433eff55d783eb59a60ddda36a6eaf", null ],
     [ "WindowList", "group___general.html#gae31cafee4ffbd8bb1652e03535a50864", null ],
     [ "AbstractNodeType", "group___general.html#ga788dd054963542ec3375d9b83255bc98", [

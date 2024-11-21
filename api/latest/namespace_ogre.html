@@ -2781,6 +2781,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_hlms_pso.html">VulkanHlmsPso</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_instance.html">VulkanInstance</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">We need the ability to re-enumerate devices to handle physical device removing, that requires fresh VkInstance instance, as otherwise Vulkan returns obsolete physical devices list.  <a href="class_ogre_1_1_vulkan_instance.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_mappings.html">VulkanMappings</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_physical_device.html">VulkanPhysicalDevice</a></td></tr>
@@ -3333,8 +3336,6 @@ Typedefs</h2></td></tr>
 <tr class="separator:ga0c0e627b2b7b2d19c81eb55d43b1026e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga464831ff8c2b7ceeeaf002a724e40e67"><td class="memItemLeft" align="right" valign="top">typedef map&lt; <a class="el" href="struct_ogre_1_1_vulkan_frame_buffer_desc_key.html">VulkanFrameBufferDescKey</a>, <a class="el" href="struct_ogre_1_1_vulkan_frame_buffer_desc_value.html">VulkanFrameBufferDescValue</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga464831ff8c2b7ceeeaf002a724e40e67">VulkanFrameBufferDescMap</a></td></tr>
 <tr class="separator:ga464831ff8c2b7ceeeaf002a724e40e67"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb35404346ec6124637b0fc8b0b91772"><td class="memItemLeft" align="right" valign="top">typedef std::vector&lt; <a class="el" href="struct_ogre_1_1_vulkan_physical_device.html">VulkanPhysicalDevice</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#acb35404346ec6124637b0fc8b0b91772">VulkanPhysicalDeviceList</a></td></tr>
-<tr class="separator:acb35404346ec6124637b0fc8b0b91772"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9433eff55d783eb59a60ddda36a6eaf"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; VkDescriptorSetLayoutBinding &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#ad9433eff55d783eb59a60ddda36a6eaf">VulkanSingleSetLayoutDesc</a></td></tr>
 <tr class="separator:ad9433eff55d783eb59a60ddda36a6eaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae31cafee4ffbd8bb1652e03535a50864"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_std_vector.html">StdVector</a>&lt; <a class="el" href="class_ogre_1_1_window.html">Window</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gae31cafee4ffbd8bb1652e03535a50864">WindowList</a></td></tr>
@@ -7088,20 +7089,6 @@ THE SOFTWARE.</h2>
       <table class="memname">
         <tr>
           <td class="memname">typedef vector&lt;<a class="el" href="class_ogre_1_1_vulkan_discard_buffer.html">VulkanDiscardBuffer</a> *&gt;::type <a class="el" href="namespace_ogre.html#ade47b5db929afab7a04bbc1662b702a1">Ogre::VulkanDiscardBufferVec</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="acb35404346ec6124637b0fc8b0b91772"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb35404346ec6124637b0fc8b0b91772">&#9670;&nbsp;</a></span>VulkanPhysicalDeviceList</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef std::vector&lt;<a class="el" href="struct_ogre_1_1_vulkan_physical_device.html">VulkanPhysicalDevice</a>&gt; <a class="el" href="namespace_ogre.html#acb35404346ec6124637b0fc8b0b91772">Ogre::VulkanPhysicalDeviceList</a></td>
         </tr>
       </table>
 </div><div class="memdoc">

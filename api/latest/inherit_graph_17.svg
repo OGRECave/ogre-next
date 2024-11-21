@@ -8,9 +8,9 @@
  viewBox="0.00 0.00 368.00 6742.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 6738)">
 <title>Graphical Class Hierarchy</title>
-<!-- Node1212 -->
+<!-- Node1214 -->
 <g id="node1" class="node">
-<title>Node1212</title>
+<title>Node1214</title>
 <g id="a_node1"><a xlink:title=" ">
 <polygon fill="none" stroke="#bfbfbf" points="0,-3362 0,-3381 127,-3381 127,-3362 0,-3362"/>
 <text text-anchor="middle" x="63.5" y="-3369" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ParamCommand</text>
@@ -27,15 +27,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node0 -->
+<!-- Node1214&#45;&gt;Node0 -->
 <g id="edge1" class="edge">
-<title>Node1212&#45;&gt;Node0</title>
+<title>Node1214&#45;&gt;Node0</title>
 <path fill="none" stroke="midnightblue" d="M64.4,-3391.42C63.16,-3660.02 52.32,-6557.5 163,-6694.5 173.57,-6707.59 190.03,-6714.22 206.43,-6717.4"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.9,-3391.21 64.45,-3381.2 60.9,-3391.18 67.9,-3391.21"/>
 </g>
-<!-- Node1214 -->
+<!-- Node1216 -->
 <g id="node3" class="node">
-<title>Node1214</title>
+<title>Node1216</title>
 <g id="a_node3"><a xlink:href="class_ogre_1_1_area_emitter_1_1_cmd_height.html" target="_top" xlink:title="Command object for area emitter size (see ParamCommand).">
 <polygon fill="none" stroke="black" points="206.5,-6654.5 206.5,-6684.5 316.5,-6684.5 316.5,-6654.5 206.5,-6654.5"/>
 <text text-anchor="start" x="214.5" y="-6672.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::AreaEmitter::</text>
@@ -43,15 +43,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1214 -->
+<!-- Node1214&#45;&gt;Node1216 -->
 <g id="edge2" class="edge">
-<title>Node1212&#45;&gt;Node1214</title>
+<title>Node1214&#45;&gt;Node1216</title>
 <path fill="none" stroke="midnightblue" d="M64.41,-3391.12C63.31,-3655.77 53.92,-6510.54 163,-6645.5 173.57,-6658.58 190.03,-6665.21 206.43,-6668.4"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.91,-3391.07 64.46,-3381.05 60.91,-3391.04 67.91,-3391.07"/>
 </g>
-<!-- Node1215 -->
+<!-- Node1217 -->
 <g id="node4" class="node">
-<title>Node1215</title>
+<title>Node1217</title>
 <g id="a_node4"><a xlink:href="class_ogre_1_1_area_emitter_1_1_cmd_width.html" target="_top" xlink:title="Command object for area emitter size (see ParamCommand).">
 <polygon fill="none" stroke="black" points="206.5,-6605.5 206.5,-6635.5 316.5,-6635.5 316.5,-6605.5 206.5,-6605.5"/>
 <text text-anchor="start" x="214.5" y="-6623.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::AreaEmitter::</text>
@@ -59,15 +59,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1215 -->
+<!-- Node1214&#45;&gt;Node1217 -->
 <g id="edge3" class="edge">
-<title>Node1212&#45;&gt;Node1215</title>
+<title>Node1214&#45;&gt;Node1217</title>
 <path fill="none" stroke="midnightblue" d="M64.42,-3391.23C63.45,-3654.36 55.57,-6463.65 163,-6596.5 173.58,-6609.58 190.03,-6616.21 206.44,-6619.39"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.92,-3391.21 64.46,-3381.2 60.92,-3391.18 67.92,-3391.21"/>
 </g>
-<!-- Node1216 -->
+<!-- Node1218 -->
 <g id="node5" class="node">
-<title>Node1216</title>
+<title>Node1218</title>
 <g id="a_node5"><a xlink:href="class_ogre_1_1_colour_fader_affector2_1_1_cmd_alpha_adjust1.html" target="_top" xlink:title="Command object for alpha adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="187.5,-6556.5 187.5,-6586.5 335.5,-6586.5 335.5,-6556.5 187.5,-6556.5"/>
 <text text-anchor="start" x="195.5" y="-6574.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ColourFaderAffector2</text>
@@ -75,15 +75,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1216 -->
+<!-- Node1214&#45;&gt;Node1218 -->
 <g id="edge4" class="edge">
-<title>Node1212&#45;&gt;Node1216</title>
+<title>Node1214&#45;&gt;Node1218</title>
 <path fill="none" stroke="midnightblue" d="M64.43,-3391.31C63.59,-3652.8 57.23,-6416.76 163,-6547.5 169.36,-6555.36 177.84,-6560.89 187.16,-6564.74"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.93,-3391.06 64.46,-3381.05 60.93,-3391.04 67.93,-3391.06"/>
 </g>
-<!-- Node1217 -->
+<!-- Node1219 -->
 <g id="node6" class="node">
-<title>Node1217</title>
+<title>Node1219</title>
 <g id="a_node6"><a xlink:href="class_ogre_1_1_colour_fader_affector2_1_1_cmd_alpha_adjust2.html" target="_top" xlink:title="Command object for alpha adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="187.5,-6507.5 187.5,-6537.5 335.5,-6537.5 335.5,-6507.5 187.5,-6507.5"/>
 <text text-anchor="start" x="195.5" y="-6525.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ColourFaderAffector2</text>
@@ -91,15 +91,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1217 -->
+<!-- Node1214&#45;&gt;Node1219 -->
 <g id="edge5" class="edge">
-<title>Node1212&#45;&gt;Node1217</title>
+<title>Node1214&#45;&gt;Node1219</title>
 <path fill="none" stroke="midnightblue" d="M64.44,-3391.4C63.74,-3651.21 58.88,-6369.86 163,-6498.5 169.36,-6506.36 177.84,-6511.89 187.16,-6515.74"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.94,-3391.19 64.47,-3381.18 60.94,-3391.17 67.94,-3391.19"/>
 </g>
-<!-- Node1218 -->
+<!-- Node1220 -->
 <g id="node7" class="node">
-<title>Node1218</title>
+<title>Node1220</title>
 <g id="a_node7"><a xlink:href="class_ogre_1_1_colour_fader_affector2_1_1_cmd_blue_adjust1.html" target="_top" xlink:title="Command object for blue adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="187.5,-6458.5 187.5,-6488.5 335.5,-6488.5 335.5,-6458.5 187.5,-6458.5"/>
 <text text-anchor="start" x="195.5" y="-6476.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ColourFaderAffector2</text>
@@ -107,15 +107,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1218 -->
+<!-- Node1214&#45;&gt;Node1220 -->
 <g id="edge6" class="edge">
-<title>Node1212&#45;&gt;Node1218</title>
+<title>Node1214&#45;&gt;Node1220</title>
 <path fill="none" stroke="midnightblue" d="M64.45,-3391.09C63.89,-3646.83 60.48,-6322.9 163,-6449.5 169.36,-6457.36 177.85,-6462.89 187.17,-6466.74"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.95,-3391.04 64.47,-3381.03 60.95,-3391.02 67.95,-3391.04"/>
 </g>
-<!-- Node1219 -->
+<!-- Node1221 -->
 <g id="node8" class="node">
-<title>Node1219</title>
+<title>Node1221</title>
 <g id="a_node8"><a xlink:href="class_ogre_1_1_colour_fader_affector2_1_1_cmd_blue_adjust2.html" target="_top" xlink:title="Command object for blue adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="187.5,-6409.5 187.5,-6439.5 335.5,-6439.5 335.5,-6409.5 187.5,-6409.5"/>
 <text text-anchor="start" x="195.5" y="-6427.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ColourFaderAffector2</text>
@@ -123,15 +123,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1219 -->
+<!-- Node1214&#45;&gt;Node1221 -->
 <g id="edge7" class="edge">
-<title>Node1212&#45;&gt;Node1219</title>
+<title>Node1214&#45;&gt;Node1221</title>
 <path fill="none" stroke="midnightblue" d="M64.46,-3391.16C64.04,-3645.11 62.13,-6276.01 163,-6400.5 169.37,-6408.36 177.85,-6413.88 187.17,-6417.74"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.96,-3391.16 64.48,-3381.15 60.96,-3391.15 67.96,-3391.16"/>
 </g>
-<!-- Node1220 -->
+<!-- Node1222 -->
 <g id="node9" class="node">
-<title>Node1220</title>
+<title>Node1222</title>
 <g id="a_node9"><a xlink:href="class_ogre_1_1_colour_fader_affector2_1_1_cmd_green_adjust1.html" target="_top" xlink:title="Command object for green adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="187.5,-6360.5 187.5,-6390.5 335.5,-6390.5 335.5,-6360.5 187.5,-6360.5"/>
 <text text-anchor="start" x="195.5" y="-6378.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ColourFaderAffector2</text>
@@ -139,15 +139,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1220 -->
+<!-- Node1214&#45;&gt;Node1222 -->
 <g id="edge8" class="edge">
-<title>Node1212&#45;&gt;Node1220</title>
+<title>Node1214&#45;&gt;Node1222</title>
 <path fill="none" stroke="midnightblue" d="M64.47,-3391.6C64.19,-3645.86 63.82,-6229.17 163,-6351.5 169.37,-6359.35 177.85,-6364.88 187.17,-6368.73"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.97,-3391.27 64.48,-3381.27 60.97,-3391.27 67.97,-3391.27"/>
 </g>
-<!-- Node1221 -->
+<!-- Node1223 -->
 <g id="node10" class="node">
-<title>Node1221</title>
+<title>Node1223</title>
 <g id="a_node10"><a xlink:href="class_ogre_1_1_colour_fader_affector2_1_1_cmd_green_adjust2.html" target="_top" xlink:title="Command object for green adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="187.5,-6311.5 187.5,-6341.5 335.5,-6341.5 335.5,-6311.5 187.5,-6311.5"/>
 <text text-anchor="start" x="195.5" y="-6329.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ColourFaderAffector2</text>
@@ -155,15 +155,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1221 -->
+<!-- Node1214&#45;&gt;Node1223 -->
 <g id="edge9" class="edge">
-<title>Node1212&#45;&gt;Node1221</title>
+<title>Node1214&#45;&gt;Node1223</title>
 <path fill="none" stroke="midnightblue" d="M64.48,-3391.27C64.35,-3641.35 65.42,-6182.2 163,-6302.5 169.37,-6310.35 177.86,-6315.88 187.18,-6319.73"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.98,-3391.11 64.49,-3381.11 60.98,-3391.11 67.98,-3391.11"/>
 </g>
-<!-- Node1222 -->
+<!-- Node1224 -->
 <g id="node11" class="node">
-<title>Node1222</title>
+<title>Node1224</title>
 <g id="a_node11"><a xlink:href="class_ogre_1_1_colour_fader_affector2_1_1_cmd_red_adjust1.html" target="_top" xlink:title="Command object for red adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="187.5,-6262.5 187.5,-6292.5 335.5,-6292.5 335.5,-6262.5 187.5,-6262.5"/>
 <text text-anchor="start" x="195.5" y="-6280.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ColourFaderAffector2</text>
@@ -171,15 +171,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1222 -->
+<!-- Node1214&#45;&gt;Node1224 -->
 <g id="edge10" class="edge">
-<title>Node1212&#45;&gt;Node1222</title>
+<title>Node1214&#45;&gt;Node1224</title>
 <path fill="none" stroke="midnightblue" d="M64.49,-3391.31C64.51,-3639.37 67.06,-6135.3 163,-6253.5 169.37,-6261.35 177.86,-6266.88 187.18,-6270.73"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.99,-3391.22 64.5,-3381.22 60.99,-3391.22 67.99,-3391.22"/>
 </g>
-<!-- Node1223 -->
+<!-- Node1225 -->
 <g id="node12" class="node">
-<title>Node1223</title>
+<title>Node1225</title>
 <g id="a_node12"><a xlink:href="class_ogre_1_1_colour_fader_affector2_1_1_cmd_red_adjust2.html" target="_top" xlink:title="Command object for red adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="187.5,-6213.5 187.5,-6243.5 335.5,-6243.5 335.5,-6213.5 187.5,-6213.5"/>
 <text text-anchor="start" x="195.5" y="-6231.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ColourFaderAffector2</text>
@@ -187,15 +187,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1223 -->
+<!-- Node1214&#45;&gt;Node1225 -->
 <g id="edge11" class="edge">
-<title>Node1212&#45;&gt;Node1223</title>
+<title>Node1214&#45;&gt;Node1225</title>
 <path fill="none" stroke="midnightblue" d="M64.51,-3391.34C64.67,-3637.25 68.7,-6088.39 163,-6204.5 169.37,-6212.35 177.86,-6217.87 187.19,-6221.72"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.01,-3391.05 64.5,-3381.05 61.01,-3391.05 68.01,-3391.05"/>
 </g>
-<!-- Node1224 -->
+<!-- Node1226 -->
 <g id="node13" class="node">
-<title>Node1224</title>
+<title>Node1226</title>
 <g id="a_node13"><a xlink:href="class_ogre_1_1_colour_fader_affector2_1_1_cmd_state_change.html" target="_top" xlink:title="Command object for alpha adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="187.5,-6164.5 187.5,-6194.5 335.5,-6194.5 335.5,-6164.5 187.5,-6164.5"/>
 <text text-anchor="start" x="195.5" y="-6182.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ColourFaderAffector2</text>
@@ -203,15 +203,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1224 -->
+<!-- Node1214&#45;&gt;Node1226 -->
 <g id="edge12" class="edge">
-<title>Node1212&#45;&gt;Node1224</title>
+<title>Node1214&#45;&gt;Node1226</title>
 <path fill="none" stroke="midnightblue" d="M64.52,-3391.37C64.84,-3635.1 70.35,-6041.48 163,-6155.5 169.38,-6163.35 177.87,-6168.87 187.19,-6172.72"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.02,-3391.15 64.51,-3381.15 61.02,-3391.16 68.02,-3391.15"/>
 </g>
-<!-- Node1225 -->
+<!-- Node1227 -->
 <g id="node14" class="node">
-<title>Node1225</title>
+<title>Node1227</title>
 <g id="a_node14"><a xlink:href="class_ogre_1_1_colour_fader_affector_1_1_cmd_alpha_adjust.html" target="_top" xlink:title="Command object for alpha adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="190.5,-6115.5 190.5,-6145.5 332.5,-6145.5 332.5,-6115.5 190.5,-6115.5"/>
 <text text-anchor="start" x="198.5" y="-6133.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ColourFaderAffector</text>
@@ -219,15 +219,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1225 -->
+<!-- Node1214&#45;&gt;Node1227 -->
 <g id="edge13" class="edge">
-<title>Node1212&#45;&gt;Node1225</title>
+<title>Node1214&#45;&gt;Node1227</title>
 <path fill="none" stroke="midnightblue" d="M64.53,-3391.38C65.01,-3632.85 71.99,-5994.57 163,-6106.5 170.04,-6115.16 179.65,-6120.98 190.11,-6124.86"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.03,-3391.24 64.51,-3381.24 61.03,-3391.25 68.03,-3391.24"/>
 </g>
-<!-- Node1226 -->
+<!-- Node1228 -->
 <g id="node15" class="node">
-<title>Node1226</title>
+<title>Node1228</title>
 <g id="a_node15"><a xlink:href="class_ogre_1_1_colour_fader_affector_1_1_cmd_blue_adjust.html" target="_top" xlink:title="Command object for blue adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="190.5,-6066.5 190.5,-6096.5 332.5,-6096.5 332.5,-6066.5 190.5,-6066.5"/>
 <text text-anchor="start" x="198.5" y="-6084.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ColourFaderAffector</text>
@@ -235,15 +235,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1226 -->
+<!-- Node1214&#45;&gt;Node1228 -->
 <g id="edge14" class="edge">
-<title>Node1212&#45;&gt;Node1226</title>
+<title>Node1214&#45;&gt;Node1228</title>
 <path fill="none" stroke="midnightblue" d="M64.55,-3391.38C65.18,-3630.47 73.62,-5947.66 163,-6057.5 170.04,-6066.15 179.66,-6071.98 190.12,-6075.85"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.05,-3391.06 64.52,-3381.07 61.05,-3391.08 68.05,-3391.06"/>
 </g>
-<!-- Node1227 -->
+<!-- Node1229 -->
 <g id="node16" class="node">
-<title>Node1227</title>
+<title>Node1229</title>
 <g id="a_node16"><a xlink:href="class_ogre_1_1_colour_fader_affector_1_1_cmd_green_adjust.html" target="_top" xlink:title="Command object for green adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="190.5,-6017.5 190.5,-6047.5 332.5,-6047.5 332.5,-6017.5 190.5,-6017.5"/>
 <text text-anchor="start" x="198.5" y="-6035.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ColourFaderAffector</text>
@@ -251,15 +251,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1227 -->
+<!-- Node1214&#45;&gt;Node1229 -->
 <g id="edge15" class="edge">
-<title>Node1212&#45;&gt;Node1227</title>
+<title>Node1214&#45;&gt;Node1229</title>
 <path fill="none" stroke="midnightblue" d="M64.56,-3391.38C65.35,-3628.05 75.26,-5900.75 163,-6008.5 170.04,-6017.15 179.66,-6022.98 190.12,-6026.85"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.06,-3391.14 64.53,-3381.15 61.06,-3391.16 68.06,-3391.14"/>
 </g>
-<!-- Node1228 -->
+<!-- Node1230 -->
 <g id="node17" class="node">
-<title>Node1228</title>
+<title>Node1230</title>
 <g id="a_node17"><a xlink:href="class_ogre_1_1_colour_fader_affector_1_1_cmd_red_adjust.html" target="_top" xlink:title="Command object for red adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="190.5,-5968.5 190.5,-5998.5 332.5,-5998.5 332.5,-5968.5 190.5,-5968.5"/>
 <text text-anchor="start" x="198.5" y="-5986.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ColourFaderAffector</text>
@@ -267,15 +267,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1228 -->
+<!-- Node1214&#45;&gt;Node1230 -->
 <g id="edge16" class="edge">
-<title>Node1212&#45;&gt;Node1228</title>
+<title>Node1214&#45;&gt;Node1230</title>
 <path fill="none" stroke="midnightblue" d="M64.57,-3391.36C65.53,-3625.55 76.89,-5853.83 163,-5959.5 170.05,-5968.15 179.67,-5973.97 190.13,-5977.84"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.07,-3391.21 64.53,-3381.23 61.07,-3391.24 68.07,-3391.21"/>
 </g>
-<!-- Node1229 -->
+<!-- Node1231 -->
 <g id="node18" class="node">
-<title>Node1229</title>
+<title>Node1231</title>
 <g id="a_node18"><a xlink:href="class_ogre_1_1_colour_image_affector_1_1_cmd_image_adjust.html" target="_top" xlink:title="Command object for red adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="188.5,-5919.5 188.5,-5949.5 334.5,-5949.5 334.5,-5919.5 188.5,-5919.5"/>
 <text text-anchor="start" x="196.5" y="-5937.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ColourImageAffector</text>
@@ -283,15 +283,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1229 -->
+<!-- Node1214&#45;&gt;Node1231 -->
 <g id="edge17" class="edge">
-<title>Node1212&#45;&gt;Node1229</title>
+<title>Node1214&#45;&gt;Node1231</title>
 <path fill="none" stroke="midnightblue" d="M64.59,-3391.33C65.71,-3622.91 78.52,-5806.91 163,-5910.5 169.61,-5918.61 178.48,-5924.23 188.18,-5928.09"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.09,-3391.03 64.54,-3381.04 61.09,-3391.06 68.09,-3391.03"/>
 </g>
-<!-- Node1230 -->
+<!-- Node1232 -->
 <g id="node19" class="node">
-<title>Node1230</title>
+<title>Node1232</title>
 <g id="a_node19"><a xlink:href="class_ogre_1_1_colour_interpolator_affector_1_1_cmd_colour_adjust.html" target="_top" xlink:title="Command object for red adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="188.5,-5870.5 188.5,-5900.5 334.5,-5900.5 334.5,-5870.5 188.5,-5870.5"/>
 <text text-anchor="start" x="196.5" y="-5888.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ColourInterpolator</text>
@@ -299,15 +299,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1230 -->
+<!-- Node1214&#45;&gt;Node1232 -->
 <g id="edge18" class="edge">
-<title>Node1212&#45;&gt;Node1230</title>
+<title>Node1214&#45;&gt;Node1232</title>
 <path fill="none" stroke="midnightblue" d="M64.6,-3391.29C65.89,-3620.23 80.16,-5759.99 163,-5861.5 169.61,-5869.6 178.48,-5875.23 188.19,-5879.09"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.1,-3391.09 64.55,-3381.11 61.1,-3391.12 68.1,-3391.09"/>
 </g>
-<!-- Node1231 -->
+<!-- Node1233 -->
 <g id="node20" class="node">
-<title>Node1231</title>
+<title>Node1233</title>
 <g id="a_node20"><a xlink:href="class_ogre_1_1_colour_interpolator_affector_1_1_cmd_time_adjust.html" target="_top" xlink:title="Command object for red adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="192,-5821.5 192,-5851.5 331,-5851.5 331,-5821.5 192,-5821.5"/>
 <text text-anchor="start" x="200" y="-5839.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ColourInterpolator</text>
@@ -315,15 +315,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1231 -->
+<!-- Node1214&#45;&gt;Node1233 -->
 <g id="edge19" class="edge">
-<title>Node1212&#45;&gt;Node1231</title>
+<title>Node1214&#45;&gt;Node1233</title>
 <path fill="none" stroke="midnightblue" d="M64.62,-3391.59C66.1,-3619.6 81.83,-5713.12 163,-5812.5 170.39,-5821.55 180.59,-5827.5 191.62,-5831.36"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.12,-3391.39 64.56,-3381.41 61.12,-3391.43 68.12,-3391.39"/>
 </g>
-<!-- Node1232 -->
+<!-- Node1234 -->
 <g id="node21" class="node">
-<title>Node1232</title>
+<title>Node1234</title>
 <g id="a_node21"><a xlink:href="class_ogre_1_1_d3_d11_h_l_s_l_program_1_1_cmd_column_major_matrices.html" target="_top" xlink:title="Command object for setting matrix packing in column&#45;major order.">
 <polygon fill="none" stroke="black" points="185.5,-5772.5 185.5,-5802.5 337.5,-5802.5 337.5,-5772.5 185.5,-5772.5"/>
 <text text-anchor="start" x="193.5" y="-5790.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::D3D11HLSLProgram</text>
@@ -331,15 +331,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1232 -->
+<!-- Node1214&#45;&gt;Node1234 -->
 <g id="edge20" class="edge">
-<title>Node1212&#45;&gt;Node1232</title>
+<title>Node1214&#45;&gt;Node1234</title>
 <path fill="none" stroke="midnightblue" d="M64.64,-3391.52C66.29,-3616.66 83.45,-5666.19 163,-5763.5 168.96,-5770.79 176.74,-5776.07 185.31,-5779.87"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.14,-3391.19 64.57,-3381.21 61.14,-3391.24 68.14,-3391.19"/>
 </g>
-<!-- Node1233 -->
+<!-- Node1235 -->
 <g id="node22" class="node">
-<title>Node1233</title>
+<title>Node1235</title>
 <g id="a_node22"><a xlink:href="class_ogre_1_1_d3_d11_h_l_s_l_program_1_1_cmd_enable_backwards_compatibility.html" target="_top" xlink:title="Command object for setting backwards compatibility.">
 <polygon fill="none" stroke="black" points="163,-5723.5 163,-5753.5 360,-5753.5 360,-5723.5 163,-5723.5"/>
 <text text-anchor="start" x="171" y="-5741.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::D3D11HLSLProgram</text>
@@ -347,15 +347,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1233 -->
+<!-- Node1214&#45;&gt;Node1235 -->
 <g id="edge21" class="edge">
-<title>Node1212&#45;&gt;Node1233</title>
+<title>Node1214&#45;&gt;Node1235</title>
 <path fill="none" stroke="midnightblue" d="M64.65,-3391.11C66.46,-3611.64 85.04,-5619.21 163,-5714.5 165.76,-5717.87 168.91,-5720.82 172.35,-5723.38"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.15,-3390.99 64.57,-3381.01 61.15,-3391.04 68.15,-3390.99"/>
 </g>
-<!-- Node1234 -->
+<!-- Node1236 -->
 <g id="node23" class="node">
-<title>Node1234</title>
+<title>Node1236</title>
 <g id="a_node23"><a xlink:href="class_ogre_1_1_d3_d11_h_l_s_l_program_1_1_cmd_entry_point.html" target="_top" xlink:title="Command object for setting entry point.">
 <polygon fill="none" stroke="black" points="189.5,-5674.5 189.5,-5704.5 333.5,-5704.5 333.5,-5674.5 189.5,-5674.5"/>
 <text text-anchor="start" x="197.5" y="-5692.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::D3D11HLSLProgram</text>
@@ -363,15 +363,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1234 -->
+<!-- Node1214&#45;&gt;Node1236 -->
 <g id="edge22" class="edge">
-<title>Node1212&#45;&gt;Node1234</title>
+<title>Node1214&#45;&gt;Node1236</title>
 <path fill="none" stroke="midnightblue" d="M64.67,-3391.37C66.68,-3610.61 86.7,-5572.33 163,-5665.5 169.85,-5673.86 179.1,-5679.58 189.18,-5683.45"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.17,-3391.26 64.58,-3381.29 61.17,-3391.32 68.17,-3391.26"/>
 </g>
-<!-- Node1235 -->
+<!-- Node1237 -->
 <g id="node24" class="node">
-<title>Node1235</title>
+<title>Node1237</title>
 <g id="a_node24"><a xlink:href="class_ogre_1_1_d3_d11_h_l_s_l_program_1_1_cmd_preprocessor_defines.html" target="_top" xlink:title="Command object for setting macro defines.">
 <polygon fill="none" stroke="black" points="189,-5625.5 189,-5655.5 334,-5655.5 334,-5625.5 189,-5625.5"/>
 <text text-anchor="start" x="197" y="-5643.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::D3D11HLSLProgram</text>
@@ -379,15 +379,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1235 -->
+<!-- Node1214&#45;&gt;Node1237 -->
 <g id="edge23" class="edge">
-<title>Node1212&#45;&gt;Node1235</title>
+<title>Node1214&#45;&gt;Node1237</title>
 <path fill="none" stroke="midnightblue" d="M64.69,-3391.26C66.87,-3607.41 88.32,-5525.4 163,-5616.5 169.74,-5624.72 178.81,-5630.39 188.7,-5634.25"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.19,-3391.05 64.59,-3381.08 61.19,-3391.12 68.19,-3391.05"/>
 </g>
-<!-- Node1236 -->
+<!-- Node1238 -->
 <g id="node25" class="node">
-<title>Node1236</title>
+<title>Node1238</title>
 <g id="a_node25"><a xlink:href="class_ogre_1_1_d3_d11_h_l_s_l_program_1_1_cmd_target.html" target="_top" xlink:title="Command object for setting target assembler.">
 <polygon fill="none" stroke="black" points="189.5,-5576.5 189.5,-5606.5 333.5,-5606.5 333.5,-5576.5 189.5,-5576.5"/>
 <text text-anchor="start" x="197.5" y="-5594.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::D3D11HLSLProgram</text>
@@ -395,15 +395,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1236 -->
+<!-- Node1214&#45;&gt;Node1238 -->
 <g id="edge24" class="edge">
-<title>Node1212&#45;&gt;Node1236</title>
+<title>Node1214&#45;&gt;Node1238</title>
 <path fill="none" stroke="midnightblue" d="M64.71,-3391.48C67.1,-3606.08 89.98,-5478.51 163,-5567.5 169.86,-5575.86 179.11,-5581.57 189.2,-5585.44"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.21,-3391.3 64.6,-3381.34 61.21,-3391.38 68.21,-3391.3"/>
 </g>
-<!-- Node1237 -->
+<!-- Node1239 -->
 <g id="node26" class="node">
-<title>Node1237</title>
+<title>Node1239</title>
 <g id="a_node26"><a xlink:href="class_ogre_1_1_deflector_plane_affector_1_1_cmd_bounce.html" target="_top" xlink:title="Command object for bounce (see ParamCommand).">
 <polygon fill="none" stroke="black" points="184,-5527.5 184,-5557.5 339,-5557.5 339,-5527.5 184,-5527.5"/>
 <text text-anchor="start" x="192" y="-5545.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::DeflectorPlaneAffector</text>
@@ -411,15 +411,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1237 -->
+<!-- Node1214&#45;&gt;Node1239 -->
 <g id="edge25" class="edge">
-<title>Node1212&#45;&gt;Node1237</title>
+<title>Node1214&#45;&gt;Node1239</title>
 <path fill="none" stroke="midnightblue" d="M64.73,-3391.35C67.31,-3602.67 91.6,-5431.57 163,-5518.5 168.64,-5525.37 175.91,-5530.46 183.92,-5534.19"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.23,-3391.08 64.61,-3381.12 61.23,-3391.17 68.23,-3391.08"/>
 </g>
-<!-- Node1238 -->
+<!-- Node1240 -->
 <g id="node27" class="node">
-<title>Node1238</title>
+<title>Node1240</title>
 <g id="a_node27"><a xlink:href="class_ogre_1_1_deflector_plane_affector_1_1_cmd_plane_normal.html" target="_top" xlink:title="Command object for plane normal (see ParamCommand).">
 <polygon fill="none" stroke="black" points="184,-5478.5 184,-5508.5 339,-5508.5 339,-5478.5 184,-5478.5"/>
 <text text-anchor="start" x="192" y="-5496.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::DeflectorPlaneAffector</text>
@@ -427,15 +427,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1238 -->
+<!-- Node1214&#45;&gt;Node1240 -->
 <g id="edge26" class="edge">
-<title>Node1212&#45;&gt;Node1238</title>
+<title>Node1214&#45;&gt;Node1240</title>
 <path fill="none" stroke="midnightblue" d="M64.76,-3391.53C67.54,-3601.03 93.25,-5384.67 163,-5469.5 168.65,-5476.37 175.91,-5481.45 183.93,-5485.19"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.26,-3391.32 64.62,-3381.36 61.26,-3391.41 68.26,-3391.32"/>
 </g>
-<!-- Node1239 -->
+<!-- Node1241 -->
 <g id="node28" class="node">
-<title>Node1239</title>
+<title>Node1241</title>
 <g id="a_node28"><a xlink:href="class_ogre_1_1_deflector_plane_affector_1_1_cmd_plane_point.html" target="_top" xlink:title="Command object for plane point (see ParamCommand).">
 <polygon fill="none" stroke="black" points="184,-5429.5 184,-5459.5 339,-5459.5 339,-5429.5 184,-5429.5"/>
 <text text-anchor="start" x="192" y="-5447.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::DeflectorPlaneAffector</text>
@@ -443,15 +443,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1239 -->
+<!-- Node1214&#45;&gt;Node1241 -->
 <g id="edge27" class="edge">
-<title>Node1212&#45;&gt;Node1239</title>
+<title>Node1214&#45;&gt;Node1241</title>
 <path fill="none" stroke="midnightblue" d="M64.78,-3391.37C67.75,-3597.41 94.86,-5337.73 163,-5420.5 168.65,-5427.36 175.92,-5432.45 183.94,-5436.18"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.28,-3391.08 64.63,-3381.13 61.28,-3391.18 68.28,-3391.08"/>
 </g>
-<!-- Node1240 -->
+<!-- Node1242 -->
 <g id="node29" class="node">
-<title>Node1240</title>
+<title>Node1242</title>
 <g id="a_node29"><a xlink:href="class_ogre_1_1_direction_randomiser_affector_1_1_cmd_keep_velocity.html" target="_top" xlink:title="Command object for keep_velocity (see ParamCommand).">
 <polygon fill="none" stroke="black" points="187,-5380.5 187,-5410.5 336,-5410.5 336,-5380.5 187,-5380.5"/>
 <text text-anchor="start" x="195" y="-5398.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::DirectionRandomiser</text>
@@ -459,15 +459,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1240 -->
+<!-- Node1214&#45;&gt;Node1242 -->
 <g id="edge28" class="edge">
-<title>Node1212&#45;&gt;Node1240</title>
+<title>Node1214&#45;&gt;Node1242</title>
 <path fill="none" stroke="midnightblue" d="M64.81,-3391.52C68,-3595.47 96.51,-5290.83 163,-5371.5 169.32,-5379.17 177.66,-5384.61 186.8,-5388.44"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.3,-3391.29 64.65,-3381.35 61.3,-3391.4 68.3,-3391.29"/>
 </g>
-<!-- Node1241 -->
+<!-- Node1243 -->
 <g id="node30" class="node">
-<title>Node1241</title>
+<title>Node1243</title>
 <g id="a_node30"><a xlink:href="class_ogre_1_1_direction_randomiser_affector_1_1_cmd_randomness.html" target="_top" xlink:title="Command object for randomness (see ParamCommand).">
 <polygon fill="none" stroke="black" points="187,-5331.5 187,-5361.5 336,-5361.5 336,-5331.5 187,-5331.5"/>
 <text text-anchor="start" x="195" y="-5349.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::DirectionRandomiser</text>
@@ -475,15 +475,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1241 -->
+<!-- Node1214&#45;&gt;Node1243 -->
 <g id="edge29" class="edge">
-<title>Node1212&#45;&gt;Node1241</title>
+<title>Node1214&#45;&gt;Node1243</title>
 <path fill="none" stroke="midnightblue" d="M64.83,-3391.33C68.22,-3591.63 98.12,-5243.88 163,-5322.5 169.32,-5330.16 177.67,-5335.6 186.81,-5339.43"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.32,-3391.05 64.66,-3381.11 61.32,-3391.16 68.32,-3391.05"/>
 </g>
-<!-- Node1242 -->
+<!-- Node1244 -->
 <g id="node31" class="node">
-<title>Node1242</title>
+<title>Node1244</title>
 <g id="a_node31"><a xlink:href="class_ogre_1_1_direction_randomiser_affector_1_1_cmd_scope.html" target="_top" xlink:title="Command object for scope (see ParamCommand).">
 <polygon fill="none" stroke="black" points="187,-5282.5 187,-5312.5 336,-5312.5 336,-5282.5 187,-5282.5"/>
 <text text-anchor="start" x="195" y="-5300.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::DirectionRandomiser</text>
@@ -491,15 +491,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1242 -->
+<!-- Node1214&#45;&gt;Node1244 -->
 <g id="edge30" class="edge">
-<title>Node1212&#45;&gt;Node1242</title>
+<title>Node1214&#45;&gt;Node1244</title>
 <path fill="none" stroke="midnightblue" d="M64.86,-3391.43C68.47,-3589.39 99.76,-5196.96 163,-5273.5 169.33,-5281.16 177.67,-5286.6 186.82,-5290.43"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.35,-3391.24 64.67,-3381.3 61.35,-3391.36 68.35,-3391.24"/>
 </g>
-<!-- Node1243 -->
+<!-- Node1245 -->
 <g id="node32" class="node">
-<title>Node1243</title>
+<title>Node1245</title>
 <g id="a_node32"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_angle.html" target="_top" xlink:title="Command object for ParticleEmitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-5233.5 193,-5263.5 330,-5263.5 330,-5233.5 193,-5233.5"/>
 <text text-anchor="start" x="201" y="-5251.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -507,15 +507,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1243 -->
+<!-- Node1214&#45;&gt;Node1245 -->
 <g id="edge31" class="edge">
-<title>Node1212&#45;&gt;Node1243</title>
+<title>Node1214&#45;&gt;Node1245</title>
 <path fill="none" stroke="midnightblue" d="M64.88,-3391.21C68.7,-3585.34 101.36,-5150.01 163,-5224.5 170.67,-5233.77 181.29,-5239.78 192.71,-5243.62"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.38,-3390.98 64.68,-3381.05 61.38,-3391.11 68.38,-3390.98"/>
 </g>
-<!-- Node1244 -->
+<!-- Node1246 -->
 <g id="node33" class="node">
-<title>Node1244</title>
+<title>Node1246</title>
 <g id="a_node33"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_colour.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-5184.5 193,-5214.5 330,-5214.5 330,-5184.5 193,-5184.5"/>
 <text text-anchor="start" x="201" y="-5202.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -523,15 +523,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1244 -->
+<!-- Node1214&#45;&gt;Node1246 -->
 <g id="edge32" class="edge">
-<title>Node1212&#45;&gt;Node1244</title>
+<title>Node1214&#45;&gt;Node1246</title>
 <path fill="none" stroke="midnightblue" d="M64.91,-3391.27C68.97,-3582.8 103,-5103.09 163,-5175.5 170.67,-5184.76 181.3,-5190.77 192.72,-5194.62"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.41,-3391.14 64.7,-3381.22 61.41,-3391.29 68.41,-3391.14"/>
 </g>
-<!-- Node1245 -->
+<!-- Node1247 -->
 <g id="node34" class="node">
-<title>Node1245</title>
+<title>Node1247</title>
 <g id="a_node34"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_colour_range_end.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-5135.5 193,-5165.5 330,-5165.5 330,-5135.5 193,-5135.5"/>
 <text text-anchor="start" x="201" y="-5153.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -539,15 +539,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1245 -->
+<!-- Node1214&#45;&gt;Node1247 -->
 <g id="edge33" class="edge">
-<title>Node1212&#45;&gt;Node1245</title>
+<title>Node1214&#45;&gt;Node1247</title>
 <path fill="none" stroke="midnightblue" d="M64.95,-3391.59C69.27,-3581.55 104.66,-5056.2 163,-5126.5 170.68,-5135.76 181.31,-5141.77 192.73,-5145.61"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.44,-3391.29 64.72,-3381.37 61.44,-3391.45 68.44,-3391.29"/>
 </g>
-<!-- Node1246 -->
+<!-- Node1248 -->
 <g id="node35" class="node">
-<title>Node1246</title>
+<title>Node1248</title>
 <g id="a_node35"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_colour_range_start.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-5086.5 193,-5116.5 330,-5116.5 330,-5086.5 193,-5086.5"/>
 <text text-anchor="start" x="201" y="-5104.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -555,15 +555,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1246 -->
+<!-- Node1214&#45;&gt;Node1248 -->
 <g id="edge34" class="edge">
-<title>Node1212&#45;&gt;Node1246</title>
+<title>Node1214&#45;&gt;Node1248</title>
 <path fill="none" stroke="midnightblue" d="M64.97,-3391.31C69.51,-3577.12 106.25,-5009.24 163,-5077.5 170.69,-5086.75 181.32,-5092.76 192.74,-5096.6"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.47,-3391.01 64.73,-3381.1 61.47,-3391.18 68.47,-3391.01"/>
 </g>
-<!-- Node1247 -->
+<!-- Node1249 -->
 <g id="node36" class="node">
-<title>Node1247</title>
+<title>Node1249</title>
 <g id="a_node36"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_dir_position_ref.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-5037.5 193,-5067.5 330,-5067.5 330,-5037.5 193,-5037.5"/>
 <text text-anchor="start" x="201" y="-5055.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -571,15 +571,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1247 -->
+<!-- Node1214&#45;&gt;Node1249 -->
 <g id="edge35" class="edge">
-<title>Node1212&#45;&gt;Node1247</title>
+<title>Node1214&#45;&gt;Node1249</title>
 <path fill="none" stroke="midnightblue" d="M65.01,-3391.3C69.79,-3574.06 107.88,-4962.31 163,-5028.5 170.7,-5037.74 181.33,-5043.75 192.75,-5047.59"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.51,-3391.13 64.75,-3381.22 61.51,-3391.31 68.51,-3391.13"/>
 </g>
-<!-- Node1248 -->
+<!-- Node1250 -->
 <g id="node37" class="node">
-<title>Node1248</title>
+<title>Node1250</title>
 <g id="a_node37"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_direction.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4988.5 193,-5018.5 330,-5018.5 330,-4988.5 193,-4988.5"/>
 <text text-anchor="start" x="201" y="-5006.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -587,15 +587,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1248 -->
+<!-- Node1214&#45;&gt;Node1250 -->
 <g id="edge36" class="edge">
-<title>Node1212&#45;&gt;Node1248</title>
+<title>Node1214&#45;&gt;Node1250</title>
 <path fill="none" stroke="midnightblue" d="M64.32,-3391.45C62.89,-3567.46 56.21,-4851.51 163,-4979.5 170.71,-4988.74 181.34,-4994.74 192.77,-4998.58"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.82,-3391.32 64.41,-3381.29 60.82,-3391.26 67.82,-3391.32"/>
 </g>
-<!-- Node1249 -->
+<!-- Node1251 -->
 <g id="node38" class="node">
-<title>Node1249</title>
+<title>Node1251</title>
 <g id="a_node38"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_duration.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4939.5 193,-4969.5 330,-4969.5 330,-4939.5 193,-4939.5"/>
 <text text-anchor="start" x="201" y="-4957.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -603,15 +603,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1249 -->
+<!-- Node1214&#45;&gt;Node1251 -->
 <g id="edge37" class="edge">
-<title>Node1212&#45;&gt;Node1249</title>
+<title>Node1214&#45;&gt;Node1251</title>
 <path fill="none" stroke="midnightblue" d="M64.36,-3391.63C63.31,-3565.3 59.49,-4806.68 163,-4930.5 170.71,-4939.73 181.35,-4945.73 192.78,-4949.56"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.86,-3391.4 64.42,-3381.38 60.86,-3391.36 67.86,-3391.4"/>
 </g>
-<!-- Node1250 -->
+<!-- Node1252 -->
 <g id="node39" class="node">
-<title>Node1250</title>
+<title>Node1252</title>
 <g id="a_node39"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_emission_rate.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4890.5 193,-4920.5 330,-4920.5 330,-4890.5 193,-4890.5"/>
 <text text-anchor="start" x="201" y="-4908.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -619,15 +619,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1250 -->
+<!-- Node1214&#45;&gt;Node1252 -->
 <g id="edge38" class="edge">
-<title>Node1212&#45;&gt;Node1250</title>
+<title>Node1214&#45;&gt;Node1252</title>
 <path fill="none" stroke="midnightblue" d="M64.4,-3391.26C63.75,-3560.42 62.66,-4761.72 163,-4881.5 170.72,-4890.72 181.37,-4896.71 192.8,-4900.55"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.9,-3391.09 64.45,-3381.07 60.9,-3391.06 67.9,-3391.09"/>
 </g>
-<!-- Node1251 -->
+<!-- Node1253 -->
 <g id="node40" class="node">
-<title>Node1251</title>
+<title>Node1253</title>
 <g id="a_node40"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_emitted_emitter.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4841.5 193,-4871.5 330,-4871.5 330,-4841.5 193,-4841.5"/>
 <text text-anchor="start" x="201" y="-4859.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -635,15 +635,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1251 -->
+<!-- Node1214&#45;&gt;Node1253 -->
 <g id="edge39" class="edge">
-<title>Node1212&#45;&gt;Node1251</title>
+<title>Node1214&#45;&gt;Node1253</title>
 <path fill="none" stroke="midnightblue" d="M64.45,-3391.37C64.19,-3557.85 65.93,-4716.87 163,-4832.5 170.73,-4841.71 181.38,-4847.7 192.81,-4851.54"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.95,-3391.14 64.47,-3381.13 60.95,-3391.12 67.95,-3391.14"/>
 </g>
-<!-- Node1252 -->
+<!-- Node1254 -->
 <g id="node41" class="node">
-<title>Node1252</title>
+<title>Node1254</title>
 <g id="a_node41"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_max_duration.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4792.5 193,-4822.5 330,-4822.5 330,-4792.5 193,-4792.5"/>
 <text text-anchor="start" x="201" y="-4810.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -651,15 +651,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1252 -->
+<!-- Node1214&#45;&gt;Node1254 -->
 <g id="edge40" class="edge">
-<title>Node1212&#45;&gt;Node1252</title>
+<title>Node1214&#45;&gt;Node1254</title>
 <path fill="none" stroke="midnightblue" d="M64.5,-3391.21C64.65,-3553.91 69.13,-4671.95 163,-4783.5 170.74,-4792.7 181.4,-4798.69 192.83,-4802.52"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68,-3391.17 64.49,-3381.17 61,-3391.17 68,-3391.17"/>
 </g>
-<!-- Node1253 -->
+<!-- Node1255 -->
 <g id="node42" class="node">
-<title>Node1253</title>
+<title>Node1255</title>
 <g id="a_node42"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_max_repeat_delay.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4743.5 193,-4773.5 330,-4773.5 330,-4743.5 193,-4743.5"/>
 <text text-anchor="start" x="201" y="-4761.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -667,15 +667,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1253 -->
+<!-- Node1214&#45;&gt;Node1255 -->
 <g id="edge41" class="edge">
-<title>Node1212&#45;&gt;Node1253</title>
+<title>Node1214&#45;&gt;Node1255</title>
 <path fill="none" stroke="midnightblue" d="M64.55,-3391.49C65.13,-3551.97 72.42,-4627.14 163,-4734.5 170.76,-4743.69 181.41,-4749.67 192.85,-4753.51"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.05,-3391.18 64.52,-3381.19 61.05,-3391.2 68.05,-3391.18"/>
 </g>
-<!-- Node1254 -->
+<!-- Node1256 -->
 <g id="node43" class="node">
-<title>Node1254</title>
+<title>Node1256</title>
 <g id="a_node43"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_max_t_t_l.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4694.5 193,-4724.5 330,-4724.5 330,-4694.5 193,-4694.5"/>
 <text text-anchor="start" x="201" y="-4712.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -683,15 +683,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1254 -->
+<!-- Node1214&#45;&gt;Node1256 -->
 <g id="edge42" class="edge">
-<title>Node1212&#45;&gt;Node1254</title>
+<title>Node1214&#45;&gt;Node1256</title>
 <path fill="none" stroke="midnightblue" d="M64.61,-3391.26C65.62,-3547.63 75.62,-4582.2 163,-4685.5 170.77,-4694.68 181.43,-4700.66 192.87,-4704.49"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.11,-3391.17 64.55,-3381.19 61.11,-3391.21 68.11,-3391.17"/>
 </g>
-<!-- Node1255 -->
+<!-- Node1257 -->
 <g id="node44" class="node">
-<title>Node1255</title>
+<title>Node1257</title>
 <g id="a_node44"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_max_velocity.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4645.5 193,-4675.5 330,-4675.5 330,-4645.5 193,-4645.5"/>
 <text text-anchor="start" x="201" y="-4663.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -699,15 +699,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1255 -->
+<!-- Node1214&#45;&gt;Node1257 -->
 <g id="edge43" class="edge">
-<title>Node1212&#45;&gt;Node1255</title>
+<title>Node1214&#45;&gt;Node1257</title>
 <path fill="none" stroke="midnightblue" d="M64.67,-3391.45C66.14,-3545.12 78.88,-4537.35 163,-4636.5 170.78,-4645.67 181.45,-4651.64 192.89,-4655.47"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.17,-3391.14 64.57,-3381.18 61.17,-3391.21 68.17,-3391.14"/>
 </g>
-<!-- Node1256 -->
+<!-- Node1258 -->
 <g id="node45" class="node">
-<title>Node1256</title>
+<title>Node1258</title>
 <g id="a_node45"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_min_duration.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4596.5 193,-4626.5 330,-4626.5 330,-4596.5 193,-4596.5"/>
 <text text-anchor="start" x="201" y="-4614.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -715,15 +715,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1256 -->
+<!-- Node1214&#45;&gt;Node1258 -->
 <g id="edge44" class="edge">
-<title>Node1212&#45;&gt;Node1256</title>
+<title>Node1214&#45;&gt;Node1258</title>
 <path fill="none" stroke="midnightblue" d="M64.73,-3391.14C66.65,-3540.38 82.06,-4492.4 163,-4587.5 170.8,-4596.66 181.47,-4602.63 192.91,-4606.45"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.23,-3391.09 64.61,-3381.14 61.23,-3391.18 68.23,-3391.09"/>
 </g>
-<!-- Node1257 -->
+<!-- Node1259 -->
 <g id="node46" class="node">
-<title>Node1257</title>
+<title>Node1259</title>
 <g id="a_node46"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_min_repeat_delay.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4547.5 193,-4577.5 330,-4577.5 330,-4547.5 193,-4547.5"/>
 <text text-anchor="start" x="201" y="-4565.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -731,15 +731,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1257 -->
+<!-- Node1214&#45;&gt;Node1259 -->
 <g id="edge45" class="edge">
-<title>Node1212&#45;&gt;Node1257</title>
+<title>Node1214&#45;&gt;Node1259</title>
 <path fill="none" stroke="midnightblue" d="M64.8,-3391.23C67.21,-3537.3 85.3,-4447.52 163,-4538.5 170.81,-4547.65 181.5,-4553.61 192.94,-4557.43"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.3,-3391.02 64.64,-3381.08 61.3,-3391.13 68.3,-3391.02"/>
 </g>
-<!-- Node1258 -->
+<!-- Node1260 -->
 <g id="node47" class="node">
-<title>Node1258</title>
+<title>Node1260</title>
 <g id="a_node47"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_min_t_t_l.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4498.5 193,-4528.5 330,-4528.5 330,-4498.5 193,-4498.5"/>
 <text text-anchor="start" x="201" y="-4516.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -747,15 +747,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1258 -->
+<!-- Node1214&#45;&gt;Node1260 -->
 <g id="edge46" class="edge">
-<title>Node1212&#45;&gt;Node1258</title>
+<title>Node1214&#45;&gt;Node1260</title>
 <path fill="none" stroke="midnightblue" d="M64.89,-3391.71C67.84,-3535.7 88.61,-4402.72 163,-4489.5 170.83,-4498.63 181.52,-4504.59 192.96,-4508.41"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.38,-3391.25 64.68,-3381.32 61.38,-3391.39 68.38,-3391.25"/>
 </g>
-<!-- Node1259 -->
+<!-- Node1261 -->
 <g id="node48" class="node">
-<title>Node1259</title>
+<title>Node1261</title>
 <g id="a_node48"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_min_velocity.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4449.5 193,-4479.5 330,-4479.5 330,-4449.5 193,-4449.5"/>
 <text text-anchor="start" x="201" y="-4467.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -763,15 +763,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1259 -->
+<!-- Node1214&#45;&gt;Node1261 -->
 <g id="edge47" class="edge">
-<title>Node1212&#45;&gt;Node1259</title>
+<title>Node1214&#45;&gt;Node1261</title>
 <path fill="none" stroke="midnightblue" d="M64.96,-3391.26C68.4,-3530.24 91.75,-4357.72 163,-4440.5 170.85,-4449.62 181.55,-4455.56 192.99,-4459.38"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.46,-3391.12 64.72,-3381.2 61.46,-3391.29 68.46,-3391.12"/>
 </g>
-<!-- Node1260 -->
+<!-- Node1262 -->
 <g id="node49" class="node">
-<title>Node1260</title>
+<title>Node1262</title>
 <g id="a_node49"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_name.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4400.5 193,-4430.5 330,-4430.5 330,-4400.5 193,-4400.5"/>
 <text text-anchor="start" x="201" y="-4418.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -779,15 +779,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1260 -->
+<!-- Node1214&#45;&gt;Node1262 -->
 <g id="edge48" class="edge">
-<title>Node1212&#45;&gt;Node1260</title>
+<title>Node1214&#45;&gt;Node1262</title>
 <path fill="none" stroke="midnightblue" d="M65.05,-3391.18C69.02,-3526.21 94.95,-4312.79 163,-4391.5 170.75,-4400.47 181.27,-4406.36 192.53,-4410.19"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.55,-3390.96 64.76,-3381.07 61.55,-3391.16 68.55,-3390.96"/>
 </g>
-<!-- Node1261 -->
+<!-- Node1263 -->
 <g id="node50" class="node">
-<title>Node1261</title>
+<title>Node1263</title>
 <g id="a_node50"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_position.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4351.5 193,-4381.5 330,-4381.5 330,-4351.5 193,-4351.5"/>
 <text text-anchor="start" x="201" y="-4369.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -795,15 +795,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1261 -->
+<!-- Node1214&#45;&gt;Node1263 -->
 <g id="edge49" class="edge">
-<title>Node1212&#45;&gt;Node1261</title>
+<title>Node1214&#45;&gt;Node1263</title>
 <path fill="none" stroke="midnightblue" d="M65.16,-3391.44C69.72,-3523.4 98.21,-4267.92 163,-4342.5 170.77,-4351.45 181.3,-4357.34 192.56,-4361.16"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.65,-3391.08 64.81,-3381.2 61.66,-3391.31 68.65,-3391.08"/>
 </g>
-<!-- Node1262 -->
+<!-- Node1264 -->
 <g id="node51" class="node">
-<title>Node1262</title>
+<title>Node1264</title>
 <g id="a_node51"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_repeat_delay.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4302.5 193,-4332.5 330,-4332.5 330,-4302.5 193,-4302.5"/>
 <text text-anchor="start" x="201" y="-4320.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -811,15 +811,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1262 -->
+<!-- Node1214&#45;&gt;Node1264 -->
 <g id="edge50" class="edge">
-<title>Node1212&#45;&gt;Node1262</title>
+<title>Node1214&#45;&gt;Node1264</title>
 <path fill="none" stroke="midnightblue" d="M65.27,-3391.21C70.39,-3518.65 101.38,-4222.96 163,-4293.5 170.8,-4302.43 181.33,-4308.31 192.6,-4312.13"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.75,-3390.86 64.86,-3381 61.76,-3391.13 68.75,-3390.86"/>
 </g>
-<!-- Node1263 -->
+<!-- Node1265 -->
 <g id="node52" class="node">
-<title>Node1263</title>
+<title>Node1265</title>
 <g id="a_node52"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_t_t_l.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4253.5 193,-4283.5 330,-4283.5 330,-4253.5 193,-4253.5"/>
 <text text-anchor="start" x="201" y="-4271.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -827,15 +827,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1263 -->
+<!-- Node1214&#45;&gt;Node1265 -->
 <g id="edge51" class="edge">
-<title>Node1212&#45;&gt;Node1263</title>
+<title>Node1214&#45;&gt;Node1265</title>
 <path fill="none" stroke="midnightblue" d="M65.39,-3391.3C71.15,-3514.96 104.6,-4178.04 163,-4244.5 170.82,-4253.4 181.37,-4259.27 192.64,-4263.09"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.88,-3390.89 64.92,-3381.06 61.89,-3391.21 68.88,-3390.89"/>
 </g>
-<!-- Node1264 -->
+<!-- Node1266 -->
 <g id="node53" class="node">
-<title>Node1264</title>
+<title>Node1266</title>
 <g id="a_node53"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_up.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4204.5 193,-4234.5 330,-4234.5 330,-4204.5 193,-4204.5"/>
 <text text-anchor="start" x="201" y="-4222.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -843,15 +843,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1264 -->
+<!-- Node1214&#45;&gt;Node1266 -->
 <g id="edge52" class="edge">
-<title>Node1212&#45;&gt;Node1264</title>
+<title>Node1214&#45;&gt;Node1266</title>
 <path fill="none" stroke="midnightblue" d="M65.53,-3391.29C71.94,-3510.81 107.8,-4133.1 163,-4195.5 170.85,-4204.38 181.41,-4210.23 192.69,-4214.05"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="69.01,-3390.87 64.99,-3381.07 62.02,-3391.24 69.01,-3390.87"/>
 </g>
-<!-- Node1265 -->
+<!-- Node1267 -->
 <g id="node54" class="node">
-<title>Node1265</title>
+<title>Node1267</title>
 <g id="a_node54"><a xlink:href="class_ogre_1_1_emitter_commands_1_1_cmd_velocity.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="193,-4155.5 193,-4185.5 330,-4185.5 330,-4155.5 193,-4155.5"/>
 <text text-anchor="start" x="201" y="-4173.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::EmitterCommands</text>
@@ -859,15 +859,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1265 -->
+<!-- Node1214&#45;&gt;Node1267 -->
 <g id="edge53" class="edge">
-<title>Node1212&#45;&gt;Node1265</title>
+<title>Node1214&#45;&gt;Node1267</title>
 <path fill="none" stroke="midnightblue" d="M64.11,-3391.46C62.39,-3501.21 59.61,-4030.49 163,-4146.5 170.89,-4155.35 181.46,-4161.19 192.74,-4165"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.62,-3391.23 64.29,-3381.17 60.62,-3391.11 67.62,-3391.23"/>
 </g>
-<!-- Node1266 -->
+<!-- Node1268 -->
 <g id="node55" class="node">
-<title>Node1266</title>
+<title>Node1268</title>
 <g id="a_node55"><a xlink:href="class_ogre_1_1_external_texture_source_1_1_cmd_f_p_s.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="184,-4106.5 184,-4136.5 339,-4136.5 339,-4106.5 184,-4106.5"/>
 <text text-anchor="start" x="192" y="-4124.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ExternalTextureSource</text>
@@ -875,15 +875,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1266 -->
+<!-- Node1214&#45;&gt;Node1268 -->
 <g id="edge54" class="edge">
-<title>Node1212&#45;&gt;Node1266</title>
+<title>Node1214&#45;&gt;Node1268</title>
 <path fill="none" stroke="midnightblue" d="M64.3,-3391.18C63.66,-3496.15 65.88,-3989.45 163,-4097.5 168.71,-4103.85 175.81,-4108.65 183.55,-4112.26"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.8,-3391.08 64.38,-3381.05 60.8,-3391.02 67.8,-3391.08"/>
 </g>
-<!-- Node1267 -->
+<!-- Node1269 -->
 <g id="node56" class="node">
-<title>Node1267</title>
+<title>Node1269</title>
 <g id="a_node56"><a xlink:href="class_ogre_1_1_external_texture_source_1_1_cmd_input_file_name.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="184,-4057.5 184,-4087.5 339,-4087.5 339,-4057.5 184,-4057.5"/>
 <text text-anchor="start" x="192" y="-4075.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ExternalTextureSource</text>
@@ -891,15 +891,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1267 -->
+<!-- Node1214&#45;&gt;Node1269 -->
 <g id="edge55" class="edge">
-<title>Node1212&#45;&gt;Node1267</title>
+<title>Node1214&#45;&gt;Node1269</title>
 <path fill="none" stroke="midnightblue" d="M64.52,-3391.43C65.01,-3492.61 72.31,-3948.57 163,-4048.5 168.74,-4054.83 175.86,-4059.61 183.61,-4063.21"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.02,-3391.34 64.49,-3381.35 61.02,-3391.36 68.02,-3391.34"/>
 </g>
-<!-- Node1268 -->
+<!-- Node1270 -->
 <g id="node57" class="node">
-<title>Node1268</title>
+<title>Node1270</title>
 <g id="a_node57"><a xlink:href="class_ogre_1_1_external_texture_source_1_1_cmd_play_mode.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="184,-4008.5 184,-4038.5 339,-4038.5 339,-4008.5 184,-4008.5"/>
 <text text-anchor="start" x="192" y="-4026.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ExternalTextureSource</text>
@@ -907,15 +907,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1268 -->
+<!-- Node1214&#45;&gt;Node1270 -->
 <g id="edge56" class="edge">
-<title>Node1212&#45;&gt;Node1268</title>
+<title>Node1214&#45;&gt;Node1270</title>
 <path fill="none" stroke="midnightblue" d="M64.76,-3391.18C66.44,-3487.41 78.57,-3907.5 163,-3999.5 168.78,-4005.79 175.91,-4010.56 183.68,-4014.15"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.26,-3391.04 64.6,-3381.09 61.26,-3391.15 68.26,-3391.04"/>
 </g>
-<!-- Node1269 -->
+<!-- Node1271 -->
 <g id="node58" class="node">
-<title>Node1269</title>
+<title>Node1271</title>
 <g id="a_node58"><a xlink:href="class_ogre_1_1_external_texture_source_1_1_cmd_tec_pass_state.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="184,-3959.5 184,-3989.5 339,-3989.5 339,-3959.5 184,-3959.5"/>
 <text text-anchor="start" x="192" y="-3977.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ExternalTextureSource</text>
@@ -923,15 +923,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1269 -->
+<!-- Node1214&#45;&gt;Node1271 -->
 <g id="edge57" class="edge">
-<title>Node1212&#45;&gt;Node1269</title>
+<title>Node1214&#45;&gt;Node1271</title>
 <path fill="none" stroke="midnightblue" d="M65.05,-3391.36C68.01,-3483.29 84.94,-3866.53 163,-3950.5 168.82,-3956.76 175.98,-3961.5 183.76,-3965.07"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.55,-3391.1 64.75,-3381.21 61.55,-3391.31 68.55,-3391.1"/>
 </g>
-<!-- Node1270 -->
+<!-- Node1272 -->
 <g id="node59" class="node">
-<title>Node1270</title>
+<title>Node1272</title>
 <g id="a_node59"><a xlink:href="class_ogre_1_1_g_l_s_l_e_s_shader_1_1_cmd_optimisation.html" target="_top" xlink:title="Command object for running the GLSL optimiser.">
 <polygon fill="none" stroke="black" points="203.5,-3910.5 203.5,-3940.5 319.5,-3940.5 319.5,-3910.5 203.5,-3910.5"/>
 <text text-anchor="start" x="211.5" y="-3928.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::GLSLESShader</text>
@@ -939,15 +939,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1270 -->
+<!-- Node1214&#45;&gt;Node1272 -->
 <g id="edge58" class="edge">
-<title>Node1212&#45;&gt;Node1270</title>
+<title>Node1214&#45;&gt;Node1272</title>
 <path fill="none" stroke="midnightblue" d="M65.39,-3391.32C69.7,-3478.32 91.22,-3825.46 163,-3901.5 173.53,-3912.66 188.34,-3918.98 203.25,-3922.47"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.88,-3391.04 64.91,-3381.22 61.89,-3391.38 68.88,-3391.04"/>
 </g>
-<!-- Node1271 -->
+<!-- Node1273 -->
 <g id="node60" class="node">
-<title>Node1271</title>
+<title>Node1273</title>
 <g id="a_node60"><a xlink:href="class_ogre_1_1_g_l_s_l_e_s_shader_1_1_cmd_preprocessor_defines.html" target="_top" xlink:title="Command object for setting macro defines.">
 <polygon fill="none" stroke="black" points="189,-3861.5 189,-3891.5 334,-3891.5 334,-3861.5 189,-3861.5"/>
 <text text-anchor="start" x="197" y="-3879.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::GLSLESShader</text>
@@ -955,30 +955,30 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1271 -->
+<!-- Node1214&#45;&gt;Node1273 -->
 <g id="edge59" class="edge">
-<title>Node1212&#45;&gt;Node1271</title>
+<title>Node1214&#45;&gt;Node1273</title>
 <path fill="none" stroke="midnightblue" d="M65.84,-3391.47C71.72,-3473.49 97.99,-3783.25 163,-3851.5 170.11,-3858.97 179.12,-3864.32 188.78,-3868.13"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="69.3,-3390.81 65.11,-3381.08 62.32,-3391.3 69.3,-3390.81"/>
 </g>
-<!-- Node1272 -->
+<!-- Node1274 -->
 <g id="node61" class="node">
-<title>Node1272</title>
+<title>Node1274</title>
 <g id="a_node61"><a xlink:href="class_ogre_1_1_g_l_s_l_shader_1_1_cmd_attach.html" target="_top" xlink:title="Command object for attaching another GLSL Program.">
 <polygon fill="none" stroke="black" points="179.5,-3823 179.5,-3842 343.5,-3842 343.5,-3823 179.5,-3823"/>
 <text text-anchor="middle" x="261.5" y="-3830" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::GLSLShader::CmdAttach</text>
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1272 -->
+<!-- Node1214&#45;&gt;Node1274 -->
 <g id="edge60" class="edge">
-<title>Node1212&#45;&gt;Node1272</title>
+<title>Node1214&#45;&gt;Node1274</title>
 <path fill="none" stroke="midnightblue" d="M66.1,-3391.48C72.78,-3469.6 100.98,-3753.12 163,-3813.5 167.82,-3818.19 173.43,-3821.89 179.49,-3824.8"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="69.56,-3390.8 65.24,-3381.13 62.58,-3391.38 69.56,-3390.8"/>
 </g>
-<!-- Node1273 -->
+<!-- Node1275 -->
 <g id="node62" class="node">
-<title>Node1273</title>
+<title>Node1275</title>
 <g id="a_node62"><a xlink:href="class_ogre_1_1_g_l_s_l_shader_1_1_cmd_column_major_matrices.html" target="_top" xlink:title="Command object for setting matrix packing in column&#45;major order.">
 <polygon fill="none" stroke="black" points="176.5,-3773.5 176.5,-3803.5 346.5,-3803.5 346.5,-3773.5 176.5,-3773.5"/>
 <text text-anchor="start" x="184.5" y="-3791.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::GLSLShader::CmdColumn</text>
@@ -986,15 +986,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1273 -->
+<!-- Node1214&#45;&gt;Node1275 -->
 <g id="edge61" class="edge">
-<title>Node1212&#45;&gt;Node1273</title>
+<title>Node1214&#45;&gt;Node1275</title>
 <path fill="none" stroke="midnightblue" d="M66.74,-3391.01C75.35,-3462.73 108.59,-3710.32 163,-3764.5 166.95,-3768.44 171.44,-3771.76 176.27,-3774.57"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="70.21,-3390.59 65.57,-3381.07 63.26,-3391.41 70.21,-3390.59"/>
 </g>
-<!-- Node1274 -->
+<!-- Node1276 -->
 <g id="node63" class="node">
-<title>Node1274</title>
+<title>Node1276</title>
 <g id="a_node63"><a xlink:href="class_ogre_1_1_g_l_s_l_shader_1_1_cmd_input_operation_type.html" target="_top" xlink:title="Command object for setting the input operation type (geometry shader only)">
 <polygon fill="none" stroke="black" points="183,-3724.5 183,-3754.5 340,-3754.5 340,-3724.5 183,-3724.5"/>
 <text text-anchor="start" x="191" y="-3742.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::GLSLShader::CmdInput</text>
@@ -1002,15 +1002,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1274 -->
+<!-- Node1214&#45;&gt;Node1276 -->
 <g id="edge62" class="edge">
-<title>Node1212&#45;&gt;Node1274</title>
+<title>Node1214&#45;&gt;Node1276</title>
 <path fill="none" stroke="midnightblue" d="M63.81,-3391.27C62.9,-3449.94 68.62,-3624.6 163,-3715.5 168.78,-3721.06 175.62,-3725.4 182.97,-3728.78"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="67.31,-3391.23 64.05,-3381.15 60.31,-3391.06 67.31,-3391.23"/>
 </g>
-<!-- Node1275 -->
+<!-- Node1277 -->
 <g id="node64" class="node">
-<title>Node1275</title>
+<title>Node1277</title>
 <g id="a_node64"><a xlink:href="class_ogre_1_1_g_l_s_l_shader_1_1_cmd_max_output_vertices.html" target="_top" xlink:title="Command object for setting the maximum output vertices (geometry shader only)">
 <polygon fill="none" stroke="black" points="185,-3675.5 185,-3705.5 338,-3705.5 338,-3675.5 185,-3675.5"/>
 <text text-anchor="start" x="193" y="-3693.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::GLSLShader::CmdMax</text>
@@ -1018,15 +1018,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1275 -->
+<!-- Node1214&#45;&gt;Node1277 -->
 <g id="edge63" class="edge">
-<title>Node1212&#45;&gt;Node1275</title>
+<title>Node1214&#45;&gt;Node1277</title>
 <path fill="none" stroke="midnightblue" d="M64.9,-3391.23C67.11,-3444.21 80.72,-3590.62 163,-3666.5 169.28,-3672.29 176.73,-3676.74 184.67,-3680.16"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.4,-3391.03 64.58,-3381.15 61.4,-3391.26 68.4,-3391.03"/>
 </g>
-<!-- Node1276 -->
+<!-- Node1278 -->
 <g id="node65" class="node">
-<title>Node1276</title>
+<title>Node1278</title>
 <g id="a_node65"><a xlink:href="class_ogre_1_1_g_l_s_l_shader_1_1_cmd_output_operation_type.html" target="_top" xlink:title="Command object for setting the output operation type (geometry shader only)">
 <polygon fill="none" stroke="black" points="179,-3626.5 179,-3656.5 344,-3656.5 344,-3626.5 179,-3626.5"/>
 <text text-anchor="start" x="187" y="-3644.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::GLSLShader::CmdOutput</text>
@@ -1034,15 +1034,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1276 -->
+<!-- Node1214&#45;&gt;Node1278 -->
 <g id="edge64" class="edge">
-<title>Node1212&#45;&gt;Node1276</title>
+<title>Node1214&#45;&gt;Node1278</title>
 <path fill="none" stroke="midnightblue" d="M66.37,-3391.04C71.93,-3437.7 92.6,-3556.29 163,-3617.5 167.74,-3621.62 173.07,-3625.05 178.74,-3627.91"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="69.85,-3390.6 65.29,-3381.04 62.89,-3391.35 69.85,-3390.6"/>
 </g>
-<!-- Node1277 -->
+<!-- Node1279 -->
 <g id="node66" class="node">
-<title>Node1277</title>
+<title>Node1279</title>
 <g id="a_node66"><a xlink:href="class_ogre_1_1_g_l_s_l_shader_1_1_cmd_preprocessor_defines.html" target="_top" xlink:title="Command object for setting macro defines.">
 <polygon fill="none" stroke="black" points="164,-3577.5 164,-3607.5 359,-3607.5 359,-3577.5 164,-3577.5"/>
 <text text-anchor="start" x="172" y="-3595.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::GLSLShader::CmdPreprocessor</text>
@@ -1050,15 +1050,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1277 -->
+<!-- Node1214&#45;&gt;Node1279 -->
 <g id="edge65" class="edge">
-<title>Node1212&#45;&gt;Node1277</title>
+<title>Node1214&#45;&gt;Node1279</title>
 <path fill="none" stroke="midnightblue" d="M68.47,-3390.86C77.68,-3430.6 104.3,-3521.58 163,-3568.5 167.22,-3571.87 171.85,-3574.78 176.73,-3577.29"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="71.89,-3390.11 66.33,-3381.09 65.05,-3391.61 71.89,-3390.11"/>
 </g>
-<!-- Node1278 -->
+<!-- Node1280 -->
 <g id="node67" class="node">
-<title>Node1278</title>
+<title>Node1280</title>
 <g id="a_node67"><a xlink:href="class_ogre_1_1_high_level_gpu_program_1_1_cmd_enable_include_header.html" target="_top" xlink:title="Command object for enabling include in shaders.">
 <polygon fill="none" stroke="black" points="184,-3528.5 184,-3558.5 339,-3558.5 339,-3528.5 184,-3528.5"/>
 <text text-anchor="start" x="192" y="-3546.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::HighLevelGpuProgram</text>
@@ -1066,15 +1066,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1278 -->
+<!-- Node1214&#45;&gt;Node1280 -->
 <g id="edge66" class="edge">
-<title>Node1212&#45;&gt;Node1278</title>
+<title>Node1214&#45;&gt;Node1280</title>
 <path fill="none" stroke="midnightblue" d="M71.84,-3390.79C85.03,-3422.73 115.81,-3486.34 163,-3519.5 169.28,-3523.91 176.27,-3527.51 183.56,-3530.46"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="75,-3389.26 68.05,-3381.27 68.5,-3391.85 75,-3389.26"/>
 </g>
-<!-- Node1279 -->
+<!-- Node1281 -->
 <g id="node68" class="node">
-<title>Node1279</title>
+<title>Node1281</title>
 <g id="a_node68"><a xlink:href="class_ogre_1_1_high_level_gpu_program_1_1_cmd_use_hlms_parser.html" target="_top" xlink:title="Command object for using Hlms parser.">
 <polygon fill="none" stroke="black" points="184,-3479.5 184,-3509.5 339,-3509.5 339,-3479.5 184,-3479.5"/>
 <text text-anchor="start" x="192" y="-3497.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::HighLevelGpuProgram</text>
@@ -1082,15 +1082,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1279 -->
+<!-- Node1214&#45;&gt;Node1281 -->
 <g id="edge67" class="edge">
-<title>Node1212&#45;&gt;Node1279</title>
+<title>Node1214&#45;&gt;Node1281</title>
 <path fill="none" stroke="midnightblue" d="M77.29,-3389.4C94.29,-3411.84 126.46,-3449.84 163,-3470.5 169.52,-3474.19 176.61,-3477.32 183.88,-3479.97"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="79.92,-3387.07 71.16,-3381.11 74.29,-3391.23 79.92,-3387.07"/>
 </g>
-<!-- Node1280 -->
+<!-- Node1282 -->
 <g id="node69" class="node">
-<title>Node1280</title>
+<title>Node1282</title>
 <g id="a_node69"><a xlink:href="class_ogre_1_1_hollow_ellipsoid_emitter_1_1_cmd_inner_x.html" target="_top" xlink:title="Command object for inner size (see ParamCommand).">
 <polygon fill="none" stroke="black" points="183,-3430.5 183,-3460.5 340,-3460.5 340,-3430.5 183,-3430.5"/>
 <text text-anchor="start" x="191" y="-3448.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::HollowEllipsoidEmitter</text>
@@ -1098,15 +1098,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1280 -->
+<!-- Node1214&#45;&gt;Node1282 -->
 <g id="edge68" class="edge">
-<title>Node1212&#45;&gt;Node1280</title>
+<title>Node1214&#45;&gt;Node1282</title>
 <path fill="none" stroke="midnightblue" d="M89.55,-3386.23C109.04,-3397.19 137.04,-3411.86 163,-3421.5 171.91,-3424.81 181.44,-3427.79 190.93,-3430.45"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="91.13,-3383.1 80.71,-3381.19 87.66,-3389.18 91.13,-3383.1"/>
 </g>
-<!-- Node1281 -->
+<!-- Node1283 -->
 <g id="node70" class="node">
-<title>Node1281</title>
+<title>Node1283</title>
 <g id="a_node70"><a xlink:href="class_ogre_1_1_hollow_ellipsoid_emitter_1_1_cmd_inner_y.html" target="_top" xlink:title="Command object for inner size (see ParamCommand).">
 <polygon fill="none" stroke="black" points="183,-3381.5 183,-3411.5 340,-3411.5 340,-3381.5 183,-3381.5"/>
 <text text-anchor="start" x="191" y="-3399.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::HollowEllipsoidEmitter</text>
@@ -1114,15 +1114,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1281 -->
+<!-- Node1214&#45;&gt;Node1283 -->
 <g id="edge69" class="edge">
-<title>Node1212&#45;&gt;Node1281</title>
+<title>Node1214&#45;&gt;Node1283</title>
 <path fill="none" stroke="midnightblue" d="M137.18,-3380.77C152.03,-3382.66 167.71,-3384.66 182.72,-3386.58"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="137.42,-3377.27 127.05,-3379.48 136.53,-3384.22 137.42,-3377.27"/>
 </g>
-<!-- Node1282 -->
+<!-- Node1284 -->
 <g id="node71" class="node">
-<title>Node1282</title>
+<title>Node1284</title>
 <g id="a_node71"><a xlink:href="class_ogre_1_1_hollow_ellipsoid_emitter_1_1_cmd_inner_z.html" target="_top" xlink:title="Command object for inner size (see ParamCommand).">
 <polygon fill="none" stroke="black" points="183,-3332.5 183,-3362.5 340,-3362.5 340,-3332.5 183,-3332.5"/>
 <text text-anchor="start" x="191" y="-3350.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::HollowEllipsoidEmitter</text>
@@ -1130,15 +1130,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1282 -->
+<!-- Node1214&#45;&gt;Node1284 -->
 <g id="edge70" class="edge">
-<title>Node1212&#45;&gt;Node1282</title>
+<title>Node1214&#45;&gt;Node1284</title>
 <path fill="none" stroke="midnightblue" d="M137.18,-3362.6C152.03,-3360.78 167.71,-3358.86 182.72,-3357.02"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="136.55,-3359.15 127.05,-3363.84 137.41,-3366.1 136.55,-3359.15"/>
 </g>
-<!-- Node1283 -->
+<!-- Node1285 -->
 <g id="node72" class="node">
-<title>Node1283</title>
+<title>Node1285</title>
 <g id="a_node72"><a xlink:href="class_ogre_1_1_linear_force_affector_1_1_cmd_force_app.html" target="_top" xlink:title="Command object for force application (see ParamCommand).">
 <polygon fill="none" stroke="black" points="191.5,-3283.5 191.5,-3313.5 331.5,-3313.5 331.5,-3283.5 191.5,-3283.5"/>
 <text text-anchor="start" x="199.5" y="-3301.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::LinearForceAffector</text>
@@ -1146,15 +1146,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1283 -->
+<!-- Node1214&#45;&gt;Node1285 -->
 <g id="edge71" class="edge">
-<title>Node1212&#45;&gt;Node1283</title>
+<title>Node1214&#45;&gt;Node1285</title>
 <path fill="none" stroke="midnightblue" d="M90.35,-3357.11C109.86,-3346.7 137.53,-3332.86 163,-3323.5 173.01,-3319.82 183.78,-3316.48 194.38,-3313.52"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="88.6,-3354.08 81.47,-3361.91 91.93,-3360.23 88.6,-3354.08"/>
 </g>
-<!-- Node1284 -->
+<!-- Node1286 -->
 <g id="node73" class="node">
-<title>Node1284</title>
+<title>Node1286</title>
 <g id="a_node73"><a xlink:href="class_ogre_1_1_linear_force_affector_1_1_cmd_force_vector.html" target="_top" xlink:title="Command object for force vector (see ParamCommand).">
 <polygon fill="none" stroke="black" points="191.5,-3234.5 191.5,-3264.5 331.5,-3264.5 331.5,-3234.5 191.5,-3234.5"/>
 <text text-anchor="start" x="199.5" y="-3252.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::LinearForceAffector</text>
@@ -1162,15 +1162,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1284 -->
+<!-- Node1214&#45;&gt;Node1286 -->
 <g id="edge72" class="edge">
-<title>Node1212&#45;&gt;Node1284</title>
+<title>Node1214&#45;&gt;Node1286</title>
 <path fill="none" stroke="midnightblue" d="M77.67,-3353.68C94.85,-3331.73 127,-3294.84 163,-3274.5 171.75,-3269.56 181.48,-3265.57 191.33,-3262.37"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="74.74,-3351.76 71.45,-3361.83 80.3,-3356.01 74.74,-3351.76"/>
 </g>
-<!-- Node1285 -->
+<!-- Node1287 -->
 <g id="node74" class="node">
-<title>Node1285</title>
+<title>Node1287</title>
 <g id="a_node74"><a xlink:href="class_ogre_1_1_metal_program_1_1_cmd_entry_point.html" target="_top" xlink:title="Command object for setting entry point.">
 <polygon fill="none" stroke="black" points="204,-3185.5 204,-3215.5 319,-3215.5 319,-3185.5 204,-3185.5"/>
 <text text-anchor="start" x="212" y="-3203.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::MetalProgram</text>
@@ -1178,15 +1178,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1285 -->
+<!-- Node1214&#45;&gt;Node1287 -->
 <g id="edge73" class="edge">
-<title>Node1212&#45;&gt;Node1285</title>
+<title>Node1214&#45;&gt;Node1287</title>
 <path fill="none" stroke="midnightblue" d="M71.95,-3352.52C85.29,-3321.08 116.3,-3258.43 163,-3225.5 175,-3217.04 189.62,-3211.44 203.85,-3207.74"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="68.66,-3351.31 68.11,-3361.89 75.14,-3353.97 68.66,-3351.31"/>
 </g>
-<!-- Node1286 -->
+<!-- Node1288 -->
 <g id="node75" class="node">
-<title>Node1286</title>
+<title>Node1288</title>
 <g id="a_node75"><a xlink:href="class_ogre_1_1_metal_program_1_1_cmd_preprocessor_defines.html" target="_top" xlink:title="Command object for setting macro defines.">
 <polygon fill="none" stroke="black" points="189,-3136.5 189,-3166.5 334,-3166.5 334,-3136.5 189,-3136.5"/>
 <text text-anchor="start" x="197" y="-3154.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::MetalProgram</text>
@@ -1194,15 +1194,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1286 -->
+<!-- Node1214&#45;&gt;Node1288 -->
 <g id="edge74" class="edge">
-<title>Node1212&#45;&gt;Node1286</title>
+<title>Node1214&#45;&gt;Node1288</title>
 <path fill="none" stroke="midnightblue" d="M68.7,-3351.82C78.21,-3312.28 105.17,-3222.98 163,-3176.5 170.63,-3170.37 179.58,-3165.72 188.92,-3162.21"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="65.29,-3351.05 66.48,-3361.58 72.11,-3352.61 65.29,-3351.05"/>
 </g>
-<!-- Node1287 -->
+<!-- Node1289 -->
 <g id="node76" class="node">
-<title>Node1287</title>
+<title>Node1289</title>
 <g id="a_node76"><a xlink:href="class_ogre_1_1_metal_program_1_1_cmd_shader_reflection_pair_hint.html" target="_top" xlink:title="Command object for setting vertex shader pair.">
 <polygon fill="none" stroke="black" points="178.5,-3087.5 178.5,-3117.5 344.5,-3117.5 344.5,-3087.5 178.5,-3087.5"/>
 <text text-anchor="start" x="186.5" y="-3105.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::MetalProgram</text>
@@ -1210,15 +1210,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1287 -->
+<!-- Node1214&#45;&gt;Node1289 -->
 <g id="edge75" class="edge">
-<title>Node1212&#45;&gt;Node1287</title>
+<title>Node1214&#45;&gt;Node1289</title>
 <path fill="none" stroke="midnightblue" d="M66.5,-3351.84C72.31,-3305.43 93.46,-3188.38 163,-3127.5 167.6,-3123.47 172.77,-3120.08 178.26,-3117.22"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="63.02,-3351.48 65.36,-3361.81 69.98,-3352.28 63.02,-3351.48"/>
 </g>
-<!-- Node1288 -->
+<!-- Node1290 -->
 <g id="node77" class="node">
-<title>Node1288</title>
+<title>Node1290</title>
 <g id="a_node77"><a xlink:href="class_ogre_1_1_particle_system_1_1_cmd_cull.html" target="_top" xlink:title="Command object for cull_each (see ParamCommand).">
 <polygon fill="none" stroke="black" points="202,-3038.5 202,-3068.5 321,-3068.5 321,-3038.5 202,-3038.5"/>
 <text text-anchor="start" x="210" y="-3056.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ParticleSystem</text>
@@ -1226,15 +1226,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1288 -->
+<!-- Node1214&#45;&gt;Node1290 -->
 <g id="edge76" class="edge">
-<title>Node1212&#45;&gt;Node1288</title>
+<title>Node1214&#45;&gt;Node1290</title>
 <path fill="none" stroke="midnightblue" d="M64.99,-3351.94C67.41,-3299.42 81.51,-3154.23 163,-3078.5 173.69,-3068.57 187.78,-3062.45 201.91,-3058.73"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.49,-3351.82 64.63,-3361.94 68.49,-3352.07 61.49,-3351.82"/>
 </g>
-<!-- Node1289 -->
+<!-- Node1291 -->
 <g id="node78" class="node">
-<title>Node1289</title>
+<title>Node1291</title>
 <g id="a_node78"><a xlink:href="class_ogre_1_1_particle_system_1_1_cmd_emitted_emitter_quota.html" target="_top" xlink:title="Command object for emittedEmitterQuota (see ParamCommand).">
 <polygon fill="none" stroke="black" points="187,-2989.5 187,-3019.5 336,-3019.5 336,-2989.5 187,-2989.5"/>
 <text text-anchor="start" x="195" y="-3007.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ParticleSystem</text>
@@ -1242,15 +1242,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1289 -->
+<!-- Node1214&#45;&gt;Node1291 -->
 <g id="edge77" class="edge">
-<title>Node1212&#45;&gt;Node1289</title>
+<title>Node1214&#45;&gt;Node1291</title>
 <path fill="none" stroke="midnightblue" d="M63.89,-3351.88C63.21,-3293.66 69.49,-3120.3 163,-3029.5 169.77,-3022.93 178.02,-3018.01 186.83,-3014.35"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="60.39,-3352 64.1,-3361.93 67.39,-3351.86 60.39,-3352"/>
 </g>
-<!-- Node1290 -->
+<!-- Node1292 -->
 <g id="node79" class="node">
-<title>Node1290</title>
+<title>Node1292</title>
 <g id="a_node79"><a xlink:href="class_ogre_1_1_particle_system_1_1_cmd_height.html" target="_top" xlink:title="Command object for particle_height (see ParamCommand).">
 <polygon fill="none" stroke="black" points="202,-2940.5 202,-2970.5 321,-2970.5 321,-2940.5 202,-2940.5"/>
 <text text-anchor="start" x="210" y="-2958.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ParticleSystem</text>
@@ -1258,15 +1258,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1290 -->
+<!-- Node1214&#45;&gt;Node1292 -->
 <g id="edge78" class="edge">
-<title>Node1212&#45;&gt;Node1290</title>
+<title>Node1214&#45;&gt;Node1292</title>
 <path fill="none" stroke="midnightblue" d="M66.82,-3351.66C75.63,-3279.8 109.19,-3034.54 163,-2980.5 173.42,-2970.04 187.58,-2963.76 201.88,-2960.04"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="63.3,-3351.64 65.58,-3361.99 70.25,-3352.47 63.3,-3351.64"/>
 </g>
-<!-- Node1291 -->
+<!-- Node1293 -->
 <g id="node80" class="node">
-<title>Node1291</title>
+<title>Node1293</title>
 <g id="a_node80"><a xlink:href="class_ogre_1_1_particle_system_1_1_cmd_iteration_interval.html" target="_top" xlink:title="Command object for iteration interval(see ParamCommand).">
 <polygon fill="none" stroke="black" points="199.5,-2891.5 199.5,-2921.5 323.5,-2921.5 323.5,-2891.5 199.5,-2891.5"/>
 <text text-anchor="start" x="207.5" y="-2909.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ParticleSystem</text>
@@ -1274,15 +1274,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1291 -->
+<!-- Node1214&#45;&gt;Node1293 -->
 <g id="edge79" class="edge">
-<title>Node1212&#45;&gt;Node1291</title>
+<title>Node1214&#45;&gt;Node1293</title>
 <path fill="none" stroke="midnightblue" d="M66.22,-3351.72C73.34,-3274.34 103,-2993.37 163,-2931.5 172.73,-2921.46 185.9,-2915.26 199.41,-2911.47"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="62.71,-3351.7 65.3,-3361.97 69.68,-3352.32 62.71,-3351.7"/>
 </g>
-<!-- Node1292 -->
+<!-- Node1294 -->
 <g id="node81" class="node">
-<title>Node1292</title>
+<title>Node1294</title>
 <g id="a_node81"><a xlink:href="class_ogre_1_1_particle_system_1_1_cmd_local_space.html" target="_top" xlink:title="Command object for local space (see ParamCommand).">
 <polygon fill="none" stroke="black" points="202,-2842.5 202,-2872.5 321,-2872.5 321,-2842.5 202,-2842.5"/>
 <text text-anchor="start" x="210" y="-2860.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ParticleSystem</text>
@@ -1290,15 +1290,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1292 -->
+<!-- Node1214&#45;&gt;Node1294 -->
 <g id="edge80" class="edge">
-<title>Node1212&#45;&gt;Node1292</title>
+<title>Node1214&#45;&gt;Node1294</title>
 <path fill="none" stroke="midnightblue" d="M65.74,-3351.67C71.34,-3268.91 96.81,-2952.24 163,-2882.5 173.23,-2871.73 187.41,-2865.35 201.8,-2861.64"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="62.25,-3351.53 65.09,-3361.74 69.23,-3351.99 62.25,-3351.53"/>
 </g>
-<!-- Node1293 -->
+<!-- Node1295 -->
 <g id="node82" class="node">
-<title>Node1293</title>
+<title>Node1295</title>
 <g id="a_node82"><a xlink:href="class_ogre_1_1_particle_system_1_1_cmd_material.html" target="_top" xlink:title="Command object for material (see ParamCommand).">
 <polygon fill="none" stroke="black" points="202,-2793.5 202,-2823.5 321,-2823.5 321,-2793.5 202,-2793.5"/>
 <text text-anchor="start" x="210" y="-2811.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ParticleSystem</text>
@@ -1306,15 +1306,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1293 -->
+<!-- Node1214&#45;&gt;Node1295 -->
 <g id="edge81" class="edge">
-<title>Node1212&#45;&gt;Node1293</title>
+<title>Node1214&#45;&gt;Node1295</title>
 <path fill="none" stroke="midnightblue" d="M65.36,-3351.4C69.55,-3263.17 90.65,-2911.1 163,-2833.5 173.19,-2822.57 187.45,-2816.16 201.92,-2812.46"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.85,-3351.49 64.9,-3361.64 68.85,-3351.81 61.85,-3351.49"/>
 </g>
-<!-- Node1294 -->
+<!-- Node1296 -->
 <g id="node83" class="node">
-<title>Node1294</title>
+<title>Node1296</title>
 <g id="a_node83"><a xlink:href="class_ogre_1_1_particle_system_1_1_cmd_nonvisible_timeout.html" target="_top" xlink:title="Command object for nonvisible timeout (see ParamCommand).">
 <polygon fill="none" stroke="black" points="193,-2744.5 193,-2774.5 330,-2774.5 330,-2744.5 193,-2744.5"/>
 <text text-anchor="start" x="201" y="-2762.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ParticleSystem</text>
@@ -1322,15 +1322,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1294 -->
+<!-- Node1214&#45;&gt;Node1296 -->
 <g id="edge82" class="edge">
-<title>Node1212&#45;&gt;Node1294</title>
+<title>Node1214&#45;&gt;Node1296</title>
 <path fill="none" stroke="midnightblue" d="M65.02,-3351.66C67.85,-3259.06 84.32,-2870.15 163,-2784.5 171.04,-2775.75 181.69,-2769.88 192.99,-2765.99"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.52,-3351.57 64.73,-3361.66 68.52,-3351.77 61.52,-3351.57"/>
 </g>
-<!-- Node1295 -->
+<!-- Node1297 -->
 <g id="node84" class="node">
-<title>Node1295</title>
+<title>Node1297</title>
 <g id="a_node84"><a xlink:href="class_ogre_1_1_particle_system_1_1_cmd_quota.html" target="_top" xlink:title="Command object for quota (see ParamCommand).">
 <polygon fill="none" stroke="black" points="202,-2695.5 202,-2725.5 321,-2725.5 321,-2695.5 202,-2695.5"/>
 <text text-anchor="start" x="210" y="-2713.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ParticleSystem</text>
@@ -1338,15 +1338,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1295 -->
+<!-- Node1214&#45;&gt;Node1297 -->
 <g id="edge83" class="edge">
-<title>Node1212&#45;&gt;Node1295</title>
+<title>Node1214&#45;&gt;Node1297</title>
 <path fill="none" stroke="midnightblue" d="M64.74,-3351.59C66.32,-3254.22 78.06,-2829.14 163,-2735.5 173.1,-2724.37 187.41,-2717.9 201.97,-2714.21"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.24,-3351.74 64.59,-3361.79 68.24,-3351.84 61.24,-3351.74"/>
 </g>
-<!-- Node1296 -->
+<!-- Node1298 -->
 <g id="node85" class="node">
-<title>Node1296</title>
+<title>Node1298</title>
 <g id="a_node85"><a xlink:href="class_ogre_1_1_particle_system_1_1_cmd_renderer.html" target="_top" xlink:title="Command object for renderer (see ParamCommand).">
 <polygon fill="none" stroke="black" points="202,-2646.5 202,-2676.5 321,-2676.5 321,-2646.5 202,-2646.5"/>
 <text text-anchor="start" x="210" y="-2664.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ParticleSystem</text>
@@ -1354,15 +1354,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1296 -->
+<!-- Node1214&#45;&gt;Node1298 -->
 <g id="edge84" class="edge">
-<title>Node1212&#45;&gt;Node1296</title>
+<title>Node1214&#45;&gt;Node1298</title>
 <path fill="none" stroke="midnightblue" d="M64.5,-3351.36C64.9,-3249.07 71.83,-2788.11 163,-2686.5 173.04,-2675.31 187.33,-2668.82 201.89,-2665.13"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61,-3351.54 64.48,-3361.54 68,-3351.55 61,-3351.54"/>
 </g>
-<!-- Node1297 -->
+<!-- Node1299 -->
 <g id="node86" class="node">
-<title>Node1297</title>
+<title>Node1299</title>
 <g id="a_node86"><a xlink:href="class_ogre_1_1_particle_system_1_1_cmd_sorted.html" target="_top" xlink:title="Command object for sorting (see ParamCommand).">
 <polygon fill="none" stroke="black" points="202,-2597.5 202,-2627.5 321,-2627.5 321,-2597.5 202,-2597.5"/>
 <text text-anchor="start" x="210" y="-2615.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ParticleSystem</text>
@@ -1370,15 +1370,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1297 -->
+<!-- Node1214&#45;&gt;Node1299 -->
 <g id="edge85" class="edge">
-<title>Node1212&#45;&gt;Node1297</title>
+<title>Node1214&#45;&gt;Node1299</title>
 <path fill="none" stroke="midnightblue" d="M64.29,-3351.62C63.56,-3245.59 65.44,-2747.26 163,-2637.5 172.98,-2626.27 187.26,-2619.76 201.82,-2616.07"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="60.79,-3351.88 64.37,-3361.85 67.79,-3351.82 60.79,-3351.88"/>
 </g>
-<!-- Node1298 -->
+<!-- Node1300 -->
 <g id="node87" class="node">
-<title>Node1298</title>
+<title>Node1300</title>
 <g id="a_node87"><a xlink:href="class_ogre_1_1_particle_system_1_1_cmd_width.html" target="_top" xlink:title="Command object for particle_width (see ParamCommand).">
 <polygon fill="none" stroke="black" points="202,-2548.5 202,-2578.5 321,-2578.5 321,-2548.5 202,-2548.5"/>
 <text text-anchor="start" x="210" y="-2566.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ParticleSystem</text>
@@ -1386,15 +1386,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1298 -->
+<!-- Node1214&#45;&gt;Node1300 -->
 <g id="edge86" class="edge">
-<title>Node1212&#45;&gt;Node1298</title>
+<title>Node1214&#45;&gt;Node1300</title>
 <path fill="none" stroke="midnightblue" d="M64.1,-3351.7C62.31,-3241.7 59.09,-2706.39 163,-2588.5 172.94,-2577.23 187.2,-2570.71 201.76,-2567.02"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="60.61,-3352.06 64.29,-3361.99 67.61,-3351.93 60.61,-3352.06"/>
 </g>
-<!-- Node1299 -->
+<!-- Node1301 -->
 <g id="node88" class="node">
-<title>Node1299</title>
+<title>Node1301</title>
 <g id="a_node88"><a xlink:href="class_ogre_1_1_ring_emitter_1_1_cmd_inner_x.html" target="_top" xlink:title="Command object for inner size (see ParamCommand).">
 <polygon fill="none" stroke="black" points="206.5,-2499.5 206.5,-2529.5 316.5,-2529.5 316.5,-2499.5 206.5,-2499.5"/>
 <text text-anchor="start" x="214.5" y="-2517.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::RingEmitter::</text>
@@ -1402,15 +1402,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1299 -->
+<!-- Node1214&#45;&gt;Node1301 -->
 <g id="edge87" class="edge">
-<title>Node1212&#45;&gt;Node1299</title>
+<title>Node1214&#45;&gt;Node1301</title>
 <path fill="none" stroke="midnightblue" d="M65.53,-3351.52C71.9,-3230.9 107.62,-2602.8 163,-2539.5 173.93,-2527.01 190.18,-2520.34 206.29,-2516.9"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="62.01,-3351.68 64.99,-3361.85 69.01,-3352.04 62.01,-3351.68"/>
 </g>
-<!-- Node1300 -->
+<!-- Node1302 -->
 <g id="node89" class="node">
-<title>Node1300</title>
+<title>Node1302</title>
 <g id="a_node89"><a xlink:href="class_ogre_1_1_ring_emitter_1_1_cmd_inner_y.html" target="_top" xlink:title="Command object for inner size (see ParamCommand).">
 <polygon fill="none" stroke="black" points="206.5,-2450.5 206.5,-2480.5 316.5,-2480.5 316.5,-2450.5 206.5,-2450.5"/>
 <text text-anchor="start" x="214.5" y="-2468.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::RingEmitter::</text>
@@ -1418,15 +1418,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1300 -->
+<!-- Node1214&#45;&gt;Node1302 -->
 <g id="edge88" class="edge">
-<title>Node1212&#45;&gt;Node1300</title>
+<title>Node1214&#45;&gt;Node1302</title>
 <path fill="none" stroke="midnightblue" d="M65.39,-3351.52C71.12,-3226.78 104.43,-2557.87 163,-2490.5 173.95,-2477.9 190.3,-2471.23 206.49,-2467.81"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.88,-3351.71 64.92,-3361.86 68.87,-3352.03 61.88,-3351.71"/>
 </g>
-<!-- Node1301 -->
+<!-- Node1303 -->
 <g id="node90" class="node">
-<title>Node1301</title>
+<title>Node1303</title>
 <g id="a_node90"><a xlink:href="class_ogre_1_1_rotation_affector_1_1_cmd_rotation_range_end.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="194,-2401.5 194,-2431.5 329,-2431.5 329,-2401.5 194,-2401.5"/>
 <text text-anchor="start" x="202" y="-2419.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::RotationAffector</text>
@@ -1434,15 +1434,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1301 -->
+<!-- Node1214&#45;&gt;Node1303 -->
 <g id="edge89" class="edge">
-<title>Node1212&#45;&gt;Node1301</title>
+<title>Node1214&#45;&gt;Node1303</title>
 <path fill="none" stroke="midnightblue" d="M65.26,-3351.62C70.36,-3223.13 101.23,-2512.98 163,-2441.5 171,-2432.24 181.91,-2426.18 193.55,-2422.26"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.75,-3351.79 64.86,-3361.92 68.75,-3352.06 61.75,-3351.79"/>
 </g>
-<!-- Node1302 -->
+<!-- Node1304 -->
 <g id="node91" class="node">
-<title>Node1302</title>
+<title>Node1304</title>
 <g id="a_node91"><a xlink:href="class_ogre_1_1_rotation_affector_1_1_cmd_rotation_range_start.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="191.5,-2352.5 191.5,-2382.5 331.5,-2382.5 331.5,-2352.5 191.5,-2352.5"/>
 <text text-anchor="start" x="199.5" y="-2370.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::RotationAffector</text>
@@ -1450,15 +1450,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1302 -->
+<!-- Node1214&#45;&gt;Node1304 -->
 <g id="edge90" class="edge">
-<title>Node1212&#45;&gt;Node1302</title>
+<title>Node1214&#45;&gt;Node1304</title>
 <path fill="none" stroke="midnightblue" d="M65.16,-3351.4C69.7,-3218.41 98.08,-2468.03 163,-2392.5 170.4,-2383.89 180.33,-2378.04 191.03,-2374.1"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.65,-3351.61 64.81,-3361.72 68.65,-3351.85 61.65,-3351.61"/>
 </g>
-<!-- Node1303 -->
+<!-- Node1305 -->
 <g id="node92" class="node">
-<title>Node1303</title>
+<title>Node1305</title>
 <g id="a_node92"><a xlink:href="class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_end.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="179,-2303.5 179,-2333.5 344,-2333.5 344,-2303.5 179,-2303.5"/>
 <text text-anchor="start" x="187" y="-2321.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::RotationAffector</text>
@@ -1466,15 +1466,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1303 -->
+<!-- Node1214&#45;&gt;Node1305 -->
 <g id="edge91" class="edge">
-<title>Node1212&#45;&gt;Node1303</title>
+<title>Node1214&#45;&gt;Node1305</title>
 <path fill="none" stroke="midnightblue" d="M65.05,-3351.68C69,-3215.64 94.84,-2423.18 163,-2343.5 167.43,-2338.32 172.77,-2334.14 178.65,-2330.77"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.55,-3351.77 64.76,-3361.86 68.54,-3351.97 61.55,-3351.77"/>
 </g>
-<!-- Node1304 -->
+<!-- Node1306 -->
 <g id="node93" class="node">
-<title>Node1304</title>
+<title>Node1306</title>
 <g id="a_node93"><a xlink:href="class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_start.html" target="_top" xlink:title="Command object for particle emitter &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="176.5,-2254.5 176.5,-2284.5 346.5,-2284.5 346.5,-2254.5 176.5,-2254.5"/>
 <text text-anchor="start" x="184.5" y="-2272.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::RotationAffector</text>
@@ -1482,15 +1482,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1304 -->
+<!-- Node1214&#45;&gt;Node1306 -->
 <g id="edge92" class="edge">
-<title>Node1212&#45;&gt;Node1304</title>
+<title>Node1214&#45;&gt;Node1306</title>
 <path fill="none" stroke="midnightblue" d="M64.96,-3351.6C68.38,-3211.63 91.65,-2378.27 163,-2294.5 166.85,-2289.98 171.4,-2286.21 176.39,-2283.09"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.46,-3351.65 64.72,-3361.73 68.46,-3351.81 61.46,-3351.65"/>
 </g>
-<!-- Node1305 -->
+<!-- Node1307 -->
 <g id="node94" class="node">
-<title>Node1305</title>
+<title>Node1307</title>
 <g id="a_node94"><a xlink:href="class_ogre_1_1_scale_affector_1_1_cmd_multiply_mode.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="205.5,-2205.5 205.5,-2235.5 317.5,-2235.5 317.5,-2205.5 205.5,-2205.5"/>
 <text text-anchor="start" x="213.5" y="-2223.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ScaleAffector</text>
@@ -1498,15 +1498,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1305 -->
+<!-- Node1214&#45;&gt;Node1307 -->
 <g id="edge93" class="edge">
-<title>Node1212&#45;&gt;Node1305</title>
+<title>Node1214&#45;&gt;Node1307</title>
 <path fill="none" stroke="midnightblue" d="M64.88,-3351.6C67.78,-3207.99 88.45,-2333.38 163,-2245.5 173.57,-2233.04 189.42,-2226.35 205.29,-2222.87"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.37,-3351.87 64.67,-3361.94 68.37,-3352.01 61.37,-3351.87"/>
 </g>
-<!-- Node1306 -->
+<!-- Node1308 -->
 <g id="node95" class="node">
-<title>Node1306</title>
+<title>Node1308</title>
 <g id="a_node95"><a xlink:href="class_ogre_1_1_scale_affector_1_1_cmd_scale_adjust.html" target="_top" xlink:title="Command object for scale adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="206.5,-2156.5 206.5,-2186.5 316.5,-2186.5 316.5,-2156.5 206.5,-2156.5"/>
 <text text-anchor="start" x="214.5" y="-2174.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ScaleAffector</text>
@@ -1514,15 +1514,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1306 -->
+<!-- Node1214&#45;&gt;Node1308 -->
 <g id="edge94" class="edge">
-<title>Node1212&#45;&gt;Node1306</title>
+<title>Node1214&#45;&gt;Node1308</title>
 <path fill="none" stroke="midnightblue" d="M64.8,-3351.64C67.2,-3204.63 85.24,-2288.5 163,-2196.5 173.77,-2183.75 190.08,-2177.04 206.29,-2173.63"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.3,-3351.81 64.64,-3361.86 68.3,-3351.92 61.3,-3351.81"/>
 </g>
-<!-- Node1307 -->
+<!-- Node1309 -->
 <g id="node96" class="node">
-<title>Node1307</title>
+<title>Node1309</title>
 <g id="a_node96"><a xlink:href="class_ogre_1_1_scale_interpolator_affector_1_1_cmd_scale_adjust.html" target="_top" xlink:title="Command object for red adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="178,-2107.5 178,-2137.5 345,-2137.5 345,-2107.5 178,-2107.5"/>
 <text text-anchor="start" x="186" y="-2125.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ScaleInterpolatorAffector</text>
@@ -1530,15 +1530,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1307 -->
+<!-- Node1214&#45;&gt;Node1309 -->
 <g id="edge95" class="edge">
-<title>Node1212&#45;&gt;Node1307</title>
+<title>Node1214&#45;&gt;Node1309</title>
 <path fill="none" stroke="midnightblue" d="M64.73,-3351.74C66.65,-3201.58 82.02,-2243.64 163,-2147.5 167.17,-2142.56 172.16,-2138.52 177.67,-2135.23"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.23,-3351.76 64.61,-3361.8 68.23,-3351.85 61.23,-3351.76"/>
 </g>
-<!-- Node1308 -->
+<!-- Node1310 -->
 <g id="node97" class="node">
-<title>Node1308</title>
+<title>Node1310</title>
 <g id="a_node97"><a xlink:href="class_ogre_1_1_scale_interpolator_affector_1_1_cmd_time_adjust.html" target="_top" xlink:title="Command object for red adjust (see ParamCommand).">
 <polygon fill="none" stroke="black" points="178,-2058.5 178,-2088.5 345,-2088.5 345,-2058.5 178,-2058.5"/>
 <text text-anchor="start" x="186" y="-2076.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ScaleInterpolatorAffector</text>
@@ -1546,15 +1546,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1308 -->
+<!-- Node1214&#45;&gt;Node1310 -->
 <g id="edge96" class="edge">
-<title>Node1212&#45;&gt;Node1308</title>
+<title>Node1214&#45;&gt;Node1310</title>
 <path fill="none" stroke="midnightblue" d="M64.67,-3351.43C66.14,-3196.85 78.86,-2198.7 163,-2098.5 167.16,-2093.55 172.15,-2089.51 177.65,-2086.21"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.17,-3351.74 64.57,-3361.77 68.16,-3351.8 61.17,-3351.74"/>
 </g>
-<!-- Node1309 -->
+<!-- Node1311 -->
 <g id="node98" class="node">
-<title>Node1309</title>
+<title>Node1311</title>
 <g id="a_node98"><a xlink:href="class_ogre_1_1_unified_high_level_gpu_program_1_1_cmd_delegate.html" target="_top" xlink:title="Command object for setting delegate (can set more than once)">
 <polygon fill="none" stroke="black" points="187,-2009.5 187,-2039.5 336,-2039.5 336,-2009.5 187,-2009.5"/>
 <text text-anchor="start" x="195" y="-2027.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::UnifiedHighLevelGpu</text>
@@ -1562,15 +1562,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1309 -->
+<!-- Node1214&#45;&gt;Node1311 -->
 <g id="edge97" class="edge">
-<title>Node1212&#45;&gt;Node1309</title>
+<title>Node1214&#45;&gt;Node1311</title>
 <path fill="none" stroke="midnightblue" d="M64.61,-3351.63C65.62,-3194.37 75.61,-2153.87 163,-2049.5 169.39,-2041.86 177.78,-2036.39 186.94,-2032.49"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.11,-3351.73 64.55,-3361.75 68.11,-3351.77 61.11,-3351.73"/>
 </g>
-<!-- Node1310 -->
+<!-- Node1312 -->
 <g id="node99" class="node">
-<title>Node1310</title>
+<title>Node1312</title>
 <g id="a_node99"><a xlink:href="class_ogre_1_1_vulkan_program_1_1_cmd_preprocessor_defines.html" target="_top" xlink:title="Command object for setting macro defines.">
 <polygon fill="none" stroke="black" points="189,-1960.5 189,-1990.5 334,-1990.5 334,-1960.5 189,-1960.5"/>
 <text text-anchor="start" x="197" y="-1978.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::VulkanProgram</text>
@@ -1578,15 +1578,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1310 -->
+<!-- Node1214&#45;&gt;Node1312 -->
 <g id="edge98" class="edge">
-<title>Node1212&#45;&gt;Node1310</title>
+<title>Node1214&#45;&gt;Node1312</title>
 <path fill="none" stroke="midnightblue" d="M64.55,-3351.4C65.14,-3190.04 72.44,-2108.95 163,-2000.5 169.83,-1992.32 178.94,-1986.62 188.86,-1982.68"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.05,-3351.74 64.52,-3361.76 68.05,-3351.77 61.05,-3351.74"/>
 </g>
-<!-- Node1311 -->
+<!-- Node1313 -->
 <g id="node100" class="node">
-<title>Node1311</title>
+<title>Node1313</title>
 <g id="a_node100"><a xlink:href="class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_accurate_facing.html" target="_top" xlink:title="Command object for accurate facing(see ParamCommand).">
 <polygon fill="none" stroke="black" points="180,-1911.5 180,-1941.5 343,-1941.5 343,-1911.5 180,-1911.5"/>
 <text text-anchor="start" x="188" y="-1929.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BillboardParticle</text>
@@ -1594,15 +1594,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1311 -->
+<!-- Node1214&#45;&gt;Node1313 -->
 <g id="edge99" class="edge">
-<title>Node1212&#45;&gt;Node1311</title>
+<title>Node1214&#45;&gt;Node1313</title>
 <path fill="none" stroke="midnightblue" d="M64.5,-3351.69C64.66,-3188.12 69.17,-2064.15 163,-1951.5 167.7,-1945.86 173.48,-1941.4 179.86,-1937.88"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61,-3351.78 64.49,-3361.78 68,-3351.78 61,-3351.78"/>
 </g>
-<!-- Node1312 -->
+<!-- Node1314 -->
 <g id="node101" class="node">
-<title>Node1312</title>
+<title>Node1314</title>
 <g id="a_node101"><a xlink:href="class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_billboard_origin.html" target="_top" xlink:title="Command object for billboard origin (see ParamCommand).">
 <polygon fill="none" stroke="black" points="180.5,-1862.5 180.5,-1892.5 342.5,-1892.5 342.5,-1862.5 180.5,-1862.5"/>
 <text text-anchor="start" x="188.5" y="-1880.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BillboardParticle</text>
@@ -1610,15 +1610,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1312 -->
+<!-- Node1214&#45;&gt;Node1314 -->
 <g id="edge100" class="edge">
-<title>Node1212&#45;&gt;Node1312</title>
+<title>Node1214&#45;&gt;Node1314</title>
 <path fill="none" stroke="midnightblue" d="M64.45,-3351.53C64.2,-3184.2 65.98,-2019.25 163,-1902.5 167.8,-1896.72 173.74,-1892.18 180.3,-1888.62"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="60.95,-3351.83 64.47,-3361.82 67.95,-3351.81 60.95,-3351.83"/>
 </g>
-<!-- Node1313 -->
+<!-- Node1315 -->
 <g id="node102" class="node">
-<title>Node1313</title>
+<title>Node1315</title>
 <g id="a_node102"><a xlink:href="class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_billboard_rotation_type.html" target="_top" xlink:title="Command object for billboard rotation type (see ParamCommand).">
 <polygon fill="none" stroke="black" points="163,-1813.5 163,-1843.5 360,-1843.5 360,-1813.5 163,-1813.5"/>
 <text text-anchor="start" x="171" y="-1831.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BillboardParticle</text>
@@ -1626,15 +1626,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1313 -->
+<!-- Node1214&#45;&gt;Node1315 -->
 <g id="edge101" class="edge">
-<title>Node1212&#45;&gt;Node1313</title>
+<title>Node1214&#45;&gt;Node1315</title>
 <path fill="none" stroke="midnightblue" d="M64.4,-3351.65C63.76,-3181.65 62.74,-1974.42 163,-1853.5 166.12,-1849.73 169.73,-1846.49 173.68,-1843.71"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="60.91,-3351.9 64.45,-3361.88 67.9,-3351.87 60.91,-3351.9"/>
 </g>
-<!-- Node1314 -->
+<!-- Node1316 -->
 <g id="node103" class="node">
-<title>Node1314</title>
+<title>Node1316</title>
 <g id="a_node103"><a xlink:href="class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_billboard_type.html" target="_top" xlink:title="Command object for billboard type (see ParamCommand).">
 <polygon fill="none" stroke="black" points="184,-1764.5 184,-1794.5 339,-1794.5 339,-1764.5 184,-1764.5"/>
 <text text-anchor="start" x="192" y="-1782.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BillboardParticle</text>
@@ -1642,15 +1642,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1314 -->
+<!-- Node1214&#45;&gt;Node1316 -->
 <g id="edge102" class="edge">
-<title>Node1212&#45;&gt;Node1314</title>
+<title>Node1214&#45;&gt;Node1316</title>
 <path fill="none" stroke="midnightblue" d="M64.36,-3351.8C63.33,-3179.34 59.48,-1929.6 163,-1804.5 168.68,-1797.63 175.97,-1792.51 184,-1788.71"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="60.86,-3351.98 64.43,-3361.96 67.86,-3351.94 60.86,-3351.98"/>
 </g>
-<!-- Node1315 -->
+<!-- Node1317 -->
 <g id="node104" class="node">
-<title>Node1315</title>
+<title>Node1317</title>
 <g id="a_node104"><a xlink:href="class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_common_direction.html" target="_top" xlink:title="Command object for common direction (see ParamCommand).">
 <polygon fill="none" stroke="black" points="172.5,-1715.5 172.5,-1745.5 350.5,-1745.5 350.5,-1715.5 172.5,-1715.5"/>
 <text text-anchor="start" x="180.5" y="-1733.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BillboardParticle</text>
@@ -1658,15 +1658,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1315 -->
+<!-- Node1214&#45;&gt;Node1317 -->
 <g id="edge103" class="edge">
-<title>Node1212&#45;&gt;Node1315</title>
+<title>Node1214&#45;&gt;Node1317</title>
 <path fill="none" stroke="midnightblue" d="M64.32,-3351.45C62.91,-3174.64 56.33,-1884.66 163,-1755.5 166.12,-1751.73 169.72,-1748.48 173.66,-1745.69"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="60.82,-3351.69 64.41,-3361.66 67.82,-3351.63 60.82,-3351.69"/>
 </g>
-<!-- Node1316 -->
+<!-- Node1318 -->
 <g id="node105" class="node">
-<title>Node1316</title>
+<title>Node1318</title>
 <g id="a_node105"><a xlink:href="class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_common_up_vector.html" target="_top" xlink:title="Command object for common up&#45;vector (see ParamCommand).">
 <polygon fill="none" stroke="black" points="172.5,-1666.5 172.5,-1696.5 350.5,-1696.5 350.5,-1666.5 172.5,-1666.5"/>
 <text text-anchor="start" x="180.5" y="-1684.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BillboardParticle</text>
@@ -1674,15 +1674,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1316 -->
+<!-- Node1214&#45;&gt;Node1318 -->
 <g id="edge104" class="edge">
-<title>Node1212&#45;&gt;Node1316</title>
+<title>Node1214&#45;&gt;Node1318</title>
 <path fill="none" stroke="midnightblue" d="M65.01,-3351.61C69.8,-3167.99 107.94,-1773.28 163,-1706.5 166.11,-1702.72 169.71,-1699.48 173.65,-1696.68"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.51,-3351.64 64.75,-3361.73 68.51,-3351.82 61.51,-3351.64"/>
 </g>
-<!-- Node1317 -->
+<!-- Node1319 -->
 <g id="node106" class="node">
-<title>Node1317</title>
+<title>Node1319</title>
 <g id="a_node106"><a xlink:href="class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_point_rendering.html" target="_top" xlink:title="Command object for point rendering (see ParamCommand).">
 <polygon fill="none" stroke="black" points="179.5,-1617.5 179.5,-1647.5 343.5,-1647.5 343.5,-1617.5 179.5,-1617.5"/>
 <text text-anchor="start" x="187.5" y="-1635.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BillboardParticle</text>
@@ -1690,15 +1690,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1317 -->
+<!-- Node1214&#45;&gt;Node1319 -->
 <g id="edge105" class="edge">
-<title>Node1212&#45;&gt;Node1317</title>
+<title>Node1214&#45;&gt;Node1319</title>
 <path fill="none" stroke="midnightblue" d="M64.98,-3351.6C69.52,-3164.95 106.33,-1726.36 163,-1657.5 167.55,-1651.97 173.15,-1647.57 179.34,-1644.08"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.47,-3351.78 64.73,-3361.86 68.47,-3351.95 61.47,-3351.78"/>
 </g>
-<!-- Node1318 -->
+<!-- Node1320 -->
 <g id="node107" class="node">
-<title>Node1318</title>
+<title>Node1320</title>
 <g id="a_node107"><a xlink:href="class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_texture_slices.html" target="_top" xlink:title="Command object for TextureSlices (see ParamCommand).">
 <polygon fill="none" stroke="black" points="184.5,-1568.5 184.5,-1598.5 338.5,-1598.5 338.5,-1568.5 184.5,-1568.5"/>
 <text text-anchor="start" x="192.5" y="-1586.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BillboardParticle</text>
@@ -1706,15 +1706,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1318 -->
+<!-- Node1214&#45;&gt;Node1320 -->
 <g id="edge106" class="edge">
-<title>Node1212&#45;&gt;Node1318</title>
+<title>Node1214&#45;&gt;Node1320</title>
 <path fill="none" stroke="midnightblue" d="M64.95,-3351.32C69.28,-3160.53 104.74,-1679.4 163,-1608.5 168.77,-1601.48 176.22,-1596.28 184.42,-1592.45"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.44,-3351.51 64.72,-3361.58 68.44,-3351.67 61.44,-3351.51"/>
 </g>
-<!-- Node1319 -->
+<!-- Node1321 -->
 <g id="node108" class="node">
-<title>Node1319</title>
+<title>Node1321</title>
 <g id="a_node108"><a xlink:href="class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_texture_stacks.html" target="_top" xlink:title="Command object for TextureStacks (see ParamCommand).">
 <polygon fill="none" stroke="black" points="182.5,-1519.5 182.5,-1549.5 340.5,-1549.5 340.5,-1519.5 182.5,-1519.5"/>
 <text text-anchor="start" x="190.5" y="-1537.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BillboardParticle</text>
@@ -1722,15 +1722,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1319 -->
+<!-- Node1214&#45;&gt;Node1321 -->
 <g id="edge107" class="edge">
-<title>Node1212&#45;&gt;Node1319</title>
+<title>Node1214&#45;&gt;Node1321</title>
 <path fill="none" stroke="midnightblue" d="M64.91,-3351.65C68.98,-3159.3 103.09,-1632.53 163,-1559.5 168.21,-1553.15 174.79,-1548.29 182.07,-1544.58"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.41,-3351.67 64.7,-3361.74 68.41,-3351.82 61.41,-3351.67"/>
 </g>
-<!-- Node1320 -->
+<!-- Node1322 -->
 <g id="node109" class="node">
-<title>Node1320</title>
+<title>Node1322</title>
 <g id="a_node109"><a xlink:href="class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_bottom_left_u_v.html" target="_top" xlink:title="Command object for specifying texture coordinates for the border (see ParamCommand).">
 <polygon fill="none" stroke="black" points="168.5,-1470.5 168.5,-1500.5 354.5,-1500.5 354.5,-1470.5 168.5,-1470.5"/>
 <text text-anchor="start" x="176.5" y="-1488.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BorderPanelOverlay</text>
@@ -1738,15 +1738,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1320 -->
+<!-- Node1214&#45;&gt;Node1322 -->
 <g id="edge108" class="edge">
-<title>Node1212&#45;&gt;Node1320</title>
+<title>Node1214&#45;&gt;Node1322</title>
 <path fill="none" stroke="midnightblue" d="M64.88,-3351.71C68.71,-3156.78 101.47,-1585.61 163,-1510.5 166.1,-1506.71 169.69,-1503.46 173.62,-1500.66"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.38,-3351.85 64.68,-3361.91 68.38,-3351.98 61.38,-3351.85"/>
 </g>
-<!-- Node1321 -->
+<!-- Node1323 -->
 <g id="node110" class="node">
-<title>Node1321</title>
+<title>Node1323</title>
 <g id="a_node110"><a xlink:href="class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_bottom_right_u_v.html" target="_top" xlink:title="Command object for specifying texture coordinates for the border (see ParamCommand).">
 <polygon fill="none" stroke="black" points="164.5,-1421.5 164.5,-1451.5 358.5,-1451.5 358.5,-1421.5 164.5,-1421.5"/>
 <text text-anchor="start" x="172.5" y="-1439.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BorderPanelOverlay</text>
@@ -1754,15 +1754,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1321 -->
+<!-- Node1214&#45;&gt;Node1323 -->
 <g id="edge109" class="edge">
-<title>Node1212&#45;&gt;Node1321</title>
+<title>Node1214&#45;&gt;Node1323</title>
 <path fill="none" stroke="midnightblue" d="M64.86,-3351.49C68.49,-3152.73 99.87,-1538.67 163,-1461.5 166.1,-1457.71 169.68,-1454.46 173.62,-1451.66"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.35,-3351.6 64.67,-3361.66 68.35,-3351.72 61.35,-3351.6"/>
 </g>
-<!-- Node1322 -->
+<!-- Node1324 -->
 <g id="node111" class="node">
-<title>Node1322</title>
+<title>Node1324</title>
 <g id="a_node111"><a xlink:href="class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_bottom_u_v.html" target="_top" xlink:title="Command object for specifying texture coordinates for the border (see ParamCommand).">
 <polygon fill="none" stroke="black" points="177.5,-1372.5 177.5,-1402.5 345.5,-1402.5 345.5,-1372.5 177.5,-1372.5"/>
 <text text-anchor="start" x="185.5" y="-1390.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BorderPanelOverlay</text>
@@ -1770,15 +1770,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1322 -->
+<!-- Node1214&#45;&gt;Node1324 -->
 <g id="edge110" class="edge">
-<title>Node1212&#45;&gt;Node1322</title>
+<title>Node1214&#45;&gt;Node1324</title>
 <path fill="none" stroke="midnightblue" d="M64.83,-3351.6C68.23,-3150.51 98.24,-1491.77 163,-1412.5 166.98,-1407.63 171.77,-1403.63 177.06,-1400.36"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.33,-3351.8 64.66,-3361.85 68.32,-3351.91 61.33,-3351.8"/>
 </g>
-<!-- Node1323 -->
+<!-- Node1325 -->
 <g id="node112" class="node">
-<title>Node1323</title>
+<title>Node1325</title>
 <g id="a_node112"><a xlink:href="class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_left_u_v.html" target="_top" xlink:title="Command object for specifying texture coordinates for the border (see ParamCommand).">
 <polygon fill="none" stroke="black" points="181,-1323.5 181,-1353.5 342,-1353.5 342,-1323.5 181,-1323.5"/>
 <text text-anchor="start" x="189" y="-1341.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BorderPanelOverlay</text>
@@ -1786,15 +1786,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1323 -->
+<!-- Node1214&#45;&gt;Node1325 -->
 <g id="edge111" class="edge">
-<title>Node1212&#45;&gt;Node1323</title>
+<title>Node1214&#45;&gt;Node1325</title>
 <path fill="none" stroke="midnightblue" d="M64.81,-3351.41C68.01,-3146.68 96.64,-1444.82 163,-1363.5 167.86,-1357.54 173.93,-1352.89 180.65,-1349.28"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.3,-3351.56 64.65,-3361.61 68.3,-3351.67 61.3,-3351.56"/>
 </g>
-<!-- Node1324 -->
+<!-- Node1326 -->
 <g id="node113" class="node">
-<title>Node1324</title>
+<title>Node1326</title>
 <g id="a_node113"><a xlink:href="class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_material.html" target="_top" xlink:title="Command object for specifying the Material for the border (see ParamCommand).">
 <polygon fill="none" stroke="black" points="181,-1274.5 181,-1304.5 342,-1304.5 342,-1274.5 181,-1274.5"/>
 <text text-anchor="start" x="189" y="-1292.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BorderPanelOverlay</text>
@@ -1802,15 +1802,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1324 -->
+<!-- Node1214&#45;&gt;Node1326 -->
 <g id="edge112" class="edge">
-<title>Node1212&#45;&gt;Node1324</title>
+<title>Node1214&#45;&gt;Node1326</title>
 <path fill="none" stroke="midnightblue" d="M64.78,-3351.55C67.77,-3144.75 95.01,-1397.93 163,-1314.5 167.86,-1308.54 173.93,-1303.89 180.64,-1300.28"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.28,-3351.78 64.63,-3361.83 68.28,-3351.88 61.28,-3351.78"/>
 </g>
-<!-- Node1325 -->
+<!-- Node1327 -->
 <g id="node114" class="node">
-<title>Node1325</title>
+<title>Node1327</title>
 <g id="a_node114"><a xlink:href="class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_right_u_v.html" target="_top" xlink:title="Command object for specifying texture coordinates for the border (see ParamCommand).">
 <polygon fill="none" stroke="black" points="181,-1225.5 181,-1255.5 342,-1255.5 342,-1225.5 181,-1225.5"/>
 <text text-anchor="start" x="189" y="-1243.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BorderPanelOverlay</text>
@@ -1818,15 +1818,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1325 -->
+<!-- Node1214&#45;&gt;Node1327 -->
 <g id="edge113" class="edge">
-<title>Node1212&#45;&gt;Node1325</title>
+<title>Node1214&#45;&gt;Node1327</title>
 <path fill="none" stroke="midnightblue" d="M64.76,-3351.39C67.56,-3141.13 93.4,-1350.99 163,-1265.5 167.85,-1259.54 173.92,-1254.89 180.64,-1251.27"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.26,-3351.56 64.63,-3361.6 68.26,-3351.65 61.26,-3351.56"/>
 </g>
-<!-- Node1326 -->
+<!-- Node1328 -->
 <g id="node115" class="node">
-<title>Node1326</title>
+<title>Node1328</title>
 <g id="a_node115"><a xlink:href="class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_size.html" target="_top" xlink:title="Command object for specifying border sizes (see ParamCommand).">
 <polygon fill="none" stroke="black" points="181,-1176.5 181,-1206.5 342,-1206.5 342,-1176.5 181,-1176.5"/>
 <text text-anchor="start" x="189" y="-1194.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BorderPanelOverlay</text>
@@ -1834,15 +1834,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1326 -->
+<!-- Node1214&#45;&gt;Node1328 -->
 <g id="edge114" class="edge">
-<title>Node1212&#45;&gt;Node1326</title>
+<title>Node1214&#45;&gt;Node1328</title>
 <path fill="none" stroke="midnightblue" d="M64.74,-3351.58C67.32,-3139.51 91.76,-1304.1 163,-1216.5 167.85,-1210.53 173.91,-1205.88 180.63,-1202.27"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.23,-3351.8 64.61,-3361.84 68.23,-3351.88 61.23,-3351.8"/>
 </g>
-<!-- Node1327 -->
+<!-- Node1329 -->
 <g id="node116" class="node">
-<title>Node1327</title>
+<title>Node1329</title>
 <g id="a_node116"><a xlink:href="class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_top_left_u_v.html" target="_top" xlink:title="Command object for specifying texture coordinates for the border (see ParamCommand).">
 <polygon fill="none" stroke="black" points="178,-1127.5 178,-1157.5 345,-1157.5 345,-1127.5 178,-1127.5"/>
 <text text-anchor="start" x="186" y="-1145.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BorderPanelOverlay</text>
@@ -1850,15 +1850,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1327 -->
+<!-- Node1214&#45;&gt;Node1329 -->
 <g id="edge115" class="edge">
-<title>Node1212&#45;&gt;Node1327</title>
+<title>Node1214&#45;&gt;Node1329</title>
 <path fill="none" stroke="midnightblue" d="M64.72,-3351.45C67.12,-3136.11 90.15,-1257.17 163,-1167.5 167.19,-1162.35 172.28,-1158.17 177.92,-1154.8"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.21,-3351.58 64.6,-3361.62 68.21,-3351.66 61.21,-3351.58"/>
 </g>
-<!-- Node1328 -->
+<!-- Node1330 -->
 <g id="node117" class="node">
-<title>Node1328</title>
+<title>Node1330</title>
 <g id="a_node117"><a xlink:href="class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_top_right_u_v.html" target="_top" xlink:title="Command object for specifying texture coordinates for the border (see ParamCommand).">
 <polygon fill="none" stroke="black" points="174.5,-1078.5 174.5,-1108.5 348.5,-1108.5 348.5,-1078.5 174.5,-1078.5"/>
 <text text-anchor="start" x="182.5" y="-1096.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BorderPanelOverlay</text>
@@ -1866,15 +1866,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1328 -->
+<!-- Node1214&#45;&gt;Node1330 -->
 <g id="edge116" class="edge">
-<title>Node1212&#45;&gt;Node1328</title>
+<title>Node1214&#45;&gt;Node1330</title>
 <path fill="none" stroke="midnightblue" d="M64.69,-3351.67C66.9,-3134.79 88.51,-1210.29 163,-1118.5 166.3,-1114.43 170.17,-1110.97 174.43,-1108.03"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.19,-3351.85 64.59,-3361.88 68.19,-3351.92 61.19,-3351.85"/>
 </g>
-<!-- Node1329 -->
+<!-- Node1331 -->
 <g id="node118" class="node">
-<title>Node1329</title>
+<title>Node1331</title>
 <g id="a_node118"><a xlink:href="class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_top_u_v.html" target="_top" xlink:title="Command object for specifying texture coordinates for the border (see ParamCommand).">
 <polygon fill="none" stroke="black" points="181,-1029.5 181,-1059.5 342,-1059.5 342,-1029.5 181,-1029.5"/>
 <text text-anchor="start" x="189" y="-1047.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BorderPanelOverlay</text>
@@ -1882,15 +1882,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1329 -->
+<!-- Node1214&#45;&gt;Node1331 -->
 <g id="edge117" class="edge">
-<title>Node1212&#45;&gt;Node1329</title>
+<title>Node1214&#45;&gt;Node1331</title>
 <path fill="none" stroke="midnightblue" d="M64.68,-3351.57C66.7,-3131.6 86.89,-1163.37 163,-1069.5 167.84,-1063.53 173.9,-1058.87 180.61,-1055.25"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.18,-3351.64 64.58,-3361.67 68.17,-3351.71 61.18,-3351.64"/>
 </g>
-<!-- Node1330 -->
+<!-- Node1332 -->
 <g id="node119" class="node">
-<title>Node1330</title>
+<title>Node1332</title>
 <g id="a_node119"><a xlink:href="class_ogre_1_1v1_1_1_overlay_element_commands_1_1_cmd_caption.html" target="_top" xlink:title="Command object for OverlayElement &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="190,-980.5 190,-1010.5 333,-1010.5 333,-980.5 190,-980.5"/>
 <text text-anchor="start" x="198" y="-998.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::OverlayElement</text>
@@ -1898,15 +1898,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1330 -->
+<!-- Node1214&#45;&gt;Node1332 -->
 <g id="edge118" class="edge">
-<title>Node1212&#45;&gt;Node1330</title>
+<title>Node1214&#45;&gt;Node1332</title>
 <path fill="none" stroke="midnightblue" d="M64.66,-3351.82C66.48,-3130.58 85.24,-1116.49 163,-1020.5 169.93,-1011.95 179.35,-1006.09 189.62,-1002.12"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.15,-3351.93 64.57,-3361.95 68.15,-3351.98 61.15,-3351.93"/>
 </g>
-<!-- Node1331 -->
+<!-- Node1333 -->
 <g id="node120" class="node">
-<title>Node1331</title>
+<title>Node1333</title>
 <g id="a_node120"><a xlink:href="class_ogre_1_1v1_1_1_overlay_element_commands_1_1_cmd_height.html" target="_top" xlink:title="Command object for OverlayElement &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="190,-931.5 190,-961.5 333,-961.5 333,-931.5 190,-931.5"/>
 <text text-anchor="start" x="198" y="-949.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::OverlayElement</text>
@@ -1914,15 +1914,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1331 -->
+<!-- Node1214&#45;&gt;Node1333 -->
 <g id="edge119" class="edge">
-<title>Node1212&#45;&gt;Node1331</title>
+<title>Node1214&#45;&gt;Node1333</title>
 <path fill="none" stroke="midnightblue" d="M64.64,-3351.75C66.29,-3127.61 83.63,-1069.57 163,-971.5 169.93,-962.94 179.35,-957.08 189.62,-953.11"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.14,-3351.73 64.57,-3361.76 68.14,-3351.78 61.14,-3351.73"/>
 </g>
-<!-- Node1332 -->
+<!-- Node1334 -->
 <g id="node121" class="node">
-<title>Node1332</title>
+<title>Node1334</title>
 <g id="a_node121"><a xlink:href="class_ogre_1_1v1_1_1_overlay_element_commands_1_1_cmd_horizontal_align.html" target="_top" xlink:title="Command object for OverlayElement &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="173.5,-882.5 173.5,-912.5 349.5,-912.5 349.5,-882.5 173.5,-882.5"/>
 <text text-anchor="start" x="181.5" y="-900.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::OverlayElement</text>
@@ -1930,15 +1930,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1332 -->
+<!-- Node1214&#45;&gt;Node1334 -->
 <g id="edge120" class="edge">
-<title>Node1212&#45;&gt;Node1332</title>
+<title>Node1214&#45;&gt;Node1334</title>
 <path fill="none" stroke="midnightblue" d="M64.62,-3351.34C66.12,-3122.63 82.05,-1022.61 163,-922.5 166.08,-918.7 169.65,-915.42 173.57,-912.61"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.12,-3351.53 64.56,-3361.56 68.12,-3351.58 61.12,-3351.53"/>
 </g>
-<!-- Node1333 -->
+<!-- Node1335 -->
 <g id="node122" class="node">
-<title>Node1333</title>
+<title>Node1335</title>
 <g id="a_node122"><a xlink:href="class_ogre_1_1v1_1_1_overlay_element_commands_1_1_cmd_left.html" target="_top" xlink:title="Command object for OverlayElement &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="190,-833.5 190,-863.5 333,-863.5 333,-833.5 190,-833.5"/>
 <text text-anchor="start" x="198" y="-851.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::OverlayElement</text>
@@ -1946,15 +1946,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1333 -->
+<!-- Node1214&#45;&gt;Node1335 -->
 <g id="edge121" class="edge">
-<title>Node1212&#45;&gt;Node1333</title>
+<title>Node1214&#45;&gt;Node1335</title>
 <path fill="none" stroke="midnightblue" d="M64.61,-3351.65C65.92,-3122.01 80.39,-975.74 163,-873.5 169.92,-864.94 179.34,-859.07 189.61,-855.1"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.11,-3351.85 64.55,-3361.87 68.11,-3351.88 61.11,-3351.85"/>
 </g>
-<!-- Node1334 -->
+<!-- Node1336 -->
 <g id="node123" class="node">
-<title>Node1334</title>
+<title>Node1336</title>
 <g id="a_node123"><a xlink:href="class_ogre_1_1v1_1_1_overlay_element_commands_1_1_cmd_material.html" target="_top" xlink:title="Command object for OverlayElement &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="190,-784.5 190,-814.5 333,-814.5 333,-784.5 190,-784.5"/>
 <text text-anchor="start" x="198" y="-802.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::OverlayElement</text>
@@ -1962,15 +1962,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1334 -->
+<!-- Node1214&#45;&gt;Node1336 -->
 <g id="edge122" class="edge">
-<title>Node1212&#45;&gt;Node1334</title>
+<title>Node1214&#45;&gt;Node1336</title>
 <path fill="none" stroke="midnightblue" d="M64.59,-3351.61C65.74,-3119.34 78.77,-928.83 163,-824.5 169.92,-815.93 179.33,-810.07 189.6,-806.1"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.09,-3351.91 64.54,-3361.93 68.09,-3351.95 61.09,-3351.91"/>
 </g>
-<!-- Node1335 -->
+<!-- Node1337 -->
 <g id="node124" class="node">
-<title>Node1335</title>
+<title>Node1337</title>
 <g id="a_node124"><a xlink:href="class_ogre_1_1v1_1_1_overlay_element_commands_1_1_cmd_metrics_mode.html" target="_top" xlink:title="Command object for OverlayElement &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="179.5,-735.5 179.5,-765.5 343.5,-765.5 343.5,-735.5 179.5,-735.5"/>
 <text text-anchor="start" x="187.5" y="-753.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::OverlayElement</text>
@@ -1978,15 +1978,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1335 -->
+<!-- Node1214&#45;&gt;Node1337 -->
 <g id="edge123" class="edge">
-<title>Node1212&#45;&gt;Node1335</title>
+<title>Node1214&#45;&gt;Node1337</title>
 <path fill="none" stroke="midnightblue" d="M64.58,-3351.58C65.56,-3116.71 77.15,-881.92 163,-775.5 167.5,-769.92 173.06,-765.49 179.22,-761.98"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.08,-3351.73 64.54,-3361.75 68.08,-3351.76 61.08,-3351.73"/>
 </g>
-<!-- Node1336 -->
+<!-- Node1338 -->
 <g id="node125" class="node">
-<title>Node1336</title>
+<title>Node1338</title>
 <g id="a_node125"><a xlink:href="class_ogre_1_1v1_1_1_overlay_element_commands_1_1_cmd_top.html" target="_top" xlink:title="Command object for OverlayElement &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="190,-686.5 190,-716.5 333,-716.5 333,-686.5 190,-686.5"/>
 <text text-anchor="start" x="198" y="-704.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::OverlayElement</text>
@@ -1994,15 +1994,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1336 -->
+<!-- Node1214&#45;&gt;Node1338 -->
 <g id="edge124" class="edge">
-<title>Node1212&#45;&gt;Node1336</title>
+<title>Node1214&#45;&gt;Node1338</title>
 <path fill="none" stroke="midnightblue" d="M64.56,-3351.57C65.38,-3114.21 75.52,-835.01 163,-726.5 169.91,-717.93 179.32,-712.06 189.59,-708.09"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.06,-3351.81 64.53,-3361.82 68.06,-3351.83 61.06,-3351.81"/>
 </g>
-<!-- Node1337 -->
+<!-- Node1339 -->
 <g id="node126" class="node">
-<title>Node1337</title>
+<title>Node1339</title>
 <g id="a_node126"><a xlink:href="class_ogre_1_1v1_1_1_overlay_element_commands_1_1_cmd_vertical_align.html" target="_top" xlink:title="Command object for OverlayElement &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="180.5,-637.5 180.5,-667.5 342.5,-667.5 342.5,-637.5 180.5,-637.5"/>
 <text text-anchor="start" x="188.5" y="-655.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::OverlayElement</text>
@@ -2010,15 +2010,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1337 -->
+<!-- Node1214&#45;&gt;Node1339 -->
 <g id="edge125" class="edge">
-<title>Node1212&#45;&gt;Node1337</title>
+<title>Node1214&#45;&gt;Node1339</title>
 <path fill="none" stroke="midnightblue" d="M64.55,-3351.56C65.21,-3111.8 73.89,-788.1 163,-677.5 167.71,-671.65 173.6,-667.06 180.12,-663.47"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.05,-3351.9 64.52,-3361.9 68.05,-3351.91 61.05,-3351.9"/>
 </g>
-<!-- Node1338 -->
+<!-- Node1340 -->
 <g id="node127" class="node">
-<title>Node1338</title>
+<title>Node1340</title>
 <g id="a_node127"><a xlink:href="class_ogre_1_1v1_1_1_overlay_element_commands_1_1_cmd_visible.html" target="_top" xlink:title="Command object for OverlayElement &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="190,-588.5 190,-618.5 333,-618.5 333,-588.5 190,-588.5"/>
 <text text-anchor="start" x="198" y="-606.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::OverlayElement</text>
@@ -2026,15 +2026,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1338 -->
+<!-- Node1214&#45;&gt;Node1340 -->
 <g id="edge126" class="edge">
-<title>Node1212&#45;&gt;Node1338</title>
+<title>Node1214&#45;&gt;Node1340</title>
 <path fill="none" stroke="midnightblue" d="M64.53,-3351.93C65.03,-3111.83 72.22,-741.25 163,-628.5 169.9,-619.92 179.31,-614.06 189.58,-610.08"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.03,-3351.99 64.51,-3361.99 68.03,-3352 61.03,-3351.99"/>
 </g>
-<!-- Node1339 -->
+<!-- Node1341 -->
 <g id="node128" class="node">
-<title>Node1339</title>
+<title>Node1341</title>
 <g id="a_node128"><a xlink:href="class_ogre_1_1v1_1_1_overlay_element_commands_1_1_cmd_width.html" target="_top" xlink:title="Command object for OverlayElement &#45; see ParamCommand.">
 <polygon fill="none" stroke="black" points="190,-539.5 190,-569.5 333,-569.5 333,-539.5 190,-539.5"/>
 <text text-anchor="start" x="198" y="-557.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::OverlayElement</text>
@@ -2042,15 +2042,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1339 -->
+<!-- Node1214&#45;&gt;Node1341 -->
 <g id="edge127" class="edge">
-<title>Node1212&#45;&gt;Node1339</title>
+<title>Node1214&#45;&gt;Node1341</title>
 <path fill="none" stroke="midnightblue" d="M64.52,-3351.58C64.87,-3107.19 70.64,-694.29 163,-579.5 169.9,-570.92 179.31,-565.05 189.58,-561.08"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.02,-3351.82 64.51,-3361.82 68.02,-3351.83 61.02,-3351.82"/>
 </g>
-<!-- Node1340 -->
+<!-- Node1342 -->
 <g id="node129" class="node">
-<title>Node1340</title>
+<title>Node1342</title>
 <g id="a_node129"><a xlink:href="class_ogre_1_1v1_1_1_panel_overlay_element_1_1_cmd_tiling.html" target="_top" xlink:title="Command object for specifying tiling (see ParamCommand).">
 <polygon fill="none" stroke="black" points="177,-490.5 177,-520.5 346,-520.5 346,-490.5 177,-490.5"/>
 <text text-anchor="start" x="185" y="-508.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::PanelOverlayElement</text>
@@ -2058,15 +2058,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1340 -->
+<!-- Node1214&#45;&gt;Node1342 -->
 <g id="edge128" class="edge">
-<title>Node1212&#45;&gt;Node1340</title>
+<title>Node1214&#45;&gt;Node1342</title>
 <path fill="none" stroke="midnightblue" d="M64.51,-3351.61C64.7,-3105.04 69.01,-647.39 163,-530.5 166.94,-525.6 171.7,-521.58 176.98,-518.29"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61.01,-3351.92 64.5,-3361.92 68.01,-3351.92 61.01,-3351.92"/>
 </g>
-<!-- Node1341 -->
+<!-- Node1343 -->
 <g id="node130" class="node">
-<title>Node1341</title>
+<title>Node1343</title>
 <g id="a_node130"><a xlink:href="class_ogre_1_1v1_1_1_panel_overlay_element_1_1_cmd_transparent.html" target="_top" xlink:title="Command object for specifying transparency (see ParamCommand).">
 <polygon fill="none" stroke="black" points="177,-441.5 177,-471.5 346,-471.5 346,-441.5 177,-441.5"/>
 <text text-anchor="start" x="185" y="-459.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::PanelOverlayElement</text>
@@ -2074,15 +2074,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1341 -->
+<!-- Node1214&#45;&gt;Node1343 -->
 <g id="edge129" class="edge">
-<title>Node1212&#45;&gt;Node1341</title>
+<title>Node1214&#45;&gt;Node1343</title>
 <path fill="none" stroke="midnightblue" d="M64.5,-3351.64C64.54,-3102.93 67.38,-600.5 163,-481.5 166.94,-476.6 171.7,-472.58 176.97,-469.29"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="61,-3351.76 64.5,-3361.76 68,-3351.76 61,-3351.76"/>
 </g>
-<!-- Node1342 -->
+<!-- Node1344 -->
 <g id="node131" class="node">
-<title>Node1342</title>
+<title>Node1344</title>
 <g id="a_node131"><a xlink:href="class_ogre_1_1v1_1_1_panel_overlay_element_1_1_cmd_u_v_coords.html" target="_top" xlink:title="Command object for specifying UV coordinates (see ParamCommand).">
 <polygon fill="none" stroke="black" points="177,-392.5 177,-422.5 346,-422.5 346,-392.5 177,-392.5"/>
 <text text-anchor="start" x="185" y="-410.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::PanelOverlayElement</text>
@@ -2090,15 +2090,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1342 -->
+<!-- Node1214&#45;&gt;Node1344 -->
 <g id="edge130" class="edge">
-<title>Node1212&#45;&gt;Node1342</title>
+<title>Node1214&#45;&gt;Node1344</title>
 <path fill="none" stroke="midnightblue" d="M64.49,-3351.68C64.38,-3100.96 65.74,-553.6 163,-432.5 166.94,-427.6 171.7,-423.58 176.97,-420.29"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="60.99,-3351.87 64.49,-3361.87 67.99,-3351.86 60.99,-3351.87"/>
 </g>
-<!-- Node1343 -->
+<!-- Node1345 -->
 <g id="node132" class="node">
-<title>Node1343</title>
+<title>Node1345</title>
 <g id="a_node132"><a xlink:href="class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_alignment.html" target="_top" xlink:title="Command object for setting the alignment.">
 <polygon fill="none" stroke="black" points="189,-343.5 189,-373.5 334,-373.5 334,-343.5 189,-343.5"/>
 <text text-anchor="start" x="197" y="-361.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::TextAreaOverlay</text>
@@ -2106,15 +2106,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1343 -->
+<!-- Node1214&#45;&gt;Node1345 -->
 <g id="edge131" class="edge">
-<title>Node1212&#45;&gt;Node1343</title>
+<title>Node1214&#45;&gt;Node1345</title>
 <path fill="none" stroke="midnightblue" d="M64.47,-3351.74C64.23,-3099.07 64.11,-506.71 163,-383.5 169.67,-375.19 178.7,-369.42 188.58,-365.45"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="60.97,-3351.98 64.49,-3361.98 67.97,-3351.98 60.97,-3351.98"/>
 </g>
-<!-- Node1344 -->
+<!-- Node1346 -->
 <g id="node133" class="node">
-<title>Node1344</title>
+<title>Node1346</title>
 <g id="a_node133"><a xlink:href="class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_caption.html" target="_top" xlink:title="Command object for setting the caption.">
 <polygon fill="none" stroke="black" points="189,-294.5 189,-324.5 334,-324.5 334,-294.5 189,-294.5"/>
 <text text-anchor="start" x="197" y="-312.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::TextAreaOverlay</text>
@@ -2122,15 +2122,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1344 -->
+<!-- Node1214&#45;&gt;Node1346 -->
 <g id="edge132" class="edge">
-<title>Node1212&#45;&gt;Node1344</title>
+<title>Node1214&#45;&gt;Node1346</title>
 <path fill="none" stroke="midnightblue" d="M64.46,-3351.79C64.07,-3097.22 62.47,-459.81 163,-334.5 169.67,-326.19 178.7,-320.41 188.58,-316.45"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="60.96,-3351.83 64.48,-3361.82 67.96,-3351.82 60.96,-3351.83"/>
 </g>
-<!-- Node1345 -->
+<!-- Node1347 -->
 <g id="node134" class="node">
-<title>Node1345</title>
+<title>Node1347</title>
 <g id="a_node134"><a xlink:href="class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_char_height.html" target="_top" xlink:title="Command object for setting the char height.">
 <polygon fill="none" stroke="black" points="189,-245.5 189,-275.5 334,-275.5 334,-245.5 189,-245.5"/>
 <text text-anchor="start" x="197" y="-263.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::TextAreaOverlay</text>
@@ -2138,15 +2138,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1345 -->
+<!-- Node1214&#45;&gt;Node1347 -->
 <g id="edge133" class="edge">
-<title>Node1212&#45;&gt;Node1345</title>
+<title>Node1214&#45;&gt;Node1347</title>
 <path fill="none" stroke="midnightblue" d="M64.45,-3351.86C63.92,-3095.5 60.83,-412.92 163,-285.5 169.67,-277.18 178.69,-271.41 188.58,-267.44"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="60.95,-3351.96 64.48,-3361.95 67.95,-3351.94 60.95,-3351.96"/>
 </g>
-<!-- Node1346 -->
+<!-- Node1348 -->
 <g id="node135" class="node">
-<title>Node1346</title>
+<title>Node1348</title>
 <g id="a_node135"><a xlink:href="class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_colour.html" target="_top" xlink:title="Command object for setting the constant colour.">
 <polygon fill="none" stroke="black" points="189,-196.5 189,-226.5 334,-226.5 334,-196.5 189,-196.5"/>
 <text text-anchor="start" x="197" y="-214.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::TextAreaOverlay</text>
@@ -2154,15 +2154,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1346 -->
+<!-- Node1214&#45;&gt;Node1348 -->
 <g id="edge134" class="edge">
-<title>Node1212&#45;&gt;Node1346</title>
+<title>Node1214&#45;&gt;Node1348</title>
 <path fill="none" stroke="midnightblue" d="M64.44,-3351.55C63.77,-3091.12 59.24,-365.97 163,-236.5 169.67,-228.18 178.69,-222.41 188.57,-218.44"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="60.94,-3351.81 64.47,-3361.8 67.94,-3351.79 60.94,-3351.81"/>
 </g>
-<!-- Node1347 -->
+<!-- Node1349 -->
 <g id="node136" class="node">
-<title>Node1347</title>
+<title>Node1349</title>
 <g id="a_node136"><a xlink:href="class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_colour_bottom.html" target="_top" xlink:title="Command object for setting the bottom colour.">
 <polygon fill="none" stroke="black" points="185,-147.5 185,-177.5 338,-177.5 338,-147.5 185,-147.5"/>
 <text text-anchor="start" x="193" y="-165.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::TextAreaOverlay</text>
@@ -2170,15 +2170,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1347 -->
+<!-- Node1214&#45;&gt;Node1349 -->
 <g id="edge135" class="edge">
-<title>Node1212&#45;&gt;Node1347</title>
+<title>Node1214&#45;&gt;Node1349</title>
 <path fill="none" stroke="midnightblue" d="M64.43,-3351.64C63.63,-3089.54 57.6,-319.08 163,-187.5 168.79,-180.27 176.36,-174.96 184.73,-171.09"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="60.93,-3351.94 64.47,-3361.93 67.93,-3351.92 60.93,-3351.94"/>
 </g>
-<!-- Node1348 -->
+<!-- Node1350 -->
 <g id="node137" class="node">
-<title>Node1348</title>
+<title>Node1350</title>
 <g id="a_node137"><a xlink:href="class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_colour_top.html" target="_top" xlink:title="Command object for setting the top colour.">
 <polygon fill="none" stroke="black" points="189,-98.5 189,-128.5 334,-128.5 334,-98.5 189,-98.5"/>
 <text text-anchor="start" x="197" y="-116.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::TextAreaOverlay</text>
@@ -2186,15 +2186,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1348 -->
+<!-- Node1214&#45;&gt;Node1350 -->
 <g id="edge136" class="edge">
-<title>Node1212&#45;&gt;Node1348</title>
+<title>Node1214&#45;&gt;Node1350</title>
 <path fill="none" stroke="midnightblue" d="M64.42,-3351.73C63.48,-3087.99 55.96,-272.2 163,-138.5 169.66,-130.18 178.69,-124.4 188.57,-120.43"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="60.92,-3351.79 64.46,-3361.78 67.92,-3351.77 60.92,-3351.79"/>
 </g>
-<!-- Node1349 -->
+<!-- Node1351 -->
 <g id="node138" class="node">
-<title>Node1349</title>
+<title>Node1351</title>
 <g id="a_node138"><a xlink:href="class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_font_name.html" target="_top" xlink:title="Command object for setting the caption.">
 <polygon fill="none" stroke="black" points="189,-49.5 189,-79.5 334,-79.5 334,-49.5 189,-49.5"/>
 <text text-anchor="start" x="197" y="-67.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::TextAreaOverlay</text>
@@ -2202,15 +2202,15 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1349 -->
+<!-- Node1214&#45;&gt;Node1351 -->
 <g id="edge137" class="edge">
-<title>Node1212&#45;&gt;Node1349</title>
+<title>Node1214&#45;&gt;Node1351</title>
 <path fill="none" stroke="midnightblue" d="M64.41,-3351.83C63.34,-3086.58 54.31,-225.32 163,-89.5 169.66,-81.18 178.68,-75.4 188.56,-71.43"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="60.91,-3351.94 64.46,-3361.92 67.91,-3351.91 60.91,-3351.94"/>
 </g>
-<!-- Node1350 -->
+<!-- Node1352 -->
 <g id="node139" class="node">
-<title>Node1350</title>
+<title>Node1352</title>
 <g id="a_node139"><a xlink:href="class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_space_width.html" target="_top" xlink:title="Command object for setting the width of a space.">
 <polygon fill="none" stroke="black" points="189,-0.5 189,-30.5 334,-30.5 334,-0.5 189,-0.5"/>
 <text text-anchor="start" x="197" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::TextAreaOverlay</text>
@@ -2218,9 +2218,9 @@
 </a>
 </g>
 </g>
-<!-- Node1212&#45;&gt;Node1350 -->
+<!-- Node1214&#45;&gt;Node1352 -->
 <g id="edge138" class="edge">
-<title>Node1212&#45;&gt;Node1350</title>
+<title>Node1214&#45;&gt;Node1352</title>
 <path fill="none" stroke="midnightblue" d="M64.4,-3351.54C63.19,-3082.33 52.72,-178.37 163,-40.5 169.66,-32.18 178.68,-26.4 188.56,-22.43"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="60.91,-3351.8 64.45,-3361.78 67.91,-3351.76 60.91,-3351.8"/>
 </g>
