@@ -223,7 +223,6 @@ namespace Ogre
         VulkanTextureGpuManager *textureManager =
             static_cast<VulkanTextureGpuManager *>( textureGpuManager );
 
-
         mTexture = textureManager->createTextureGpuWindow( this );
         if( DepthBuffer::DefaultDepthBufferFormat != PFG_NULL )
         {
@@ -250,11 +249,10 @@ namespace Ogre
 
         if( mDepthBuffer )
         {
-            mTexture->_setDepthBufferDefaults(
-                mDepthBuffer->isTilerMemoryless()
-                    ? DepthBuffer::POOL_MEMORYLESS
-                    : DepthBuffer::NO_POOL_EXPLICIT_RTV, false,
-                mDepthBuffer->getPixelFormat() );
+            mTexture->_setDepthBufferDefaults( mDepthBuffer->isTilerMemoryless()
+                                                   ? DepthBuffer::POOL_MEMORYLESS
+                                                   : DepthBuffer::NO_POOL_EXPLICIT_RTV,
+                                               false, mDepthBuffer->getPixelFormat() );
         }
         else
         {

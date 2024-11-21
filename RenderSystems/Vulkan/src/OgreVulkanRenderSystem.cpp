@@ -511,8 +511,8 @@ namespace Ogre
                 pipelineCacheCreateInfo.pInitialData = buf.data() + sizeof( PipelineCachePrefixHeader );
 
                 VkPipelineCache pipelineCache{};
-                result = vkCreatePipelineCache( mDevice->mDevice, &pipelineCacheCreateInfo,
-                                                nullptr, &pipelineCache );
+                result = vkCreatePipelineCache( mDevice->mDevice, &pipelineCacheCreateInfo, nullptr,
+                                                &pipelineCache );
                 if( VK_SUCCESS == result && pipelineCache != 0 )
                 {
                     std::swap( mDevice->mPipelineCache, pipelineCache );
@@ -538,8 +538,8 @@ namespace Ogre
         if( mDevice->mPipelineCache )
         {
             size_t size{};
-            VkResult result = vkGetPipelineCacheData( mDevice->mDevice, mDevice->mPipelineCache, &size,
-                                                      nullptr );
+            VkResult result =
+                vkGetPipelineCacheData( mDevice->mDevice, mDevice->mPipelineCache, &size, nullptr );
             if( result == VK_SUCCESS && size > 0 && size <= 0x7FFFFFFF )
             {
                 std::vector<unsigned char> buf;  // PipelineCachePrefixHeader + payload
@@ -807,7 +807,7 @@ namespace Ogre
         rsc->setCapability( RSC_VBO );
         // VK_INDEX_TYPE_UINT32 is always supported with range at least 2^24-1
         // and even 2^32-1 if mDevice->mDeviceFeatures.fullDrawIndexUint32
-        rsc->setCapability( RSC_32BIT_INDEX ); 
+        rsc->setCapability( RSC_32BIT_INDEX );
         rsc->setCapability( RSC_TWO_SIDED_STENCIL );
         rsc->setCapability( RSC_STENCIL_WRAP );
         if( mDevice->mDeviceFeatures.shaderClipDistance )
@@ -1325,7 +1325,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     const VulkanPhysicalDeviceList &VulkanRenderSystem::getVulkanPhysicalDevices( bool refreshList )
     {
-
         if( refreshList || mVulkanPhysicalDeviceList.empty() )
         {
             LogManager::getSingleton().logMessage( "Vulkan: Device detection starts" );
@@ -3016,8 +3015,7 @@ namespace Ogre
 #endif
             }
 
-            vkCmdSetViewport( mDevice->mGraphicsQueue.getCurrentCmdBuffer(), 0u, numViewports,
-                              vkVp );
+            vkCmdSetViewport( mDevice->mGraphicsQueue.getCurrentCmdBuffer(), 0u, numViewports, vkVp );
         }
 
         if( mVpChanged || numViewports > 1u )
@@ -3366,16 +3364,14 @@ namespace Ogre
                     //
                     // This cannot catch all use cases, but if you fall into something this
                     // doesn't catch, then you should probably be using explicit resolves
-                    bool useNewLayoutForMsaa =
-                            itor->newLayout == ResourceLayout::RenderTarget ||
-                            itor->newLayout == ResourceLayout::ResolveDest ||
-                            itor->newLayout == ResourceLayout::CopySrc ||
-                            itor->newLayout == ResourceLayout::CopyDst;
-                    bool useOldLayoutForMsaa =
-                            itor->oldLayout == ResourceLayout::RenderTarget ||
-                            itor->oldLayout == ResourceLayout::ResolveDest ||
-                            itor->oldLayout == ResourceLayout::CopySrc ||
-                            itor->oldLayout == ResourceLayout::CopyDst;
+                    bool useNewLayoutForMsaa = itor->newLayout == ResourceLayout::RenderTarget ||
+                                               itor->newLayout == ResourceLayout::ResolveDest ||
+                                               itor->newLayout == ResourceLayout::CopySrc ||
+                                               itor->newLayout == ResourceLayout::CopyDst;
+                    bool useOldLayoutForMsaa = itor->oldLayout == ResourceLayout::RenderTarget ||
+                                               itor->oldLayout == ResourceLayout::ResolveDest ||
+                                               itor->oldLayout == ResourceLayout::CopySrc ||
+                                               itor->oldLayout == ResourceLayout::CopyDst;
                     if( !useNewLayoutForMsaa )
                         imageBarrier.newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                     if( !useOldLayoutForMsaa )
@@ -3415,10 +3411,9 @@ namespace Ogre
             dstStage = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
 
         vkCmdPipelineBarrier( mDevice->mGraphicsQueue.getCurrentCmdBuffer(),
-                              srcStage & mDevice->mSupportedStages,
-                              dstStage & mDevice->mSupportedStages, 0, numMemBarriers, &memBarrier,
-                              0u, 0, static_cast<uint32>( mImageBarriers.size() ),
-                              mImageBarriers.begin() );
+                              srcStage & mDevice->mSupportedStages, dstStage & mDevice->mSupportedStages,
+                              0, numMemBarriers, &memBarrier, 0u, 0,
+                              static_cast<uint32>( mImageBarriers.size() ), mImageBarriers.begin() );
         mImageBarriers.clear();
     }
     //-------------------------------------------------------------------------

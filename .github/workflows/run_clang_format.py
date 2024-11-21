@@ -39,6 +39,7 @@ g_folders = [
     'RenderSystems/GL3Plus',
     'RenderSystems/Metal',
     'RenderSystems/NULL',
+    'RenderSystems/Vulkan',
     'PlugIns/ParticleFX',
     'PlugIns/ParticleFX2',
     'Samples/2.0',
@@ -53,6 +54,7 @@ g_exceptions = {'stb_image_write.h', 'stb_image.h',
                 'OgreMetalPixelFormatToShaderType.inl',
                 'OgreD3D11PixelFormatToShaderType.cpp',
                 'OgreD3D11PixelFormatToShaderType.inl',
+                'spirv.h', 'spirv_reflect.h',
                 'LocalCubemapScene.h', 'LocalCubemapsManualProbesScene.h',
                 'OgreScriptTranslator.cpp'}
 

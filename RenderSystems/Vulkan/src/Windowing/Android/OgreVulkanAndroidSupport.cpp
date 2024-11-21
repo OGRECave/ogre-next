@@ -197,7 +197,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-	IdString VulkanAndroidSupport::getInterfaceName() const { return "android"; }
+    IdString VulkanAndroidSupport::getInterfaceName() const { return "android"; }
     //-------------------------------------------------------------------------
-	String VulkanAndroidSupport::getInterfaceNameStr() const { return "android"; }
+    String VulkanAndroidSupport::getInterfaceNameStr() const { return "android"; }
 }  // namespace Ogre

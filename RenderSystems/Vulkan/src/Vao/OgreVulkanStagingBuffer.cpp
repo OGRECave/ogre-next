@@ -354,7 +354,8 @@ namespace Ogre
         OGRE_ASSERT_HIGH( !Workarounds::mPowerVRAlignment ||
                           ( region.dstOffset % Workarounds::mPowerVRAlignment ) == 0u );
 #endif
-        vkCmdCopyBuffer( device->mGraphicsQueue.getCurrentCmdBuffer(), mVboName, dstBuffer, 1u, &region );
+        vkCmdCopyBuffer( device->mGraphicsQueue.getCurrentCmdBuffer(), mVboName, dstBuffer, 1u,
+                         &region );
 
         if( mUploadOnly )
         {
@@ -417,7 +418,8 @@ namespace Ogre
         OGRE_ASSERT_HIGH( !Workarounds::mPowerVRAlignment ||
                           ( region.dstOffset % Workarounds::mPowerVRAlignment ) == 0u );
 #endif
-        vkCmdCopyBuffer( device->mGraphicsQueue.getCurrentCmdBuffer(), srcBuffer, mVboName, 1u, &region );
+        vkCmdCopyBuffer( device->mGraphicsQueue.getCurrentCmdBuffer(), srcBuffer, mVboName, 1u,
+                         &region );
 
         return freeRegionOffset + extraOffset;
     }

@@ -2146,7 +2146,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::getAvailableSemaphores( VkSemaphoreArray &semaphoreArray,
-                                                    size_t numSemaphores )
+                                                   size_t numSemaphores )
     {
         semaphoreArray.reserve( semaphoreArray.size() + numSemaphores );
 

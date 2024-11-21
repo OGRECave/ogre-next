@@ -62,10 +62,7 @@ namespace Ogre
         _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
-    VulkanTextureGpu::~VulkanTextureGpu()
-    {
-        destroyInternalResourcesImpl();
-    }
+    VulkanTextureGpu::~VulkanTextureGpu() { destroyInternalResourcesImpl(); }
     //-----------------------------------------------------------------------------------
     PixelFormatGpu VulkanTextureGpu::getWorkaroundedPixelFormat( const PixelFormatGpu pixelFormat ) const
     {

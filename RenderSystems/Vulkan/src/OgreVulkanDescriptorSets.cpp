@@ -58,8 +58,8 @@ namespace Ogre
             {
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
                 sampler = static_cast<VkSampler>( samplerblock->mRsData );
-#else // VK handles are always 64bit, even on 32bit systems
-                sampler = *static_cast<VkSampler*>( samplerblock->mRsData );
+#else  // VK handles are always 64bit, even on 32bit systems
+                sampler = *static_cast<VkSampler *>( samplerblock->mRsData );
 #endif
             }
             VkDescriptorImageInfo imageInfo;
