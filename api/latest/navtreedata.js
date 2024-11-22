@@ -211,7 +211,7 @@ var NAVTREEINDEX =
 "struct_ogre_1_1_shader_params_1_1_manual_param.html#a880e52a307999acf9db0b87be8d5a5a8",
 "struct_ogre_1_1_unlit_property.html#a1f18d1961ef991f16f725b90fd21da99",
 "struct_ogre_1_1_volume_1_1_chunk_tree_shared_data.html#af672339162b49888584d20403decfc13",
-"struct_ogre_1_1is_pod_like_3_01long_01_4.html"
+"struct_ogre_1_1is_pod_like_3_01int_01_4.html#a648e554da1efd2bb890e10b2d1d19047"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
