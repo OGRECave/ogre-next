@@ -341,17 +341,8 @@ namespace Ogre
         OGRE_DELETE mVulkanProgramFactory0;
         mVulkanProgramFactory0 = 0;
 
-        const bool bIsExternal = mDevice->mIsExternal;
-        VkDevice vkDevice = mDevice->mDevice;
         delete mDevice;
         mDevice = 0;
-
-#ifdef OGRE_VULKAN_USE_SWAPPY
-        SwappyVk_destroyDevice( vkDevice );
-#endif
-
-        if( !bIsExternal )
-            vkDestroyDevice( vkDevice, 0 );
     }
     //-------------------------------------------------------------------------
     const String &VulkanRenderSystem::getName() const
@@ -1092,6 +1083,8 @@ namespace Ogre
                 }
             }
 
+            mNativeShadingLanguageVersion = 450;
+
             if( !mInstance )
                 mInstance = std::make_shared<VulkanInstance>( Root::getSingleton().getAppName(), nullptr,
                                                               dbgFunc, this );
@@ -1100,114 +1093,8 @@ namespace Ogre
                                 ? VulkanPhysicalDevice( { externalDevice->physicalDevice, String() } )
                                 : *mInstance->findByName( mVulkanSupport->getSelectedDeviceName() );
 
-            if( !externalDevice )
-                mDevice = new VulkanDevice( mInstance, mActiveDevice, this );
-            else
-                mDevice = new VulkanDevice( mInstance, *externalDevice, this );
-
-            mNativeShadingLanguageVersion = 450;
-
-            bool bCanRestrictImageViewUsage = false;
-
-#ifdef OGRE_VULKAN_USE_SWAPPY
-            // Declared at this scope because the pointer must live long enough
-            // for the reference in deviceExtensions[i] to remain valid.
-            struct ExtName
-            {
-                char name[VK_MAX_EXTENSION_NAME_SIZE];
-            };
-            FastArray<ExtName> swappyRequiredExtensionNames;
-#endif
-            FastArray<const char *> deviceExtensions;
-            if( !externalDevice )
-            {
-                uint32 numExtensions = 0;
-                vkEnumerateDeviceExtensionProperties( mDevice->mPhysicalDevice, 0, &numExtensions, 0 );
-
-                FastArray<VkExtensionProperties> availableExtensions;
-                availableExtensions.resize( numExtensions );
-                vkEnumerateDeviceExtensionProperties( mDevice->mPhysicalDevice, 0, &numExtensions,
-                                                      availableExtensions.begin() );
-                for( size_t i = 0u; i < numExtensions; ++i )
-                {
-                    const String extensionName = availableExtensions[i].extensionName;
-                    LogManager::getSingleton().logMessage( "Vulkan: Found device extension: " +
-                                                           extensionName );
-
-                    if( extensionName == VK_KHR_MAINTENANCE2_EXTENSION_NAME )
-                    {
-                        deviceExtensions.push_back( VK_KHR_MAINTENANCE2_EXTENSION_NAME );
-                        bCanRestrictImageViewUsage = true;
-                    }
-                    else if( extensionName == VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME )
-                        deviceExtensions.push_back( VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME );
-                    else if( extensionName == VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME )
-                        deviceExtensions.push_back( VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME );
-                    else if( extensionName == VK_KHR_STORAGE_BUFFER_STORAGE_CLASS_EXTENSION_NAME )
-                    {
-                        // Required by VK_KHR_16bit_storage
-                        deviceExtensions.push_back( VK_KHR_STORAGE_BUFFER_STORAGE_CLASS_EXTENSION_NAME );
-                    }
-                    else if( extensionName == VK_KHR_16BIT_STORAGE_EXTENSION_NAME )
-                        deviceExtensions.push_back( VK_KHR_16BIT_STORAGE_EXTENSION_NAME );
-                    else if( extensionName == VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME )
-                        deviceExtensions.push_back( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME );
-                }
-#ifdef OGRE_VULKAN_USE_SWAPPY
-                // Add any extensions that SwappyVk requires:
-                uint32_t numSwappyRequiredExtensions = 0u;
-                SwappyVk_determineDeviceExtensions( mDevice->mPhysicalDevice, numExtensions,
-                                                    availableExtensions.begin(),
-                                                    &numSwappyRequiredExtensions, 0 );
-                FastArray<char *> swappyRequiredExtensionNamesTmp;
-                swappyRequiredExtensionNames.resize( numSwappyRequiredExtensions );
-                swappyRequiredExtensionNamesTmp.reserve( numSwappyRequiredExtensions );
-
-                for( ExtName &extName : swappyRequiredExtensionNames )
-                    swappyRequiredExtensionNamesTmp.push_back( extName.name );
-
-                SwappyVk_determineDeviceExtensions(
-                    mDevice->mPhysicalDevice, numExtensions, availableExtensions.begin(),
-                    &numSwappyRequiredExtensions, swappyRequiredExtensionNamesTmp.begin() );
-
-                for( const char *swappyReqExtension : swappyRequiredExtensionNamesTmp )
-                {
-                    bool bAlreadyAdded = false;
-                    for( const char *alreadyAdded : deviceExtensions )
-                    {
-                        if( strncmp( alreadyAdded, swappyReqExtension, VK_MAX_EXTENSION_NAME_SIZE ) ==
-                            0 )
-                        {
-                            bAlreadyAdded = true;
-                            break;
-                        }
-                    }
-                    if( !bAlreadyAdded )
-                        deviceExtensions.push_back( swappyReqExtension );
-                }
-#endif
-            }
-            else
-            {
-                if( mDevice->hasDeviceExtension( VK_KHR_MAINTENANCE2_EXTENSION_NAME ) )
-                    bCanRestrictImageViewUsage = true;
-            }
-
-            if( !bCanRestrictImageViewUsage )
-            {
-                LogManager::getSingleton().logMessage(
-                    "WARNING: " VK_KHR_MAINTENANCE2_EXTENSION_NAME
-                    " not present. We may have to force the driver to do UAV + SRGB operations "
-                    "the GPU should support, but it's not guaranteed to work" );
-            }
-
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
-            if( VulkanInstance::hasValidationLayers )
-                deviceExtensions.push_back( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
-#endif
-
-            if( !externalDevice )
-                mDevice->createDevice( deviceExtensions, 0u, 0u );
+            mDevice = new VulkanDevice( this );
+            mDevice->setPhysicalDevice( mInstance, mActiveDevice, externalDevice );
 
             mRealCapabilities = createRenderSystemCapabilities();
             mCurrentCapabilities = mRealCapabilities;
@@ -1259,6 +1146,17 @@ namespace Ogre
             else
             {
                 DepthBuffer::DefaultDepthBufferFormat = PFG_NULL;
+            }
+
+            bool bCanRestrictImageViewUsage =
+                mDevice->hasDeviceExtension( VK_KHR_MAINTENANCE2_EXTENSION_NAME );
+
+            if( !bCanRestrictImageViewUsage )
+            {
+                LogManager::getSingleton().logMessage(
+                    "WARNING: " VK_KHR_MAINTENANCE2_EXTENSION_NAME
+                    " not present. We may have to force the driver to do UAV + SRGB operations "
+                    "the GPU should support, but it's not guaranteed to work" );
             }
 
             VulkanTextureGpuManager *textureGpuManager = OGRE_NEW VulkanTextureGpuManager(

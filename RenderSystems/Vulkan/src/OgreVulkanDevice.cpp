@@ -452,10 +452,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    VulkanDevice::VulkanDevice( const std::shared_ptr<VulkanInstance> &instance,
-                                const VulkanPhysicalDevice &physicalDevice,
-                                VulkanRenderSystem *renderSystem ) :
-        mInstance( instance ),
+    VulkanDevice::VulkanDevice( VulkanRenderSystem *renderSystem ) :
+        mInstance( 0 ),
         mPhysicalDevice( 0 ),
         mDevice( 0 ),
         mPipelineCache( 0 ),
@@ -465,149 +463,14 @@ namespace Ogre
         mSupportedStages( 0xFFFFFFFF ),
         mIsExternal( false )
     {
-        memset( &mDeviceMemoryProperties, 0, sizeof( mDeviceMemoryProperties ) );
-        setPhysicalDevice( physicalDevice );
-    }
-    //-------------------------------------------------------------------------
-    VulkanDevice::VulkanDevice( const std::shared_ptr<VulkanInstance> &instance,
-                                const VulkanExternalDevice &externalDevice,
-                                VulkanRenderSystem *renderSystem ) :
-        mInstance( instance ),
-        mPhysicalDevice( externalDevice.physicalDevice ),
-        mDevice( externalDevice.device ),
-        mPipelineCache( 0 ),
-        mPresentQueue( 0 ),
-        mVaoManager( 0 ),
-        mRenderSystem( renderSystem ),
-        mSupportedStages( 0xFFFFFFFF ),
-        mIsExternal( true )
-    {
-        LogManager::getSingleton().logMessage(
-            "Vulkan: Creating Vulkan Device from External VkVulkan handle" );
-
-        memset( &mDeviceMemoryProperties, 0, sizeof( mDeviceMemoryProperties ) );
-
-        vkGetPhysicalDeviceMemoryProperties( mPhysicalDevice, &mDeviceMemoryProperties );
-
-        // mDeviceExtraFeatures gets initialized later, once we analyzed all the extensions
-        memset( &mDeviceExtraFeatures, 0, sizeof( mDeviceExtraFeatures ) );
-        fillDeviceFeatures();
-
-        mSupportedStages = 0xFFFFFFFF;
-        if( !mDeviceFeatures.geometryShader )
-            mSupportedStages ^= VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
-        if( !mDeviceFeatures.tessellationShader )
-        {
-            mSupportedStages ^= VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
-                                VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
-        }
-
-        {
-            uint32 numQueues;
-            vkGetPhysicalDeviceQueueFamilyProperties( mPhysicalDevice, &numQueues, NULL );
-            if( numQueues == 0u )
-            {
-                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Vulkan device is reporting 0 queues!",
-                             "VulkanDevice::createDevice" );
-            }
-            mQueueProps.resize( numQueues );
-            vkGetPhysicalDeviceQueueFamilyProperties( mPhysicalDevice, &numQueues, &mQueueProps[0] );
-        }
-
-        mPresentQueue = externalDevice.presentQueue;
-        mGraphicsQueue.setExternalQueue( this, VulkanQueue::Graphics, externalDevice.graphicsQueue );
-        {
-            // Filter wrongly-provided extensions
-            uint32 numExtensions = 0;
-            vkEnumerateDeviceExtensionProperties( mPhysicalDevice, 0, &numExtensions, 0 );
-
-            FastArray<VkExtensionProperties> availableExtensions;
-            availableExtensions.resize( numExtensions );
-            vkEnumerateDeviceExtensionProperties( mPhysicalDevice, 0, &numExtensions,
-                                                  availableExtensions.begin() );
-            std::set<String> extensions;
-            for( size_t i = 0u; i < numExtensions; ++i )
-            {
-                const String extensionName = availableExtensions[i].extensionName;
-                LogManager::getSingleton().logMessage( "Vulkan: Found device extension: " +
-                                                       extensionName );
-                extensions.insert( extensionName );
-            }
-
-            FastArray<VkExtensionProperties> deviceExtensionsCopy = externalDevice.deviceExtensions;
-            FastArray<VkExtensionProperties>::iterator itor = deviceExtensionsCopy.begin();
-            FastArray<VkExtensionProperties>::iterator endt = deviceExtensionsCopy.end();
-
-            while( itor != endt )
-            {
-                if( extensions.find( itor->extensionName ) == extensions.end() )
-                {
-                    LogManager::getSingleton().logMessage(
-                        "Vulkan: [INFO] External Device claims extension " +
-                        String( itor->extensionName ) +
-                        " is present but it's not. This is normal. Ignoring." );
-                    itor = efficientVectorRemove( deviceExtensionsCopy, itor );
-                    endt = deviceExtensionsCopy.end();
-                }
-                else
-                {
-                    ++itor;
-                }
-            }
-
-            mDeviceExtensions.reserve( deviceExtensionsCopy.size() );
-            itor = deviceExtensionsCopy.begin();
-            while( itor != endt )
-            {
-                LogManager::getSingleton().logMessage(
-                    "Vulkan: Externally requested Device Extension: " + String( itor->extensionName ) );
-                mDeviceExtensions.push_back( itor->extensionName );
-                ++itor;
-            }
-
-            std::sort( mDeviceExtensions.begin(), mDeviceExtensions.end() );
-        }
-
-        // Initialize mDeviceExtraFeatures
-        if( VulkanInstance::hasExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
-        {
-            VkPhysicalDeviceFeatures2 deviceFeatures2;
-            makeVkStruct( deviceFeatures2, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2 );
-            VkPhysicalDevice16BitStorageFeatures _16BitStorageFeatures;
-            makeVkStruct( _16BitStorageFeatures,
-                          VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES );
-            VkPhysicalDeviceShaderFloat16Int8Features shaderFloat16Int8Features;
-            makeVkStruct( shaderFloat16Int8Features,
-                          VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES );
-
-            PFN_vkGetPhysicalDeviceFeatures2KHR GetPhysicalDeviceFeatures2KHR =
-                (PFN_vkGetPhysicalDeviceFeatures2KHR)vkGetInstanceProcAddr(
-                    mInstance->mVkInstance, "vkGetPhysicalDeviceFeatures2KHR" );
-
-            void **lastNext = &deviceFeatures2.pNext;
-
-            if( this->hasDeviceExtension( VK_KHR_16BIT_STORAGE_EXTENSION_NAME ) )
-            {
-                *lastNext = &_16BitStorageFeatures;
-                lastNext = &_16BitStorageFeatures.pNext;
-            }
-            if( this->hasDeviceExtension( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME ) )
-            {
-                *lastNext = &shaderFloat16Int8Features;
-                lastNext = &shaderFloat16Int8Features.pNext;
-            }
-
-            GetPhysicalDeviceFeatures2KHR( mPhysicalDevice, &deviceFeatures2 );
-
-            mDeviceExtraFeatures.storageInputOutput16 = _16BitStorageFeatures.storageInputOutput16;
-            mDeviceExtraFeatures.shaderFloat16 = shaderFloat16Int8Features.shaderFloat16;
-            mDeviceExtraFeatures.shaderInt8 = shaderFloat16Int8Features.shaderInt8;
-        }
-
-        initUtils( mDevice );
     }
     //-------------------------------------------------------------------------
     VulkanDevice::~VulkanDevice()
+    {
+        destroy();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanDevice::destroy()
     {
         if( mDevice )
         {
@@ -623,10 +486,13 @@ namespace Ogre
                 mPipelineCache = 0;
             }
 
-            // Must be done externally (this' destructor has yet to free more Vulkan stuff)
-            // vkDestroyDevice( mDevice, 0 );
+#ifdef OGRE_VULKAN_USE_SWAPPY
+            SwappyVk_destroyDevice( mDevice );
+#endif
+            if( !mIsExternal )
+                vkDestroyDevice( mDevice, 0 );
+
             mDevice = 0;
-            mPhysicalDevice = 0;
         }
     }
     //-------------------------------------------------------------------------
@@ -698,6 +564,43 @@ namespace Ogre
         // VK_DEVICEFEATURE_ENABLE_IF( inheritedQueries );
     }
     //-------------------------------------------------------------------------
+    bool VulkanDevice::fillDeviceFeatures2(
+        VkPhysicalDeviceFeatures2 &deviceFeatures2,
+        VkPhysicalDevice16BitStorageFeatures &device16BitStorageFeatures,
+        VkPhysicalDeviceShaderFloat16Int8Features &deviceShaderFloat16Int8Features )
+    {
+        if( !VulkanInstance::hasExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
+            return false;
+
+        makeVkStruct( deviceFeatures2, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2 );
+        makeVkStruct( device16BitStorageFeatures,
+                      VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES );
+        makeVkStruct( deviceShaderFloat16Int8Features,
+                      VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES );
+
+            PFN_vkGetPhysicalDeviceFeatures2KHR GetPhysicalDeviceFeatures2KHR =
+            (PFN_vkGetPhysicalDeviceFeatures2KHR)vkGetInstanceProcAddr(
+                mInstance->mVkInstance, "vkGetPhysicalDeviceFeatures2KHR" );
+
+        void **lastNext = &deviceFeatures2.pNext;
+        if( hasDeviceExtension( VK_KHR_16BIT_STORAGE_EXTENSION_NAME ) )
+        {
+            *lastNext = &device16BitStorageFeatures;
+            lastNext = &device16BitStorageFeatures.pNext;
+        }
+        if( hasDeviceExtension( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME ) )
+        {
+            *lastNext = &deviceShaderFloat16Int8Features;
+            lastNext = &deviceShaderFloat16Int8Features.pNext;
+        }
+
+        GetPhysicalDeviceFeatures2KHR( mPhysicalDevice, &deviceFeatures2 );
+        mDeviceExtraFeatures.storageInputOutput16 = device16BitStorageFeatures.storageInputOutput16;
+        mDeviceExtraFeatures.shaderFloat16 = deviceShaderFloat16Int8Features.shaderFloat16;
+        mDeviceExtraFeatures.shaderInt8 = deviceShaderFloat16Int8Features.shaderInt8;
+        return true;
+    }
+    //-------------------------------------------------------------------------
     void VulkanDevice::destroyQueues( FastArray<VulkanQueue> &queueArray )
     {
         FastArray<VulkanQueue>::iterator itor = queueArray.begin();
@@ -711,28 +614,122 @@ namespace Ogre
         queueArray.clear();
     }
     //-------------------------------------------------------------------------
-    void VulkanDevice::setPhysicalDevice( const VulkanPhysicalDevice &physicalDevice )
+    void VulkanDevice::setPhysicalDevice( const std::shared_ptr<VulkanInstance> &instance,
+                                          const VulkanPhysicalDevice &physicalDevice,
+                                          const VulkanExternalDevice *externalDevice )
     {
-        if( !physicalDevice.title.empty() )
+        destroy();
+
+        if( externalDevice )
+            LogManager::getSingleton().logMessage(
+                "Vulkan: Creating Vulkan Device from External VkVulkan handle" );
+        else
             LogManager::getSingleton().logMessage( "Vulkan: Selected \"" + physicalDevice.title +
                                                    "\" physical device" );
 
-        mPhysicalDevice = physicalDevice.physicalDevice;
+        mIsExternal = externalDevice != nullptr;
 
-        vkGetPhysicalDeviceMemoryProperties( mPhysicalDevice, &mDeviceMemoryProperties );
-
-        // mDeviceExtraFeatures gets initialized later, once we analyzed all the extensions
-        memset( &mDeviceExtraFeatures, 0, sizeof( mDeviceExtraFeatures ) );
-        fillDeviceFeatures();
-
-        mSupportedStages = 0xFFFFFFFF;
-        if( !mDeviceFeatures.geometryShader )
-            mSupportedStages ^= VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
-        if( !mDeviceFeatures.tessellationShader )
+        // update physical device properties
+        if( mInstance != instance || mPhysicalDevice != physicalDevice.physicalDevice )
         {
-            mSupportedStages ^= VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
-                                VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
+            mInstance = instance;
+            mPhysicalDevice = physicalDevice.physicalDevice;
+
+            memset( &mDeviceMemoryProperties, 0, sizeof( mDeviceMemoryProperties ) );
+            vkGetPhysicalDeviceMemoryProperties( mPhysicalDevice, &mDeviceMemoryProperties );
+
+            // mDeviceExtraFeatures gets initialized later, once we analyzed all device extensions
+            memset( &mDeviceExtraFeatures, 0, sizeof( mDeviceExtraFeatures ) );
+
+            // Query all available and selectively enable required features
+            fillDeviceFeatures();
+
+            mSupportedStages = 0xFFFFFFFF;
+            if( !mDeviceFeatures.geometryShader )
+                mSupportedStages ^= VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+            if( !mDeviceFeatures.tessellationShader )
+            {
+                mSupportedStages ^= VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
+                                    VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
+            }
+
+            uint32 numQueues;
+            vkGetPhysicalDeviceQueueFamilyProperties( mPhysicalDevice, &numQueues, NULL );
+            if( numQueues == 0u )
+            {
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Vulkan device is reporting 0 queues!",
+                             "VulkanDevice::createDevice" );
+            }
+            mQueueProps.resize( numQueues );
+            vkGetPhysicalDeviceQueueFamilyProperties( mPhysicalDevice, &numQueues, &mQueueProps[0] );
         }
+
+        // Obtain logical device
+        uint32 numExtensions = 0;
+        vkEnumerateDeviceExtensionProperties( mPhysicalDevice, 0, &numExtensions, 0 );
+
+        FastArray<VkExtensionProperties> availableExtensions;
+        availableExtensions.resize( numExtensions );
+        vkEnumerateDeviceExtensionProperties( mPhysicalDevice, 0, &numExtensions,
+                                              availableExtensions.begin() );
+        if( !externalDevice )
+        {
+            createDevice( availableExtensions, 0u, 0u );
+        }
+        else
+        {
+            mDevice = externalDevice->device;
+
+            mPresentQueue = externalDevice->presentQueue;
+            mGraphicsQueue.setExternalQueue( this, VulkanQueue::Graphics,
+                                             externalDevice->graphicsQueue );
+
+            // Filter wrongly-provided extensions
+            std::set<String> extensions;
+            for( auto &ext : availableExtensions )
+            {
+                const String extensionName = ext.extensionName;
+                LogManager::getSingleton().logMessage( "Vulkan: Found device extension: " +
+                                                       extensionName );
+                extensions.insert( extensionName );
+            }
+            auto extFilter = [&extensions]( const VkExtensionProperties &elem ) {
+                if( extensions.find( elem.extensionName ) != extensions.end() )
+                    return false;
+                LogManager::getSingleton().logMessage(
+                    "Vulkan: [INFO] External Device claims extension " + String( elem.extensionName ) +
+                    " is present but it's not. This is normal. Ignoring." );
+                return true;
+            };
+            FastArray<VkExtensionProperties> edx = externalDevice->deviceExtensions;
+            edx.resize( std::remove_if( edx.begin(), edx.end(), extFilter ) - edx.begin() );
+
+            mDeviceExtensions.reserve( edx.size() );
+            for( auto &ext : edx )
+            {
+                LogManager::getSingleton().logMessage(
+                    "Vulkan: Externally requested Device Extension: " + String( ext.extensionName ) );
+                mDeviceExtensions.push_back( ext.extensionName );
+            }
+            std::sort( mDeviceExtensions.begin(), mDeviceExtensions.end() );
+
+            // Initialize mDeviceExtraFeatures
+            VkPhysicalDeviceFeatures2 deviceFeatures2;
+            VkPhysicalDevice16BitStorageFeatures device16BitStorageFeatures;
+            VkPhysicalDeviceShaderFloat16Int8Features deviceShaderFloat16Int8Features;
+            fillDeviceFeatures2( deviceFeatures2, device16BitStorageFeatures,
+                                 deviceShaderFloat16Int8Features );
+        }
+
+        // initial pipeline cache
+        VkPipelineCacheCreateInfo pipelineCacheCreateInfo;
+        makeVkStruct( pipelineCacheCreateInfo, VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO );
+        VkResult result =
+            vkCreatePipelineCache( mDevice, &pipelineCacheCreateInfo, nullptr, &mPipelineCache );
+        checkVkResult( result, "vkCreatePipelineCache" );
+
+        // debug utils
+        initUtils( mDevice );
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::findGraphicsQueue( FastArray<uint32> &inOutUsedQueueCount )
@@ -812,18 +809,85 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanDevice::createDevice( FastArray<const char *> &extensions, uint32 maxComputeQueues,
-                                     uint32 maxTransferQueues )
+    void VulkanDevice::createDevice( const FastArray<VkExtensionProperties> &availableExtensions,
+                                     uint32 maxComputeQueues, uint32 maxTransferQueues )
     {
-        uint32 numQueues;
-        vkGetPhysicalDeviceQueueFamilyProperties( mPhysicalDevice, &numQueues, NULL );
-        if( numQueues == 0u )
+        FastArray<const char *> deviceExtensions;
+        for( auto &ext : availableExtensions )
         {
-            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Vulkan device is reporting 0 queues!",
-                         "VulkanDevice::createDevice" );
+            const String extensionName = ext.extensionName;
+            LogManager::getSingleton().logMessage( "Vulkan: Found device extension: " + extensionName );
+
+            if( extensionName == VK_KHR_MAINTENANCE2_EXTENSION_NAME )
+                deviceExtensions.push_back( VK_KHR_MAINTENANCE2_EXTENSION_NAME );
+            else if( extensionName == VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME )
+                deviceExtensions.push_back( VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME );
+            else if( extensionName == VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME )
+                deviceExtensions.push_back( VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME );
+            else if( extensionName == VK_KHR_STORAGE_BUFFER_STORAGE_CLASS_EXTENSION_NAME )
+            {
+                // Required by VK_KHR_16bit_storage
+                deviceExtensions.push_back( VK_KHR_STORAGE_BUFFER_STORAGE_CLASS_EXTENSION_NAME );
+            }
+            else if( extensionName == VK_KHR_16BIT_STORAGE_EXTENSION_NAME )
+                deviceExtensions.push_back( VK_KHR_16BIT_STORAGE_EXTENSION_NAME );
+            else if( extensionName == VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME )
+                deviceExtensions.push_back( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME );
         }
-        mQueueProps.resize( numQueues );
-        vkGetPhysicalDeviceQueueFamilyProperties( mPhysicalDevice, &numQueues, &mQueueProps[0] );
+
+        deviceExtensions.push_back( VK_KHR_SWAPCHAIN_EXTENSION_NAME );
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+        if( VulkanInstance::hasValidationLayers )
+            deviceExtensions.push_back( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
+#endif
+
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        // Add any extensions that SwappyVk requires:
+        uint32_t numSwappyRequiredExtensions = 0u;
+        SwappyVk_determineDeviceExtensions( mPhysicalDevice, numExtensions, availableExtensions.begin(),
+                                            &numSwappyRequiredExtensions, 0 );
+
+        struct ExtName
+        {
+            char name[VK_MAX_EXTENSION_NAME_SIZE];
+        };
+        FastArray<ExtName> swappyRequiredExtensionNames;
+        swappyRequiredExtensionNames.resize( numSwappyRequiredExtensions );
+
+        FastArray<char *> swappyRequiredExtensionNamesTmp;
+        swappyRequiredExtensionNamesTmp.reserve( numSwappyRequiredExtensions );
+        for( ExtName &extName : swappyRequiredExtensionNames )
+            swappyRequiredExtensionNamesTmp.push_back( extName.name );
+
+        SwappyVk_determineDeviceExtensions( mPhysicalDevice, numExtensions, availableExtensions.begin(),
+                                            &numSwappyRequiredExtensions,
+                                            swappyRequiredExtensionNamesTmp.begin() );
+
+        for( const char *swappyReqExtension : swappyRequiredExtensionNamesTmp )
+        {
+            bool bAlreadyAdded = false;
+            for( const char *alreadyAdded : deviceExtensions )
+            {
+                if( strncmp( alreadyAdded, swappyReqExtension, VK_MAX_EXTENSION_NAME_SIZE ) == 0 )
+                {
+                    bAlreadyAdded = true;
+                    break;
+                }
+            }
+            if( !bAlreadyAdded )
+                deviceExtensions.push_back( swappyReqExtension );
+        }
+#endif
+
+        mDeviceExtensions.clear();
+        mDeviceExtensions.reserve( deviceExtensions.size() );
+        for( auto ext : deviceExtensions )
+        {
+            LogManager::getSingleton().logMessage( "Vulkan: Requesting device extension: " + String( ext ) );
+            mDeviceExtensions.push_back( ext );
+        }
+        std::sort( mDeviceExtensions.begin(), mDeviceExtensions.end() );
 
         // Setup queue creation
         FastArray<VkDeviceQueueCreateInfo> queueCreateInfo;
@@ -838,90 +902,29 @@ namespace Ogre
             queueCreateInfo[i].pQueuePriorities = queuePriorities[i].begin();
         }
 
-        extensions.push_back( VK_KHR_SWAPCHAIN_EXTENSION_NAME );
-
         VkDeviceCreateInfo createInfo;
         makeVkStruct( createInfo, VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO );
 
-        createInfo.enabledExtensionCount = static_cast<uint32>( extensions.size() );
-        createInfo.ppEnabledExtensionNames = extensions.begin();
+        createInfo.enabledExtensionCount = static_cast<uint32>( deviceExtensions.size() );
+        createInfo.ppEnabledExtensionNames = deviceExtensions.begin();
 
         createInfo.queueCreateInfoCount = static_cast<uint32>( queueCreateInfo.size() );
         createInfo.pQueueCreateInfos = &queueCreateInfo[0];
 
-        if( VulkanInstance::hasExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
-            createInfo.pEnabledFeatures = nullptr;
+        VkPhysicalDeviceFeatures2 deviceFeatures2;
+        VkPhysicalDevice16BitStorageFeatures device16BitStorageFeatures;
+        VkPhysicalDeviceShaderFloat16Int8Features deviceShaderFloat16Int8Features;
+        if( fillDeviceFeatures2( deviceFeatures2, device16BitStorageFeatures,
+                                 deviceShaderFloat16Int8Features ) )
+        {
+            createInfo.pNext = &deviceFeatures2;
+            deviceFeatures2.features = mDeviceFeatures;
+        }
         else
             createInfo.pEnabledFeatures = &mDeviceFeatures;
 
-        {
-            mDeviceExtensions.clear();
-            mDeviceExtensions.reserve( extensions.size() );
-
-            FastArray<const char *>::const_iterator itor = extensions.begin();
-            FastArray<const char *>::const_iterator endt = extensions.end();
-
-            while( itor != endt )
-            {
-                LogManager::getSingleton().logMessage( "Vulkan: Requesting Extension: " +
-                                                       String( *itor ) );
-                mDeviceExtensions.push_back( *itor );
-                ++itor;
-            }
-
-            std::sort( mDeviceExtensions.begin(), mDeviceExtensions.end() );
-        }
-
-        // Declared at this scope because they must be alive for createInfo.pNext
-        VkPhysicalDeviceFeatures2 deviceFeatures2;
-        makeVkStruct( deviceFeatures2, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2 );
-        VkPhysicalDevice16BitStorageFeatures _16BitStorageFeatures;
-        makeVkStruct( _16BitStorageFeatures, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES );
-        VkPhysicalDeviceShaderFloat16Int8Features shaderFloat16Int8Features;
-        makeVkStruct( shaderFloat16Int8Features,
-                      VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES );
-
-        // Initialize mDeviceExtraFeatures
-        if( VulkanInstance::hasExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
-        {
-            PFN_vkGetPhysicalDeviceFeatures2KHR GetPhysicalDeviceFeatures2KHR =
-                (PFN_vkGetPhysicalDeviceFeatures2KHR)vkGetInstanceProcAddr(
-                    mInstance->mVkInstance, "vkGetPhysicalDeviceFeatures2KHR" );
-
-            void **lastNext = &deviceFeatures2.pNext;
-
-            if( this->hasDeviceExtension( VK_KHR_16BIT_STORAGE_EXTENSION_NAME ) )
-            {
-                *lastNext = &_16BitStorageFeatures;
-                lastNext = &_16BitStorageFeatures.pNext;
-            }
-            if( this->hasDeviceExtension( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME ) )
-            {
-                *lastNext = &shaderFloat16Int8Features;
-                lastNext = &shaderFloat16Int8Features.pNext;
-            }
-
-            // Send the same chain to vkCreateDevice
-            createInfo.pNext = &deviceFeatures2;
-
-            GetPhysicalDeviceFeatures2KHR( mPhysicalDevice, &deviceFeatures2 );
-            deviceFeatures2.features = mDeviceFeatures;
-
-            mDeviceExtraFeatures.storageInputOutput16 = _16BitStorageFeatures.storageInputOutput16;
-            mDeviceExtraFeatures.shaderFloat16 = shaderFloat16Int8Features.shaderFloat16;
-            mDeviceExtraFeatures.shaderInt8 = shaderFloat16Int8Features.shaderInt8;
-        }
-
         VkResult result = vkCreateDevice( mPhysicalDevice, &createInfo, NULL, &mDevice );
         checkVkResult( result, "vkCreateDevice" );
-
-        VkPipelineCacheCreateInfo pipelineCacheCreateInfo;
-        makeVkStruct( pipelineCacheCreateInfo, VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO );
-
-        result = vkCreatePipelineCache( mDevice, &pipelineCacheCreateInfo, nullptr, &mPipelineCache );
-        checkVkResult( result, "vkCreatePipelineCache" );
-
-        initUtils( mDevice );
     }
     //-------------------------------------------------------------------------
     bool VulkanDevice::hasDeviceExtension( const IdString extension ) const

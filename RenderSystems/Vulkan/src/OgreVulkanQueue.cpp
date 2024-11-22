@@ -70,6 +70,11 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VulkanQueue::~VulkanQueue()
     {
+        destroy();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanQueue::destroy()
+    {
         if( mDevice )
         {
             vkDeviceWaitIdle( mDevice );
@@ -115,6 +120,8 @@ namespace Ogre
                 vkDestroyFence( mDevice, *itor++, 0 );
 
             mAvailableFences.clear();
+
+            mDevice = 0;
         }
     }
     //-------------------------------------------------------------------------
@@ -293,9 +300,6 @@ namespace Ogre
 
         newCommandBuffer();
     }
-
-    void VulkanQueue::destroy() {}
-
     //-------------------------------------------------------------------------
     void VulkanQueue::newCommandBuffer()
     {

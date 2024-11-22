@@ -166,6 +166,10 @@ namespace Ogre
         bool mIsExternal;
 
         void fillDeviceFeatures();
+        bool fillDeviceFeatures2(
+            VkPhysicalDeviceFeatures2 &deviceFeatures2,
+            VkPhysicalDevice16BitStorageFeatures &device16BitStorageFeatures,
+            VkPhysicalDeviceShaderFloat16Int8Features &deviceShaderFloat16Int8Features );
 
         static void destroyQueues( FastArray<VulkanQueue> &queueArray );
 
@@ -177,18 +181,17 @@ namespace Ogre
                                     FastArray<VkDeviceQueueCreateInfo> &outQueueCiArray );
 
     public:
-        VulkanDevice( const std::shared_ptr<VulkanInstance> &instance,
-                      const VulkanPhysicalDevice &physicalDevice, VulkanRenderSystem *renderSystem );
-        VulkanDevice( const std::shared_ptr<VulkanInstance> &instance,
-                      const VulkanExternalDevice &externalDevice, VulkanRenderSystem *renderSystem );
+        VulkanDevice( VulkanRenderSystem *renderSystem );
         ~VulkanDevice();
 
-    protected:
-        void setPhysicalDevice( const VulkanPhysicalDevice &physicalDevice );
+        void destroy();
 
-    public:
-        void createDevice( FastArray<const char *> &extensions, uint32 maxComputeQueues,
-                           uint32 maxTransferQueues );
+        void setPhysicalDevice( const std::shared_ptr<VulkanInstance> &instance,
+                                const VulkanPhysicalDevice &physicalDevice,
+                                const VulkanExternalDevice *externalDevice );
+
+        void createDevice( const FastArray<VkExtensionProperties> &availableExtensions,
+                           uint32 maxComputeQueues, uint32 maxTransferQueues );
 
         bool hasDeviceExtension( const IdString extension ) const;
 
