@@ -43,6 +43,12 @@ THE SOFTWARE.
 #    include "swappy/swappyVk.h"
 #endif
 
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
+#    define OGRE_HASH128_FUNC MurmurHash3_x86_128
+#else
+#    define OGRE_HASH128_FUNC MurmurHash3_x64_128
+#endif
+
 #define OGRE_VK_KHR_WIN32_SURFACE_EXTENSION_NAME "VK_KHR_win32_surface"
 #define OGRE_VK_KHR_XCB_SURFACE_EXTENSION_NAME "VK_KHR_xcb_surface"
 #define OGRE_VK_KHR_ANDROID_SURFACE_EXTENSION_NAME "VK_KHR_android_surface"
@@ -428,8 +434,13 @@ namespace Ogre
             if( sameNameIndex != 0 )
                 name += " (" + Ogre::StringConverter::toString( sameNameIndex + 1 ) + ")";
 
+            // TODO: use deviceLUID or deviceUUID if available
+            uint64 hashResult[2] = {};
+            OGRE_HASH128_FUNC( name.c_str(), (int)name.size(), IdString::Seed, hashResult );
+            long long deviceLUID = hashResult[0];
+
             LogManager::getSingleton().logMessage( "Vulkan: \"" + name + "\"" );
-            mVulkanPhysicalDevices.push_back( { device, name } );
+            mVulkanPhysicalDevices.push_back( { device, deviceLUID, name } );
         }
 
         LogManager::getSingleton().logMessage( "Vulkan: Device detection ends" );
