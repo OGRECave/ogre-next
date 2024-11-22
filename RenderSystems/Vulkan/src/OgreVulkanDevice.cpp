@@ -465,10 +465,7 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    VulkanDevice::~VulkanDevice()
-    {
-        destroy();
-    }
+    VulkanDevice::~VulkanDevice() { destroy(); }
     //-------------------------------------------------------------------------
     void VulkanDevice::destroy()
     {
@@ -578,7 +575,7 @@ namespace Ogre
         makeVkStruct( deviceShaderFloat16Int8Features,
                       VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES );
 
-            PFN_vkGetPhysicalDeviceFeatures2KHR GetPhysicalDeviceFeatures2KHR =
+        PFN_vkGetPhysicalDeviceFeatures2KHR GetPhysicalDeviceFeatures2KHR =
             (PFN_vkGetPhysicalDeviceFeatures2KHR)vkGetInstanceProcAddr(
                 mInstance->mVkInstance, "vkGetPhysicalDeviceFeatures2KHR" );
 
@@ -884,7 +881,8 @@ namespace Ogre
         mDeviceExtensions.reserve( deviceExtensions.size() );
         for( auto ext : deviceExtensions )
         {
-            LogManager::getSingleton().logMessage( "Vulkan: Requesting device extension: " + String( ext ) );
+            LogManager::getSingleton().logMessage( "Vulkan: Requesting device extension: " +
+                                                   String( ext ) );
             mDeviceExtensions.push_back( ext );
         }
         std::sort( mDeviceExtensions.begin(), mDeviceExtensions.end() );

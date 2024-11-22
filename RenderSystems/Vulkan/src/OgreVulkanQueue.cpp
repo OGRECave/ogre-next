@@ -68,10 +68,7 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    VulkanQueue::~VulkanQueue()
-    {
-        destroy();
-    }
+    VulkanQueue::~VulkanQueue() { destroy(); }
     //-------------------------------------------------------------------------
     void VulkanQueue::destroy()
     {
