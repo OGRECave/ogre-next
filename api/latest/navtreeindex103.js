@@ -1,5 +1,6 @@
 var NAVTREEINDEX103 =
 {
+"hlms.html#HlmsTextureManager":[4,1,1,8],
 "hlms.html#HlmsTextureManagerAutomaticBatching":[4,1,1,8,0],
 "hlms.html#HlmsTextureManagerAutomaticBatchingAutoParams":[4,1,1,8,0,1],
 "hlms.html#HlmsTextureManagerAutomaticBatchingLoadingTwice":[4,1,1,8,0,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX103 =
 "namespace_ogre.html#a423feaaeafb68cbde70debbbfdc56ca6":[7,0,0,1124],
 "namespace_ogre.html#a4304981347643708ee9a7ba8884e5758":[7,0,0,1282],
 "namespace_ogre.html#a439278da9ec600ca236ce06ce5007657":[7,0,0,1407],
-"namespace_ogre.html#a447e51d7625af79716667cebcfa6da57":[7,0,0,1338],
-"namespace_ogre.html#a447e51d7625af79716667cebcfa6da57a67ac0d57b0c790c17be7e64f989989f3":[7,0,0,1338,1]
+"namespace_ogre.html#a447e51d7625af79716667cebcfa6da57":[7,0,0,1338]
 };

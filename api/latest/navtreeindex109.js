@@ -1,5 +1,6 @@
 var NAVTREEINDEX109 =
 {
+"struct_ogre_1_1_emitted_particle.html#a3fb0b1d441ca491ea57126a09d200560":[8,0,0,298,0],
 "struct_ogre_1_1_emitted_particle.html#a85c88a2d32d20e393952b9a3c5f47f5d":[8,0,0,298,1],
 "struct_ogre_1_1_emitter_instance_data.html":[8,0,0,300],
 "struct_ogre_1_1_emitter_instance_data.html#a1aa0da7c5c0fdee22e5cf5b46a47b40b":[8,0,0,300,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX109 =
 "struct_ogre_1_1_hlms_base_prop.html#a1039c0943e010e9927b0430d2ef0628e":[6,2,10,47,32],
 "struct_ogre_1_1_hlms_base_prop.html#a13b868a5d8b53b3e69e0499f5518f83e":[6,2,10,47,1],
 "struct_ogre_1_1_hlms_base_prop.html#a163015a155429115574d6c3f9730726d":[6,2,10,47,42],
-"struct_ogre_1_1_hlms_base_prop.html#a1737a4e449ff76e8d27766aa7e80a909":[6,2,10,47,60],
-"struct_ogre_1_1_hlms_base_prop.html#a1a7152cda74ced04962a7b1c28c32238":[6,2,10,47,48]
+"struct_ogre_1_1_hlms_base_prop.html#a1737a4e449ff76e8d27766aa7e80a909":[6,2,10,47,60]
 };

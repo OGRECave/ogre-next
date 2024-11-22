@@ -1,5 +1,8 @@
 var NAVTREEINDEX117 =
 {
+"struct_ogre_1_1is_pod_like_3_01long_01_4.html":[8,0,0,524],
+"struct_ogre_1_1is_pod_like_3_01long_01_4.html#a0f0020a7f46d74d45988af6730689e4f":[8,0,0,524,0],
+"struct_ogre_1_1is_pod_like_3_01short_01_4.html":[8,0,0,525],
 "struct_ogre_1_1is_pod_like_3_01short_01_4.html#ab5fec72e8ec9973e27578b54045b0b04":[8,0,0,525,0],
 "struct_ogre_1_1is_pod_like_3_01signed_01char_01_4.html":[8,0,0,526],
 "struct_ogre_1_1is_pod_like_3_01signed_01char_01_4.html#af8ad32023ee81d5136137cfa8e5f5941":[8,0,0,526,0],

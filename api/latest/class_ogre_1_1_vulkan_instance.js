@@ -3,6 +3,7 @@ var class_ogre_1_1_vulkan_instance =
     [ "VulkanInstance", "class_ogre_1_1_vulkan_instance.html#abbd22c9219d26cd6439caece324909f1", null ],
     [ "~VulkanInstance", "class_ogre_1_1_vulkan_instance.html#a4184ba5ca856c3e28004e7ba4bae1a33", null ],
     [ "enumerateExtensionsAndLayers", "class_ogre_1_1_vulkan_instance.html#a3bbc61667444ad2d35f4a389e776e505", null ],
+    [ "findByName", "class_ogre_1_1_vulkan_instance.html#a24434f038e9663f73ce26c8951eb1ac0", null ],
     [ "hasExtension", "class_ogre_1_1_vulkan_instance.html#ab275dce4574e3239a97a0c2b54963a60", null ],
     [ "initDebugFeatures", "class_ogre_1_1_vulkan_instance.html#a5c51e780dc01cb85d1c15c1f68621068", null ],
     [ "initPhysicalDeviceList", "class_ogre_1_1_vulkan_instance.html#aa5f36216fddc3aac615b3780f3f1bd09", null ],
