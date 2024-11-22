@@ -435,9 +435,24 @@ namespace Ogre
         LogManager::getSingleton().logMessage( "Vulkan: Device detection ends" );
     }
     //-------------------------------------------------------------------------
+    const VulkanPhysicalDevice *VulkanInstance::findByName( const String &name ) const
+    {
+        // return requested device
+        if( !name.empty() )
+            for( auto &elem : mVulkanPhysicalDevices )
+                if( elem.title == name )
+                    return &elem;
+
+        // return default device
+        if( !mVulkanPhysicalDevices.empty() )
+            return &mVulkanPhysicalDevices[0];
+
+        return nullptr;
+    }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    VulkanDevice::VulkanDevice( VkInstance instance, const String &deviceName,
+    //-------------------------------------------------------------------------
+    VulkanDevice::VulkanDevice( VkInstance instance, const VulkanPhysicalDevice &physicalDevice,
                                 VulkanRenderSystem *renderSystem ) :
         mInstance( instance ),
         mPhysicalDevice( 0 ),
@@ -450,7 +465,7 @@ namespace Ogre
         mIsExternal( false )
     {
         memset( &mDeviceMemoryProperties, 0, sizeof( mDeviceMemoryProperties ) );
-        createPhysicalDevice( deviceName );
+        setPhysicalDevice( physicalDevice );
     }
     //-------------------------------------------------------------------------
     VulkanDevice::VulkanDevice( VkInstance instance, const VulkanExternalDevice &externalDevice,
@@ -694,23 +709,13 @@ namespace Ogre
         queueArray.clear();
     }
     //-------------------------------------------------------------------------
-    void VulkanDevice::createPhysicalDevice( const String &deviceName )
+    void VulkanDevice::setPhysicalDevice( const VulkanPhysicalDevice &physicalDevice )
     {
-        auto &devices = mRenderSystem->getVulkanPhysicalDevices();
-        size_t deviceIdx = 0;
-        for( size_t i = 0; i < devices.size(); ++i )
-        {
-            if( devices[i].title == deviceName )
-            {
-                deviceIdx = i;
-                break;
-            }
-        }
+        if( !physicalDevice.title.empty() )
+            LogManager::getSingleton().logMessage( "Vulkan: Selected \"" + physicalDevice.title +
+                                                   "\" physical device" );
 
-        LogManager::getSingleton().logMessage( "Vulkan: Requested \"" + deviceName + "\", selected \"" +
-                                               devices[deviceIdx].title + "\"" );
-
-        mPhysicalDevice = devices[deviceIdx].physicalDevice;
+        mPhysicalDevice = physicalDevice.physicalDevice;
 
         vkGetPhysicalDeviceMemoryProperties( mPhysicalDevice, &mDeviceMemoryProperties );
 

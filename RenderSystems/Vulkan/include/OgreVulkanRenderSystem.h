@@ -83,6 +83,7 @@ namespace Ogre
         VulkanProgramFactory *mVulkanProgramFactory3;
 
         std::shared_ptr<VulkanInstance> mInstance;
+        VulkanPhysicalDevice mActiveDevice;
 
         VulkanSupport *mVulkanSupport;
         std::map<IdString, VulkanSupport *> mAvailableVulkanSupports;

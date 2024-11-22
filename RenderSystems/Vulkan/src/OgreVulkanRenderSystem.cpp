@@ -173,6 +173,7 @@ namespace Ogre
         mVulkanProgramFactory1( 0 ),
         mVulkanProgramFactory2( 0 ),
         mVulkanProgramFactory3( 0 ),
+        mActiveDevice( { 0, String() } ),
         mFirstUnflushedAutoParamsBuffer( 0 ),
         mAutoParamsBufferIdx( 0 ),
         mCurrentAutoParamsBufferPtr( 0 ),
@@ -1095,9 +1096,12 @@ namespace Ogre
                 mInstance = std::make_shared<VulkanInstance>( Root::getSingleton().getAppName(), nullptr,
                                                               dbgFunc, this );
 
+            mActiveDevice = externalDevice
+                                ? VulkanPhysicalDevice( { externalDevice->physicalDevice, String() } )
+                                : *mInstance->findByName( mVulkanSupport->getSelectedDeviceName() );
+
             if( !externalDevice )
-                mDevice = new VulkanDevice( mInstance->mVkInstance,
-                                            mVulkanSupport->getSelectedDeviceName(), this );
+                mDevice = new VulkanDevice( mInstance->mVkInstance, mActiveDevice, this );
             else
                 mDevice = new VulkanDevice( mInstance->mVkInstance, *externalDevice, this );
 

@@ -90,6 +90,9 @@ namespace Ogre
 
         void initPhysicalDeviceList();
 
+        // never fail but can return default driver if requested is not found
+        const VulkanPhysicalDevice *findByName( const String &name ) const;
+
     public:
         VkInstance mVkInstance;
         bool mVkInstanceIsExternal;
@@ -174,13 +177,14 @@ namespace Ogre
                                     FastArray<VkDeviceQueueCreateInfo> &outQueueCiArray );
 
     public:
-        VulkanDevice( VkInstance instance, const String &deviceName, VulkanRenderSystem *renderSystem );
+        VulkanDevice( VkInstance instance, const VulkanPhysicalDevice &physicalDevice,
+                      VulkanRenderSystem *renderSystem );
         VulkanDevice( VkInstance instance, const VulkanExternalDevice &externalDevice,
                       VulkanRenderSystem *renderSystem );
         ~VulkanDevice();
 
     protected:
-        void createPhysicalDevice( const String &deviceName );
+        void setPhysicalDevice( const VulkanPhysicalDevice &physicalDevice );
 
     public:
         void createDevice( FastArray<const char *> &extensions, uint32 maxComputeQueues,
