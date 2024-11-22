@@ -200,11 +200,9 @@ namespace Ogre
                 desc.storageMode = MTLStorageModePrivate;
                 RenderSystem *rs = Root::getSingleton().getRenderSystem();
                 assert( rs );
-                const RenderSystemCapabilities *capabilities = rs->getCapabilities();
-                bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
                 TextureGpuManager *textureGpuManager = rs->getTextureGpuManager();
                 bool bAllowMemoryless = textureGpuManager->allowMemoryless();
-                if( isTiler && bAllowMemoryless )
+                if( bAllowMemoryless )
                 {
                     if( @available( iOS 10, macOS 11, * ) )
                         desc.storageMode = MTLStorageModeMemoryless;

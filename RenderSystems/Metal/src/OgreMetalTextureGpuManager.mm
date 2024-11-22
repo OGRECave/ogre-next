@@ -160,13 +160,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TextureGpu *MetalTextureGpuManager::createWindowDepthBuffer( const bool bMemoryLess )
     {
-        const RenderSystemCapabilities *capabilities =
-            Root::getSingleton().getRenderSystem()->getCapabilities();
-        const bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
         return OGRE_NEW MetalTextureGpuRenderTarget(
             GpuPageOutStrategy::Discard, mVaoManager, "RenderWindow DepthBuffer",
             TextureFlags::NotTexture | TextureFlags::RenderToTexture |
-                ( isTiler && bMemoryLess ? TextureFlags::TilerMemoryless : 0 ) |
+                ( bMemoryLess && allowMemoryless() ? TextureFlags::TilerMemoryless : 0 ) |
                 TextureFlags::RenderWindowSpecific | TextureFlags::DiscardableContent,
             TextureTypes::Type2D, this );
     }
