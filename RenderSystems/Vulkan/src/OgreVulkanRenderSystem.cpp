@@ -227,6 +227,12 @@ namespace Ogre
                                                       externalInstance, dbgFunc, this );
 
         initConfigOptions();
+
+        // Certain drivers (e.g. AMD) or tools did not like when we kept around Vulkan, OpenGL & D3D11
+        // instances/devices/context live at the same time (i.e. like when we are probing for support),
+        // therefore release VkInstance here, and recreate it later
+        if( !externalInstance )
+            mInstance.reset();
     }
     //-------------------------------------------------------------------------
     VulkanRenderSystem::~VulkanRenderSystem()
@@ -1084,6 +1090,10 @@ namespace Ogre
                         StringConverter::parseUnsignedLong( itOption->second ) );
                 }
             }
+
+            if( !mInstance )
+                mInstance = std::make_shared<VulkanInstance>( Root::getSingleton().getAppName(), nullptr,
+                                                              dbgFunc, this );
 
             if( !externalDevice )
                 mDevice = new VulkanDevice( mInstance->mVkInstance,
