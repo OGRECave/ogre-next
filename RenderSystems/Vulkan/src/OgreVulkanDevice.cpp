@@ -59,7 +59,9 @@ namespace Ogre
 {
     FastArray<const char *> VulkanInstance::enabledExtensions;  // sorted
     FastArray<const char *> VulkanInstance::enabledLayers;      // sorted
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
     bool VulkanInstance::hasValidationLayers = false;
+#endif
 
     bool StrCmpLess( const char *a, const char *b ) { return strcmp( a, b ) < 0; }
 
