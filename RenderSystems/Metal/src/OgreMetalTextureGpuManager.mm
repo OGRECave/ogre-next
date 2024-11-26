@@ -163,7 +163,7 @@ namespace Ogre
         return OGRE_NEW MetalTextureGpuRenderTarget(
             GpuPageOutStrategy::Discard, mVaoManager, "RenderWindow DepthBuffer",
             TextureFlags::NotTexture | TextureFlags::RenderToTexture |
-                ( bMemoryLess && allowMemoryless() ? TextureFlags::TilerMemoryless : 0 ) |
+                ( ( bMemoryLess && allowMemoryless() ) ? TextureFlags::TilerMemoryless : 0 ) |
                 TextureFlags::RenderWindowSpecific | TextureFlags::DiscardableContent,
             TextureTypes::Type2D, this );
     }
