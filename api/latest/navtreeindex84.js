@@ -1,9 +1,10 @@
 var NAVTREEINDEX84 =
 {
-"class_ogre_1_1v1_1_1_manual_object_factory.html#a638335db48454780bd911de7471fd585":[6,0,1,62,1],
+"class_ogre_1_1v1_1_1_manual_object_factory.html#a629e5c2787b13cb9b243e9ca1b397a22":[6,0,1,62,2],
 "class_ogre_1_1v1_1_1_manual_object_factory.html#a638335db48454780bd911de7471fd585":[6,2,11,62,1],
-"class_ogre_1_1v1_1_1_manual_object_factory.html#a6c99e42159681b6a32463bcba31c3c46":[6,0,1,62,0],
+"class_ogre_1_1v1_1_1_manual_object_factory.html#a638335db48454780bd911de7471fd585":[6,0,1,62,1],
 "class_ogre_1_1v1_1_1_manual_object_factory.html#a6c99e42159681b6a32463bcba31c3c46":[6,2,11,62,0],
+"class_ogre_1_1v1_1_1_manual_object_factory.html#a6c99e42159681b6a32463bcba31c3c46":[6,0,1,62,0],
 "class_ogre_1_1v1_1_1_manual_object_factory.html#ad3f984c694810efb988b6232bb571678":[6,2,11,62,4],
 "class_ogre_1_1v1_1_1_manual_object_factory.html#ad3f984c694810efb988b6232bb571678":[6,0,1,62,4],
 "class_ogre_1_1v1_1_1_mesh.html":[6,2,10,117],
@@ -248,6 +249,5 @@ var NAVTREEINDEX84 =
 "class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#ac29aea433769d93d944a0e5955208a7e":[8,0,0,2,90,7],
 "class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#acb486838eb2b4adea9983de5232a47e0":[8,0,0,2,90,3],
 "class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#ada4c62404662e3d3a22cf9513894bbd9":[8,0,0,2,90,8],
-"class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#adb61e55dafeb07e4669ba7cfd97b3104":[8,0,0,2,90,1],
-"class_ogre_1_1v1_1_1_node_animation_track.html":[6,2,0,17]
+"class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#adb61e55dafeb07e4669ba7cfd97b3104":[8,0,0,2,90,1]
 };

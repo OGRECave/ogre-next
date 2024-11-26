@@ -1,5 +1,6 @@
 var NAVTREEINDEX89 =
 {
+"class_ogre_1_1v1_1_1_vertex_buffer_binding.html#a889dd4af680d36fd6a07f3da864ce6a3":[6,2,9,30,15],
 "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#aaf35db6d7858883f97547833d8c3c206":[6,2,9,30,4],
 "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#ab53b6b19d2c0b591b86b4df7721de343":[6,2,9,30,6],
 "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#ab5bb204026da90bd110fb047d5148019":[6,2,9,30,12],
@@ -248,6 +249,5 @@ var NAVTREEINDEX89 =
 "compositor.html#CompositorNodesPassesStencil":[4,2,4,0,2,7],
 "compositor.html#CompositorNodesPassesUavQueue":[4,2,4,0,2,8],
 "compositor.html#CompositorNodesPassesUavQueue_keep_previous_uavs":[4,2,4,0,2,8,4],
-"compositor.html#CompositorNodesPassesUavQueue_starting_slot":[4,2,4,0,2,8,0],
-"compositor.html#CompositorNodesPassesUavQueue_uav":[4,2,4,0,2,8,1]
+"compositor.html#CompositorNodesPassesUavQueue_starting_slot":[4,2,4,0,2,8,0]
 };

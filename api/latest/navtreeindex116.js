@@ -1,5 +1,6 @@
 var NAVTREEINDEX116 =
 {
+"struct_ogre_1_1_volume_1_1_chunk_tree_shared_data.html#abf3e0545802da294d9e24825b5c1413f":[8,0,0,3,5,0],
 "struct_ogre_1_1_volume_1_1_chunk_tree_shared_data.html#af672339162b49888584d20403decfc13":[8,0,0,3,5,5],
 "struct_ogre_1_1_volume_1_1_dual_cell.html":[8,0,0,3,17],
 "struct_ogre_1_1_volume_1_1_dual_cell.html#a03a18e2bf6aae3679c0946bce94ac77c":[8,0,0,3,17,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX116 =
 "struct_ogre_1_1is_pod_like_3_01double_01_4.html":[8,0,0,521],
 "struct_ogre_1_1is_pod_like_3_01double_01_4.html#aa78e1cdcaf54b5e970d20f172ce7cb79":[8,0,0,521,0],
 "struct_ogre_1_1is_pod_like_3_01float_01_4.html":[8,0,0,522],
-"struct_ogre_1_1is_pod_like_3_01float_01_4.html#ae476e952b709f0a34403869794ba1cf4":[8,0,0,522,0],
-"struct_ogre_1_1is_pod_like_3_01int_01_4.html":[8,0,0,523]
+"struct_ogre_1_1is_pod_like_3_01float_01_4.html#ae476e952b709f0a34403869794ba1cf4":[8,0,0,522,0]
 };

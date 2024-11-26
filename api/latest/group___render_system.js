@@ -84,6 +84,7 @@ var group___render_system =
       [ "RenderQueue", "class_ogre_1_1_render_queue.html#abb653f126d0d03d73e28468a89c3c24d", null ],
       [ "~RenderQueue", "class_ogre_1_1_render_queue.html#abeedbfecbb98d295978226f18f1ba5bd", null ],
       [ "_compileShadersThread", "class_ogre_1_1_render_queue.html#ad6e291d9363608ae01f1aba7d90c8ee7", null ],
+      [ "_releaseManualHardwareResources", "class_ogre_1_1_render_queue.html#a458d605f6641f97dcf0373733cec4bb2", null ],
       [ "_warmUpShadersThread", "class_ogre_1_1_render_queue.html#a3a989e7043b62af6ac712bfbf9968813", null ],
       [ "addRenderableV1", "class_ogre_1_1_render_queue.html#a504e8bf8d6496ea3b88ead7e6cef8aa0", null ],
       [ "addRenderableV2", "class_ogre_1_1_render_queue.html#abf6d23ea6dfa5a14cbb3052d30a7332f", null ],

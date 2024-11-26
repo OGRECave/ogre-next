@@ -1,5 +1,6 @@
 var NAVTREEINDEX103 =
 {
+"hlms.html#HlmsTemplates":[4,1,1,3],
 "hlms.html#HlmsTextureManager":[4,1,1,8],
 "hlms.html#HlmsTextureManagerAutomaticBatching":[4,1,1,8,0],
 "hlms.html#HlmsTextureManagerAutomaticBatchingAutoParams":[4,1,1,8,0,1],
@@ -114,8 +115,8 @@ var NAVTREEINDEX103 =
 "i_o_s_2_ogre_error_dialog_imp_8h.html":[9,0,271],
 "i_o_s_2_ogre_metal_view_8h.html":[9,0,562],
 "i_o_s_2_ogre_timer_imp_8h.html":[9,0,809],
-"index.html":[],
 "index.html":[0],
+"index.html":[],
 "index.html#autotoc_md10":[0,0,2],
 "index.html#autotoc_md7":[0,0],
 "index.html#autotoc_md8":[0,0,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX103 =
 "namespace_ogre.html#a3d9f5c00761ed1ff7885a805d82f942c":[7,0,0,1115],
 "namespace_ogre.html#a423feaaeafb68cbde70debbbfdc56ca6":[7,0,0,1124],
 "namespace_ogre.html#a4304981347643708ee9a7ba8884e5758":[7,0,0,1282],
-"namespace_ogre.html#a439278da9ec600ca236ce06ce5007657":[7,0,0,1407],
-"namespace_ogre.html#a447e51d7625af79716667cebcfa6da57":[7,0,0,1338]
+"namespace_ogre.html#a439278da9ec600ca236ce06ce5007657":[7,0,0,1407]
 };
