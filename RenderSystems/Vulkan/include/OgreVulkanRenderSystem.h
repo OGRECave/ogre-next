@@ -145,6 +145,10 @@ namespace Ogre
         void flushRootLayout();
         void flushRootLayoutCS();
 
+        void createVkResources();
+        void destroyVkResources0();
+        void destroyVkResources1();
+
     public:
         VulkanRenderSystem( const NameValuePairList *options );
         ~VulkanRenderSystem() override;
