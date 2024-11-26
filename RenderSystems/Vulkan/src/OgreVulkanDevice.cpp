@@ -426,7 +426,7 @@ namespace Ogre
         map<String, unsigned>::type sameNameCounter;
         mVulkanPhysicalDevices.clear();
         mVulkanPhysicalDevices.reserve( devices.size() );
-        for( auto device : devices )
+        for( VkPhysicalDevice device : devices )
         {
             VkPhysicalDeviceProperties deviceProps;
             vkGetPhysicalDeviceProperties( device, &deviceProps );
@@ -452,9 +452,13 @@ namespace Ogre
     {
         // return requested device
         if( !name.empty() )
-            for( auto &elem : mVulkanPhysicalDevices )
+        {
+            for( const VulkanPhysicalDevice &elem : mVulkanPhysicalDevices )
+            {
                 if( elem.title == name )
                     return &elem;
+            }
+        }
 
         // return default device
         if( !mVulkanPhysicalDevices.empty() )
@@ -631,11 +635,15 @@ namespace Ogre
         destroy();
 
         if( externalDevice )
+        {
             LogManager::getSingleton().logMessage(
                 "Vulkan: Creating Vulkan Device from External VkVulkan handle" );
+        }
         else
+        {
             LogManager::getSingleton().logMessage( "Vulkan: Selected \"" + physicalDevice.title +
                                                    "\" physical device" );
+        }
 
         mIsExternal = externalDevice != nullptr;
 
@@ -823,7 +831,7 @@ namespace Ogre
                                      uint32 maxComputeQueues, uint32 maxTransferQueues )
     {
         FastArray<const char *> deviceExtensions;
-        for( auto &ext : availableExtensions )
+        for( const VkExtensionProperties &ext : availableExtensions )
         {
             const String extensionName = ext.extensionName;
             LogManager::getSingleton().logMessage( "Vulkan: Found device extension: " + extensionName );

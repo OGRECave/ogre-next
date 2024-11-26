@@ -1086,8 +1086,10 @@ namespace Ogre
             mNativeShadingLanguageVersion = 450;
 
             if( !mInstance )
+            {
                 mInstance = std::make_shared<VulkanInstance>( Root::getSingleton().getAppName(), nullptr,
                                                               dbgFunc, this );
+            }
 
             mActiveDevice = externalDevice
                                 ? VulkanPhysicalDevice( { externalDevice->physicalDevice, 0, String() } )
