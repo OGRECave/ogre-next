@@ -105,7 +105,7 @@ namespace Ogre
         for( const VkExtensionProperties &ext : availableExtensions )
         {
             LogManager::getSingleton().logMessage( "Vulkan: Found instance extension: " +
-                                                  String( ext.extensionName ) );
+                                                   String( ext.extensionName ) );
         }
 
         // Enumerate supported layers
