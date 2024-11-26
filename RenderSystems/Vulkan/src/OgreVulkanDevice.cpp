@@ -102,9 +102,11 @@ namespace Ogre
             vkEnumerateInstanceExtensionProperties( 0, &numExtensions, availableExtensions.begin() );
         checkVkResult( result, "vkEnumerateInstanceExtensionProperties" );
 
-        for( auto &ext : availableExtensions )
+        for( const VkExtensionProperties &ext : availableExtensions )
+        {
             LogManager::getSingleton().logMessage( "Vulkan: Found instance extension: " +
-                                                   String( ext.extensionName ) );
+                                                  String( ext.extensionName ) );
+        }
 
         // Enumerate supported layers
         FastArray<VkLayerProperties> availableLayers;
@@ -188,15 +190,15 @@ namespace Ogre
                     " is present but it's not. This is normal. Ignoring." );
                 return true;
             };
-            auto &eix = externalInstance->instanceExtensions;
-            eix.resize( std::remove_if( eix.begin(), eix.end(), extFilter ) - eix.begin() );
+            FastArray<VkExtensionProperties> &eix = externalInstance->instanceExtensions;
+            eix.resize( size_t( std::remove_if( eix.begin(), eix.end(), extFilter ) - eix.begin() ) );
             availableExtensions = eix;
-            for( auto &ext : eix )
+            for( const VkExtensionProperties &ext : eix )
                 enabledExtensions.push_back( ext.extensionName );
 
             // Filter wrongly-provided layers
             std::set<String> layers;
-            for( auto &layer : availableLayers )
+            for( const VkLayerProperties &layer : availableLayers )
                 layers.insert( layer.layerName );
             auto layerFilter = [&layers]( const VkLayerProperties &elem ) {
                 if( layers.find( elem.layerName ) != layers.end() )
@@ -206,10 +208,10 @@ namespace Ogre
                     " is present but it's not. This is normal. Ignoring." );
                 return true;
             };
-            auto &eil = externalInstance->instanceLayers;
-            eil.resize( std::remove_if( eil.begin(), eil.end(), layerFilter ) - eil.begin() );
+            FastArray<VkLayerProperties> &eil = externalInstance->instanceLayers;
+            eil.resize( size_t( std::remove_if( eil.begin(), eil.end(), layerFilter ) - eil.begin() ) );
             availableLayers = eil;
-            for( auto &layer : eil )
+            for( VkLayerProperties &layer : eil )
                 enabledLayers.push_back( layer.layerName );
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
@@ -720,7 +722,7 @@ namespace Ogre
                 return true;
             };
             FastArray<VkExtensionProperties> edx = externalDevice->deviceExtensions;
-            edx.resize( std::remove_if( edx.begin(), edx.end(), extFilter ) - edx.begin() );
+            edx.resize( size_t( std::remove_if( edx.begin(), edx.end(), extFilter ) - edx.begin() ) );
 
             mDeviceExtensions.reserve( edx.size() );
             for( auto &ext : edx )
