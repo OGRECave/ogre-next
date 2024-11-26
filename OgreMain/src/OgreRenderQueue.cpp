@@ -119,6 +119,11 @@ namespace Ogre
     {
         delete mCommandBuffer;
 
+        _releaseManualHardwareResources();
+    }
+    //-----------------------------------------------------------------------
+    void RenderQueue::_releaseManualHardwareResources()
+    {
         assert( mUsedIndirectBuffers.empty() );
 
         IndirectBufferPackedVec::const_iterator itor = mFreeIndirectBuffers.begin();
@@ -131,6 +136,8 @@ namespace Ogre
             mVaoManager->destroyIndirectBuffer( *itor );
             ++itor;
         }
+
+        mFreeIndirectBuffers.clear();
     }
     //-----------------------------------------------------------------------
     IndirectBufferPacked *RenderQueue::getIndirectBuffer( size_t numDraws )

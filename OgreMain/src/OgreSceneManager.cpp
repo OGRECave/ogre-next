@@ -1752,6 +1752,10 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void SceneManager::_releaseManualHardwareResources()
     {
+        // release indirect buffers in render queue
+        if( mRenderQueue )
+            mRenderQueue->_releaseManualHardwareResources();
+
         // release hardware resources inside all movable objects
         OGRE_LOCK_MUTEX( mMovableObjectCollectionMapMutex );
         for( MovableObjectCollectionMap::iterator ci = mMovableObjectCollectionMap.begin(),
