@@ -185,8 +185,8 @@ namespace Ogre
                 params->find( "VaoManager::mDelayedBlocksFlushThreshold" );
             if( itor != params->end() )
             {
-                mDelayedBlocksFlushThreshold = static_cast<size_t>(
-                    StringConverter::parseUnsignedLong( itor->second, mDelayedBlocksFlushThreshold ) );
+                mDelayedBlocksFlushThreshold =
+                    StringConverter::parseSizeT( itor->second, mDelayedBlocksFlushThreshold );
             }
         }
     }
