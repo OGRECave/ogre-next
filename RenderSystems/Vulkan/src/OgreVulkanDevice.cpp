@@ -439,12 +439,11 @@ namespace Ogre
                 name += " (" + Ogre::StringConverter::toString( sameNameIndex + 1 ) + ")";
 
             // TODO: use deviceLUID or deviceUUID if available
-            uint64 hashResult[2] = {};
-            OGRE_HASH128_FUNC( name.c_str(), (int)name.size(), IdString::Seed, hashResult );
-            long long deviceLUID = hashResult[0];
+            uint64 uid[2] = {};
+            OGRE_HASH128_FUNC( name.c_str(), (int)name.size(), IdString::Seed, uid );
 
             LogManager::getSingleton().logMessage( "Vulkan: \"" + name + "\"" );
-            mVulkanPhysicalDevices.push_back( { device, deviceLUID, name } );
+            mVulkanPhysicalDevices.push_back( { device, { uid[0], uid[1] }, name } );
         }
 
         LogManager::getSingleton().logMessage( "Vulkan: Device detection ends" );

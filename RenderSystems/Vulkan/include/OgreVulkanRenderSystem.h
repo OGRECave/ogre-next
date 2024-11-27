@@ -56,7 +56,7 @@ namespace Ogre
     struct VulkanPhysicalDevice
     {
         VkPhysicalDevice physicalDevice;
-        long long physicalDeviceID;
+        uint64 physicalDeviceID[2];
         String title;
     };
 

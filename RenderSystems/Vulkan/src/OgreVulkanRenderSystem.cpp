@@ -173,7 +173,7 @@ namespace Ogre
         mVulkanProgramFactory1( 0 ),
         mVulkanProgramFactory2( 0 ),
         mVulkanProgramFactory3( 0 ),
-        mActiveDevice( { 0, 0, String() } ),
+        mActiveDevice( {} ),
         mFirstUnflushedAutoParamsBuffer( 0 ),
         mAutoParamsBufferIdx( 0 ),
         mCurrentAutoParamsBufferPtr( 0 ),
@@ -1092,7 +1092,7 @@ namespace Ogre
             }
 
             mActiveDevice = externalDevice
-                                ? VulkanPhysicalDevice( { externalDevice->physicalDevice, 0, String() } )
+                                ? VulkanPhysicalDevice( { externalDevice->physicalDevice } )
                                 : *mInstance->findByName( mVulkanSupport->getSelectedDeviceName() );
 
             mDevice = new VulkanDevice( this );
