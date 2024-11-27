@@ -1,5 +1,6 @@
 var NAVTREEINDEX104 =
 {
+"namespace_ogre.html#a439278da9ec600ca236ce06ce5007657":[7,0,0,1407],
 "namespace_ogre.html#a447e51d7625af79716667cebcfa6da57":[7,0,0,1338],
 "namespace_ogre.html#a447e51d7625af79716667cebcfa6da57a67ac0d57b0c790c17be7e64f989989f3":[7,0,0,1338,1],
 "namespace_ogre.html#a447e51d7625af79716667cebcfa6da57a75d156143dfcf82c40f6bd0d350dff9b":[7,0,0,1338,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX104 =
 "namespace_ogre_1_1_common_texture_types.html":[7,0,0,2],
 "namespace_ogre_1_1_common_texture_types.html#a3a978c834ce00930123468c9a64047b4":[7,0,0,2,0],
 "namespace_ogre_1_1_common_texture_types.html#a3a978c834ce00930123468c9a64047b4a1401cab26e1cb6b3730cfd610cbe6f09":[7,0,0,2,0,1],
-"namespace_ogre_1_1_common_texture_types.html#a3a978c834ce00930123468c9a64047b4a3f22b32546d18bc52eae77308ad07721":[7,0,0,2,0,0],
-"namespace_ogre_1_1_common_texture_types.html#a3a978c834ce00930123468c9a64047b4a46cdc74c21d464c0330b5bcb57b22462":[7,0,0,2,0,5]
+"namespace_ogre_1_1_common_texture_types.html#a3a978c834ce00930123468c9a64047b4a3f22b32546d18bc52eae77308ad07721":[7,0,0,2,0,0]
 };
