@@ -20,7 +20,7 @@ ogre_add_executable(OgreMeshTool ${SOURCE_FILES})
 ogre_add_component_include_dir(MeshLodGenerator)
 
 if(OGRE_STATIC)
-	include_directories("${OGRE_SOURCE_DIR}/RenderSystems/NULL/include")
+	include_directories("${PROJECT_SOURCE_DIR}/RenderSystems/NULL/include")
 endif ()
 
 target_link_libraries(OgreMeshTool ${OGRE_LIBRARIES} ${OGRE_MeshLodGenerator_LIBRARIES})

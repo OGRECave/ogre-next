@@ -11,8 +11,6 @@
 # OgreNextMain core library
 ############################################################
 
-PROJECT(${OGRE_NEXT}Main)
-
 function( add_filtered_h filterName fileString )
 	file(GLOB TMP_FILES ${fileString})
 	set(HEADER_FILES ${HEADER_FILES} ${TMP_FILES} PARENT_SCOPE)
@@ -73,7 +71,7 @@ add_filtered_std("ParticleSystem")
 add_filtered_std("ogrestd")
 add_filtered_std("Vao")
 
-list(APPEND HEADER_FILES ${OGRE_BINARY_DIR}/include/OgreBuildSettings.h
+list(APPEND HEADER_FILES ${PROJECT_BINARY_DIR}/include/OgreBuildSettings.h
 	src/OgreImageResampler.h
 	src/OgrePixelConversions.h
 	src/OgreSIMDHelper.h)
@@ -449,18 +447,18 @@ if (APPLE)
     set(OGRE_OSX_BUILD_CONFIGURATION "$(PLATFORM_NAME)/$(CONFIGURATION)")
   
 	add_custom_command(TARGET ${OGRE_NEXT}Main POST_BUILD
-		COMMAND mkdir ARGS -p ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/Threading
+		COMMAND mkdir ARGS -p ${PROJECT_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/Threading
         COMMAND ditto 
-		${OGRE_SOURCE_DIR}/OgreMain/include/Threading/*.h ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/Threading
-		COMMAND mkdir ARGS -p ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/OSX
+		${PROJECT_SOURCE_DIR}/OgreMain/include/Threading/*.h ${PROJECT_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/Threading
+		COMMAND mkdir ARGS -p ${PROJECT_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/OSX
         COMMAND ditto 
-		${OGRE_SOURCE_DIR}/OgreMain/include/OSX/*.h ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/OSX
-		COMMAND cd ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers
+		${PROJECT_SOURCE_DIR}/OgreMain/include/OSX/*.h ${PROJECT_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/OSX
+		COMMAND cd ${PROJECT_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers
 		)
 
     foreach(HEADER_PATH ${THREAD_HEADER_FILES})
         get_filename_component(HEADER_FILE ${HEADER_PATH} NAME)
-        set(FWK_HEADER_PATH ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/${HEADER_FILE})
+        set(FWK_HEADER_PATH ${PROJECT_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/${HEADER_FILE})
         add_custom_command(TARGET ${OGRE_NEXT}Main POST_BUILD
             COMMAND rm -f ${FWK_HEADER_PATH}
             )
@@ -468,7 +466,7 @@ if (APPLE)
 
     foreach(HEADER_PATH ${PLATFORM_HEADERS})
         get_filename_component(HEADER_FILE ${HEADER_PATH} NAME)
-        set(FWK_HEADER_PATH ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/${HEADER_FILE})
+        set(FWK_HEADER_PATH ${PROJECT_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/${HEADER_FILE})
         add_custom_command(TARGET ${OGRE_NEXT}Main POST_BUILD
             COMMAND rm -f ${FWK_HEADER_PATH}
             )
@@ -503,7 +501,7 @@ use_precompiled_header(${OGRE_NEXT}Main
 # install ${OGRE_NEXT}Main
 ogre_config_lib(${OGRE_NEXT}Main TRUE)
 foreach(HEADER_FILE ${HEADER_FILES})
-	string(REGEX REPLACE "((${CMAKE_CURRENT_SOURCE_DIR}|${OGRE_BINARY_DIR})/)?(include|src)/" "" RELATIVE_HEADER_FILE ${HEADER_FILE})
+	string(REGEX REPLACE "((${CMAKE_CURRENT_SOURCE_DIR}|${PROJECT_BINARY_DIR})/)?(include|src)/" "" RELATIVE_HEADER_FILE ${HEADER_FILE})
 	string(REGEX MATCH "((.*)/)+" HEADER_SUBDIRECTORY ${RELATIVE_HEADER_FILE})
 	install(FILES ${HEADER_FILE} DESTINATION include/${OGRE_NEXT_PREFIX}/${HEADER_SUBDIRECTORY})
 endforeach()

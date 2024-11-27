@@ -11,7 +11,6 @@
 # Paging optional component
 ############################################################
 
-PROJECT(OgrePaging)
 
 # define header and source files for the library
 file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
@@ -22,7 +21,7 @@ add_definitions(-DOGRE_PAGING_EXPORTS -D_MT -D_USRDLL)
 
 # include headers
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-include_directories(${OGRE_SOURCE_DIR}/OgreMain/include)
+include_directories(${PROJECT_SOURCE_DIR}/OgreMain/include)
 
 # setup target
 ogre_add_library(OgrePaging ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADER_FILES} ${PLATFORM_SOURCE_FILES})

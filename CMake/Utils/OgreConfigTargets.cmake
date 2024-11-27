@@ -25,20 +25,20 @@ endif()
 # Default build output paths
 if (NOT OGRE_ARCHIVE_OUTPUT)
   if(APPLE AND NOT OGRE_BUILD_PLATFORM_ANDROID)
-    set(OGRE_ARCHIVE_OUTPUT ${OGRE_BINARY_DIR}/lib/${PLATFORM_NAME})
+    set(OGRE_ARCHIVE_OUTPUT ${PROJECT_BINARY_DIR}/lib/${PLATFORM_NAME})
   else()
-    set(OGRE_ARCHIVE_OUTPUT ${OGRE_BINARY_DIR}/lib)
+    set(OGRE_ARCHIVE_OUTPUT ${PROJECT_BINARY_DIR}/lib)
   endif()
 endif ()
 if (NOT OGRE_LIBRARY_OUTPUT)
   if(APPLE AND NOT OGRE_BUILD_PLATFORM_ANDROID)
-    set(OGRE_LIBRARY_OUTPUT ${OGRE_BINARY_DIR}/lib/${PLATFORM_NAME})
+    set(OGRE_LIBRARY_OUTPUT ${PROJECT_BINARY_DIR}/lib/${PLATFORM_NAME})
   else()
-    set(OGRE_LIBRARY_OUTPUT ${OGRE_BINARY_DIR}/lib)
+    set(OGRE_LIBRARY_OUTPUT ${PROJECT_BINARY_DIR}/lib)
   endif()
 endif ()
 if (NOT OGRE_RUNTIME_OUTPUT)
-  set(OGRE_RUNTIME_OUTPUT ${OGRE_BINARY_DIR}/bin)
+  set(OGRE_RUNTIME_OUTPUT ${PROJECT_BINARY_DIR}/bin)
 endif ()
 
 if (WIN32)
@@ -210,20 +210,20 @@ function(ogre_config_lib LIBNAME EXPORT)
     # install debug pdb files
 	# Static libs don't have PDBs
 	if (NOT OGRE_STATIC)
-#	  install(FILES ${OGRE_BINARY_DIR}/lib${OGRE_LIB_DEBUG_PATH}/${LIBNAME}Static_d.pdb
+#	  install(FILES ${PROJECT_BINARY_DIR}/lib${OGRE_LIB_DEBUG_PATH}/${LIBNAME}Static_d.pdb
 #	    DESTINATION ${OGRE_LIB_DIRECTORY}${OGRE_LIB_DEBUG_PATH}
 #		CONFIGURATIONS Debug
 #	  )
-#	  install(FILES ${OGRE_BINARY_DIR}/lib${OGRE_LIB_RELWDBG_PATH}/${LIBNAME}Static.pdb
+#	  install(FILES ${PROJECT_BINARY_DIR}/lib${OGRE_LIB_RELWDBG_PATH}/${LIBNAME}Static.pdb
 #	    DESTINATION ${OGRE_LIB_DIRECTORY}${OGRE_LIB_RELWDBG_PATH}
 #		CONFIGURATIONS RelWithDebInfo
 #	  )
 #	else ()
-	  install(FILES ${OGRE_BINARY_DIR}/bin${OGRE_DEBUG_PATH}/${LIBNAME}_d.pdb
+	  install(FILES ${PROJECT_BINARY_DIR}/bin${OGRE_DEBUG_PATH}/${LIBNAME}_d.pdb
 	    DESTINATION bin${OGRE_DEBUG_PATH}
 		CONFIGURATIONS Debug
 	  )
-	  install(FILES ${OGRE_BINARY_DIR}/bin${OGRE_RELWDBG_PATH}/${LIBNAME}.pdb
+	  install(FILES ${PROJECT_BINARY_DIR}/bin${OGRE_RELWDBG_PATH}/${LIBNAME}.pdb
 	    DESTINATION bin${OGRE_RELWDBG_PATH}
 		CONFIGURATIONS RelWithDebInfo
 	  )
@@ -245,7 +245,7 @@ function(ogre_config_framework LIBNAME)
          INSTALL_NAME_DIR "@executable_path/../Frameworks"
       )
       set_target_properties(${LIBNAME} PROPERTIES XCODE_ATTRIBUTE_GCC_PRECOMPILE_PREFIX_HEADER "YES")
-      set_target_properties(${LIBNAME} PROPERTIES XCODE_ATTRIBUTE_GCC_PREFIX_HEADER "${OGRE_SOURCE_DIR}/OgreMain/include/OgreStableHeaders.h")
+      set_target_properties(${LIBNAME} PROPERTIES XCODE_ATTRIBUTE_GCC_PREFIX_HEADER "${PROJECT_SOURCE_DIR}/OgreMain/include/OgreStableHeaders.h")
       set_target_properties(${LIBNAME} PROPERTIES RESOURCE "${RESOURCE_FILES}")
       set_source_files_properties("${HEADER_FILES}" PROPERTIES MACOSX_PACKAGE_LOCATION Headers)
       set_source_files_properties("${PLATFORM_HEADERS}" PROPERTIES MACOSX_PACKAGE_LOCATION Headers)
@@ -283,20 +283,20 @@ function(ogre_config_plugin PLUGINNAME)
     # install debug pdb files
 	# Static libs don't have PDBs
 	if (NOT OGRE_STATIC)
-#	  install(FILES ${OGRE_BINARY_DIR}/lib${OGRE_LIB_DEBUG_PATH}/${PLUGINNAME}Static_d.pdb
+#	  install(FILES ${PROJECT_BINARY_DIR}/lib${OGRE_LIB_DEBUG_PATH}/${PLUGINNAME}Static_d.pdb
 #	    DESTINATION ${OGRE_LIB_DIRECTORY}${OGRE_LIB_DEBUG_PATH}/opt
 #		CONFIGURATIONS Debug
 #	  )
-#	  install(FILES ${OGRE_BINARY_DIR}/lib${OGRE_LIB_RELWDBG_PATH}/${PLUGINNAME}Static.pdb
+#	  install(FILES ${PROJECT_BINARY_DIR}/lib${OGRE_LIB_RELWDBG_PATH}/${PLUGINNAME}Static.pdb
 #	    DESTINATION ${OGRE_LIB_DIRECTORY}${OGRE_LIB_RELWDBG_PATH}/opt
 #		CONFIGURATIONS RelWithDebInfo
 #	  )
 #	else ()
-	  install(FILES ${OGRE_BINARY_DIR}/bin${OGRE_DEBUG_PATH}/${PLUGINNAME}_d.pdb
+	  install(FILES ${PROJECT_BINARY_DIR}/bin${OGRE_DEBUG_PATH}/${PLUGINNAME}_d.pdb
 	    DESTINATION bin${OGRE_DEBUG_PATH}
 		CONFIGURATIONS Debug
 	  )
-	  install(FILES ${OGRE_BINARY_DIR}/bin${OGRE_RELWDBG_PATH}/${PLUGINNAME}.pdb
+	  install(FILES ${PROJECT_BINARY_DIR}/bin${OGRE_RELWDBG_PATH}/${PLUGINNAME}.pdb
 	    DESTINATION bin${OGRE_RELWDBG_PATH}
 		CONFIGURATIONS RelWithDebInfo
 	  )
@@ -352,11 +352,11 @@ function(ogre_config_sample_exe SAMPLENAME)
   ogre_config_sample_common(${SAMPLENAME})
   if (OGRE_INSTALL_PDB AND OGRE_INSTALL_SAMPLES)
 	  # install debug pdb files - no _d on exe
-	  install(FILES ${OGRE_BINARY_DIR}/bin${OGRE_DEBUG_PATH}/${SAMPLENAME}.pdb
+	  install(FILES ${PROJECT_BINARY_DIR}/bin${OGRE_DEBUG_PATH}/${SAMPLENAME}.pdb
 		  DESTINATION bin${OGRE_DEBUG_PATH}
 		  CONFIGURATIONS Debug
 		  )
-	  install(FILES ${OGRE_BINARY_DIR}/bin${OGRE_RELWDBG_PATH}/${SAMPLENAME}.pdb
+	  install(FILES ${PROJECT_BINARY_DIR}/bin${OGRE_RELWDBG_PATH}/${SAMPLENAME}.pdb
 		  DESTINATION bin${OGRE_RELWDBG_PATH}
 		  CONFIGURATIONS RelWithDebInfo
 		  )
@@ -377,11 +377,11 @@ function(ogre_config_sample_lib SAMPLENAME)
   ogre_config_sample_common(${SAMPLENAME})
   if (OGRE_INSTALL_PDB AND OGRE_INSTALL_SAMPLES)
 	  # install debug pdb files - with a _d on lib
-	  install(FILES ${OGRE_BINARY_DIR}/bin${OGRE_DEBUG_PATH}/${SAMPLENAME}.pdb
+	  install(FILES ${PROJECT_BINARY_DIR}/bin${OGRE_DEBUG_PATH}/${SAMPLENAME}.pdb
 		  DESTINATION bin${OGRE_DEBUG_PATH}
 		  CONFIGURATIONS Debug
 		  )
-	  install(FILES ${OGRE_BINARY_DIR}/bin${OGRE_RELWDBG_PATH}/${SAMPLENAME}.pdb
+	  install(FILES ${PROJECT_BINARY_DIR}/bin${OGRE_RELWDBG_PATH}/${SAMPLENAME}.pdb
 		  DESTINATION bin${OGRE_RELWDBG_PATH}
 		  CONFIGURATIONS RelWithDebInfo
 		  )
@@ -426,11 +426,11 @@ function(ogre_config_tool TOOLNAME)
     ogre_install_target(${TOOLNAME} "" FALSE)
     if (OGRE_INSTALL_PDB)
       # install debug pdb files
-      install(FILES ${OGRE_BINARY_DIR}/bin${OGRE_DEBUG_PATH}/${TOOLNAME}_d.pdb
+      install(FILES ${PROJECT_BINARY_DIR}/bin${OGRE_DEBUG_PATH}/${TOOLNAME}_d.pdb
         DESTINATION bin${OGRE_DEBUG_PATH}
         CONFIGURATIONS Debug
         )
-      install(FILES ${OGRE_BINARY_DIR}/bin${OGRE_RELWDBG_PATH}/${TOOLNAME}.pdb
+      install(FILES ${PROJECT_BINARY_DIR}/bin${OGRE_RELWDBG_PATH}/${TOOLNAME}.pdb
         DESTINATION bin${OGRE_RELWDBG_PATH}
         CONFIGURATIONS RelWithDebInfo
         )
@@ -444,6 +444,6 @@ function(ogre_add_component_include_dir COMPONENTNAME)
 	if (OGRE_SDK_BUILD)
 		include_directories("${OGRE_INCLUDE_DIR}/${COMPONENTNAME}")
 	else()
-		include_directories("${OGRE_SOURCE_DIR}/Components/${COMPONENTNAME}/include")	
+		include_directories("${PROJECT_SOURCE_DIR}/Components/${COMPONENTNAME}/include")	
 	endif()
 endfunction(ogre_add_component_include_dir)
