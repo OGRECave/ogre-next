@@ -514,13 +514,14 @@ namespace Ogre
             }
             else
             {
-                bDirty |= table.dirtyBakedTextures &
+                bDirty |= (int)table.dirtyBakedTextures &
                           ( (int)ranges[DescBindingTypes::ReadOnlyBuffer].isInUse() |
                             (int)ranges[DescBindingTypes::TexBuffer].isInUse() |
                             (int)ranges[DescBindingTypes::Texture].isInUse() );
-                bDirty |= table.dirtyBakedSamplers & ranges[DescBindingTypes::Sampler].isInUse();
-                bDirty |= table.dirtyBakedUavs & ( (int)ranges[DescBindingTypes::UavBuffer].isInUse() |
-                                                   (int)ranges[DescBindingTypes::UavTexture].isInUse() );
+                bDirty |= (int)table.dirtyBakedSamplers & ranges[DescBindingTypes::Sampler].isInUse();
+                bDirty |=
+                    (int)table.dirtyBakedUavs & ( (int)ranges[DescBindingTypes::UavBuffer].isInUse() |
+                                                  (int)ranges[DescBindingTypes::UavTexture].isInUse() );
             }
 
             if( bDirty )
