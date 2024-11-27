@@ -57,6 +57,8 @@ namespace Ogre
     {
         VkPhysicalDevice physicalDevice;
         uint64 physicalDeviceID[2];
+        VkDriverId driverID;
+        uint32 apiVersion;
         String title;
     };
 

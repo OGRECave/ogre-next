@@ -445,19 +445,24 @@ namespace Ogre
 
             // { deviceLUID, 0 } on Windows, deviceUUID or name hash otherwise
             uint64 uid[2] = {};
+            VkDriverId driverID = VkDriverId( 0 );
             if( GetPhysicalDeviceProperties2 && deviceProps.apiVersion >= VK_API_VERSION_1_2 )
             {
                 // VkPhysicalDeviceIDProperties requires enabled VK_KHR_EXTERNAL_xxx extensions
                 VkPhysicalDeviceProperties2 deviceProps2;
                 VkPhysicalDeviceVulkan11Properties vulkan11Props;  // requires VK_API_VERSION_1_2
+                VkPhysicalDeviceDriverProperties driverProps;      // requires VK_API_VERSION_1_2
                 makeVkStruct( deviceProps2, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2 );
                 makeVkStruct( vulkan11Props, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_PROPERTIES );
+                makeVkStruct( driverProps, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES );
                 deviceProps2.pNext = &vulkan11Props;
+                vulkan11Props.pNext = &driverProps;
                 GetPhysicalDeviceProperties2( device, &deviceProps2 );
                 if( vulkan11Props.deviceLUIDValid )
                     memcpy( uid, vulkan11Props.deviceLUID, VK_LUID_SIZE );
                 else
                     memcpy( uid, vulkan11Props.deviceUUID, VK_UUID_SIZE );
+                driverID = driverProps.driverID;
             }
             else
             {
@@ -465,7 +470,8 @@ namespace Ogre
             }
 
             LogManager::getSingleton().logMessage( "Vulkan: \"" + name + "\"" );
-            mVulkanPhysicalDevices.push_back( { device, { uid[0], uid[1] }, name } );
+            mVulkanPhysicalDevices.push_back(
+                { device, { uid[0], uid[1] }, driverID, deviceProps.apiVersion, name } );
         }
 
         LogManager::getSingleton().logMessage( "Vulkan: Device detection ends" );
