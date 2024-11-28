@@ -1728,10 +1728,10 @@ namespace Ogre
 
         MeshManager::getSingleton().unloadAll( Resource::LF_MARKED_FOR_RELOAD );
 
+        notifyDeviceLost( &mDevice );
+
         static_cast<D3D11TextureGpuManager *>( mTextureGpuManager )->_destroyD3DResources();
         static_cast<D3D11VaoManager *>( mVaoManager )->_destroyD3DResources();
-
-        notifyDeviceLost( &mDevice );
 
         // Release all automatic temporary buffers and free unused
         // temporary buffers, so we doesn't need to recreate them,
