@@ -144,6 +144,17 @@ namespace Ogre
                 if( 0 == strncmp( pMsg, err.c_str(), err.size() ) )
                     return false;
         }
+        {
+            // temporary
+            static String ignoredFalsePositiveErrors[] = {
+                "Validation Error: [ VUID-VkShaderModuleCreateInfo-pCode-08740 ]",
+                "Validation Error: [ VUID-VkShaderModuleCreateInfo-pCode-08742 ]",
+                "windows_read_data_files_in_registry: Registry lookup failed to get ICD manifest files."
+            };
+            for( auto &err : ignoredFalsePositiveErrors )
+                if( 0 == strncmp( pMsg, err.c_str(), err.size() ) )
+                    return false;
+        }
 #endif
 
         // clang-format off
