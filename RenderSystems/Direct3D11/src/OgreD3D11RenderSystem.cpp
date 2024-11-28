@@ -59,6 +59,7 @@ THE SOFTWARE.
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreProfiler.h"
 #include "OgreSceneManagerEnumerator.h"
+#include "OgreTimer.h"
 #include "OgreViewport.h"
 #include "Vao/OgreD3D11BufferInterface.h"
 #include "Vao/OgreD3D11ReadOnlyBufferPacked.h"
@@ -1711,6 +1712,9 @@ namespace Ogre
     {
         LogManager::getSingleton().logMessage( "D3D11: Device was lost, recreating." );
 
+        Timer timer;
+        uint64 startTime = timer.getMicroseconds();
+
         // release device depended resources
         fireDeviceEvent( &mDevice, "DeviceLost" );
 
@@ -1755,7 +1759,9 @@ namespace Ogre
 
         fireDeviceEvent( &mDevice, "DeviceRestored" );
 
-        LogManager::getSingleton().logMessage( "D3D11: Device was restored." );
+        uint64 passedTime = ( timer.getMicroseconds() - startTime ) / 1000;
+        LogManager::getSingleton().logMessage( "D3D11: Device was restored in " +
+                                               StringConverter::toString( passedTime ) + "ms" );
     }
     //---------------------------------------------------------------------
     bool D3D11RenderSystem::validateDevice( bool forceDeviceElection )
