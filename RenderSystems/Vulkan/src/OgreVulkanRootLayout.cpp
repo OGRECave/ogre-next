@@ -95,6 +95,22 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    void VulkanRootLayout::notifyDeviceLost()
+    {
+        if( mRootLayout )
+        {
+            vkDestroyPipelineLayout( mProgramManager->getDevice()->mDevice, mRootLayout, 0 );
+            mRootLayout = 0;
+        }
+
+        mSets.resize( 0 );
+        mPools.resize( 0 );
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRootLayout::notifyDeviceRestored( unsigned pass )
+    {
+    }
+    //-------------------------------------------------------------------------
     void VulkanRootLayout::copyFrom( const RootLayout &rootLayout, bool bIncludeArrayBindings )
     {
         OGRE_ASSERT_LOW( !mRootLayout && "Cannot call parseRootLayout after createVulkanHandles" );

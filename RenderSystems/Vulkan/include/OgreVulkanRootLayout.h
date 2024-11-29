@@ -58,7 +58,9 @@ namespace Ogre
 {
     uint32 toVkDescriptorType( DescBindingTypes::DescBindingTypes type );
 
-    class _OgreVulkanExport VulkanRootLayout final : protected RootLayout, public OgreAllocatedObj
+    class _OgreVulkanExport VulkanRootLayout final : protected RootLayout,
+                                                     public OgreAllocatedObj,
+                                                     protected VulkanDeviceResource
     {
         /// One handle per binding set (up to OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS)
         /// Doesn't have gaps (e.g. if mDescBindingRanges[3] is not empty, then mSets[3] must exist)
@@ -125,6 +127,9 @@ namespace Ogre
                                   const VulkanGlobalBindingTable &table );
 
         uint32 calculateFirstDirtySet( const VulkanGlobalBindingTable &table ) const;
+
+        void notifyDeviceLost() override;
+        void notifyDeviceRestored( unsigned pass ) override;
 
     public:
         VulkanRootLayout( VulkanGpuProgramManager *programManager );
