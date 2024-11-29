@@ -185,6 +185,20 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VulkanCache::~VulkanCache()
     {
+        destroy();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanCache::notifyDeviceLost()
+    {
+        destroy();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanCache::notifyDeviceRestored( unsigned pass )
+    {
+    }
+    //-------------------------------------------------------------------------
+    void VulkanCache::destroy()
+    {
         VkRenderPassMap::const_iterator itor = mRenderPassCache.begin();
         VkRenderPassMap::const_iterator endt = mRenderPassCache.end();
 
