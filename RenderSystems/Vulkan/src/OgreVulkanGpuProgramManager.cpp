@@ -105,21 +105,33 @@ namespace Ogre
             mRootLayouts.clear();
         }
 
-        {
-            DescriptorSetMap::const_iterator itor = mDescriptorSetMap.begin();
-            DescriptorSetMap::const_iterator endt = mDescriptorSetMap.end();
-
-            while( itor != endt )
-            {
-                vkDestroyDescriptorSetLayout( mDevice->mDevice, itor->second, 0 );
-                ++itor;
-            }
-
-            mDescriptorSetMap.clear();
-        }
+        destroyDescriptorSetLayouts();
 
         // Unregister with resource group manager
         ResourceGroupManager::getSingleton()._unregisterResourceManager( mResourceType );
+    }
+    //-------------------------------------------------------------------------
+    void VulkanGpuProgramManager::destroyDescriptorSetLayouts()
+    {
+        DescriptorSetMap::const_iterator itor = mDescriptorSetMap.begin();
+        DescriptorSetMap::const_iterator endt = mDescriptorSetMap.end();
+
+        while( itor != endt )
+        {
+            vkDestroyDescriptorSetLayout( mDevice->mDevice, itor->second, 0 );
+            ++itor;
+        }
+
+        mDescriptorSetMap.clear();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanGpuProgramManager::notifyDeviceLost()
+    {
+        destroyDescriptorSetLayouts();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanGpuProgramManager::notifyDeviceRestored( unsigned pass )
+    {
     }
     //-------------------------------------------------------------------------
     bool VulkanGpuProgramManager::registerProgramFactory( const String &syntaxCode,
