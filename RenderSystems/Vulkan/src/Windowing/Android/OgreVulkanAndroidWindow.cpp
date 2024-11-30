@@ -77,26 +77,6 @@ namespace Ogre
     VulkanAndroidWindow::~VulkanAndroidWindow()
     {
         destroy();
-
-        if( mTexture )
-        {
-            mTexture->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
-            OGRE_DELETE mTexture;
-            mTexture = 0;
-        }
-        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
-        {
-            mStencilBuffer->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
-            OGRE_DELETE mStencilBuffer;
-            mStencilBuffer = 0;
-        }
-        if( mDepthBuffer )
-        {
-            mDepthBuffer->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
-            OGRE_DELETE mDepthBuffer;
-            mDepthBuffer = 0;
-            mStencilBuffer = 0;
-        }
     }
     //-----------------------------------------------------------------------------------
     const char *VulkanAndroidWindow::getRequiredExtensionName()
@@ -283,18 +263,7 @@ namespace Ogre
 #endif
 
         destroySwapchain();
-
-        // Depth & Stencil buffer are normal textures; thus they need to be reeinitialized normally
-        if( mDepthBuffer && mDepthBuffer->getResidencyStatus() != GpuResidency::OnStorage )
-            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-        if( mStencilBuffer && mStencilBuffer != mDepthBuffer &&
-            mStencilBuffer->getResidencyStatus() != GpuResidency::OnStorage )
-        {
-            mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-        }
-
         setFinalResolution( newWidth, newHeight );
-
         createSwapchain();
     }
     //-------------------------------------------------------------------------

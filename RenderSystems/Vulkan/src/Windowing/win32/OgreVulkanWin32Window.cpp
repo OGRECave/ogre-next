@@ -76,22 +76,6 @@ namespace Ogre
     VulkanWin32Window::~VulkanWin32Window()
     {
         destroy();
-
-        if( mTexture )
-        {
-            mTexture->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
-            OGRE_DELETE mTexture;
-            mTexture = 0;
-        }
-        if( mDepthBuffer )
-        {
-            mDepthBuffer->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
-            OGRE_DELETE mDepthBuffer;
-            mDepthBuffer = 0;
-        }
-        // Depth & Stencil buffers are the same pointer
-        // OGRE_DELETE mStencilBuffer;
-        mStencilBuffer = 0;
     }
     //-------------------------------------------------------------------------
     const char *VulkanWin32Window::getRequiredExtensionName()
@@ -739,15 +723,7 @@ namespace Ogre
         mDevice->stall();
 
         destroySwapchain();
-
-        // Depth & Stencil buffer are normal textures; thus they need to be reeinitialized normally
-        if( mDepthBuffer )
-            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
-            mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-
         setFinalResolution( mRequestedWidth, mRequestedHeight );
-
         createSwapchain();
     }
     //-------------------------------------------------------------------------

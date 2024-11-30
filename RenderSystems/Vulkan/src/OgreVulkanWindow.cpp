@@ -194,6 +194,19 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VulkanWindowSwapChainBased::~VulkanWindowSwapChainBased() {}
     //-------------------------------------------------------------------------
+    void VulkanWindowSwapChainBased::notifyDeviceLost()
+    {
+        destroySwapchain();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanWindowSwapChainBased::notifyDeviceRestored( unsigned pass )
+    {
+        if( pass == 0 )
+        {
+            createSwapchain();
+        }
+    }
+    //-------------------------------------------------------------------------
     void VulkanWindowSwapChainBased::parseSharedParams( const NameValuePairList *miscParams )
     {
         NameValuePairList::const_iterator opt;
@@ -498,7 +511,7 @@ namespace Ogre
         mDevice->mRenderSystem->notifySwapchainCreated( this );
     }
     //-------------------------------------------------------------------------
-    void VulkanWindowSwapChainBased::destroySwapchain()
+    void VulkanWindowSwapChainBased::destroySwapchain( bool finalDestruction )
     {
         mDevice->mRenderSystem->notifySwapchainDestroyed( this );
 
@@ -515,6 +528,37 @@ namespace Ogre
         }
 
         mSwapchainStatus = SwapchainReleased;
+
+        if( finalDestruction )
+        {
+            if( mTexture )
+            {
+                mTexture->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
+                OGRE_DELETE mTexture;
+                mTexture = 0;
+            }
+            if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
+            {
+                mStencilBuffer->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
+                OGRE_DELETE mStencilBuffer;
+                mStencilBuffer = 0;
+            }
+            if( mDepthBuffer )
+            {
+                mDepthBuffer->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
+                OGRE_DELETE mDepthBuffer;
+                mDepthBuffer = 0;
+                mStencilBuffer = 0;
+            }
+        }
+        else
+        {
+            if( mDepthBuffer && mDepthBuffer->getResidencyStatus() != GpuResidency::OnStorage )
+                mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+            if( mStencilBuffer && mStencilBuffer != mDepthBuffer &&
+                mStencilBuffer->getResidencyStatus() != GpuResidency::OnStorage )
+                mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+        }
     }
     //-------------------------------------------------------------------------
     void VulkanWindowSwapChainBased::acquireNextSwapchain()
@@ -561,7 +605,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanWindowSwapChainBased::destroy()
     {
-        destroySwapchain();
+        destroySwapchain( true );
         if( mSurfaceKHR )
         {
             vkDestroySurfaceKHR( mDevice->mInstance->mVkInstance, mSurfaceKHR, 0 );
@@ -605,12 +649,6 @@ namespace Ogre
         mVSync = vSync;
 
         destroySwapchain();
-
-        if( mDepthBuffer )
-            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
-            mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-
         createSwapchain();
     }
     //-------------------------------------------------------------------------
@@ -622,12 +660,6 @@ namespace Ogre
         mCanDownloadData = bWantsToDownload;
 
         destroySwapchain();
-
-        if( mDepthBuffer )
-            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
-            mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-
         createSwapchain();
     }
     //-------------------------------------------------------------------------

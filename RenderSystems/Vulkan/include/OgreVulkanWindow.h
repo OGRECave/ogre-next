@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgreVulkanPrerequisites.h"
 
+#include "OgreVulkanDeviceResource.h"
 #include "OgreWindow.h"
 
 namespace Ogre
@@ -67,7 +68,7 @@ namespace Ogre
         void swapBuffers() override;
     };
 
-    class VulkanWindowSwapChainBased : public VulkanWindow
+    class VulkanWindowSwapChainBased : public VulkanWindow, protected VulkanDeviceResource
     {
     public:
         enum Backend
@@ -115,7 +116,10 @@ namespace Ogre
 
         PixelFormatGpu chooseSurfaceFormat( bool hwGamma );
         virtual void createSwapchain();
-        virtual void destroySwapchain();
+        virtual void destroySwapchain( bool finalDestruction = false );
+
+        void notifyDeviceLost() override;
+        void notifyDeviceRestored( unsigned pass ) override;
 
     public:
         void acquireNextSwapchain();
