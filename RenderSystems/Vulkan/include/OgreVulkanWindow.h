@@ -115,6 +115,8 @@ namespace Ogre
         void parseSharedParams( const NameValuePairList *miscParams );
 
         PixelFormatGpu chooseSurfaceFormat( bool hwGamma );
+        virtual void createSurface() = 0;
+        virtual void destroySurface();
         virtual void createSwapchain();
         virtual void destroySwapchain( bool finalDestruction = false );
 

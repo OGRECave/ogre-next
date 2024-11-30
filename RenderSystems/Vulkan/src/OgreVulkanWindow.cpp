@@ -197,12 +197,14 @@ namespace Ogre
     void VulkanWindowSwapChainBased::notifyDeviceLost()
     {
         destroySwapchain();
+        destroySurface();
     }
     //-------------------------------------------------------------------------
     void VulkanWindowSwapChainBased::notifyDeviceRestored( unsigned pass )
     {
         if( pass == 0 )
         {
+            createSurface();
             createSwapchain();
         }
     }
@@ -606,6 +608,11 @@ namespace Ogre
     void VulkanWindowSwapChainBased::destroy()
     {
         destroySwapchain( true );
+        destroySurface();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanWindowSwapChainBased::destroySurface()
+    {
         if( mSurfaceKHR )
         {
             vkDestroySurfaceKHR( mDevice->mInstance->mVkInstance, mSurfaceKHR, 0 );

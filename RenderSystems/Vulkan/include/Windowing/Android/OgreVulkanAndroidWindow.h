@@ -138,6 +138,7 @@ namespace Ogre
         static void setFramePacingSwappyAutoMode();
 #endif
 
+        void createSurface() override;
         void createSwapchain() override;
         void destroySwapchain() override;
 

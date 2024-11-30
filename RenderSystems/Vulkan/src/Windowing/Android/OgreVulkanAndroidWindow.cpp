@@ -366,12 +366,7 @@ namespace Ogre
         mFocused = true;
         // WindowEventUtilities::_addRenderWindow( this );
 
-        VkAndroidSurfaceCreateInfoKHR andrSurfCreateInfo;
-        makeVkStruct( andrSurfCreateInfo, VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR );
-        andrSurfCreateInfo.window = mNativeWindow;
-        VkResult result = vkCreateAndroidSurfaceKHR( mDevice->mInstance->mVkInstance,
-                                                     &andrSurfCreateInfo, 0, &mSurfaceKHR );
-        checkVkResult( result, "vkCreateAndroidSurfaceKHR" );
+        createSurface();
 
         const uint32 newWidth = static_cast<uint32>( ANativeWindow_getWidth( mNativeWindow ) );
         const uint32 newHeight = static_cast<uint32>( ANativeWindow_getHeight( mNativeWindow ) );
@@ -413,6 +408,16 @@ namespace Ogre
         }
 
         createSwapchain();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanAndroidWindow::createSurface()
+    {
+        VkAndroidSurfaceCreateInfoKHR andrSurfCreateInfo;
+        makeVkStruct( andrSurfCreateInfo, VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR );
+        andrSurfCreateInfo.window = mNativeWindow;
+        VkResult result = vkCreateAndroidSurfaceKHR( mDevice->mInstance->mVkInstance,
+                                                     &andrSurfCreateInfo, 0, &mSurfaceKHR );
+        checkVkResult( result, "vkCreateAndroidSurfaceKHR" );
     }
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::setJniProvider( AndroidJniProvider *provider )

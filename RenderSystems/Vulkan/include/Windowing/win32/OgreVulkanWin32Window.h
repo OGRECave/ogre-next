@@ -37,6 +37,7 @@ namespace Ogre
     class VulkanWin32Window final : public VulkanWindowSwapChainBased
     {
     private:
+        HINSTANCE mHinstance;
         HWND mHwnd;  // Win32 Window handle
         HDC mHDC;
         uint32 mColourDepth;
@@ -58,6 +59,7 @@ namespace Ogre
         DWORD getWindowStyle( bool fullScreen ) const;
 
         void createWindow( const NameValuePairList *miscParams );
+        void createSurface() override;
 
     public:
         VulkanWin32Window( const String &title, uint32 width, uint32 height, bool fullscreenMode );

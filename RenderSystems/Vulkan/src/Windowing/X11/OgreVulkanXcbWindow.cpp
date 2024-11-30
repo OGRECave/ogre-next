@@ -193,12 +193,7 @@ namespace Ogre
                          "VulkanXcbWindow::_initialize" );
         }
 
-        VkXcbSurfaceCreateInfoKHR xcbSurfCreateInfo;
-        memset( &xcbSurfCreateInfo, 0, sizeof( xcbSurfCreateInfo ) );
-        xcbSurfCreateInfo.sType = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
-        xcbSurfCreateInfo.connection = mConnection;
-        xcbSurfCreateInfo.window = mXcbWindow;
-        create_xcb_surface( mDevice->mInstance->mVkInstance, &xcbSurfCreateInfo, 0, &mSurfaceKHR );
+        createSurface();
 
         VulkanTextureGpuManager *textureManager =
             static_cast<VulkanTextureGpuManager *>( textureGpuManager );
@@ -240,6 +235,16 @@ namespace Ogre
         }
 
         createSwapchain();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanXcbWindow::createSurface()
+    {
+        VkXcbSurfaceCreateInfoKHR xcbSurfCreateInfo;
+        memset( &xcbSurfCreateInfo, 0, sizeof( xcbSurfCreateInfo ) );
+        xcbSurfCreateInfo.sType = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
+        xcbSurfCreateInfo.connection = mConnection;
+        xcbSurfCreateInfo.window = mXcbWindow;
+        create_xcb_surface( mDevice->mInstance->mVkInstance, &xcbSurfCreateInfo, 0, &mSurfaceKHR );
     }
     //-------------------------------------------------------------------------
     void VulkanXcbWindow::initConnection()
