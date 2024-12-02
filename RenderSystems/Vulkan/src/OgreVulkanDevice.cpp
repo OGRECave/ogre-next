@@ -769,6 +769,10 @@ namespace Ogre
                                  deviceShaderFloat16Int8Features );
         }
 
+        vkGetPhysicalDeviceProperties( mPhysicalDevice, &mDeviceProperties );
+
+        initQueues();
+
         // initial pipeline cache
         VkPipelineCacheCreateInfo pipelineCacheCreateInfo;
         makeVkStruct( pipelineCacheCreateInfo, VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO );

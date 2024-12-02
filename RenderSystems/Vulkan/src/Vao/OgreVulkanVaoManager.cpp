@@ -117,8 +117,6 @@ namespace Ogre
                     StringConverter::parseSizeT( itor->second, mDelayedBlocksFlushThreshold );
             }
         }
-  
-        createVkResources();
     }
     //-----------------------------------------------------------------------------------
     VulkanVaoManager::~VulkanVaoManager()
@@ -199,10 +197,14 @@ namespace Ogre
         mDelayedFuncs.resize( mDynamicBufferMultiplier );
 
         determineBestMemoryTypes();
+
+        initDrawIdVertexBuffer();
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::destroyVkResources( bool finalDestruction )
     {
+        mDrawId = 0;
+
         destroyAllVertexArrayObjects();
         deleteAllBuffers();
 

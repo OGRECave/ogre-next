@@ -680,11 +680,7 @@ namespace Ogre
 
         // We would like to save the device properties for the device capabilities limits.
         // These limits are needed for buffers' binding alignments.
-        VkPhysicalDeviceProperties *vkProperties =
-            const_cast<VkPhysicalDeviceProperties *>( &mDevice->mDeviceProperties );
-        vkGetPhysicalDeviceProperties( mDevice->mPhysicalDevice, vkProperties );
-
-        VkPhysicalDeviceProperties &properties = mDevice->mDeviceProperties;
+        const VkPhysicalDeviceProperties &properties = mDevice->mDeviceProperties;
 
         LogManager::getSingleton().logMessage(
             "Vulkan: API Version: " +
@@ -1167,20 +1163,19 @@ namespace Ogre
                                 : *mInstance->findByName( mVulkanSupport->getSelectedDeviceName() );
 
             mDevice = new VulkanDevice( this );
+            VulkanVaoManager *vaoManager = OGRE_NEW VulkanVaoManager( mDevice, this, miscParams );
+            mVaoManager = vaoManager;
+            mDevice->mVaoManager = vaoManager;
+
             mDevice->setPhysicalDevice( mInstance, mActiveDevice, externalDevice );
+            vaoManager->createVkResources();
 
             mRealCapabilities = createRenderSystemCapabilities();
             mCurrentCapabilities = mRealCapabilities;
 
             initialiseFromRenderSystemCapabilities( mCurrentCapabilities, 0 );
 
-            VulkanVaoManager *vaoManager = OGRE_NEW VulkanVaoManager( mDevice, this, miscParams );
-            mVaoManager = vaoManager;
             mHardwareBufferManager = OGRE_NEW v1::VulkanHardwareBufferManager( mDevice, mVaoManager );
-
-            mDevice->mVaoManager = vaoManager;
-            mDevice->initQueues();
-            vaoManager->initDrawIdVertexBuffer();
 
             FastArray<PixelFormatGpu> depthFormatCandidates( 5u );
             if( DepthBuffer::AvailableDepthFormats & DepthBuffer::DFM_S8 )

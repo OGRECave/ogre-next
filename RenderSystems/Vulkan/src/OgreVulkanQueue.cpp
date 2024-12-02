@@ -91,6 +91,7 @@ namespace Ogre
 
                     vkDestroyCommandPool( mDevice, itor->mCmdPool, 0 );
                     itor->mCommands.clear();
+                    itor->mCurrentCmdIdx = 0;
 
                     ++itor;
                 }
