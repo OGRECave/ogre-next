@@ -133,7 +133,7 @@ namespace Ogre
         size_t getSharesSetupWith() const { return sharesSetupWith; }
     };
 
-    /** Shadow Nodes are special nodes (not to be confused with @see CompositorNode)
+    /** Shadow Nodes are special nodes (not to be confused with CompositorNode)
         that are only used for rendering shadow maps.
         Normal Compositor Nodes can share or own a ShadowNode. The ShadowNode will
         render the scene enough times to fill all shadow maps so the main scene pass
