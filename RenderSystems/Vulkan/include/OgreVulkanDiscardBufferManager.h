@@ -31,6 +31,7 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 
 #include "OgreVulkanPrerequisites.h"
 
+#include "OgreVulkanDeviceResource.h"
 #include "Vao/OgreVulkanVaoManager.h"
 
 namespace Ogre
@@ -44,7 +45,8 @@ namespace Ogre
     ///
     /// We need Discard for the v1 interfaces. So we need to emulate it.
     /// This class does exactly this.
-    class _OgreVulkanExport VulkanDiscardBufferManager : public OgreAllocatedObj
+    class _OgreVulkanExport VulkanDiscardBufferManager : public OgreAllocatedObj,
+                                                         protected VulkanDeviceResource
     {
     public:
         struct UnsafeBlock : public VulkanVaoManager::Block
@@ -90,6 +92,11 @@ namespace Ogre
         /// Puts unsafe blocks that are now safe back to the free blocks pool.
         void updateUnsafeBlocks();
 
+        void destroyVkResources();
+        void createVkResources();
+
+        void notifyDeviceLost() override;
+        void notifyDeviceRestored( unsigned pass ) override;
     public:
         VulkanDiscardBufferManager( VulkanDevice *device, VaoManager *vaoManager );
         ~VulkanDiscardBufferManager();
