@@ -1,5 +1,7 @@
 var NAVTREEINDEX116 =
 {
+"struct_ogre_1_1_volume_1_1_chunk_tree_shared_data.html#a5945276049999e1e44dc07e200ddc162":[8,0,0,3,5,3],
+"struct_ogre_1_1_volume_1_1_chunk_tree_shared_data.html#a64aba683df2575afa57a24c039d3298b":[8,0,0,3,5,4],
 "struct_ogre_1_1_volume_1_1_chunk_tree_shared_data.html#abe9ecc8d43cd57c6d753de9278fd5c45":[8,0,0,3,5,1],
 "struct_ogre_1_1_volume_1_1_chunk_tree_shared_data.html#abf3e0545802da294d9e24825b5c1413f":[8,0,0,3,5,0],
 "struct_ogre_1_1_volume_1_1_chunk_tree_shared_data.html#af672339162b49888584d20403decfc13":[8,0,0,3,5,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX116 =
 "struct_ogre_1_1is_pod_like_3_01_t_01_5_01_4.html#acd4bc0b3444a29e4cafef881dc36760e":[8,0,0,528,0],
 "struct_ogre_1_1is_pod_like_3_01bool_01_4.html":[8,0,0,519],
 "struct_ogre_1_1is_pod_like_3_01bool_01_4.html#abee82e4ddd0de50c57085f40e4afc61a":[8,0,0,519,0],
-"struct_ogre_1_1is_pod_like_3_01char_01_4.html":[8,0,0,520],
-"struct_ogre_1_1is_pod_like_3_01char_01_4.html#a26cec9c44fa431197e653bb059b42c5c":[8,0,0,520,0],
-"struct_ogre_1_1is_pod_like_3_01double_01_4.html":[8,0,0,521]
+"struct_ogre_1_1is_pod_like_3_01char_01_4.html":[8,0,0,520]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX109 =
 {
+"struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html#ab78ebe8078c04919ce6c44b20d52ad1f":[8,0,0,289,0,1],
+"struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html#ac21f93c3af9e702519a2358b8adbb39d":[8,0,0,289,0,2],
 "struct_ogre_1_1_emitted_particle.html":[8,0,0,298],
 "struct_ogre_1_1_emitted_particle.html#a23c5ae4569d16d0eace3a3fd09424565":[8,0,0,298,2],
 "struct_ogre_1_1_emitted_particle.html#a3fb0b1d441ca491ea57126a09d200560":[8,0,0,298,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX109 =
 "struct_ogre_1_1_hlms_base_prop.html#a03a545ca9be88fcf366c9aa7f1d8368d":[6,2,10,47,86],
 "struct_ogre_1_1_hlms_base_prop.html#a05852baddb01052d197367e64b74b6ef":[6,2,10,47,58],
 "struct_ogre_1_1_hlms_base_prop.html#a087247ae98d52c3272916702e1cee479":[6,2,10,47,93],
-"struct_ogre_1_1_hlms_base_prop.html#a0f7ba12f4dd9081fb481095598eca626":[6,2,10,47,5],
-"struct_ogre_1_1_hlms_base_prop.html#a1039c0943e010e9927b0430d2ef0628e":[6,2,10,47,32],
-"struct_ogre_1_1_hlms_base_prop.html#a13b868a5d8b53b3e69e0499f5518f83e":[6,2,10,47,1]
+"struct_ogre_1_1_hlms_base_prop.html#a0f7ba12f4dd9081fb481095598eca626":[6,2,10,47,5]
 };

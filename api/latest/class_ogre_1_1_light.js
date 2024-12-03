@@ -47,6 +47,7 @@ var class_ogre_1_1_light =
     [ "getSpotlightInnerAngle", "class_ogre_1_1_light.html#a80e94a914a7bc76bca023e2c986c2687", null ],
     [ "getSpotlightNearClipDistance", "class_ogre_1_1_light.html#ace79ed42960f5f2860b02bc408fbd767", null ],
     [ "getSpotlightOuterAngle", "class_ogre_1_1_light.html#a5eb5c5553b4b3af3878f47676074487f", null ],
+    [ "getSpotlightSinHalfAngle", "class_ogre_1_1_light.html#ab955ce7675c5eb4384ca8c5c3fe3260d", null ],
     [ "getSpotlightTanHalfAngle", "class_ogre_1_1_light.html#a2d7c2d62244754d6a5a86f848509e35b", null ],
     [ "getTexture", "class_ogre_1_1_light.html#ac53dd392f9c2fd05f643825e9723af26", null ],
     [ "getType", "class_ogre_1_1_light.html#ab428dbb558a53b761a3a526836e6a55b", null ],
