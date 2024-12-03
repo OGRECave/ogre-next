@@ -66,6 +66,17 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     VulkanRenderPassDescriptor::~VulkanRenderPassDescriptor() { releaseFbo(); }
     //-----------------------------------------------------------------------------------
+    void VulkanRenderPassDescriptor::notifyDeviceLost()
+    {
+        releaseFbo();
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanRenderPassDescriptor::notifyDeviceRestored( unsigned pass )
+    {
+        if( pass == 1 )
+            entriesModified( RenderPassDescriptor::All );
+    }
+    //-----------------------------------------------------------------------------------
     void VulkanRenderPassDescriptor::checkRenderWindowStatus()
     {
         if( ( mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific() ) ||
