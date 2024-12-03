@@ -370,6 +370,8 @@ namespace Ogre
             VkResult result = vkCreateSampler( mDevice->mDevice, &samplerDescriptor, 0, &mDummySampler );
             checkVkResult( result, "vkCreateSampler" );
         }
+
+        resetAllBindings();
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::destroyVkResources0()
@@ -1240,8 +1242,6 @@ namespace Ogre
             }
 
             createVkResources();
-
-            resetAllBindings();
 
             String workaroundsStr;
             Workarounds::dump( workaroundsStr );
