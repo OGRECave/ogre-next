@@ -124,12 +124,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2004ed04a92b7bbe8001521a7d060a43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3b9a6f92929930e55371e15d4b00eaf"><td class="memItemLeft" align="right" valign="top">VkImageView&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_texture_gpu_manager.html#ac3b9a6f92929930e55371e15d4b00eaf">createView</a> (const <a class="el" href="struct_ogre_1_1_descriptor_set_uav_1_1_texture_slot.html">DescriptorSetUav::TextureSlot</a> &amp;texSlot)</td></tr>
 <tr class="separator:ac3b9a6f92929930e55371e15d4b00eaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e24fd33dd1928bace4c18113d9ee5ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_texture_gpu_manager.html#a5e24fd33dd1928bace4c18113d9ee5ee">createVkResources</a> ()</td></tr>
+<tr class="separator:a5e24fd33dd1928bace4c18113d9ee5ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01c8e000e0d0a903849bafee2c4de603"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_texture_gpu_manager.html#a01c8e000e0d0a903849bafee2c4de603">createWindowDepthBuffer</a> (const bool bMemoryLess)</td></tr>
 <tr class="separator:a01c8e000e0d0a903849bafee2c4de603"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a899ae784a461fde4dbd09dcd63ce8837"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_texture_gpu_manager.html#a899ae784a461fde4dbd09dcd63ce8837">destroyView</a> (<a class="el" href="struct_ogre_1_1_descriptor_set_texture2_1_1_texture_slot.html">DescriptorSetTexture2::TextureSlot</a> texSlot, VkImageView imageView)</td></tr>
 <tr class="separator:a899ae784a461fde4dbd09dcd63ce8837"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa5a2bf5a1d6426b02da324b2a5e119e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_texture_gpu_manager.html#aaa5a2bf5a1d6426b02da324b2a5e119e">destroyView</a> (<a class="el" href="struct_ogre_1_1_descriptor_set_uav_1_1_texture_slot.html">DescriptorSetUav::TextureSlot</a> texSlot, VkImageView imageView)</td></tr>
 <tr class="separator:aaa5a2bf5a1d6426b02da324b2a5e119e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a790d88e6f44306640d30baf4d8ff32dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_texture_gpu_manager.html#a790d88e6f44306640d30baf4d8ff32dc">destroyVkResources</a> (bool finalDestruction=false)</td></tr>
+<tr class="separator:a790d88e6f44306640d30baf4d8ff32dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad48cadc684f6052d6fdb2ccede94df7e"><td class="memItemLeft" align="right" valign="top">VkImageView&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_texture_gpu_manager.html#ad48cadc684f6052d6fdb2ccede94df7e">getBlankTextureView</a> (<a class="el" href="namespace_ogre_1_1_texture_types.html#aa364e348564060700791c9940d5ced82">TextureTypes::TextureTypes</a> textureType) const</td></tr>
 <tr class="separator:ad48cadc684f6052d6fdb2ccede94df7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d083dad26113b48299b1c009d66f69f"><td class="memItemLeft" align="right" valign="top">VkImage&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_texture_gpu_manager.html#a3d083dad26113b48299b1c009d66f69f">getBlankTextureVulkanName</a> (<a class="el" href="namespace_ogre_1_1_texture_types.html#aa364e348564060700791c9940d5ced82">TextureTypes::TextureTypes</a> textureType) const</td></tr>
@@ -551,6 +555,23 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a5e24fd33dd1928bace4c18113d9ee5ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e24fd33dd1928bace4c18113d9ee5ee">&#9670;&nbsp;</a></span>createVkResources()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::VulkanTextureGpuManager::createVkResources </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a01c8e000e0d0a903849bafee2c4de603"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a01c8e000e0d0a903849bafee2c4de603">&#9670;&nbsp;</a></span>createWindowDepthBuffer()</h2>
 
@@ -619,6 +640,24 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a790d88e6f44306640d30baf4d8ff32dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a790d88e6f44306640d30baf4d8ff32dc">&#9670;&nbsp;</a></span>destroyVkResources()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::VulkanTextureGpuManager::destroyVkResources </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>finalDestruction</em> = <code>false</code></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">

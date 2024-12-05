@@ -1,5 +1,17 @@
 var NAVTREEINDEX103 =
 {
+"hlms.html#HlmsCreationOfShadersHotReloading":[4,1,1,5,2],
+"hlms.html#HlmsPreprocessor":[4,1,1,4],
+"hlms.html#HlmsPreprocessorSyntax":[4,1,1,4,0],
+"hlms.html#HlmsPreprocessorSyntaxCounter":[4,1,1,4,0,2],
+"hlms.html#HlmsPreprocessorSyntaxForeach":[4,1,1,4,0,1],
+"hlms.html#HlmsPreprocessorSyntaxInsertpiece":[4,1,1,4,0,6],
+"hlms.html#HlmsPreprocessorSyntaxPiece":[4,1,1,4,0,5],
+"hlms.html#HlmsPreprocessorSyntaxProperty":[4,1,1,4,0,0],
+"hlms.html#HlmsPreprocessorSyntaxPsetEtc":[4,1,1,4,0,8],
+"hlms.html#HlmsPreprocessorSyntaxSetEtc":[4,1,1,4,0,4],
+"hlms.html#HlmsPreprocessorSyntaxUndefpiece":[4,1,1,4,0,7],
+"hlms.html#HlmsPreprocessorSyntaxValue":[4,1,1,4,0,3],
 "hlms.html#HlmsRuntimeRendering":[4,1,1,6],
 "hlms.html#HlmsRuntimeRenderingFillBuffersFor":[4,1,1,6,1],
 "hlms.html#HlmsRuntimeRenderingPreparePassHash":[4,1,1,6,0],
@@ -237,17 +249,5 @@ var NAVTREEINDEX103 =
 "namespace_ogre.html#a24084171ec692b4831ae31dace5b6f78":[7,0,0,1382],
 "namespace_ogre.html#a2437a44ce057091eba32786bc28ac1fb":[7,0,0,1119],
 "namespace_ogre.html#a24aca8d208dcf62fbe3bee9e759ac73d":[7,0,0,1171],
-"namespace_ogre.html#a26bb73ddc770257c1d41fd99f82bdf75":[7,0,0,1408],
-"namespace_ogre.html#a2784ce8d6af184237a7416b699b1122b":[7,0,0,1269],
-"namespace_ogre.html#a29d512504d93722a56ed474cd02d1b27":[7,0,0,1423],
-"namespace_ogre.html#a2b50c8299b49c77b1f41e1a6567ffaff":[7,0,0,1274],
-"namespace_ogre.html#a2c452533979dfdf73a296288e94d920b":[7,0,0,1178],
-"namespace_ogre.html#a2e4542b93098e5f39cef152c941047e7":[7,0,0,1257],
-"namespace_ogre.html#a2faaa3bff56503a5df5168df1d28ccfb":[7,0,0,1209],
-"namespace_ogre.html#a35281bec85547bd26f9ef56c75171459":[7,0,0,1415],
-"namespace_ogre.html#a379cc8652f292a5bdcd0b0c5eb45257a":[7,0,0,1107],
-"namespace_ogre.html#a384a85abe4c776359b5b4cf2771af367":[7,0,0,1397],
-"namespace_ogre.html#a398609fc7f66939c990741e6878792aa":[7,0,0,1421],
-"namespace_ogre.html#a3af18a4129f2043729eb4aeb2c9a70e6":[7,0,0,1286],
-"namespace_ogre.html#a3d9f5c00761ed1ff7885a805d82f942c":[7,0,0,1115]
+"namespace_ogre.html#a26bb73ddc770257c1d41fd99f82bdf75":[7,0,0,1408]
 };

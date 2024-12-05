@@ -100,7 +100,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_vulkan_render_pass_desc
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_vulkan_render_pass_descriptor__inherit__graph.svg" width="258" height="187"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_vulkan_render_pass_descriptor__inherit__graph.svg" width="448" height="187"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -113,6 +113,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a975af77fc0b53a64a05e96130ed2ac60"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_pass_descriptor.html#a975af77fc0b53a64a05e96130ed2ac60">entriesModified</a> (<a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> entryTypes) override</td></tr>
 <tr class="memdesc:a975af77fc0b53a64a05e96130ed2ac60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call this when you're done modified mColour.  <a href="class_ogre_1_1_vulkan_render_pass_descriptor.html#a975af77fc0b53a64a05e96130ed2ac60">More...</a><br /></td></tr>
 <tr class="separator:a975af77fc0b53a64a05e96130ed2ac60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a279c65614fe7620514d52990505e7fd3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_pass_descriptor.html#a279c65614fe7620514d52990505e7fd3">notifyDeviceLost</a> () override</td></tr>
+<tr class="separator:a279c65614fe7620514d52990505e7fd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaeeef282825f875e2b22b1cb36ac55c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_pass_descriptor.html#aaeeef282825f875e2b22b1cb36ac55c0">notifyDeviceRestored</a> (unsigned pass) override</td></tr>
+<tr class="separator:aaeeef282825f875e2b22b1cb36ac55c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6833cdf1d44f265799d4e5de3343ba78"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_pass_descriptor.html#a6833cdf1d44f265799d4e5de3343ba78">notifyRenderTextureNonResident</a> (<a class="el" href="class_ogre_1_1_vulkan_texture_gpu.html">VulkanTextureGpu</a> *texture)</td></tr>
 <tr class="separator:a6833cdf1d44f265799d4e5de3343ba78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52a6b3ba4a16d43050674d29ae7bc743"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_pass_descriptor.html#a52a6b3ba4a16d43050674d29ae7bc743">notifySwapchainCreated</a> (<a class="el" href="class_ogre_1_1_vulkan_window.html">VulkanWindow</a> *window)</td></tr>
@@ -283,6 +287,61 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_render_pass_descriptor.html#aacf8e4ca01f70069d482936804dfe838">Ogre::RenderPassDescriptor</a>.</p>
+
+</div>
+</div>
+<a id="a279c65614fe7620514d52990505e7fd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a279c65614fe7620514d52990505e7fd3">&#9670;&nbsp;</a></span>notifyDeviceLost()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::VulkanRenderPassDescriptor::notifyDeviceLost </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_ogre_1_1_vulkan_device_resource.html#a7f4e59021f7858e2f77f0189ad465bc3">Ogre::VulkanDeviceResource</a>.</p>
+
+</div>
+</div>
+<a id="aaeeef282825f875e2b22b1cb36ac55c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaeeef282825f875e2b22b1cb36ac55c0">&#9670;&nbsp;</a></span>notifyDeviceRestored()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::VulkanRenderPassDescriptor::notifyDeviceRestored </td>
+          <td>(</td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>pass</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_ogre_1_1_vulkan_device_resource.html#a475c4422438dba02b18fad39e41aef63">Ogre::VulkanDeviceResource</a>.</p>
 
 </div>
 </div>

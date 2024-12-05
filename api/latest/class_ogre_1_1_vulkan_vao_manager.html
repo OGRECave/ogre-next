@@ -171,12 +171,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a45ff102de58acd7d8d5cd77ea0bf8851"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a904b8700c2ee999b86d624384802a15a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vulkan_staging_texture.html">VulkanStagingTexture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a904b8700c2ee999b86d624384802a15a">createStagingTexture</a> (<a class="el" href="group___image.html#ga71f09fe41a1db41186262f1aa5814a18">PixelFormatGpu</a> formatFamily, size_t sizeBytes)</td></tr>
 <tr class="separator:a904b8700c2ee999b86d624384802a15a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96bb866e33ee675aa532142c05b7c864"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a96bb866e33ee675aa532142c05b7c864">createVkResources</a> ()</td></tr>
+<tr class="separator:a96bb866e33ee675aa532142c05b7c864"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d085bf800ae5b743106d7494b69f4aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a0d085bf800ae5b743106d7494b69f4aa">deallocateRawBuffer</a> (<a class="el" href="struct_ogre_1_1_vulkan_raw_buffer.html">VulkanRawBuffer</a> &amp;rawBuffer, bool bImmediately)</td></tr>
 <tr class="separator:a0d085bf800ae5b743106d7494b69f4aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55fb0b0643f47ed4de330528d614ce07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a55fb0b0643f47ed4de330528d614ce07">deallocateTexture</a> (size_t vboIdx, size_t bufferOffset, size_t sizeBytes)</td></tr>
 <tr class="separator:a55fb0b0643f47ed4de330528d614ce07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39ec5e085c6183db97d875c57ca92f0b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a39ec5e085c6183db97d875c57ca92f0b">destroyStagingTexture</a> (<a class="el" href="class_ogre_1_1_vulkan_staging_texture.html">VulkanStagingTexture</a> *stagingTexture)</td></tr>
 <tr class="separator:a39ec5e085c6183db97d875c57ca92f0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb20561f1946e05cdd24e15064127b07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#aeb20561f1946e05cdd24e15064127b07">destroyVkResources</a> (bool finalDestruction=false)</td></tr>
+<tr class="separator:aeb20561f1946e05cdd24e15064127b07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4815d1129fad990a892bc0d5f0f5d20b"><td class="memItemLeft" align="right" valign="top">VkSemaphore&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a4815d1129fad990a892bc0d5f0f5d20b">getAvailableSemaphore</a> ()</td></tr>
 <tr class="separator:a4815d1129fad990a892bc0d5f0f5d20b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affce885268f092b27677b1cbf551fad3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#affce885268f092b27677b1cbf551fad3">getAvailableSemaphores</a> (<a class="el" href="namespace_ogre.html#acae60aed4d41345db59648a2379e3559">VkSemaphoreArray</a> &amp;semaphoreArray, size_t numSemaphores)</td></tr>
@@ -806,6 +810,23 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a96bb866e33ee675aa532142c05b7c864"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96bb866e33ee675aa532142c05b7c864">&#9670;&nbsp;</a></span>createVkResources()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::VulkanVaoManager::createVkResources </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0d085bf800ae5b743106d7494b69f4aa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0d085bf800ae5b743106d7494b69f4aa">&#9670;&nbsp;</a></span>deallocateRawBuffer()</h2>
 
@@ -879,6 +900,24 @@ Static Public Member Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1_vulkan_staging_texture.html">VulkanStagingTexture</a> *&#160;</td>
           <td class="paramname"><em>stagingTexture</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aeb20561f1946e05cdd24e15064127b07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb20561f1946e05cdd24e15064127b07">&#9670;&nbsp;</a></span>destroyVkResources()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::VulkanVaoManager::destroyVkResources </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>finalDestruction</em> = <code>false</code></td><td>)</td>
           <td></td>
         </tr>
       </table>

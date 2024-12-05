@@ -388,6 +388,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac037b5fe30dd9ef06735c784b1c88863"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75b6c8828f64c69d46def1d2608d6535"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; <a class="el" href="struct_ogre_1_1_vulkan_physical_device.html">VulkanPhysicalDevice</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a75b6c8828f64c69d46def1d2608d6535">getVulkanPhysicalDevices</a> () const</td></tr>
 <tr class="separator:a75b6c8828f64c69d46def1d2608d6535"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a788f8cd96c944836c29c9141729aa047"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a788f8cd96c944836c29c9141729aa047">handleDeviceLost</a> ()</td></tr>
+<tr class="separator:a788f8cd96c944836c29c9141729aa047"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ee0fc5d4e7e816d8f979d10369752b3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a0ee0fc5d4e7e816d8f979d10369752b3">hasAnisotropicMipMapFilter</a> () const override</td></tr>
 <tr class="memdesc:a0ee0fc5d4e7e816d8f979d10369752b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if the system has anisotropic mip map filter support.  <a href="class_ogre_1_1_vulkan_render_system.html#a0ee0fc5d4e7e816d8f979d10369752b3">More...</a><br /></td></tr>
 <tr class="separator:a0ee0fc5d4e7e816d8f979d10369752b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -453,6 +455,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a20202748993a987073131d6b8ea43c6a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a20202748993a987073131d6b8ea43c6a">validateConfigOptions</a> () override</td></tr>
 <tr class="memdesc:a20202748993a987073131d6b8ea43c6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates the options set for the rendering system, returning a message if there are problems.  <a href="class_ogre_1_1_vulkan_render_system.html#a20202748993a987073131d6b8ea43c6a">More...</a><br /></td></tr>
 <tr class="separator:a20202748993a987073131d6b8ea43c6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a768ab4c8cd69d1d3d4dd117759b13701"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a768ab4c8cd69d1d3d4dd117759b13701">validateDevice</a> (bool forceDeviceElection=false) override</td></tr>
+<tr class="memdesc:a768ab4c8cd69d1d3d4dd117759b13701"><td class="mdescLeft">&#160;</td><td class="mdescRight">Some render systems have moments when GPU device is temporarily unavailable, for example when D3D11 device is lost, or when iOS app is in background, etc.  <a href="class_ogre_1_1_vulkan_render_system.html#a768ab4c8cd69d1d3d4dd117759b13701">More...</a><br /></td></tr>
+<tr class="separator:a768ab4c8cd69d1d3d4dd117759b13701"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73ff97a1715d0c2382692774aa1b3f07"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_sample_description.html">SampleDescription</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a73ff97a1715d0c2382692774aa1b3f07">validateSampleDescription</a> (const <a class="el" href="struct_ogre_1_1_sample_description.html">SampleDescription</a> &amp;sampleDesc, <a class="el" href="group___image.html#ga71f09fe41a1db41186262f1aa5814a18">PixelFormatGpu</a> format, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> textureFlags) override</td></tr>
 <tr class="memdesc:a73ff97a1715d0c2382692774aa1b3f07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns supported sample description for requested FSAA mode, with graceful downgrading.  <a href="class_ogre_1_1_vulkan_render_system.html#a73ff97a1715d0c2382692774aa1b3f07">More...</a><br /></td></tr>
 <tr class="separator:a73ff97a1715d0c2382692774aa1b3f07"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -695,9 +700,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6219a2d1f92be5548983a03de9522365 inherit pub_methods_class_ogre_1_1_render_system"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a6219a2d1f92be5548983a03de9522365">useCustomRenderSystemCapabilities</a> (<a class="el" href="class_ogre_1_1_render_system_capabilities.html">RenderSystemCapabilities</a> *capabilities)</td></tr>
 <tr class="memdesc:a6219a2d1f92be5548983a03de9522365 inherit pub_methods_class_ogre_1_1_render_system"><td class="mdescLeft">&#160;</td><td class="mdescRight">Force the render system to use the special capabilities.  <a href="class_ogre_1_1_render_system.html#a6219a2d1f92be5548983a03de9522365">More...</a><br /></td></tr>
 <tr class="separator:a6219a2d1f92be5548983a03de9522365 inherit pub_methods_class_ogre_1_1_render_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a913bd8f0e2e19cf356ccaa3bed31543e inherit pub_methods_class_ogre_1_1_render_system"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a913bd8f0e2e19cf356ccaa3bed31543e">validateDevice</a> (bool forceDeviceElection=false)</td></tr>
-<tr class="memdesc:a913bd8f0e2e19cf356ccaa3bed31543e inherit pub_methods_class_ogre_1_1_render_system"><td class="mdescLeft">&#160;</td><td class="mdescRight">Some render systems have moments when GPU device is temporarily unavailable, for example when D3D11 device is lost, or when iOS app is in background, etc.  <a href="class_ogre_1_1_render_system.html#a913bd8f0e2e19cf356ccaa3bed31543e">More...</a><br /></td></tr>
-<tr class="separator:a913bd8f0e2e19cf356ccaa3bed31543e inherit pub_methods_class_ogre_1_1_render_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -4512,6 +4514,23 @@ However <a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> cann
 
 </div>
 </div>
+<a id="a788f8cd96c944836c29c9141729aa047"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a788f8cd96c944836c29c9141729aa047">&#9670;&nbsp;</a></span>handleDeviceLost()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::VulkanRenderSystem::handleDeviceLost </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0ee0fc5d4e7e816d8f979d10369752b3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0ee0fc5d4e7e816d8f979d10369752b3">&#9670;&nbsp;</a></span>hasAnisotropicMipMapFilter()</h2>
 
@@ -5268,6 +5287,36 @@ Once this init sequence is completed the threads are independent but this startu
 <dl class="section note"><dt>Note</dt><dd>If the returned string is empty, there are no problems. </dd></dl>
 
 <p>Implements <a class="el" href="class_ogre_1_1_render_system.html#a90ca5c0fdbb3b6c21f334a6e8cdb1373">Ogre::RenderSystem</a>.</p>
+
+</div>
+</div>
+<a id="a768ab4c8cd69d1d3d4dd117759b13701"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a768ab4c8cd69d1d3d4dd117759b13701">&#9670;&nbsp;</a></span>validateDevice()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::VulkanRenderSystem::validateDevice </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forceDeviceElection</em> = <code>false</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Some render systems have moments when GPU device is temporarily unavailable, for example when D3D11 device is lost, or when iOS app is in background, etc. </p>
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_render_system.html#a913bd8f0e2e19cf356ccaa3bed31543e">Ogre::RenderSystem</a>.</p>
 
 </div>
 </div>

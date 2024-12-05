@@ -1981,7 +1981,16 @@ var hierarchy =
     [ "Ogre::VulkanDevice", "struct_ogre_1_1_vulkan_device.html", null ],
     [ "Ogre::VulkanDevice::ExtraVkFeatures", "struct_ogre_1_1_vulkan_device_1_1_extra_vk_features.html", null ],
     [ "Ogre::VulkanDevice::SelectedQueue", "struct_ogre_1_1_vulkan_device_1_1_selected_queue.html", null ],
-    [ "Ogre::VulkanDeviceResource", "class_ogre_1_1_vulkan_device_resource.html", null ],
+    [ "Ogre::VulkanDeviceResource", "class_ogre_1_1_vulkan_device_resource.html", [
+      [ "Ogre::VulkanCache", "class_ogre_1_1_vulkan_cache.html", null ],
+      [ "Ogre::VulkanDiscardBufferManager", "class_ogre_1_1_vulkan_discard_buffer_manager.html", null ],
+      [ "Ogre::VulkanGpuProgramManager", "class_ogre_1_1_vulkan_gpu_program_manager.html", null ],
+      [ "Ogre::VulkanProgram", "class_ogre_1_1_vulkan_program.html", null ],
+      [ "Ogre::VulkanRenderPassDescriptor", "class_ogre_1_1_vulkan_render_pass_descriptor.html", null ],
+      [ "Ogre::VulkanRootLayout", "class_ogre_1_1_vulkan_root_layout.html", null ],
+      [ "Ogre::VulkanTextureGpu", "class_ogre_1_1_vulkan_texture_gpu.html", null ],
+      [ "Ogre::VulkanWindowSwapChainBased", "class_ogre_1_1_vulkan_window_swap_chain_based.html", null ]
+    ] ],
     [ "Ogre::VulkanDeviceResourceManager", "class_ogre_1_1_vulkan_device_resource_manager.html", [
       [ "Ogre::VulkanRenderSystem", "class_ogre_1_1_vulkan_render_system.html", null ]
     ] ],

@@ -18,48 +18,48 @@
 </a>
 </g>
 </g>
-<!-- Node5 -->
-<g id="node5" class="node">
-<title>Node5</title>
-<g id="a_node5"><a xlink:href="class_ogre_1_1_vulkan_android_window.html" target="_top" xlink:title=" ">
-<polygon fill="none" stroke="black" points="0,-0.5 0,-19.5 155,-19.5 155,-0.5 0,-0.5"/>
-<text text-anchor="middle" x="77.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::VulkanAndroidWindow</text>
-</a>
-</g>
-</g>
-<!-- Node1&#45;&gt;Node5 -->
-<g id="edge4" class="edge">
-<title>Node1&#45;&gt;Node5</title>
-<path fill="none" stroke="midnightblue" d="M197.75,-53.09C166.36,-42.1 127.17,-28.39 102.24,-19.66"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="196.62,-56.4 207.21,-56.4 198.93,-49.79 196.62,-56.4"/>
-</g>
 <!-- Node6 -->
 <g id="node6" class="node">
 <title>Node6</title>
-<g id="a_node6"><a xlink:href="class_ogre_1_1_vulkan_win32_window.html" target="_top" xlink:title=" ">
-<polygon fill="none" stroke="black" points="173.5,-0.5 173.5,-19.5 321.5,-19.5 321.5,-0.5 173.5,-0.5"/>
-<text text-anchor="middle" x="247.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::VulkanWin32Window</text>
+<g id="a_node6"><a xlink:href="class_ogre_1_1_vulkan_android_window.html" target="_top" xlink:title=" ">
+<polygon fill="none" stroke="black" points="0,-0.5 0,-19.5 155,-19.5 155,-0.5 0,-0.5"/>
+<text text-anchor="middle" x="77.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::VulkanAndroidWindow</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node6 -->
 <g id="edge5" class="edge">
 <title>Node1&#45;&gt;Node6</title>
-<path fill="none" stroke="midnightblue" d="M247.5,-46.29C247.5,-36.86 247.5,-26.65 247.5,-19.66"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="244,-46.4 247.5,-56.4 251,-46.4 244,-46.4"/>
+<path fill="none" stroke="midnightblue" d="M197.75,-53.09C166.36,-42.1 127.17,-28.39 102.24,-19.66"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="196.62,-56.4 207.21,-56.4 198.93,-49.79 196.62,-56.4"/>
 </g>
 <!-- Node7 -->
 <g id="node7" class="node">
 <title>Node7</title>
-<g id="a_node7"><a xlink:href="class_ogre_1_1_vulkan_xcb_window.html" target="_top" xlink:title=" ">
-<polygon fill="none" stroke="black" points="340,-0.5 340,-19.5 475,-19.5 475,-0.5 340,-0.5"/>
-<text text-anchor="middle" x="407.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::VulkanXcbWindow</text>
+<g id="a_node7"><a xlink:href="class_ogre_1_1_vulkan_win32_window.html" target="_top" xlink:title=" ">
+<polygon fill="none" stroke="black" points="173.5,-0.5 173.5,-19.5 321.5,-19.5 321.5,-0.5 173.5,-0.5"/>
+<text text-anchor="middle" x="247.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::VulkanWin32Window</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node7 -->
 <g id="edge6" class="edge">
 <title>Node1&#45;&gt;Node7</title>
+<path fill="none" stroke="midnightblue" d="M247.5,-46.29C247.5,-36.86 247.5,-26.65 247.5,-19.66"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="244,-46.4 247.5,-56.4 251,-46.4 244,-46.4"/>
+</g>
+<!-- Node8 -->
+<g id="node8" class="node">
+<title>Node8</title>
+<g id="a_node8"><a xlink:href="class_ogre_1_1_vulkan_xcb_window.html" target="_top" xlink:title=" ">
+<polygon fill="none" stroke="black" points="340,-0.5 340,-19.5 475,-19.5 475,-0.5 340,-0.5"/>
+<text text-anchor="middle" x="407.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::VulkanXcbWindow</text>
+</a>
+</g>
+</g>
+<!-- Node1&#45;&gt;Node8 -->
+<g id="edge7" class="edge">
+<title>Node1&#45;&gt;Node8</title>
 <path fill="none" stroke="midnightblue" d="M295.09,-52.8C324.51,-41.86 360.95,-28.31 384.22,-19.66"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="293.57,-49.63 285.42,-56.4 296.01,-56.19 293.57,-49.63"/>
 </g>
@@ -67,46 +67,61 @@
 <g id="node2" class="node">
 <title>Node2</title>
 <g id="a_node2"><a xlink:href="class_ogre_1_1_vulkan_window.html" target="_top" xlink:title=" ">
-<polygon fill="none" stroke="black" points="189,-123.5 189,-142.5 306,-142.5 306,-123.5 189,-123.5"/>
-<text text-anchor="middle" x="247.5" y="-130.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::VulkanWindow</text>
+<polygon fill="none" stroke="black" points="112,-123.5 112,-142.5 229,-142.5 229,-123.5 112,-123.5"/>
+<text text-anchor="middle" x="170.5" y="-130.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::VulkanWindow</text>
 </a>
 </g>
 </g>
 <!-- Node2&#45;&gt;Node1 -->
 <g id="edge1" class="edge">
 <title>Node2&#45;&gt;Node1</title>
-<path fill="none" stroke="midnightblue" d="M247.5,-113.23C247.5,-104.59 247.5,-94.5 247.5,-86.52"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="244,-113.48 247.5,-123.48 251,-113.48 244,-113.48"/>
+<path fill="none" stroke="midnightblue" d="M189.66,-117.2C201.8,-107.81 217.41,-95.75 229.35,-86.52"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="187.31,-114.59 181.53,-123.48 191.59,-120.13 187.31,-114.59"/>
 </g>
 <!-- Node3 -->
 <g id="node3" class="node">
 <title>Node3</title>
 <g id="a_node3"><a xlink:href="class_ogre_1_1_window.html" target="_top" xlink:title=" ">
-<polygon fill="none" stroke="black" points="205,-179.5 205,-198.5 290,-198.5 290,-179.5 205,-179.5"/>
-<text text-anchor="middle" x="247.5" y="-186.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Window</text>
+<polygon fill="none" stroke="black" points="128,-179.5 128,-198.5 213,-198.5 213,-179.5 128,-179.5"/>
+<text text-anchor="middle" x="170.5" y="-186.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Window</text>
 </a>
 </g>
 </g>
 <!-- Node3&#45;&gt;Node2 -->
 <g id="edge2" class="edge">
 <title>Node3&#45;&gt;Node2</title>
-<path fill="none" stroke="midnightblue" d="M247.5,-168.8C247.5,-159.91 247.5,-149.78 247.5,-142.75"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="244,-169.08 247.5,-179.08 251,-169.08 244,-169.08"/>
+<path fill="none" stroke="midnightblue" d="M170.5,-168.8C170.5,-159.91 170.5,-149.78 170.5,-142.75"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="167,-169.08 170.5,-179.08 174,-169.08 167,-169.08"/>
 </g>
 <!-- Node4 -->
 <g id="node4" class="node">
 <title>Node4</title>
 <g id="a_node4"><a xlink:title=" ">
-<polygon fill="none" stroke="#bfbfbf" points="196.5,-235.5 196.5,-254.5 298.5,-254.5 298.5,-235.5 196.5,-235.5"/>
-<text text-anchor="middle" x="247.5" y="-242.5" font-family="Helvetica,sans-Serif" font-size="10.00">OgreAllocatedObj</text>
+<polygon fill="none" stroke="#bfbfbf" points="119.5,-235.5 119.5,-254.5 221.5,-254.5 221.5,-235.5 119.5,-235.5"/>
+<text text-anchor="middle" x="170.5" y="-242.5" font-family="Helvetica,sans-Serif" font-size="10.00">OgreAllocatedObj</text>
 </a>
 </g>
 </g>
 <!-- Node4&#45;&gt;Node3 -->
 <g id="edge3" class="edge">
 <title>Node4&#45;&gt;Node3</title>
-<path fill="none" stroke="midnightblue" d="M247.5,-224.8C247.5,-215.91 247.5,-205.78 247.5,-198.75"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="244,-225.08 247.5,-235.08 251,-225.08 244,-225.08"/>
+<path fill="none" stroke="midnightblue" d="M170.5,-224.8C170.5,-215.91 170.5,-205.78 170.5,-198.75"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="167,-225.08 170.5,-235.08 174,-225.08 167,-225.08"/>
+</g>
+<!-- Node5 -->
+<g id="node5" class="node">
+<title>Node5</title>
+<g id="a_node5"><a xlink:href="class_ogre_1_1_vulkan_device_resource.html" target="_top" xlink:title="Represents a Vulkan device depended rendering resource.">
+<polygon fill="none" stroke="black" points="247,-123.5 247,-142.5 404,-142.5 404,-123.5 247,-123.5"/>
+<text text-anchor="middle" x="325.5" y="-130.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::VulkanDeviceResource</text>
+</a>
+</g>
+</g>
+<!-- Node5&#45;&gt;Node1 -->
+<g id="edge4" class="edge">
+<title>Node5&#45;&gt;Node1</title>
+<path fill="none" stroke="#8b1a1a" d="M306.09,-117.2C293.79,-107.81 277.98,-95.75 265.88,-86.52"/>
+<polygon fill="#8b1a1a" stroke="#8b1a1a" points="304.25,-120.19 314.32,-123.48 308.5,-114.63 304.25,-120.19"/>
 </g>
 </g>
 </svg>

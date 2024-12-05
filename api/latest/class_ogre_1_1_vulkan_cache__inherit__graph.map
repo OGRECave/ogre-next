@@ -1,4 +1,5 @@
 <map id="Ogre::VulkanCache" name="Ogre::VulkanCache">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,149,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="9,5,145,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="100,80,244,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,141,32"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_vulkan_device_resource.html" title="Represents a Vulkan device depended rendering resource." alt="" coords="166,5,375,32"/>
 </map>

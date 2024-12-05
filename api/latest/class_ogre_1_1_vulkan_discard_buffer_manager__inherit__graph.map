@@ -1,4 +1,5 @@
 <map id="Ogre::VulkanDiscardBufferManager" name="Ogre::VulkanDiscardBufferManager">
-<area shape="rect" id="node1" title="Vulkan doesn&#39;t support &quot;DISCARD&quot; like D3D9/D3D11 (and OpenGL but often it&#39;s broken) where we requeste..." alt="" coords="5,80,197,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="33,5,169,32"/>
+<area shape="rect" id="node1" title="Vulkan doesn&#39;t support &quot;DISCARD&quot; like D3D9/D3D11 (and OpenGL but often it&#39;s broken) where we requeste..." alt="" coords="76,80,268,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,141,32"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_vulkan_device_resource.html" title="Represents a Vulkan device depended rendering resource." alt="" coords="166,5,375,32"/>
 </map>

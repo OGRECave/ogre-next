@@ -114,6 +114,7 @@ var class_ogre_1_1_vulkan_render_system =
     [ "getVerticalTexelOffset", "class_ogre_1_1_vulkan_render_system.html#a5d861dd78eb95245287e154893ab52d6", null ],
     [ "getVulkanDevice", "class_ogre_1_1_vulkan_render_system.html#ac037b5fe30dd9ef06735c784b1c88863", null ],
     [ "getVulkanPhysicalDevices", "class_ogre_1_1_vulkan_render_system.html#a75b6c8828f64c69d46def1d2608d6535", null ],
+    [ "handleDeviceLost", "class_ogre_1_1_vulkan_render_system.html#a788f8cd96c944836c29c9141729aa047", null ],
     [ "hasAnisotropicMipMapFilter", "class_ogre_1_1_vulkan_render_system.html#a0ee0fc5d4e7e816d8f979d10369752b3", null ],
     [ "initConfigOptions", "class_ogre_1_1_vulkan_render_system.html#a2ed03ae8d85301b4f0ff8f9600a5d773", null ],
     [ "initGPUProfiling", "class_ogre_1_1_vulkan_render_system.html#ae0d6f4281914c4125791c90493756907", null ],
@@ -138,5 +139,6 @@ var class_ogre_1_1_vulkan_render_system =
     [ "supportsMultithreadedShaderCompilation", "class_ogre_1_1_vulkan_render_system.html#affa135b4ada8ca1f4afb9a1135235772", null ],
     [ "unregisterThread", "class_ogre_1_1_vulkan_render_system.html#a6cd050d0488813ce414f5a2bb3e99f38", null ],
     [ "validateConfigOptions", "class_ogre_1_1_vulkan_render_system.html#a20202748993a987073131d6b8ea43c6a", null ],
+    [ "validateDevice", "class_ogre_1_1_vulkan_render_system.html#a768ab4c8cd69d1d3d4dd117759b13701", null ],
     [ "validateSampleDescription", "class_ogre_1_1_vulkan_render_system.html#a73ff97a1715d0c2382692774aa1b3f07", null ]
 ];
