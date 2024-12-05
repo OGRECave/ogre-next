@@ -312,7 +312,20 @@ namespace Ogre
 
         postRenderPassDescriptorSetup( renderPassDesc );
 
-        renderPassDesc->entriesModified( RenderPassDescriptor::All );
+        try
+        {
+            renderPassDesc->entriesModified( RenderPassDescriptor::All );
+        }
+        catch( Exception &e )
+        {
+            LogManager::getSingleton().logMessage(
+                "The compositor pass '" + mDefinition->mProfilingId + "' from Node: '" +
+                    mParentNode->getDefinition()->getNameStr() + "' in Workspace: '" +
+                    mParentNode->getWorkspace()->getDefinition()->getNameStr() +
+                    "' threw the following Exception:",
+                LML_CRITICAL );
+            throw;
+        }
     }
     //-----------------------------------------------------------------------------------
     void CompositorPass::setupRenderPassTarget( RenderPassTargetBase *renderPassTargetAttachment,

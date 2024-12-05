@@ -177,7 +177,8 @@ namespace Ogre
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Texture '" + texture->getNameStr() +
                              "' is TilerMemoryless. For load actions it can only use clear, "
-                             "dont_care or clear_on_tilers.",
+                             "dont_care or clear_on_tilers. Alternatively, launch OgreNext with 'Allow "
+                             "Memoryless RTT' set to No. See Ogre.log for more info.",
                          "RenderPassDescriptor::validateMemorylessTexture" );
         }
 
@@ -187,7 +188,9 @@ namespace Ogre
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "Texture '" + texture->getNameStr() +
-                                 "' is TilerMemoryless. For store actions it can only use dont_care.",
+                                 "' is TilerMemoryless. For store actions it can only use dont_care. "
+                                 "Alternatively, launch OgreNext with 'Allow Memoryless RTT' set to No."
+                                 " See Ogre.log for more info.",
                              "RenderPassDescriptor::validateMemorylessTexture" );
             }
         }
@@ -198,7 +201,8 @@ namespace Ogre
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "MSAA Texture '" + texture->getNameStr() +
                                  "' is TilerMemoryless. For store actions it can only use dont_care "
-                                 "or resolve.",
+                                 "or resolve. Alternatively, launch OgreNext with 'Allow Memoryless "
+                                 "RTT' set to No. See Ogre.log for more info.",
                              "RenderPassDescriptor::validateMemorylessTexture" );
             }
         }
