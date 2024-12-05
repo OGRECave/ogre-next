@@ -336,7 +336,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::setNativeWindow( ANativeWindow *nativeWindow )
     {
-        destroy();
+        destroySwapchain();
+        destroySurface();
 
         // Depth & Stencil buffer are normal textures; thus they need to be reeinitialized normally
         if( mDepthBuffer && mDepthBuffer->getResidencyStatus() != GpuResidency::OnStorage )

@@ -1170,10 +1170,11 @@ namespace Ogre
             mDevice->mVaoManager = vaoManager;
 
             mDevice->setPhysicalDevice( mInstance, mActiveDevice, externalDevice );
-            vaoManager->createVkResources();
 
             mRealCapabilities = createRenderSystemCapabilities();
             mCurrentCapabilities = mRealCapabilities;
+
+            vaoManager->createVkResources();
 
             initialiseFromRenderSystemCapabilities( mCurrentCapabilities, 0 );
 
