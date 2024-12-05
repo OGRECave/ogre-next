@@ -97,6 +97,7 @@ namespace Ogre
 
         void notifyDeviceLost() override;
         void notifyDeviceRestored( unsigned pass ) override;
+
     public:
         VulkanDiscardBufferManager( VulkanDevice *device, VaoManager *vaoManager );
         ~VulkanDiscardBufferManager();

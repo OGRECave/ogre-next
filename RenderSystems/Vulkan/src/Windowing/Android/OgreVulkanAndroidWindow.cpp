@@ -74,10 +74,7 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    VulkanAndroidWindow::~VulkanAndroidWindow()
-    {
-        destroy();
-    }
+    VulkanAndroidWindow::~VulkanAndroidWindow() { destroy(); }
     //-----------------------------------------------------------------------------------
     const char *VulkanAndroidWindow::getRequiredExtensionName()
     {

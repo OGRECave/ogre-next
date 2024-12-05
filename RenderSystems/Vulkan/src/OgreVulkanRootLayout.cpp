@@ -107,9 +107,7 @@ namespace Ogre
         mPools.resize( 0 );
     }
     //-------------------------------------------------------------------------
-    void VulkanRootLayout::notifyDeviceRestored( unsigned pass )
-    {
-    }
+    void VulkanRootLayout::notifyDeviceRestored( unsigned pass ) {}
     //-------------------------------------------------------------------------
     void VulkanRootLayout::copyFrom( const RootLayout &rootLayout, bool bIncludeArrayBindings )
     {

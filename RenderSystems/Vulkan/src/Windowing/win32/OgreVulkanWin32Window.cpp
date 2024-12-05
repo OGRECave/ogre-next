@@ -91,10 +91,7 @@ namespace Ogre
 #endif
     }
     //-------------------------------------------------------------------------
-    VulkanWin32Window::~VulkanWin32Window()
-    {
-        destroy();
-    }
+    VulkanWin32Window::~VulkanWin32Window() { destroy(); }
     //-------------------------------------------------------------------------
     const char *VulkanWin32Window::getRequiredExtensionName()
     {

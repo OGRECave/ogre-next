@@ -56,10 +56,7 @@ namespace Ogre
         createVkResources();
     }
     //-----------------------------------------------------------------------------------
-    VulkanTextureGpuManager::~VulkanTextureGpuManager()
-    {
-        destroyVkResources( true );
-    }
+    VulkanTextureGpuManager::~VulkanTextureGpuManager() { destroyVkResources( true ); }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuManager::createVkResources()
     {
@@ -104,7 +101,7 @@ namespace Ogre
 
         // Use a VulkanStagingTexture but we will manually handle the upload.
         // The barriers are easy because there is no work using any of this data
-        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager ); 
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
         VulkanStagingTexture *stagingTex =
             vaoManager->createStagingTexture( PFG_RGBA8_UNORM, sizeof( c_whiteData ) * 2u );
 
@@ -173,8 +170,7 @@ namespace Ogre
                 memRequirements, mBlankTexture[i].vboPoolIdx, mBlankTexture[i].internalBufferStart );
 
             VkResult result = vkBindImageMemory( mDevice->mDevice, mBlankTexture[i].vkImage,
-                                                 deviceMemory,
-                                                 mBlankTexture[i].internalBufferStart );
+                                                 deviceMemory, mBlankTexture[i].internalBufferStart );
             checkVkResult( result, "vkBindImageMemory" );
         }
 

@@ -1304,7 +1304,6 @@ namespace Ogre
         }
 
         return true;
-
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::handleDeviceLost()

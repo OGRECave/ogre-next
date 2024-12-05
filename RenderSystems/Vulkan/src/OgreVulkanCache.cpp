@@ -183,19 +183,11 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VulkanCache::VulkanCache( VulkanDevice *device ) : mDevice( device ) {}
     //-------------------------------------------------------------------------
-    VulkanCache::~VulkanCache()
-    {
-        destroy();
-    }
+    VulkanCache::~VulkanCache() { destroy(); }
     //-------------------------------------------------------------------------
-    void VulkanCache::notifyDeviceLost()
-    {
-        destroy();
-    }
+    void VulkanCache::notifyDeviceLost() { destroy(); }
     //-------------------------------------------------------------------------
-    void VulkanCache::notifyDeviceRestored( unsigned pass )
-    {
-    }
+    void VulkanCache::notifyDeviceRestored( unsigned pass ) {}
     //-------------------------------------------------------------------------
     void VulkanCache::destroy()
     {

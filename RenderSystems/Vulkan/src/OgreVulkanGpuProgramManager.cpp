@@ -125,14 +125,9 @@ namespace Ogre
         mDescriptorSetMap.clear();
     }
     //-------------------------------------------------------------------------
-    void VulkanGpuProgramManager::notifyDeviceLost()
-    {
-        destroyDescriptorSetLayouts();
-    }
+    void VulkanGpuProgramManager::notifyDeviceLost() { destroyDescriptorSetLayouts(); }
     //-------------------------------------------------------------------------
-    void VulkanGpuProgramManager::notifyDeviceRestored( unsigned pass )
-    {
-    }
+    void VulkanGpuProgramManager::notifyDeviceRestored( unsigned pass ) {}
     //-------------------------------------------------------------------------
     bool VulkanGpuProgramManager::registerProgramFactory( const String &syntaxCode,
                                                           CreateGpuProgramCallback createFn )

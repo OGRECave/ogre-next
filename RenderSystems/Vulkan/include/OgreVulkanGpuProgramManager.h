@@ -31,8 +31,8 @@ THE SOFTWARE.
 
 #include "OgreVulkanPrerequisites.h"
 
-#include "OgreVulkanDeviceResource.h"
 #include "OgreGpuProgramManager.h"
+#include "OgreVulkanDeviceResource.h"
 
 #include "vulkan/vulkan_core.h"
 

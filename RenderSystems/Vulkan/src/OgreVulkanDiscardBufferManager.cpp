@@ -43,15 +43,9 @@ namespace Ogre
         createVkResources();
     }
 
-    VulkanDiscardBufferManager::~VulkanDiscardBufferManager()
-    {
-        destroyVkResources();
-    }
+    VulkanDiscardBufferManager::~VulkanDiscardBufferManager() { destroyVkResources(); }
 
-    void VulkanDiscardBufferManager::notifyDeviceLost()
-    {
-        destroyVkResources();
-    }
+    void VulkanDiscardBufferManager::notifyDeviceLost() { destroyVkResources(); }
 
     void VulkanDiscardBufferManager::notifyDeviceRestored( unsigned pass )
     {

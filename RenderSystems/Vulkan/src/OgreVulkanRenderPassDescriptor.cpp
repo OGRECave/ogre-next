@@ -66,10 +66,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     VulkanRenderPassDescriptor::~VulkanRenderPassDescriptor() { releaseFbo(); }
     //-----------------------------------------------------------------------------------
-    void VulkanRenderPassDescriptor::notifyDeviceLost()
-    {
-        releaseFbo();
-    }
+    void VulkanRenderPassDescriptor::notifyDeviceLost() { releaseFbo(); }
     //-----------------------------------------------------------------------------------
     void VulkanRenderPassDescriptor::notifyDeviceRestored( unsigned pass )
     {

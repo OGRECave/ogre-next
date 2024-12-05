@@ -119,10 +119,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    VulkanVaoManager::~VulkanVaoManager()
-    {
-        destroyVkResources( true );
-    }
+    VulkanVaoManager::~VulkanVaoManager() { destroyVkResources( true ); }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::createVkResources()
     {
@@ -218,7 +215,7 @@ namespace Ogre
 
         deleteStagingBuffers();
 
-        for( VulkanDelayedFuncBaseArray& fnFrame : mDelayedFuncs )
+        for( VulkanDelayedFuncBaseArray &fnFrame : mDelayedFuncs )
         {
             for( VulkanDelayedFuncBase *fn : fnFrame )
             {
