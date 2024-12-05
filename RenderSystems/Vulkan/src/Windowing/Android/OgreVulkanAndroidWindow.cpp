@@ -85,12 +85,6 @@ namespace Ogre
     {
         if( mNativeWindow )
         {
-            // Android is destroying our window. Possibly user pressed the home or power
-            // button.
-            //
-            // We must flush all our references to the old swapchain otherwise when
-            // the app goes to foreground again and submit that stale content Mali
-            // will return DEVICE_LOST
             mDevice->stall();
         }
 
@@ -336,6 +330,14 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::setNativeWindow( ANativeWindow *nativeWindow )
     {
+        // Android is destroying our window. Possibly user pressed the home or power
+        // button.
+        //
+        // We must flush all our references to the old swapchain otherwise when
+        // the app goes to foreground again and submit that stale content Mali
+        // will return DEVICE_LOST
+        mDevice->stall();
+
         destroySwapchain();
         destroySurface();
 
