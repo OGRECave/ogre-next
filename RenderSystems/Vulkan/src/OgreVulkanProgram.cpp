@@ -779,12 +779,14 @@ namespace Ogre
                          "VulkanProgram::compile" );
         }
 
-        // TODO: Support SPIR-Vs with mReflectArrayRootLayouts == true or with mCustomRootLayout == false
-        // Is it even worth it? Most shaders won't need and it just adds complexity.
-        if( mCompiled && !mSpirv.empty() && mCustomRootLayout && !mReflectArrayRootLayouts )
+        if( mCompiled && !mSpirv.empty() )
         {
             GpuProgramManager &gpuProgramManager = GpuProgramManager::getSingleton();
-            if( gpuProgramManager.getSaveMicrocodesToCache() )
+            // TODO: Support caching SPIR-Vs with mReflectArrayRootLayouts == true or with
+            // mCustomRootLayout == false Is it even worth it? Most shaders won't need and it
+            // just adds complexity.
+            if( gpuProgramManager.getSaveMicrocodesToCache() && mCustomRootLayout &&
+                !mReflectArrayRootLayouts )
             {
                 const uint32 spirvSizeBytes = static_cast<uint32>( mSpirv.size() * sizeof( uint32 ) );
                 GpuProgramManager::Microcode newMicrocode =
