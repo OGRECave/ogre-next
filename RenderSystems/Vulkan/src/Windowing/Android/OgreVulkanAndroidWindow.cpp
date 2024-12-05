@@ -278,7 +278,7 @@ namespace Ogre
 
         mDevice->stall();
 
-#ifdef OGRE_VULKAN_USE_SWAPPY &&defined( OGRE_VK_WORKAROUND_SWAPPY_CRASH )
+#if defined( OGRE_VULKAN_USE_SWAPPY ) && defined( OGRE_VK_WORKAROUND_SWAPPY_CRASH )
         const String manufacturer = getSystemProperty( "ro.product.manufacturer" );
         const String model = getSystemProperty( "ro.product.model" );
         const bool bIsAndroid14 = getSdkVersion() >= 34;
