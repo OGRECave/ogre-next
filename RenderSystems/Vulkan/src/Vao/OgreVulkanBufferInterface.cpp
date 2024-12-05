@@ -102,12 +102,15 @@ namespace Ogre
 
         char *retVal = (char *)mMappedPtr;
 
-        // For persistent maps, we've mapped the whole 3x size of the buffer. mLastMappingStart
-        // points to the right offset so that we can later flush correctly.
-        size_t lastMappingStart =
-            elementStart + mBuffer->_getInternalNumElements() * dynamicCurrentFrame;
-        mBuffer->mLastMappingStart = lastMappingStart;
-        retVal += lastMappingStart * bytesPerElement;
+        if( mBuffer->mBufferType >= BT_DYNAMIC_PERSISTENT )
+        {
+            // For persistent maps, we've mapped the whole 3x size of the buffer. mLastMappingStart
+            // points to the right offset so that we can later flush correctly.
+            size_t lastMappingStart =
+                elementStart + mBuffer->_getInternalNumElements() * dynamicCurrentFrame;
+            mBuffer->mLastMappingStart = lastMappingStart;
+            retVal += lastMappingStart * bytesPerElement;
+        }
 
         return retVal;
     }
