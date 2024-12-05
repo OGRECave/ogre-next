@@ -140,7 +140,7 @@ namespace Ogre
 
         void createSurface() override;
         void createSwapchain() override;
-        void destroySwapchain() override;
+        void destroySwapchain( bool finalDestruction = false ) override;
 
     public:
         VulkanAndroidWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );

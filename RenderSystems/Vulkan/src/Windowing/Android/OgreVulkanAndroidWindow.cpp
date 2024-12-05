@@ -498,7 +498,7 @@ namespace Ogre
 #endif
     }
     //-------------------------------------------------------------------------
-    void VulkanAndroidWindow::destroySwapchain()
+    void VulkanAndroidWindow::destroySwapchain( bool finalDestruction )
     {
 #ifdef OGRE_VULKAN_USE_SWAPPY
         // Swappy has a bug where calling SwappyVk_destroySwapchain will leak the mNativeWindow.
@@ -507,7 +507,7 @@ namespace Ogre
             SwappyVk_setWindow( mDevice->mDevice, mSwapchain, mNativeWindow );
         SwappyVk_destroySwapchain( mDevice->mDevice, mSwapchain );
 #endif
-        VulkanWindowSwapChainBased::destroySwapchain();
+        VulkanWindowSwapChainBased::destroySwapchain( finalDestruction );
     }
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::getCustomAttribute( IdString name, void *pData )

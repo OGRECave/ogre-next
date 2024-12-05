@@ -138,8 +138,8 @@ namespace Ogre
 #ifdef OGRE_VK_WORKAROUND_ADRENO_UBO64K
         Workarounds::mAdrenoUbo64kLimitTriggered = false;
         Workarounds::mAdrenoUbo64kLimit = 0u;
-        if( renderSystem->getCapabilities()->getVendor() == GPU_QUALCOMM &&
-            renderSystem->getCapabilities()->getDeviceName().find( "Turnip" ) == String::npos )
+        if( mVkRenderSystem->getCapabilities()->getVendor() == GPU_QUALCOMM &&
+            mVkRenderSystem->getCapabilities()->getDeviceName().find( "Turnip" ) == String::npos )
         {
             mConstBufferMaxSize =
                 std::min<size_t>( mConstBufferMaxSize, 64u * 1024u - mConstBufferAlignment );
@@ -152,8 +152,8 @@ namespace Ogre
 #endif
 
 #ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
-        if( renderSystem->getCapabilities()->getVendor() == GPU_IMGTEC &&
-            !renderSystem->getCapabilities()->getDriverVersion().hasMinVersion( 1, 426, 234 ) )
+        if( mVkRenderSystem->getCapabilities()->getVendor() == GPU_IMGTEC &&
+            !mVkRenderSystem->getCapabilities()->getDriverVersion().hasMinVersion( 1, 426, 234 ) )
         {
             Workarounds::mPowerVRAlignment = 16u;
 
