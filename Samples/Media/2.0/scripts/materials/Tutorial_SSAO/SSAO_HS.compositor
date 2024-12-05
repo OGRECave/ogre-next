@@ -128,6 +128,11 @@ compositor_node SSAO_GenerationSSAO_and_Composite
 		pass render_quad
 		{
 			load { all dont_care }
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
 			material SSAO/Apply
 			input 0 blurTextureVertical
 			input 1 RT0
@@ -135,6 +140,19 @@ compositor_node SSAO_GenerationSSAO_and_Composite
 
 		pass render_scene
 		{
+			// We must set depth & stencil to dont_care because the
+			// Window's DepthBuffer is Memoryless by default and Overlays break the pass.
+			load
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
+
 			lod_update_list	off
 
 			//Render Overlays

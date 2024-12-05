@@ -39,7 +39,15 @@ compositor_node Tutorial_ReconstructPosFromDepthNode
 		{
 			load
 			{
-				colour			dont_care
+				colour	dont_care
+				depth	dont_care
+				stencil	dont_care
+			}
+
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
 			}
 
 			material ReconstructPosFromDepth
@@ -50,6 +58,13 @@ compositor_node Tutorial_ReconstructPosFromDepthNode
 		
 		pass render_scene
 		{
+			// We must set depth & stencil to dont_care because the
+			// Window's DepthBuffer is Memoryless by default and Overlays break the pass.
+			load
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
 			store
 			{
 				depth	dont_care

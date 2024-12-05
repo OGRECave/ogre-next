@@ -4,11 +4,6 @@ compositor_node Tutorial_TerrainRenderingNode
 
 	target rt_renderwindow
 	{
-		pass clear
-		{
-			colour_value 0.2 0.4 0.6 1
-		}
-
 		pass render_scene
 		{
 			load

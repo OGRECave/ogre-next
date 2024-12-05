@@ -310,6 +310,21 @@ namespace Ogre
                                    rtv->preferDepthTexture, rtv->depthBufferFormat );
         }
 
+        if( mDefinition->mSkipLoadStoreSemantics )
+        {
+            // Set everything to dont_care since validation must not complain.
+            const size_t numColourEntries = renderPassDesc->getNumColourEntries();
+            for( size_t i = 0u; i < numColourEntries; ++i )
+            {
+                renderPassDesc->mColour[i].loadAction = LoadAction::DontCare;
+                renderPassDesc->mColour[i].storeAction = StoreAction::DontCare;
+            }
+            renderPassDesc->mDepth.loadAction = LoadAction::DontCare;
+            renderPassDesc->mDepth.storeAction = StoreAction::DontCare;
+            renderPassDesc->mStencil.loadAction = LoadAction::DontCare;
+            renderPassDesc->mStencil.storeAction = StoreAction::DontCare;
+        }
+
         postRenderPassDescriptorSetup( renderPassDesc );
 
         try

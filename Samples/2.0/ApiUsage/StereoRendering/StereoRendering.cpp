@@ -105,6 +105,13 @@ namespace Demo
             return mEyeWorkspaces[0];
         }
 
+        void initMiscParamsListener( Ogre::NameValuePairList &params ) override
+        {
+            // This sample specifically REQUIRES the window's depth buffer contents to be preserved
+            // between multiple passes. Therefore we must disable it.
+            params["memoryless_depth_buffer"] = "No";
+        }
+
     public:
         StereoGraphicsSystem( GameState *gameState ) : GraphicsSystem( gameState ) {}
     };
