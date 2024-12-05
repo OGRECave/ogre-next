@@ -42,8 +42,8 @@ compositor_node TutorialComputeTest01_UavTextureRenderingNode
 			// Window's DepthBuffer is Memoryless by default and Overlays break the pass.
 			load
 			{
-				depth	dont_care
-				stencil	dont_care
+				depth	clear
+				stencil	clear
 			}
 			store
 			{
