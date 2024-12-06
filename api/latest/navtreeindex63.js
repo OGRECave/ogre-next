@@ -1,5 +1,6 @@
 var NAVTREEINDEX63 =
 {
+"class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_end.html#a3a510da5d58b567c38b79e3ffd95ed11":[8,0,0,822,2,0],
 "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_start.html":[8,0,0,822,3],
 "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_start.html#a6b9805fdcbfa00ee3dbd570163128f0a":[8,0,0,822,3,0],
 "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_start.html#aeea4abda4fc309b990286d45b9f87756":[8,0,0,822,3,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX63 =
 "class_ogre_1_1_scene_manager.html#a1cd7c70305104c508f85f339e423e973":[6,2,11,45,34],
 "class_ogre_1_1_scene_manager.html#a1ec392f63d0f2fdf537c118c51f1c78e":[6,2,11,45,141],
 "class_ogre_1_1_scene_manager.html#a1ec392f63d0f2fdf537c118c51f1c78e":[6,0,1,45,141],
-"class_ogre_1_1_scene_manager.html#a1f59ebdfaadbe33f713d754737041654":[6,2,11,45,275],
-"class_ogre_1_1_scene_manager.html#a1f59ebdfaadbe33f713d754737041654":[6,0,1,45,275]
+"class_ogre_1_1_scene_manager.html#a1f59ebdfaadbe33f713d754737041654":[6,2,11,45,275]
 };

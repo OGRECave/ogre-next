@@ -1968,6 +1968,7 @@ var files_dup =
     [ "OgreVulkanReadOnlyBufferPacked.h", "_ogre_vulkan_read_only_buffer_packed_8h.html", [
       [ "VulkanReadOnlyBufferPacked", "class_ogre_1_1_vulkan_read_only_buffer_packed.html", "class_ogre_1_1_vulkan_read_only_buffer_packed" ]
     ] ],
+    [ "OgreVulkanReadOnlyTBufferWorkaround.h", "_ogre_vulkan_read_only_t_buffer_workaround_8h.html", null ],
     [ "OgreVulkanRenderPassDescriptor.h", "_ogre_vulkan_render_pass_descriptor_8h.html", "_ogre_vulkan_render_pass_descriptor_8h" ],
     [ "OgreVulkanRenderSystem.h", "_ogre_vulkan_render_system_8h.html", [
       [ "VulkanPhysicalDevice", "struct_ogre_1_1_vulkan_physical_device.html", "struct_ogre_1_1_vulkan_physical_device" ],

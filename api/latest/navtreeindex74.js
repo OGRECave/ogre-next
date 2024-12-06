@@ -1,5 +1,6 @@
 var NAVTREEINDEX74 =
 {
+"class_ogre_1_1_vector4.html#a37efa8bb4db9148fb43c8238b21c1906":[6,2,6,37,17],
 "class_ogre_1_1_vector4.html#a389cf99ed365e8ec1d823c0a0cf52da3":[6,2,6,37,47],
 "class_ogre_1_1_vector4.html#a3b9ce3e33b491148161ac0e4116e709a":[6,2,6,37,41],
 "class_ogre_1_1_vector4.html#a3c5d80e9271bd8ee888111969f1e2857":[6,2,6,37,11],
@@ -248,6 +249,5 @@ var NAVTREEINDEX74 =
 "class_ogre_1_1_volume_1_1_mesh_builder.html#ae700364d0682c95173d0168dd4230e27":[8,0,0,3,23,4],
 "class_ogre_1_1_volume_1_1_mesh_builder_callback.html":[8,0,0,3,24],
 "class_ogre_1_1_volume_1_1_mesh_builder_callback.html#a27c03be369113b0379191143c852d766":[8,0,0,3,24,1],
-"class_ogre_1_1_volume_1_1_mesh_builder_callback.html#aafe40c41952d3b12991b5d4b83d14e40":[8,0,0,3,24,0],
-"class_ogre_1_1_volume_1_1_octree_node.html":[8,0,0,3,25]
+"class_ogre_1_1_volume_1_1_mesh_builder_callback.html#aafe40c41952d3b12991b5d4b83d14e40":[8,0,0,3,24,0]
 };

@@ -1,13 +1,14 @@
 var NAVTREEINDEX84 =
 {
+"class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#a5a7c69333625dbb4149f64069f23be10":[6,0,1,61,0,11],
 "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#a976192e993c3fd6d1a138ec89b9d207f":[6,2,11,61,0,7],
 "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#a976192e993c3fd6d1a138ec89b9d207f":[6,0,1,61,0,7],
 "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#abea4ff8821d98b3b2e2cdf60aa38e4bb":[6,0,1,61,0,8],
 "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#abea4ff8821d98b3b2e2cdf60aa38e4bb":[6,2,11,61,0,8],
 "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#acc27048722935dcfb99d0ee0b5288470":[6,0,1,61,0,1],
 "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#acc27048722935dcfb99d0ee0b5288470":[6,2,11,61,0,1],
-"class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#ad2e20aafd30ef75b01ed79ba0529602d":[6,0,1,61,0,5],
 "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#ad2e20aafd30ef75b01ed79ba0529602d":[6,2,11,61,0,5],
+"class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#ad2e20aafd30ef75b01ed79ba0529602d":[6,0,1,61,0,5],
 "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#af3d7c3e27992fb3bca7bac47e1be7569":[6,0,1,61,0,9],
 "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#af3d7c3e27992fb3bca7bac47e1be7569":[6,2,11,61,0,9],
 "class_ogre_1_1v1_1_1_manual_object_factory.html":[6,2,11,62],
@@ -248,6 +249,5 @@ var NAVTREEINDEX84 =
 "class_ogre_1_1v1_1_1_metal_hardware_index_buffer.html#a1df6870cff33b263ca814409a9d27e15":[8,0,0,2,89,6],
 "class_ogre_1_1v1_1_1_metal_hardware_index_buffer.html#a2f1fff75a21e85140213a90d1423b212":[8,0,0,2,89,7],
 "class_ogre_1_1v1_1_1_metal_hardware_index_buffer.html#a425a22ff45362040189c61ebaaca9ff7":[8,0,0,2,89,4],
-"class_ogre_1_1v1_1_1_metal_hardware_index_buffer.html#a48b6bf33d72ee8ec10817bf25dba9653":[8,0,0,2,89,8],
-"class_ogre_1_1v1_1_1_metal_hardware_index_buffer.html#a5f1071557ef8c2387e4b0c9ae745a8bc":[8,0,0,2,89,9]
+"class_ogre_1_1v1_1_1_metal_hardware_index_buffer.html#a48b6bf33d72ee8ec10817bf25dba9653":[8,0,0,2,89,8]
 };

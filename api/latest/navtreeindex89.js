@@ -1,5 +1,6 @@
 var NAVTREEINDEX89 =
 {
+"class_ogre_1_1v1_1_1_vertex_animation_track.html#ae3081e1571b1bb5ea1ccd6e7e272ac30":[6,2,0,29,10],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#aef3b4ca6669c73703929497782a53199":[6,2,0,29,1],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#af586c208be88ffd102307b1e0dfae645":[6,2,0,29,11],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#af6901a3ccfe2afc03d12daacca86f33e":[6,2,0,29,6],
@@ -191,8 +192,8 @@ var NAVTREEINDEX89 =
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a4a1bfe23cadfd5eee017f5f76390641b":[6,0,1,69,3],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a74293d38760984a8545eb3d8e5fc5f9b":[6,0,1,69,0],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a74293d38760984a8545eb3d8e5fc5f9b":[6,2,11,69,0],
-"class_ogre_1_1v1_1_1_wire_bounding_box.html#a7cd34069ef7153f171bb63b9ff7594cf":[6,2,11,69,2],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a7cd34069ef7153f171bb63b9ff7594cf":[6,0,1,69,2],
+"class_ogre_1_1v1_1_1_wire_bounding_box.html#a7cd34069ef7153f171bb63b9ff7594cf":[6,2,11,69,2],
 "class_radial_density_mask_vr_generator.html":[6,2,10,145],
 "class_rotation.html":[8,0,17],
 "class_visual.html":[8,0,19],
@@ -248,6 +249,5 @@ var NAVTREEINDEX89 =
 "compositor.html#CompositorNodesPassesRenderScene_instanced_stereo":[4,2,4,0,2,5,3],
 "compositor.html#CompositorNodesPassesRenderScene_is_prepass":[4,2,4,0,2,4,15],
 "compositor.html#CompositorNodesPassesRenderScene_light_visibility_mask":[4,2,4,0,2,4,6],
-"compositor.html#CompositorNodesPassesRenderScene_lod_bias":[4,2,4,0,2,4,2],
-"compositor.html#CompositorNodesPassesRenderScene_lod_camera":[4,2,4,0,2,4,10]
+"compositor.html#CompositorNodesPassesRenderScene_lod_bias":[4,2,4,0,2,4,2]
 };

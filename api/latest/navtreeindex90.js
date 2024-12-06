@@ -1,5 +1,6 @@
 var NAVTREEINDEX90 =
 {
+"compositor.html#CompositorNodesPassesRenderScene_lod_camera":[4,2,4,0,2,4,10],
 "compositor.html#CompositorNodesPassesRenderScene_lod_update_list":[4,2,4,0,2,4,3],
 "compositor.html#CompositorNodesPassesRenderScene_overlays":[4,2,4,0,2,4,8],
 "compositor.html#CompositorNodesPassesRenderScene_rq_first":[4,2,4,0,2,4,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX90 =
 "functions_vars_u.html":[8,3,2,21],
 "functions_vars_v.html":[8,3,2,22],
 "functions_vars_w.html":[8,3,2,23],
-"functions_vars_x.html":[8,3,2,24],
-"functions_vars_y.html":[8,3,2,25]
+"functions_vars_x.html":[8,3,2,24]
 };
