@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgreVulkanPrerequisites.h"
 
+#include <mutex>
 #include "ogrestd/vector.h"
 
 namespace Ogre
@@ -73,6 +74,7 @@ namespace Ogre
         ~VulkanDeviceResourceManager();  // protected and non-virtual
 
     private:
+        std::recursive_mutex mResourcesMutex;
         vector<VulkanDeviceResource *>::type mResources, mResourcesCopy;
     };
 

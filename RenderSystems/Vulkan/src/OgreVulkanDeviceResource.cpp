@@ -64,12 +64,16 @@ namespace Ogre
 
     void VulkanDeviceResourceManager::notifyResourceCreated( VulkanDeviceResource *deviceResource )
     {
+        std::lock_guard<std::recursive_mutex> guard( mResourcesMutex );
+
         assert( std::find( mResources.begin(), mResources.end(), deviceResource ) == mResources.end() );
         mResources.push_back( deviceResource );
     }
 
     void VulkanDeviceResourceManager::notifyResourceDestroyed( VulkanDeviceResource *deviceResource )
     {
+        std::lock_guard<std::recursive_mutex> guard( mResourcesMutex );
+
         vector<VulkanDeviceResource *>::type::iterator it =
             std::find( mResources.begin(), mResources.end(), deviceResource );
         assert( it != mResources.end() );
@@ -83,6 +87,8 @@ namespace Ogre
 
     void VulkanDeviceResourceManager::notifyDeviceLost()
     {
+        std::lock_guard<std::recursive_mutex> guard( mResourcesMutex );
+
         assert( mResourcesCopy.empty() );  // reentrancy is not expected nor supported
         mResourcesCopy = mResources;
 
@@ -99,6 +105,8 @@ namespace Ogre
 
     void VulkanDeviceResourceManager::notifyDeviceRestored()
     {
+        std::lock_guard<std::recursive_mutex> guard( mResourcesMutex );
+
         assert( mResourcesCopy.empty() );  // reentrancy is not expected nor supported
         mResourcesCopy = mResources;
         for( unsigned pass = 0; pass < 2; ++pass )
