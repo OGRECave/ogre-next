@@ -897,8 +897,10 @@ namespace Ogre
 #ifdef OGRE_VULKAN_USE_SWAPPY
         // Add any extensions that SwappyVk requires:
         uint32_t numSwappyRequiredExtensions = 0u;
-        SwappyVk_determineDeviceExtensions( mPhysicalDevice, numExtensions, availableExtensions.begin(),
-                                            &numSwappyRequiredExtensions, 0 );
+        SwappyVk_determineDeviceExtensions(
+            mPhysicalDevice, static_cast<uint32_t>( availableExtensions.size() ),
+            const_cast<VkExtensionProperties *>( availableExtensions.begin() ),  // swappy API flaw
+            &numSwappyRequiredExtensions, 0 );
 
         struct ExtName
         {
@@ -912,9 +914,10 @@ namespace Ogre
         for( ExtName &extName : swappyRequiredExtensionNames )
             swappyRequiredExtensionNamesTmp.push_back( extName.name );
 
-        SwappyVk_determineDeviceExtensions( mPhysicalDevice, numExtensions, availableExtensions.begin(),
-                                            &numSwappyRequiredExtensions,
-                                            swappyRequiredExtensionNamesTmp.begin() );
+        SwappyVk_determineDeviceExtensions(
+            mPhysicalDevice, static_cast<uint32_t>( availableExtensions.size() ),
+            const_cast<VkExtensionProperties *>( availableExtensions.begin() ),  // swappy API flaw
+            &numSwappyRequiredExtensions, swappyRequiredExtensionNamesTmp.begin() );
 
         for( const char *swappyReqExtension : swappyRequiredExtensionNamesTmp )
         {
