@@ -66,7 +66,13 @@ namespace Ogre
             // clang-format off
         case DescBindingTypes::ParamBuffer:       return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         case DescBindingTypes::ConstBuffer:       return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+#ifdef OGRE_VK_WORKAROUND_ADRENO_6xx_READONLY_IS_TBUFFER
+        case DescBindingTypes::ReadOnlyBuffer:    return Workarounds::mAdreno6xxReadOnlyIsTBuffer ?
+                                                            VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER :
+                                                            VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+#else
         case DescBindingTypes::ReadOnlyBuffer:    return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+#endif
         case DescBindingTypes::TexBuffer:         return VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER;
         case DescBindingTypes::Texture:           return VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
         case DescBindingTypes::Sampler:           return VK_DESCRIPTOR_TYPE_SAMPLER;
@@ -445,8 +451,22 @@ namespace Ogre
         VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
         bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges,
                     arrayedSlots[DescBindingTypes::ReadOnlyBuffer] );
+
+#ifdef OGRE_VK_WORKAROUND_ADRENO_6xx_READONLY_IS_TBUFFER
+        if( Workarounds::mAdreno6xxReadOnlyIsTBuffer )
+        {
+            writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER;
+            writeDescSet.pTexelBufferView = &table.readOnlyBuffers2[bindRanges.start];
+        }
+        else
+        {
+            writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+            writeDescSet.pBufferInfo = &table.readOnlyBuffers[bindRanges.start];
+        }
+#else
         writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
         writeDescSet.pBufferInfo = &table.readOnlyBuffers[bindRanges.start];
+#endif
     }
     //-------------------------------------------------------------------------
     inline void VulkanRootLayout::bindTexBuffers( VkWriteDescriptorSet *writeDescSets,

@@ -225,6 +225,9 @@ namespace Ogre
         void _setTexBuffer( size_t slot, VkBufferView bufferView );
         void _setTexBufferCS( size_t slot, VkBufferView bufferView );
         void _setReadOnlyBuffer( size_t slot, const VkDescriptorBufferInfo &bufferInfo );
+#ifdef OGRE_VK_WORKAROUND_ADRENO_6xx_READONLY_IS_TBUFFER
+        void _setReadOnlyBuffer( size_t slot, VkBufferView bufferView );
+#endif
 
         void _setCurrentDeviceFromTexture( TextureGpu *texture ) override;
         void _setTexture( size_t unit, TextureGpu *texPtr, bool bDepthReadOnly ) override;

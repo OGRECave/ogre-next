@@ -63,6 +63,9 @@ namespace Ogre
     {
         FastArray<VkBufferView> mBuffers;
         FastArray<VkDescriptorBufferInfo> mReadOnlyBuffers;
+#ifdef OGRE_VK_WORKAROUND_ADRENO_6xx_READONLY_IS_TBUFFER
+        FastArray<VkBufferView> mReadOnlyBuffers2;
+#endif
         FastArray<VkDescriptorImageInfo> mTextures;
         VkWriteDescriptorSet mWriteDescSets[3];
 

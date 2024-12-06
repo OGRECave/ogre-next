@@ -42,6 +42,7 @@ THE SOFTWARE.
 #    include "Vao/OgreVulkanMultiSourceVertexBufferPool.h"
 #endif
 #include "Vao/OgreVulkanReadOnlyBufferPacked.h"
+#include "Vao/OgreVulkanReadOnlyTBufferWorkaround.h"
 #include "Vao/OgreVulkanStagingBuffer.h"
 #include "Vao/OgreVulkanTexBufferPacked.h"
 #include "Vao/OgreVulkanUavBufferPacked.h"
@@ -174,6 +175,18 @@ namespace Ogre
 
         mReadOnlyIsTexBuffer = false;
         mReadOnlyBufferMaxSize = mUavBufferMaxSize;
+
+#ifdef OGRE_VK_WORKAROUND_ADRENO_6xx_READONLY_IS_TBUFFER
+        if( mVkRenderSystem->getCapabilities()->getVendor() == GPU_QUALCOMM &&
+            mVkRenderSystem->getCapabilities()->getDeviceId() >= 0x6000000 &&
+            mVkRenderSystem->getCapabilities()->getDeviceId() < 0x7000000 &&
+            mVkRenderSystem->getCapabilities()->getDeviceName().find( "Turnip" ) == String::npos )
+        {
+            Workarounds::mAdreno6xxReadOnlyIsTBuffer = true;
+            mReadOnlyIsTexBuffer = true;
+            mReadOnlyBufferMaxSize = mTexBufferMaxSize;
+        }
+#endif
 
         memset( mUsedHeapMemory, 0, sizeof( mUsedHeapMemory ) );
         memset( mMemoryTypesInUse, 0, sizeof( mMemoryTypesInUse ) );
@@ -1571,8 +1584,15 @@ namespace Ogre
         size_t vboIdx;
         size_t bufferOffset;
 
+#ifdef OGRE_VK_WORKAROUND_ADRENO_6xx_READONLY_IS_TBUFFER
+        const size_t alignment =
+            Workarounds::mAdreno6xxReadOnlyIsTBuffer
+                ? mTexBufferAlignment
+                : Math::lcm( mUavBufferAlignment, PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ) );
+#else
         const size_t alignment =
             Math::lcm( mUavBufferAlignment, PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ) );
+#endif
         size_t requestedSize = sizeBytes;
 
         VboFlag vboFlag = bufferTypeToVboFlag( bufferType, false );
@@ -1592,9 +1612,25 @@ namespace Ogre
         VulkanBufferInterface *bufferInterface =
             new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
 
+#ifdef OGRE_VK_WORKAROUND_ADRENO_6xx_READONLY_IS_TBUFFER
+        ReadOnlyBufferPacked *retVal;
+        if( Workarounds::mAdreno6xxReadOnlyIsTBuffer )
+        {
+            retVal = OGRE_NEW VulkanReadOnlyTBufferWorkaround(
+                bufferOffset, requestedSize, 1u, (uint32)( sizeBytes - requestedSize ), bufferType,
+                initialData, keepAsShadow, mVkRenderSystem, this, bufferInterface, pixelFormat );
+        }
+        else
+        {
+            retVal = OGRE_NEW VulkanReadOnlyBufferPacked(
+                bufferOffset, requestedSize, 1u, (uint32)( sizeBytes - requestedSize ), bufferType,
+                initialData, keepAsShadow, mVkRenderSystem, this, bufferInterface, pixelFormat );
+        }
+#else
         VulkanReadOnlyBufferPacked *retVal = OGRE_NEW VulkanReadOnlyBufferPacked(
             bufferOffset, requestedSize, 1u, (uint32)( sizeBytes - requestedSize ), bufferType,
             initialData, keepAsShadow, mVkRenderSystem, this, bufferInterface, pixelFormat );
+#endif
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, requestedSize );

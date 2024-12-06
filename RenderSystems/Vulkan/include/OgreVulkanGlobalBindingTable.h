@@ -68,6 +68,9 @@ namespace Ogre
         VkDescriptorImageInfo samplers[NUM_BIND_SAMPLERS];
 
         VkDescriptorBufferInfo readOnlyBuffers[NUM_BIND_READONLY_BUFFERS];
+#ifdef OGRE_VK_WORKAROUND_ADRENO_6xx_READONLY_IS_TBUFFER
+        VkBufferView readOnlyBuffers2[NUM_BIND_READONLY_BUFFERS];
+#endif
 
         VkWriteDescriptorSet *bakedDescriptorSets[BakedDescriptorSets::NumBakedDescriptorSets];
 

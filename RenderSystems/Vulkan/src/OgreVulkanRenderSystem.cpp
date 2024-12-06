@@ -1526,6 +1526,20 @@ namespace Ogre
             mTableDirty = true;
         }
     }
+#ifdef OGRE_VK_WORKAROUND_ADRENO_6xx_READONLY_IS_TBUFFER
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_setReadOnlyBuffer( size_t slot, VkBufferView bufferView )
+    {
+        OGRE_ASSERT_MEDIUM( slot < NUM_BIND_READONLY_BUFFERS );
+        if( mGlobalTable.readOnlyBuffers2[slot] != bufferView )
+        {
+            mGlobalTable.readOnlyBuffers2[slot] = bufferView;
+            mGlobalTable.minDirtySlotReadOnlyBuffer =
+                std::min( mGlobalTable.minDirtySlotReadOnlyBuffer, (uint8)slot );
+            mTableDirty = true;
+        }
+    }
+#endif
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setCurrentDeviceFromTexture( TextureGpu *texture ) {}
     //-------------------------------------------------------------------------
