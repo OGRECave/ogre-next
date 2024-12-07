@@ -39,7 +39,7 @@ namespace Ogre
 {
     /**
      */
-    class _OgreVulkanExport VulkanCache : public OgreAllocatedObj, protected VulkanDeviceResource
+    class _OgreVulkanExport VulkanCache final : public OgreAllocatedObj, protected VulkanDeviceResource
     {
     protected:
         struct VkRenderPassCreateInfoCmp

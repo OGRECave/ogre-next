@@ -45,8 +45,8 @@ namespace Ogre
     ///
     /// We need Discard for the v1 interfaces. So we need to emulate it.
     /// This class does exactly this.
-    class _OgreVulkanExport VulkanDiscardBufferManager : public OgreAllocatedObj,
-                                                         protected VulkanDeviceResource
+    class _OgreVulkanExport VulkanDiscardBufferManager final : public OgreAllocatedObj,
+                                                               protected VulkanDeviceResource
     {
     public:
         struct UnsafeBlock : public VulkanVaoManager::Block
