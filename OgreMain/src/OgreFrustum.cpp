@@ -356,7 +356,7 @@ namespace Ogre {
                 top = mTop;
                 bottom = mBottom;
 
-                if (mFrustrumExtentsType == FET_TAN_HALF_ANGLES)
+                if( mFrustrumExtentsType == FET_TAN_HALF_ANGLES && mProjType != PT_ORTHOGRAPHIC )
                 {
                     left    *= mNearDist;
                     right   *= mNearDist;
@@ -1388,16 +1388,16 @@ namespace Ogre {
                                     FrustrumExtentsType frustrumExtentsType) const
     {
         updateFrustum();
-        if (frustrumExtentsType == FET_TAN_HALF_ANGLES &&
-            mFrustrumExtentsType == FET_PROJ_PLANE_POS)
+        if( frustrumExtentsType == FET_TAN_HALF_ANGLES && mFrustrumExtentsType == FET_PROJ_PLANE_POS &&
+            mProjType != PT_ORTHOGRAPHIC )
         {
             outleft = mLeft / mNearDist;
             outright = mRight / mNearDist;
             outtop = mTop / mNearDist;
             outbottom = mBottom / mNearDist;
         }
-        else if (frustrumExtentsType == FET_PROJ_PLANE_POS &&
-                 mFrustrumExtentsType == FET_TAN_HALF_ANGLES)
+        else if( frustrumExtentsType == FET_PROJ_PLANE_POS &&
+                 mFrustrumExtentsType == FET_TAN_HALF_ANGLES && mProjType != PT_ORTHOGRAPHIC )
         {
             outleft = mLeft * mNearDist;
             outright = mRight * mNearDist;
