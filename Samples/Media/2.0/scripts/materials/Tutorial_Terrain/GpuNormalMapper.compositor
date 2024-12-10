@@ -11,6 +11,16 @@ compositor_node Terra/GpuNormalMapper
 
 		pass generate_mipmaps
 		{
+		    load
+            {
+                depth	dont_care
+                stencil	dont_care
+            }
+            store
+            {
+                depth	dont_care
+                stencil	dont_care
+            }
 		}
 	}
 }
@@ -33,6 +43,16 @@ compositor_node Terra/GpuNormalMapperU16
 
 		pass generate_mipmaps
 		{
+		    load
+            {
+                depth	dont_care
+                stencil	dont_care
+            }
+            store
+            {
+                depth	dont_care
+                stencil	dont_care
+            }
 		}
 	}
 }
