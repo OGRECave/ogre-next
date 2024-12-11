@@ -57,16 +57,6 @@ compositor_node PlanarReflectionsReflectiveRenderingNode
 
 		pass generate_mipmaps
 		{
-		    load
-            {
-                depth	dont_care
-                stencil	dont_care
-            }
-            store
-            {
-                depth	dont_care
-                stencil	dont_care
-            }
 			mipmap_method compute_hq
 
 			profiling_id "Mipmap Generation (HQ)"
