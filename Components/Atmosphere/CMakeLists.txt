@@ -8,7 +8,6 @@
 #-------------------------------------------------------------------
 
 
-PROJECT(${OGRE_NEXT}Atmosphere)
 
 file(
 	GLOB HEADER_FILES
