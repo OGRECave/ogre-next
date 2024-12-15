@@ -111,6 +111,7 @@ namespace Ogre
             InvertVertexWinding         = 1u << 1u,
             NoDepthBuffer               = 1u << 2u,
             ForceDepthClamp             = 1u << 3u,
+            ForceCullNone               = 1u << 4u,
             // clang-format on
         };
     };

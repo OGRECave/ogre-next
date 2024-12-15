@@ -709,7 +709,7 @@ namespace Ogre
         mListener->preparePassHash( shadowNode, casterPass, dualParaboloid, sceneManager, this );
 
         PassCache passCache;
-        passCache.passPso = getPassPsoForScene( sceneManager );
+        passCache.passPso = getPassPsoForScene( sceneManager, false );
         passCache.properties = mT[kNoTid].setProperties;
 
         assert( mPassCache.size() <= (size_t)HlmsBits::PassMask &&

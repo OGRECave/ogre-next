@@ -547,7 +547,7 @@ namespace Ogre
         HlmsCache preparePassHashBase( const Ogre::CompositorShadowNode *shadowNode, bool casterPass,
                                        bool dualParaboloid, SceneManager *sceneManager );
 
-        HlmsPassPso getPassPsoForScene( SceneManager *sceneManager );
+        HlmsPassPso getPassPsoForScene( SceneManager *sceneManager, const bool bForceCullNone );
 
         /// OpenGL sets texture binding slots from C++
         /// All other APIs set the slots from shader.
