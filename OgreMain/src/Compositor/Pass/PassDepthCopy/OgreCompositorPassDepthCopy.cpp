@@ -66,7 +66,7 @@ namespace Ogre
         CompositorPass( definition, parentNode ),
         mDefinition( definition )
     {
-        initialize( rtv );
+        initialize( 0, true );
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassDepthCopy::execute( const Camera *lodCamera )
