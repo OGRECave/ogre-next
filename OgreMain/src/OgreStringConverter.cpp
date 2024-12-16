@@ -149,38 +149,31 @@ namespace Ogre
     {
         return _toString( val, width, fill, flags );
     }
-#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64 || OGRE_PLATFORM == OGRE_PLATFORM_APPLE || \
-    OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
     //-----------------------------------------------------------------------
     String StringConverter::toString( unsigned int val, unsigned short width, char fill,
                                       std::ios::fmtflags flags )
     {
         return _toString( val, width, fill, flags );
     }
-#    if OGRE_COMPILER == OGRE_COMPILER_MSVC
-    //-----------------------------------------------------------------------
     String StringConverter::toString( unsigned long val, unsigned short width, char fill,
-                                      std::ios::fmtflags flags )
-    {
-        return _toString( val, width, fill, flags );
-    }
-#    endif
-#else
-    //-----------------------------------------------------------------------
-    String StringConverter::toString( unsigned long val, unsigned short width, char fill,
-                                      std::ios::fmtflags flags )
-    {
-        return _toString( val, width, fill, flags );
-    }
-#endif
-    //-----------------------------------------------------------------------
-    String StringConverter::toString( size_t val, unsigned short width, char fill,
                                       std::ios::fmtflags flags )
     {
         return _toString( val, width, fill, flags );
     }
     //-----------------------------------------------------------------------
     String StringConverter::toString( long val, unsigned short width, char fill,
+                                      std::ios::fmtflags flags )
+    {
+        return _toString( val, width, fill, flags );
+    }
+    //-----------------------------------------------------------------------
+    String StringConverter::toString( long long val, unsigned short width, char fill,
+                                      std::ios::fmtflags flags )
+    {
+        return _toString( val, width, fill, flags );
+    }
+    //-----------------------------------------------------------------------
+    String StringConverter::toString( unsigned long long val, unsigned short width, char fill,
                                       std::ios::fmtflags flags )
     {
         return _toString( val, width, fill, flags );
