@@ -1300,10 +1300,12 @@ var group___general =
       [ "toString", "class_ogre_1_1_string_converter.html#abe53e5d97672c4986cb4cfb1d510faac", null ],
       [ "toString", "class_ogre_1_1_string_converter.html#af3993bdf743a430c2fb50219acb3683f", null ],
       [ "toString", "class_ogre_1_1_string_converter.html#a18abdb1754749134d685e023b5a52bd3", null ],
+      [ "toString", "class_ogre_1_1_string_converter.html#a5012998f6140680b0ac8dde747dcffcb", null ],
       [ "toString", "class_ogre_1_1_string_converter.html#a17b3ccc053e6d9cb1e6f0fbd754984b5", null ],
       [ "toString", "class_ogre_1_1_string_converter.html#a9601d02e62790f039128170a3ed4d5da", null ],
-      [ "toString", "class_ogre_1_1_string_converter.html#a16f86bf7f546c9a6c0d3477e84f12024", null ],
       [ "toString", "class_ogre_1_1_string_converter.html#a184e73275f33b8191a756dad27e391b2", null ],
+      [ "toString", "class_ogre_1_1_string_converter.html#a1fcc92ec31fa27f8712b28f01743705c", null ],
+      [ "toString", "class_ogre_1_1_string_converter.html#a3f4aa3b9f2b6931e7010f0ef0bdc4f99", null ],
       [ "toString", "class_ogre_1_1_string_converter.html#aa1378ae68227b869fc21b4bb9110d2db", null ]
     ] ],
     [ "StringInterface", "class_ogre_1_1_string_interface.html", [

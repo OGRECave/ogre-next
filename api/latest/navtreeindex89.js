@@ -1,5 +1,7 @@
 var NAVTREEINDEX89 =
 {
+"class_ogre_1_1v1_1_1_vertex_animation_track.html#ab99ecee09a99a4bdbdadfd97d9f4e18f":[6,2,0,29,13],
+"class_ogre_1_1v1_1_1_vertex_animation_track.html#adc792ad9e83fc1a04076bc1a8781d7c0":[6,2,0,29,8],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#ae3081e1571b1bb5ea1ccd6e7e272ac30":[6,2,0,29,10],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#aef3b4ca6669c73703929497782a53199":[6,2,0,29,1],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#af586c208be88ffd102307b1e0dfae645":[6,2,0,29,11],
@@ -247,7 +249,5 @@ var NAVTREEINDEX89 =
 "compositor.html#CompositorNodesPassesRenderScene_flush_command_buffers_after_shadow_node":[4,2,4,0,2,4,14],
 "compositor.html#CompositorNodesPassesRenderScene_gen_normals_gbuffer":[4,2,4,0,2,4,17],
 "compositor.html#CompositorNodesPassesRenderScene_instanced_stereo":[4,2,4,0,2,5,3],
-"compositor.html#CompositorNodesPassesRenderScene_is_prepass":[4,2,4,0,2,4,15],
-"compositor.html#CompositorNodesPassesRenderScene_light_visibility_mask":[4,2,4,0,2,4,6],
-"compositor.html#CompositorNodesPassesRenderScene_lod_bias":[4,2,4,0,2,4,2]
+"compositor.html#CompositorNodesPassesRenderScene_is_prepass":[4,2,4,0,2,4,15]
 };

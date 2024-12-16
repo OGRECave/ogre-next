@@ -1,5 +1,7 @@
 var NAVTREEINDEX111 =
 {
+"struct_ogre_1_1_hlms_property.html#a9c044438147b438dabe3ace1ef64e8b8":[6,2,10,62,0],
+"struct_ogre_1_1_hlms_property.html#aecab519ff1990e94966878e0f4ab864a":[6,2,10,62,3],
 "struct_ogre_1_1_hlms_pso.html":[6,2,10,63],
 "struct_ogre_1_1_hlms_pso.html#a01d5b5734bfaa181540788babf7e64dd":[6,2,10,63,14],
 "struct_ogre_1_1_hlms_pso.html#a046e7706148d71b100d97101bb602160":[6,2,10,63,15],
@@ -79,8 +81,8 @@ var NAVTREEINDEX111 =
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#aac84518f8d8108d7f7875516128b3474":[6,0,0,13,0,1],
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#acd53cb3f6a58dbf08f1baa12bcb03033":[6,0,0,13,0,2],
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#ad94bec02d71f91fd2f543f3488d25d61":[6,0,0,13,0,0],
-"struct_ogre_1_1_intersection_scene_query_result.html":[6,2,11,22],
 "struct_ogre_1_1_intersection_scene_query_result.html":[6,0,1,22],
+"struct_ogre_1_1_intersection_scene_query_result.html":[6,2,11,22],
 "struct_ogre_1_1_intersection_scene_query_result.html#a7f5b38d7ff668a368bcef9886fff1941":[6,2,11,22,1],
 "struct_ogre_1_1_intersection_scene_query_result.html#a7f5b38d7ff668a368bcef9886fff1941":[6,0,1,22,1],
 "struct_ogre_1_1_intersection_scene_query_result.html#ae58676373c408a358f7cc01874703abc":[6,2,11,22,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX111 =
 "struct_ogre_1_1_lod_output_buffer.html#a4ba7837aaca023a50f1d60a262cdf6b6":[8,0,0,569,1],
 "struct_ogre_1_1_lod_output_buffer_1_1_submesh.html":[8,0,0,569,0],
 "struct_ogre_1_1_lod_output_buffer_1_1_submesh.html#aa490fa9dde1b5017f46e572ea0c5e511":[8,0,0,569,0,0],
-"struct_ogre_1_1_lod_vertex_buffer.html":[8,0,0,578],
-"struct_ogre_1_1_lod_vertex_buffer.html#a15d5128e7048282d3269c2ad2a076d82":[8,0,0,578,0],
-"struct_ogre_1_1_lod_vertex_buffer.html#a26ef0460f2b0ac0ec0c6994bce586f37":[8,0,0,578,3]
+"struct_ogre_1_1_lod_vertex_buffer.html":[8,0,0,578]
 };
