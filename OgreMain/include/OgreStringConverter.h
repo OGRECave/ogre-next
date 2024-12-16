@@ -90,23 +90,17 @@ namespace Ogre
         /** Converts an int to a String. */
         static String toString( int val, unsigned short width = 0, char fill = ' ',
                                 std::ios::fmtflags flags = std::ios::fmtflags( 0 ) );
-#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64 || OGRE_PLATFORM == OGRE_PLATFORM_APPLE || \
-    OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         /** Converts an unsigned int to a String. */
         static String toString( unsigned int val, unsigned short width = 0, char fill = ' ',
                                 std::ios::fmtflags flags = std::ios::fmtflags( 0 ) );
-#    if OGRE_COMPILER == OGRE_COMPILER_MSVC
         /** Converts an unsigned long to a String. */
         static String toString( unsigned long val, unsigned short width = 0, char fill = ' ',
                                 std::ios::fmtflags flags = std::ios::fmtflags( 0 ) );
-#    endif
-#else
-        /** Converts an unsigned long to a String. */
-        static String toString( unsigned long val, unsigned short width = 0, char fill = ' ',
+        /** Converts a long long to a String. */
+        static String toString( long long val, unsigned short width = 0, char fill = ' ',
                                 std::ios::fmtflags flags = std::ios::fmtflags( 0 ) );
-#endif
-        /** Converts a size_t to a String. */
-        static String toString( size_t val, unsigned short width = 0, char fill = ' ',
+        /** Converts an unsigned long long to a String. */
+        static String toString( unsigned long long val, unsigned short width = 0, char fill = ' ',
                                 std::ios::fmtflags flags = std::ios::fmtflags( 0 ) );
         /** Converts a long to a String. */
         static String toString( long val, unsigned short width = 0, char fill = ' ',
