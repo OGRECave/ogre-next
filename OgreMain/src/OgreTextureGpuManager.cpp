@@ -1164,8 +1164,8 @@ namespace Ogre
                                             size_t &outUsedStagingTextureBytes,
                                             size_t &outAvailableStagingTextureBytes )
     {
-        outUsedStagingTextureBytes = getConsumedMemoryByStagingTextures( mAvailableStagingTextures );
-        outAvailableStagingTextureBytes = getConsumedMemoryByStagingTextures( mUsedStagingTextures );
+        outAvailableStagingTextureBytes = getConsumedMemoryByStagingTextures( mAvailableStagingTextures );
+        outUsedStagingTextureBytes = getConsumedMemoryByStagingTextures( mUsedStagingTextures );
 
         size_t textureBytesCpu = 0;
         size_t textureBytesGpu = 0;
