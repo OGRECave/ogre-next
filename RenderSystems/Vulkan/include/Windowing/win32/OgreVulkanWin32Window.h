@@ -51,7 +51,7 @@ namespace Ogre
 
         static bool mClassRegistered;
 
-        void updateWindowRect();
+        bool updateWindowRect();
         void adjustWindow( uint32 clientWidth, uint32 clientHeight,  //
                            uint32 *outDrawableWidth, uint32 *outDrawableHeight );
 
