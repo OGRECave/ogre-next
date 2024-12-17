@@ -108,6 +108,7 @@ namespace Ogre
         {
             mTop = 0;
             mLeft = 0;
+            bResolutionChanged = true;
             setFinalResolution( 0, 0 );
             return bResolutionChanged;
         }
@@ -119,6 +120,7 @@ namespace Ogre
         {
             mTop = 0;
             mLeft = 0;
+            bResolutionChanged = true;
             setFinalResolution( 0, 0 );
             return bResolutionChanged;
         }
