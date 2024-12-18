@@ -476,7 +476,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool VulkanVaoManager::flushAllGpuDelayedBlocks( const bool bIssueBarrier )
     {
-        if( bIssueBarrier )
+        if( bIssueBarrier && !mDevice->mIsDeviceLost )
         {
             if( mDevice->mGraphicsQueue.getEncoderState() == VulkanQueue::EncoderGraphicsOpen )
             {

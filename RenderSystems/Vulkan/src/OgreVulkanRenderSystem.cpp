@@ -1343,6 +1343,7 @@ namespace Ogre
 
         // recreate device
         mDevice->setPhysicalDevice( mInstance, mActiveDevice, nullptr );
+        mDevice->mIsDeviceLost = false;
 
         static_cast<VulkanVaoManager *>( mVaoManager )->createVkResources();
         static_cast<VulkanTextureGpuManager *>( mTextureGpuManager )->createVkResources();

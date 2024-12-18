@@ -76,48 +76,34 @@ namespace Ogre
         {
             vkDeviceWaitIdle( mDevice );
 
+            mWindowsPendingSwap.clear();
+
+            for( PerFrameData &perFrameData : mPerFrameData )
             {
-                FastArray<PerFrameData>::iterator itor = mPerFrameData.begin();
-                FastArray<PerFrameData>::iterator endt = mPerFrameData.end();
+                for( VkFence fence : perFrameData.mProtectingFences )
+                    vkDestroyFence( mDevice, fence, 0 );
+                perFrameData.mProtectingFences.clear();
 
-                while( itor != endt )
-                {
-                    VkFenceArray::const_iterator itFence = itor->mProtectingFences.begin();
-                    VkFenceArray::const_iterator enFence = itor->mProtectingFences.end();
-
-                    while( itFence != enFence )
-                        vkDestroyFence( mDevice, *itFence++, 0 );
-                    itor->mProtectingFences.clear();
-
-                    vkDestroyCommandPool( mDevice, itor->mCmdPool, 0 );
-                    itor->mCommands.clear();
-                    itor->mCurrentCmdIdx = 0;
-
-                    ++itor;
-                }
-            }
-            {
-                RefCountedFenceMap::const_iterator itor = mRefCountedFences.begin();
-                RefCountedFenceMap::const_iterator endt = mRefCountedFences.end();
-
-                while( itor != endt )
-                {
-                    // If recycleAfterRelease == false, then they were destroyed with mProtectingFences
-                    if( itor->second.recycleAfterRelease )
-                        vkDestroyFence( mDevice, itor->first, 0 );
-                    ++itor;
-                }
-
-                mRefCountedFences.clear();
+                vkDestroyCommandPool( mDevice, perFrameData.mCmdPool, 0 );
+                perFrameData.mCommands.clear();
+                perFrameData.mCurrentCmdIdx = 0;
             }
 
-            VkFenceArray::const_iterator itor = mAvailableFences.begin();
-            VkFenceArray::const_iterator endt = mAvailableFences.end();
+            for( RefCountedFenceMap::value_type &elem : mRefCountedFences )
+            {
+                // If recycleAfterRelease == false, then they were destroyed with mProtectingFences
+                if( elem.second.recycleAfterRelease )
+                    vkDestroyFence( mDevice, elem.first, 0 );
+            }
+            mRefCountedFences.clear();
 
-            while( itor != endt )
-                vkDestroyFence( mDevice, *itor++, 0 );
-
+            for( VkFence fence : mAvailableFences )
+                vkDestroyFence( mDevice, fence, 0 );
             mAvailableFences.clear();
+
+            for( VkSemaphore sem : mGpuSignalSemaphForCurrCmdBuff )
+                vkDestroySemaphore( mDevice, sem, 0 );
+            mGpuSignalSemaphForCurrCmdBuff.clear();
 
             mDevice = 0;
         }
@@ -1256,7 +1242,7 @@ namespace Ogre
         VkResult result = vkQueueSubmit( mQueue, 1u, &submitInfo, fence );
         if( result != VK_SUCCESS )
             mOwnerDevice->mIsDeviceLost = true;
-        checkVkResult( result, "vkQueueSubmit" );
+        // we need some cleanup before checking result
 
         mGpuWaitSemaphForCurrCmdBuff.clear();
 
@@ -1273,6 +1259,8 @@ namespace Ogre
             mPerFrameData[dynBufferFrame].mProtectingFences.push_back( fence );
 
         mPendingCmds.clear();
+
+        checkVkResult( result, "vkQueueSubmit" );
 
         if( submissionType >= SubmissionType::EndFrameAndSwap )
         {

@@ -540,7 +540,7 @@ namespace Ogre
         VulkanDevice *getDevice() const { return mDevice; }
 
         /// Insert into the end of semaphoreArray 'numSemaphores'
-        /// number of semaphores that are safe for use.
+        /// number of semaphores that are safe for use. Transfers ownership.
         void getAvailableSemaphores( VkSemaphoreArray &semaphoreArray, size_t numSemaphores );
         VkSemaphore getAvailableSemaphore();
 

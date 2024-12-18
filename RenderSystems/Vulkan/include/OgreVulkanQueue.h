@@ -100,7 +100,7 @@ namespace Ogre
         VkSemaphoreArray                mGpuWaitSemaphForCurrCmdBuff;
         FastArray<VkPipelineStageFlags> mGpuWaitFlags;
         /// Collection of semaphore we will signal when our queue
-        /// submitted in commitAndNextCommandBuffer is done
+        /// submitted in commitAndNextCommandBuffer is done. Semaphores are owned.
         VkSemaphoreArray                mGpuSignalSemaphForCurrCmdBuff;
         // clang-format on
 
