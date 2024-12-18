@@ -1,5 +1,13 @@
 var NAVTREEINDEX9 =
 {
+"_ogre_platform_8h.html#afd156284f0635909a814d4a9c745e0ce":[9,0,666,46],
+"_ogre_platform_information_8h.html":[9,0,667],
+"_ogre_plugin_8h.html":[9,0,668],
+"_ogre_point_emitter2_8h.html":[9,0,670],
+"_ogre_point_emitter_8h.html":[9,0,669],
+"_ogre_point_emitter_factory_8h.html":[9,0,671],
+"_ogre_polygon_8h.html":[9,0,672],
+"_ogre_pose_8h.html":[9,0,673],
 "_ogre_pose_8h.html#ga4b8e1c003a5b70771a65da0cb40428cf":[9,0,673,0],
 "_ogre_predefined_controllers_8h.html":[9,0,674],
 "_ogre_prefab_factory_8h.html":[9,0,675],
@@ -241,13 +249,5 @@ var NAVTREEINDEX9 =
 "_ogre_render_system_capabilities_8h.html#ggaafd4c573704bd74fac9ec9c02071ad08adb0bc970eade1549ca251c1bf475884c":[9,0,698,5,4],
 "_ogre_render_system_capabilities_8h.html#ggaafd4c573704bd74fac9ec9c02071ad08ade4c71b633d37b5a844c360d7c11ea9a":[9,0,698,5,2],
 "_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a1b40ea797205e9b18025b417a0762fe1":[9,0,698,6,16],
-"_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a1ecaf69b6c1ede1b4e073308fcaeae38":[9,0,698,6,12],
-"_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a2d66ad2e2ce38c274d21f39551d2abe8":[9,0,698,6,0],
-"_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a33babe0bc67d09ef934c73a84b1a25fb":[9,0,698,6,8],
-"_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a39ecb7f5b44964fe66db54c9043731fc":[9,0,698,6,18],
-"_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a505f1dc88797793728f8997b73491658":[9,0,698,6,7],
-"_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a5753a78e9d99c0d1c878d1c6adc5a83b":[9,0,698,6,4],
-"_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a67fcd21f7a64e781a98ce95bd19ce18c":[9,0,698,6,2],
-"_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a7451efa522a35274cf6e081aa72172da":[9,0,698,6,6],
-"_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a7dad707bd81e71dced7da15fd2423c7e":[9,0,698,6,9]
+"_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a1ecaf69b6c1ede1b4e073308fcaeae38":[9,0,698,6,12]
 };

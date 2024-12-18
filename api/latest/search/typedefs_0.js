@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['_5fstringbase_27216',['_StringBase',['../namespace_ogre.html#a6190e7c0a19190277aeadf25f536ac8c',1,'Ogre']]],
-  ['_5fstringhash_27217',['_StringHash',['../group___general.html#ga39063dbfddacad4998c6ea0ab722cd11',1,'Ogre']]],
-  ['_5fstringstreambase_27218',['_StringStreamBase',['../namespace_ogre.html#a071d7f5bba6f8aeef8c8e948806ba8cb',1,'Ogre']]]
+  ['_5fstringbase_27212',['_StringBase',['../namespace_ogre.html#a6190e7c0a19190277aeadf25f536ac8c',1,'Ogre']]],
+  ['_5fstringhash_27213',['_StringHash',['../group___general.html#ga39063dbfddacad4998c6ea0ab722cd11',1,'Ogre']]],
+  ['_5fstringstreambase_27214',['_StringStreamBase',['../namespace_ogre.html#a071d7f5bba6f8aeef8c8e948806ba8cb',1,'Ogre']]]
 ];
