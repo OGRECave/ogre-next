@@ -288,6 +288,6 @@ namespace Ogre
 
 }  // namespace Ogre
 
-#include "OgreArrayVector4.inl"
+#include "OgreArrayVector4SSE2.inl"
 
 #endif

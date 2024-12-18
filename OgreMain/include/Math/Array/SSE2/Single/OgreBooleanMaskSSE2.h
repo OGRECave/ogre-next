@@ -26,8 +26,8 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#ifndef __NEON_BooleanMask_H__
-#define __NEON_BooleanMask_H__
+#ifndef __SSE2_BooleanMask_H__
+#define __SSE2_BooleanMask_H__
 
 #ifndef __BooleanMask_H__
 #    error "Don't include this file directly. include Math/Array/OgreBooleanMask.h"
@@ -66,11 +66,11 @@ namespace Ogre
         };
 
     private:
-        static const uint32x4_ct mMasks[NUM_MASKS];
+        static const ArrayMaskR mMasks[NUM_MASKS];
 
     public:
         inline static ArrayMaskR getMask( bool x, bool y, bool z, bool w );
-        inline static ArrayMaskR getMask( bool booleans[4] );
+        inline static ArrayMaskR getMask( bool booleans[ARRAY_PACKED_REALS] );
 
         inline static ArrayMaskR getAllSetMask();
 
@@ -84,12 +84,10 @@ namespace Ogre
         */
         inline static uint32 getScalarMask( ArrayMaskR mask );
 
-#ifndef _MSC_VER  // everything is __n128 on MSVC, so extra overloads are not allowed
         inline static uint32 getScalarMask( ArrayInt mask );
-#endif
     };
 }  // namespace Ogre
 
-#include "OgreBooleanMask.inl"
+#include "OgreBooleanMaskSSE2.inl"
 
 #endif

@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef __SSE2_ArrayVector3_H__
-#define __SSE2_ArrayVector3_H__
+#ifndef __C_ArrayVector3_H__
+#define __C_ArrayVector3_H__
 
 #ifndef __ArrayVector3_H__
 #    error "Don't include this file directly. include Math/Array/OgreArrayVector3.h"
@@ -103,9 +103,9 @@ namespace Ogre
         /// Sets all packed vectors to the same value as the scalar input vector
         void setAll( const Vector3 &v )
         {
-            mChunkBase[0] = _mm_set_ps1( v.x );
-            mChunkBase[1] = _mm_set_ps1( v.y );
-            mChunkBase[2] = _mm_set_ps1( v.z );
+            mChunkBase[0] = v.x;
+            mChunkBase[1] = v.y;
+            mChunkBase[2] = v.z;
         }
 
         /// Copies only one vector, by looking at the indexes
@@ -118,14 +118,9 @@ namespace Ogre
 
         inline ArrayVector3 &operator=( const Real fScalar )
         {
-            // set1_ps is a composite instrinsic using shuffling instructions.
-            // Store the actual result in a tmp variable and copy. We don't
-            // do mChunkBase[1] = mChunkBase[0]; because of a potential LHS
-            // depending on how smart the compiler was
-            ArrayReal tmp = _mm_set1_ps( fScalar );
-            mChunkBase[0] = tmp;
-            mChunkBase[1] = tmp;
-            mChunkBase[2] = tmp;
+            mChunkBase[0] = fScalar;
+            mChunkBase[1] = fScalar;
+            mChunkBase[2] = fScalar;
 
             return *this;
         }
@@ -163,19 +158,15 @@ namespace Ogre
         inline friend ArrayVector3 operator/( const ArrayVector3 &lhs, ArrayReal fScalar );
 
         inline void operator+=( const ArrayVector3 &a );
-        inline void operator+=( const Real fScalar );
         inline void operator+=( const ArrayReal fScalar );
 
         inline void operator-=( const ArrayVector3 &a );
-        inline void operator-=( const Real fScalar );
         inline void operator-=( const ArrayReal fScalar );
 
         inline void operator*=( const ArrayVector3 &a );
-        inline void operator*=( const Real fScalar );
         inline void operator*=( const ArrayReal fScalar );
 
         inline void operator/=( const ArrayVector3 &a );
-        inline void operator/=( const Real fScalar );
         inline void operator/=( const ArrayReal fScalar );
 
         /// @copydoc Vector3::length()
@@ -284,7 +275,7 @@ namespace Ogre
             the replacement provided:
 
             this[i] = mask[i] != 0 ? this[i] : replacement[i]
-            @see MathlibSSE2::Cmov4
+            @see MathlibC::Cmov4
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
@@ -307,7 +298,7 @@ namespace Ogre
             the replacement provided:
 
             this[i] = mask[i] != 0 ? this[i] : replacement[i]
-            @see MathlibSSE2::CmovRobust
+            @see MathlibC::CmovRobust
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
@@ -329,7 +320,7 @@ namespace Ogre
             Selects between arg1 & arg2 according to mask:
 
             this[i] = mask[i] != 0 ? arg1[i] : arg2[i]
-            @see MathlibSSE2::Cmov4
+            @see MathlibC::Cmov4
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
@@ -347,18 +338,10 @@ namespace Ogre
                                           ArrayMaskR mask );
 
         /** Converts 4 ARRAY_PACKED_REALS reals into this ArrayVector3
-        @remarks
-            'src' must be aligned and assumed to have enough memory for ARRAY_PACKED_REALS Vector3
-            i.e. on SSE2 you can construct src as:
-                OGRE_ALIGNED_DECL( Real, vals[ARRAY_PACKED_REALS * 4], OGRE_SIMD_ALIGNMENT ) =
-                {
-                    x0, y0, z0, 0,
-                    x1, y1, z1, 0,
-                    x2, y2, z2, 0,
-                    x3, y3, z3, 0,
-                }
-            See Frustum::getCustomWorldSpaceCorners implementation for an actual, advanced use case.
-        */
+         @remarks
+         'src' must be aligned and assumed to have enough memory for ARRAY_PACKED_REALS Vector3
+         See Frustum::getCustomWorldSpaceCorners implementation for an actual, advanced use case.
+         */
         inline void loadFromAoS( const Real *RESTRICT_ALIAS src );
 
         static const ArrayVector3 ZERO;
@@ -370,12 +353,11 @@ namespace Ogre
         static const ArrayVector3 NEGATIVE_UNIT_Z;
         static const ArrayVector3 UNIT_SCALE;
     };
-
     /** @} */
     /** @} */
 
 }  // namespace Ogre
 
-#include "OgreArrayVector3.inl"
+#include "OgreArrayVector3C.inl"
 
 #endif

@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef __C_ArrayMatrix4_H__
-#define __C_ArrayMatrix4_H__
+#ifndef __SSE2_ArrayMatrix4_H__
+#define __SSE2_ArrayMatrix4_H__
 
 #ifndef __ArrayMatrix4_H__
 #    error "Don't include this file directly. include Math/Array/OgreArrayMatrix4.h"
@@ -61,7 +61,7 @@ namespace Ogre
             fetches for common cache lines of 64 bytes.
             Make sure extractions are made sequentially to avoid cache
             trashing and excessive bandwidth consumption, and prefer
-            working on see ArrayVector3 & see ArrayQuaternion instead
+            working on ArrayVector3 & ArrayQuaternion instead
             Architectures where the cache line == 32 bytes may want to
             set ARRAY_PACKED_REALS = 2 depending on their needs
     */
@@ -127,22 +127,22 @@ namespace Ogre
         /// Sets all packed matrices to the same value as the scalar input matrix
         void setAll( const Matrix4 &m )
         {
-            mChunkBase[0] = m._m[0];
-            mChunkBase[1] = m._m[1];
-            mChunkBase[2] = m._m[2];
-            mChunkBase[3] = m._m[3];
-            mChunkBase[4] = m._m[4];
-            mChunkBase[5] = m._m[5];
-            mChunkBase[6] = m._m[6];
-            mChunkBase[7] = m._m[7];
-            mChunkBase[8] = m._m[8];
-            mChunkBase[9] = m._m[9];
-            mChunkBase[10] = m._m[10];
-            mChunkBase[11] = m._m[11];
-            mChunkBase[12] = m._m[12];
-            mChunkBase[13] = m._m[13];
-            mChunkBase[14] = m._m[14];
-            mChunkBase[15] = m._m[15];
+            mChunkBase[0] = _mm_set_ps1( m._m[0] );
+            mChunkBase[1] = _mm_set_ps1( m._m[1] );
+            mChunkBase[2] = _mm_set_ps1( m._m[2] );
+            mChunkBase[3] = _mm_set_ps1( m._m[3] );
+            mChunkBase[4] = _mm_set_ps1( m._m[4] );
+            mChunkBase[5] = _mm_set_ps1( m._m[5] );
+            mChunkBase[6] = _mm_set_ps1( m._m[6] );
+            mChunkBase[7] = _mm_set_ps1( m._m[7] );
+            mChunkBase[8] = _mm_set_ps1( m._m[8] );
+            mChunkBase[9] = _mm_set_ps1( m._m[9] );
+            mChunkBase[10] = _mm_set_ps1( m._m[10] );
+            mChunkBase[11] = _mm_set_ps1( m._m[11] );
+            mChunkBase[12] = _mm_set_ps1( m._m[12] );
+            mChunkBase[13] = _mm_set_ps1( m._m[13] );
+            mChunkBase[14] = _mm_set_ps1( m._m[14] );
+            mChunkBase[15] = _mm_set_ps1( m._m[15] );
         }
 
         static ArrayMatrix4 createAllFromMatrix4( const Matrix4 &m )
@@ -186,7 +186,7 @@ namespace Ogre
                 This function is defined in ArrayMatrix4 to avoid including this header into
                 ArrayQuaternion. The idea is that ArrayMatrix4 requires ArrayQuaternion, and
                 ArrayQuaternion requires ArrayVector3. Simple dependency order
-            @param
+            @param q
                 The quaternion to convert from.
         */
         inline void fromQuaternion( const ArrayQuaternion &q );
@@ -221,27 +221,15 @@ namespace Ogre
     class _OgreExport SimpleMatrix4
     {
     public:
-        ArrayReal mChunkBase[16];
+        ArrayReal mChunkBase[4];
 
         /// Assumes src is aligned
         void load( const Matrix4 &src )
         {
-            mChunkBase[0] = src._m[0];
-            mChunkBase[1] = src._m[1];
-            mChunkBase[2] = src._m[2];
-            mChunkBase[3] = src._m[3];
-            mChunkBase[4] = src._m[4];
-            mChunkBase[5] = src._m[5];
-            mChunkBase[6] = src._m[6];
-            mChunkBase[7] = src._m[7];
-            mChunkBase[8] = src._m[8];
-            mChunkBase[9] = src._m[9];
-            mChunkBase[10] = src._m[10];
-            mChunkBase[11] = src._m[11];
-            mChunkBase[12] = src._m[12];
-            mChunkBase[13] = src._m[13];
-            mChunkBase[14] = src._m[14];
-            mChunkBase[15] = src._m[15];
+            mChunkBase[0] = _mm_load_ps( src._m );
+            mChunkBase[1] = _mm_load_ps( src._m + 4 );
+            mChunkBase[2] = _mm_load_ps( src._m + 8 );
+            mChunkBase[3] = _mm_load_ps( src._m + 12 );
         }
     };
 
@@ -250,6 +238,6 @@ namespace Ogre
 
 }  // namespace Ogre
 
-#include "OgreArrayMatrix4.inl"
+#include "OgreArrayMatrix4SSE2.inl"
 
 #endif

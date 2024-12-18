@@ -167,6 +167,6 @@ namespace Ogre
 
 }  // namespace Ogre
 
-#include "OgreAabb.inl"
+#include "OgreAabbC.inl"
 
 #endif

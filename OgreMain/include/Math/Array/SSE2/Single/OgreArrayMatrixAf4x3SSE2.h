@@ -25,10 +25,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef __SSE2_ArrayMatrix4_H__
-#define __SSE2_ArrayMatrix4_H__
+#ifndef _SSE2_ArrayMatrixAf4x3_H_
+#define _SSE2_ArrayMatrixAf4x3_H_
 
-#ifndef __ArrayMatrix4_H__
+#ifndef _ArrayMatrixAf4x3_H_
 #    error "Don't include this file directly. include Math/Array/OgreArrayMatrix4.h"
 #endif
 
@@ -40,7 +40,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class SimpleMatrix4;
+    class SimpleMatrixAf4x3;
 
     /** \addtogroup Core
      *  @{
@@ -48,14 +48,14 @@ namespace Ogre
     /** \addtogroup Math
      *  @{
      */
-    /** Cache-friendly container of 4x4 matrices represented as a SoA array.
+    /** Cache-friendly container of AFFINE 4x4 matrices represented as a SoA array.
         @remarks
             ArrayMatrix4 is a SIMD & cache-friendly version of Matrix4.
             An operation on an ArrayMatrix4 is done on 4 vectors at a
             time (the actual amount is defined by ARRAY_PACKED_REALS)
             Assuming ARRAY_PACKED_REALS == 4, the memory layout will
             be as following:
-             mChunkBase mChunkBase + 3
+              mChunkBase     mChunkBase + 4
              a00b00c00d00    a01b01c01d01
             Extracting one Matrix4 needs 256 bytes, which needs 4 line
             fetches for common cache lines of 64 bytes.
@@ -66,63 +66,12 @@ namespace Ogre
             set ARRAY_PACKED_REALS = 2 depending on their needs
     */
 
-    class _OgreExport ArrayMatrix4
+    class _OgreExport ArrayMatrixAf4x3
     {
     public:
-        ArrayReal mChunkBase[16];
+        ArrayReal mChunkBase[12];
 
-        ArrayMatrix4() {}
-        ArrayMatrix4( const ArrayMatrix4 &copy )
-        {
-            // Using a loop minimizes instruction count (better i-cache)
-            // Doing 4 at a time per iteration maximizes instruction pairing
-            // Unrolling the whole loop is i-cache unfriendly and
-            // becomes unmaintainable (16 lines!?)
-            for( size_t i = 0; i < 16; i += 4 )
-            {
-                mChunkBase[i] = copy.mChunkBase[i];
-                mChunkBase[i + 1] = copy.mChunkBase[i + 1];
-                mChunkBase[i + 2] = copy.mChunkBase[i + 2];
-                mChunkBase[i + 3] = copy.mChunkBase[i + 3];
-            }
-        }
-
-        void getAsMatrix4( Matrix4 &out, size_t index ) const
-        {
-            // Be careful of not writing to these regions or else strict aliasing rule gets broken!!!
-            const Real *RESTRICT_ALIAS aliasedReal = reinterpret_cast<const Real *>( mChunkBase );
-            Real *RESTRICT_ALIAS       matrix = reinterpret_cast<Real *>( out._m );
-            for( size_t i = 0; i < 16; i += 4 )
-            {
-                matrix[i] = aliasedReal[ARRAY_PACKED_REALS * ( i ) + index];
-                matrix[i + 1] = aliasedReal[ARRAY_PACKED_REALS * ( i + 1 ) + index];
-                matrix[i + 2] = aliasedReal[ARRAY_PACKED_REALS * ( i + 2 ) + index];
-                matrix[i + 3] = aliasedReal[ARRAY_PACKED_REALS * ( i + 3 ) + index];
-            }
-        }
-
-        /// STRONGLY Prefer using @see getAsMatrix4() because this function may have more
-        /// overhead (the other one is faster)
-        Matrix4 getAsMatrix4( size_t index ) const
-        {
-            Matrix4 retVal;
-            getAsMatrix4( retVal, index );
-
-            return retVal;
-        }
-
-        void setFromMatrix4( const Matrix4 &m, size_t index )
-        {
-            Real *RESTRICT_ALIAS       aliasedReal = reinterpret_cast<Real *>( mChunkBase );
-            const Real *RESTRICT_ALIAS matrix = reinterpret_cast<const Real *>( m._m );
-            for( size_t i = 0; i < 16; i += 4 )
-            {
-                aliasedReal[ARRAY_PACKED_REALS * ( i ) + index] = matrix[i];
-                aliasedReal[ARRAY_PACKED_REALS * ( i + 1 ) + index] = matrix[i + 1];
-                aliasedReal[ARRAY_PACKED_REALS * ( i + 2 ) + index] = matrix[i + 2];
-                aliasedReal[ARRAY_PACKED_REALS * ( i + 3 ) + index] = matrix[i + 3];
-            }
-        }
+        ArrayMatrixAf4x3() {}
 
         /// Sets all packed matrices to the same value as the scalar input matrix
         void setAll( const Matrix4 &m )
@@ -139,44 +88,24 @@ namespace Ogre
             mChunkBase[9] = _mm_set_ps1( m._m[9] );
             mChunkBase[10] = _mm_set_ps1( m._m[10] );
             mChunkBase[11] = _mm_set_ps1( m._m[11] );
-            mChunkBase[12] = _mm_set_ps1( m._m[12] );
-            mChunkBase[13] = _mm_set_ps1( m._m[13] );
-            mChunkBase[14] = _mm_set_ps1( m._m[14] );
-            mChunkBase[15] = _mm_set_ps1( m._m[15] );
         }
 
-        static ArrayMatrix4 createAllFromMatrix4( const Matrix4 &m )
+        static ArrayMatrixAf4x3 createAllFromMatrix4( const Matrix4 &m )
         {
-            ArrayMatrix4 retVal;
+            ArrayMatrixAf4x3 retVal;
             retVal.setAll( m );
             return retVal;
         }
 
-        /** Assigns the value of the other matrix. Does not reference the
-            ptr address, but rather perform a memory copy
-            @param
-                rkMatrix The other matrix
-        */
-        inline ArrayMatrix4 &operator=( const ArrayMatrix4 &rkMatrix )
-        {
-            for( size_t i = 0; i < 16; i += 4 )
-            {
-                mChunkBase[i] = rkMatrix.mChunkBase[i];
-                mChunkBase[i + 1] = rkMatrix.mChunkBase[i + 1];
-                mChunkBase[i + 2] = rkMatrix.mChunkBase[i + 2];
-                mChunkBase[i + 3] = rkMatrix.mChunkBase[i + 3];
-            }
-            return *this;
-        }
-
         // Concatenation
-        inline friend ArrayMatrix4 operator*( const ArrayMatrix4 &lhs, const ArrayMatrix4 &rhs );
+        FORCEINLINE friend ArrayMatrixAf4x3 operator*( const ArrayMatrixAf4x3 &lhs,
+                                                       const ArrayMatrixAf4x3 &rhs );
 
         inline ArrayVector3 operator*( const ArrayVector3 &rhs ) const;
 
         /// Prefer the update version 'a *= b' A LOT over 'a = a * b'
         /// (copying from an ArrayMatrix4 is 256 bytes!)
-        inline void operator*=( const ArrayMatrix4 &rhs );
+        FORCEINLINE void operator*=( const ArrayMatrixAf4x3 &rhs );
 
         /** Converts the given quaternion to a 3x3 matrix representation and fill our values
             @remarks
@@ -195,33 +124,69 @@ namespace Ogre
         inline void makeTransform( const ArrayVector3 &position, const ArrayVector3 &scale,
                                    const ArrayQuaternion &orientation );
 
+        /// @copydoc Matrix4::decomposition()
+        inline void decomposition( ArrayVector3 &position, ArrayVector3 &scale,
+                                   ArrayQuaternion &orientation ) const;
+
+        /** Calculates the inverse of the matrix. If used against degenerate matrices,
+            it may cause NaNs and Infs on those. Use setToInverseDegeneratesAsIdentity()
+            if you want to deal with degenerate matrices.
+        */
+        inline void setToInverse();
+
+        /** Calculates the inverse of the matrix. If one (or more) of the matrices are
+            degenerate (don't have an inverse), those are set to identity.
+        */
+        inline void setToInverseDegeneratesAsIdentity();
+
+        /** Strips orientation and/or scale components out of this matrix based on the input using
+            branchless selection.
+        @remarks
+            Scale is always assumed to be positive. Negating the scale is the same as rotating
+            180° and/or skewing. If negative scale was applied, it is assumed
+            it was done using orientation/skewing alone (if orientation is stripped, the matrix will
+            look in the opposite direction as if scale was positive, if scale is stripped, the
+            matrix will keep looking in the opposite direction as if the scale were still negative)
+            This behavior mimics that of major modeling tools.
+        */
+        inline void retain( ArrayMaskR orientation, ArrayMaskR scale );
+
         /** Converts these matrices contained in this ArrayMatrix to AoS form and stores them in dst
         @remarks
             'dst' must be aligned and assumed to have enough memory for ARRAY_PACKED_REALS matrices
         */
-        inline void storeToAoS( Matrix4 *RESTRICT_ALIAS dst ) const;
+        inline void streamToAoS( Matrix4 *RESTRICT_ALIAS dst ) const;
+        inline void storeToAoS( SimpleMatrixAf4x3 *RESTRICT_ALIAS src ) const;
+        inline void streamToAoS( SimpleMatrixAf4x3 *RESTRICT_ALIAS src ) const;
 
         /** Converts ARRAY_PACKED_REALS matrices into this ArrayMatrix
         @remarks
             'src' must be aligned and assumed to have enough memory for ARRAY_PACKED_REALS matrices
         */
         inline void loadFromAoS( const Matrix4 *RESTRICT_ALIAS src );
-        inline void loadFromAoS( const SimpleMatrix4 *RESTRICT_ALIAS src );
+        inline void loadFromAoS( const Matrix4 *RESTRICT_ALIAS *src );
+        inline void loadFromAoS( const SimpleMatrixAf4x3 *RESTRICT_ALIAS src );
+        inline void loadFromAoS( const SimpleMatrixAf4x3 *RESTRICT_ALIAS *src );
 
-        /// @copydoc Matrix4::isAffine()
-        inline bool isAffine() const;
-
-        static const ArrayMatrix4 IDENTITY;
+        static const ArrayMatrixAf4x3 IDENTITY;
     };
 
-    /** Simple wrap up to load an AoS matrix 4x4 using SSE. The main reason of this class
-        is to force MSVC to use 4 movaps to load arrays of Matrix4s (which are waaay more
+    /** Simple wrap up to load an AoS matrix 4x3 using SSE. The main reason of this class
+        is to force MSVC to use 3 movaps to load arrays of MatrixAf4x3s (which are waaay more
         efficient that whatever lea+mov junk it tries to produce)
     */
-    class _OgreExport SimpleMatrix4
+    class _OgreExport SimpleMatrixAf4x3
     {
     public:
-        ArrayReal mChunkBase[4];
+        ArrayReal mChunkBase[3];
+
+        SimpleMatrixAf4x3() {}
+        SimpleMatrixAf4x3( ArrayReal row0, ArrayReal row1, ArrayReal row2 )
+        {
+            mChunkBase[0] = row0;
+            mChunkBase[1] = row1;
+            mChunkBase[2] = row2;
+        }
 
         /// Assumes src is aligned
         void load( const Matrix4 &src )
@@ -229,8 +194,52 @@ namespace Ogre
             mChunkBase[0] = _mm_load_ps( src._m );
             mChunkBase[1] = _mm_load_ps( src._m + 4 );
             mChunkBase[2] = _mm_load_ps( src._m + 8 );
-            mChunkBase[3] = _mm_load_ps( src._m + 12 );
         }
+
+        /// Assumes dst is aligned
+        void store( Matrix4 *dst ) const
+        {
+            float *RESTRICT_ALIAS dstPtr = reinterpret_cast<float *>( dst );
+
+            _mm_store_ps( dstPtr, mChunkBase[0] );
+            _mm_store_ps( dstPtr + 4, mChunkBase[1] );
+            _mm_store_ps( dstPtr + 8, mChunkBase[2] );
+            _mm_store_ps( dstPtr + 12, MathlibSSE2::LAST_AFFINE_COLUMN );
+        }
+
+        /// Assumes dst is aligned
+        void store4x3( Matrix4 *dst ) const
+        {
+            float *RESTRICT_ALIAS dstPtr = reinterpret_cast<float *>( dst );
+
+            _mm_store_ps( dstPtr, mChunkBase[0] );
+            _mm_store_ps( dstPtr + 4, mChunkBase[1] );
+            _mm_store_ps( dstPtr + 8, mChunkBase[2] );
+        }
+
+        /// Assumes dst is aligned
+        void store4x3( float *RESTRICT_ALIAS dst ) const
+        {
+            _mm_store_ps( dst, mChunkBase[0] );
+            _mm_store_ps( dst + 4, mChunkBase[1] );
+            _mm_store_ps( dst + 8, mChunkBase[2] );
+        }
+
+        /// Copies our 4x3 contents using memory write combining when possible.
+        void streamTo4x3( float *RESTRICT_ALIAS dst ) const
+        {
+#ifndef OGRE_RENDERSYSTEM_API_ALIGN_COMPATIBILITY
+            _mm_stream_ps( dst, mChunkBase[0] );
+            _mm_stream_ps( dst + 4, mChunkBase[1] );
+            _mm_stream_ps( dst + 8, mChunkBase[2] );
+#else
+            _mm_storeu_ps( dst, mChunkBase[0] );
+            _mm_storeu_ps( dst + 4, mChunkBase[1] );
+            _mm_storeu_ps( dst + 8, mChunkBase[2] );
+#endif
+        }
+
+        static const SimpleMatrixAf4x3 IDENTITY;
     };
 
     /** @} */
@@ -238,6 +247,6 @@ namespace Ogre
 
 }  // namespace Ogre
 
-#include "OgreArrayMatrix4.inl"
+#include "OgreArrayMatrixAf4x3SSE2.inl"
 
 #endif

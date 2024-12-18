@@ -337,6 +337,6 @@ namespace Ogre
 
 }  // namespace Ogre
 
-#include "OgreArrayVector2.inl"
+#include "OgreArrayVector2C.inl"
 
 #endif

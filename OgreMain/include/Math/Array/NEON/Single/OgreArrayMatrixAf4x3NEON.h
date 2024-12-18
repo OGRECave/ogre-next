@@ -247,6 +247,6 @@ namespace Ogre
 
 }  // namespace Ogre
 
-#include "OgreArrayMatrixAf4x3.inl"
+#include "OgreArrayMatrixAf4x3NEON.inl"
 
 #endif

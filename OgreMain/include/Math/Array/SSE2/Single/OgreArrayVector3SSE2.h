@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef __NEON_ArrayVector3_H__
-#define __NEON_ArrayVector3_H__
+#ifndef __SSE2_ArrayVector3_H__
+#define __SSE2_ArrayVector3_H__
 
 #ifndef __ArrayVector3_H__
 #    error "Don't include this file directly. include Math/Array/OgreArrayVector3.h"
@@ -103,9 +103,9 @@ namespace Ogre
         /// Sets all packed vectors to the same value as the scalar input vector
         void setAll( const Vector3 &v )
         {
-            mChunkBase[0] = vdupq_n_f32( v.x );
-            mChunkBase[1] = vdupq_n_f32( v.y );
-            mChunkBase[2] = vdupq_n_f32( v.z );
+            mChunkBase[0] = _mm_set_ps1( v.x );
+            mChunkBase[1] = _mm_set_ps1( v.y );
+            mChunkBase[2] = _mm_set_ps1( v.z );
         }
 
         /// Copies only one vector, by looking at the indexes
@@ -122,7 +122,7 @@ namespace Ogre
             // Store the actual result in a tmp variable and copy. We don't
             // do mChunkBase[1] = mChunkBase[0]; because of a potential LHS
             // depending on how smart the compiler was
-            ArrayReal tmp = vdupq_n_f32( fScalar );
+            ArrayReal tmp = _mm_set1_ps( fScalar );
             mChunkBase[0] = tmp;
             mChunkBase[1] = tmp;
             mChunkBase[2] = tmp;
@@ -238,13 +238,13 @@ namespace Ogre
         inline ArrayVector3 reflect( const ArrayVector3 &normal ) const;
 
         /** Calculates the inverse of the vectors: 1.0f / v;
-         But if original is zero, the zero is left (0 / 0 = 0).
-         Example:
-         Bfore inverseLeaveZero:
-         x = 0; y = 2; z = 3;
-         After inverseLeaveZero
-         x = 0; y = 0.5; z = 0.3333;
-         */
+            But if original is zero, the zero is left (0 / 0 = 0).
+            Example:
+            Bfore inverseLeaveZero:
+                x = 0; y = 2; z = 3;
+            After inverseLeaveZero
+                x = 0; y = 0.5; z = 0.3333;
+        */
         inline void inverseLeaveZeroes();
 
         /// @see Vector3::isNaN()
@@ -284,7 +284,7 @@ namespace Ogre
             the replacement provided:
 
             this[i] = mask[i] != 0 ? this[i] : replacement[i]
-            @see MathlibNEON::Cmov4
+            @see MathlibSSE2::Cmov4
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
@@ -307,7 +307,7 @@ namespace Ogre
             the replacement provided:
 
             this[i] = mask[i] != 0 ? this[i] : replacement[i]
-            @see MathlibNEON::CmovRobust
+            @see MathlibSSE2::CmovRobust
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
@@ -329,7 +329,7 @@ namespace Ogre
             Selects between arg1 & arg2 according to mask:
 
             this[i] = mask[i] != 0 ? arg1[i] : arg2[i]
-            @see MathlibNEON::Cmov4
+            @see MathlibSSE2::Cmov4
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
@@ -370,11 +370,12 @@ namespace Ogre
         static const ArrayVector3 NEGATIVE_UNIT_Z;
         static const ArrayVector3 UNIT_SCALE;
     };
+
     /** @} */
     /** @} */
 
 }  // namespace Ogre
 
-#include "OgreArrayVector3.inl"
+#include "OgreArrayVector3SSE2.inl"
 
 #endif

@@ -121,6 +121,6 @@ namespace Ogre
 
 }  // namespace Ogre
 
-#include "OgreArraySphere.inl"
+#include "OgreArraySphereNEON.inl"
 
 #endif

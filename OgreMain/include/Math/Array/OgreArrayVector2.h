@@ -33,18 +33,18 @@ THE SOFTWARE.
 
 #if OGRE_CPU == OGRE_CPU_X86 && OGRE_USE_SIMD == 1
 #    if OGRE_DOUBLE_PRECISION == 1
-#        include "SSE2/Double/OgreArrayVector2.h"
+#        include "SSE2/Double/OgreArrayVector2SSE2.h"
 #    else
-#        include "SSE2/Single/OgreArrayVector2.h"
+#        include "SSE2/Single/OgreArrayVector2SSE2.h"
 #    endif
 #elif OGRE_CPU == OGRE_CPU_ARM && OGRE_USE_SIMD == 1
 #    if OGRE_DOUBLE_PRECISION == 1
 #        error Double precision with SIMD on ARM is not supported
 #    else
-#        include "NEON/Single/OgreArrayVector2.h"
+#        include "NEON/Single/OgreArrayVector2NEON.h"
 #    endif
 #else
-#    include "C/OgreArrayVector2.h"
+#    include "C/OgreArrayVector2C.h"
 #endif
 
 #endif

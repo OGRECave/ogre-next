@@ -33,12 +33,12 @@ THE SOFTWARE.
 
 /*#if OGRE_CPU == OGRE_CPU_X86 && defined( OGRE_USE_SIMD )
     #if OGRE_DOUBLE_PRECISION == 1
-        #include "SSE2/Double/OgreAabb.h"
+        #include "SSE2/Double/OgreAabbSSE2.h"
     #else
-        #include "SSE2/Single/OgreAabb.h"
+        #include "SSE2/Single/OgreAabbSSE2.h"
     #endif
 #else*/
-#include "C/OgreAabb.h"
+#include "C/OgreAabbC.h"
 //#endif
 
 #endif

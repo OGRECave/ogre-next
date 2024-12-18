@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef __C_ArrayAabb_H__
-#define __C_ArrayAabb_H__
+#ifndef __NEON_ArrayAabb_H__
+#define __NEON_ArrayAabb_H__
 
 #ifndef __ArrayAabb_H__
 #    error "Don't include this file directly. include Math/Array/OgreArrayAabb.h"
@@ -48,17 +48,17 @@ namespace Ogre
     /** Cache-friendly array of Aabb represented as a SoA array.
         @remarks
             ArrayAabb is a SIMD & cache-friendly version of AxisAlignedBox.
-            (AABB = Axis aligned bounding box) See ArrayVector3 for
+            (AABB = Axis aligned bounding box)  See ArrayVector3 for
             more information.
         @par
             For performance reasons given the mathematical properties,
             this version stores the box in the form "center + halfSize"
             instead of the form "minimum, maximum" that is present in
             AxisAlignedBox:
-                * Merging is slightly more expensive
-                * intersects() is much cheaper
-                * Naturally deals with infinite boxes (no need for branches)
-                * Transform is cheaper (a common operation)
+                + Merging is slightly more expensive
+                + intersects() is much cheaper
+                + Naturally deals with infinite boxes (no need for branches)
+                + Transform is cheaper (a common operation)
         @par
             Extracting one aabb needs 84 bytes, while all 4 aabbs
             need 96 bytes, both cases are always two cache lines.
@@ -177,6 +177,6 @@ namespace Ogre
 
 }  // namespace Ogre
 
-#include "OgreArrayAabb.inl"
+#include "OgreArrayAabbNEON.inl"
 
 #endif

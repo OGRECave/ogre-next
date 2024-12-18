@@ -4,7 +4,7 @@ This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2014 Torus Knot Software Ltd
+Copyright (c) 2000-2023 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef Ogre_SSE2_ArrayVector2_H
-#define Ogre_SSE2_ArrayVector2_H
+#ifndef Ogre_NEON_ArrayVector2_H
+#define Ogre_NEON_ArrayVector2_H
 
 #ifndef OgreArrayVector2_H
 #    error "Don't include this file directly. include Math/Array/OgreArrayVector2.h"
@@ -44,7 +44,7 @@ namespace Ogre
     /** \addtogroup Math
      *  @{
      */
-    /** Cache-friendly array of 2-dimensional represented as a SoA array.
+    /** Cache-friendly array of 3-dimensional represented as a SoA array.
         @remarks
             ArrayVector2 is a SIMD & cache-friendly version of Vector2.
             An operation on an ArrayVector2 is done on 4 vectors at a
@@ -99,8 +99,8 @@ namespace Ogre
         /// Sets all packed vectors to the same value as the scalar input vector
         void setAll( const Vector2 &v )
         {
-            mChunkBase[0] = _mm_set_ps1( v.x );
-            mChunkBase[1] = _mm_set_ps1( v.y );
+            mChunkBase[0] = vdupq_n_f32( v.x );
+            mChunkBase[1] = vdupq_n_f32( v.y );
         }
 
         inline ArrayVector2 &operator=( const Real fScalar )
@@ -109,7 +109,7 @@ namespace Ogre
             // Store the actual result in a tmp variable and copy. We don't
             // do mChunkBase[1] = mChunkBase[0]; because of a potential LHS
             // depending on how smart the compiler was
-            ArrayReal tmp = _mm_set1_ps( fScalar );
+            ArrayReal tmp = vdupq_n_f32( fScalar );
             mChunkBase[0] = tmp;
             mChunkBase[1] = tmp;
 
@@ -198,10 +198,10 @@ namespace Ogre
         /// @copydoc Vector2::makeCeil()
         inline void makeCeil( const ArrayVector2 &cmp );
 
-        /// Returns the smallest value between x, y; min( x, y )
+        /// Returns the smallest value between x, y, z; min( x, y, z )
         inline ArrayReal getMinComponent() const;
 
-        /// Returns the biggest value between x, y; max( x, y )
+        /// Returns the biggest value between x, y, z; max( x, y, z )
         inline ArrayReal getMaxComponent() const;
 
         /** Converts the vector to (sign(x), sign(y), sign(z))
@@ -224,13 +224,13 @@ namespace Ogre
         inline ArrayVector2 reflect( const ArrayVector2 &normal ) const;
 
         /** Calculates the inverse of the vectors: 1.0f / v;
-            But if original is zero, the zero is left (0 / 0 = 0).
-            Example:
-            Bfore inverseLeaveZero:
-                x = 0; y = 2; z = 3;
-            After inverseLeaveZero
-                x = 0; y = 0.5; z = 0.3333;
-        */
+         But if original is zero, the zero is left (0 / 0 = 0).
+         Example:
+         Bfore inverseLeaveZero:
+         x = 0; y = 2; z = 3;
+         After inverseLeaveZero
+         x = 0; y = 0.5; z = 0.3333;
+         */
         inline void inverseLeaveZeroes();
 
         /// @see Vector2::isNaN()
@@ -247,6 +247,7 @@ namespace Ogre
         @return
             Vector.x = min( vector[0].x, vector[1].x, vector[2].x, vector[3].x )
             Vector.y = min( vector[0].y, vector[1].y, vector[2].y, vector[3].y )
+            Vector.z = min( vector[0].z, vector[1].z, vector[2].z, vector[3].z )
         */
         inline Vector2 collapseMin() const;
 
@@ -257,6 +258,7 @@ namespace Ogre
         @return
             Vector.x = max( vector[0].x, vector[1].x, vector[2].x, vector[3].x )
             Vector.y = max( vector[0].y, vector[1].y, vector[2].y, vector[3].y )
+            Vector.z = max( vector[0].z, vector[1].z, vector[2].z, vector[3].z )
         */
         inline Vector2 collapseMax() const;
 
@@ -265,7 +267,7 @@ namespace Ogre
             the replacement provided:
 
             this[i] = mask[i] != 0 ? this[i] : replacement[i]
-            @see MathlibSSE2::Cmov4
+            @see MathlibNEON::Cmov4
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
@@ -288,7 +290,7 @@ namespace Ogre
             the replacement provided:
 
             this[i] = mask[i] != 0 ? this[i] : replacement[i]
-            @see MathlibSSE2::CmovRobust
+            @see MathlibNEON::CmovRobust
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
@@ -310,7 +312,7 @@ namespace Ogre
             Selects between arg1 & arg2 according to mask:
 
             this[i] = mask[i] != 0 ? arg1[i] : arg2[i]
-            @see MathlibSSE2::Cmov4
+            @see MathlibNEON::Cmov4
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
@@ -334,12 +336,11 @@ namespace Ogre
         static const ArrayVector2 NEGATIVE_UNIT_Y;
         static const ArrayVector2 UNIT_SCALE;
     };
-
     /** @} */
     /** @} */
 
 }  // namespace Ogre
 
-#include "OgreArrayVector2.inl"
+#include "OgreArrayVector2NEON.inl"
 
 #endif

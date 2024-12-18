@@ -33,18 +33,18 @@ THE SOFTWARE.
 
 #if OGRE_CPU == OGRE_CPU_X86 && OGRE_USE_SIMD == 1
 #    if OGRE_DOUBLE_PRECISION == 1
-#        include "SSE2/Double/OgreBooleanMask.h"
+#        include "SSE2/Double/OgreBooleanMaskSSE2.h"
 #    else
-#        include "SSE2/Single/OgreBooleanMask.h"
+#        include "SSE2/Single/OgreBooleanMaskSSE2.h"
 #    endif
 #elif OGRE_CPU == OGRE_CPU_ARM && OGRE_USE_SIMD == 1
 #    if OGRE_DOUBLE_PRECISION == 1
 #        error Double precision with SIMD on ARM is not supported
 #    else
-#        include "NEON/Single/OgreBooleanMask.h"
+#        include "NEON/Single/OgreBooleanMaskNEON.h"
 #    endif
 #else
-#    include "C/OgreBooleanMask.h"
+#    include "C/OgreBooleanMaskC.h"
 #endif
 
 #endif

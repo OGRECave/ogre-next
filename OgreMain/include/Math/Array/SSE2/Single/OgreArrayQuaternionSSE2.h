@@ -37,8 +37,6 @@ THE SOFTWARE.
 #include "Math/Array/OgreArrayVector3.h"
 #include "Math/Array/OgreMathlib.h"
 
-#include "OgreArrayQuaternion.h"
-
 namespace Ogre
 {
     /** \addtogroup Core
@@ -257,6 +255,6 @@ namespace Ogre
 
 }  // namespace Ogre
 
-#include "OgreArrayQuaternion.inl"
+#include "OgreArrayQuaternionSSE2.inl"
 
 #endif
