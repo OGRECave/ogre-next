@@ -27,7 +27,7 @@ THE SOFTWARE.
 */
 #include "OgreStableHeaders.h"
 
-#include "Animation/OgreTagPoint.h"
+#include "Animation/OgreTagPoint2.h"
 
 #include "Animation/OgreBone.h"
 #include "Math/Array/OgreBooleanMask.h"

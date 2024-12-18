@@ -12,7 +12,7 @@
 
 #include "Animation/OgreSkeletonAnimation.h"
 #include "Animation/OgreSkeletonInstance.h"
-#include "Animation/OgreTagPoint.h"
+#include "Animation/OgreTagPoint2.h"
 
 #include "OgreCamera.h"
 

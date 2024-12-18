@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include "Animation/OgreSkeletonDef.h"
 #include "Animation/OgreSkeletonInstance.h"
-#include "Animation/OgreTagPoint.h"
+#include "Animation/OgreTagPoint2.h"
 #include "Compositor/OgreCompositorShadowNode.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 #include "Math/Array/OgreBooleanMask.h"

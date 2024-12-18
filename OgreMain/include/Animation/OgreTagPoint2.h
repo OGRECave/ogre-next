@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef _OgreTagPoint_H_
-#define _OgreTagPoint_H_
+#ifndef _OgreTagPoint2_H_
+#define _OgreTagPoint2_H_
 
 #include "OgreSceneNode.h"
 
