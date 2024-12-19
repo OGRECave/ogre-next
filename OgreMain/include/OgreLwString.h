@@ -471,7 +471,7 @@ namespace Ogre
         template <typename M, typename N, typename O, typename P, typename Q, typename R, typename S,
                   typename T>
         LwString &a( const M &a0, const N &a1, const O &a2, const P &a3, const Q &a4, const R &a5,
-                     const S &a6, const S &a7 )
+                     const S &a6, const T &a7 )
         {
             this->a( a0, a1, a2, a3 );
             this->a( a4, a5, a6, a7 );
