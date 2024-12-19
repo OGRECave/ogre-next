@@ -45,14 +45,14 @@ PROJECT_BRIEF          = "Object-Oriented Graphics Rendering Engine"
 # exceed 55 pixels and the maximum width should not exceed 200 pixels.
 # Doxygen will copy the logo to the output directory.
 
-PROJECT_LOGO           = "${OGRE_SOURCE_DIR}/Docs/ogre-logo.png"
+PROJECT_LOGO           = "${PROJECT_SOURCE_DIR}/Docs/ogre-logo.png"
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute)
 # base path where the generated documentation will be put.
 # If a relative path is entered, it will be relative to the location
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = "${OGRE_BINARY_DIR}/api/"
+OUTPUT_DIRECTORY       = "${PROJECT_BINARY_DIR}/api/"
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create
 # 4096 sub-directories (in 2 levels) under the output directory of each output
@@ -653,7 +653,7 @@ WARN_FORMAT            = "$file:$line: $text"
 # and error messages should be written. If left blank the output is written
 # to stderr.
 
-WARN_LOGFILE           = "${OGRE_BINARY_DIR}/doxygen_warnings.log"
+WARN_LOGFILE           = "${PROJECT_BINARY_DIR}/doxygen_warnings.log"
 
 #---------------------------------------------------------------------------
 # configuration options related to the input files
@@ -747,9 +747,9 @@ EXAMPLE_RECURSIVE      = NO
 # directories that contain image that are included in the documentation (see
 # the \image command).
 
-IMAGE_PATH             = "${OGRE_SOURCE_DIR}/Docs/src/manual/" \
-						 "${OGRE_SOURCE_DIR}/Docs/src/images/" \
-						 "${OGRE_SOURCE_DIR}/Docs/src/SettingUpOgre/images/"
+IMAGE_PATH             = "${PROJECT_SOURCE_DIR}/Docs/src/manual/" \
+						 "${PROJECT_SOURCE_DIR}/Docs/src/images/" \
+						 "${PROJECT_SOURCE_DIR}/Docs/src/SettingUpOgre/images/"
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program
@@ -941,7 +941,7 @@ HTML_STYLESHEET        =
 # robust against future updates. Doxygen will copy the style sheet file to
 # the output directory.
 
-HTML_EXTRA_STYLESHEET  = "${OGRE_SOURCE_DIR}/Docs/doxygen-awesome.css" "${OGRE_SOURCE_DIR}/Docs/ogre_style.css"
+HTML_EXTRA_STYLESHEET  = "${PROJECT_SOURCE_DIR}/Docs/doxygen-awesome.css" "${PROJECT_SOURCE_DIR}/Docs/ogre_style.css"
 
 # The HTML_EXTRA_FILES tag can be used to specify one or more extra images or
 # other source files which should be copied to the HTML output directory. Note

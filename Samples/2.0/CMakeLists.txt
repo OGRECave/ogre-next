@@ -14,8 +14,6 @@ if( NOT OGRE_BUILD_PLATFORM_APPLE_IOS AND NOT ANDROID )
 	if( OGRE_BUILD_SAMPLES2 AND NOT SDL2_FOUND )
 		message( STATUS "Could not find dependency for samples: SDL2" )
 		set( OGRE_BUILD_SAMPLES2_SKIP 1 )
-	else()
-		include_directories(${SDL2_INCLUDE_DIR})
 	endif()
 endif()
 

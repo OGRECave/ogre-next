@@ -18,7 +18,7 @@ set(SOURCE_FILES
 
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-include_directories(${OGRE_SOURCE_DIR}/Samples/Common/include)
+include_directories(${PROJECT_SOURCE_DIR}/Samples/Common/include)
 ogre_add_component_include_dir(Terrain)
 ogre_add_component_include_dir(Overlay)
 ogre_add_component_include_dir(MeshLodGenerator)

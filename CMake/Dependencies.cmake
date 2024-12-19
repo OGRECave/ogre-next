@@ -21,38 +21,38 @@ if(OGRE_BUILD_PLATFORM_EMSCRIPTEN)
     ${OGRE_DEPENDENCIES_DIR}
     ${EMSCRIPTEN_ROOT_PATH}/system
     ${ENV_OGRE_DEPENDENCIES_DIR}
-    "${OGRE_BINARY_DIR}/EmscriptenDependencies"
-    "${OGRE_SOURCE_DIR}/EmscriptenDependencies"
-    "${OGRE_BINARY_DIR}/../EmscriptenDependencies"
-    "${OGRE_SOURCE_DIR}/../EmscriptenDependencies"
+    "${PROJECT_BINARY_DIR}/EmscriptenDependencies"
+    "${PROJECT_SOURCE_DIR}/EmscriptenDependencies"
+    "${PROJECT_BINARY_DIR}/../EmscriptenDependencies"
+    "${PROJECT_SOURCE_DIR}/../EmscriptenDependencies"
   )
   set(CMAKE_FIND_ROOT_PATH ${CMAKE_FIND_ROOT_PATH} ${OGRE_DEP_SEARCH_PATH})
 elseif(OGRE_BUILD_PLATFORM_APPLE_IOS)
   set(OGRE_DEP_SEARCH_PATH 
     ${OGRE_DEPENDENCIES_DIR}
     ${ENV_OGRE_DEPENDENCIES_DIR}
-    "${OGRE_BINARY_DIR}/iOSDependencies"
-    "${OGRE_SOURCE_DIR}/iOSDependencies"
-    "${OGRE_BINARY_DIR}/../iOSDependencies"
-    "${OGRE_SOURCE_DIR}/../iOSDependencies"
+    "${PROJECT_BINARY_DIR}/iOSDependencies"
+    "${PROJECT_SOURCE_DIR}/iOSDependencies"
+    "${PROJECT_BINARY_DIR}/../iOSDependencies"
+    "${PROJECT_SOURCE_DIR}/../iOSDependencies"
   )
 elseif(OGRE_BUILD_PLATFORM_ANDROID)
   set(OGRE_DEP_SEARCH_PATH 
     ${OGRE_DEPENDENCIES_DIR}
     ${ENV_OGRE_DEPENDENCIES_DIR}
-    "${OGRE_BINARY_DIR}/DependenciesAndroid"
-    "${OGRE_SOURCE_DIR}/DependenciesAndroid"
-    "${OGRE_BINARY_DIR}/../DependenciesAndroid"
-    "${OGRE_SOURCE_DIR}/../DependenciesAndroid"
+    "${PROJECT_BINARY_DIR}/DependenciesAndroid"
+    "${PROJECT_SOURCE_DIR}/DependenciesAndroid"
+    "${PROJECT_BINARY_DIR}/../DependenciesAndroid"
+    "${PROJECT_SOURCE_DIR}/../DependenciesAndroid"
   )
 else()
   set(OGRE_DEP_SEARCH_PATH 
     ${OGRE_DEPENDENCIES_DIR}
     ${ENV_OGRE_DEPENDENCIES_DIR}
-    "${OGRE_BINARY_DIR}/Dependencies"
-    "${OGRE_SOURCE_DIR}/Dependencies"
-    "${OGRE_BINARY_DIR}/../Dependencies"
-    "${OGRE_SOURCE_DIR}/../Dependencies"
+    "${PROJECT_BINARY_DIR}/Dependencies"
+    "${PROJECT_SOURCE_DIR}/Dependencies"
+    "${PROJECT_BINARY_DIR}/../Dependencies"
+    "${PROJECT_SOURCE_DIR}/../Dependencies"
   )
 endif()
 
@@ -238,9 +238,9 @@ macro_log_feature(CppUnit_FOUND "CppUnit" "Library for performing unit tests" "h
 # setting everything up, including overriding any of the above
 # findings.
 set(OGREDEPS_RUNTIME_OUTPUT ${OGRE_RUNTIME_OUTPUT})
-if (EXISTS "${OGRE_SOURCE_DIR}/Dependencies/CMakeLists.txt")
+if (EXISTS "${PROJECT_SOURCE_DIR}/Dependencies/CMakeLists.txt")
   add_subdirectory(Dependencies)
-elseif (EXISTS "${OGRE_SOURCE_DIR}/ogredeps/CMakeLists.txt")
+elseif (EXISTS "${PROJECT_SOURCE_DIR}/ogredeps/CMakeLists.txt")
   add_subdirectory(ogredeps)
 endif ()
 
