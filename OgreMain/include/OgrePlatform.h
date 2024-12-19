@@ -509,7 +509,8 @@ THE SOFTWARE.
 
 // Define whether or not Ogre compiled with NEON support.
 #    if OGRE_DOUBLE_PRECISION == 0 && OGRE_CPU == OGRE_CPU_ARM && \
-        ( defined( __aarch64__ ) || defined( __ARM_NEON__ ) || \
+        ( defined( __aarch64__ ) || defined( __arm64__ ) || defined( _M_ARM64 ) || \
+          defined( __ARM_NEON__ ) || \
           defined( _WIN32_WINNT_WIN8 ) && _WIN32_WINNT >= _WIN32_WINNT_WIN8 )
 #        define __OGRE_HAVE_NEON 1
 #    endif

@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include "VendorExtensions/OgreD3D11VendorExtension.h"
 
-#if !OGRE_NO_AMD_AGS
+#if !OGRE_NO_AMD_AGS && OGRE_CPU == OGRE_CPU_X86  // x86 or x64 only
 #    include <amd_ags.h>
 #endif
 
@@ -38,7 +38,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-#if !OGRE_NO_AMD_AGS
+#if !OGRE_NO_AMD_AGS && OGRE_CPU == OGRE_CPU_X86  // x86 or x64 only
     class _OgreD3D11Export D3D11AmdExtension : public D3D11VendorExtension
     {
     protected:
