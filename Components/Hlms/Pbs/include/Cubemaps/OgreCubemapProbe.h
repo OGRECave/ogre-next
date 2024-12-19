@@ -78,6 +78,8 @@ namespace Ogre
 
         /// False if it should be updated every frame. True if only updated when dirty
         bool mStatic;
+        /// False if it's static and its camera should not take part in global lighting culling
+        bool mCullLights;
 
     public:
         /// While disabled, this probe won't be updated (even if dirty) and won't be considered
@@ -196,6 +198,13 @@ namespace Ogre
         */
         void setStatic( bool isStatic );
         bool getStatic() const { return mStatic; }
+
+        /** Set to False if it's static and its camera should not take part in global lighting culling
+       @remarks
+           call it outside before renderOneFrame()
+       */
+        void setCullLights( bool b ) { mCullLights = b; }
+        bool getCullLights() const { return mCullLights; }
 
         /** When two probes overlap, you may want one probe to have particularly more influence
             than the others. Use this value to decrease/increase the weight when blending the probes.

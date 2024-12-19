@@ -65,6 +65,7 @@ namespace Ogre
         mNumDatablockUsers( 0 ),
         mPriority( 10u ),
         mStatic( true ),
+        mCullLights( true ),
         mEnabled( true ),
         mDirty( true ),
         mNumIterations( 8 ),
@@ -548,7 +549,7 @@ namespace Ogre
         {
             mCamera->setPosition( mProbeCameraPos );
             mCamera->setOrientation( Quaternion( mOrientation ) );
-            if( mStatic )
+            if( mStatic && mCullLights )
                 mCamera->setLightCullingVisibility( true, true );
         }
     }
