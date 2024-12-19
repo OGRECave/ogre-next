@@ -99,8 +99,8 @@ $(document).ready(function(){initNavTree('_particle_system2.html',''); initResiz
 <li class="level1"><a href="#ParticleSystem2Oit">Using OIT (Order Independent Transparency)</a><ul><li class="level2"><a href="#AlphaHashingBlueNoiseSetup">Alpha Hashing: Blue Noise vs White Noise</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md78">Thread Safe RandomValueProvider</a></li>
-<li class="level1"><a href="#autotoc_md79">New settings</a></li>
+<li class="level1"><a href="#autotoc_md79">Thread Safe RandomValueProvider</a></li>
+<li class="level1"><a href="#autotoc_md80">New settings</a></li>
 </ul>
 </div>
 <div class="textblock"><p><a class="anchor" id="md_manual_Plugins_ParticleSystem2"></a></p>
@@ -232,11 +232,11 @@ Alpha Hashing: Blue Noise vs White Noise</h2>
 <div class="ttc" id="aclass_ogre_1_1_log_manager_html_a902232428113a662c9edef05660d5b27"><div class="ttname"><a href="class_ogre_1_1_log_manager.html#a902232428113a662c9edef05660d5b27">Ogre::LogManager::getSingleton</a></div><div class="ttdeci">static LogManager &amp; getSingleton()</div><div class="ttdoc">Override standard Singleton retrieval.</div></div>
 <div class="ttc" id="agroup___general_html_gga124456c1616299612ac9f46e7d69268da5210f9fef7f2093878f02f2757606f33"><div class="ttname"><a href="group___general.html#gga124456c1616299612ac9f46e7d69268da5210f9fef7f2093878f02f2757606f33">Ogre::LML_CRITICAL</a></div><div class="ttdeci">@ LML_CRITICAL</div><div class="ttdef"><b>Definition:</b> OgreLog.h:69</div></div>
 </div><!-- fragment --><p>When blue noise is not available, OgreNext will automatically fallback to a white noise implementation. Which one looks better is a bit subjective.</p>
-<h1><a class="anchor" id="autotoc_md78"></a>
+<h1><a class="anchor" id="autotoc_md79"></a>
 Thread Safe RandomValueProvider</h1>
 <p>PFX2 relies on <code>Math::UnitRandom</code> being thread safe.</p>
 <p>If you've registered a custom random provider via <code>Math::SetRandomValueProvider</code>, then make sure <code>RandomValueProvider::getRandomUnit</code> is thread safe (e.g. use TLS).</p>
-<h1><a class="anchor" id="autotoc_md79"></a>
+<h1><a class="anchor" id="autotoc_md80"></a>
 New settings</h1>
 <p>scaler TBD </p>
 </div></div><!-- contents -->

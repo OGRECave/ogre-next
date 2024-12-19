@@ -7,6 +7,7 @@ var _migrating_30_to_40 =
       ] ],
       [ "Compositor Script changes", "_ogre40_changes.html#autotoc_md59", null ],
       [ "New initialization step", "_ogre40_changes.html#autotoc_md60", null ],
-      [ "HlmsUnlit changes", "_ogre40_changes.html#autotoc_md61", null ]
+      [ "HlmsUnlit changes", "_ogre40_changes.html#autotoc_md61", null ],
+      [ "Header renames", "_ogre40_changes.html#autotoc_md62", null ]
     ] ]
 ];

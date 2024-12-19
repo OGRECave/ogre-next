@@ -93,7 +93,7 @@ $(document).ready(function(){initNavTree('_tuning_memory_resources.html',''); in
 <div class="toc"><h3>Table of Contents</h3>
 <ul><li class="level1"><a href="#GroupingTexturesByType">Grouping textures by type</a></li>
 <li class="level1"><a href="#DynamicVsDefaultBuffers">Dynamic vs Default buffers</a></li>
-<li class="level1"><a href="#TweakingVaoManager">Tweaking default memory consumption by VaoManager</a><ul><li class="level2"><a href="#autotoc_md77">Vulkan and &lt;tt&gt;TEXTURES_OPTIMAL&lt;/tt&gt;</a></li>
+<li class="level1"><a href="#TweakingVaoManager">Tweaking default memory consumption by VaoManager</a><ul><li class="level2"><a href="#autotoc_md78">Vulkan and &lt;tt&gt;TEXTURES_OPTIMAL&lt;/tt&gt;</a></li>
 </ul>
 </li>
 </ul>
@@ -176,7 +176,7 @@ Tweaking default memory consumption by VaoManager</h1>
 <div class="line">params[<span class="stringliteral">&quot;VaoManager::SHADER_DYNAMIC&quot;</span>] = <a class="code" href="class_ogre_1_1_string_converter.html#af3993bdf743a430c2fb50219acb3683f">Ogre::StringConverter::toString</a>( 4u * 1024u * 1024u );</div>
 <div class="ttc" id="aclass_ogre_1_1_string_converter_html_af3993bdf743a430c2fb50219acb3683f"><div class="ttname"><a href="class_ogre_1_1_string_converter.html#af3993bdf743a430c2fb50219acb3683f">Ogre::StringConverter::toString</a></div><div class="ttdeci">static String toString(float val, unsigned short precision=0, unsigned short width=0, char fill=' ', std::ios::fmtflags flags=std::ios::fmtflags(0))</div><div class="ttdoc">Converts a float to a String.</div></div>
 </div><!-- fragment --><p>Note the default settings are different for Mobile (Android + iOS) builds</p>
-<h2><a class="anchor" id="autotoc_md77"></a>
+<h2><a class="anchor" id="autotoc_md78"></a>
 Vulkan and &lt;tt&gt;TEXTURES_OPTIMAL&lt;/tt&gt;</h2>
 <p>The pool <code>VaoManager::TEXTURES_OPTIMAL</code> is used on many GPUs but not all of them.</p>
 <p>As it depends on <code>VkPhysicalDeviceLimits::bufferImageGranularity</code> property. When this value is 1, then <code>VaoManager::TEXTURES_OPTIMAL</code> pool is not used because all texture memory will go to the <code>VaoManager::CPU_INACCESSIBLE</code> pool. <a href="http://vulkan.gpuinfo.org/displaydevicelimit.php?name=bufferImageGranularity&amp;platform=all">Mostly AMD, and some Intel and Qualcomm GPUs are able to use this</a>.</p>

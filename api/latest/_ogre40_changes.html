@@ -98,6 +98,7 @@ $(document).ready(function(){initNavTree('_ogre40_changes.html',''); initResizab
 <li class="level1"><a href="#autotoc_md59">Compositor Script changes</a></li>
 <li class="level1"><a href="#autotoc_md60">New initialization step</a></li>
 <li class="level1"><a href="#autotoc_md61">HlmsUnlit changes</a></li>
+<li class="level1"><a href="#autotoc_md62">Header renames</a></li>
 </ul>
 </div>
 <div class="textblock"><p><a class="anchor" id="md_manual_Migrating_Ogre4_0_Changes"></a></p>
@@ -163,7 +164,15 @@ HlmsUnlit changes</h1>
 <p><a href="https://github.com/OGRECave/ogre-next/commit/9ee6dd793481b5378e9a68fd445a34435b802e1b">HlmsUnlit now behaves like HlmsPbs</a> when it comes to the use of mReservedTexBufferSlots &amp; mReservedTexSlots.</p>
 <p>The variable <code>HlmsUnlit::mSamplerUnitSlotStart</code> was removed and <code>HlmsUnlit::mTexUnitSlotStart</code> is now autocalculated every pass, which means users must not rely on overriding this value.</p>
 <p>Users deriving from HlmsUnlit must set mReservedTexBufferSlots &amp; mReservedTexSlots instead, like it is done for HlmsPbs.</p>
-<p>See <a href="https://github.com/darksylinc/colibrigui/commit/87e74824973007ee9f7f3f46719d2a6ba4948678">Colibri project's commit</a> for an example of how the change was ported. </p>
+<p>See <a href="https://github.com/darksylinc/colibrigui/commit/87e74824973007ee9f7f3f46719d2a6ba4948678">Colibri project's commit</a> for an example of how the change was ported.</p>
+<h1><a class="anchor" id="autotoc_md62"></a>
+Header renames</h1>
+<p>Due to issues with different IDEs and build systems, renamed several headers so that all header files have a unique name, even if they live in a different folder.</p>
+<p>For example <code>Animation/OgreTagPoint.h</code> is now <code><a class="el" href="_ogre_tag_point2_8h.html">Animation/OgreTagPoint2.h</a></code> because <code><a class="el" href="_ogre_tag_point_8h.html">OgreTagPoint.h</a></code> already existed. This can cause build errors when upgrading to 4.0 that are easily fix by switching to their new names.</p>
+<p>See commits <a href="https://github.com/OGRECave/ogre-next/commit/75801f33df72844384549b11de96b10421584bce">75801f33df72844384549b11de96b10421584bce</a> and <a href="https://github.com/OGRECave/ogre-next/commit/67f9fddd4292877dbedb2507fba7719c42aad97c">67f9fddd4292877dbedb2507fba7719c42aad97c</a> for affected files. The message of the commit was:</p>
+<blockquote class="doxtable">
+<p>Avoid identically named source files - some build systems have problems with it, even if CMake have none (headermaps in XCode, shared intermediate folder in <a class="el" href="class_visual.html">Visual</a> Studio) </p>
+</blockquote>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
