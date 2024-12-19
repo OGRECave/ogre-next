@@ -1,5 +1,6 @@
 var NAVTREEINDEX89 =
 {
+"class_ogre_1_1v1_1_1_vertex_animation_track.html#a9d523374e768ef4eb1dcbcd149e418a0":[6,2,0,29,15],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#ab99ecee09a99a4bdbdadfd97d9f4e18f":[6,2,0,29,13],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#adc792ad9e83fc1a04076bc1a8781d7c0":[6,2,0,29,8],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#ae3081e1571b1bb5ea1ccd6e7e272ac30":[6,2,0,29,10],
@@ -248,6 +249,5 @@ var NAVTREEINDEX89 =
 "compositor.html#CompositorNodesPassesRenderScene_enable_forwardplus":[4,2,4,0,2,4,13],
 "compositor.html#CompositorNodesPassesRenderScene_flush_command_buffers_after_shadow_node":[4,2,4,0,2,4,14],
 "compositor.html#CompositorNodesPassesRenderScene_gen_normals_gbuffer":[4,2,4,0,2,4,17],
-"compositor.html#CompositorNodesPassesRenderScene_instanced_stereo":[4,2,4,0,2,5,3],
-"compositor.html#CompositorNodesPassesRenderScene_is_prepass":[4,2,4,0,2,4,15]
+"compositor.html#CompositorNodesPassesRenderScene_instanced_stereo":[4,2,4,0,2,5,3]
 };

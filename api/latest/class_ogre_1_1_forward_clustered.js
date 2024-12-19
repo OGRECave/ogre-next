@@ -6,6 +6,7 @@ var class_ogre_1_1_forward_clustered =
     [ "execute", "class_ogre_1_1_forward_clustered.html#a933d7f618e031bd7e5d275ebc08edfe7", null ],
     [ "fillConstBufferData", "class_ogre_1_1_forward_clustered.html#afc74e7a4271f3084b21a889f300697d9", null ],
     [ "getConstBufferSize", "class_ogre_1_1_forward_clustered.html#a9dc980e42770af871d5bfbc3c56a6ae7", null ],
+    [ "getCubemapProbesPerCell", "class_ogre_1_1_forward_clustered.html#a086f0143eba746d05a2e909029c4bd5a", null ],
     [ "getDebugFrustum", "class_ogre_1_1_forward_clustered.html#ad1f22720423e9baa5e6f99b86397d1b7", null ],
     [ "getDecalsPerCell", "class_ogre_1_1_forward_clustered.html#aba7845b82fbd336907794be269cceece", null ],
     [ "getForwardPlusMethod", "class_ogre_1_1_forward_clustered.html#abde44e6f430d33e97a36211b1faa0c2c", null ],
