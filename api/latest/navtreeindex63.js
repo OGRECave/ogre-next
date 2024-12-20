@@ -1,5 +1,7 @@
 var NAVTREEINDEX63 =
 {
+"class_ogre_1_1_rotation_affector_1_1_cmd_rotation_range_start.html#a275d0421330b4449f8da8e0fc4474d3e":[8,0,0,822,1,0],
+"class_ogre_1_1_rotation_affector_1_1_cmd_rotation_range_start.html#adcef5ee1679a009e7d645e3e1377657a":[8,0,0,822,1,1],
 "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_end.html":[8,0,0,822,2],
 "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_end.html#a1ffe96e7e76e44d9145dbab2304d5c7c":[8,0,0,822,2,1],
 "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_end.html#a3a510da5d58b567c38b79e3ffd95ed11":[8,0,0,822,2,0],
@@ -181,8 +183,8 @@ var NAVTREEINDEX63 =
 "class_ogre_1_1_scene_format_importer.html#ab44f0175dc84011c435f7f95c5997b45":[6,2,11,43,8],
 "class_ogre_1_1_scene_format_importer.html#ac19725c5d5067ef11ff9c9e1d55d758b":[6,0,1,43,4],
 "class_ogre_1_1_scene_format_importer.html#ac19725c5d5067ef11ff9c9e1d55d758b":[6,2,11,43,4],
-"class_ogre_1_1_scene_format_importer.html#acdc2449fde1dc7569e3ff2ca46fb90a5":[6,0,1,43,7],
 "class_ogre_1_1_scene_format_importer.html#acdc2449fde1dc7569e3ff2ca46fb90a5":[6,2,11,43,7],
+"class_ogre_1_1_scene_format_importer.html#acdc2449fde1dc7569e3ff2ca46fb90a5":[6,0,1,43,7],
 "class_ogre_1_1_scene_format_importer.html#ad759609d1cff68207164fa83d717b28f":[6,2,11,43,2],
 "class_ogre_1_1_scene_format_importer.html#ad759609d1cff68207164fa83d717b28f":[6,0,1,43,2],
 "class_ogre_1_1_scene_format_listener.html":[6,0,1,44],
@@ -247,7 +249,5 @@ var NAVTREEINDEX63 =
 "class_ogre_1_1_scene_manager.html#a1c55f5e97c66261de71c979db64f6355":[6,0,1,45,149],
 "class_ogre_1_1_scene_manager.html#a1cca7941525cf1c3aa08a6e3dfa5357a":[6,0,1,45,25],
 "class_ogre_1_1_scene_manager.html#a1cca7941525cf1c3aa08a6e3dfa5357a":[6,2,11,45,25],
-"class_ogre_1_1_scene_manager.html#a1cd7c70305104c508f85f339e423e973":[6,0,1,45,34],
-"class_ogre_1_1_scene_manager.html#a1cd7c70305104c508f85f339e423e973":[6,2,11,45,34],
-"class_ogre_1_1_scene_manager.html#a1ec392f63d0f2fdf537c118c51f1c78e":[6,2,11,45,141]
+"class_ogre_1_1_scene_manager.html#a1cd7c70305104c508f85f339e423e973":[6,0,1,45,34]
 };

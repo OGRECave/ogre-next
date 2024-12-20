@@ -1,5 +1,7 @@
 var NAVTREEINDEX68 =
 {
+"class_ogre_1_1_skeleton_def.html#acce8af184f766ac8a5e47c822aa02d54":[8,0,0,880,10],
+"class_ogre_1_1_skeleton_def.html#aedcdbf902b2c111c5df7718b7b6b21a5":[8,0,0,880,8],
 "class_ogre_1_1_skeleton_def.html#af3a6e1dde6e00465e0ef07d7af1402b5":[8,0,0,880,16],
 "class_ogre_1_1_skeleton_def.html#afde47dee79826caef3c9af1d4f671fa1":[8,0,0,880,12],
 "class_ogre_1_1_skeleton_instance.html":[6,2,0,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX68 =
 "class_ogre_1_1_staging_texture_manager.html":[8,0,0,898],
 "class_ogre_1_1_staging_texture_manager.html#a08032f5765443d5c35d413dd8a8e5849":[8,0,0,898,0],
 "class_ogre_1_1_staging_texture_manager.html#a49795dd8250aff0abe8646811c6a4bf1":[8,0,0,898,2],
-"class_ogre_1_1_staging_texture_manager.html#ad7b9e18265cdb9427efe2cb3677b59c2":[8,0,0,898,1],
-"class_ogre_1_1_static_cache.html":[8,0,0,899],
-"class_ogre_1_1_static_cache.html#a0c5c50ba8dcb899f95414093f1085789":[8,0,0,899,4]
+"class_ogre_1_1_staging_texture_manager.html#ad7b9e18265cdb9427efe2cb3677b59c2":[8,0,0,898,1]
 };

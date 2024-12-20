@@ -1,5 +1,7 @@
 var NAVTREEINDEX109 =
 {
+"struct_ogre_1_1_descriptor_set_uav_1_1_texture_slot.html#aee611a7a7334e59c5b8923b174470aa2":[6,2,10,17,2,7],
+"struct_ogre_1_1_descriptor_set_uav_1_1_texture_slot.html#af61b5be9470e7a0ac42279d27e738d42":[6,2,10,17,2,8],
 "struct_ogre_1_1_driver_version.html":[6,2,9,2],
 "struct_ogre_1_1_driver_version.html#a25b4560ade1696aca231b4a6db4cbc0b":[6,2,9,2,0],
 "struct_ogre_1_1_driver_version.html#a2a220ab8ccde79520d30871b5453d31f":[6,2,9,2,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX109 =
 "struct_ogre_1_1_hlms_1_1_datablock_custom_piece_file.html#a5d2891b2c5b8488750677008e947bbe4":[6,2,10,45,0,4],
 "struct_ogre_1_1_hlms_1_1_datablock_custom_piece_file.html#a66bff0b46f129f49123df68613b1d080":[6,2,10,45,0,2],
 "struct_ogre_1_1_hlms_1_1_datablock_custom_piece_file.html#aaca0282628a58fb451989a4f58f6aa7c":[6,2,10,45,0,1],
-"struct_ogre_1_1_hlms_1_1_datablock_entry.html":[6,2,10,45,1],
-"struct_ogre_1_1_hlms_1_1_datablock_entry.html#a11f41b74f63b61c81a1e3c36e57c4aaf":[6,2,10,45,1,2],
-"struct_ogre_1_1_hlms_1_1_datablock_entry.html#a1e51eda8b8ef972f565cf79b03a937cf":[6,2,10,45,1,4]
+"struct_ogre_1_1_hlms_1_1_datablock_entry.html":[6,2,10,45,1]
 };

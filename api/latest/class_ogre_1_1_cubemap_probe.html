@@ -137,6 +137,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a35fad2de4b3dfb306d1ec86f0c9e1168"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adba3be5beea79b4d2561723cc89b8868"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_parallax_corrected_cubemap_base.html">ParallaxCorrectedCubemapBase</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_cubemap_probe.html#adba3be5beea79b4d2561723cc89b8868">getCreator</a> ()</td></tr>
 <tr class="separator:adba3be5beea79b4d2561723cc89b8868"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e45501f304b296f557dade994d4496f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_cubemap_probe.html#a3e45501f304b296f557dade994d4496f">getCullLights</a> () const</td></tr>
+<tr class="separator:a3e45501f304b296f557dade994d4496f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27d5d5399399be39884a8bcddcf1018f"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_scene_node.html">SceneNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_cubemap_probe.html#a27d5d5399399be39884a8bcddcf1018f">getInternalCubemapProbeSceneNode</a> () const</td></tr>
 <tr class="separator:a27d5d5399399be39884a8bcddcf1018f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabe4001db7fc7b230aaecc07c6114386"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_cubemap_probe.html#aabe4001db7fc7b230aaecc07c6114386">getInternalSliceToArrayTexture</a> () const</td></tr>
@@ -168,6 +170,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9e2f39fb9b255a0acf3148c29833eaec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_cubemap_probe.html#a9e2f39fb9b255a0acf3148c29833eaec">set</a> (const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;cameraPos, const <a class="el" href="struct_ogre_1_1_aabb.html">Aabb</a> &amp;area, const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;areaInnerRegion, const <a class="el" href="class_ogre_1_1_matrix3.html">Matrix3</a> &amp;orientation, const <a class="el" href="struct_ogre_1_1_aabb.html">Aabb</a> &amp;probeShape)</td></tr>
 <tr class="memdesc:a9e2f39fb9b255a0acf3148c29833eaec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets cubemap probe's parameters.  <a href="class_ogre_1_1_cubemap_probe.html#a9e2f39fb9b255a0acf3148c29833eaec">More...</a><br /></td></tr>
 <tr class="separator:a9e2f39fb9b255a0acf3148c29833eaec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae684132844eab4ce9c915a2a7c1df93d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_cubemap_probe.html#ae684132844eab4ce9c915a2a7c1df93d">setCullLights</a> (bool b)</td></tr>
+<tr class="memdesc:ae684132844eab4ce9c915a2a7c1df93d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set to False if it's static and its camera should not take part in global lighting culling.  <a href="class_ogre_1_1_cubemap_probe.html#ae684132844eab4ce9c915a2a7c1df93d">More...</a><br /></td></tr>
+<tr class="separator:ae684132844eab4ce9c915a2a7c1df93d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab75fa535ffb665951d4cd0e91a49973d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_cubemap_probe.html#ab75fa535ffb665951d4cd0e91a49973d">setPriority</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> priority)</td></tr>
 <tr class="memdesc:ab75fa535ffb665951d4cd0e91a49973d"><td class="mdescLeft">&#160;</td><td class="mdescRight">When two probes overlap, you may want one probe to have particularly more influence than the others.  <a href="class_ogre_1_1_cubemap_probe.html#ab75fa535ffb665951d4cd0e91a49973d">More...</a><br /></td></tr>
 <tr class="separator:ab75fa535ffb665951d4cd0e91a49973d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -481,6 +486,31 @@ Public Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3e45501f304b296f557dade994d4496f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e45501f304b296f557dade994d4496f">&#9670;&nbsp;</a></span>getCullLights()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::CubemapProbe::getCullLights </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>
@@ -881,6 +911,35 @@ Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="ae684132844eab4ce9c915a2a7c1df93d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae684132844eab4ce9c915a2a7c1df93d">&#9670;&nbsp;</a></span>setCullLights()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::CubemapProbe::setCullLights </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>b</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set to False if it's static and its camera should not take part in global lighting culling. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>call it outside before renderOneFrame() </dd></dl>
 
 </div>
 </div>
