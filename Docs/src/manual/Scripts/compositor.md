@@ -2013,19 +2013,18 @@ Also setting Textures that are RenderTargets is dangerous. For RenderTargets, ch
 This pass lets you perform a raw copy between textures. You can think of it as a literal mempcy.
 
 @note The pass is called "depth" copy because originally it only supported copying depth buffers in OgreNext 2.1. However it was later expanded in 2.2 to be able to copy any arbitrary texture. For historical reasons it carries the "depth" name. **But in this context "texture" and "depth" copy are synonyms**.
-
+@par
 @note Both src and dst texture must have the same resolution and pixel formats.
 
  - [in](#CompositorPassDepthCopy_in)
  - [out](#CompositorPassDepthCopy_out)
  - [mip_range](#CompositorPassDepthCopy_mip_range)
 
-This pass does not require a target and thus can be left blank, e.g.
+This pass does not require a named target and thus can be left blank, e.g.
 
 @par
-Format:
 ```cpp
-target
+target  // <-- target does not specify a texture name.
 {
     pass texture_copy
     {
