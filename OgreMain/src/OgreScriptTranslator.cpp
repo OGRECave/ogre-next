@@ -8264,17 +8264,6 @@ namespace Ogre{
 
         uint8 shadowMapSupportedLightTypes = 0;
 
-        size_t numPasses = 0;
-        for(AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
-        {
-            if((*i)->type == ANT_OBJECT)
-            {
-                ObjectAbstractNode *nodeObj = reinterpret_cast<ObjectAbstractNode*>( i->get() );
-                if( !nodeObj->abstract && nodeObj->id == ID_PASS )
-                    ++numPasses;
-            }
-        }
-
         String lightTypeStr;
         AbstractNodeList::const_iterator namesIt = obj->values.begin();
         for( size_t j=0; j<obj->values.size() + 1; ++j )
