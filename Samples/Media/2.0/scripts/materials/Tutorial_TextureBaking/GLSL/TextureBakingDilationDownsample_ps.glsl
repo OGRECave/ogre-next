@@ -7,7 +7,7 @@
 
 #define float4 vec4
 
-vulkan_layout( ogre_t0 ) uniform sampler2DArray srcTex;
+vulkan_layout( ogre_t0 ) uniform texture2DArray srcTex;
 
 vulkan_layout( location = 0 )
 out float4 fragColour;
