@@ -1531,16 +1531,16 @@ input</h4>
 <h3><a class="anchor" id="CompositorNodesPassesDepthCopy"></a>
 texture_copy / depth_copy</h3>
 <p>This pass lets you perform a raw copy between textures. You can think of it as a literal mempcy.</p>
-<dl class="section note"><dt>Note</dt><dd>The pass is called "depth" copy because originally it only supported copying depth buffers in OgreNext 2.1. However it was later expanded in 2.2 to be able to copy any arbitrary texture. For historical reasons it carries the "depth" name. <b>But in this context "texture" and "depth" copy are synonyms</b>.</dd>
-<dd>
-Both src and dst texture must have the same resolution and pixel formats.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>The pass is called "depth" copy because originally it only supported copying depth buffers in OgreNext 2.1. However it was later expanded in 2.2 to be able to copy any arbitrary texture. For historical reasons it carries the "depth" name. <b>But in this context "texture" and "depth" copy are synonyms</b>. </dd></dl>
+<dl class="section user"><dt></dt><dd></dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Both src and dst texture must have the same resolution and pixel formats.</dd></dl>
 <ul>
 <li><a href="#CompositorPassDepthCopy_in">in</a></li>
 <li><a href="#CompositorPassDepthCopy_out">out</a></li>
 <li><a href="#CompositorPassDepthCopy_mip_range">mip_range</a></li>
 </ul>
-<p>This pass does not require a target and thus can be left blank, e.g.</p>
-<dl class="section user"><dt></dt><dd>Format: <div class="fragment"><div class="line">target</div>
+<p>This pass does not require a named target and thus can be left blank, e.g.</p>
+<dl class="section user"><dt></dt><dd><div class="fragment"><div class="line">target  <span class="comment">// &lt;-- target does not specify a texture name.</span></div>
 <div class="line">{</div>
 <div class="line">    pass texture_copy</div>
 <div class="line">    {</div>
