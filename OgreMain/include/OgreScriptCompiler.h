@@ -1069,6 +1069,9 @@ namespace Ogre
                     ID_KERNEL_RADIUS,
                     ID_GAUSS_DEVIATION,
 
+                    // Used by PASS_DEPTHCOPY.
+                    ID_MIP_RANGE,
+
                     //Used by IBL_SPECULAR
                     ID_SAMPLES_PER_ITERATION,
                     ID_SAMPLES_SINGLE_ITERATION_FALLBACK,
