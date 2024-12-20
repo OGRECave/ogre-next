@@ -1881,6 +1881,7 @@ var group___general =
       [ "ID_COMPUTE_HQ", "group___general.html#gga30d5439896c2a2362024ec689b1e181cae40dca789094eaee2c9908a434ca2cd9", null ],
       [ "ID_KERNEL_RADIUS", "group___general.html#gga30d5439896c2a2362024ec689b1e181cae7b13a1e3ffc9763845cd8f740743ff5", null ],
       [ "ID_GAUSS_DEVIATION", "group___general.html#gga30d5439896c2a2362024ec689b1e181cace623a702be9a7aeb4eb68e29a523b26", null ],
+      [ "ID_MIP_RANGE", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca886fe27222eccb06658120dfa2c8343e", null ],
       [ "ID_SAMPLES_PER_ITERATION", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca4d85f85ee5e384690e1f1324e91e6b1e", null ],
       [ "ID_SAMPLES_SINGLE_ITERATION_FALLBACK", "group___general.html#gga30d5439896c2a2362024ec689b1e181caa8c82eab51d1ea6632f2406bbedd3c88", null ],
       [ "ID_FORCE_MIPMAP_FALLBACK", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca34ceaa287216aa89af50af30a3118781", null ],

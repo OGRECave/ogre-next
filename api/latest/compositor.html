@@ -196,6 +196,11 @@ $(document).ready(function(){initNavTree('compositor.html',''); initResizable();
 <li class="level4"><a href="#CompositorPassCompute_input">input</a></li>
 </ul>
 </li>
+<li class="level3"><a href="#CompositorNodesPassesDepthCopy">texture_copy / depth_copy</a><ul><li class="level4"><a href="#CompositorPassDepthCopy_in">in</a></li>
+<li class="level4"><a href="#CompositorPassDepthCopy_out">out</a></li>
+<li class="level4"><a href="#CompositorPassDepthCopy_mip_range">mip_range</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="level2"><a href="#CompositorNodesTextures">texture</a><ul><li class="level3"><a href="#CompositorNodesTexturesMsaa">MSAA: Explicit vs Implicit resolves</a><ul><li class="level4"><a href="#CompositorNodesTexturesMsaaImplicit">Implicit resolves</a></li>
@@ -566,6 +571,7 @@ Passes</h2>
 <li>stencil (PASS_STENCIL)</li>
 <li><a class="el" href="compositor.html#CompositorNodesPassesUavQueue">uav_queue</a> (PASS_UAV)</li>
 <li><a class="el" href="compositor.html#CompositorNodesPassesCompute">compute</a> (PASS_COMPUTE)</li>
+<li>[texture_copy] / <a class="el" href="compositor.html#CompositorNodesPassesDepthCopy">depth_copy</a> (PASS_DEPTHCOPY)</li>
 <li>custom (PASS_CUSTOM)</li>
 </ul>
 <h3><a class="anchor" id="autotoc_md115"></a>
@@ -1522,6 +1528,51 @@ input</h4>
  Also setting Textures that are RenderTargets is dangerous. For RenderTargets, change the <a class="el" href="class_ogre_1_1_compositor_pass_compute_def.html">CompositorPassComputeDef</a> instead. </dd></dl>
 <dl class="section user"><dt></dt><dd></dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Don't interleave compute and graphics passes. For optimum performance, try to batch everything of the same type together.</dd></dl>
+<h3><a class="anchor" id="CompositorNodesPassesDepthCopy"></a>
+texture_copy / depth_copy</h3>
+<p>This pass lets you perform a raw copy between textures. You can think of it as a literal mempcy.</p>
+<dl class="section note"><dt>Note</dt><dd>The pass is called "depth" copy because originally it only supported copying depth buffers in OgreNext 2.1. However it was later expanded in 2.2 to be able to copy any arbitrary texture. For historical reasons it carries the "depth" name. <b>But in this context "texture" and "depth" copy are synonyms</b>.</dd>
+<dd>
+Both src and dst texture must have the same resolution and pixel formats.</dd></dl>
+<ul>
+<li><a href="#CompositorPassDepthCopy_in">in</a></li>
+<li><a href="#CompositorPassDepthCopy_out">out</a></li>
+<li><a href="#CompositorPassDepthCopy_mip_range">mip_range</a></li>
+</ul>
+<p>This pass does not require a target and thus can be left blank, e.g.</p>
+<dl class="section user"><dt></dt><dd>Format: <div class="fragment"><div class="line">target</div>
+<div class="line">{</div>
+<div class="line">    pass texture_copy</div>
+<div class="line">    {</div>
+<div class="line">        in  src_tex</div>
+<div class="line">        out dst_tex</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Copy all mipmaps.</span></div>
+<div class="line">        mip_range 0 0</div>
+<div class="line"> </div>
+<div class="line">        profiling_id <span class="stringliteral">&quot;Final Copy to Texture&quot;</span></div>
+<div class="line">    }</div>
+<div class="line">}</div>
+</div><!-- fragment --></dd></dl>
+<h4><a class="anchor" id="CompositorPassDepthCopy_in"></a>
+in</h4>
+<dl class="section user"><dt></dt><dd>Format: <div class="fragment"><div class="line">in &lt;src_texture&gt;</div>
+</div><!-- fragment --></dd></dl>
+<p>The name of the texture to copy.</p>
+<h4><a class="anchor" id="CompositorPassDepthCopy_out"></a>
+out</h4>
+<dl class="section user"><dt></dt><dd>Format: <div class="fragment"><div class="line">out &lt;dst_texture&gt;</div>
+</div><!-- fragment --></dd></dl>
+<p>The name of the texture that will hold the copy.</p>
+<h4><a class="anchor" id="CompositorPassDepthCopy_mip_range"></a>
+mip_range</h4>
+<dl class="section user"><dt></dt><dd>Format: <div class="fragment"><div class="line">mip_range &lt;first_mip&gt; &lt;num_mipmaps&gt;</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Default:</span></div>
+<div class="line">mip_range 0 1</div>
+</div><!-- fragment --></dd></dl>
+<p>Sets which mipmaps to copy. Mipmaps to copy are in range <code>[first_mip; first_mip + num_mipmaps)</code>.</p>
+<p>If <code>num_mipmaps</code> is the special value 0, then all mipmaps starting from <code>first_mip</code> until the end are copied.</p>
 <h2><a class="anchor" id="CompositorNodesTextures"></a>
 texture</h2>
 <div class="fragment"><div class="line">texture &lt;name&gt; &lt;width&gt; &lt;height&gt; [depth] &lt;pixel_format&gt; [msaa &lt;N&gt;] [msaa_auto]</div>

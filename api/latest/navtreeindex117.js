@@ -1,5 +1,12 @@
 var NAVTREEINDEX117 =
 {
+"struct_ogre_1_1_workarounds.html":[8,0,0,1063],
+"struct_ogre_1_1_workarounds.html#a9d9bb24ee8a21a9b726aecdedd095ed6":[8,0,0,1063,0],
+"struct_ogre_1_1float2.html":[8,0,0,324],
+"struct_ogre_1_1float2.html#ac93d468565eb53d3fc6c7a1f5122e014":[8,0,0,324,2],
+"struct_ogre_1_1float2.html#acc1f836dc566a17404141826fa187759":[8,0,0,324,1],
+"struct_ogre_1_1float2.html#adc33b0e8a1fdd1551c0de5cd3f6576f4":[8,0,0,324,3],
+"struct_ogre_1_1float2.html#aea83a5eb65db2157b55e3df390d4b8de":[8,0,0,324,0],
 "struct_ogre_1_1float4.html":[8,0,0,325],
 "struct_ogre_1_1float4.html#a342fc304f58a4a2b379c3a91dc0ae04d":[8,0,0,325,1],
 "struct_ogre_1_1float4.html#a4e18ae6fc1a9b1313e30b8946d92b2dd":[8,0,0,325,0],

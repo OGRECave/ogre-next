@@ -117,6 +117,11 @@ var _scripts =
             [ "uav", "compositor.html#CompositorPassCompute_uav", null ],
             [ "uav_buffer", "compositor.html#CompositorPassCompute_uav_buffer", null ],
             [ "input", "compositor.html#CompositorPassCompute_input", null ]
+          ] ],
+          [ "texture_copy / depth_copy", "compositor.html#CompositorNodesPassesDepthCopy", [
+            [ "in", "compositor.html#CompositorPassDepthCopy_in", null ],
+            [ "out", "compositor.html#CompositorPassDepthCopy_out", null ],
+            [ "mip_range", "compositor.html#CompositorPassDepthCopy_mip_range", null ]
           ] ]
         ] ],
         [ "texture", "compositor.html#CompositorNodesTextures", [
