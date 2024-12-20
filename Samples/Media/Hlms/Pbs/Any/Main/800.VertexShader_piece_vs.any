@@ -233,7 +233,7 @@
 			@end
 		@else
 			outVs_Position.xy = inVs_uv@value( hlms_uv_baking ).xy * 2.0f - 1.0f + passBuf.pixelOffset2x.xy;
-			@property( !hlms_forwardplus_flipY || syntax != glsl )
+			@property( !hlms_forwardplus_flipY || ( syntax != glsl && syntax != glslvk ) )
 				outVs_Position.y = -outVs_Position.y;
 			@end
 			outVs_Position.zw = float2( 0.0f, 1.0f );
