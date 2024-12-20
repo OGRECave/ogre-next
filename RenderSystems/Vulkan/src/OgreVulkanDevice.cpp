@@ -885,6 +885,8 @@ namespace Ogre
                 deviceExtensions.push_back( VK_KHR_16BIT_STORAGE_EXTENSION_NAME );
             else if( extensionName == VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME )
                 deviceExtensions.push_back( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME );
+            else if( extensionName == VK_AMD_SHADER_TRINARY_MINMAX_EXTENSION_NAME )
+                deviceExtensions.push_back( VK_AMD_SHADER_TRINARY_MINMAX_EXTENSION_NAME );
         }
 
         deviceExtensions.push_back( VK_KHR_SWAPCHAIN_EXTENSION_NAME );
