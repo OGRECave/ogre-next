@@ -76,7 +76,7 @@ LINKS
 
 http://ogre.sf.net - OGRE homepage
 
-http://www.wings3d.org - Wings 3D homepage
+http://www.wings3d.com - Wings 3D homepage
 
 http://www.python.org - Python homepage
 
