@@ -45,12 +45,7 @@ namespace Demo
             else if( *( originalDataFolder.end() - 1 ) != '/' )
                 originalDataFolder += "/";
 
-            const char *c_locations[] = { "Compute/Tools",
-                                          "Compute/Tools/Any",
-                                          "Compute/Tools/GLSL",
-                                          "Compute/Tools/HLSL",
-                                          "Compute/Tools/Metal",
-                                          "Compute/Algorithms/IrradianceFields",
+            const char *c_locations[] = { "Compute/Algorithms/IrradianceFields",
                                           "Compute/Algorithms/IrradianceFields/Visualizer",
                                           "VCT",
                                           "VCT/ImageVoxelizer",

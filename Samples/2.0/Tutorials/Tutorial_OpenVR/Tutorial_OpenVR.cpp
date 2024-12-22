@@ -72,7 +72,6 @@ namespace Demo
         const char *c_locations[] = { "Hlms/Common/GLSL",
                                       "Hlms/Common/HLSL",
                                       "Hlms/Common/Metal",
-                                      "Compute/Tools/Any",
                                       "Compute/VR",
                                       "Compute/VR/Foveated",
                                       "2.0/scripts/materials/PbsMaterials" };

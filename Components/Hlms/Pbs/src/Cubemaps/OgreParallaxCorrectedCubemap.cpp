@@ -889,7 +889,7 @@ namespace Ogre
     void ParallaxCorrectedCubemap::updateExpensiveCollectedDirtyProbes( uint16 iterationThreshold )
     {
         RenderSystem *renderSystem = mSceneManager->getDestinationRenderSystem();
-        // HlmsManager *hlmsManager = mRoot->getHlmsManager();
+        HlmsManager *hlmsManager = mRoot->getHlmsManager();
 
         const uint32 oldVisibilityMask = mSceneManager->getVisibilityMask();
         mSceneManager->setVisibilityMask( 0xffffffff );
@@ -906,7 +906,7 @@ namespace Ogre
                     renderSystem->_beginFrameOnce();
                     mCopyWorkspace->_beginUpdate( true );
                     if( j == 0 )
-                        mCollectedProbes[i]->_clearCubemap();
+                        mCollectedProbes[i]->_clearCubemap( hlmsManager );
                     mCopyWorkspace->_update();
                     transitionBlendResultToTexture();
                     mCollectedProbes[i]->_updateRender();
@@ -930,6 +930,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::updateRender()
     {
+        HlmsManager *hlmsManager = mRoot->getHlmsManager();
+
         const uint32 oldVisibilityMask = mSceneManager->getVisibilityMask();
         mSceneManager->setVisibilityMask( 0xffffffff );
 
@@ -939,7 +941,7 @@ namespace Ogre
             {
                 setFinalProbeTo( i );
 
-                mCollectedProbes[i]->_clearCubemap();
+                mCollectedProbes[i]->_clearCubemap( hlmsManager );
 
                 for( int j = 0; j < mCollectedProbes[i]->mNumIterations; ++j )
                 {

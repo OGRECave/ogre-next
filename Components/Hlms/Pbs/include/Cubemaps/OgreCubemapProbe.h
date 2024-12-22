@@ -231,7 +231,7 @@ namespace Ogre
         Real getNDF( const Vector3 &posLS ) const;
 
         void _prepareForRendering();
-        void _clearCubemap();
+        void _clearCubemap( HlmsManager *hlmsManager );
         void _updateRender();
 
         const Vector3 &getProbeCameraPos() const { return mProbeCameraPos; }

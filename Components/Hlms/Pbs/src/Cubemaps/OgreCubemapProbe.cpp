@@ -32,9 +32,11 @@ THE SOFTWARE.
 
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
+#include "Compute/OgreComputeTools.h"
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 #include "Cubemaps/OgreParallaxCorrectedCubemapBase.h"
 #include "OgreCamera.h"
+#include "OgreHlmsManager.h"
 #include "OgreId.h"
 #include "OgreInternalCubemapProbe.h"
 #include "OgreLogManager.h"
@@ -438,10 +440,10 @@ namespace Ogre
             (ResourceStatusMap *)0, Vector4::ZERO, 0x00, executionMask );
         mWorkspace->addListener( mCreator );
 
-        if( !mStatic && !mCreator->getAutomaticMode() )
+        if( !mStatic && !mCreator->getAutomaticMode() && mTexture->isRenderToTexture() )
         {
             mClearWorkspace = compositorManager->addWorkspace(
-                sceneManager, channels, mCamera, "AutoGen_ParallaxCorrectedCubemapClear_Workspace",
+                sceneManager, mTexture, mCamera, "AutoGen_ParallaxCorrectedCubemapClear_Workspace",
                 false );
         }
     }
@@ -554,18 +556,31 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::_clearCubemap()
+    void CubemapProbe::_clearCubemap( HlmsManager *hlmsManager )
     {
         if( !mClearWorkspace && mWorkspace )
         {
-            CompositorWorkspaceDef const *workspaceDef = mCreator->getDefaultWorkspaceDef();
-            CompositorManager2 *compositorManager = workspaceDef->getCompositorManager();
+            if( mTexture->isRenderToTexture() )
+            {
+                CompositorWorkspaceDef const *workspaceDef = mCreator->getDefaultWorkspaceDef();
+                CompositorManager2 *compositorManager = workspaceDef->getCompositorManager();
 
-            SceneManager *sceneManager = mCreator->getSceneManager();
-            CompositorChannelVec channels( mWorkspace->getExternalRenderTargets() );
-            mClearWorkspace = compositorManager->addWorkspace(
-                sceneManager, channels, mCamera, "AutoGen_ParallaxCorrectedCubemapClear_Workspace",
-                false );
+                SceneManager *sceneManager = mCreator->getSceneManager();
+                mClearWorkspace = compositorManager->addWorkspace(
+                    sceneManager, mTexture, mCamera, "AutoGen_ParallaxCorrectedCubemapClear_Workspace",
+                    false );
+            }
+            else
+            {
+                ComputeTools computeTools( hlmsManager->getComputeHlms() );
+                const float clearValue[4] = {
+                    0.0f,
+                    0.0f,
+                    0.0f,
+                    0.0f,
+                };
+                computeTools.clearUavFloat( mTexture, clearValue );
+            }
         }
 
         if( !mClearWorkspace )
