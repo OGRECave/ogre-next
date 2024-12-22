@@ -69,12 +69,9 @@ namespace Demo
         else if( *( originalDataFolder.end() - 1 ) != '/' )
             originalDataFolder += "/";
 
-        const char *c_locations[] = { "Hlms/Common/GLSL",
-                                      "Hlms/Common/HLSL",
-                                      "Hlms/Common/Metal",
-                                      "Compute/VR",
-                                      "Compute/VR/Foveated",
-                                      "2.0/scripts/materials/PbsMaterials" };
+        const char *c_locations[] = { "Hlms/Common/GLSL",    "Hlms/Common/HLSL",
+                                      "Hlms/Common/Metal",   "Compute/VR",
+                                      "Compute/VR/Foveated", "2.0/scripts/materials/PbsMaterials" };
 
         for( size_t i = 0; i < sizeof( c_locations ) / sizeof( c_locations[0] ); ++i )
         {
