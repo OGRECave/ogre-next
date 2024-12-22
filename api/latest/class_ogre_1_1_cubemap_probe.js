@@ -3,7 +3,7 @@ var class_ogre_1_1_cubemap_probe =
     [ "CubemapProbe", "class_ogre_1_1_cubemap_probe.html#a30f201eaad96f6500dfd2ba1a1dae181", null ],
     [ "~CubemapProbe", "class_ogre_1_1_cubemap_probe.html#ab3b9e826ec257b4c95df5dfab8dbba70", null ],
     [ "_addReference", "class_ogre_1_1_cubemap_probe.html#a7562de28206b70a7d2e3a2297decfc15", null ],
-    [ "_clearCubemap", "class_ogre_1_1_cubemap_probe.html#abe5e3b878ed1d79f60a464ac0963f537", null ],
+    [ "_clearCubemap", "class_ogre_1_1_cubemap_probe.html#aa55421cc53d99550d4282ef5504b485e", null ],
     [ "_prepareForRendering", "class_ogre_1_1_cubemap_probe.html#a6ec1703a71086d837c1e4e29acde55cb", null ],
     [ "_releaseManualHardwareResources", "class_ogre_1_1_cubemap_probe.html#a601fa72e611467785c7b2b81d859d600", null ],
     [ "_removeReference", "class_ogre_1_1_cubemap_probe.html#a06074a04e523b8c0718a2879add97ce2", null ],
