@@ -22,5 +22,6 @@ var _ogre_vulkan_prerequisites_8h =
       [ "FlushOnly", "_ogre_vulkan_prerequisites_8h.html#a119342ed453a2c317a310c790104831ead38befc11f27a51af69cd4bb7acf9231", null ],
       [ "NewFrameIdx", "_ogre_vulkan_prerequisites_8h.html#a119342ed453a2c317a310c790104831ea008778c80c9330eb944ecf889f267462", null ],
       [ "EndFrameAndSwap", "_ogre_vulkan_prerequisites_8h.html#a119342ed453a2c317a310c790104831ea502186dffd75155c5a68c40240352a90", null ]
-    ] ]
+    ] ],
+    [ "onVulkanFailure", "_ogre_vulkan_prerequisites_8h.html#a58b32574dbda32c8bb1e410634f1d929", null ]
 ];

@@ -31,7 +31,7 @@ var searchData=
   ['oldskeletoninstance_22493',['OldSkeletonInstance',['../class_ogre_1_1v1_1_1_old_skeleton_instance.html#a0e54c74f56680830421c3f54485fd82b',1,'Ogre::v1::OldSkeletonInstance']]],
   ['oldskeletonmanager_22494',['OldSkeletonManager',['../class_ogre_1_1v1_1_1_old_skeleton_manager.html#a6415e10522b2a9b364acc3dff6f11499',1,'Ogre::v1::OldSkeletonManager']]],
   ['onetimeinit_22495',['oneTimeInit',['../class_ogre_1_1_particle_affector2.html#a58d74f1f723a5cecb80678be87033c3b',1,'Ogre::ParticleAffector2::oneTimeInit()'],['../class_ogre_1_1_colour_image_affector2.html#a6b80e1c144fc4446cdcafc3fb90e163b',1,'Ogre::ColourImageAffector2::oneTimeInit()']]],
-  ['onvulkanfailure_22496',['onVulkanFailure',['../namespace_ogre.html#ad0eb7d276e4484e6c9d18b2b2a1cd713',1,'Ogre']]],
+  ['onvulkanfailure_22496',['onVulkanFailure',['../namespace_ogre.html#a58b32574dbda32c8bb1e410634f1d929',1,'Ogre']]],
   ['open_22497',['open',['../class_ogre_1_1_archive.html#a712594a09d02eb0575941b8bf2b1a279',1,'Ogre::Archive::open()'],['../class_ogre_1_1_zip_archive.html#aabb29f6ac55b24e1eaba792ef752e5ed',1,'Ogre::ZipArchive::open()'],['../class_ogre_1_1_file_system_archive.html#a4faf1889d128521e6eda9a4f73209881',1,'Ogre::FileSystemArchive::open()'],['../class_ogre_1_1_a_p_k_file_system_archive.html#ae0182ce37e2f1e05799760ad7d997b41',1,'Ogre::APKFileSystemArchive::open()']]],
   ['openfilestream_22498',['openFileStream',['../class_ogre_1_1_root.html#a613d2b3b64f75260b30a5fa0a8761846',1,'Ogre::Root']]],
   ['openresource_22499',['openResource',['../class_ogre_1_1_resource_group_manager.html#a59383aca4ce35694ebce498d43283567',1,'Ogre::ResourceGroupManager']]],
