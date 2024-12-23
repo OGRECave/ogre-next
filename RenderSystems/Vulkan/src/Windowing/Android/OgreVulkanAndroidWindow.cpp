@@ -417,7 +417,7 @@ namespace Ogre
         andrSurfCreateInfo.window = mNativeWindow;
         VkResult result = vkCreateAndroidSurfaceKHR( mDevice->mInstance->mVkInstance,
                                                      &andrSurfCreateInfo, 0, &mSurfaceKHR );
-        checkVkResult( result, "vkCreateAndroidSurfaceKHR" );
+        checkVkResult( mDevice, result, "vkCreateAndroidSurfaceKHR" );
     }
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::setJniProvider( AndroidJniProvider *provider )

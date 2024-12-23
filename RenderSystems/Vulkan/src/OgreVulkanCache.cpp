@@ -321,7 +321,7 @@ namespace Ogre
 
             VkResult result =
                 vkCreateRenderPass( mDevice->mGraphicsQueue.mDevice, &rpciCopy, 0, &retVal );
-            checkVkResult( result, "vkCreateRenderPass" );
+            checkVkResult( mDevice, result, "vkCreateRenderPass" );
 
             mRenderPassCache[rpciCopy] = retVal;
         }

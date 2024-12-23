@@ -147,29 +147,28 @@ namespace Ogre
         };
     }
 
+    void onVulkanFailure( VulkanDevice *device, int result, const char *message, const char *func,
+                          const char *file, long line );
 }  // namespace Ogre
 
-#define OGRE_VK_EXCEPT( code, num, desc, src ) \
-    OGRE_EXCEPT_EX( code, num, desc + ( "\nVkResult = " + vkResultToString( num ) ), src )
-
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#    define checkVkResult( result, functionName ) \
+#    define checkVkResult( device, result, functionName ) \
         do \
         { \
             if( result != VK_SUCCESS ) \
             { \
-                OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, functionName " failed", \
-                                __FUNCSIG__ ); \
+                onVulkanFailure( device, result, functionName " failed", __FUNCSIG__, __FILE__, \
+                                 __LINE__ ); \
             } \
         } while( 0 )
 #else
-#    define checkVkResult( result, functionName ) \
+#    define checkVkResult( device, result, functionName ) \
         do \
         { \
             if( result != VK_SUCCESS ) \
             { \
-                OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, functionName " failed", \
-                                __PRETTY_FUNCTION__ ); \
+                onVulkanFailure( device, result, functionName " failed", __PRETTY_FUNCTION__, __FILE__, \
+                                 __LINE__ ); \
             } \
         } while( 0 )
 #endif

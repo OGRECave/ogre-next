@@ -242,7 +242,7 @@ namespace Ogre
         uint32 numFormats = 0u;
         VkResult result = vkGetPhysicalDeviceSurfaceFormatsKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
                                                                 &numFormats, 0 );
-        checkVkResult( result, "vkGetPhysicalDeviceSurfaceFormatsKHR" );
+        checkVkResult( mDevice, result, "vkGetPhysicalDeviceSurfaceFormatsKHR" );
         if( numFormats == 0 )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
@@ -254,7 +254,7 @@ namespace Ogre
         formats.resize( numFormats );
         result = vkGetPhysicalDeviceSurfaceFormatsKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
                                                        &numFormats, formats.begin() );
-        checkVkResult( result, "vkGetPhysicalDeviceSurfaceFormatsKHR" );
+        checkVkResult( mDevice, result, "vkGetPhysicalDeviceSurfaceFormatsKHR" );
 
         PixelFormatGpu pixelFormat = PFG_UNKNOWN;
         for( size_t i = 0; i < numFormats && pixelFormat == PFG_UNKNOWN; ++i )
@@ -298,7 +298,7 @@ namespace Ogre
         VkSurfaceCapabilitiesKHR surfaceCaps;
         VkResult result = vkGetPhysicalDeviceSurfaceCapabilitiesKHR( mDevice->mPhysicalDevice,
                                                                      mSurfaceKHR, &surfaceCaps );
-        checkVkResult( result, "vkGetPhysicalDeviceSurfaceCapabilitiesKHR" );
+        checkVkResult( mDevice, result, "vkGetPhysicalDeviceSurfaceCapabilitiesKHR" );
 
         // Swapchain may be smaller/bigger than requested
         setFinalResolution( Math::Clamp( getWidth(), surfaceCaps.minImageExtent.width,
@@ -309,7 +309,7 @@ namespace Ogre
         VkBool32 supported;
         result = vkGetPhysicalDeviceSurfaceSupportKHR(
             mDevice->mPhysicalDevice, mDevice->mGraphicsQueue.mFamilyIdx, mSurfaceKHR, &supported );
-        checkVkResult( result, "vkGetPhysicalDeviceSurfaceSupportKHR" );
+        checkVkResult( mDevice, result, "vkGetPhysicalDeviceSurfaceSupportKHR" );
 
         if( !supported )
         {
@@ -321,13 +321,13 @@ namespace Ogre
         uint32 numPresentModes = 0u;
         result = vkGetPhysicalDeviceSurfacePresentModesKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
                                                             &numPresentModes, 0 );
-        checkVkResult( result, "vkGetPhysicalDeviceSurfacePresentModesKHR" );
+        checkVkResult( mDevice, result, "vkGetPhysicalDeviceSurfacePresentModesKHR" );
 
         FastArray<VkPresentModeKHR> presentModes;
         presentModes.resize( numPresentModes );
         result = vkGetPhysicalDeviceSurfacePresentModesKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
                                                             &numPresentModes, presentModes.begin() );
-        checkVkResult( result, "vkGetPhysicalDeviceSurfacePresentModesKHR" );
+        checkVkResult( mDevice, result, "vkGetPhysicalDeviceSurfacePresentModesKHR" );
 
         // targetPresentModes[0] is the target, targetPresentModes[1] is the fallback
         bool presentModesFound[2] = { false, false };
@@ -487,18 +487,18 @@ namespace Ogre
         //-----------------------------
 
         result = vkCreateSwapchainKHR( mDevice->mDevice, &swapchainCreateInfo, 0, &mSwapchain );
-        checkVkResult( result, "vkCreateSwapchainKHR" );
+        checkVkResult( mDevice, result, "vkCreateSwapchainKHR" );
 
         uint32 numSwapchainImages = 0u;
         result = vkGetSwapchainImagesKHR( mDevice->mDevice, mSwapchain, &numSwapchainImages, NULL );
-        checkVkResult( result, "vkGetSwapchainImagesKHR" );
+        checkVkResult( mDevice, result, "vkGetSwapchainImagesKHR" );
 
         OGRE_ASSERT_LOW( numSwapchainImages > 0u );
 
         mSwapchainImages.resize( numSwapchainImages );
         result = vkGetSwapchainImagesKHR( mDevice->mDevice, mSwapchain, &numSwapchainImages,
                                           mSwapchainImages.begin() );
-        checkVkResult( result, "vkGetSwapchainImagesKHR" );
+        checkVkResult( mDevice, result, "vkGetSwapchainImagesKHR" );
 
         // We need to retransition the main texture now to re-create MSAA surfaces (if any).
         // We need to do it now, because doing it later will overwrite the VkImage handles with NULL.

@@ -146,7 +146,7 @@ namespace Ogre
 
         VkResult result = vkWaitForFences( device->mDevice, 1, &syncObj, VK_TRUE,
                                            UINT64_MAX );  // You can't wait forever in Vulkan?!?
-        checkVkResult( result, "VulkanStagingBuffer::wait" );
+        checkVkResult( device, result, "VulkanStagingBuffer::wait" );
     }
     //-----------------------------------------------------------------------------------
     void VulkanStagingBuffer::waitIfNeeded()

@@ -96,7 +96,7 @@ namespace Ogre
 
         VkResult result = vkCreateBufferView( vulkanVaoManager->getDevice()->mDevice, &bufferCreateInfo,
                                               0, &mCachedResourceViews[cacheIdx].mResourceView );
-        checkVkResult( result, "vkCreateBufferView" );
+        checkVkResult( vulkanVaoManager->getDevice(), result, "vkCreateBufferView" );
 
         mCurrentCacheCursor = uint8( ( cacheIdx + 1 ) % 16 );
 
@@ -198,7 +198,7 @@ namespace Ogre
         VkBufferView retVal;
         VkResult result =
             vkCreateBufferView( vulkanVaoManager->getDevice()->mDevice, &bufferCreateInfo, 0, &retVal );
-        checkVkResult( result, "vkCreateBufferView" );
+        checkVkResult( vulkanVaoManager->getDevice(), result, "vkCreateBufferView" );
 
         return retVal;
     }

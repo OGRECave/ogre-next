@@ -156,7 +156,7 @@ namespace Ogre
 
             VkResult result =
                 vkCreateDescriptorSetLayout( mDevice->mDevice, &descSetLayoutCi, 0, &retVal );
-            checkVkResult( result, "vkCreateDescriptorSetLayout" );
+            checkVkResult( mDevice, result, "vkCreateDescriptorSetLayout" );
             mDescriptorSetMap[set] = retVal;
         }
         else

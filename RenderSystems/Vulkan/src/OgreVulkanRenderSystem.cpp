@@ -184,6 +184,20 @@ namespace Ogre
         // return true;
     }
     //-------------------------------------------------------------------------
+    void onVulkanFailure( VulkanDevice *device, int result, const char *desc, const char *src,
+                          const char *file, long line )
+    {
+        VkResult vkResult = (VkResult)result;
+        if( device != nullptr && device->mDeviceLostReason == VK_SUCCESS &&
+            ( vkResult == VK_ERROR_OUT_OF_HOST_MEMORY || vkResult == VK_ERROR_OUT_OF_DEVICE_MEMORY ||
+              vkResult == VK_ERROR_DEVICE_LOST ) )
+            device->mDeviceLostReason = vkResult;
+
+        ExceptionFactory::throwException( Exception::ERR_RENDERINGAPI_ERROR, vkResult,
+                                          desc + ( "\nVkResult = " + vkResultToString( vkResult ) ), src,
+                                          file, line );
+    }
+    //-------------------------------------------------------------------------
     VulkanRenderSystem::VulkanRenderSystem( const NameValuePairList *options ) :
         RenderSystem(),
         mInitialized( false ),
@@ -356,7 +370,7 @@ namespace Ogre
             imageViewCi.subresourceRange.layerCount = 1u;
 
             VkResult result = vkCreateImageView( mDevice->mDevice, &imageViewCi, 0, &mDummyTextureView );
-            checkVkResult( result, "vkCreateImageView" );
+            checkVkResult( mDevice, result, "vkCreateImageView" );
         }
 
         {
@@ -368,7 +382,7 @@ namespace Ogre
             samplerDescriptor.minLod = -std::numeric_limits<float>::max();
             samplerDescriptor.maxLod = std::numeric_limits<float>::max();
             VkResult result = vkCreateSampler( mDevice->mDevice, &samplerDescriptor, 0, &mDummySampler );
-            checkVkResult( result, "vkCreateSampler" );
+            checkVkResult( mDevice, result, "vkCreateSampler" );
         }
 
         resetAllBindings();
@@ -1297,11 +1311,11 @@ namespace Ogre
         }
 
         // recreate logical device with all resources
-        if( anotherIsElected || mDevice->mIsDeviceLost )
+        if( anotherIsElected || mDevice->isDeviceLost() )
         {
             handleDeviceLost();
 
-            return !mDevice->mIsDeviceLost;
+            return !mDevice->isDeviceLost();
         }
 
         return true;
@@ -1343,7 +1357,6 @@ namespace Ogre
 
         // recreate device
         mDevice->setPhysicalDevice( mInstance, mActiveDevice, nullptr );
-        mDevice->mIsDeviceLost = false;
 
         static_cast<VulkanVaoManager *>( mVaoManager )->createVkResources();
         static_cast<VulkanTextureGpuManager *>( mTextureGpuManager )->createVkResources();
@@ -1819,7 +1832,7 @@ namespace Ogre
         VkPipeline vulkanPso = 0u;
         VkResult result = vkCreateComputePipelines( mDevice->mDevice, mDevice->mPipelineCache, 1u,
                                                     &computeInfo, 0, &vulkanPso );
-        checkVkResult( result, "vkCreateComputePipelines" );
+        checkVkResult( mDevice, result, "vkCreateComputePipelines" );
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         if( mValidationError )
@@ -1941,7 +1954,7 @@ namespace Ogre
                 oldRootLayout = reinterpret_cast<VulkanHlmsPso *>( mPso->rsData )->rootLayout;
 
             VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
-            OGRE_ASSERT_LOW( pso->rsData );
+            OGRE_ASSERT_LOW( pso && pso->rsData );
             VulkanHlmsPso *vulkanPso = reinterpret_cast<VulkanHlmsPso *>( pso->rsData );
             vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanPso->pso );
             mPso = pso;
@@ -2287,7 +2300,7 @@ namespace Ogre
             break;
         }
 
-        size_t bytesToWrite = shader->getBufferRequiredSize();
+        size_t bytesToWrite = shader ? shader->getBufferRequiredSize() : 0;
         if( shader && bytesToWrite > 0 )
         {
             OGRE_ASSERT_LOW(
@@ -3411,7 +3424,7 @@ namespace Ogre
         VkPipeline vulkanPso = 0;
         VkResult result = vkCreateGraphicsPipelines( mDevice->mDevice, mDevice->mPipelineCache, 1u,
                                                      &pipeline, 0, &vulkanPso );
-        checkVkResult( result, "vkCreateGraphicsPipelines" );
+        checkVkResult( mDevice, result, "vkCreateGraphicsPipelines" );
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         if( mValidationError )
@@ -3514,7 +3527,7 @@ namespace Ogre
 
         VkSampler textureSampler;
         VkResult result = vkCreateSampler( mDevice->mDevice, &samplerDescriptor, 0, &textureSampler );
-        checkVkResult( result, "vkCreateSampler" );
+        checkVkResult( mDevice, result, "vkCreateSampler" );
 
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
         newBlock->mRsData = textureSampler;

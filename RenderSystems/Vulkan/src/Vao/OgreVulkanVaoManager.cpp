@@ -476,7 +476,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool VulkanVaoManager::flushAllGpuDelayedBlocks( const bool bIssueBarrier )
     {
-        if( bIssueBarrier && !mDevice->mIsDeviceLost )
+        if( bIssueBarrier && !mDevice->isDeviceLost() )
         {
             if( mDevice->mGraphicsQueue.getEncoderState() == VulkanQueue::EncoderGraphicsOpen )
             {
@@ -738,7 +738,7 @@ namespace Ogre
                          VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT |
                          VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
         VkResult result = vkCreateBuffer( mDevice->mDevice, &bufferCi, 0, &tmpBuffer );
-        checkVkResult( result, "vkCreateBuffer" );
+        checkVkResult( mDevice, result, "vkCreateBuffer" );
 
         VkMemoryRequirements memRequirements;
         vkGetBufferMemoryRequirements( mDevice->mDevice, tmpBuffer, &memRequirements );
@@ -1107,7 +1107,7 @@ namespace Ogre
                 if( vboFlag == CPU_READ_WRITE )
                     bufferCi.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
                 VkResult result = vkCreateBuffer( mDevice->mDevice, &bufferCi, 0, &newVbo.vkBuffer );
-                checkVkResult( result, "vkCreateBuffer" );
+                checkVkResult( mDevice, result, "vkCreateBuffer" );
 
                 VkMemoryRequirements buffMemRequirements;
                 vkGetBufferMemoryRequirements( mDevice->mDevice, newVbo.vkBuffer, &buffMemRequirements );
@@ -1122,7 +1122,7 @@ namespace Ogre
             memAllocInfo.memoryTypeIndex = chosenMemoryTypeIdx;
 
             VkResult result = vkAllocateMemory( mDevice->mDevice, &memAllocInfo, NULL, &newVbo.vboName );
-            checkVkResult( result, "vkAllocateMemory" );
+            checkVkResult( mDevice, result, "vkAllocateMemory" );
 
             mUsedHeapMemory[memTypes[chosenMemoryTypeIdx].heapIndex] += poolSize;
 
@@ -1130,7 +1130,7 @@ namespace Ogre
             {
                 result =
                     vkBindBufferMemory( mDevice->mDevice, newVbo.vkBuffer, newVbo.vboName, buffOffset );
-                checkVkResult( result, "vkBindBufferMemory" );
+                checkVkResult( mDevice, result, "vkBindBufferMemory" );
             }
 
             newVbo.sizeBytes = usablePoolSize;
@@ -2173,7 +2173,7 @@ namespace Ogre
                 VkSemaphore semaphore = 0;
                 const VkResult result =
                     vkCreateSemaphore( mDevice->mDevice, &semaphoreCreateInfo, 0, &semaphore );
-                checkVkResult( result, "vkCreateSemaphore" );
+                checkVkResult( mDevice, result, "vkCreateSemaphore" );
                 semaphoreArray.push_back( semaphore );
             }
 
@@ -2198,7 +2198,7 @@ namespace Ogre
 
             const VkResult result =
                 vkCreateSemaphore( mDevice->mDevice, &semaphoreCreateInfo, 0, &retVal );
-            checkVkResult( result, "vkCreateSemaphore" );
+            checkVkResult( mDevice, result, "vkCreateSemaphore" );
         }
         else
         {
@@ -2294,7 +2294,7 @@ namespace Ogre
 
         VkResult result = vkWaitForFences( queue->mDevice, 1u, &fenceName, VK_TRUE,
                                            UINT64_MAX );  // You can't wait forever in Vulkan?!?
-        checkVkResult( result, "VulkanStagingBuffer::wait" );
+        checkVkResult( queue->mOwnerDevice, result, "VulkanStagingBuffer::wait" );
         queue->releaseFence( fenceName );
         return 0;
     }

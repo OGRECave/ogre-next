@@ -176,7 +176,7 @@ namespace Ogre
             moduleCi.codeSize = mSpirv.size() * sizeof( uint32 );
             moduleCi.pCode = mSpirv.data();
             VkResult result = vkCreateShaderModule( mDevice->mDevice, &moduleCi, 0, &mShaderModule );
-            checkVkResult( result, "vkCreateShaderModule" );
+            checkVkResult( mDevice, result, "vkCreateShaderModule" );
 
             setObjectName( mDevice->mDevice, (uint64_t)mShaderModule,
                            VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT, mName.c_str() );
@@ -383,7 +383,7 @@ namespace Ogre
                     moduleCi.pCode = mSpirv.data();
                     VkResult result =
                         vkCreateShaderModule( mDevice->mDevice, &moduleCi, 0, &mShaderModule );
-                    checkVkResult( result, "vkCreateShaderModule" );
+                    checkVkResult( mDevice, result, "vkCreateShaderModule" );
 
                     setObjectName( mDevice->mDevice, (uint64_t)mShaderModule,
                                    VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT, mName.c_str() );
@@ -802,7 +802,7 @@ namespace Ogre
             moduleCi.codeSize = mSpirv.size() * sizeof( uint32 );
             moduleCi.pCode = mSpirv.data();
             VkResult result = vkCreateShaderModule( mDevice->mDevice, &moduleCi, 0, &mShaderModule );
-            checkVkResult( result, "vkCreateShaderModule" );
+            checkVkResult( mDevice, result, "vkCreateShaderModule" );
 
             setObjectName( mDevice->mDevice, (uint64_t)mShaderModule,
                            VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT, mName.c_str() );

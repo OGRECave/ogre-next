@@ -245,7 +245,9 @@ namespace Ogre
         xcbSurfCreateInfo.sType = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
         xcbSurfCreateInfo.connection = mConnection;
         xcbSurfCreateInfo.window = mXcbWindow;
-        create_xcb_surface( mDevice->mInstance->mVkInstance, &xcbSurfCreateInfo, 0, &mSurfaceKHR );
+        VkResult result =
+            create_xcb_surface( mDevice->mInstance->mVkInstance, &xcbSurfCreateInfo, 0, &mSurfaceKHR );
+        checkVkResult( mDevice, result, "vkCreateXcbSurfaceKHR" );
     }
     //-------------------------------------------------------------------------
     void VulkanXcbWindow::initConnection()

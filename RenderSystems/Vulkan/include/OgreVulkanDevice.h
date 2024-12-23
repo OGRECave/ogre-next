@@ -163,7 +163,7 @@ namespace Ogre
 
         uint32 mSupportedStages;
 
-        bool mIsDeviceLost;
+        VkResult mDeviceLostReason;
         bool mIsExternal;
 
         void fillDeviceFeatures();
@@ -203,6 +203,8 @@ namespace Ogre
 
         /// Waits for the GPU to finish all pending commands.
         void stall();
+
+        bool isDeviceLost() const { return mDeviceLostReason != VK_SUCCESS; }
     };
 
     // Mask away read flags from srcAccessMask

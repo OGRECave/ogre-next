@@ -158,7 +158,7 @@ namespace Ogre
 
             VkResult imageResult =
                 vkCreateImage( mDevice->mDevice, &imageInfo, 0, &mBlankTexture[i].vkImage );
-            checkVkResult( imageResult, "vkCreateImage" );
+            checkVkResult( mDevice, imageResult, "vkCreateImage" );
 
             setObjectName( mDevice->mDevice, (uint64_t)mBlankTexture[i].vkImage,
                            VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, dummyNames[i] );
@@ -171,7 +171,7 @@ namespace Ogre
 
             VkResult result = vkBindImageMemory( mDevice->mDevice, mBlankTexture[i].vkImage,
                                                  deviceMemory, mBlankTexture[i].internalBufferStart );
-            checkVkResult( result, "vkBindImageMemory" );
+            checkVkResult( mDevice, result, "vkBindImageMemory" );
         }
 
         size_t barrierCount = 0u;
@@ -289,13 +289,13 @@ namespace Ogre
 
             VkResult result =
                 vkCreateImageView( mDevice->mDevice, &imageViewCi, 0, &mBlankTexture[i].defaultView );
-            checkVkResult( result, "vkCreateImageView" );
+            checkVkResult( mDevice, result, "vkCreateImageView" );
         }
 
         // We will be releasing the staging texture memory immediately. We must flush out manually
         mDevice->commitAndNextCommandBuffer( SubmissionType::FlushOnly );
         VkResult result = vkDeviceWaitIdle( mDevice->mDevice );
-        checkVkResult( result, "vkDeviceWaitIdle" );
+        checkVkResult( mDevice, result, "vkDeviceWaitIdle" );
 
         vaoManager->destroyStagingTexture( stagingTex );
         delete stagingTex;

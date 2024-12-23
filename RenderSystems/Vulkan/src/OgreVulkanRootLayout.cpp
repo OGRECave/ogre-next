@@ -354,7 +354,7 @@ namespace Ogre
         VkPipelineLayout rootLayoutResult;
         VkResult result =
             vkCreatePipelineLayout( device->mDevice, &pipelineLayoutCi, 0, &rootLayoutResult );
-        checkVkResult( result, "vkCreatePipelineLayout" );
+        checkVkResult( device, result, "vkCreatePipelineLayout" );
 
         mRootLayout.store( rootLayoutResult, std::memory_order::memory_order_relaxed );
 

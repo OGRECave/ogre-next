@@ -122,7 +122,7 @@ namespace Ogre
             VkFenceCreateInfo fenceCi;
             makeVkStruct( fenceCi, VK_STRUCTURE_TYPE_FENCE_CREATE_INFO );
             VkResult result = vkCreateFence( mDevice, &fenceCi, 0, &retVal );
-            checkVkResult( result, "vkCreateFence" );
+            checkVkResult( mOwnerDevice, result, "vkCreateFence" );
         }
         return retVal;
     }
@@ -163,7 +163,7 @@ namespace Ogre
         {
             VkResult result =
                 vkResetFences( mDevice, numFencesToReset, &mAvailableFences[oldNumAvailableFences] );
-            checkVkResult( result, "vkResetFences" );
+            checkVkResult( mOwnerDevice, result, "vkResetFences" );
         }
     }
     //-------------------------------------------------------------------------
@@ -191,14 +191,14 @@ namespace Ogre
             allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
             allocateInfo.commandBufferCount = 1u;
             VkResult result = vkAllocateCommandBuffers( mDevice, &allocateInfo, &cmdBuffer );
-            checkVkResult( result, "vkAllocateCommandBuffers" );
+            checkVkResult( mOwnerDevice, result, "vkAllocateCommandBuffers" );
 
             frameData.mCommands.push_back( cmdBuffer );
         }
         else if( frameData.mCurrentCmdIdx == 0u )
         {
             VkResult result = vkResetCommandPool( mDevice, frameData.mCmdPool, 0 );
-            checkVkResult( result, "vkResetCommandPool" );
+            checkVkResult( mOwnerDevice, result, "vkResetCommandPool" );
         }
 
         return frameData.mCommands[frameData.mCurrentCmdIdx++];
@@ -276,7 +276,7 @@ namespace Ogre
         for( size_t i = 0; i < maxNumFrames; ++i )
         {
             VkResult result = vkCreateFence( mDevice, &fenceCi, 0, &mAvailableFences[i] );
-            checkVkResult( result, "vkCreateFence" );
+            checkVkResult( mOwnerDevice, result, "vkCreateFence" );
         }
 
         // Create one cmd pool per thread (assume single threaded for now)
@@ -290,7 +290,7 @@ namespace Ogre
         {
             VkResult result =
                 vkCreateCommandPool( mDevice, &cmdPoolCreateInfo, 0, &mPerFrameData[i].mCmdPool );
-            checkVkResult( result, "vkCreateCommandPool" );
+            checkVkResult( mOwnerDevice, result, "vkCreateCommandPool" );
         }
 
         newCommandBuffer();
@@ -305,7 +305,7 @@ namespace Ogre
         makeVkStruct( beginInfo, VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO );
         beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
         VkResult result = vkBeginCommandBuffer( mCurrentCmdBuffer, &beginInfo );
-        checkVkResult( result, "vkBeginCommandBuffer" );
+        checkVkResult( mOwnerDevice, result, "vkBeginCommandBuffer" );
     }
     //-------------------------------------------------------------------------
     void VulkanQueue::endCommandBuffer()
@@ -315,7 +315,7 @@ namespace Ogre
             endAllEncoders();
 
             VkResult result = vkEndCommandBuffer( mCurrentCmdBuffer );
-            checkVkResult( result, "vkEndCommandBuffer" );
+            checkVkResult( mOwnerDevice, result, "vkEndCommandBuffer" );
 
             mPendingCmds.push_back( mCurrentCmdBuffer );
             mCurrentCmdBuffer = 0;
@@ -1130,7 +1130,7 @@ namespace Ogre
                 if( itor->second.recycleAfterRelease )
                 {
                     VkResult result = vkResetFences( mDevice, 1u, &itor->first );
-                    checkVkResult( result, "vkResetFences" );
+                    checkVkResult( mOwnerDevice, result, "vkResetFences" );
                     mAvailableFences.push_back( itor->first );
                 }
                 mRefCountedFences.erase( itor );
@@ -1159,7 +1159,7 @@ namespace Ogre
         {
             const uint32 numFences = static_cast<uint32>( fences.size() );
             VkResult result = vkWaitForFences( mDevice, numFences, &fences[0], VK_TRUE, UINT64_MAX );
-            checkVkResult( result, "vkWaitForFences" );
+            checkVkResult( mOwnerDevice, result, "vkWaitForFences" );
             recycleFences( fences );
         }
     }
@@ -1175,7 +1175,7 @@ namespace Ogre
             VkResult result = vkWaitForFences( mDevice, numFences, &fences[0], VK_TRUE, 0u );
             if( result != VK_TIMEOUT )
             {
-                checkVkResult( result, "vkWaitForFences" );
+                checkVkResult( mOwnerDevice, result, "vkWaitForFences" );
                 recycleFences( fences );
             }
             else
@@ -1254,8 +1254,6 @@ namespace Ogre
         VkFence fence = mCurrentFence;  // Note: mCurrentFence may be nullptr
 
         VkResult result = vkQueueSubmit( mQueue, 1u, &submitInfo, fence );
-        if( result != VK_SUCCESS )
-            mOwnerDevice->mIsDeviceLost = true;
         // we need some cleanup before checking result
 
         mGpuWaitSemaphForCurrCmdBuff.clear();
@@ -1274,7 +1272,7 @@ namespace Ogre
 
         mPendingCmds.clear();
 
-        checkVkResult( result, "vkQueueSubmit" );
+        checkVkResult( mOwnerDevice, result, "vkQueueSubmit" );
 
         if( submissionType >= SubmissionType::EndFrameAndSwap )
         {

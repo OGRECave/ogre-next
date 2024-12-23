@@ -78,7 +78,7 @@ namespace Ogre
         {
             VkResult result =
                 vkMapMemory( mDevice->mDevice, mDeviceMemory, 0u, mVboSize, 0, &mMappedPtr );
-            checkVkResult( result, "vkMapMemory" );
+            checkVkResult( mDevice, result, "vkMapMemory" );
         }
 
         outTicket = addMappedRange( start, count );
@@ -91,7 +91,7 @@ namespace Ogre
             setAlignMemoryCoherentAtom( memRange, start, count,
                                         mDevice->mDeviceProperties.limits.nonCoherentAtomSize );
             VkResult result = vkInvalidateMappedMemoryRanges( mDevice->mDevice, 1u, &memRange );
-            checkVkResult( result, "vkInvalidateMappedMemoryRanges" );
+            checkVkResult( mDevice, result, "vkInvalidateMappedMemoryRanges" );
         }
 
         return static_cast<uint8 *>( mMappedPtr ) + start;
@@ -110,7 +110,7 @@ namespace Ogre
             setAlignMemoryCoherentAtom( mappedRange, mMappedRanges[ticket].start + start, count,
                                         mDevice->mDeviceProperties.limits.nonCoherentAtomSize );
             VkResult result = vkFlushMappedMemoryRanges( mDevice->mDevice, 1u, &mappedRange );
-            checkVkResult( result, "vkFlushMappedMemoryRanges" );
+            checkVkResult( mDevice, result, "vkFlushMappedMemoryRanges" );
         }
     }
     //-----------------------------------------------------------------------------------

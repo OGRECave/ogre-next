@@ -205,7 +205,7 @@ namespace Ogre
         VulkanDevice *device = textureManager->getDevice();
 
         VkResult imageResult = vkCreateImage( device->mDevice, &imageInfo, 0, &mFinalTextureName );
-        checkVkResult( imageResult, "vkCreateImage" );
+        checkVkResult( device, imageResult, "vkCreateImage" );
 
         setObjectName( device->mDevice, (uint64_t)mFinalTextureName,
                        VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, textureName.c_str() );
@@ -220,7 +220,7 @@ namespace Ogre
 
         VkResult result =
             vkBindImageMemory( device->mDevice, mFinalTextureName, deviceMemory, mInternalBufferStart );
-        checkVkResult( result, "vkBindImageMemory" );
+        checkVkResult( device, result, "vkBindImageMemory" );
 
         if( isPoolOwner() )
         {
@@ -868,7 +868,7 @@ namespace Ogre
 
         VkImageView imageView;
         VkResult result = vkCreateImageView( device->mDevice, &imageViewCi, 0, &imageView );
-        checkVkResult( result, "vkCreateImageView" );
+        checkVkResult( device, result, "vkCreateImageView" );
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         const String textureName = getNameStr() + "(View)";
@@ -1051,7 +1051,7 @@ namespace Ogre
         VulkanDevice *device = textureManager->getDevice();
 
         VkResult imageResult = vkCreateImage( device->mDevice, &imageInfo, 0, &mMsaaFramebufferName );
-        checkVkResult( imageResult, "vkCreateImage" );
+        checkVkResult( device, imageResult, "vkCreateImage" );
 
         setObjectName( device->mDevice, (uint64_t)mMsaaFramebufferName,
                        VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, textureName.c_str() );
@@ -1066,7 +1066,7 @@ namespace Ogre
 
         VkResult result = vkBindImageMemory( device->mDevice, mMsaaFramebufferName, deviceMemory,
                                              mMsaaInternalBufferStart );
-        checkVkResult( result, "vkBindImageMemory" );
+        checkVkResult( device, result, "vkBindImageMemory" );
 
         // Immediately transition to its only state
         VkImageMemoryBarrier imageBarrier = this->getImageMemoryBarrier();

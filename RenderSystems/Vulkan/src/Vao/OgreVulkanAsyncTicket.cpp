@@ -75,7 +75,7 @@ namespace Ogre
                 mQueue->releaseFence( mFenceName );
                 mFenceName = 0;
 
-                checkVkResult( result, "vkWaitForFences" );
+                checkVkResult( mQueue->mOwnerDevice, result, "vkWaitForFences" );
             }
         }
         else

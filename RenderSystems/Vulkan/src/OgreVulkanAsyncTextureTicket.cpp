@@ -243,7 +243,7 @@ namespace Ogre
                 mQueue->releaseFence( mAccurateFence );
                 mAccurateFence = 0;
 
-                checkVkResult( result, "vkWaitForFences" );
+                checkVkResult( mQueue->mOwnerDevice, result, "vkWaitForFences" );
                 if( mStatus != Mapped )
                     mStatus = Ready;
                 retVal = true;

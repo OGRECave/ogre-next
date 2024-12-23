@@ -468,7 +468,7 @@ namespace Ogre
 
         VkResult result =
             vkCreateWin32SurfaceKHR( mDevice->mInstance->mVkInstance, &createInfo, 0, &mSurfaceKHR );
-        checkVkResult( result, "vkCreateWin32SurfaceKHR" );
+        checkVkResult( mDevice, result, "vkCreateWin32SurfaceKHR" );
     }
     //-------------------------------------------------------------------------
     void VulkanWin32Window::adjustWindow( uint32 clientWidth, uint32 clientHeight,
