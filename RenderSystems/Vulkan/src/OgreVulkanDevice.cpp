@@ -518,7 +518,7 @@ namespace Ogre
     {
         if( mDevice )
         {
-            vkDeviceWaitIdle( mDevice );
+            vkDeviceWaitIdle( mDevice );  // intentionally ignore result in destroy()
 
             mGraphicsQueue.destroy();
             destroyQueues( mComputeQueues );
@@ -714,12 +714,15 @@ namespace Ogre
 
         // Obtain logical device
         uint32 numExtensions = 0;
-        vkEnumerateDeviceExtensionProperties( mPhysicalDevice, 0, &numExtensions, 0 );
+        VkResult result = vkEnumerateDeviceExtensionProperties( mPhysicalDevice, 0, &numExtensions, 0 );
+        checkVkResult( result, "vkEnumerateDeviceExtensionProperties" );
 
         FastArray<VkExtensionProperties> availableExtensions;
         availableExtensions.resize( numExtensions );
-        vkEnumerateDeviceExtensionProperties( mPhysicalDevice, 0, &numExtensions,
-                                              availableExtensions.begin() );
+        result = vkEnumerateDeviceExtensionProperties( mPhysicalDevice, 0, &numExtensions,
+                                                       availableExtensions.begin() );
+        checkVkResult( result, "vkEnumerateDeviceExtensionProperties" );
+
         if( !externalDevice )
         {
             createDevice( availableExtensions, 0u, 0u );
@@ -776,8 +779,7 @@ namespace Ogre
         // initial pipeline cache
         VkPipelineCacheCreateInfo pipelineCacheCreateInfo;
         makeVkStruct( pipelineCacheCreateInfo, VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO );
-        VkResult result =
-            vkCreatePipelineCache( mDevice, &pipelineCacheCreateInfo, nullptr, &mPipelineCache );
+        result = vkCreatePipelineCache( mDevice, &pipelineCacheCreateInfo, nullptr, &mPipelineCache );
         checkVkResult( result, "vkCreatePipelineCache" );
 
         // debug utils
@@ -1064,7 +1066,8 @@ namespace Ogre
         commitAndNextCommandBuffer( SubmissionType::FlushOnly );
         mRenderSystem->resetAllBindings();
 
-        vkDeviceWaitIdle( mDevice );
+        VkResult result = vkDeviceWaitIdle( mDevice );
+        checkVkResult( result, "vkDeviceWaitIdle" );
 
         mRenderSystem->_notifyDeviceStalled();
     }

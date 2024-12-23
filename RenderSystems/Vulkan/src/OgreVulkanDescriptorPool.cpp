@@ -191,7 +191,8 @@ namespace Ogre
 
         while( itor != endt )
         {
-            vkResetDescriptorPool( device->mDevice, itor->pool, 0 );
+            VkResult result = vkResetDescriptorPool( device->mDevice, itor->pool, 0 );
+            checkVkResult( result, "vkResetDescriptorPool" );
             itor->size = 0u;
             ++itor;
         }

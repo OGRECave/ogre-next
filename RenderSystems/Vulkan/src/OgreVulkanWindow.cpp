@@ -319,12 +319,15 @@ namespace Ogre
         }
 
         uint32 numPresentModes = 0u;
-        vkGetPhysicalDeviceSurfacePresentModesKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
-                                                   &numPresentModes, 0 );
+        result = vkGetPhysicalDeviceSurfacePresentModesKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
+                                                            &numPresentModes, 0 );
+        checkVkResult( result, "vkGetPhysicalDeviceSurfacePresentModesKHR" );
+
         FastArray<VkPresentModeKHR> presentModes;
         presentModes.resize( numPresentModes );
-        vkGetPhysicalDeviceSurfacePresentModesKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
-                                                   &numPresentModes, presentModes.begin() );
+        result = vkGetPhysicalDeviceSurfacePresentModesKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
+                                                            &numPresentModes, presentModes.begin() );
+        checkVkResult( result, "vkGetPhysicalDeviceSurfacePresentModesKHR" );
 
         // targetPresentModes[0] is the target, targetPresentModes[1] is the fallback
         bool presentModesFound[2] = { false, false };

@@ -308,12 +308,16 @@ static void createVulkanDevice( const Ogre::VulkanExternalInstance &externalInst
     FastArray<const char *> deviceExtensions;
     {
         uint32_t numExtensions = 0;
-        vkEnumerateDeviceExtensionProperties( outExternalDevice.physicalDevice, 0, &numExtensions, 0 );
+        VkResult result = vkEnumerateDeviceExtensionProperties( outExternalDevice.physicalDevice, 0,
+                                                                &numExtensions, 0 );
+        myCheckVkResult( result, "vkCreateInstance" );
 
         FastArray<VkExtensionProperties> availableExtensions;
         availableExtensions.resize( numExtensions );
-        vkEnumerateDeviceExtensionProperties( outExternalDevice.physicalDevice, 0, &numExtensions,
-                                              availableExtensions.begin() );
+        result = vkEnumerateDeviceExtensionProperties( outExternalDevice.physicalDevice, 0,
+                                                       &numExtensions, availableExtensions.begin() );
+        myCheckVkResult( result, "vkCreateInstance" );
+
         for( size_t i = 0u; i < numExtensions; ++i )
         {
             const String extensionName = availableExtensions[i].extensionName;

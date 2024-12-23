@@ -331,7 +331,7 @@ namespace Ogre
         {
             renderPassDesc->entriesModified( RenderPassDescriptor::All );
         }
-        catch( Exception &e )
+        catch( Exception & )
         {
             LogManager::getSingleton().logMessage(
                 "The compositor pass '" + mDefinition->mProfilingId + "' from Node: '" +

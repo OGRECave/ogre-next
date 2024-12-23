@@ -294,7 +294,8 @@ namespace Ogre
 
         // We will be releasing the staging texture memory immediately. We must flush out manually
         mDevice->commitAndNextCommandBuffer( SubmissionType::FlushOnly );
-        vkDeviceWaitIdle( mDevice->mDevice );
+        VkResult result = vkDeviceWaitIdle( mDevice->mDevice );
+        checkVkResult( result, "vkDeviceWaitIdle" );
 
         vaoManager->destroyStagingTexture( stagingTex );
         delete stagingTex;
