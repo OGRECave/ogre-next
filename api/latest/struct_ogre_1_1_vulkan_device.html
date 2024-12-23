@@ -134,6 +134,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9fbbb869e1ee3059a20fd44e46b8688a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0369aa624f9b0d76521077b89699f49f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#a0369aa624f9b0d76521077b89699f49f">initQueues</a> ()</td></tr>
 <tr class="separator:a0369aa624f9b0d76521077b89699f49f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adadcf126dfd3be5fad42309d9a831215"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#adadcf126dfd3be5fad42309d9a831215">isDeviceLost</a> () const</td></tr>
+<tr class="separator:adadcf126dfd3be5fad42309d9a831215"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad499e766aa5f5cf60d66b3217d697b68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#ad499e766aa5f5cf60d66b3217d697b68">setPhysicalDevice</a> (const std::shared_ptr&lt; <a class="el" href="class_ogre_1_1_vulkan_instance.html">VulkanInstance</a> &gt; &amp;instance, const <a class="el" href="struct_ogre_1_1_vulkan_physical_device.html">VulkanPhysicalDevice</a> &amp;physicalDevice, const <a class="el" href="struct_ogre_1_1_vulkan_external_device.html">VulkanExternalDevice</a> *externalDevice)</td></tr>
 <tr class="separator:ad499e766aa5f5cf60d66b3217d697b68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9052e6d3cb9531fcea410cdce25e16f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#a9052e6d3cb9531fcea410cdce25e16f9">stall</a> ()</td></tr>
@@ -159,6 +161,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a65f8a4ee1a653f4d599caeda0fd18e8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ef4793068b7a83eda78aee406f4decf"><td class="memItemLeft" align="right" valign="top">VkPhysicalDeviceFeatures&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#a7ef4793068b7a83eda78aee406f4decf">mDeviceFeatures</a></td></tr>
 <tr class="separator:a7ef4793068b7a83eda78aee406f4decf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84b46033adccc969612e25a06e37c843"><td class="memItemLeft" align="right" valign="top">VkResult&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#a84b46033adccc969612e25a06e37c843">mDeviceLostReason</a></td></tr>
+<tr class="separator:a84b46033adccc969612e25a06e37c843"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae174a7cb061e258cb27230f8114b7ee3"><td class="memItemLeft" align="right" valign="top">VkPhysicalDeviceMemoryProperties&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#ae174a7cb061e258cb27230f8114b7ee3">mDeviceMemoryProperties</a></td></tr>
 <tr class="separator:ae174a7cb061e258cb27230f8114b7ee3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5aa808400dbddb71ba3da47b93d276dc"><td class="memItemLeft" align="right" valign="top">VkPhysicalDeviceProperties&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#a5aa808400dbddb71ba3da47b93d276dc">mDeviceProperties</a></td></tr>
@@ -168,8 +172,6 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a3fca8e0da8c1f51138f975f83fde3c6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2902bcababab0c18faa8cdeee21e284c"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_ogre_1_1_vulkan_instance.html">VulkanInstance</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#a2902bcababab0c18faa8cdeee21e284c">mInstance</a></td></tr>
 <tr class="separator:a2902bcababab0c18faa8cdeee21e284c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07a826efde3b3f89251dc4544908ff5a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#a07a826efde3b3f89251dc4544908ff5a">mIsDeviceLost</a></td></tr>
-<tr class="separator:a07a826efde3b3f89251dc4544908ff5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae748f30c1f0bc89c9b376873f68a7582"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#ae748f30c1f0bc89c9b376873f68a7582">mIsExternal</a></td></tr>
 <tr class="separator:ae748f30c1f0bc89c9b376873f68a7582"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a5164e2fdbec15196ad2809148e00ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a3586f545aff0ff062d7a58ac83b90ecf">VkPhysicalDevice</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#a9a5164e2fdbec15196ad2809148e00ff">mPhysicalDevice</a></td></tr>
@@ -516,6 +518,31 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="adadcf126dfd3be5fad42309d9a831215"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adadcf126dfd3be5fad42309d9a831215">&#9670;&nbsp;</a></span>isDeviceLost()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::VulkanDevice::isDeviceLost </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad499e766aa5f5cf60d66b3217d697b68"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad499e766aa5f5cf60d66b3217d697b68">&#9670;&nbsp;</a></span>setPhysicalDevice()</h2>
 
@@ -644,6 +671,22 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a84b46033adccc969612e25a06e37c843"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84b46033adccc969612e25a06e37c843">&#9670;&nbsp;</a></span>mDeviceLostReason</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkResult Ogre::VulkanDevice::mDeviceLostReason</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_ogre_1_1_vulkan_queue.html#a39b6e9817fba374684fbcd1b3349fa70">Ogre::VulkanQueue::getCurrentCmdBuffer()</a>.</p>
+
+</div>
+</div>
 <a id="ae174a7cb061e258cb27230f8114b7ee3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae174a7cb061e258cb27230f8114b7ee3">&#9670;&nbsp;</a></span>mDeviceMemoryProperties</h2>
 
@@ -696,20 +739,6 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::shared_ptr&lt;<a class="el" href="class_ogre_1_1_vulkan_instance.html">VulkanInstance</a>&gt; Ogre::VulkanDevice::mInstance</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a07a826efde3b3f89251dc4544908ff5a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07a826efde3b3f89251dc4544908ff5a">&#9670;&nbsp;</a></span>mIsDeviceLost</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::VulkanDevice::mIsDeviceLost</td>
         </tr>
       </table>
 </div><div class="memdoc">

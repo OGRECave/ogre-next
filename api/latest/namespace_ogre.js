@@ -2709,6 +2709,7 @@ var namespace_ogre =
     [ "makeVkStruct", "namespace_ogre.html#abdb3f1738cb3647211a3ce693d8fafdd", null ],
     [ "ogreGlObjectLabel", "namespace_ogre.html#a29d512504d93722a56ed474cd02d1b27", null ],
     [ "ogreGlObjectLabel", "namespace_ogre.html#a4b3ac5cd3c1499373bbb3ebc3904a418", null ],
+    [ "onVulkanFailure", "namespace_ogre.html#ad0eb7d276e4484e6c9d18b2b2a1cd713", null ],
     [ "operator!=", "group___general.html#ga80a53685c54f25a002db54a9368e02c6", null ],
     [ "operator!=", "group___memory.html#ga0cec9339a4ab3eaf48c767087cd7f400", null ],
     [ "operator!=", "group___memory.html#ga34a9308dc656f694883718bf8fa4f1c2", null ],

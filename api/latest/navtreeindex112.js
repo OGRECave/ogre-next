@@ -1,5 +1,6 @@
 var NAVTREEINDEX112 =
 {
+"struct_ogre_1_1_lod_level.html#a39e40bdcbeea13357ace7e38e53446e3abb3bbdf3ae9b38c77e31e09e92e46b55":[8,0,0,567,0,1],
 "struct_ogre_1_1_lod_level.html#a39e40bdcbeea13357ace7e38e53446e3afe36984fdb5b516b5bc79f53d3e48699":[8,0,0,567,0,0],
 "struct_ogre_1_1_lod_level.html#a45b8fffff2bc5dc6d29967a7678421e2":[8,0,0,567,5],
 "struct_ogre_1_1_lod_level.html#a66963ac25513a9575ef21dfbef2c5256":[8,0,0,567,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX112 =
 "struct_ogre_1_1_pbs_property.html#a9e626e77eddbcda2cde0599ca4fbcd2e":[6,0,0,16,49],
 "struct_ogre_1_1_pbs_property.html#aa00d5f0944e6c9afda83f945852b10b3":[6,0,0,16,79],
 "struct_ogre_1_1_pbs_property.html#aa0b9c855539fd6f083759303448e88ed":[6,0,0,16,37],
-"struct_ogre_1_1_pbs_property.html#aa400163e80e15674460f24e2f0073d89":[6,0,0,16,55],
-"struct_ogre_1_1_pbs_property.html#aa7d37ede7ffa8cedc1458737da57b17a":[6,0,0,16,74]
+"struct_ogre_1_1_pbs_property.html#aa400163e80e15674460f24e2f0073d89":[6,0,0,16,55]
 };

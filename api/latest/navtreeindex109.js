@@ -1,5 +1,6 @@
 var NAVTREEINDEX109 =
 {
+"struct_ogre_1_1_descriptor_set_uav_1_1_texture_slot.html#a0f1bb3f8d64e2da03c02816cac680515":[6,2,10,17,2,3],
 "struct_ogre_1_1_descriptor_set_uav_1_1_texture_slot.html#a5cc0777a459ba2cf4f2bc1e1818cf1ab":[6,2,10,17,2,1],
 "struct_ogre_1_1_descriptor_set_uav_1_1_texture_slot.html#a6ef1461ef5181a8ed10ea94c1f87c51e":[6,2,10,17,2,2],
 "struct_ogre_1_1_descriptor_set_uav_1_1_texture_slot.html#a84675b0d869686a7bc836ddfdd148590":[6,2,10,17,2,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX109 =
 "struct_ogre_1_1_hidden_area_vr_settings.html#a8729ee2ece54466fc992a6185c27b4f1":[6,2,10,41,6],
 "struct_ogre_1_1_hidden_area_vr_settings.html#a8ab0b721d456556fcf54305f9c0c481c":[6,2,10,41,5],
 "struct_ogre_1_1_hidden_area_vr_settings.html#aac400000cac5c745ff5980999a3b9181":[6,2,10,41,7],
-"struct_ogre_1_1_hidden_area_vr_settings.html#af6f880a9fb10883cfdcd0977de3345de":[6,2,10,41,2],
-"struct_ogre_1_1_hidden_area_vr_settings.html#afbda8be8da981a34199b3786bf1660a3":[6,2,10,41,1]
+"struct_ogre_1_1_hidden_area_vr_settings.html#af6f880a9fb10883cfdcd0977de3345de":[6,2,10,41,2]
 };
