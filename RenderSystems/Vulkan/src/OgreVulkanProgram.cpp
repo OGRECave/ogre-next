@@ -51,41 +51,7 @@ THE SOFTWARE.
 #if defined( __GNUC__ ) && !defined( __clang__ )
 #    pragma GCC diagnostic pop
 #endif
-#include "glslang/SPIRV/Logger.h"
-
-// Inclusion of SPIRV headers triggers lots of C++11 errors we don't care
-namespace glslang
-{
-    struct SpvOptions
-    {
-        SpvOptions() :
-            generateDebugInfo( false ),
-            stripDebugInfo( false ),
-            disableOptimizer( true ),
-            optimizeSize( false ),
-            disassemble( false ),
-            validate( false )
-        {
-        }
-        bool generateDebugInfo;
-        bool stripDebugInfo;
-        bool disableOptimizer;
-        bool optimizeSize;
-        bool disassemble;
-        bool validate;
-    };
-
-    void GetSpirvVersion( std::string & );
-    int GetSpirvGeneratorVersion();
-    void GlslangToSpv( const glslang::TIntermediate &intermediate, std::vector<unsigned int> &spirv,
-                       SpvOptions *options = 0 );
-    void GlslangToSpv( const glslang::TIntermediate &intermediate, std::vector<unsigned int> &spirv,
-                       spv::SpvBuildLogger *logger, SpvOptions *options = 0 );
-    void OutputSpvBin( const std::vector<unsigned int> &spirv, const char *baseName );
-    void OutputSpvHex( const std::vector<unsigned int> &spirv, const char *baseName,
-                       const char *varName );
-
-}  // namespace glslang
+#include "glslang/SPIRV/GlslangToSpv.h"
 
 namespace Ogre
 {
