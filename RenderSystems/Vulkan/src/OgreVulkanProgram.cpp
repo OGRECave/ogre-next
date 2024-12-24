@@ -71,8 +71,8 @@ namespace Ogre
 
     private:
         // Prevent being able to copy this object
-        FreeModuleOnDestructor( const FreeModuleOnDestructor & );
-        FreeModuleOnDestructor &operator=( const FreeModuleOnDestructor & );
+        FreeModuleOnDestructor( const FreeModuleOnDestructor & ) = delete;
+        FreeModuleOnDestructor &operator=( const FreeModuleOnDestructor & ) = delete;
     };
 
     //-----------------------------------------------------------------------

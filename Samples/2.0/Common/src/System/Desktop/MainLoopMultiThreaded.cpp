@@ -211,7 +211,7 @@ unsigned long logicThread( Ogre::ThreadHandle *threadHandle )
     Ogre::Timer timer;
     YieldTimer yieldTimer( &timer );
 
-    unsigned long startTime = timer.getMicroseconds();
+    Ogre::uint64 startTime = timer.getMicroseconds();
 
     while( !graphicsSystem->getQuit() )
     {
