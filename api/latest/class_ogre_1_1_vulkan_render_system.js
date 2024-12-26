@@ -119,6 +119,7 @@ var class_ogre_1_1_vulkan_render_system =
     [ "initConfigOptions", "class_ogre_1_1_vulkan_render_system.html#a2ed03ae8d85301b4f0ff8f9600a5d773", null ],
     [ "initGPUProfiling", "class_ogre_1_1_vulkan_render_system.html#ae0d6f4281914c4125791c90493756907", null ],
     [ "initialiseFromRenderSystemCapabilities", "class_ogre_1_1_vulkan_render_system.html#a7f28018141da0116ab351701d159530f", null ],
+    [ "isDeviceLost", "class_ogre_1_1_vulkan_render_system.html#a0082ab55b9f2095554ed11ed3dd69084", null ],
     [ "isSameLayout", "class_ogre_1_1_vulkan_render_system.html#ad31de78889d42552467cdf2ee49cada3", null ],
     [ "loadPipelineCache", "class_ogre_1_1_vulkan_render_system.html#a1196674dbcf3e670eebd31aa3dd66557", null ],
     [ "markProfileEvent", "class_ogre_1_1_vulkan_render_system.html#a691b5029fbd88f511e9d20595cf5f9ed", null ],

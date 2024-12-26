@@ -400,6 +400,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7f28018141da0116ab351701d159530f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a7f28018141da0116ab351701d159530f">initialiseFromRenderSystemCapabilities</a> (<a class="el" href="class_ogre_1_1_render_system_capabilities.html">RenderSystemCapabilities</a> *caps, <a class="el" href="class_ogre_1_1_window.html">Window</a> *primary) override</td></tr>
 <tr class="memdesc:a7f28018141da0116ab351701d159530f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the render system from the capabilities.  <a href="class_ogre_1_1_vulkan_render_system.html#a7f28018141da0116ab351701d159530f">More...</a><br /></td></tr>
 <tr class="separator:a7f28018141da0116ab351701d159530f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0082ab55b9f2095554ed11ed3dd69084"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a0082ab55b9f2095554ed11ed3dd69084">isDeviceLost</a> () override</td></tr>
+<tr class="memdesc:a0082ab55b9f2095554ed11ed3dd69084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if device was lost and the application should destroy and recreate the device and all device depended resources using <a class="el" href="class_ogre_1_1_vulkan_render_system.html#a768ab4c8cd69d1d3d4dd117759b13701" title="Checks if device was lost and recreates it with all depended resources.">validateDevice()</a> call.  <a href="class_ogre_1_1_vulkan_render_system.html#a0082ab55b9f2095554ed11ed3dd69084">More...</a><br /></td></tr>
+<tr class="separator:a0082ab55b9f2095554ed11ed3dd69084"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad31de78889d42552467cdf2ee49cada3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#ad31de78889d42552467cdf2ee49cada3">isSameLayout</a> (<a class="el" href="namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7">ResourceLayout::Layout</a> a, <a class="el" href="namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7">ResourceLayout::Layout</a> b, const <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, bool bIsDebugCheck) const override</td></tr>
 <tr class="memdesc:ad31de78889d42552467cdf2ee49cada3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if 'a' and 'b' internally map to the same layout and should be considered equivalent for a given texture.  <a href="class_ogre_1_1_vulkan_render_system.html#ad31de78889d42552467cdf2ee49cada3">More...</a><br /></td></tr>
 <tr class="separator:ad31de78889d42552467cdf2ee49cada3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -456,7 +459,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a20202748993a987073131d6b8ea43c6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates the options set for the rendering system, returning a message if there are problems.  <a href="class_ogre_1_1_vulkan_render_system.html#a20202748993a987073131d6b8ea43c6a">More...</a><br /></td></tr>
 <tr class="separator:a20202748993a987073131d6b8ea43c6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a768ab4c8cd69d1d3d4dd117759b13701"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a768ab4c8cd69d1d3d4dd117759b13701">validateDevice</a> (bool forceDeviceElection=false) override</td></tr>
-<tr class="memdesc:a768ab4c8cd69d1d3d4dd117759b13701"><td class="mdescLeft">&#160;</td><td class="mdescRight">Some render systems have moments when GPU device is temporarily unavailable, for example when D3D11 device is lost, or when iOS app is in background, etc.  <a href="class_ogre_1_1_vulkan_render_system.html#a768ab4c8cd69d1d3d4dd117759b13701">More...</a><br /></td></tr>
+<tr class="memdesc:a768ab4c8cd69d1d3d4dd117759b13701"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if device was lost and recreates it with all depended resources.  <a href="class_ogre_1_1_vulkan_render_system.html#a768ab4c8cd69d1d3d4dd117759b13701">More...</a><br /></td></tr>
 <tr class="separator:a768ab4c8cd69d1d3d4dd117759b13701"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73ff97a1715d0c2382692774aa1b3f07"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_sample_description.html">SampleDescription</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a73ff97a1715d0c2382692774aa1b3f07">validateSampleDescription</a> (const <a class="el" href="struct_ogre_1_1_sample_description.html">SampleDescription</a> &amp;sampleDesc, <a class="el" href="group___image.html#ga71f09fe41a1db41186262f1aa5814a18">PixelFormatGpu</a> format, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> textureFlags) override</td></tr>
 <tr class="memdesc:a73ff97a1715d0c2382692774aa1b3f07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns supported sample description for requested FSAA mode, with graceful downgrading.  <a href="class_ogre_1_1_vulkan_render_system.html#a73ff97a1715d0c2382692774aa1b3f07">More...</a><br /></td></tr>
@@ -4644,6 +4647,42 @@ However <a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> cann
 
 </div>
 </div>
+<a id="a0082ab55b9f2095554ed11ed3dd69084"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0082ab55b9f2095554ed11ed3dd69084">&#9670;&nbsp;</a></span>isDeviceLost()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::VulkanRenderSystem::isDeviceLost </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if device was lost and the application should destroy and recreate the device and all device depended resources using <a class="el" href="class_ogre_1_1_vulkan_render_system.html#a768ab4c8cd69d1d3d4dd117759b13701" title="Checks if device was lost and recreates it with all depended resources.">validateDevice()</a> call. </p>
+<p>Note, that initial device lost condition detection is asynchronous, and can be reported by any 3D API call, resulting in RenderingApiException that should be catched. Device lost conditions are reported by 3D APIs as</p><ul>
+<li>Direct3D 9: D3DERR_DEVICELOST</li>
+<li>Direct3D 10+: DXGI_ERROR_DEVICE_REMOVED/_RESET/_HUNG/etc</li>
+<li>Vulkan: VK_ERROR_DEVICE_LOST</li>
+<li>OpenGL[ES]: GL_CONTEXT_LOST</li>
+<li>Metal: MTLCommandBufferErrorDeviceRemoved/AccessRevoked, MTLDeviceWasRemovedNotification </li>
+</ul>
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_render_system.html#a6a6c0544ad2e02be08fb19cb15a00db5">Ogre::RenderSystem</a>.</p>
+
+</div>
+</div>
 <a id="ad31de78889d42552467cdf2ee49cada3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad31de78889d42552467cdf2ee49cada3">&#9670;&nbsp;</a></span>isSameLayout()</h2>
 
@@ -5314,7 +5353,8 @@ Once this init sequence is completed the threads are independent but this startu
 </table>
 </div><div class="memdoc">
 
-<p>Some render systems have moments when GPU device is temporarily unavailable, for example when D3D11 device is lost, or when iOS app is in background, etc. </p>
+<p>Checks if device was lost and recreates it with all depended resources. </p>
+<p>Optionally elects best physical device even if current device was not lost. Without forceDeviceElection param this function is pretty lightweight and is automatically called by <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> on start of each frame. </p>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_render_system.html#a913bd8f0e2e19cf356ccaa3bed31543e">Ogre::RenderSystem</a>.</p>
 

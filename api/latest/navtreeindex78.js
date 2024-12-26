@@ -1,5 +1,8 @@
 var NAVTREEINDEX78 =
 {
+"class_ogre_1_1_vulkan_vao_manager.html#af84adcd5063ffc4c16f9735b26e07d3b":[8,0,0,1041,35],
+"class_ogre_1_1_vulkan_vao_manager.html#afbc41371222b8bad4d0df08b1edeba2a":[8,0,0,1041,15],
+"class_ogre_1_1_vulkan_vao_manager.html#affce885268f092b27677b1cbf551fad3":[8,0,0,1041,28],
 "class_ogre_1_1_vulkan_win32_support.html":[8,0,0,1042],
 "class_ogre_1_1_vulkan_win32_support.html#a3541d8a86a2a9301f0ae66850473f1b4":[8,0,0,1042,0],
 "class_ogre_1_1_vulkan_win32_support.html#a737d31c242a11ec7dafbf5e53867ba90":[8,0,0,1042,4],
@@ -246,8 +249,5 @@ var NAVTREEINDEX78 =
 "class_ogre_1_1_wire_aabb.html#ae4e1c5e6aaaa198a801cc122597469fe":[8,0,0,1061,7],
 "class_ogre_1_1_wire_aabb.html#afe132196de784f87a7016fa06cbe907e":[8,0,0,1061,6],
 "class_ogre_1_1_wire_aabb_factory.html":[8,0,0,1062],
-"class_ogre_1_1_wire_aabb_factory.html#a08eafba0b076630a8e7e60b5f46f097a":[8,0,0,1062,4],
-"class_ogre_1_1_wire_aabb_factory.html#a8db72b4819c9b95adc156a51ce8840e5":[8,0,0,1062,0],
-"class_ogre_1_1_wire_aabb_factory.html#a9b0c1cf9711935949fb4090d18b2c1c4":[8,0,0,1062,2],
-"class_ogre_1_1_wire_aabb_factory.html#aeca7d6e9453134a82e4457ceafc78ffc":[8,0,0,1062,1]
+"class_ogre_1_1_wire_aabb_factory.html#a08eafba0b076630a8e7e60b5f46f097a":[8,0,0,1062,4]
 };

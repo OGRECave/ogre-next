@@ -1,5 +1,6 @@
 var NAVTREEINDEX47 =
 {
+"class_ogre_1_1_mathlib_c.html#ab15fff902d3c0896379b73c54dab4432":[8,0,0,600,57],
 "class_ogre_1_1_mathlib_c.html#ab53ac1dc4a42cf5df069d912d4e31928":[8,0,0,600,49],
 "class_ogre_1_1_mathlib_c.html#ab6a28010f647e703ae2e2caedb75fc52":[8,0,0,600,28],
 "class_ogre_1_1_mathlib_c.html#ab780c9b15a4b9387e3683e078bddfa74":[8,0,0,600,32],
@@ -248,6 +249,5 @@ var NAVTREEINDEX47 =
 "class_ogre_1_1_mesh_serializer_impl.html#a0a5a3365f3e276d4158b1aac030ba5ce":[6,2,10,74,0],
 "class_ogre_1_1_mesh_serializer_impl.html#a3e4affe098778b6834aad962d1360deb":[6,2,10,74,3],
 "class_ogre_1_1_mesh_serializer_impl.html#a463303d3589d155222a85792ac88145c":[6,2,10,74,1],
-"class_ogre_1_1_mesh_serializer_impl.html#ab8249caad10960583a7596a52efa4d02":[6,2,10,74,2],
-"class_ogre_1_1_mesh_serializer_impl__v2__1___r0.html":[6,2,10,75]
+"class_ogre_1_1_mesh_serializer_impl.html#ab8249caad10960583a7596a52efa4d02":[6,2,10,74,2]
 };

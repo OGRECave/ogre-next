@@ -366,6 +366,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af32c27c7a39eefadb55480a5f110350b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ae0f324bcc1a167b3dd11228df11369"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a4ae0f324bcc1a167b3dd11228df11369">initRenderSystem</a> ()</td></tr>
 <tr class="separator:a4ae0f324bcc1a167b3dd11228df11369"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ad8a2c25708898f0151aadf862f11ec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a2ad8a2c25708898f0151aadf862f11ec">isDeviceLost</a> () override</td></tr>
+<tr class="memdesc:a2ad8a2c25708898f0151aadf862f11ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if device was lost and the application should destroy and recreate the device and all device depended resources using <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#aef0108b035ba4efa9a5ba004966c4a91" title="Checks if device was lost and recreates it with all depended resources.">validateDevice()</a> call.  <a href="class_ogre_1_1_d3_d11_render_system.html#a2ad8a2c25708898f0151aadf862f11ec">More...</a><br /></td></tr>
+<tr class="separator:a2ad8a2c25708898f0151aadf862f11ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95c2abc6ab7cb59ee249623eb9515628"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a95c2abc6ab7cb59ee249623eb9515628">markProfileEvent</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;eventName) override</td></tr>
 <tr class="memdesc:a95c2abc6ab7cb59ee249623eb9515628"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks an instantaneous event for graphics profilers.  <a href="class_ogre_1_1_d3_d11_render_system.html#a95c2abc6ab7cb59ee249623eb9515628">More...</a><br /></td></tr>
 <tr class="separator:a95c2abc6ab7cb59ee249623eb9515628"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -411,7 +414,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a3d7e0738522b0144613a690f5ff118f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates the options set for the rendering system, returning a message if there are problems.  <a href="class_ogre_1_1_d3_d11_render_system.html#a3d7e0738522b0144613a690f5ff118f8">More...</a><br /></td></tr>
 <tr class="separator:a3d7e0738522b0144613a690f5ff118f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef0108b035ba4efa9a5ba004966c4a91"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_render_system.html#aef0108b035ba4efa9a5ba004966c4a91">validateDevice</a> (bool forceDeviceElection=false) override</td></tr>
-<tr class="memdesc:aef0108b035ba4efa9a5ba004966c4a91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Some render systems have moments when GPU device is temporarily unavailable, for example when D3D11 device is lost, or when iOS app is in background, etc.  <a href="class_ogre_1_1_d3_d11_render_system.html#aef0108b035ba4efa9a5ba004966c4a91">More...</a><br /></td></tr>
+<tr class="memdesc:aef0108b035ba4efa9a5ba004966c4a91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if device was lost and recreates it with all depended resources.  <a href="class_ogre_1_1_d3_d11_render_system.html#aef0108b035ba4efa9a5ba004966c4a91">More...</a><br /></td></tr>
 <tr class="separator:aef0108b035ba4efa9a5ba004966c4a91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6fc36c28010a8d304b968f06ad72c7e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_sample_description.html">SampleDescription</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a6fc36c28010a8d304b968f06ad72c7e3">validateSampleDescription</a> (const <a class="el" href="struct_ogre_1_1_sample_description.html">SampleDescription</a> &amp;sampleDesc, <a class="el" href="group___image.html#ga71f09fe41a1db41186262f1aa5814a18">PixelFormatGpu</a> format, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> textureFlags) override</td></tr>
 <tr class="memdesc:a6fc36c28010a8d304b968f06ad72c7e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns supported sample description for requested FSAA mode, with graceful downgrading.  <a href="class_ogre_1_1_d3_d11_render_system.html#a6fc36c28010a8d304b968f06ad72c7e3">More...</a><br /></td></tr>
@@ -4259,6 +4262,42 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a2ad8a2c25708898f0151aadf862f11ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ad8a2c25708898f0151aadf862f11ec">&#9670;&nbsp;</a></span>isDeviceLost()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::D3D11RenderSystem::isDeviceLost </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if device was lost and the application should destroy and recreate the device and all device depended resources using <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#aef0108b035ba4efa9a5ba004966c4a91" title="Checks if device was lost and recreates it with all depended resources.">validateDevice()</a> call. </p>
+<p>Note, that initial device lost condition detection is asynchronous, and can be reported by any 3D API call, resulting in RenderingApiException that should be catched. Device lost conditions are reported by 3D APIs as</p><ul>
+<li>Direct3D 9: D3DERR_DEVICELOST</li>
+<li>Direct3D 10+: DXGI_ERROR_DEVICE_REMOVED/_RESET/_HUNG/etc</li>
+<li>Vulkan: VK_ERROR_DEVICE_LOST</li>
+<li>OpenGL[ES]: GL_CONTEXT_LOST</li>
+<li>Metal: MTLCommandBufferErrorDeviceRemoved/AccessRevoked, MTLDeviceWasRemovedNotification </li>
+</ul>
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_render_system.html#a6a6c0544ad2e02be08fb19cb15a00db5">Ogre::RenderSystem</a>.</p>
+
+</div>
+</div>
 <a id="a95c2abc6ab7cb59ee249623eb9515628"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a95c2abc6ab7cb59ee249623eb9515628">&#9670;&nbsp;</a></span>markProfileEvent()</h2>
 
@@ -4834,7 +4873,8 @@ Once this init sequence is completed the threads are independent but this startu
 </table>
 </div><div class="memdoc">
 
-<p>Some render systems have moments when GPU device is temporarily unavailable, for example when D3D11 device is lost, or when iOS app is in background, etc. </p>
+<p>Checks if device was lost and recreates it with all depended resources. </p>
+<p>Optionally elects best physical device even if current device was not lost. Without forceDeviceElection param this function is pretty lightweight and is automatically called by <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> on start of each frame. </p>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_render_system.html#a913bd8f0e2e19cf356ccaa3bed31543e">Ogre::RenderSystem</a>.</p>
 

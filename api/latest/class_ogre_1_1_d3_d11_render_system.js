@@ -105,6 +105,7 @@ var class_ogre_1_1_d3_d11_render_system =
     [ "initConfigOptions", "class_ogre_1_1_d3_d11_render_system.html#a5682546b302a210d789c31d23b9b0355", null ],
     [ "initGPUProfiling", "class_ogre_1_1_d3_d11_render_system.html#af32c27c7a39eefadb55480a5f110350b", null ],
     [ "initRenderSystem", "class_ogre_1_1_d3_d11_render_system.html#a4ae0f324bcc1a167b3dd11228df11369", null ],
+    [ "isDeviceLost", "class_ogre_1_1_d3_d11_render_system.html#a2ad8a2c25708898f0151aadf862f11ec", null ],
     [ "markProfileEvent", "class_ogre_1_1_d3_d11_render_system.html#a95c2abc6ab7cb59ee249623eb9515628", null ],
     [ "postExtraThreadsStarted", "class_ogre_1_1_d3_d11_render_system.html#adfef63c124fe69b0f64a677cbed89f8c", null ],
     [ "preExtraThreadsStarted", "class_ogre_1_1_d3_d11_render_system.html#a44e1f16c45882e64974751b4f81f6107", null ],

@@ -283,6 +283,7 @@ var group___render_system =
       [ "getWBufferEnabled", "class_ogre_1_1_render_system.html#ae0a982412b9878a5e9e95b34dde38cf0", null ],
       [ "hasAnisotropicMipMapFilter", "class_ogre_1_1_render_system.html#a2532f63fc0d0c2e76b6b61c804829628", null ],
       [ "initGPUProfiling", "class_ogre_1_1_render_system.html#a7f629d499ad8afe83cdd445198c8a128", null ],
+      [ "isDeviceLost", "class_ogre_1_1_render_system.html#a6a6c0544ad2e02be08fb19cb15a00db5", null ],
       [ "isGpuProgramBound", "class_ogre_1_1_render_system.html#a1ac003196b5b51384f714924a0041081", null ],
       [ "isReverseDepth", "class_ogre_1_1_render_system.html#a0f6d872e0df3b080da903d9e0f4af6ba", null ],
       [ "isSameLayout", "class_ogre_1_1_render_system.html#a387d5fa07b1c096496ce6a97c4f68505", null ],
