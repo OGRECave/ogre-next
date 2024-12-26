@@ -1279,6 +1279,8 @@ namespace Ogre
     {
         return mInstance->mVulkanPhysicalDevices;
     }
+    //---------------------------------------------------------------------
+    bool VulkanRenderSystem::isDeviceLost() { return mDevice && mDevice->isDeviceLost(); }
     //-------------------------------------------------------------------------
     bool VulkanRenderSystem::validateDevice( bool forceDeviceElection )
     {

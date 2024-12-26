@@ -221,6 +221,7 @@ namespace Ogre
 
         void              reinitialise() override;
         void              shutdown() override;
+        bool              isDeviceLost() override;
         bool              validateDevice( bool forceDeviceElection = false ) override;
         void              handleDeviceLost();
         void              setShadingType( ShadeOptions so );

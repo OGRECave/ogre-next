@@ -287,8 +287,23 @@ namespace Ogre
          */
         virtual void shutdown();
 
-        /** Some render systems have moments when GPU device is temporarily unavailable,
-            for example when D3D11 device is lost, or when iOS app is in background, etc.
+        /** Returns true if device was lost and the application should destroy and recreate
+            the device and all device depended resources using validateDevice() call. Note,
+            that initial device lost condition detection is asynchronous, and can be reported
+            by any 3D API call, resulting in RenderingApiException that should be catched.
+            Device lost conditions are reported by 3D APIs as
+            - Direct3D 9: D3DERR_DEVICELOST
+            - Direct3D 10+: DXGI_ERROR_DEVICE_REMOVED/_RESET/_HUNG/etc
+            - Vulkan: VK_ERROR_DEVICE_LOST
+            - OpenGL[ES]: GL_CONTEXT_LOST
+            - Metal: MTLCommandBufferErrorDeviceRemoved/AccessRevoked, MTLDeviceWasRemovedNotification
+         */
+        virtual bool isDeviceLost() { return false; }
+
+        /** Checks if device was lost and recreates it with all depended resources.
+            Optionally elects best physical device even if current device was not lost.
+            Without forceDeviceElection param this function is pretty lightweight
+            and is automatically called by Ogre on start of each frame.
          */
         virtual bool validateDevice( bool forceDeviceElection = false ) { return true; }
 

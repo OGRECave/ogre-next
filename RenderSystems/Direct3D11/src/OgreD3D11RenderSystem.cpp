@@ -1764,6 +1764,8 @@ namespace Ogre
                                                StringConverter::toString( passedTime ) + "ms" );
     }
     //---------------------------------------------------------------------
+    bool D3D11RenderSystem::isDeviceLost() { return !mDevice.isNull() && mDevice.IsDeviceLost(); }
+    //---------------------------------------------------------------------
     bool D3D11RenderSystem::validateDevice( bool forceDeviceElection )
     {
         if( mDevice.isNull() )

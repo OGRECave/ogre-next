@@ -156,6 +156,7 @@ namespace Ogre
         void shutdown() override;
         const FastArray<VulkanPhysicalDevice> &getVulkanPhysicalDevices() const;
         const VulkanPhysicalDevice &getActiveVulkanPhysicalDevice() const { return mActiveDevice; }
+        bool isDeviceLost() override;
         bool validateDevice( bool forceDeviceElection = false ) override;
         void handleDeviceLost();
 
