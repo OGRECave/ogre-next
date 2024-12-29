@@ -1177,7 +1177,11 @@ namespace Ogre
             }
 
             mActiveDevice = externalDevice
-                                ? VulkanPhysicalDevice( { externalDevice->physicalDevice } )
+                                ? VulkanPhysicalDevice( { externalDevice->physicalDevice,
+                                                          { 0ul, 0ul },
+                                                          VK_DRIVER_ID_MAX_ENUM,
+                                                          0u,
+                                                          "[OgreNext] External Device" } )
                                 : *mInstance->findByName( mVulkanSupport->getSelectedDeviceName() );
 
             mDevice = new VulkanDevice( this );
