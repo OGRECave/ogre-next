@@ -473,6 +473,16 @@ namespace Ogre
         areaLocalToShape.mCenter = mInvOrientation * areaLocalToShape.mCenter;
         areaLocalToShape.mCenter += mProbeShape.mCenter;
 
+        {
+            const Vector3 posLS = mInvOrientation * ( cameraPos - mArea.mCenter );
+            const Aabb areaLS = getAreaLS();
+            if( !areaLS.contains( posLS ) )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "cameraPos must be inside area.",
+                             "CubemapProbe::set" );
+            }
+        }
+
         if( ( !mProbeShape.contains( mArea ) && !mCreator->getAutomaticMode() ) ||
             ( !mProbeShape.intersects( mArea ) && mCreator->getAutomaticMode() ) )
         {
