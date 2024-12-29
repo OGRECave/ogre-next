@@ -13,7 +13,10 @@ void ParticleSystem::_cloneFrom( const ParticleSystem *_original )
     this->mBoundsAutoUpdate = original->mBoundsAutoUpdate;
     this->mBoundsUpdateTime = original->mBoundsUpdateTime;
     this->mUpdateRemainTime = original->mUpdateRemainTime;
+    this->mResourceGroupName = original->mResourceGroupName;
+    this->mMaterialName = original->mMaterialName;
     this->mIsRendererConfigured = original->mIsRendererConfigured;
+    this->mMaterial = original->mMaterial;
     this->mDefaultWidth = original->mDefaultWidth;
     this->mDefaultHeight = original->mDefaultHeight;
     this->mSpeedFactor = original->mSpeedFactor;
@@ -31,13 +34,6 @@ void ParticleSystem::_cloneFrom( const ParticleSystem *_original )
     this->mParticleEmitterRootNode = original->mParticleEmitterRootNode;
     this->mTranslateParticleDirectionIntoWorldSpace =
         original->mTranslateParticleDirectionIntoWorldSpace;
-    this->mRenderer = original->mRenderer;
-    this->mCullIndividual = original->mCullIndividual;
-    this->mPoolSize = original->mPoolSize;
-    this->mEmittedEmitterPoolSize = original->mEmittedEmitterPoolSize;
-    this->mResourceGroupName = original->mResourceGroupName;
-    this->mMaterialName = original->mMaterialName;
-    this->mMaterial = original->mMaterial;
     this->mActiveParticles = original->mActiveParticles;
     this->mFreeParticles = original->mFreeParticles;
     this->mParticlePool = original->mParticlePool;
@@ -46,6 +42,10 @@ void ParticleSystem::_cloneFrom( const ParticleSystem *_original )
     this->mActiveEmittedEmitters = original->mActiveEmittedEmitters;
     this->mEmitters = original->mEmitters;
     this->mAffectors = original->mAffectors;
+    this->mRenderer = original->mRenderer;
+    this->mCullIndividual = original->mCullIndividual;
     this->mRendererType = original->mRendererType;
+    this->mPoolSize = original->mPoolSize;
+    this->mEmittedEmitterPoolSize = original->mEmittedEmitterPoolSize;
     this->mOrigin = original->mOrigin;
 }

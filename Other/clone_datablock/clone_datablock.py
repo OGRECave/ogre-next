@@ -3,13 +3,14 @@
 
 import argparse
 import clang.cindex
-import io;
-import os;
+import io
+import os
 import sys
-#import hashlib
+# import hashlib
 
 if not sys.platform.startswith("win32"):
     from ctypes.util import find_library
+
 
 def setup_clang(library):
     if library == None:
@@ -17,8 +18,8 @@ def setup_clang(library):
         if sys.platform.startswith("win32"):
             clang.cindex.Config.set_library_path("C:/Program Files/LLVM/bin")
         else:
-            clang.cindex.Config.set_library_file( find_library('clang-10') )
-            #clang.cindex.Config.set_library_path("/usr/lib")
+            clang.cindex.Config.set_library_file(find_library('clang-18'))
+            # clang.cindex.Config.set_library_path("/usr/lib")
     else:
         clang.cindex.Config.set_library_file(library)
 
@@ -42,15 +43,16 @@ def parse_classdecl(cursor, classname, classmembers, baseclassname):
                 elif children.kind == clang.cindex.CursorKind.CXX_BASE_SPECIFIER:
                     base_class = children.get_definition()
                     for base_children in base_class.get_children():
-                        if base_children.displayname == "cloneImpl(Ogre::HlmsDatablock *)":
-                            baseclassname.append( base_class.spelling )
+                        if base_children.displayname == "cloneImpl(Ogre::HlmsDatablock *)" \
+                                or base_children.displayname == "cloneImpl(HlmsDatablock *)":
+                            baseclassname.append(base_class.spelling)
                             break
             except ValueError:
                 pass
 
 
 def parse_fielddecl(cursor, classname, classmembers):
-    cursortype = cursor.type;
+    cursortype = cursor.type
     if cursortype.kind == clang.cindex.TypeKind.TYPEDEF:
         cursortype = cursortype.get_canonical()
 
@@ -63,7 +65,8 @@ def parse_fielddecl(cursor, classname, classmembers):
         if cursortype.element_type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
             # Bidimensional C-style array
             # @todo Add support for multidimensional C-style array
-            size = (cursortype.element_count, cursortype.element_type.element_count)
+            size = (cursortype.element_count,
+                    cursortype.element_type.element_count)
         else:
             # C-style array
             size = (cursortype.element_count, )
