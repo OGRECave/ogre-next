@@ -191,7 +191,9 @@ namespace Ogre
         if( device != nullptr && device->mDeviceLostReason == VK_SUCCESS &&
             ( vkResult == VK_ERROR_OUT_OF_HOST_MEMORY || vkResult == VK_ERROR_OUT_OF_DEVICE_MEMORY ||
               vkResult == VK_ERROR_DEVICE_LOST ) )
+        {
             device->mDeviceLostReason = vkResult;
+        }
 
         ExceptionFactory::throwException( Exception::ERR_RENDERINGAPI_ERROR, vkResult,
                                           desc + ( "\nVkResult = " + vkResultToString( vkResult ) ), src,
