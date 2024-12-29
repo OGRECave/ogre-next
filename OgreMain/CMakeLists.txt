@@ -85,23 +85,23 @@ add_filter_only( "Source Files\\Threading" "${CMAKE_CURRENT_SOURCE_DIR}/src/Thre
 list(REMOVE_ITEM HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreFreeImageCodec2.h"
 	"${CMAKE_CURRENT_SOURCE_DIR}/include/OgreASTCCodec.h"
 	"${CMAKE_CURRENT_SOURCE_DIR}/include/OgreDDSCodec2.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/OgrePVRTCCodec.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreETCCodec.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreZip.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreAPKZipArchive.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreSTBICodec.h"
+	"${CMAKE_CURRENT_SOURCE_DIR}/include/OgrePVRTCCodec.h"
+	"${CMAKE_CURRENT_SOURCE_DIR}/include/OgreETCCodec.h"
+	"${CMAKE_CURRENT_SOURCE_DIR}/include/OgreZip.h"
+	"${CMAKE_CURRENT_SOURCE_DIR}/include/OgreAPKZipArchive.h"
+	"${CMAKE_CURRENT_SOURCE_DIR}/include/OgreSTBICodec.h"
 )
 
 # Remove optional source files
 list(REMOVE_ITEM SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreFreeImageCodec2.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/OgreASTCCodec.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/OgreDDSCodec2.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/OgrePVRTCCodec.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreETCCodec.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreZip.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreAPKZipArchive.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreSearchOps.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreSTBICodec.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/OgrePVRTCCodec.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/OgreETCCodec.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/OgreZip.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/OgreAPKZipArchive.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/OgreSearchOps.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/OgreSTBICodec.cpp"
 )
 
 if (OGRE_SIMD_SSE2)
@@ -127,48 +127,48 @@ if (EMSCRIPTEN)
   set(PLATFORM_HEADER_INSTALL "Emscripten")
 elseif (WIN32)
   set(THREAD_SOURCE_FILES
-      src/Threading/OgreBarrierWin.cpp
-	  src/Threading/OgreLightweightMutexWin.cpp
-      src/Threading/OgreThreadsWin.cpp
+	src/Threading/OgreBarrierWin.cpp
+	src/Threading/OgreLightweightMutexWin.cpp
+	src/Threading/OgreThreadsWin.cpp
   )
   list(APPEND PLATFORM_SOURCE_FILES src/WIN32/OgreWin32Resources.rc)
   if (WINDOWS_STORE OR WINDOWS_PHONE)
     include_directories("include/WIN32")
     set(PLATFORM_HEADERS
-      include/WIN32/OgreComPtr.h
-      include/WIN32/OgreConfigDialogImpWinRT.h
-      include/WIN32/OgreErrorDialogImpWinRT.h
-      include/WIN32/OgreTimerImp.h
+	include/WIN32/OgreComPtr.h
+	include/WIN32/OgreConfigDialogImpWinRT.h
+	include/WIN32/OgreErrorDialogImpWinRT.h
+	include/WIN32/OgreTimerImp.h
     )
     set(PLATFORM_SOURCE_FILES
-      src/WIN32/OgreOptimisedUtilDirectXMath.cpp
-      src/WIN32/OgreConfigDialogWinRT.cpp
-      src/WIN32/OgreErrorDialogWinRT.cpp
-      src/WIN32/OgreFileSystemLayer.cpp
-      src/WIN32/OgreTimer.cpp
+	src/WIN32/OgreOptimisedUtilDirectXMath.cpp
+	src/WIN32/OgreConfigDialogWinRT.cpp
+	src/WIN32/OgreErrorDialogWinRT.cpp
+	src/WIN32/OgreFileSystemLayer.cpp
+	src/WIN32/OgreTimer.cpp
     )  
 
     set(PLATFORM_HEADER_INSTALL "WIN32")
   else ()
     include_directories("include/WIN32")
     set(PLATFORM_HEADERS
-      include/WIN32/OgreComPtr.h
-      include/WIN32/OgreConfigDialogImp.h
-      include/WIN32/OgreErrorDialogImp.h
-      include/WIN32/OgreTimerImp.h
-      include/WIN32/OgreMinGWSupport.h
+	include/WIN32/OgreComPtr.h
+	include/WIN32/OgreConfigDialogImp.h
+	include/WIN32/OgreErrorDialogImp.h
+	include/WIN32/OgreTimerImp.h
+	include/WIN32/OgreMinGWSupport.h
     )
     set(PLATFORM_SOURCE_FILES
-      src/WIN32/OgreOptimisedUtilDirectXMath.cpp
-      src/WIN32/OgreConfigDialog.cpp
-      src/WIN32/OgreErrorDialog.cpp
-      src/WIN32/OgreFileSystemLayer.cpp
-      src/WIN32/OgreTimer.cpp
-      src/WIN32/resource.h
+	src/WIN32/OgreOptimisedUtilDirectXMath.cpp
+	src/WIN32/OgreConfigDialog.cpp
+	src/WIN32/OgreErrorDialog.cpp
+	src/WIN32/OgreFileSystemLayer.cpp
+	src/WIN32/OgreTimer.cpp
+	src/WIN32/resource.h
     )  
     set(RESOURCE_FILES
-      src/WIN32/resource.h
-      src/WIN32/OgreWin32Resources.rc
+	src/WIN32/resource.h
+	src/WIN32/OgreWin32Resources.rc
     )
     source_group(Resources FILES ${RESOURCE_FILES})
     set(PLATFORM_HEADER_INSTALL "WIN32")
@@ -263,9 +263,9 @@ endif()
 
 if (NOT WIN32)
   set(THREAD_SOURCE_FILES
-      src/Threading/OgreBarrierPThreads.cpp
-	  src/Threading/OgreLightweightMutexPThreads.cpp
-      src/Threading/OgreThreadsPThreads.cpp
+	src/Threading/OgreBarrierPThreads.cpp
+	src/Threading/OgreLightweightMutexPThreads.cpp
+	src/Threading/OgreThreadsPThreads.cpp
   )
 endif()
 
