@@ -238,6 +238,9 @@ namespace Ogre
 
         datablock->mShadowConstantBias = mShadowConstantBias;
 
+        for( size_t i = 0u; i < NumShaderTypes; ++i )
+            datablock->mCustomPieceFileIdHash[i] = mCustomPieceFileIdHash[i];
+
         cloneImpl( datablock );
 
         datablock->calculateHash();
