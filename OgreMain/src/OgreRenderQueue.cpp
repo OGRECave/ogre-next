@@ -124,19 +124,20 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void RenderQueue::_releaseManualHardwareResources()
     {
-        assert( mUsedIndirectBuffers.empty() );
-
-        IndirectBufferPackedVec::const_iterator itor = mFreeIndirectBuffers.begin();
-        IndirectBufferPackedVec::const_iterator endt = mFreeIndirectBuffers.end();
-
-        while( itor != endt )
+        for( IndirectBufferPacked *buf : mUsedIndirectBuffers )
         {
-            if( ( *itor )->getMappingState() != MS_UNMAPPED )
-                ( *itor )->unmap( UO_UNMAP_ALL );
-            mVaoManager->destroyIndirectBuffer( *itor );
-            ++itor;
+            if( buf->getMappingState() != MS_UNMAPPED )
+                buf->unmap( UO_UNMAP_ALL );
+            mVaoManager->destroyIndirectBuffer( buf );
         }
+        mUsedIndirectBuffers.clear();
 
+        for( IndirectBufferPacked *buf : mFreeIndirectBuffers )
+        {
+            if( buf->getMappingState() != MS_UNMAPPED )
+                buf->unmap( UO_UNMAP_ALL );
+            mVaoManager->destroyIndirectBuffer( buf );
+        }
         mFreeIndirectBuffers.clear();
     }
     //-----------------------------------------------------------------------
