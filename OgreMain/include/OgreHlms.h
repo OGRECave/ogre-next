@@ -1252,6 +1252,7 @@ namespace Ogre
         static const IdString AlphaBlend;
         static const IdString AlphaToCoverage;
         static const IdString AlphaHash;
+        static const IdString AccurateNonUniformNormalScaling;
         // Per material. Related with SsRefractionsAvailable
         static const IdString ScreenSpaceRefractions;
         static const IdString

@@ -204,6 +204,8 @@ namespace Ogre
     const IdString HlmsBaseProp::AlphaBlend = IdString( "hlms_alphablend" );
     const IdString HlmsBaseProp::AlphaToCoverage = IdString( "hlms_alpha_to_coverage" );
     const IdString HlmsBaseProp::AlphaHash = IdString( "hlms_alpha_hash" );
+    const IdString HlmsBaseProp::AccurateNonUniformNormalScaling =
+        IdString( "hlms_accurate_non_uniform_normal_scaling" );
     const IdString HlmsBaseProp::ScreenSpaceRefractions = IdString( "hlms_screen_space_refractions" );
     // We use a different convention because it's a really private property that ideally
     // shouldn't be exposed to users.

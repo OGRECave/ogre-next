@@ -455,6 +455,15 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void HlmsDatablock::setAccurateNonUniformNormalScaling( bool bAccurate )
+    {
+        if( mAccurateNonUniformNormalScaling != bAccurate )
+        {
+            mAccurateNonUniformNormalScaling = bAccurate;
+            flushRenderables();
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void HlmsDatablock::setAlphaHashing( bool bAlphaHashing )
     {
         if( mAlphaHashing != bAlphaHashing )

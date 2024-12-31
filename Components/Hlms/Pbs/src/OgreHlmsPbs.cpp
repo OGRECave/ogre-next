@@ -764,6 +764,9 @@ namespace Ogre
         setProperty( kNoTid, PbsProperty::FresnelWorkflow, fresnelWorkflow );
         setProperty( kNoTid, PbsProperty::MetallicWorkflow, metallicWorkflow );
 
+        if( datablock->getAccurateNonUniformNormalScaling() )
+            setProperty( kNoTid, HlmsBaseProp::AccurateNonUniformNormalScaling, 1 );
+
         if( datablock->getTwoSidedLighting() )
             setProperty( kNoTid, PbsProperty::TwoSidedLighting, 1 );
 

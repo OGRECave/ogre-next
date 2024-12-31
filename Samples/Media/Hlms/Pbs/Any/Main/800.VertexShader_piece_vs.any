@@ -35,7 +35,7 @@
     @insertpiece( DeclShadowMapMacros )
 	@insertpiece( DeclAtmosphereNprSkyFuncs )
 	
-	@property( accurate_non_uniform_scaled_normals )
+	@property( hlms_accurate_non_uniform_normal_scaling )
 		// Computes transpose( adjugate( m ) )
 		// See:
 		//  https://x.com/iquilezles/status/1866219178409316362

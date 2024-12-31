@@ -58,6 +58,7 @@
             "blendblock" : "unique_name",
             "alpha_test" : ["disabled", 0.5],
             "shadow_const_bias" : 0.01,
+            "accurate_non_uniform_normal_scaling" : false,
             "two_sided"  :  false,
             "receive_shadows"	:	true,
 
