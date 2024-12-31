@@ -10,6 +10,9 @@
 
 	@insertpiece( Common_Matrix_DeclUnpackMatrix4x4 )
 	@insertpiece( Common_Matrix_DeclUnpackMatrix4x3 )
+	@property( hlms_skeleton || hlms_pose )
+		@insertpiece( Common_Matrix_DeclLoadOgreFloat4x3 )
+	@end
 	@property( hlms_particle_system )
 		@insertpiece( DeclQuaternion )
 	@end
@@ -33,19 +36,41 @@
 	@insertpiece( DeclAtmosphereNprSkyFuncs )
 	
 	@property( accurate_non_uniform_scaled_normals )
-		midf3x3 adjugate( midf3x3 m )
+		// Computes transpose( adjugate( m ) )
+		// See:
+		//  https://x.com/iquilezles/status/1866219178409316362
+		//  https://www.shadertoy.com/view/3s33zj
+		//  https://github.com/graphitemaster/normals_revisited
+		midf3x3 adjugateForNormals( midf3x3 m )
 		{
-			midf3x3 n;
-			n[0][0] = m[1][1] * m[2][2] - m[1][2] * m[2][1];
-			n[0][1] = m[0][2] * m[2][1] - m[0][1] * m[2][2];
-			n[0][2] = m[0][1] * m[1][2] - m[0][2] * m[1][1];
-			n[1][0] = m[1][2] * m[2][0] - m[1][0] * m[2][2];
-			n[1][1] = m[0][0] * m[2][2] - m[0][2] * m[2][0];
-			n[1][2] = m[0][2] * m[1][0] - m[0][0] * m[1][2];
-			n[2][0] = m[1][0] * m[2][1] - m[2][0] * m[1][1];
-			n[2][1] = m[0][1] * m[2][0] - m[0][0] * m[2][1];
-			n[2][2] = m[0][0] * m[1][1] - m[0][1] * m[1][0];
+			const midf3 r0 = getMatrixRow( m, 0 ).xyz;
+			const midf3 r1 = getMatrixRow( m, 1 ).xyz;
+			const midf3 r2 = getMatrixRow( m, 2 ).xyz;
+			midf3x3 n = buildFloat3x3( cross( r1.xyz, r2.xyz ),
+									   cross( r2.xyz, r0.xyz ),
+									   cross( r0.xyz, r1.xyz ) );
 			return n;
+		}
+
+		INLINE midf3x3 adjugateForNormalsFrom4x3( ogre_float4x3 m )
+		{
+			const midf3 r0 = midf3_c( getMatrixRow( m, 0 ).xyz );
+			const midf3 r1 = midf3_c( getMatrixRow( m, 1 ).xyz );
+			const midf3 r2 = midf3_c( getMatrixRow( m, 2 ).xyz );
+			midf3x3 n = buildFloat3x3( cross( r1.xyz, r2.xyz ),
+									   cross( r2.xyz, r0.xyz ),
+									   cross( r0.xyz, r1.xyz ) );
+			return n;
+		}
+	@else
+		midf3x3 adjugateForNormals( midf3x3 m )
+		{
+			return m;
+		}
+
+		INLINE midf3x3 adjugateForNormalsFrom4x3( ogre_float4x3 m )
+		{
+			return toMidf3x3( m );
 		}
 	@end
 @end
@@ -63,58 +88,41 @@
 @property( hlms_skeleton )
 @piece( SkeletonTransform )
 	uint _idx = (inVs_blendIndices[0] << 1u) + inVs_blendIndices[0]; //inVs_blendIndices[0] * 3u; a 32-bit int multiply is 4 cycles on GCN! (and mul24 is not exposed to GLSL...)
-	uint matStart = worldMaterialIdx[inVs_drawId].x >> 9u;
-	float4 worldMat[3];
-	worldMat[0] = readOnlyFetch( worldMatBuf, int(matStart + _idx + 0u) );
-	worldMat[1] = readOnlyFetch( worldMatBuf, int(matStart + _idx + 1u) );
-	worldMat[2] = readOnlyFetch( worldMatBuf, int(matStart + _idx + 2u) );
+	const uint matStart = worldMaterialIdx[inVs_drawId].x >> 9u;
+	ogre_float4x3 worldMat;
+	worldMat = makeOgreFloat4x3( readOnlyFetch( worldMatBuf, int( matStart + _idx + 0u ) ),
+								 readOnlyFetch( worldMatBuf, int( matStart + _idx + 1u ) ),
+								 readOnlyFetch( worldMatBuf, int( matStart + _idx + 2u ) ) );
 	float4 worldPos;
-	worldPos.x = dot( worldMat[0], inputPos );
-	worldPos.y = dot( worldMat[1], inputPos );
-	worldPos.z = dot( worldMat[2], inputPos );
-	worldPos.xyz *= inVs_blendWeights[0];
-    @property( hlms_normal || hlms_qtangent )
+	worldPos.xyz = mul( inputPos, worldMat ) * inVs_blendWeights[0];
+	@property( hlms_normal || hlms_qtangent )
+		midf3x3 normalAdjMat = adjugateForNormalsFrom4x3( worldMat );
+
 		midf3 worldNorm;
-		worldNorm.x = dot( midf3_c( worldMat[0].xyz ), inputNormal );
-		worldNorm.y = dot( midf3_c( worldMat[1].xyz ), inputNormal );
-		worldNorm.z = dot( midf3_c( worldMat[2].xyz ), inputNormal );
-		worldNorm *= midf_c( inVs_blendWeights[0] );
+		worldNorm = mul( inputNormal, normalAdjMat ) * midf_c( inVs_blendWeights[0] );
 	@end
 	@property( normal_map )
 		midf3 worldTang;
-		worldTang.x = dot( midf3_c( worldMat[0].xyz ), inputTangent );
-		worldTang.y = dot( midf3_c( worldMat[1].xyz ), inputTangent );
-		worldTang.z = dot( midf3_c( worldMat[2].xyz ), inputTangent );
-		worldTang *= midf_c( inVs_blendWeights[0] );
+		worldTang = mul( inputTangent, normalAdjMat ) * midf_c( inVs_blendWeights[0] );
 	@end
 
-	@psub( NeedsMoreThan1BonePerVertex, hlms_bones_per_vertex, 1 )
-	@property( NeedsMoreThan1BonePerVertex )
-		float4 tmp4;
-		tmp4.w = 1.0;
-		midf3 tmp3;
-	@end //!NeedsMoreThan1BonePerVertex
 	@foreach( hlms_bones_per_vertex, n, 1 )
-		_idx = (inVs_blendIndices[@n] << 1u) + inVs_blendIndices[@n]; //inVs_blendIndices[@n] * 3; a 32-bit int multiply is 4 cycles on GCN! (and mul24 is not exposed to GLSL...)
-		worldMat[0] = readOnlyFetch( worldMatBuf, int(matStart + _idx + 0u) );
-		worldMat[1] = readOnlyFetch( worldMatBuf, int(matStart + _idx + 1u) );
-		worldMat[2] = readOnlyFetch( worldMatBuf, int(matStart + _idx + 2u) );
-		tmp4.x = dot( worldMat[0], inputPos );
-		tmp4.y = dot( worldMat[1], inputPos );
-		tmp4.z = dot( worldMat[2], inputPos );
-		worldPos.xyz += (tmp4 * inVs_blendWeights[@n]).xyz;
+		_idx = (inVs_blendIndices[@n] << 1u) + inVs_blendIndices[@n]; //inVs_blendIndices[@n] * 3; a 32-bit int multiply is 4 cycles on GCN! (and mul24 is not exposed to GLSL...).
+		worldMat = makeOgreFloat4x3( readOnlyFetch( worldMatBuf, int( matStart + _idx + 0u ) ),
+									 readOnlyFetch( worldMatBuf, int( matStart + _idx + 1u ) ),
+									 readOnlyFetch( worldMatBuf, int( matStart + _idx + 2u ) ) );
+		worldPos.xyz += mul( inputPos, worldMat ) * inVs_blendWeights[@n];
 		@property( hlms_normal || hlms_qtangent )
-			tmp3.x = dot( midf3_c( worldMat[0].xyz ), inputNormal );
-			tmp3.y = dot( midf3_c( worldMat[1].xyz ), inputNormal );
-			tmp3.z = dot( midf3_c( worldMat[2].xyz ), inputNormal );
-			worldNorm += tmp3.xyz * midf_c( inVs_blendWeights[@n] );
+			normalAdjMat = adjugateForNormalsFrom4x3( worldMat );
+			worldNorm += mul( inputNormal, normalAdjMat ) * midf_c( inVs_blendWeights[@n] );
 		@end
 		@property( normal_map )
-			tmp3.x = dot( midf3_c( worldMat[0].xyz ), inputTangent );
-			tmp3.y = dot( midf3_c( worldMat[1].xyz ), inputTangent );
-			tmp3.z = dot( midf3_c( worldMat[2].xyz ), inputTangent );
-			worldTang += tmp3.xyz * midf_c( inVs_blendWeights[@n] );
+			worldNorm += mul( inputTangent, normalAdjMat ) * midf_c( inVs_blendWeights[@n] );
 		@end
+	@end
+
+	@property( hlms_normal || hlms_qtangent )
+		worldNorm = normalize( worldNorm );
 	@end
 
 	worldPos.w = 1.0;
@@ -185,14 +193,13 @@
 	// If hlms_skeleton is defined the transforms will be provided by bones.
 	// If hlms_pose is not combined with hlms_skeleton the object's worldMat and worldView have to be set.
 	@property( !hlms_skeleton )
-		float4 worldMat[3];
-		worldMat[0] = readOnlyFetch( worldMatBuf, int( poseDataStart + @value(NumPoseWeightVectors)u + 1u ) );
-		worldMat[1] = readOnlyFetch( worldMatBuf, int( poseDataStart + @value(NumPoseWeightVectors)u + 2u ) );
-		worldMat[2] = readOnlyFetch( worldMatBuf, int( poseDataStart + @value(NumPoseWeightVectors)u + 3u ) );
+		ogre_float4x3 worldMat;
+		worldMat = makeOgreFloat4x3(
+			readOnlyFetch( worldMatBuf, int( poseDataStart + @value( NumPoseWeightVectors )u + 1u ) ),
+			readOnlyFetch( worldMatBuf, int( poseDataStart + @value( NumPoseWeightVectors )u + 2u ) ),
+			readOnlyFetch( worldMatBuf, int( poseDataStart + @value( NumPoseWeightVectors )u + 3u ) ) );
 		float4 worldPos;
-		worldPos.x = dot( worldMat[0], inputPos );
-		worldPos.y = dot( worldMat[1], inputPos );
-		worldPos.z = dot( worldMat[2], inputPos );
+		worldPos.xyz = mul( inputPos, worldMat );
 		worldPos.w = 1.0;
 
 		@property( hlms_normal || hlms_qtangent )
@@ -213,11 +220,12 @@
 	@property( hlms_normal || hlms_qtangent )	outVs.pos		= @insertpiece( CalculatePsPos );@end
 	@property( hlms_normal || hlms_qtangent )
 		midf3x3 worldMat3x3 = toMidf3x3( worldViewMat );
-		@property( accurate_non_uniform_scaled_normals )
-			midf3x3 normalMat = transpose( adjugate( worldMat3x3 ) );
-			outVs.normal = normalize( mul( @insertpiece(local_normal), normalMat ) );
-		@else
+		@property( hlms_skeleton )
+			// worldViewMat is actually passBuf.view so we don't need the adjugate. We've already done that.
 			outVs.normal = mul( @insertpiece(local_normal), worldMat3x3 );
+		@else
+			midf3x3 normalMat = adjugateForNormals( worldMat3x3 );
+			outVs.normal = mul( @insertpiece(local_normal), normalMat );
 		@end
 	@end
 	@property( normal_map )						outVs.tangent	= mul( @insertpiece(local_tangent), toMidf3x3( worldViewMat ) );@end
@@ -290,19 +298,20 @@
 
 		float4 worldPos = float4( mul(inVs_vertex, worldMat).xyz, 1.0f );
 		@property( ( hlms_normal || hlms_qtangent) && hlms_num_shadow_map_lights )
-			// We need worldNorm for normal offset bias
-			midf3 worldNorm = mul( inputNormal, toMidf3x3( worldMat ) ).xyz;
+			const midf3x3 normalAdjMat = adjugateForNormalsFrom4x3( worldMat );
+
+			// We need worldNorm for normal offset bias.
+			midf3 worldNorm = normalize( mul( inputNormal, normalAdjMat ).xyz );
 		@end
 	@end
 
 	@insertpiece( PoseTransform )
 
 	@property( !hlms_skeleton && hlms_pose && ( hlms_normal || hlms_qtangent) && hlms_num_shadow_map_lights )
-		// We need worldNorm for normal offset bias, special path when using poses
-		midf3 worldNorm;
-		worldNorm.x = dot( midf3_c( worldMat[0].xyz ), inputNormal );
-		worldNorm.y = dot( midf3_c( worldMat[1].xyz ), inputNormal );
-		worldNorm.z = dot( midf3_c( worldMat[2].xyz ), inputNormal );
+		const midf3x3 normalAdjMat = adjugateForNormalsFrom4x3( worldMat );
+
+		// We need worldNorm for normal offset bias, special path when using poses.
+		midf3 worldNorm = normalize( mul( inputNormal, normalAdjMat ).xyz );
 	@end
 
 	@insertpiece( SkeletonTransform )
