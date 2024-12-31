@@ -117,7 +117,7 @@
 			worldNorm += mul( inputNormal, normalAdjMat ) * midf_c( inVs_blendWeights[@n] );
 		@end
 		@property( normal_map )
-			worldNorm += mul( inputTangent, normalAdjMat ) * midf_c( inVs_blendWeights[@n] );
+			worldTang += mul( inputTangent, normalAdjMat ) * midf_c( inVs_blendWeights[@n] );
 		@end
 	@end
 
