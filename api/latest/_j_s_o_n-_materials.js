@@ -56,6 +56,7 @@ var _j_s_o_n__materials =
     ] ],
     [ "Reference Guide: HLMS PBS Datablock", "hlmspbsdatablockref.html", [
       [ "Common Datablock Parameters:", "hlmspbsdatablockref.html#dbCommonParameters", [
+        [ "Parameter: accurate_non_uniform_normal_scaling", "hlmspbsdatablockref.html#dbParamAccurateNonUniformNormalScaling", null ],
         [ "Parameter: alpha_test", "hlmspbsdatablockref.html#dbParamAlphaTest", null ],
         [ "Parameter: blendblock", "hlmspbsdatablockref.html#dbParamBlendBlock", null ],
         [ "Parameter: macroblock", "hlmspbsdatablockref.html#dbParamMacroBlock", null ],

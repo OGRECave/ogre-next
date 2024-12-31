@@ -1,5 +1,7 @@
 var NAVTREEINDEX69 =
 {
+"class_ogre_1_1_staging_texture_buffer_impl.html#ad2f3c66603fc7e844e0b45c52b1ca5ef":[6,2,10,106,7],
+"class_ogre_1_1_staging_texture_buffer_impl.html#af1119300dee47505b106d1da6f18577a":[6,2,10,106,0],
 "class_ogre_1_1_staging_texture_manager.html":[8,0,0,898],
 "class_ogre_1_1_staging_texture_manager.html#a08032f5765443d5c35d413dd8a8e5849":[8,0,0,898,0],
 "class_ogre_1_1_staging_texture_manager.html#a49795dd8250aff0abe8646811c6a4bf1":[8,0,0,898,2],
@@ -174,14 +176,14 @@ var NAVTREEINDEX69 =
 "class_ogre_1_1_sub_item.html#ab2d3e0b9de4887c724e8787a044337a1":[6,0,1,55,5],
 "class_ogre_1_1_sub_item.html#ab4c66fed80a7372f7898fccd1f821eb1":[6,2,11,55,3],
 "class_ogre_1_1_sub_item.html#ab4c66fed80a7372f7898fccd1f821eb1":[6,0,1,55,3],
-"class_ogre_1_1_sub_item.html#ad0005f520ec5739b126b5a5421f1eef4":[6,0,1,55,1],
 "class_ogre_1_1_sub_item.html#ad0005f520ec5739b126b5a5421f1eef4":[6,2,11,55,1],
+"class_ogre_1_1_sub_item.html#ad0005f520ec5739b126b5a5421f1eef4":[6,0,1,55,1],
 "class_ogre_1_1_sub_item.html#ad3cd53e0bfca3c6399a7f257329b30dc":[6,0,1,55,6],
 "class_ogre_1_1_sub_item.html#ad3cd53e0bfca3c6399a7f257329b30dc":[6,2,11,55,6],
 "class_ogre_1_1_sub_item.html#ad530c3ce557d0f24aa7011f2ceb91ead":[6,2,11,55,10],
 "class_ogre_1_1_sub_item.html#ad530c3ce557d0f24aa7011f2ceb91ead":[6,0,1,55,10],
-"class_ogre_1_1_sub_item.html#ae72b0350ca9deb7a6fb7940f2f5a088a":[6,2,11,55,9],
 "class_ogre_1_1_sub_item.html#ae72b0350ca9deb7a6fb7940f2f5a088a":[6,0,1,55,9],
+"class_ogre_1_1_sub_item.html#ae72b0350ca9deb7a6fb7940f2f5a088a":[6,2,11,55,9],
 "class_ogre_1_1_sub_item.html#ae86009da7744548c4c347617cb3ab2da":[6,2,11,55,0],
 "class_ogre_1_1_sub_item.html#ae86009da7744548c4c347617cb3ab2da":[6,0,1,55,0],
 "class_ogre_1_1_sub_item.html#affce28947124dd4573fb224a975fdce9":[6,2,11,55,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX69 =
 "class_ogre_1_1_tag_point.html#a46c521c0f9d2bd52844e9131644aac6b":[6,2,0,8,4],
 "class_ogre_1_1_tag_point.html#a7610cd7b83d0a9845331970be5b8ad49":[6,2,0,8,2],
 "class_ogre_1_1_tag_point.html#a790b5f3c260a3a487b90f8d6875228eb":[6,2,0,8,5],
-"class_ogre_1_1_tag_point.html#a8e764733599dad131c89eca095e9d707":[6,2,0,8,0],
-"class_ogre_1_1_tag_point.html#a9cf6ba03b520f4a839241e6168f28cfd":[6,2,0,8,6],
-"class_ogre_1_1_tag_point.html#afb6cdccc2e12dada84db117b08caf6ea":[6,2,0,8,1]
+"class_ogre_1_1_tag_point.html#a8e764733599dad131c89eca095e9d707":[6,2,0,8,0]
 };

@@ -125,6 +125,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aad4a3cb37e49d6aac51b648a121038dc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms_datablock.html">HlmsDatablock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#aad4a3cb37e49d6aac51b648a121038dc">clone</a> (<a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> name) const</td></tr>
 <tr class="memdesc:aad4a3cb37e49d6aac51b648a121038dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a copy of this datablock with the same settings, but a different name.  <a href="class_ogre_1_1_hlms_datablock.html#aad4a3cb37e49d6aac51b648a121038dc">More...</a><br /></td></tr>
 <tr class="separator:aad4a3cb37e49d6aac51b648a121038dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad36a1339c77eed85ce7488e1f82263f2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ad36a1339c77eed85ce7488e1f82263f2">getAccurateNonUniformNormalScaling</a> () const</td></tr>
+<tr class="separator:ad36a1339c77eed85ce7488e1f82263f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5b16d0602b5668877a7aeec28e0239e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#af5b16d0602b5668877a7aeec28e0239e">getAlphaHashing</a> () const</td></tr>
 <tr class="separator:af5b16d0602b5668877a7aeec28e0239e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7567020e1e5f76035ef68d0724059046"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a7567020e1e5f76035ef68d0724059046">getAlphaTest</a> () const</td></tr>
@@ -172,6 +174,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2bdfaaee402c04a5db850af5382af2c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f0826a189eec659051ce6513eafaa57"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a3f0826a189eec659051ce6513eafaa57">saveTextures</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;folderPath, set&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &gt;::type &amp;savedTextures, bool saveOitd, bool saveOriginal, <a class="el" href="class_ogre_1_1_hlms_texture_export_listener.html">HlmsTextureExportListener</a> *listener)</td></tr>
 <tr class="separator:a3f0826a189eec659051ce6513eafaa57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec064a9bcd3fcd695489379c299a76d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#aec064a9bcd3fcd695489379c299a76d5">setAccurateNonUniformNormalScaling</a> (bool bAccurate)</td></tr>
+<tr class="memdesc:aec064a9bcd3fcd695489379c299a76d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">When objects are scaled by non-uniform values, normals tend to get skewed or deformed causing wrong lighting.  <a href="class_ogre_1_1_hlms_datablock.html#aec064a9bcd3fcd695489379c299a76d5">More...</a><br /></td></tr>
+<tr class="separator:aec064a9bcd3fcd695489379c299a76d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae011026cebbe3b509aef579cb6884922"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ae011026cebbe3b509aef579cb6884922">setAlphaHashing</a> (bool bAlphaHashing)</td></tr>
 <tr class="memdesc:ae011026cebbe3b509aef579cb6884922"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uses a trick to <em>mimic</em> true Order Independent Transparency alpha blending.  <a href="class_ogre_1_1_hlms_datablock.html#ae011026cebbe3b509aef579cb6884922">More...</a><br /></td></tr>
 <tr class="separator:ae011026cebbe3b509aef579cb6884922"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -390,6 +395,31 @@ Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="ad36a1339c77eed85ce7488e1f82263f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad36a1339c77eed85ce7488e1f82263f2">&#9670;&nbsp;</a></span>getAccurateNonUniformNormalScaling()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::HlmsDatablock::getAccurateNonUniformNormalScaling </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -958,6 +988,49 @@ Public Attributes</h2></td></tr>
 </dl>
 
 <p>Reimplemented in <a class="el" href="group___resources.html#gaa174345a2019a718cfcd2aa274abe595">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS</a>.</p>
+
+</div>
+</div>
+<a id="aec064a9bcd3fcd695489379c299a76d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec064a9bcd3fcd695489379c299a76d5">&#9670;&nbsp;</a></span>setAccurateNonUniformNormalScaling()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::HlmsDatablock::setAccurateNonUniformNormalScaling </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bAccurate</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>When objects are scaled by non-uniform values, normals tend to get skewed or deformed causing wrong lighting. </p>
+<p>This setting enables the use of additional math in the vertex shader to ensure normals are properly scaled in these situations.</p>
+<p>Calling this function triggers a HlmsDatablock::flushRenderables. </p><dl class="section remark"><dt>Remarks</dt><dd>This setting would make more sense to be per object (or ideally autodetect when scale factor isn't uniform) but this is expensive to perform. Therefore the setting lives in the material instead, which is the best next thing. </dd></dl>
+<dl class="section user"><dt></dt><dd></dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Due to the way the math works, the normal isn't exactly the same even if there is no scaling involved. This is particularly noticeable with normal-offset bias in directional lights shadow mapping, as the shadow displaces a little bit. </dd></dl>
+<dl class="section user"><dt></dt><dd></dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Non-uniform scaling is when the scale is not the same for all axes. Examples of non-uniform scaling: <div class="fragment"><div class="line">node-&gt;setScale( 2.0f, 5.0f, 0.02f );</div>
+<div class="line">node-&gt;setScale( 1.0f, 5.0f, 1.0f );</div>
+</div><!-- fragment --> Examples of uniform scaling: <div class="fragment"><div class="line">node-&gt;setScale( 1.0f, 1.0f, 1.0f );</div>
+<div class="line">node-&gt;setScale( 3.0f, 3.0f, 3.0f );</div>
+</div><!-- fragment --> </dd></dl>
+<dl class="section user"><dt></dt><dd></dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>For more info see:<ul>
+<li><a href="https://x.com/iquilezles/status/1866219178409316362">https://x.com/iquilezles/status/1866219178409316362</a></li>
+<li><a href="https://www.shadertoy.com/view/3s33zj">https://www.shadertoy.com/view/3s33zj</a></li>
+<li><a href="https://github.com/graphitemaster/normals_revisited">https://github.com/graphitemaster/normals_revisited</a> </li>
+</ul>
+</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bAccurate</td><td>True to enable the additional math for correction. False otherwise (default value). </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

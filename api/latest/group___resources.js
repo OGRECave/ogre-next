@@ -852,6 +852,7 @@ var group___resources =
     ] ],
     [ "HlmsBaseProp", "struct_ogre_1_1_hlms_base_prop.html", [
       [ "_DatablockCustomPieceShaderName", "struct_ogre_1_1_hlms_base_prop.html#a6c483207ade33479b0c2c36cf28864c9", null ],
+      [ "AccurateNonUniformNormalScaling", "struct_ogre_1_1_hlms_base_prop.html#a7d0fd1580c77b92abf503a4ef9ed7c02", null ],
       [ "AllPointLights", "struct_ogre_1_1_hlms_base_prop.html#a13b868a5d8b53b3e69e0499f5518f83e", null ],
       [ "AlphaBlend", "struct_ogre_1_1_hlms_base_prop.html#a8bf55758ad2d7622abc44f449631bc9c", null ],
       [ "AlphaHash", "struct_ogre_1_1_hlms_base_prop.html#a310ab60826c2d55718ffe097cf6d7dae", null ],
@@ -1045,6 +1046,7 @@ var group___resources =
       [ "_unlinkRenderable", "class_ogre_1_1_hlms_datablock.html#a7de763729aa608f77b7bee59e1172bd3", null ],
       [ "calculateHash", "class_ogre_1_1_hlms_datablock.html#aa55bf43e01f95d05f3e28da6d4c49464", null ],
       [ "clone", "class_ogre_1_1_hlms_datablock.html#aad4a3cb37e49d6aac51b648a121038dc", null ],
+      [ "getAccurateNonUniformNormalScaling", "class_ogre_1_1_hlms_datablock.html#ad36a1339c77eed85ce7488e1f82263f2", null ],
       [ "getAlphaHashing", "class_ogre_1_1_hlms_datablock.html#af5b16d0602b5668877a7aeec28e0239e", null ],
       [ "getAlphaTest", "class_ogre_1_1_hlms_datablock.html#a7567020e1e5f76035ef68d0724059046", null ],
       [ "getAlphaTestShadowCasterOnly", "class_ogre_1_1_hlms_datablock.html#a53f23bd5d085a6a04d31e036765f9c2b", null ],
@@ -1066,6 +1068,7 @@ var group___resources =
       [ "hasCustomShadowMacroblock", "class_ogre_1_1_hlms_datablock.html#a080f4a428d886dbe9fab72e88e9ba7e2", null ],
       [ "preload", "class_ogre_1_1_hlms_datablock.html#a2bdfaaee402c04a5db850af5382af2c3", null ],
       [ "saveTextures", "class_ogre_1_1_hlms_datablock.html#a3f0826a189eec659051ce6513eafaa57", null ],
+      [ "setAccurateNonUniformNormalScaling", "class_ogre_1_1_hlms_datablock.html#aec064a9bcd3fcd695489379c299a76d5", null ],
       [ "setAlphaHashing", "class_ogre_1_1_hlms_datablock.html#ae011026cebbe3b509aef579cb6884922", null ],
       [ "setAlphaTest", "class_ogre_1_1_hlms_datablock.html#a4c5bc6488a0f67fa0838f41352172b4d", null ],
       [ "setAlphaTestThreshold", "class_ogre_1_1_hlms_datablock.html#a1a2d38b259d670575af205798067c612", null ],

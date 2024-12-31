@@ -1,6 +1,7 @@
 var struct_ogre_1_1_hlms_base_prop =
 [
     [ "_DatablockCustomPieceShaderName", "struct_ogre_1_1_hlms_base_prop.html#a6c483207ade33479b0c2c36cf28864c9", null ],
+    [ "AccurateNonUniformNormalScaling", "struct_ogre_1_1_hlms_base_prop.html#a7d0fd1580c77b92abf503a4ef9ed7c02", null ],
     [ "AllPointLights", "struct_ogre_1_1_hlms_base_prop.html#a13b868a5d8b53b3e69e0499f5518f83e", null ],
     [ "AlphaBlend", "struct_ogre_1_1_hlms_base_prop.html#a8bf55758ad2d7622abc44f449631bc9c", null ],
     [ "AlphaHash", "struct_ogre_1_1_hlms_base_prop.html#a310ab60826c2d55718ffe097cf6d7dae", null ],
