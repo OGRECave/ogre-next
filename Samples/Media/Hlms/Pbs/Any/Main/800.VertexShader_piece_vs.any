@@ -122,6 +122,7 @@
 	@end
 
 	@property( hlms_normal || hlms_qtangent )
+		// Must be normalized for offset bias to work correctly.
 		worldNorm = normalize( worldNorm );
 	@end
 
@@ -301,6 +302,7 @@
 			const midf3x3 normalAdjMat = adjugateForNormalsFrom4x3( worldMat );
 
 			// We need worldNorm for normal offset bias.
+			// Must be normalized for offset bias to work correctly.
 			midf3 worldNorm = normalize( mul( inputNormal, normalAdjMat ).xyz );
 		@end
 	@end
@@ -311,6 +313,7 @@
 		const midf3x3 normalAdjMat = adjugateForNormalsFrom4x3( worldMat );
 
 		// We need worldNorm for normal offset bias, special path when using poses.
+		// Must be normalized for offset bias to work correctly.
 		midf3 worldNorm = normalize( mul( inputNormal, normalAdjMat ).xyz );
 	@end
 
