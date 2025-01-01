@@ -151,17 +151,6 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
   else()
     set( OGRE_WARNING_FLAGS "${OGRE_WARNING_FLAGS} \
         -Winconsistent-missing-destructor-override -Wcomma -Wsign-conversion -Wconversion" )
-#    set( OGRE_WARNING_FLAGS
-#        "-Weverything -Wno-reserved-id-macro -Wno-old-style-cast -Wno-documentation-unknown-command \
-#        -Wno-zero-as-null-pointer-constant -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-undef \
-#        -Wno-padded -Werror" )
-#    set( OGRE_WARNING_FLAGS
-#        "-Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-unused-macros -Wno-newline-eof \
-#        -Wno-exit-time-destructors -Wno-global-constructors -Wno-gnu-zero-variadic-macro-arguments \
-#        -Wno-documentation -Wno-shadow -Wno-switch-enum -Wno-missing-prototypes \
-#        -Wno-used-but-marked-unused -Wno-zero-as-null-pointer-constant -Wno-old-style-cast \
-#        -Wno-double-promotion -Wno-reserved-id-macro -Wno-undef -Wno-documentation-unknown-command \
-#        -Wno-float-equal -Wno-covered-switch-default -Werror" )
   endif()
 
   if (EMSCRIPTEN)
@@ -373,9 +362,7 @@ elseif(EMSCRIPTEN)
   add_definitions(-DEMSCRIPTEN=1 -D__EMSCRIPTEN__=1)
   set(TargetPlatform "Emscripten")
   set(OGRE_PLATFORM OGRE_PLATFORM_EMSCRIPTEN)
-
   set(OGRE_BUILD_RENDERSYSTEM_GLES2 TRUE CACHE BOOL "Forcing OpenGL ES 2 RenderSystem for Emscripten" FORCE)
-
   set(OGRE_CONFIG_ENABLE_STBI TRUE CACHE BOOL "Enable STBIImageCodec on Emscripten (Smaller Footprint)" FORCE)
   set(OGRE_CONFIG_ENABLE_FREEIMAGE FALSE CACHE BOOL "Disable Freeimage on Emscripten (Smaller Footprint)" FORCE)
   set(OGRE_BUILD_TOOLS FALSE CACHE BOOL "Disable tools on Emscripten" FORCE)
@@ -528,7 +515,6 @@ cmake_dependent_option(OGRE_BUILD_XSIEXPORTER "Build the Softimage exporter" FAL
 option(OGRE_BUILD_TESTS "Build the unit tests & PlayPen" FALSE)
 option(OGRE_CONFIG_DOUBLE "Use doubles instead of floats in Ogre" FALSE)
 option(OGRE_CONFIG_NODE_INHERIT_TRANSFORM "Tells the node whether it should inherit full transform from it's parent node or derived position, orientation and scale" FALSE)
-
 
 set(OGRE_PLUGIN_LIB_PREFIX "" CACHE STRING "Prefix dynamically linked plugins, e.g. 'lib' (GCC and Clang only)")
 
@@ -760,10 +746,8 @@ add_subdirectory(CMake)
 # provide option to install dependencies on Windows
 include(InstallDependencies)
 
-
 # Provide CPack packaging target
 include(Packaging)
-
 
 # Show feature summary
 include(OgreFeatureSummary)
