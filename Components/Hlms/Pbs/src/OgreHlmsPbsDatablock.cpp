@@ -351,6 +351,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HlmsPbsDatablock::~HlmsPbsDatablock()
     {
+        if( mCubemapProbe )
+        {
+            mCubemapProbe->_removeReference();
+            mCubemapProbe = 0;
+        }
         if( mAssignedPool )
             static_cast<HlmsPbs*>(mCreator)->releaseSlot( this );
     }
