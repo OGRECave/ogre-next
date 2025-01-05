@@ -1,5 +1,7 @@
 <map id="Ogre::FloatGpuParameterControllerValue" name="Ogre::FloatGpuParameterControllerValue">
-<area shape="rect" id="node1" title="Predefined controller value for setting a single floating&#45; point value in a constant parameter of a v..." alt="" coords="5,169,256,211"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_controller_value.html" title=" " alt="" coords="50,80,211,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="63,5,199,32"/>
+<area shape="rect" id="Node000001" title="Predefined controller value for setting a single floating&#45; point value in a constant parameter of a v..." alt="" coords="5,167,256,207"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_controller_value.html" title=" " alt="" coords="50,79,211,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,133,133,166,128,166,128,133"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="63,5,199,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="133,44,133,79,128,79,128,44"/>
 </map>

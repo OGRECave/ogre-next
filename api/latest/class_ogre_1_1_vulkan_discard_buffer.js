@@ -6,9 +6,9 @@ var class_ogre_1_1_vulkan_discard_buffer =
     [ "getBlockStart", "class_ogre_1_1_vulkan_discard_buffer.html#a69ec43a70426813b917d58d96f4c6420", null ],
     [ "getBufferName", "class_ogre_1_1_vulkan_discard_buffer.html#a38cb600842e34461cb4cebdc3a3b0383", null ],
     [ "getOffset", "class_ogre_1_1_vulkan_discard_buffer.html#a0676a18c19c77136b99aed366de6702a", null ],
-    [ "getOwner", "class_ogre_1_1_vulkan_discard_buffer.html#a3d35e9d3914f2e4d078a377ffeb48810", null ],
+    [ "getOwner", "class_ogre_1_1_vulkan_discard_buffer.html#a19b18a44562c80a640fcb411a37f694f", null ],
     [ "getSizeBytes", "class_ogre_1_1_vulkan_discard_buffer.html#a422ba39c3648e94afd2228f54ee70792", null ],
-    [ "map", "class_ogre_1_1_vulkan_discard_buffer.html#a88218fd4bc84f60425401c1771354d19", null ],
+    [ "map", "class_ogre_1_1_vulkan_discard_buffer.html#a5e832767a647d79438cd07285ca3b93c", null ],
     [ "unmap", "class_ogre_1_1_vulkan_discard_buffer.html#a158291da553cd3eb908f3d35e18e72f0", null ],
     [ "VulkanDiscardBufferManager", "class_ogre_1_1_vulkan_discard_buffer.html#a1c0faf8035c84945332107680afb638e", null ]
 ];

@@ -1,4 +1,5 @@
 <map id="Ogre::KfTransformArrayMemoryManager" name="Ogre::KfTransformArrayMemoryManager">
-<area shape="rect" id="node1" title="Implementation to create the KfTransform variables needed by SkeletonTrack See SkeletonAnimationDef a..." alt="" coords="5,80,235,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_array_memory_manager.html" title="Abstract memory manager for managing large chunks of contiguous memory, optimized for SoA (Structure ..." alt="" coords="17,5,223,32"/>
+<area shape="rect" id="Node000001" title="Implementation to create the KfTransform variables needed by SkeletonTrack See SkeletonAnimationDef a..." alt="" coords="5,79,235,119"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_array_memory_manager.html" title="Abstract memory manager for managing large chunks of contiguous memory, optimized for SoA (Structure ..." alt="" coords="17,5,223,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,44,123,79,117,79,117,44"/>
 </map>

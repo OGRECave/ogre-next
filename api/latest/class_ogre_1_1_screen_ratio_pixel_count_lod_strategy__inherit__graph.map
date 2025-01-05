@@ -1,7 +1,11 @@
 <map id="Ogre::ScreenRatioPixelCountLodStrategy" name="Ogre::ScreenRatioPixelCountLodStrategy">
-<area shape="rect" id="node1" title="The ScreenRatioPixelCountLodStrategy class Implement a strategy which calculates LOD ratios based on ..." alt="" coords="664,27,872,69"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_pixel_count_lod_strategy_base.html" title="Abstract base class for level of detail strategy based on pixel count approximations from bounding sp..." alt="" coords="376,5,616,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_lod_strategy.html" title="Strategy for determining level of detail." alt="" coords="189,5,328,32"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,5,141,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="389,57,603,98"/>
+<area shape="rect" id="Node000001" title="The ScreenRatioPixelCountLodStrategy class Implement a strategy which calculates LOD ratios based on ..." alt="" coords="703,27,911,67"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_pixel_count_lod_strategy_base.html" title="Abstract base class for level of detail strategy based on pixel count approximations from bounding sp..." alt="" coords="415,5,655,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="666,29,703,33,702,39,666,35"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_lod_strategy.html" title="Strategy for determining level of detail." alt="" coords="228,5,367,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="381,15,414,15,414,21,381,21"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="194,15,228,15,228,21,194,21"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="427,55,642,95"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="655,60,702,55,703,61,656,66"/>
 </map>

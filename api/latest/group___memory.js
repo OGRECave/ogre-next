@@ -1,12 +1,12 @@
 var group___memory =
 [
     [ "OgreMemoryAllocatorConfig.h", "_ogre_memory_allocator_config_8h.html", null ],
-    [ "AlignedMemory", "class_ogre_1_1_aligned_memory.html", [
-      [ "allocate", "class_ogre_1_1_aligned_memory.html#ad13640994e404f2befc9b7eb72f8659c", null ],
-      [ "allocate", "class_ogre_1_1_aligned_memory.html#a63bd1c2f3f55b989331a04fccc07356a", null ],
+    [ "Ogre::AlignedMemory", "class_ogre_1_1_aligned_memory.html", [
+      [ "allocate", "class_ogre_1_1_aligned_memory.html#a01be2f01666893095a00393e2c167467", null ],
+      [ "allocate", "class_ogre_1_1_aligned_memory.html#aa7da5d5b67d88adec855c35ff1c3b8c2", null ],
       [ "deallocate", "class_ogre_1_1_aligned_memory.html#aec9665c128b282869284a6025520adee", null ]
     ] ],
-    [ "ArrayMemoryManager", "class_ogre_1_1_array_memory_manager.html", [
+    [ "Ogre::ArrayMemoryManager", "class_ogre_1_1_array_memory_manager.html", [
       [ "RebaseListener", "class_ogre_1_1_array_memory_manager_1_1_rebase_listener.html", [
         [ "applyRebase", "class_ogre_1_1_array_memory_manager_1_1_rebase_listener.html#aefcfd7751701e774e0ba3ba51935438d", null ],
         [ "buildDiffList", "class_ogre_1_1_array_memory_manager_1_1_rebase_listener.html#a11b893d66c86445b9d73207118a579cc", null ],
@@ -27,7 +27,7 @@ var group___memory =
       [ "shrinkToFit", "class_ogre_1_1_array_memory_manager.html#a1885069fab42349469ea51ea34590bad", null ],
       [ "MAX_MEMORY_SLOTS", "class_ogre_1_1_array_memory_manager.html#a738870646404c47464027863b9dea16c", null ]
     ] ],
-    [ "BoneArrayMemoryManager", "class_ogre_1_1_bone_array_memory_manager.html", [
+    [ "Ogre::BoneArrayMemoryManager", "class_ogre_1_1_bone_array_memory_manager.html", [
       [ "MemoryTypes", "class_ogre_1_1_bone_array_memory_manager.html#aa20b2f1745d99d3534242c64c19e5c7e", [
         [ "Owner", "class_ogre_1_1_bone_array_memory_manager.html#aa20b2f1745d99d3534242c64c19e5c7ea6b77403ae3588cc6d8f67271366327d5", null ],
         [ "Position", "class_ogre_1_1_bone_array_memory_manager.html#aa20b2f1745d99d3534242c64c19e5c7ead79d876167733f51086b408040fdc79f", null ],
@@ -49,7 +49,7 @@ var group___memory =
       [ "BoneInitRoutines", "class_ogre_1_1_bone_array_memory_manager.html#a54f67f154e7bc21144c1962b83063fad", null ],
       [ "ElementsMemSize", "class_ogre_1_1_bone_array_memory_manager.html#a1f9c3b7d2dee1d619161717d8ed0cd80", null ]
     ] ],
-    [ "BoneMemoryManager", "class_ogre_1_1_bone_memory_manager.html", [
+    [ "Ogre::BoneMemoryManager", "class_ogre_1_1_bone_memory_manager.html", [
       [ "BoneMemoryManager", "class_ogre_1_1_bone_memory_manager.html#a4c64e11634352f03b8f6ef06c94ff800", null ],
       [ "~BoneMemoryManager", "class_ogre_1_1_bone_memory_manager.html#a2fe61696b7ed82aded3499505ce3ccb7", null ],
       [ "_growToDepth", "class_ogre_1_1_bone_memory_manager.html#a4c9581070ff4387dd6c96219c215bbb8", null ],
@@ -66,7 +66,7 @@ var group___memory =
       [ "performCleanup", "class_ogre_1_1_bone_memory_manager.html#a5ffc6b33d1a50b4d57a03b474139e518", null ],
       [ "setBoneRebaseListener", "class_ogre_1_1_bone_memory_manager.html#a530c24952c58a0547716da1a6b75d78b", null ]
     ] ],
-    [ "NodeArrayMemoryManager", "class_ogre_1_1_node_array_memory_manager.html", [
+    [ "Ogre::NodeArrayMemoryManager", "class_ogre_1_1_node_array_memory_manager.html", [
       [ "MemoryTypes", "class_ogre_1_1_node_array_memory_manager.html#af49bbc12dc3106a2fc7b8f1761ac9f5f", [
         [ "Parent", "class_ogre_1_1_node_array_memory_manager.html#af49bbc12dc3106a2fc7b8f1761ac9f5fa8c8ec6390a866bd1f9a26254c3e389f3", null ],
         [ "Owner", "class_ogre_1_1_node_array_memory_manager.html#af49bbc12dc3106a2fc7b8f1761ac9f5faf719d71db838dd7d4d921ee72c3f3ac0", null ],
@@ -89,10 +89,10 @@ var group___memory =
       [ "NodeCleanupRoutines", "class_ogre_1_1_node_array_memory_manager.html#ae4768b67e11274e71bd9e63d967b9f6e", null ],
       [ "NodeInitRoutines", "class_ogre_1_1_node_array_memory_manager.html#a6c467643bfc4d843669d49d9a0a3fd8b", null ]
     ] ],
-    [ "NodeMemoryManager", "class_ogre_1_1_node_memory_manager.html", [
+    [ "Ogre::NodeMemoryManager", "class_ogre_1_1_node_memory_manager.html", [
       [ "NodeMemoryManager", "class_ogre_1_1_node_memory_manager.html#a9e9d52de89e6efa2e55b5f61cb294452", null ],
       [ "~NodeMemoryManager", "class_ogre_1_1_node_memory_manager.html#ac9c59bce25d96c7768bf3629e6f1ed30", null ],
-      [ "_getDummyNode", "class_ogre_1_1_node_memory_manager.html#a46a0db9a7a97980cd5b0c81982de3a65", null ],
+      [ "_getDummyNode", "class_ogre_1_1_node_memory_manager.html#a412053cae8c86607e82a4e8eb028b194", null ],
       [ "_setTwin", "class_ogre_1_1_node_memory_manager.html#a57055b26b6143047324615ab6bd3dae5", null ],
       [ "applyRebase", "class_ogre_1_1_node_memory_manager.html#aa20a53d831e60d71b68aee7943193b37", null ],
       [ "buildDiffList", "class_ogre_1_1_node_memory_manager.html#a20b94d34a5d7adca205bac9e4adecd9e", null ],
@@ -100,7 +100,7 @@ var group___memory =
       [ "getFirstNode", "class_ogre_1_1_node_memory_manager.html#afdfc8edff9c1cdee4a3a0aa87386a737", null ],
       [ "getMemoryManagerType", "class_ogre_1_1_node_memory_manager.html#a553b5879adf0c61bd251deeba8500ff9", null ],
       [ "getNumDepths", "class_ogre_1_1_node_memory_manager.html#a08a80e0d43c9243fd3f0541e84d95c02", null ],
-      [ "getTwin", "class_ogre_1_1_node_memory_manager.html#a2c8e220a8af88ad84c0c1b02c062a111", null ],
+      [ "getTwin", "class_ogre_1_1_node_memory_manager.html#a1a0ee246bef7df095b9a881259b5170b", null ],
       [ "migrateTo", "class_ogre_1_1_node_memory_manager.html#a2e70fdeca2ff47f8b08861ae24af762f", null ],
       [ "migrateTo", "class_ogre_1_1_node_memory_manager.html#a5e020556390ffe4f5402d3600211389d", null ],
       [ "migrateToAndAttach", "class_ogre_1_1_node_memory_manager.html#a4829385f3716fde5e5d535d47f9b4880", null ],
@@ -114,7 +114,7 @@ var group___memory =
       [ "performCleanup", "class_ogre_1_1_node_memory_manager.html#a7ceae32e071b4ee2433e8463504ed398", null ],
       [ "shrinkToFit", "class_ogre_1_1_node_memory_manager.html#adb199d18bd2c249d44fc89c2dbfdedaf", null ]
     ] ],
-    [ "ObjectDataArrayMemoryManager", "class_ogre_1_1_object_data_array_memory_manager.html", [
+    [ "Ogre::ObjectDataArrayMemoryManager", "class_ogre_1_1_object_data_array_memory_manager.html", [
       [ "MemoryTypes", "class_ogre_1_1_object_data_array_memory_manager.html#a01818bd20c4b78825933f9b4e5c83735", [
         [ "Parent", "class_ogre_1_1_object_data_array_memory_manager.html#a01818bd20c4b78825933f9b4e5c83735ac64922a0801701b751899aff96fa1072", null ],
         [ "Owner", "class_ogre_1_1_object_data_array_memory_manager.html#a01818bd20c4b78825933f9b4e5c83735a32327967a22f45457ddf494bb4fe88e9", null ],
@@ -137,10 +137,10 @@ var group___memory =
       [ "ElementsMemSize", "class_ogre_1_1_object_data_array_memory_manager.html#a0a0ae39e5ad5949c8ceb27f82db9a76a", null ],
       [ "ObjCleanupRoutines", "class_ogre_1_1_object_data_array_memory_manager.html#a3669ef2901676e46a8d2961761e8660c", null ]
     ] ],
-    [ "ObjectMemoryManager", "class_ogre_1_1_object_memory_manager.html", [
+    [ "Ogre::ObjectMemoryManager", "class_ogre_1_1_object_memory_manager.html", [
       [ "ObjectMemoryManager", "class_ogre_1_1_object_memory_manager.html#ad476ec990597bd0f5e505f7a14527aa9", null ],
       [ "~ObjectMemoryManager", "class_ogre_1_1_object_memory_manager.html#a23a9dab2dfc3424659309b98794b2633", null ],
-      [ "_getDummyNode", "class_ogre_1_1_object_memory_manager.html#ab8b3386b902554aac974ae646000e411", null ],
+      [ "_getDummyNode", "class_ogre_1_1_object_memory_manager.html#ae1c8bb313d67c58eb8405040b77ad567", null ],
       [ "_getTotalRenderQueues", "class_ogre_1_1_object_memory_manager.html#ad6c0d3a0c920dd3890e2606b4bc8627b", null ],
       [ "_setTwin", "class_ogre_1_1_object_memory_manager.html#ada9ae13f4b0cc10d7dee8e8d15a02313", null ],
       [ "applyRebase", "class_ogre_1_1_object_memory_manager.html#ae08ed3ab4ea707b14f9ddeff2296e54b", null ],
@@ -151,7 +151,7 @@ var group___memory =
       [ "getMemoryManagerType", "class_ogre_1_1_object_memory_manager.html#a032c23b281a75f46db6eeda9f6827b3d", null ],
       [ "getNumRenderQueues", "class_ogre_1_1_object_memory_manager.html#aacc3f26a856c2e4f9b463d3fed7825f4", null ],
       [ "getTotalNumObjects", "class_ogre_1_1_object_memory_manager.html#ade91dd0361c03668a712ddae1757c01c", null ],
-      [ "getTwin", "class_ogre_1_1_object_memory_manager.html#a6533a18e1bf65ca824c7dad75559fcfd", null ],
+      [ "getTwin", "class_ogre_1_1_object_memory_manager.html#a62c192d77d52b71feeb4a2fdb5cae692", null ],
       [ "migrateTo", "class_ogre_1_1_object_memory_manager.html#a059f579b3fce6297b6541e6a06a36d40", null ],
       [ "objectCreated", "class_ogre_1_1_object_memory_manager.html#a30c9f2fecf984b7045f656517b931849", null ],
       [ "objectDestroyed", "class_ogre_1_1_object_memory_manager.html#aae2e6b8ba5fbcabd6765f23e4d228e36", null ],
@@ -159,7 +159,7 @@ var group___memory =
       [ "performCleanup", "class_ogre_1_1_object_memory_manager.html#a6a9f7f049d953a3fb4fe4ae5bc2ce225", null ],
       [ "shrinkToFit", "class_ogre_1_1_object_memory_manager.html#a653f6a2a1b0deba78eb242e9d09538ef", null ]
     ] ],
-    [ "STLAllocator", "class_ogre_1_1_s_t_l_allocator.html", [
+    [ "Ogre::STLAllocator< T, AllocPolicy >", "class_ogre_1_1_s_t_l_allocator.html", [
       [ "rebind", "struct_ogre_1_1_s_t_l_allocator_1_1rebind.html", [
         [ "other", "struct_ogre_1_1_s_t_l_allocator_1_1rebind.html#a38ae5b67425ece5706373301c23915f0", null ]
       ] ],
@@ -184,32 +184,32 @@ var group___memory =
       [ "destroy", "class_ogre_1_1_s_t_l_allocator.html#ad4101ccdcdc6c5336a2ebd5169c55ff9", null ],
       [ "max_size", "class_ogre_1_1_s_t_l_allocator.html#a9c1e83043b7125ab226ddc78150520c8", null ]
     ] ],
-    [ "STLAllocatorBase", "struct_ogre_1_1_s_t_l_allocator_base.html", [
+    [ "Ogre::STLAllocatorBase< T >", "struct_ogre_1_1_s_t_l_allocator_base.html", [
       [ "value_type", "struct_ogre_1_1_s_t_l_allocator_base.html#a3fc45e6ad404fa54ad9246682e7ccd88", null ]
     ] ],
-    [ "STLAllocatorBase< const T >", "struct_ogre_1_1_s_t_l_allocator_base_3_01const_01_t_01_4.html", [
+    [ "Ogre::STLAllocatorBase< const T >", "struct_ogre_1_1_s_t_l_allocator_base_3_01const_01_t_01_4.html", [
       [ "value_type", "struct_ogre_1_1_s_t_l_allocator_base_3_01const_01_t_01_4.html#ad0004d963c1616f06b527bc144bd883f", null ]
     ] ],
-    [ "CleanupRoutines", "group___memory.html#ga5b1c906a5ac13a070fb50a011658759c", null ],
-    [ "MemoryCategory", "group___memory.html#ga830fab51be174d6f2849857cb1abb36a", [
-      [ "MEMCATEGORY_GENERAL", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aa8ac29a2852b1b5fe79d1659b16f521cb", null ],
-      [ "MEMCATEGORY_GEOMETRY", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aaf9e04ff475de4493bc942a9c73da4c2e", null ],
-      [ "MEMCATEGORY_ANIMATION", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aa24267bedbd1115a8f208e4ee355693e4", null ],
-      [ "MEMCATEGORY_SCENE_CONTROL", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aa8a55fa0fcaa8403bb51ca210f882ed90", null ],
-      [ "MEMCATEGORY_SCENE_OBJECTS", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aaffe1e3d51d961175f8f2756611439181", null ],
-      [ "MEMCATEGORY_RESOURCE", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aa04bad2e7f64cc2b6f4cda9f56b59e5b4", null ],
-      [ "MEMCATEGORY_SCRIPTING", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aaa037d2f843117cd5fb39ec064d7ff23b", null ],
-      [ "MEMCATEGORY_RENDERSYS", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aa29274489311d683a88676dbb1c779788", null ],
-      [ "MEMCATEGORY_COUNT", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aa4ff2b9446477e2ea4170b09d8aaa1b67", null ]
+    [ "Ogre::CleanupRoutines", "group___memory.html#ga4670b4da69fc17f183690626fd3bf47f", null ],
+    [ "Ogre::MemoryCategory", "group___memory.html#ga830fab51be174d6f2849857cb1abb36a", [
+      [ "Ogre::MEMCATEGORY_GENERAL", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aa8ac29a2852b1b5fe79d1659b16f521cb", null ],
+      [ "Ogre::MEMCATEGORY_GEOMETRY", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aaf9e04ff475de4493bc942a9c73da4c2e", null ],
+      [ "Ogre::MEMCATEGORY_ANIMATION", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aa24267bedbd1115a8f208e4ee355693e4", null ],
+      [ "Ogre::MEMCATEGORY_SCENE_CONTROL", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aa8a55fa0fcaa8403bb51ca210f882ed90", null ],
+      [ "Ogre::MEMCATEGORY_SCENE_OBJECTS", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aaffe1e3d51d961175f8f2756611439181", null ],
+      [ "Ogre::MEMCATEGORY_RESOURCE", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aa04bad2e7f64cc2b6f4cda9f56b59e5b4", null ],
+      [ "Ogre::MEMCATEGORY_SCRIPTING", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aaa037d2f843117cd5fb39ec064d7ff23b", null ],
+      [ "Ogre::MEMCATEGORY_RENDERSYS", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aa29274489311d683a88676dbb1c779788", null ],
+      [ "Ogre::MEMCATEGORY_COUNT", "group___memory.html#gga830fab51be174d6f2849857cb1abb36aa4ff2b9446477e2ea4170b09d8aaa1b67", null ]
     ] ],
-    [ "cleanerArrayAabb", "group___memory.html#ga585d805d0bd700286f91158e4e82ec52", null ],
-    [ "cleanerArrayQuaternion", "group___memory.html#ga01d3d3ffc8fa63836b9d336c1ea17141", null ],
-    [ "cleanerArrayVector3Unit", "group___memory.html#ga6d44cc03e3544990ed2fe1861c03fd79", null ],
-    [ "cleanerArrayVector3Zero", "group___memory.html#gad2b0e7fc66b983b62e60af2ae311e885", null ],
-    [ "cleanerFlat", "group___memory.html#ga0a20a5515b4c6df35f99fabb37dad97b", null ],
-    [ "constructN", "group___memory.html#gae542663b49eb68a74336d84e11ba0b9c", null ],
-    [ "operator!=", "group___memory.html#ga0cec9339a4ab3eaf48c767087cd7f400", null ],
-    [ "operator!=", "group___memory.html#ga34a9308dc656f694883718bf8fa4f1c2", null ],
-    [ "operator==", "group___memory.html#gaa34a630f2287087875d360c454a0fb48", null ],
-    [ "operator==", "group___memory.html#gaa5b83b2ba3ce965e3d8dd129c93ee43b", null ]
+    [ "Ogre::cleanerArrayAabb", "group___memory.html#ga585d805d0bd700286f91158e4e82ec52", null ],
+    [ "Ogre::cleanerArrayQuaternion", "group___memory.html#ga01d3d3ffc8fa63836b9d336c1ea17141", null ],
+    [ "Ogre::cleanerArrayVector3Unit", "group___memory.html#ga6d44cc03e3544990ed2fe1861c03fd79", null ],
+    [ "Ogre::cleanerArrayVector3Zero", "group___memory.html#gad2b0e7fc66b983b62e60af2ae311e885", null ],
+    [ "Ogre::cleanerFlat", "group___memory.html#ga0a20a5515b4c6df35f99fabb37dad97b", null ],
+    [ "Ogre::constructN", "group___memory.html#ga0b9086ad544aba73e4dc0d8cbb41b93a", null ],
+    [ "Ogre::operator!=", "group___memory.html#ga0cec9339a4ab3eaf48c767087cd7f400", null ],
+    [ "Ogre::operator!=", "group___memory.html#ga34a9308dc656f694883718bf8fa4f1c2", null ],
+    [ "Ogre::operator==", "group___memory.html#gaa34a630f2287087875d360c454a0fb48", null ],
+    [ "Ogre::operator==", "group___memory.html#gaa5b83b2ba3ce965e3d8dd129c93ee43b", null ]
 ];

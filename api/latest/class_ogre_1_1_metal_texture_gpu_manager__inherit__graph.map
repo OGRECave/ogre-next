@@ -1,6 +1,9 @@
 <map id="Ogre::MetalTextureGpuManager" name="Ogre::MetalTextureGpuManager">
-<area shape="rect" id="node1" title=" " alt="" coords="51,155,280,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_texture_gpu_manager.html" title="This class manages all textures (i.e." alt="" coords="69,80,261,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,141,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="165,5,352,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="81,152,310,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_texture_gpu_manager.html" title="This class manages all textures (i.e." alt="" coords="99,79,291,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,118,198,152,193,152,193,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="122,36,180,76,177,81,119,41"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="205,5,391,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="272,41,214,81,211,76,269,36"/>
 </map>

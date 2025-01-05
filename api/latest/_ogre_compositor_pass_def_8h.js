@@ -1,8 +1,8 @@
 var _ogre_compositor_pass_def_8h =
 [
-    [ "UavDependency", "struct_ogre_1_1_compositor_pass_def_1_1_uav_dependency.html", "struct_ogre_1_1_compositor_pass_def_1_1_uav_dependency" ],
-    [ "ViewportRect", "struct_ogre_1_1_compositor_pass_def_1_1_viewport_rect.html", "struct_ogre_1_1_compositor_pass_def_1_1_viewport_rect" ],
-    [ "CompositorPassDefVec", "_ogre_compositor_pass_def_8h.html#ga6b94d748f5de680be15bb9a585c292b1", null ],
+    [ "Ogre::CompositorPassDef::UavDependency", "struct_ogre_1_1_compositor_pass_def_1_1_uav_dependency.html", "struct_ogre_1_1_compositor_pass_def_1_1_uav_dependency" ],
+    [ "Ogre::CompositorPassDef::ViewportRect", "struct_ogre_1_1_compositor_pass_def_1_1_viewport_rect.html", "struct_ogre_1_1_compositor_pass_def_1_1_viewport_rect" ],
+    [ "CompositorPassDefVec", "_ogre_compositor_pass_def_8h.html#ga5cc23a9ff066c8ba7a6c1275453ea590", null ],
     [ "CompositorPassType", "_ogre_compositor_pass_def_8h.html#ga6f176e5de375550ba7f1c8dccde8345a", [
       [ "PASS_INVALID", "_ogre_compositor_pass_def_8h.html#gga6f176e5de375550ba7f1c8dccde8345aa3237339678fe18c0dfdda0de205da6ae", null ],
       [ "PASS_SCENE", "_ogre_compositor_pass_def_8h.html#gga6f176e5de375550ba7f1c8dccde8345aab48a9dc44373ebd060553b5414cf3763", null ],

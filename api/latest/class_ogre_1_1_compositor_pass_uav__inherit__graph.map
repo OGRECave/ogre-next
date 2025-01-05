@@ -1,6 +1,9 @@
 <map id="Ogre::CompositorPassUav" name="Ogre::CompositorPassUav">
-<area shape="rect" id="node1" title="Implementation of CompositorPass This implementation will set UAVs." alt="" coords="93,155,283,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes." alt="" coords="5,80,171,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="20,5,156,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="195,80,381,107"/>
+<area shape="rect" id="Node000001" title="Implementation of CompositorPass This implementation will set UAVs." alt="" coords="97,152,288,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes." alt="" coords="10,79,175,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,110,178,150,175,154,118,114"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,44,95,79,90,79,90,44"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="199,79,386,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="267,114,211,154,207,150,264,110"/>
 </map>

@@ -2,7 +2,7 @@ var class_ogre_1_1_particle_system_renderer =
 [
     [ "ParticleSystemRenderer", "class_ogre_1_1_particle_system_renderer.html#a18d83b417a606c9d40f87fffe003ef2a", null ],
     [ "~ParticleSystemRenderer", "class_ogre_1_1_particle_system_renderer.html#acedd9af6338bc40603a571333be5f5f9", null ],
-    [ "_createVisualData", "class_ogre_1_1_particle_system_renderer.html#a4f432e318acf13e79841534431bcdad4", null ],
+    [ "_createVisualData", "class_ogre_1_1_particle_system_renderer.html#a797b94caf5b57b4ceebef41b9dd66efb", null ],
     [ "_destroyVisualData", "class_ogre_1_1_particle_system_renderer.html#addc7a41c0c6aba115a7ca23219001690", null ],
     [ "_getSortMode", "class_ogre_1_1_particle_system_renderer.html#a8a2f1a2c8b45e2357f528d451df82258", null ],
     [ "_notifyAttached", "class_ogre_1_1_particle_system_renderer.html#a2aea8e94bb68335126bce074015061eb", null ],
@@ -18,7 +18,7 @@ var class_ogre_1_1_particle_system_renderer =
     [ "_setDatablock", "class_ogre_1_1_particle_system_renderer.html#a2be171c17536da6472cb29388cb2bdad", null ],
     [ "_setMaterialName", "class_ogre_1_1_particle_system_renderer.html#a592d21293c7a9f6662edca03d15726f4", null ],
     [ "_updateRenderQueue", "class_ogre_1_1_particle_system_renderer.html#ad479a1541f983f2bc44e56b537d319cb", null ],
-    [ "getType", "class_ogre_1_1_particle_system_renderer.html#abae2ae3785f4d9d4b1697148c2c554ea", null ],
+    [ "getType", "class_ogre_1_1_particle_system_renderer.html#af7cf9a2ce8ca47257de8c498bb81f8be", null ],
     [ "setKeepParticlesInLocalSpace", "class_ogre_1_1_particle_system_renderer.html#a9d51542da9e252f542e9ba7d89f575c1", null ],
     [ "setRenderQueueGroup", "class_ogre_1_1_particle_system_renderer.html#ac586ecbee5141ce024ff371de137a952", null ],
     [ "setRenderQueueSubGroup", "class_ogre_1_1_particle_system_renderer.html#ab1754e528578346d701afda3c620ffe8", null ]

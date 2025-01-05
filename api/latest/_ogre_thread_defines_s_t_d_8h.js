@@ -1,6 +1,6 @@
 var _ogre_thread_defines_s_t_d_8h =
 [
-    [ "ThreadLocalPtr", "class_ogre_1_1_thread_local_ptr.html", "class_ogre_1_1_thread_local_ptr" ],
+    [ "Ogre::ThreadLocalPtr< T >", "class_ogre_1_1_thread_local_ptr.html", "class_ogre_1_1_thread_local_ptr" ],
     [ "OGRE_AUTO_MUTEX", "_ogre_thread_defines_s_t_d_8h.html#a18a523fad1f9e10324e1742865f562b7", null ],
     [ "OGRE_AUTO_SHARED_MUTEX", "_ogre_thread_defines_s_t_d_8h.html#ab0e8c6d123555d7447c38185a1b9105e", null ],
     [ "OGRE_COPY_AUTO_SHARED_MUTEX", "_ogre_thread_defines_s_t_d_8h.html#acf02af48b9d015cd2f0c10e22466c73a", null ],

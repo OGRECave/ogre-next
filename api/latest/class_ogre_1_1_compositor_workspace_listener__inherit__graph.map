@@ -1,7 +1,11 @@
 <map id="Ogre::CompositorWorkspaceListener" name="Ogre::CompositorWorkspaceListener">
-<area shape="rect" id="node1" title=" " alt="" coords="291,5,497,47"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_parallax_corrected_cubemap_base.html" title=" " alt="" coords="128,95,399,121"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_vct_cascaded_voxelizer.html" title="This class manages multiple cascades of Voxels and each cascade can be composed of VctImageVoxelizer." alt="" coords="423,95,627,121"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="5,169,244,196"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="268,169,536,196"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="291,5,497,45"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_parallax_corrected_cubemap_base.html" title=" " alt="" coords="128,93,399,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="352,55,284,95,281,91,349,50"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_vct_cascaded_voxelizer.html" title="This class manages multiple cascades of Voxels and each cascade can be composed of VctImageVoxelizer." alt="" coords="423,93,627,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="439,50,507,91,504,95,436,55"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="5,167,244,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="230,127,149,169,146,164,228,122"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="268,167,536,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="299,122,381,164,378,169,296,127"/>
 </map>

@@ -1,9 +1,15 @@
 <map id="Ogre::StagingTextureBufferImpl" name="Ogre::StagingTextureBufferImpl">
-<area shape="rect" id="node1" title="This implementation can be used by all RenderSystem APIs except D3D11, which is why this implementati..." alt="" coords="396,81,623,108"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_staging_texture.html" title=" " alt="" coords="671,5,881,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_metal_staging_texture.html" title=" " alt="" coords="679,56,873,83"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_n_u_l_l_staging_texture.html" title=" " alt="" coords="680,107,872,133"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_vulkan_staging_texture.html" title=" " alt="" coords="675,157,877,184"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_staging_texture.html" title="A StagingTexture is an intermediate texture that can be read and be written from both CPU &amp; GPU." alt="" coords="189,81,348,108"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,81,141,108"/>
+<area shape="rect" id="Node000001" title="This implementation can be used by all RenderSystem APIs except D3D11, which is why this implementati..." alt="" coords="435,80,661,105"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_l3_plus_staging_texture.html" title=" " alt="" coords="709,5,920,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="599,73,709,39,754,28,755,33,710,45,600,78"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_metal_staging_texture.html" title=" " alt="" coords="717,55,912,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="675,78,717,74,718,79,675,83"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_n_u_l_l_staging_texture.html" title=" " alt="" coords="719,104,911,129"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="675,101,719,105,718,111,675,107"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_vulkan_staging_texture.html" title=" " alt="" coords="714,153,915,179"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="601,107,710,139,755,151,754,156,709,145,600,112"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_staging_texture.html" title="A StagingTexture is an intermediate texture that can be read and be written from both CPU &amp; GPU." alt="" coords="228,80,387,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="401,90,435,90,435,95,401,95"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,80,180,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="194,90,228,90,228,95,194,95"/>
 </map>

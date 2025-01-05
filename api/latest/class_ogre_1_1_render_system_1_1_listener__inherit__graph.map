@@ -1,9 +1,15 @@
 <map id="Ogre::RenderSystem::Listener" name="Ogre::RenderSystem::Listener">
-<area shape="rect" id="node1" title="Defines a listener on the custom events that this render system can raise." alt="" coords="5,74,161,115"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_atmosphere_npr.html" title="Non&#45;physically&#45;based&#45;render (NPR) Atmosphere solution." alt="" coords="263,5,426,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_render_pass_descriptor.html" title="D3D11 will share groups of ID3D11RenderTargetView all D3D11RenderPassDescriptor that share the same R..." alt="" coords="221,56,468,83"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_parallax_corrected_cubemap_base.html" title=" " alt="" coords="209,107,480,133"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1v1_1_1_overlay_system.html" title="This class simplify initialization / finalization of the overlay system." alt="" coords="252,157,437,184"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="543,81,781,108"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="528,132,796,159"/>
+<area shape="rect" id="Node000001" title="Defines a listener on the custom events that this render system can raise." alt="" coords="5,73,161,113"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_atmosphere_npr.html" title="Non&#45;physically&#45;based&#45;render (NPR) Atmosphere solution." alt="" coords="263,5,426,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,65,209,39,262,27,264,32,210,45,141,70"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_render_pass_descriptor.html" title="D3D11 will share groups of ID3D11RenderTargetView all D3D11RenderPassDescriptor that share the same R..." alt="" coords="221,55,468,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="175,81,221,77,221,82,175,86"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_parallax_corrected_cubemap_base.html" title=" " alt="" coords="209,104,480,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="175,98,209,102,209,107,175,104"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1v1_1_1_overlay_system.html" title="This class simplify initialization / finalization of the overlay system." alt="" coords="252,153,437,179"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="144,115,210,138,264,151,262,156,209,143,142,120"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="543,80,781,105"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="494,103,542,99,543,104,494,108"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="528,129,796,155"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="494,126,528,129,528,134,493,131"/>
 </map>

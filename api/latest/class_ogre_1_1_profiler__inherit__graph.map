@@ -1,5 +1,7 @@
 <map id="Ogre::Profiler" name="Ogre::Profiler">
-<area shape="rect" id="node1" title="The profiler allows you to measure the performance of your code." alt="" coords="146,80,253,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,204,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="227,5,363,32"/>
+<area shape="rect" id="Node000001" title="The profiler allows you to measure the performance of your code." alt="" coords="157,79,263,104"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,204,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="135,36,194,76,191,81,132,41"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="228,5,403,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="288,41,229,81,226,76,285,36"/>
 </map>

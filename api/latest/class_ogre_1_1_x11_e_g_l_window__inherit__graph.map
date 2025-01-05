@@ -1,7 +1,11 @@
 <map id="Ogre::X11EGLWindow" name="Ogre::X11EGLWindow">
-<area shape="rect" id="node1" title=" " alt="" coords="63,229,225,256"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_e_g_l_window.html" title=" " alt="" coords="75,155,213,181"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_window.html" title=" " alt="" coords="17,80,130,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,5,141,32"/>
-<area shape="rect" id="node5" title=" " alt="" coords="155,80,275,107"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="82,225,245,251"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_e_g_l_window.html" title=" " alt="" coords="95,152,232,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,191,166,225,161,225,161,191"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_window.html" title=" " alt="" coords="36,79,149,104"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="116,112,154,150,150,154,112,116"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="95,44,95,79,90,79,90,44"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="174,79,294,104"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="215,116,177,154,173,150,211,112"/>
 </map>

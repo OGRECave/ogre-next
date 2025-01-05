@@ -1,6 +1,9 @@
 <map id="Ogre::ForwardPlusBase" name="Ogre::ForwardPlusBase">
-<area shape="rect" id="node1" title="ForwardPlusBase." alt="" coords="73,80,245,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_forward3_d.html" title="Forward3D." alt="" coords="5,155,136,181"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_forward_clustered.html" title="Implementation of Clustered Forward Shading." alt="" coords="161,155,335,181"/>
-<area shape="rect" id="node2" title=" " alt="" coords="91,5,227,32"/>
+<area shape="rect" id="Node000001" title="ForwardPlusBase." alt="" coords="73,79,245,104"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_forward3_d.html" title="Forward3D." alt="" coords="5,152,136,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="136,115,87,154,83,150,132,110"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_forward_clustered.html" title="Implementation of Clustered Forward Shading." alt="" coords="161,152,335,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="185,110,235,150,232,154,182,115"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="71,5,246,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,44,161,79,156,79,156,44"/>
 </map>

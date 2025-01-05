@@ -1,4 +1,5 @@
 <map id="Ogre::HollowEllipsoidEmitterFactory2" name="Ogre::HollowEllipsoidEmitterFactory2">
-<area shape="rect" id="node1" title=" " alt="" coords="5,95,215,136"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_particle_emitter_def_data_factory.html" title="Abstract class defining the interface to be implemented by creators of EmitterDefData subclasses." alt="" coords="20,5,200,47"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,93,215,133"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_particle_emitter_def_data_factory.html" title="Abstract class defining the interface to be implemented by creators of EmitterDefData subclasses." alt="" coords="20,5,200,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,59,113,93,107,93,107,59"/>
 </map>

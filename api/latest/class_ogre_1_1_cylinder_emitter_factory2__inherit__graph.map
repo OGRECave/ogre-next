@@ -1,4 +1,5 @@
 <map id="Ogre::CylinderEmitterFactory2" name="Ogre::CylinderEmitterFactory2">
-<area shape="rect" id="node1" title=" " alt="" coords="5,95,224,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_particle_emitter_def_data_factory.html" title="Abstract class defining the interface to be implemented by creators of EmitterDefData subclasses." alt="" coords="25,5,205,47"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,93,224,119"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_particle_emitter_def_data_factory.html" title="Abstract class defining the interface to be implemented by creators of EmitterDefData subclasses." alt="" coords="25,5,205,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,59,117,93,112,93,112,59"/>
 </map>

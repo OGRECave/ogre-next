@@ -1,8 +1,13 @@
 <map id="Ogre::ParallaxCorrectedCubemapBase" name="Ogre::ParallaxCorrectedCubemapBase">
-<area shape="rect" id="node1" title=" " alt="" coords="128,95,399,121"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="5,169,244,196"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="268,169,536,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="46,13,161,39"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_render_system_1_1_listener.html" title="Defines a listener on the custom events that this render system can raise." alt="" coords="185,5,341,47"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_compositor_workspace_listener.html" title=" " alt="" coords="365,5,572,47"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="128,93,399,119"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="5,167,244,192"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="230,127,149,169,146,164,228,122"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="268,167,536,192"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="299,122,381,164,378,169,296,127"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="46,13,161,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,42,241,91,239,96,138,46"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_render_system_1_1_listener.html" title="Defines a listener on the custom events that this render system can raise." alt="" coords="185,5,341,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="266,59,266,93,261,93,261,59"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_compositor_workspace_listener.html" title=" " alt="" coords="365,5,572,45"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="408,53,295,96,293,91,406,48"/>
 </map>

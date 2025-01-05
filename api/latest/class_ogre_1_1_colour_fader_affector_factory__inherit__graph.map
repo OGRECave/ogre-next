@@ -1,5 +1,7 @@
 <map id="Ogre::ColourFaderAffectorFactory" name="Ogre::ColourFaderAffectorFactory">
-<area shape="rect" id="node1" title="Factory class for ColourFaderAffector." alt="" coords="14,155,203,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_particle_affector_factory.html" title="Abstract class defining the interface to be implemented by creators of ParticleAffector subclasses." alt="" coords="5,80,212,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="41,5,177,32"/>
+<area shape="rect" id="Node000001" title="Factory class for ColourFaderAffector." alt="" coords="14,152,203,192"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_particle_affector_factory.html" title="Abstract class defining the interface to be implemented by creators of ParticleAffector subclasses." alt="" coords="5,79,212,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,118,111,152,106,152,106,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="21,5,196,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="111,44,111,79,106,79,106,44"/>
 </map>

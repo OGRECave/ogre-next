@@ -1,7 +1,11 @@
 <map id="Ogre::v1::AnimationContainer" name="Ogre::v1::AnimationContainer">
-<area shape="rect" id="node1" title="An animation container interface, which allows generic access to sibling animations." alt="" coords="79,5,294,32"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_mesh.html" title="Resource holding data about 3D mesh." alt="" coords="36,80,156,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1v1_1_1_skeleton.html" title="A collection of OldBone objects used to animate a skinned mesh." alt="" coords="208,80,349,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_patch_mesh.html" title="Patch specialisation of Mesh." alt="" coords="5,155,160,181"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1v1_1_1_old_skeleton_instance.html" title="A OldSkeletonInstance is a single instance of a Skeleton used by a world object." alt="" coords="184,155,403,181"/>
+<area shape="rect" id="Node000001" title="An animation container interface, which allows generic access to sibling animations." alt="" coords="79,5,294,31"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_mesh.html" title="Resource holding data about 3D mesh." alt="" coords="36,79,156,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,41,112,81,109,76,160,37"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1v1_1_1_skeleton.html" title="A collection of OldBone objects used to animate a skinned mesh." alt="" coords="208,79,349,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="214,37,265,76,262,81,210,41"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_patch_mesh.html" title="Patch specialisation of Mesh." alt="" coords="5,152,160,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,118,87,152,82,151,89,117"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1v1_1_1_old_skeleton_instance.html" title="A OldSkeletonInstance is a single instance of a Skeleton used by a world object." alt="" coords="184,152,403,177"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="286,117,294,151,288,152,281,118"/>
 </map>

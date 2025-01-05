@@ -1,7 +1,11 @@
 <map id="Ogre::SceneNode" name="Ogre::SceneNode">
-<area shape="rect" id="node1" title="Class representing a node in the scene graph." alt="" coords="81,155,215,181"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_tag_point.html" title="TagPoints are like SceneNodes, that can be children of a Bone." alt="" coords="90,229,206,256"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_node.html" title="Class representing a general&#45;purpose node an articulated scene graph." alt="" coords="101,80,195,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,141,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="165,5,280,32"/>
+<area shape="rect" id="Node000001" title="Class representing a node in the scene graph." alt="" coords="109,152,244,177"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_tag_point.html" title="TagPoints are like SceneNodes, that can be children of a Bone." alt="" coords="119,225,235,251"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="179,191,179,225,174,225,174,191"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_node.html" title="Class representing a general&#45;purpose node an articulated scene graph." alt="" coords="129,79,224,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,118,179,152,174,152,174,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="118,38,165,76,161,80,115,42"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="205,5,319,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="240,41,192,80,189,76,236,37"/>
 </map>

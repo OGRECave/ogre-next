@@ -1,8 +1,13 @@
 <map id="Ogre::VulkanAndroidWindow" name="Ogre::VulkanAndroidWindow">
-<area shape="rect" id="node1" title=" " alt="" coords="83,319,289,345"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_vulkan_window_swap_chain_based.html" title=" " alt="" coords="72,229,300,271"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_vulkan_window.html" title=" " alt="" coords="5,155,161,181"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_window.html" title=" " alt="" coords="27,80,140,107"/>
-<area shape="rect" id="node5" title=" " alt="" coords="15,5,151,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_vulkan_device_resource.html" title="Represents a Vulkan device depended rendering resource." alt="" coords="185,155,395,181"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="92,313,299,339"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_vulkan_window_swap_chain_based.html" title=" " alt="" coords="81,225,309,265"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,279,198,313,193,313,193,279"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_vulkan_window.html" title=" " alt="" coords="15,152,171,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="120,184,172,223,169,227,117,188"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_window.html" title=" " alt="" coords="36,79,149,104"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="95,118,95,152,90,152,90,118"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="95,44,95,79,90,79,90,44"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_vulkan_device_resource.html" title="Represents a Vulkan device depended rendering resource." alt="" coords="195,152,404,177"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="275,188,222,227,219,223,272,184"/>
 </map>

@@ -1,4 +1,5 @@
 <map id="Ogre::RenderPassColourTarget" name="Ogre::RenderPassColourTarget">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,224,107"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_render_pass_target_base.html" title=" " alt="" coords="11,5,219,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,224,104"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_render_pass_target_base.html" title=" " alt="" coords="11,5,219,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,44,117,79,112,79,112,44"/>
 </map>

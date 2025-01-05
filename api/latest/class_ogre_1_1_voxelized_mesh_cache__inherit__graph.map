@@ -1,4 +1,5 @@
 <map id="Ogre::VoxelizedMeshCache" name="Ogre::VoxelizedMeshCache">
-<area shape="rect" id="node1" title="Uses a VctVoxelizer to convert a single mesh made up of triangles into a voxel 3D texture representat..." alt="" coords="5,80,204,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="47,5,162,32"/>
+<area shape="rect" id="Node000001" title="Uses a VctVoxelizer to convert a single mesh made up of triangles into a voxel 3D texture representat..." alt="" coords="5,79,204,104"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="47,5,162,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,44,107,79,102,79,102,44"/>
 </map>

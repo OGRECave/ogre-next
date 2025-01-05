@@ -1,5 +1,7 @@
 <map id="Ogre::v1::GLES2TextureBuffer" name="Ogre::v1::GLES2TextureBuffer">
-<area shape="rect" id="node1" title="Texture surface." alt="" coords="9,169,222,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_g_l_e_s2_hardware_pixel_buffer.html" title=" " alt="" coords="5,80,225,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="38,5,193,32"/>
+<area shape="rect" id="Node000001" title="Texture surface." alt="" coords="9,167,222,192"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_g_l_e_s2_hardware_pixel_buffer.html" title=" " alt="" coords="5,79,225,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,132,118,166,113,166,113,132"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="38,5,193,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="118,44,118,79,113,79,113,44"/>
 </map>

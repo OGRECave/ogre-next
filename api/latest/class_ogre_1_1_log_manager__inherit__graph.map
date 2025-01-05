@@ -1,5 +1,7 @@
 <map id="Ogre::LogManager" name="Ogre::LogManager">
-<area shape="rect" id="node1" title="The log manager handles the creation and retrieval of logs for the application." alt="" coords="155,80,296,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,237,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="261,5,397,32"/>
+<area shape="rect" id="Node000001" title="The log manager handles the creation and retrieval of logs for the application." alt="" coords="164,79,305,104"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,237,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,36,218,76,215,81,150,40"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="262,5,437,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="321,40,255,81,252,76,318,35"/>
 </map>

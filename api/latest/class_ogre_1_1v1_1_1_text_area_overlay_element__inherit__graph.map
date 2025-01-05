@@ -1,7 +1,11 @@
 <map id="Ogre::v1::TextAreaOverlayElement" name="Ogre::v1::TextAreaOverlayElement">
-<area shape="rect" id="node1" title="This class implements an overlay element which contains simple unformatted text." alt="" coords="158,155,351,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_overlay_element.html" title="Abstract definition of a 2D element to be displayed in an Overlay." alt="" coords="159,80,350,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,5,163,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="187,5,322,32"/>
-<area shape="rect" id="node5" title=" " alt="" coords="347,5,483,32"/>
+<area shape="rect" id="Node000001" title="This class implements an overlay element which contains simple unformatted text." alt="" coords="158,152,351,192"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_overlay_element.html" title="Abstract definition of a 2D element to be displayed in an Overlay." alt="" coords="159,79,350,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="257,118,257,152,252,152,252,118"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,5,163,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="125,33,228,76,226,81,123,38"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="187,5,322,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="257,44,257,79,252,79,252,44"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="346,5,521,31"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="393,38,285,81,283,76,391,33"/>
 </map>

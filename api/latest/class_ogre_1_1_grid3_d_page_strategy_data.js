@@ -17,7 +17,7 @@ var class_ogre_1_1_grid3_d_page_strategy_data =
     [ "getHoldRadius", "group___optional.html#ga877411758e54ca8c42513b98b22c3889", null ],
     [ "getLoadRadius", "group___optional.html#gae7017d1aa57580ce16a801938209cc00", null ],
     [ "getMidPointGridSpace", "group___optional.html#ga2762e5a38c2a8f887236920efb6dc840", null ],
-    [ "getOrigin", "group___optional.html#gac1f2ae920c09cc2595a11da65d422b82", null ],
+    [ "getOrigin", "group___optional.html#ga84be79828f3f8cdcabfb6886d0262cf6", null ],
     [ "load", "group___optional.html#gab5159dd7922b777ed101992b5319b20b", null ],
     [ "save", "group___optional.html#gaedcf87a66b42befb2aba22b6d42fee58", null ],
     [ "setCellRange", "group___optional.html#gaa2df60347efc29d35a690e71c64531eb", null ],

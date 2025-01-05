@@ -1,9 +1,15 @@
 <map id="Ogre::ParticleEmitterDefDataFactory" name="Ogre::ParticleEmitterDefDataFactory">
-<area shape="rect" id="node1" title="Abstract class defining the interface to be implemented by creators of EmitterDefData subclasses." alt="" coords="5,129,185,170"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_box_emitter_factory2.html" title=" " alt="" coords="248,5,437,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_cylinder_emitter_factory2.html" title=" " alt="" coords="233,56,452,83"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_ellipsoid_emitter_factory2.html" title=" " alt="" coords="233,107,452,133"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_hollow_ellipsoid_emitter_factory2.html" title=" " alt="" coords="238,158,447,199"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_point_emitter_factory2.html" title=" " alt="" coords="244,224,441,251"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_ring_emitter_factory2.html" title=" " alt="" coords="246,275,439,301"/>
+<area shape="rect" id="Node000001" title="Abstract class defining the interface to be implemented by creators of EmitterDefData subclasses." alt="" coords="5,126,185,166"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_box_emitter_factory2.html" title=" " alt="" coords="248,5,437,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,115,173,75,232,40,264,28,265,33,234,44,176,80,129,119"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_cylinder_emitter_factory2.html" title=" " alt="" coords="233,55,452,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="154,118,233,89,275,78,276,83,234,94,155,123"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_ellipsoid_emitter_factory2.html" title=" " alt="" coords="233,104,452,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="199,131,235,127,236,132,199,136"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_hollow_ellipsoid_emitter_factory2.html" title=" " alt="" coords="238,154,447,194"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="199,155,238,160,238,165,198,160"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_point_emitter_factory2.html" title=" " alt="" coords="244,219,441,244"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="150,169,234,203,279,216,278,221,232,209,148,174"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_ring_emitter_factory2.html" title=" " alt="" coords="246,268,439,293"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="127,174,175,215,235,253,268,265,266,270,232,258,172,219,124,178"/>
 </map>

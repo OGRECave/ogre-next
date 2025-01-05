@@ -1,4 +1,5 @@
 <map id="Ogre::GlSwitchableSupport" name="Ogre::GlSwitchableSupport">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,201,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_g_l3_plus_support.html" title=" " alt="" coords="22,5,185,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,201,104"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l3_plus_support.html" title=" " alt="" coords="22,5,185,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,44,106,79,101,79,101,44"/>
 </map>

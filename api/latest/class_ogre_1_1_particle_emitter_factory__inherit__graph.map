@@ -1,10 +1,17 @@
 <map id="Ogre::ParticleEmitterFactory" name="Ogre::ParticleEmitterFactory">
-<area shape="rect" id="node1" title="Abstract class defining the interface to be implemented by creators of ParticleEmitter subclasses." alt="" coords="189,136,393,163"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_box_emitter_factory.html" title="Factory class for particle emitter of type &quot;Box&quot;." alt="" coords="456,5,637,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_cylinder_emitter_factory.html" title="Factory class for particle emitter of type &quot;Cylinder&quot;." alt="" coords="441,56,652,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_ellipsoid_emitter_factory.html" title="Factory class for particle emitter of type &quot;Ellipsoid&quot;." alt="" coords="441,107,652,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_hollow_ellipsoid_emitter_factory.html" title="Factory class for particle emitter of type &quot;HollowEllipsoid&quot;." alt="" coords="442,158,651,199"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_point_emitter_factory.html" title="Factory class for particle emitter of type &quot;Point&quot;." alt="" coords="452,224,641,251"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_ring_emitter_factory.html" title="Factory class for particle emitter of type &quot;Ring&quot;." alt="" coords="454,275,639,301"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,136,141,163"/>
+<area shape="rect" id="Node000001" title="Abstract class defining the interface to be implemented by creators of ParticleEmitter subclasses." alt="" coords="228,133,432,159"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_box_emitter_factory.html" title="Factory class for particle emitter of type &quot;Box&quot;." alt="" coords="495,5,676,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="354,122,409,80,443,58,479,40,511,28,513,33,481,44,446,63,412,84,357,127"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_cylinder_emitter_factory.html" title="Factory class for particle emitter of type &quot;Cylinder&quot;." alt="" coords="480,55,691,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="374,126,479,89,522,77,524,83,481,94,376,131"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_ellipsoid_emitter_factory.html" title="Factory class for particle emitter of type &quot;Ellipsoid&quot;." alt="" coords="480,104,691,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="445,130,480,126,480,131,446,135"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_hollow_ellipsoid_emitter_factory.html" title="Factory class for particle emitter of type &quot;HollowEllipsoid&quot;." alt="" coords="481,154,690,194"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="446,156,481,160,480,165,445,161"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_point_emitter_factory.html" title="Factory class for particle emitter of type &quot;Point&quot;." alt="" coords="491,219,680,244"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="373,162,481,203,526,216,525,221,479,209,371,167"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_ring_emitter_factory.html" title="Factory class for particle emitter of type &quot;Ring&quot;." alt="" coords="493,268,678,293"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="356,166,411,211,445,234,481,254,512,265,510,270,479,259,442,239,407,215,353,170"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,133,180,159"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,143,228,143,228,149,194,149"/>
 </map>

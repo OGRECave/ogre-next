@@ -1,6 +1,9 @@
 <map id="Ogre::AtmosphereNpr" name="Ogre::AtmosphereNpr">
-<area shape="rect" id="node1" title="Non&#45;physically&#45;based&#45;render (NPR) Atmosphere solution." alt="" coords="135,169,298,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_atmosphere_component.html" title=" " alt="" coords="5,87,220,114"/>
-<area shape="rect" id="node3" title=" " alt="" coords="45,5,181,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_render_system_1_1_listener.html" title="Defines a listener on the custom events that this render system can raise." alt="" coords="244,80,400,121"/>
+<area shape="rect" id="Node000001" title="Non&#45;physically&#45;based&#45;render (NPR) Atmosphere solution." alt="" coords="135,167,298,192"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_atmosphere_component.html" title=" " alt="" coords="5,86,220,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,117,203,164,200,169,137,122"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="25,5,200,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="115,44,115,86,110,86,110,44"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_render_system_1_1_listener.html" title="Defines a listener on the custom events that this render system can raise." alt="" coords="244,79,400,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="287,129,234,168,231,164,284,125"/>
 </map>

@@ -1,6 +1,9 @@
 <map id="Ogre::ManualResourceLoader" name="Ogre::ManualResourceLoader">
-<area shape="rect" id="node1" title="Interface describing a manual resource loader." alt="" coords="195,5,409,32"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_mesh_manager.html" title="Handles the management of mesh resources." alt="" coords="5,80,159,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="183,80,421,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1v1_1_1_mesh_manager.html" title="Handles the management of mesh resources." alt="" coords="445,80,623,107"/>
+<area shape="rect" id="Node000001" title="Interface describing a manual resource loader." alt="" coords="195,5,409,31"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_mesh_manager.html" title="Handles the management of mesh resources." alt="" coords="5,79,159,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="254,37,118,81,117,76,253,32"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="183,79,421,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="305,44,305,79,299,79,299,44"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1v1_1_1_mesh_manager.html" title="Handles the management of mesh resources." alt="" coords="445,79,623,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="353,32,497,76,496,81,351,37"/>
 </map>

@@ -1,4 +1,5 @@
 <map id="Ogre::ConstBufferPoolUser" name="Ogre::ConstBufferPoolUser">
-<area shape="rect" id="node1" title=" " alt="" coords="13,5,207,32"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_o_g_r_e___h_l_m_s___t_e_x_t_u_r_e___b_a_s_e___c_l_a_s_s.html" title="This is not a regular header, therefore it has no include guards." alt="" coords="5,80,215,121"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="13,5,207,31"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_o_g_r_e___h_l_m_s___t_e_x_t_u_r_e___b_a_s_e___c_l_a_s_s.html" title="This is not a regular header, therefore it has no include guards." alt="" coords="5,79,215,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,44,113,79,107,79,107,44"/>
 </map>

@@ -1,4 +1,5 @@
 <map id="Ogre::v1::Billboard" name="Ogre::v1::Billboard">
-<area shape="rect" id="node1" title="A billboard is a primitive which always faces the camera in every frame." alt="" coords="5,80,148,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="9,5,145,32"/>
+<area shape="rect" id="Node000001" title="A billboard is a primitive which always faces the camera in every frame." alt="" coords="21,79,164,104"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,44,95,79,90,79,90,44"/>
 </map>

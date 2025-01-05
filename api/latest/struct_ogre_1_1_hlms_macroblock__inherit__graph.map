@@ -1,4 +1,5 @@
 <map id="Ogre::HlmsMacroblock" name="Ogre::HlmsMacroblock">
-<area shape="rect" id="node1" title="A macro block contains settings that will rarely change, and thus are common to many materials." alt="" coords="5,80,176,107"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_basic_block.html" title=" " alt="" coords="25,5,157,32"/>
+<area shape="rect" id="Node000001" title="A macro block contains settings that will rarely change, and thus are common to many materials." alt="" coords="5,79,176,104"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_basic_block.html" title=" " alt="" coords="25,5,157,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,44,93,79,88,79,88,44"/>
 </map>

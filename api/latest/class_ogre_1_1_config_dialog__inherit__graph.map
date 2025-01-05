@@ -1,4 +1,12 @@
 <map id="Ogre::ConfigDialog" name="Ogre::ConfigDialog">
-<area shape="rect" id="node1" title="Defines the behaviour of an automatic renderer configuration dialog." alt="" coords="5,80,149,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="9,5,145,32"/>
+<area shape="rect" id="Node000001" title="Defines the behaviour of an automatic renderer configuration dialog." alt="" coords="21,79,165,104"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="37,41,33,50,33,59,37,68,46,76,43,80,33,71,28,61,28,49,32,39"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="53,42,51,60,61,77,56,80,46,61,48,41"/>
+<area shape="poly" id="edge3_Node000001_Node000002" title=" " alt="" coords="70,44,69,62,75,78,70,79,64,62,64,44"/>
+<area shape="poly" id="edge4_Node000001_Node000002" title=" " alt="" coords="87,44,88,78,83,79,81,45"/>
+<area shape="poly" id="edge5_Node000001_Node000002" title=" " alt="" coords="104,45,102,79,97,78,99,44"/>
+<area shape="poly" id="edge6_Node000001_Node000002" title=" " alt="" coords="121,44,122,62,116,79,111,78,117,62,116,44"/>
+<area shape="poly" id="edge7_Node000001_Node000002" title=" " alt="" coords="137,41,140,61,129,80,125,77,134,60,132,42"/>
+<area shape="poly" id="edge8_Node000001_Node000002" title=" " alt="" coords="153,39,158,49,158,61,152,71,143,80,139,76,148,68,152,59,153,50,148,41"/>
 </map>

@@ -1,5 +1,7 @@
 <map id="Ogre::TextureAnimationControllerValue" name="Ogre::TextureAnimationControllerValue">
-<area shape="rect" id="node1" title="Predefined controller value for getting / setting a texture coordinate modifications (scales and tran..." alt="" coords="5,169,245,211"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_controller_value.html" title=" " alt="" coords="45,80,206,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="57,5,193,32"/>
+<area shape="rect" id="Node000001" title="Predefined controller value for getting / setting a texture coordinate modifications (scales and tran..." alt="" coords="5,167,245,207"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_controller_value.html" title=" " alt="" coords="45,79,206,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,133,128,166,123,166,123,133"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="57,5,193,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="128,44,128,79,123,79,123,44"/>
 </map>

@@ -11,7 +11,7 @@ var class_ogre_1_1v1_1_1_panel_overlay_element =
     [ "getRenderOperation", "class_ogre_1_1v1_1_1_panel_overlay_element.html#a025ff330cf5a70d742e0b689ec9be542", null ],
     [ "getTileX", "class_ogre_1_1v1_1_1_panel_overlay_element.html#a407b6feed54a0dd33281e1006baa34d7", null ],
     [ "getTileY", "class_ogre_1_1v1_1_1_panel_overlay_element.html#a2fa487abd75cf2ad5cbac4d31066b4ff", null ],
-    [ "getTypeName", "class_ogre_1_1v1_1_1_panel_overlay_element.html#a7490d15a27c918c519af23534042a954", null ],
+    [ "getTypeName", "class_ogre_1_1v1_1_1_panel_overlay_element.html#a36410b1dbcbaa072852d54b934ab5408", null ],
     [ "getUV", "class_ogre_1_1v1_1_1_panel_overlay_element.html#ad455a218685e03e7bce3c1088a1ae559", null ],
     [ "initialise", "class_ogre_1_1v1_1_1_panel_overlay_element.html#a141bf79e9bc30c4d2c18055f4a1f1902", null ],
     [ "isTransparent", "class_ogre_1_1v1_1_1_panel_overlay_element.html#afe3794b4d4d639dfc0829c01d41322fd", null ],

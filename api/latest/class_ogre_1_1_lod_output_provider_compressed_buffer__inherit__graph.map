@@ -1,5 +1,7 @@
 <map id="Ogre::LodOutputProviderCompressedBuffer" name="Ogre::LodOutputProviderCompressedBuffer">
-<area shape="rect" id="node1" title=" " alt="" coords="23,155,286,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_lod_output_provider_compressed_mesh.html" title=" " alt="" coords="5,80,304,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_lod_output_provider.html" title=" " alt="" coords="63,5,246,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="23,152,286,192"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_lod_output_provider_compressed_mesh.html" title=" " alt="" coords="5,79,304,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,118,157,152,152,152,152,118"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_lod_output_provider.html" title=" " alt="" coords="63,5,246,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="157,44,157,79,152,79,152,44"/>
 </map>

@@ -1,5 +1,7 @@
 <map id="Ogre::FileHandleDataStream" name="Ogre::FileHandleDataStream">
-<area shape="rect" id="node1" title="Common subclass of DataStream for handling data from C&#45;style file handles." alt="" coords="5,155,213,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_data_stream.html" title="General purpose class used for encapsulating the reading and writing of data." alt="" coords="40,80,179,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="41,5,177,32"/>
+<area shape="rect" id="Node000001" title="Common subclass of DataStream for handling data from C&#45;style file handles." alt="" coords="5,152,213,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_data_stream.html" title="General purpose class used for encapsulating the reading and writing of data." alt="" coords="40,79,179,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,118,112,152,107,152,107,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="22,5,197,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,44,112,79,107,79,107,44"/>
 </map>

@@ -1,3 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$struct_ogre_1_1_active_actor_data.html" title=" " alt="" coords="5,5,172,32"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,45,183,70"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_uniform_buffer.html" title="Specialisation of HardwareUniformBuffer for emulation." alt="" coords="233,5,471,45"/>
+<area shape="poly" id="edge8_Node000000_Node000001" title=" " alt="" coords="196,42,233,37,233,43,197,47"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_g_l_e_s2_hardware_uniform_buffer.html" title="Specialisation of HardwareUniformBuffer for OpenGL." alt="" coords="231,69,473,109"/>
+<area shape="poly" id="edge9_Node000000_Node000002" title=" " alt="" coords="197,67,231,72,230,77,196,73"/>
 </map>

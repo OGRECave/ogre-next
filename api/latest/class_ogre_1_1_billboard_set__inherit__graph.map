@@ -1,11 +1,19 @@
 <map id="Ogre::BillboardSet" name="Ogre::BillboardSet">
-<area shape="rect" id="node1" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,..." alt="" coords="190,304,330,331"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene." alt="" coords="169,229,351,256"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects." alt="" coords="95,155,254,181"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,80,163,107"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="187,80,346,107"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="9,5,175,32"/>
-<area shape="rect" id="node7" title=" " alt="" coords="199,5,335,32"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="359,5,473,32"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="278,155,413,181"/>
+<area shape="rect" id="Node000001" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,..." alt="" coords="206,299,346,324"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene." alt="" coords="185,225,367,251"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="279,264,279,299,273,299,273,264"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects." alt="" coords="111,152,270,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="216,184,264,223,260,227,213,188"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="21,79,179,104"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="127,110,177,150,174,154,124,115"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="203,79,362,104"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="259,114,207,154,204,150,256,110"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,171,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="133,33,252,76,250,81,131,38"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="195,5,370,31"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="285,44,285,79,280,79,280,44"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="395,5,509,31"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="413,38,311,81,309,76,411,34"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="294,152,429,177"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="339,188,292,227,288,223,336,184"/>
 </map>

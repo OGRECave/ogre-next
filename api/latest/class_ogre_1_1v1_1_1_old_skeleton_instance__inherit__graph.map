@@ -1,8 +1,13 @@
 <map id="Ogre::v1::OldSkeletonInstance" name="Ogre::v1::OldSkeletonInstance">
-<area shape="rect" id="node1" title="A OldSkeletonInstance is a single instance of a Skeleton used by a world object." alt="" coords="156,229,375,256"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_skeleton.html" title="A collection of OldBone objects used to animate a skinned mesh." alt="" coords="195,155,336,181"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g." alt="" coords="109,80,230,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,5,163,32"/>
-<area shape="rect" id="node5" title=" " alt="" coords="187,5,323,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1v1_1_1_animation_container.html" title="An animation container interface, which allows generic access to sibling animations." alt="" coords="254,80,469,107"/>
+<area shape="rect" id="Node000001" title="A OldSkeletonInstance is a single instance of a Skeleton used by a world object." alt="" coords="165,225,384,251"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_skeleton.html" title="A collection of OldBone objects used to animate a skinned mesh." alt="" coords="204,152,345,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="277,191,277,225,272,225,272,191"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g." alt="" coords="118,79,239,104"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="207,110,261,150,257,154,204,114"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,5,163,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="112,37,165,76,162,81,109,41"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="187,5,362,31"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="250,41,196,81,193,76,247,37"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1v1_1_1_animation_container.html" title="An animation container interface, which allows generic access to sibling animations." alt="" coords="263,79,478,104"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="346,114,292,154,289,150,343,110"/>
 </map>

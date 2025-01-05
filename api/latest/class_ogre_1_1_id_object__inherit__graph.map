@@ -1,49 +1,95 @@
 <map id="Ogre::IdObject" name="Ogre::IdObject">
-<area shape="rect" id="node1" title=" " alt="" coords="5,1095,120,1121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_bone.html" title="Class representing a Bone in the join hierarchy of a skeleton." alt="" coords="256,461,351,488"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_compositor_node.html" title="Compositor nodes are the core subject of compositing." alt="" coords="218,512,389,539"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re..." alt="" coords="200,563,407,589"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_irradiance_field.html" title="Implements an Irradiance Field with Depth, inspired on DDGI." alt="" coords="225,613,382,640"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="224,664,383,691"/>
-<area shape="rect" id="node34" href="$class_ogre_1_1_node.html" title="Class representing a general&#45;purpose node an articulated scene graph." alt="" coords="256,1069,351,1096"/>
-<area shape="rect" id="node37" href="$class_ogre_1_1_parallax_corrected_cubemap_base.html" title=" " alt="" coords="168,1120,439,1147"/>
-<area shape="rect" id="node40" href="$class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e." alt="" coords="225,1171,382,1197"/>
-<area shape="rect" id="node42" href="$class_ogre_1_1_vct_lighting.html" title=" " alt="" coords="236,1221,371,1248"/>
-<area shape="rect" id="node43" href="$class_ogre_1_1_vct_material.html" title=" " alt="" coords="235,1272,371,1299"/>
-<area shape="rect" id="node44" href="$class_ogre_1_1_vct_voxelizer_source_base.html" title="This class contains shared functionality between voxelizer; and is used by VctLighting to source its ..." alt="" coords="195,1323,412,1349"/>
-<area shape="rect" id="node47" href="$class_ogre_1_1_voxelized_mesh_cache.html" title="Uses a VctVoxelizer to convert a single mesh made up of triangles into a voxel 3D texture representat..." alt="" coords="204,1373,403,1400"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_compositor_shadow_node.html" title="Shadow Nodes are special nodes (not to be confused with CompositorNode) that are only used for render..." alt="" coords="510,5,731,32"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_decal.html" title="Decals can have diffuse, normal map, and emissive on top of regular objects." alt="" coords="571,56,670,83"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_frustum.html" title="A frustum represents a pyramid, capped at the near and far end which is used to represent either a vi..." alt="" coords="563,107,678,133"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1_ifd_probe_visualizer.html" title=" " alt="" coords="531,157,710,184"/>
-<area shape="rect" id="node12" href="$class_ogre_1_1_internal_cubemap_probe.html" title="This class is internal and should not be interfaced directly by users." alt="" coords="515,208,726,235"/>
-<area shape="rect" id="node13" href="$class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh." alt="" coords="575,259,666,285"/>
-<area shape="rect" id="node14" href="$class_ogre_1_1_light.html" title="Representation of a dynamic light source in the scene." alt="" coords="574,309,667,336"/>
-<area shape="rect" id="node15" href="$class_ogre_1_1_manual_object.html" title=" " alt="" coords="545,360,696,387"/>
-<area shape="rect" id="node16" href="$class_ogre_1_1_movable_plane.html" title="Definition of a Plane that may be attached to a node, and the derived details of it retrieved simply." alt="" coords="544,411,697,437"/>
-<area shape="rect" id="node17" href="$class_ogre_1_1_null_entity.html" title=" " alt="" coords="558,461,683,488"/>
-<area shape="rect" id="node18" href="$class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects." alt="" coords="541,512,700,539"/>
-<area shape="rect" id="node21" href="$class_ogre_1_1_particle_system2.html" title=" " alt="" coords="537,563,704,589"/>
-<area shape="rect" id="node22" href="$class_ogre_1_1_rectangle2_d.html" title=" " alt="" coords="549,613,693,640"/>
-<area shape="rect" id="node23" href="$class_ogre_1_1_voxel_visualizer.html" title=" " alt="" coords="541,664,701,691"/>
-<area shape="rect" id="node24" href="$class_ogre_1_1_wire_aabb.html" title="Helper class to display the Aabb of a MovableObject as lines." alt="" coords="559,715,683,741"/>
-<area shape="rect" id="node25" href="$class_ogre_1_1v1_1_1_billboard_chain.html" title="Allows the rendering of a chain of connected billboards." alt="" coords="531,765,711,792"/>
-<area shape="rect" id="node27" href="$class_ogre_1_1v1_1_1_billboard_set.html" title="A collection of billboards (faces which are always facing the given direction) with the same (default..." alt="" coords="539,816,703,843"/>
-<area shape="rect" id="node28" href="$class_ogre_1_1v1_1_1_entity.html" title="Defines an instance of a discrete, movable object based on a Mesh." alt="" coords="559,867,682,893"/>
-<area shape="rect" id="node29" href="$class_ogre_1_1v1_1_1_manual_object.html" title="Class providing a much simplified interface to generating manual objects with custom geometry." alt="" coords="533,917,708,944"/>
-<area shape="rect" id="node30" href="$class_ogre_1_1v1_1_1_overlay.html" title="Represents a layer which is rendered on top of the &#39;normal&#39; scene contents." alt="" coords="553,968,689,995"/>
-<area shape="rect" id="node31" href="$class_ogre_1_1v1_1_1_rectangle2_d.html" title="Allows the rendering of a simple 2D rectangle This class renders a simple 2D rectangle; this rectangl..." alt="" coords="537,1019,705,1045"/>
-<area shape="rect" id="node32" href="$class_ogre_1_1v1_1_1_simple_renderable.html" title="Simple implementation of MovableObject and Renderable for single&#45;part custom objects." alt="" coords="519,1069,723,1096"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_camera.html" title="A viewpoint from which the scene will be rendered." alt="" coords="847,107,959,133"/>
-<area shape="rect" id="node19" href="$class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene." alt="" coords="813,512,994,539"/>
-<area shape="rect" id="node20" href="$class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,..." alt="" coords="1052,512,1192,539"/>
-<area shape="rect" id="node26" href="$class_ogre_1_1v1_1_1_ribbon_trail.html" title="Subclass of BillboardChain which automatically leaves a trail behind one or more Node instances." alt="" coords="825,765,982,792"/>
-<area shape="rect" id="node33" href="$class_ogre_1_1v1_1_1_wire_bounding_box.html" title="Allows the rendering of a wireframe bounding box." alt="" coords="803,1069,1004,1096"/>
-<area shape="rect" id="node35" href="$class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph." alt="" coords="553,1120,688,1147"/>
-<area shape="rect" id="node36" href="$class_ogre_1_1_tag_point.html" title="TagPoints are like SceneNodes, that can be children of a Bone." alt="" coords="845,1120,961,1147"/>
-<area shape="rect" id="node38" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="501,1171,740,1197"/>
-<area shape="rect" id="node39" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="487,1221,755,1248"/>
-<area shape="rect" id="node41" href="$class_ogre_1_1_default_scene_manager.html" title="Default scene manager." alt="" coords="518,1272,723,1299"/>
-<area shape="rect" id="node45" href="$class_ogre_1_1_vct_image_voxelizer.html" title="The image voxelizer aims to be faster than VctImageVoxelizer for the whole scene by following a diffe..." alt="" coords="529,1323,712,1349"/>
-<area shape="rect" id="node46" href="$class_ogre_1_1_vct_voxelizer.html" title="The voxelizer consists in several stages." alt="" coords="550,1373,691,1400"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,1067,120,1092"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_bone.html" title="Class representing a Bone in the join hierarchy of a skeleton." alt="" coords="256,449,351,475"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="62,1052,68,931,85,760,98,673,116,593,138,528,151,503,166,484,186,470,209,461,255,455,256,461,210,466,188,474,170,488,156,506,143,531,121,595,103,674,90,761,74,931,67,1053"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_compositor_node.html" title="Compositor nodes are the core subject of compositing." alt="" coords="218,499,389,524"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="63,1053,70,941,88,784,101,705,119,633,140,574,152,551,166,533,190,517,217,508,219,514,192,522,170,537,157,554,145,576,124,634,107,706,93,785,76,941,68,1053"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re..." alt="" coords="200,548,407,573"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="63,1053,72,950,91,808,105,737,122,672,142,619,166,583,181,571,199,563,201,568,184,576,170,586,147,621,127,674,110,738,96,809,78,950,68,1053"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_irradiance_field.html" title="Implements an Irradiance Field with Depth, inspired on DDGI." alt="" coords="225,597,382,623"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="64,1052,75,959,95,832,108,769,125,711,144,664,166,632,193,615,224,606,225,611,195,620,170,636,149,667,130,713,114,770,100,833,80,959,69,1053"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="224,647,383,672"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="76,1053,292,671,297,674,81,1056"/>
+<area shape="rect" id="Node000034" href="$class_ogre_1_1_node.html" title="Class representing a general&#45;purpose node an articulated scene graph." alt="" coords="256,1041,351,1067"/>
+<area shape="poly" id="edge33_Node000001_Node000034" title=" " alt="" coords="134,1069,256,1056,256,1062,134,1075"/>
+<area shape="rect" id="Node000037" href="$class_ogre_1_1_parallax_corrected_cubemap_base.html" title=" " alt="" coords="168,1091,439,1116"/>
+<area shape="poly" id="edge36_Node000001_Node000037" title=" " alt="" coords="134,1084,176,1088,176,1093,134,1089"/>
+<area shape="rect" id="Node000040" href="$class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e." alt="" coords="225,1140,382,1165"/>
+<area shape="poly" id="edge39_Node000001_Node000040" title=" " alt="" coords="100,1096,169,1126,225,1140,224,1145,167,1131,97,1101"/>
+<area shape="rect" id="Node000042" href="$class_ogre_1_1_vct_lighting.html" title=" " alt="" coords="236,1189,371,1215"/>
+<area shape="poly" id="edge41_Node000001_Node000042" title=" " alt="" coords="84,1101,120,1140,144,1160,169,1176,202,1188,236,1195,235,1200,201,1193,167,1180,141,1164,117,1144,80,1105"/>
+<area shape="rect" id="Node000043" href="$class_ogre_1_1_vct_material.html" title=" " alt="" coords="235,1239,371,1264"/>
+<area shape="poly" id="edge42_Node000001_Node000043" title=" " alt="" coords="77,1103,112,1166,138,1198,169,1225,201,1239,236,1247,235,1252,200,1245,167,1230,134,1202,107,1169,72,1106"/>
+<area shape="rect" id="Node000044" href="$class_ogre_1_1_vct_voxelizer_source_base.html" title="This class contains shared functionality between voxelizer; and is used by VctLighting to source its ..." alt="" coords="195,1288,412,1313"/>
+<area shape="poly" id="edge43_Node000001_Node000044" title=" " alt="" coords="72,1105,84,1143,104,1190,132,1236,149,1257,170,1274,196,1288,193,1293,166,1279,146,1261,127,1239,99,1192,79,1145,67,1106"/>
+<area shape="rect" id="Node000047" href="$class_ogre_1_1_voxelized_mesh_cache.html" title="Uses a VctVoxelizer to convert a single mesh made up of triangles into a voxel 3D texture representat..." alt="" coords="204,1337,403,1363"/>
+<area shape="poly" id="edge46_Node000001_Node000047" title=" " alt="" coords="70,1105,78,1153,96,1213,126,1274,146,1301,170,1324,186,1334,205,1342,203,1347,184,1339,166,1328,142,1304,121,1276,91,1215,73,1155,64,1106"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_compositor_shadow_node.html" title="Shadow Nodes are special nodes (not to be confused with CompositorNode) that are only used for render..." alt="" coords="510,5,731,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="401,506,420,497,437,484,458,457,471,430,479,403,481,376,475,320,460,264,445,208,438,152,441,124,449,96,463,68,485,40,508,23,511,28,489,44,468,71,454,98,446,125,444,152,450,207,465,263,480,319,487,376,484,404,476,432,462,460,441,488,423,502,403,511"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_decal.html" title="Decals can have diffuse, normal map, and emissive on top of regular objects." alt="" coords="571,55,670,80"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="395,656,418,647,437,632,449,613,458,588,466,524,465,447,460,363,454,279,453,201,462,136,471,110,485,90,503,75,525,66,570,60,571,65,526,71,506,80,489,93,476,112,467,137,459,201,460,279,465,362,471,446,472,524,463,589,454,615,441,636,421,651,397,661"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_frustum.html" title="A frustum represents a pyramid, capped at the near and far end which is used to represent either a vi..." alt="" coords="563,104,678,129"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="395,656,418,647,437,632,448,615,456,592,464,534,464,464,460,387,456,311,455,240,464,181,472,157,485,139,502,125,521,117,563,110,564,115,523,122,504,130,489,142,477,160,469,182,461,241,461,311,465,387,469,463,470,534,462,593,453,617,441,636,420,651,397,661"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_ifd_probe_visualizer.html" title=" " alt="" coords="531,153,710,179"/>
+<area shape="poly" id="edge10_Node000007_Node000011" title=" " alt="" coords="395,656,418,647,437,632,458,605,471,578,479,551,481,524,475,468,460,412,445,356,438,300,441,272,449,244,463,216,485,188,506,172,530,164,532,169,508,177,489,192,468,219,454,246,446,273,444,300,450,355,465,411,480,467,487,524,484,552,476,580,462,608,441,636,420,651,397,661"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_internal_cubemap_probe.html" title="This class is internal and should not be interfaced directly by users." alt="" coords="515,203,726,228"/>
+<area shape="poly" id="edge11_Node000007_Node000012" title=" " alt="" coords="395,655,418,647,437,632,456,608,468,584,475,560,477,536,472,487,460,437,447,387,442,337,445,312,452,287,465,262,485,237,513,218,516,223,488,241,470,265,457,289,450,313,448,337,453,386,465,436,478,486,483,536,480,561,473,586,460,611,441,636,420,651,397,660"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh." alt="" coords="575,252,666,277"/>
+<area shape="poly" id="edge12_Node000007_Node000013" title=" " alt="" coords="395,655,418,646,437,632,453,611,465,591,471,569,473,548,470,505,460,462,450,418,446,374,449,352,456,330,467,308,485,287,505,272,528,263,575,258,575,263,529,268,507,277,489,291,472,311,461,332,454,353,452,374,455,417,465,461,475,504,479,548,476,571,469,593,458,614,441,636,420,651,397,660"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1_light.html" title="Representation of a dynamic light source in the scene." alt="" coords="574,301,667,327"/>
+<area shape="poly" id="edge13_Node000007_Node000014" title=" " alt="" coords="395,655,418,646,437,632,451,614,461,597,470,561,467,524,460,486,452,449,450,411,459,373,470,354,485,336,504,322,527,313,574,307,574,313,528,318,507,326,488,340,474,357,464,375,456,411,458,448,465,485,473,523,475,561,466,599,456,617,441,636,420,651,397,660"/>
+<area shape="rect" id="Node000015" href="$class_ogre_1_1_manual_object.html" title=" " alt="" coords="545,351,696,376"/>
+<area shape="poly" id="edge14_Node000007_Node000015" title=" " alt="" coords="395,654,418,646,437,632,458,603,466,573,465,542,460,511,455,479,454,448,463,416,485,385,513,367,545,359,546,364,515,372,489,389,467,418,459,448,460,479,465,510,470,542,471,574,463,605,441,636,420,650,397,659"/>
+<area shape="rect" id="Node000016" href="$class_ogre_1_1_movable_plane.html" title="Definition of a Plane that may be attached to a node, and the derived details of it retrieved simply." alt="" coords="544,400,697,425"/>
+<area shape="poly" id="edge15_Node000007_Node000016" title=" " alt="" coords="395,654,418,645,437,632,454,609,462,585,463,561,460,536,457,510,458,484,466,459,485,435,512,418,543,409,544,414,514,422,488,439,471,462,463,485,463,510,465,535,468,560,467,586,459,611,441,636,420,650,397,659"/>
+<area shape="rect" id="Node000017" href="$class_ogre_1_1_null_entity.html" title=" " alt="" coords="558,449,683,475"/>
+<area shape="poly" id="edge16_Node000007_Node000017" title=" " alt="" coords="395,653,418,645,437,632,451,615,458,597,460,560,462,521,469,502,485,484,501,473,519,465,557,457,558,463,521,470,504,477,488,488,474,505,467,522,465,560,463,599,456,618,440,636,420,650,397,658"/>
+<area shape="rect" id="Node000018" href="$class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects." alt="" coords="541,499,700,524"/>
+<area shape="poly" id="edge17_Node000007_Node000018" title=" " alt="" coords="395,651,417,643,437,632,448,621,455,609,460,584,466,558,473,545,485,533,511,519,540,511,542,516,513,524,488,537,477,548,471,560,465,585,460,611,452,624,440,636,420,648,397,656"/>
+<area shape="rect" id="Node000021" href="$class_ogre_1_1_particle_system2.html" title=" " alt="" coords="537,548,704,573"/>
+<area shape="poly" id="edge20_Node000007_Node000021" title=" " alt="" coords="395,647,437,632,452,620,460,608,470,595,485,582,510,572,536,565,538,570,512,577,488,587,474,598,465,611,456,624,440,636,397,652"/>
+<area shape="rect" id="Node000022" href="$class_ogre_1_1_rectangle2_d.html" title=" " alt="" coords="549,597,693,623"/>
+<area shape="poly" id="edge21_Node000007_Node000022" title=" " alt="" coords="396,642,548,618,549,624,397,648"/>
+<area shape="rect" id="Node000023" href="$class_ogre_1_1_voxel_visualizer.html" title=" " alt="" coords="541,647,701,672"/>
+<area shape="poly" id="edge22_Node000007_Node000023" title=" " alt="" coords="397,657,540,657,540,662,397,662"/>
+<area shape="rect" id="Node000024" href="$class_ogre_1_1_wire_aabb.html" title="Helper class to display the Aabb of a MovableObject as lines." alt="" coords="559,696,683,721"/>
+<area shape="poly" id="edge23_Node000007_Node000024" title=" " alt="" coords="397,671,559,696,558,702,396,676"/>
+<area shape="rect" id="Node000025" href="$class_ogre_1_1v1_1_1_billboard_chain.html" title="Allows the rendering of a chain of connected billboards." alt="" coords="531,745,711,771"/>
+<area shape="poly" id="edge24_Node000007_Node000025" title=" " alt="" coords="345,675,411,703,487,730,540,743,538,748,486,735,409,708,343,680"/>
+<area shape="rect" id="Node000027" href="$class_ogre_1_1v1_1_1_billboard_set.html" title="A collection of billboards (faces which are always facing the given direction) with the same (default..." alt="" coords="539,795,703,820"/>
+<area shape="poly" id="edge26_Node000007_Node000027" title=" " alt="" coords="331,679,399,730,442,757,488,780,539,795,538,800,486,784,440,762,396,735,328,683"/>
+<area shape="rect" id="Node000028" href="$class_ogre_1_1v1_1_1_entity.html" title="Defines an instance of a discrete, movable object based on a Mesh." alt="" coords="559,844,682,869"/>
+<area shape="poly" id="edge27_Node000007_Node000028" title=" " alt="" coords="324,682,352,715,391,756,437,796,488,829,523,842,559,850,558,855,521,847,485,834,433,800,387,760,348,719,320,685"/>
+<area shape="rect" id="Node000029" href="$class_ogre_1_1v1_1_1_manual_object.html" title="Class providing a much simplified interface to generating manual objects with custom geometry." alt="" coords="533,893,708,919"/>
+<area shape="poly" id="edge28_Node000007_Node000029" title=" " alt="" coords="320,683,346,727,383,780,431,834,458,858,488,878,510,889,534,896,532,901,508,894,485,883,455,862,427,838,379,784,341,730,315,686"/>
+<area shape="rect" id="Node000030" href="$class_ogre_1_1v1_1_1_overlay.html" title="Represents a layer which is rendered on top of the &#39;normal&#39; scene contents." alt="" coords="553,943,689,968"/>
+<area shape="poly" id="edge29_Node000007_Node000030" title=" " alt="" coords="316,684,339,736,375,803,425,872,455,902,488,928,519,942,553,950,552,955,517,947,485,932,451,906,421,875,371,806,334,739,312,686"/>
+<area shape="rect" id="Node000031" href="$class_ogre_1_1v1_1_1_rectangle2_d.html" title="Allows the rendering of a simple 2D rectangle This class renders a simple 2D rectangle; this rectangl..." alt="" coords="537,992,705,1017"/>
+<area shape="poly" id="edge30_Node000007_Node000031" title=" " alt="" coords="314,684,334,745,368,826,392,868,419,908,451,946,488,977,512,990,537,998,536,1003,509,995,485,982,448,949,415,912,387,871,363,828,329,747,309,686"/>
+<area shape="rect" id="Node000032" href="$class_ogre_1_1v1_1_1_simple_renderable.html" title="Simple implementation of MovableObject and Renderable for single&#45;part custom objects." alt="" coords="519,1041,723,1067"/>
+<area shape="poly" id="edge31_Node000007_Node000032" title=" " alt="" coords="312,685,329,755,362,848,385,898,414,945,448,989,488,1026,520,1043,517,1047,485,1031,444,993,409,948,380,900,357,850,324,756,307,686"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_camera.html" title="A viewpoint from which the scene will be rendered." alt="" coords="847,104,959,129"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="692,114,847,114,847,119,692,119"/>
+<area shape="rect" id="Node000019" href="$class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene." alt="" coords="813,499,994,524"/>
+<area shape="poly" id="edge18_Node000018_Node000019" title=" " alt="" coords="714,509,812,509,812,514,714,514"/>
+<area shape="rect" id="Node000020" href="$class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,..." alt="" coords="1052,499,1192,524"/>
+<area shape="poly" id="edge19_Node000019_Node000020" title=" " alt="" coords="1008,509,1052,509,1052,514,1008,514"/>
+<area shape="rect" id="Node000026" href="$class_ogre_1_1v1_1_1_ribbon_trail.html" title="Subclass of BillboardChain which automatically leaves a trail behind one or more Node instances." alt="" coords="825,745,982,771"/>
+<area shape="poly" id="edge25_Node000025_Node000026" title=" " alt="" coords="724,755,825,755,825,761,724,761"/>
+<area shape="rect" id="Node000033" href="$class_ogre_1_1v1_1_1_wire_bounding_box.html" title="Allows the rendering of a wireframe bounding box." alt="" coords="803,1041,1004,1067"/>
+<area shape="poly" id="edge32_Node000032_Node000033" title=" " alt="" coords="736,1051,802,1051,802,1057,736,1057"/>
+<area shape="rect" id="Node000035" href="$class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph." alt="" coords="553,1091,688,1116"/>
+<area shape="poly" id="edge34_Node000034_Node000035" title=" " alt="" coords="365,1061,553,1090,552,1096,364,1066"/>
+<area shape="rect" id="Node000036" href="$class_ogre_1_1_tag_point.html" title="TagPoints are like SceneNodes, that can be children of a Bone." alt="" coords="845,1091,961,1116"/>
+<area shape="poly" id="edge35_Node000035_Node000036" title=" " alt="" coords="702,1101,845,1101,845,1106,702,1106"/>
+<area shape="rect" id="Node000038" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="501,1140,740,1165"/>
+<area shape="poly" id="edge37_Node000037_Node000038" title=" " alt="" coords="400,1116,538,1137,538,1143,399,1121"/>
+<area shape="rect" id="Node000039" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="487,1189,755,1215"/>
+<area shape="poly" id="edge38_Node000037_Node000039" title=" " alt="" coords="422,1118,440,1126,456,1139,465,1152,474,1164,488,1176,515,1187,513,1192,485,1180,470,1168,460,1155,452,1142,437,1131,420,1123"/>
+<area shape="rect" id="Node000041" href="$class_ogre_1_1_default_scene_manager.html" title="Default scene manager." alt="" coords="518,1239,723,1264"/>
+<area shape="poly" id="edge40_Node000040_Node000041" title=" " alt="" coords="396,1159,440,1176,456,1188,465,1201,474,1214,488,1225,519,1237,517,1242,485,1230,470,1217,460,1204,452,1192,437,1180,394,1164"/>
+<area shape="rect" id="Node000045" href="$class_ogre_1_1_vct_image_voxelizer.html" title="The image voxelizer aims to be faster than VctImageVoxelizer for the whole scene by following a diffe..." alt="" coords="529,1288,712,1313"/>
+<area shape="poly" id="edge44_Node000044_Node000045" title=" " alt="" coords="426,1298,529,1298,529,1303,426,1303"/>
+<area shape="rect" id="Node000046" href="$class_ogre_1_1_vct_voxelizer.html" title="The voxelizer consists in several stages." alt="" coords="550,1337,691,1363"/>
+<area shape="poly" id="edge45_Node000044_Node000046" title=" " alt="" coords="400,1313,550,1336,549,1342,399,1318"/>
 </map>

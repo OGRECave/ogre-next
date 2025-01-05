@@ -1,6 +1,9 @@
 <map id="Ogre::v1::GLES2DefaultHardwareIndexBuffer" name="Ogre::v1::GLES2DefaultHardwareIndexBuffer">
-<area shape="rect" id="node1" title="Specialisation of HardwareIndexBuffer for emulation." alt="" coords="5,229,243,271"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_hardware_index_buffer.html" title="Specialisation of HardwareBuffer for vertex index buffers, still abstract." alt="" coords="13,155,235,181"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_hardware_buffer.html" title="Abstract class defining common features of hardware buffers." alt="" coords="31,80,217,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="56,5,192,32"/>
+<area shape="rect" id="Node000001" title="Specialisation of HardwareIndexBuffer for emulation." alt="" coords="5,225,243,265"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_hardware_index_buffer.html" title="Specialisation of HardwareBuffer for vertex index buffers, still abstract." alt="" coords="13,152,235,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,191,127,225,121,225,121,191"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_hardware_buffer.html" title="Abstract class defining common features of hardware buffers." alt="" coords="31,79,217,104"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,118,127,152,121,152,121,118"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="37,5,211,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="127,44,127,79,121,79,121,44"/>
 </map>

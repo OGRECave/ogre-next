@@ -1,5 +1,9 @@
 var searchData=
 [
-  ['win32_5flean_5fand_5fmean_30469',['WIN32_LEAN_AND_MEAN',['../_w_i_n32_2_ogre_config_dialog_imp_8h.html#ac7bef5d85e3dcd73eef56ad39ffc84a9',1,'WIN32_LEAN_AND_MEAN():&#160;OgreConfigDialogImp.h'],['../_ogre_config_dialog_imp_win_r_t_8h.html#ac7bef5d85e3dcd73eef56ad39ffc84a9',1,'WIN32_LEAN_AND_MEAN():&#160;OgreConfigDialogImpWinRT.h'],['../_w_i_n32_2_ogre_error_dialog_imp_8h.html#ac7bef5d85e3dcd73eef56ad39ffc84a9',1,'WIN32_LEAN_AND_MEAN():&#160;OgreErrorDialogImp.h'],['../_w_i_n32_2_ogre_timer_imp_8h.html#ac7bef5d85e3dcd73eef56ad39ffc84a9',1,'WIN32_LEAN_AND_MEAN():&#160;OgreTimerImp.h'],['../_ogre_vulkan_win32_support_8h.html#ac7bef5d85e3dcd73eef56ad39ffc84a9',1,'WIN32_LEAN_AND_MEAN():&#160;OgreVulkanWin32Support.h']]],
-  ['window_30470',['Window',['../_ogre_x11_e_g_l_support_8h.html#a12f0b3ea7a02ede1c5799a956e008406',1,'OgreX11EGLSupport.h']]]
+  ['vc_5fextralean_0',['VC_EXTRALEAN',['../_ogre_vulkan_win32_support_8h.html#a0172fbace36625330d5f0f163a1ddc1a',1,'OgreVulkanWin32Support.h']]],
+  ['virtual_5fl0_1',['virtual_l0',['../_ogre_platform_8h.html#ab365672a946fca969834e0be99a5649a',1,'OgrePlatform.h']]],
+  ['virtual_5fl1_2',['virtual_l1',['../_ogre_platform_8h.html#ad8a102b20f8a115e9787f68fc1045cdf',1,'OgrePlatform.h']]],
+  ['virtual_5fl2_3',['virtual_l2',['../_ogre_platform_8h.html#a2c52accfdfe1971a9c62bac16d2bbdc8',1,'OgrePlatform.h']]],
+  ['visibilitychangemask_4',['VisibilityChangeMask',['../_ogre_x11_e_g_l_support_8h.html#ae55322407855ab36edf909cb81daf20d',1,'OgreX11EGLSupport.h']]],
+  ['visualidmask_5',['VisualIDMask',['../_ogre_x11_e_g_l_support_8h.html#a366e59c0e29f48ab511d5ed3d9904147',1,'OgreX11EGLSupport.h']]]
 ];

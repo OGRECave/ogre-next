@@ -1,6 +1,6 @@
 var struct_ogre_1_1_hlms_json_1_1_named_blocks =
 [
-    [ "blendblocks", "struct_ogre_1_1_hlms_json_1_1_named_blocks.html#a9dbcb57597b23ee57502acf0ce3ef4d2", null ],
-    [ "macroblocks", "struct_ogre_1_1_hlms_json_1_1_named_blocks.html#a8acb3752688991f4d69d48958d4b8bbd", null ],
-    [ "samplerblocks", "struct_ogre_1_1_hlms_json_1_1_named_blocks.html#abea7bdd9c8cca70698a6dd347a62e2fc", null ]
+    [ "blendblocks", "struct_ogre_1_1_hlms_json_1_1_named_blocks.html#a621a15fc99b8767f1387f7abe8db7583", null ],
+    [ "macroblocks", "struct_ogre_1_1_hlms_json_1_1_named_blocks.html#a3e60fedc79ba78a6203927bc15295bec", null ],
+    [ "samplerblocks", "struct_ogre_1_1_hlms_json_1_1_named_blocks.html#a2de2f8c7fd5d1d4a5545477353cc3a28", null ]
 ];

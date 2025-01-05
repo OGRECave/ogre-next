@@ -1,5 +1,7 @@
 <map id="Ogre::HlmsJsonListener" name="Ogre::HlmsJsonListener">
-<area shape="rect" id="node1" title=" " alt="" coords="17,5,192,32"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_scene_format_listener.html" title="Override this listener if you want to filter which objects get exported." alt="" coords="5,80,204,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_default_scene_format_listener.html" title="Default implementation that prevents a SceneNode from being exported if the only attached objects." alt="" coords="7,155,202,196"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="17,5,192,31"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_scene_format_listener.html" title="Override this listener if you want to filter which objects get exported." alt="" coords="5,79,204,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,44,107,79,102,79,102,44"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_default_scene_format_listener.html" title="Default implementation that prevents a SceneNode from being exported if the only attached objects." alt="" coords="7,152,202,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="107,118,107,152,102,152,102,118"/>
 </map>

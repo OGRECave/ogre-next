@@ -1,6 +1,6 @@
 var _ogre_script_compiler_8h =
 [
-    [ "Error", "struct_ogre_1_1_script_compiler_1_1_error.html", "struct_ogre_1_1_script_compiler_1_1_error" ],
+    [ "Ogre::ScriptCompiler::Error", "struct_ogre_1_1_script_compiler_1_1_error.html", "struct_ogre_1_1_script_compiler_1_1_error" ],
     [ "AbstractNodeList", "_ogre_script_compiler_8h.html#gae6612ea0b05ddf514b5478a6c0c0cb09", null ],
     [ "AbstractNodeListPtr", "_ogre_script_compiler_8h.html#gad207f4cd0b8599200e52d366fe61f069", null ],
     [ "AbstractNodePtr", "_ogre_script_compiler_8h.html#ga15cfb375beeafed87e1bdd96ef10ff36", null ],

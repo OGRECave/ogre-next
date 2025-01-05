@@ -2,7 +2,7 @@ var class_ogre_1_1v1_1_1_g_l3_plus_hardware_buffer_manager_base =
 [
     [ "GL3PlusHardwareBufferManagerBase", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_buffer_manager_base.html#a520ef2e60b7615abfcf6fda999b65104", null ],
     [ "~GL3PlusHardwareBufferManagerBase", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_buffer_manager_base.html#a1ddf908e7be7f49c9253e01ca22aee62", null ],
-    [ "allocateScratch", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_buffer_manager_base.html#a5a4badeeef8fb778e876bb097a601902", null ],
+    [ "allocateScratch", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_buffer_manager_base.html#a11c2aa58d8f812cbf7e0e38a04da1118", null ],
     [ "createIndexBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_buffer_manager_base.html#aac4cf06c4b22507601ef370c2aa4a829", null ],
     [ "createVertexBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_buffer_manager_base.html#a9dd7343a136552c378a54c8a098b92f1", null ],
     [ "deallocateScratch", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_buffer_manager_base.html#a2b03b3afb7c0f5d5cbf9f81273cfb237", null ],

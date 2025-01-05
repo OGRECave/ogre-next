@@ -1,4 +1,5 @@
 <map id="Ogre::ColourFaderAffector::CmdGreenAdjust" name="Ogre::ColourFaderAffector::CmdGreenAdjust">
-<area shape="rect" id="node1" title="Command object for green adjust (see ParamCommand)." alt="" coords="5,80,195,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="15,5,185,32"/>
+<area shape="rect" id="Node000001" title="Command object for green adjust (see ParamCommand)." alt="" coords="5,79,195,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="15,5,185,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,44,103,79,97,79,97,44"/>
 </map>

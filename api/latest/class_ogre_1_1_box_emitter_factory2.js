@@ -1,5 +1,5 @@
 var class_ogre_1_1_box_emitter_factory2 =
 [
-    [ "createEmitter", "class_ogre_1_1_box_emitter_factory2.html#a1be90e4938d1142a580eb3b90be9f069", null ],
-    [ "getName", "class_ogre_1_1_box_emitter_factory2.html#ab60cc59268dbacee5324a2ac93564dee", null ]
+    [ "createEmitter", "class_ogre_1_1_box_emitter_factory2.html#a61e5d16bcee0829f41807d478cd5724d", null ],
+    [ "getName", "class_ogre_1_1_box_emitter_factory2.html#a245588a0338a09a0118c45cae855a1c5", null ]
 ];

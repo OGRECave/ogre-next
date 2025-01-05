@@ -1,4 +1,5 @@
 <map id="Ogre::GLSLESLinkProgram" name="Ogre::GLSLESLinkProgram">
-<area shape="rect" id="node1" title="C++ encapsulation of GLSL ES Program Object." alt="" coords="5,95,196,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="9,5,193,47"/>
+<area shape="rect" id="Node000001" title="C++ encapsulation of GLSL ES Program Object." alt="" coords="5,93,196,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="9,5,193,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,59,103,93,98,93,98,59"/>
 </map>

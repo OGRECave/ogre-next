@@ -1,5 +1,7 @@
 <map id="Ogre::GpuProgramUsage" name="Ogre::GpuProgramUsage">
-<area shape="rect" id="node1" title="This class makes the usage of a vertex and fragment programs (low&#45;level or high&#45;level),..." alt="" coords="95,80,278,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_resource_1_1_listener.html" title=" " alt="" coords="5,5,187,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="211,5,347,32"/>
+<area shape="rect" id="Node000001" title="This class makes the usage of a vertex and fragment programs (low&#45;level or high&#45;level),..." alt="" coords="106,79,289,104"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_resource_1_1_listener.html" title=" " alt="" coords="5,5,187,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,36,182,76,179,81,122,41"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="211,5,386,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="273,41,215,81,212,76,270,36"/>
 </map>

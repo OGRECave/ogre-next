@@ -1,6 +1,9 @@
 <map id="Ogre::ParticleSystemRendererFactory" name="Ogre::ParticleSystemRendererFactory">
-<area shape="rect" id="node1" title="Abstract class definition of a factory object for ParticleSystemRenderer." alt="" coords="88,95,305,136"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1v1_1_1_billboard_particle_renderer_factory.html" title="Factory class for BillboardParticleRenderer." alt="" coords="101,184,292,225"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_factory_obj.html" title=" " alt="" coords="5,5,199,47"/>
-<area shape="rect" id="node3" title=" " alt="" coords="223,13,359,39"/>
+<area shape="rect" id="Node000001" title="Abstract class definition of a factory object for ParticleSystemRenderer." alt="" coords="97,93,315,133"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1v1_1_1_billboard_particle_renderer_factory.html" title="Factory class for BillboardParticleRenderer." alt="" coords="111,181,301,221"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="209,147,209,181,203,181,203,147"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_factory_obj.html" title=" " alt="" coords="5,5,199,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,52,185,91,181,95,134,56"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="223,13,397,38"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="287,49,231,95,227,91,284,45"/>
 </map>

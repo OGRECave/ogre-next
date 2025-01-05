@@ -1,12 +1,21 @@
 <map id="Ogre::Plugin" name="Ogre::Plugin">
-<area shape="rect" id="node1" title="Class defining a generic OGRE plugin." alt="" coords="189,183,291,209"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_plugin.html" title="Plugin instance for D3D11 Manager." alt="" coords="353,5,499,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_plugin.html" title="Plugin instance for GL3Plus Manager." alt="" coords="349,56,503,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_e_s2_plugin.html" title="Plugin instance for GL ES 2 Manager." alt="" coords="355,107,497,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_metal_plugin.html" title="Plugin instance for Metal Manager." alt="" coords="357,157,495,184"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_plugin.html" title="Plugin instance for NULL Manager." alt="" coords="359,208,493,235"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_particle_f_x2_plugin.html" title="Plugin instance for ParticleFX2 Manager." alt="" coords="339,259,513,285"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_particle_f_x_plugin.html" title="Plugin instance for ParticleFX Manager." alt="" coords="343,309,509,336"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_vulkan_plugin.html" title="Plugin instance for Vulkan Manager." alt="" coords="354,360,498,387"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,183,141,209"/>
+<area shape="rect" id="Node000001" title="Class defining a generic OGRE plugin." alt="" coords="228,179,329,204"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_plugin.html" title="Plugin instance for D3D11 Manager." alt="" coords="392,5,537,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="288,164,320,102,345,68,376,40,397,28,399,33,379,44,349,72,325,105,292,167"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_l3_plus_plugin.html" title="Plugin instance for GL3Plus Manager." alt="" coords="388,55,541,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="295,166,329,126,352,106,376,89,401,78,403,83,379,94,355,110,333,130,299,169"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_g_l_e_s2_plugin.html" title="Plugin instance for GL ES 2 Manager." alt="" coords="393,104,536,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="312,169,376,138,410,127,412,132,378,143,314,174"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_metal_plugin.html" title="Plugin instance for Metal Manager." alt="" coords="395,153,534,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="343,180,395,173,395,178,344,185"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_n_u_l_l_plugin.html" title="Plugin instance for NULL Manager." alt="" coords="397,203,532,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="344,197,397,204,397,209,343,202"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_particle_f_x2_plugin.html" title="Plugin instance for ParticleFX2 Manager." alt="" coords="377,252,552,277"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="315,208,378,238,412,249,411,254,376,243,313,213"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_particle_f_x_plugin.html" title="Plugin instance for ParticleFX Manager." alt="" coords="381,301,548,327"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="299,213,333,252,379,288,404,299,401,304,376,292,330,256,295,217"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_vulkan_plugin.html" title="Plugin instance for Vulkan Manager." alt="" coords="393,351,537,376"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="292,216,325,277,349,310,379,337,399,348,397,353,376,341,345,313,320,280,288,218"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,179,180,204"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,189,228,189,228,194,194,194"/>
 </map>

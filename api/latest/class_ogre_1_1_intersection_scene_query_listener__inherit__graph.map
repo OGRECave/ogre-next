@@ -1,5 +1,7 @@
 <map id="Ogre::IntersectionSceneQueryListener" name="Ogre::IntersectionSceneQueryListener">
-<area shape="rect" id="node1" title="Alternative listener class for dealing with IntersectionSceneQuery." alt="" coords="5,5,221,47"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_intersection_scene_query.html" title="Separate SceneQuery class to query for pairs of objects which are possibly intersecting one another." alt="" coords="5,95,221,121"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_default_intersection_scene_query.html" title="Default implementation of IntersectionSceneQuery." alt="" coords="20,169,207,211"/>
+<area shape="rect" id="Node000001" title="Alternative listener class for dealing with IntersectionSceneQuery." alt="" coords="5,5,221,45"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_intersection_scene_query.html" title="Separate SceneQuery class to query for pairs of objects which are possibly intersecting one another." alt="" coords="5,93,221,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,59,116,93,111,93,111,59"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_default_intersection_scene_query.html" title="Default implementation of IntersectionSceneQuery." alt="" coords="20,167,207,207"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="116,132,116,167,111,167,111,132"/>
 </map>

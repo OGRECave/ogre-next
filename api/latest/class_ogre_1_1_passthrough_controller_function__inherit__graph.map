@@ -1,5 +1,7 @@
 <map id="Ogre::PassthroughControllerFunction" name="Ogre::PassthroughControllerFunction">
-<area shape="rect" id="node1" title="Predefined controller function which just passes through the original source directly to dest." alt="" coords="5,169,209,211"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_controller_function.html" title=" " alt="" coords="17,80,197,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="39,5,175,32"/>
+<area shape="rect" id="Node000001" title="Predefined controller function which just passes through the original source directly to dest." alt="" coords="5,167,209,207"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_controller_function.html" title=" " alt="" coords="17,79,197,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,133,110,166,105,166,105,133"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="39,5,175,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="110,44,110,79,105,79,105,44"/>
 </map>

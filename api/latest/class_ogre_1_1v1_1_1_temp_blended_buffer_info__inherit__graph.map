@@ -1,5 +1,7 @@
 <map id="Ogre::v1::TempBlendedBufferInfo" name="Ogre::v1::TempBlendedBufferInfo">
-<area shape="rect" id="node1" title="Structure for recording the use of temporary blend buffers." alt="" coords="72,95,309,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_hardware_buffer_licensee.html" title="Abstract interface representing a &#39;licensee&#39; of a hardware buffer copy." alt="" coords="5,5,192,47"/>
-<area shape="rect" id="node3" title=" " alt="" coords="216,13,352,39"/>
+<area shape="rect" id="Node000001" title="Structure for recording the use of temporary blend buffers." alt="" coords="83,93,320,119"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_hardware_buffer_licensee.html" title="Abstract interface representing a &#39;licensee&#39; of a hardware buffer copy." alt="" coords="5,5,192,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,52,188,91,184,95,133,56"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="217,13,391,38"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="279,49,218,95,215,91,276,44"/>
 </map>

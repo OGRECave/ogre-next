@@ -4,6 +4,6 @@ var class_ogre_1_1v1_1_1_edge_list_builder =
     [ "~EdgeListBuilder", "class_ogre_1_1v1_1_1_edge_list_builder.html#a7c2933e8c33fa59dba53f1172e6729ca", null ],
     [ "addIndexData", "class_ogre_1_1v1_1_1_edge_list_builder.html#aa24c98d5bbb06b7d673cf5cc870a3d47", null ],
     [ "addVertexData", "class_ogre_1_1v1_1_1_edge_list_builder.html#a843c3bb7f3538ec0bcbe6f1adee4304a", null ],
-    [ "build", "class_ogre_1_1v1_1_1_edge_list_builder.html#acd40952ef94c472ebb9ba84776dcfc4f", null ],
+    [ "build", "class_ogre_1_1v1_1_1_edge_list_builder.html#a689e18a5b2121f89bd556667db2182a3", null ],
     [ "log", "class_ogre_1_1v1_1_1_edge_list_builder.html#ad319a0ee6ee198f07034055216493b61", null ]
 ];

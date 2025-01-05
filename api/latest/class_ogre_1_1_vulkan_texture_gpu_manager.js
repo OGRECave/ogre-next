@@ -4,16 +4,16 @@ var class_ogre_1_1_vulkan_texture_gpu_manager =
     [ "~VulkanTextureGpuManager", "class_ogre_1_1_vulkan_texture_gpu_manager.html#abbc036e6b162f4dcec056175d24fa851", null ],
     [ "canRestrictImageViewUsage", "class_ogre_1_1_vulkan_texture_gpu_manager.html#aff6ba25c8f92c6c1d1d86b0234aa14ce", null ],
     [ "checkSupport", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a50565b61f8effc61866934c7862a7cd8", null ],
-    [ "createTextureGpuNullWindow", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a68c0c5d43003d2ec7dad5a410e60b05e", null ],
-    [ "createTextureGpuWindow", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a47f53fb28df0ada8ea7888192f11a9da", null ],
+    [ "createTextureGpuNullWindow", "class_ogre_1_1_vulkan_texture_gpu_manager.html#ad8912665b8e584540c2a97f3f226c9db", null ],
+    [ "createTextureGpuWindow", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a794575b1265d26e59bd5e2cbe92febd9", null ],
     [ "createView", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a2004ed04a92b7bbe8001521a7d060a43", null ],
     [ "createView", "class_ogre_1_1_vulkan_texture_gpu_manager.html#ac3b9a6f92929930e55371e15d4b00eaf", null ],
     [ "createVkResources", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a5e24fd33dd1928bace4c18113d9ee5ee", null ],
-    [ "createWindowDepthBuffer", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a01c8e000e0d0a903849bafee2c4de603", null ],
+    [ "createWindowDepthBuffer", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a9c1a066e23937de9811c1179f16af538", null ],
     [ "destroyView", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a899ae784a461fde4dbd09dcd63ce8837", null ],
     [ "destroyView", "class_ogre_1_1_vulkan_texture_gpu_manager.html#aaa5a2bf5a1d6426b02da324b2a5e119e", null ],
     [ "destroyVkResources", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a790d88e6f44306640d30baf4d8ff32dc", null ],
     [ "getBlankTextureView", "class_ogre_1_1_vulkan_texture_gpu_manager.html#ad48cadc684f6052d6fdb2ccede94df7e", null ],
     [ "getBlankTextureVulkanName", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a3d083dad26113b48299b1c009d66f69f", null ],
-    [ "getDevice", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a588906fd252b805b53d513c4e784b7f8", null ]
+    [ "getDevice", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a3a83a74e7ba3a7d6c09fedc55085035a", null ]
 ];

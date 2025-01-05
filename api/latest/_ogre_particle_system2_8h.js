@@ -1,8 +1,8 @@
 var _ogre_particle_system2_8h =
 [
-    [ "ParticleSystem2", "class_ogre_1_1_particle_system2.html", "class_ogre_1_1_particle_system2" ],
-    [ "ParticleSystem2Factory", "class_ogre_1_1_particle_system2_factory.html", "class_ogre_1_1_particle_system2_factory" ],
-    [ "ParticleSystemDef", "class_ogre_1_1_particle_system_def.html", "class_ogre_1_1_particle_system_def" ],
+    [ "Ogre::ParticleSystem2", "class_ogre_1_1_particle_system2.html", "class_ogre_1_1_particle_system2" ],
+    [ "Ogre::ParticleSystem2Factory", "class_ogre_1_1_particle_system2_factory.html", "class_ogre_1_1_particle_system2_factory" ],
+    [ "Ogre::ParticleSystemDef", "class_ogre_1_1_particle_system_def.html", "class_ogre_1_1_particle_system_def" ],
     [ "ParticleRotationType", "_ogre_particle_system2_8h.html#a8dc71a0e7995e681a2b4096adbb12b5d", [
       [ "None", "_ogre_particle_system2_8h.html#a8dc71a0e7995e681a2b4096adbb12b5daedb1d971c0f9f5d43373fa82b2685236", null ],
       [ "Vertex", "_ogre_particle_system2_8h.html#a8dc71a0e7995e681a2b4096adbb12b5da5ea2698af77aa6eb4f7c9c0d5592d375", null ],

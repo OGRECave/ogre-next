@@ -1,5 +1,7 @@
 <map id="Ogre::D3D11StereoDriverBridge" name="Ogre::D3D11StereoDriverBridge">
-<area shape="rect" id="node1" title="Bridge interface from the render system to the stereo driver." alt="" coords="103,95,333,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,228,47"/>
-<area shape="rect" id="node3" title=" " alt="" coords="251,13,387,39"/>
+<area shape="rect" id="Node000001" title="Bridge interface from the render system to the stereo driver." alt="" coords="103,93,333,119"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,228,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,52,204,91,201,95,150,56"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="251,13,387,38"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="295,49,235,95,231,91,292,45"/>
 </map>

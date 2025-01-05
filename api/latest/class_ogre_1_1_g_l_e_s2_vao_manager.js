@@ -9,7 +9,7 @@ var class_ogre_1_1_g_l_e_s2_vao_manager =
     [ "_update", "class_ogre_1_1_g_l_e_s2_vao_manager.html#ac89183899ce6e9570437aef231ffbb0b", null ],
     [ "bindDrawId", "class_ogre_1_1_g_l_e_s2_vao_manager.html#a14af0f51a45dc94fc035abaefaa0c4ee", null ],
     [ "createAsyncTicket", "class_ogre_1_1_g_l_e_s2_vao_manager.html#a94d2ceb28fc032b4af6d66ef86c50911", null ],
-    [ "createStagingBuffer", "class_ogre_1_1_g_l_e_s2_vao_manager.html#af93ed720de935513aba7bbd8ab476827", null ],
+    [ "createStagingBuffer", "class_ogre_1_1_g_l_e_s2_vao_manager.html#a8afed3e76f6873ab7163d333d46ac2b4", null ],
     [ "getAttributeIndexFor", "class_ogre_1_1_g_l_e_s2_vao_manager.html#ad0f8f619071ee938d2d7282bf774fc38", null ],
     [ "getMaxVertexAttribs", "class_ogre_1_1_g_l_e_s2_vao_manager.html#af6396319a56f1705c5843971b5d38af9", null ],
     [ "isFrameFinished", "class_ogre_1_1_g_l_e_s2_vao_manager.html#adad0bea0e9aeff600982ab1a38dcbed6", null ],

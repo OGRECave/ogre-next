@@ -1,8 +1,13 @@
 <map id="Ogre::PlaneBoundedVolumeListSceneQuery" name="Ogre::PlaneBoundedVolumeListSceneQuery">
-<area shape="rect" id="node1" title="Specialises the SceneQuery class for querying within a plane&#45;bounded volume." alt="" coords="68,229,271,271"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_default_plane_bounded_volume_list_scene_query.html" title="Default implementation of PlaneBoundedVolumeListSceneQuery." alt="" coords="68,319,271,360"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_region_scene_query.html" title="Abstract class defining a query which returns single results from a region." alt="" coords="77,155,261,181"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_scene_query.html" title="A class for performing queries on a scene." alt="" coords="5,80,144,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="7,5,143,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_scene_query_listener.html" title="This optional class allows you to receive per&#45;result callbacks from SceneQuery executions instead of ..." alt="" coords="169,80,359,107"/>
+<area shape="rect" id="Node000001" title="Specialises the SceneQuery class for querying within a plane&#45;bounded volume." alt="" coords="86,225,289,265"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_default_plane_bounded_volume_list_scene_query.html" title="Default implementation of PlaneBoundedVolumeListSceneQuery." alt="" coords="86,313,289,353"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="190,279,190,313,185,313,185,279"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_region_scene_query.html" title="Abstract class defining a query which returns single results from a region." alt="" coords="95,152,279,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,191,190,225,185,225,185,191"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_scene_query.html" title="A class for performing queries on a scene." alt="" coords="23,79,162,104"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="120,110,173,150,170,154,117,114"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="95,44,95,79,90,79,90,44"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_scene_query_listener.html" title="This optional class allows you to receive per&#45;result callbacks from SceneQuery executions instead of ..." alt="" coords="187,79,377,104"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="257,114,204,154,201,150,254,110"/>
 </map>

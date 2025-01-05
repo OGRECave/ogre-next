@@ -1,5 +1,7 @@
 <map id="Ogre::ControllerManager" name="Ogre::ControllerManager">
-<area shape="rect" id="node1" title="Class for managing Controller instances." alt="" coords="111,95,293,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,207,47"/>
-<area shape="rect" id="node3" title=" " alt="" coords="231,13,367,39"/>
+<area shape="rect" id="Node000001" title="Class for managing Controller instances." alt="" coords="120,93,303,119"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,207,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,51,197,91,194,95,141,56"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="231,13,405,38"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="293,48,229,95,226,91,290,44"/>
 </map>

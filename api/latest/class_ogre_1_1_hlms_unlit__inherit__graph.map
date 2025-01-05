@@ -1,7 +1,11 @@
 <map id="Ogre::HlmsUnlit" name="Ogre::HlmsUnlit">
-<area shape="rect" id="node1" title="Implementation without lighting or skeletal animation specfically designed for OpenGL 3+,..." alt="" coords="139,244,265,271"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_hlms_buffer_manager.html" title="Managing constant and texture buffers for sending shader parameters is a very similar process to most..." alt="" coords="5,169,196,196"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="53,95,148,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="11,5,190,47"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_const_buffer_pool.html" title="Maintains a pool of buffers grouped by hash ID." alt="" coords="221,169,386,196"/>
+<area shape="rect" id="Node000001" title="Implementation without lighting or skeletal animation specfically designed for OpenGL 3+,..." alt="" coords="139,240,265,265"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_hlms_buffer_manager.html" title="Managing constant and texture buffers for sending shader parameters is a very similar process to most..." alt="" coords="5,167,196,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,198,187,238,184,242,127,202"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="53,93,148,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="103,132,103,167,98,167,98,132"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="11,5,190,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="103,59,103,93,98,93,98,59"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_const_buffer_pool.html" title="Maintains a pool of buffers grouped by hash ID." alt="" coords="221,167,386,192"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="277,202,220,242,217,238,274,198"/>
 </map>

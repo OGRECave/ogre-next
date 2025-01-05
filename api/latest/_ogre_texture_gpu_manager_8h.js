@@ -1,9 +1,9 @@
 var _ogre_texture_gpu_manager_8h =
 [
-    [ "BudgetEntry", "struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html", "struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry" ],
-    [ "MetadataCacheEntry", "struct_ogre_1_1_texture_gpu_manager_1_1_metadata_cache_entry.html", "struct_ogre_1_1_texture_gpu_manager_1_1_metadata_cache_entry" ],
-    [ "ResourceEntry", "struct_ogre_1_1_texture_gpu_manager_1_1_resource_entry.html", "struct_ogre_1_1_texture_gpu_manager_1_1_resource_entry" ],
-    [ "StagingTextureVec", "_ogre_texture_gpu_manager_8h.html#gaaca146151e2f0fc419ef2b02d9bf9f1e", null ],
+    [ "Ogre::TextureGpuManager::BudgetEntry", "struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html", "struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry" ],
+    [ "Ogre::TextureGpuManager::MetadataCacheEntry", "struct_ogre_1_1_texture_gpu_manager_1_1_metadata_cache_entry.html", "struct_ogre_1_1_texture_gpu_manager_1_1_metadata_cache_entry" ],
+    [ "Ogre::TextureGpuManager::ResourceEntry", "struct_ogre_1_1_texture_gpu_manager_1_1_resource_entry.html", "struct_ogre_1_1_texture_gpu_manager_1_1_resource_entry" ],
+    [ "StagingTextureVec", "_ogre_texture_gpu_manager_8h.html#gaf90aa3d6df3a1804b40198ca22360ac0", null ],
     [ "TexturePoolList", "_ogre_texture_gpu_manager_8h.html#ga9ee475f7c3b717768fa083b62409f63f", null ],
     [ "CommonTextureTypes", "_ogre_texture_gpu_manager_8h.html#a3a978c834ce00930123468c9a64047b4", [
       [ "Diffuse", "_ogre_texture_gpu_manager_8h.html#a3a978c834ce00930123468c9a64047b4a3f22b32546d18bc52eae77308ad07721", null ],

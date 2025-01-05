@@ -1,5 +1,7 @@
 <map id="Ogre::ResourceManager::ResourcePool" name="Ogre::ResourceManager::ResourcePool">
-<area shape="rect" id="node1" title="Definition of a pool of resources, which users can use to reuse similar resources many times without ..." alt="" coords="109,80,288,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_pool.html" title=" " alt="" coords="5,5,203,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="227,5,363,32"/>
+<area shape="rect" id="Node000001" title="Definition of a pool of resources, which users can use to reuse similar resources many times without ..." alt="" coords="120,79,299,119"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_pool.html" title=" " alt="" coords="5,5,203,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="132,37,186,76,182,81,129,41"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="227,5,402,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="290,41,236,81,233,76,287,37"/>
 </map>

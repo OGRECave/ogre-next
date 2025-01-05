@@ -1,6 +1,9 @@
 <map id="Ogre::HlmsDatablock" name="Ogre::HlmsDatablock">
-<area shape="rect" id="node1" title="An hlms datablock contains individual information about a specific material." alt="" coords="156,80,317,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_hlms_low_level_datablock.html" title="Contains information needed by the UI (2D) for OpenGL ES 2.0." alt="" coords="5,162,228,189"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_o_g_r_e___h_l_m_s___t_e_x_t_u_r_e___b_a_s_e___c_l_a_s_s.html" title="This is not a regular header, therefore it has no include guards." alt="" coords="252,155,461,196"/>
-<area shape="rect" id="node2" title=" " alt="" coords="169,5,305,32"/>
+<area shape="rect" id="Node000001" title="An hlms datablock contains individual information about a specific material." alt="" coords="156,79,317,104"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_hlms_low_level_datablock.html" title="Contains information needed by the UI (2D) for OpenGL ES 2.0." alt="" coords="5,159,228,185"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="209,114,136,161,133,157,206,110"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_o_g_r_e___h_l_m_s___t_e_x_t_u_r_e___b_a_s_e___c_l_a_s_s.html" title="This is not a regular header, therefore it has no include guards." alt="" coords="252,152,461,192"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="267,109,329,150,326,154,264,114"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="149,5,324,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="239,44,239,79,234,79,234,44"/>
 </map>

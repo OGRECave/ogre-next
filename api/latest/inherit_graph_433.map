@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1_parameter_def.html" title="Definition of a parameter supported by a StringInterface class, for introspection." alt="" coords="5,5,156,32"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_parallax_corrected_cubemap_auto_listener.html" title=" " alt="" coords="5,5,244,45"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_pcc_per_pixel_grid_placement.html" title="Placing multiple PCC probes by hand can be difficult and even error prone." alt="" coords="292,13,523,38"/>
+<area shape="poly" id="edge937_Node000000_Node000001" title=" " alt="" coords="258,23,292,23,292,28,258,28"/>
 </map>

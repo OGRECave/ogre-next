@@ -1,5 +1,7 @@
 <map id="Ogre::D3D11StagingTexture" name="Ogre::D3D11StagingTexture">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,208,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_staging_texture.html" title="A StagingTexture is an intermediate texture that can be read and be written from both CPU &amp; GPU." alt="" coords="27,80,186,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="39,5,175,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,152,208,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_staging_texture.html" title="A StagingTexture is an intermediate texture that can be read and be written from both CPU &amp; GPU." alt="" coords="27,79,186,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,118,109,152,104,152,104,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="19,5,194,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,44,109,79,104,79,104,44"/>
 </map>

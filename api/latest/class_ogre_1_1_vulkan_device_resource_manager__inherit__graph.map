@@ -1,4 +1,5 @@
 <map id="Ogre::VulkanDeviceResourceManager" name="Ogre::VulkanDeviceResourceManager">
-<area shape="rect" id="node1" title="Singleton that is used to propagate device state changed notifications." alt="" coords="5,5,215,47"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_vulkan_render_system.html" title="Implementation of Vulkan as a rendering system." alt="" coords="11,95,209,121"/>
+<area shape="rect" id="Node000001" title="Singleton that is used to propagate device state changed notifications." alt="" coords="5,5,215,45"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_vulkan_render_system.html" title="Implementation of Vulkan as a rendering system." alt="" coords="11,93,209,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,59,113,93,107,93,107,59"/>
 </map>

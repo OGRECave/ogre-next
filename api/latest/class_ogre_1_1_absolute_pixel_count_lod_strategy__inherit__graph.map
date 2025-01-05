@@ -1,7 +1,11 @@
 <map id="Ogre::AbsolutePixelCountLodStrategy" name="Ogre::AbsolutePixelCountLodStrategy">
-<area shape="rect" id="node1" title="The AbsolutePixelCountLodStrategy class LOD strategy that works like ScreenRatioPixelCountLodStrategy..." alt="" coords="152,244,339,285"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_pixel_count_lod_strategy_base.html" title="Abstract base class for level of detail strategy based on pixel count approximations from bounding sp..." alt="" coords="5,162,245,189"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_lod_strategy.html" title="Strategy for determining level of detail." alt="" coords="56,80,195,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="57,5,193,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="269,155,464,196"/>
+<area shape="rect" id="Node000001" title="The AbsolutePixelCountLodStrategy class LOD strategy that works like ScreenRatioPixelCountLodStrategy..." alt="" coords="152,240,339,280"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_pixel_count_lod_strategy_base.html" title="Abstract base class for level of detail strategy based on pixel count approximations from bounding sp..." alt="" coords="5,159,245,185"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,191,220,238,217,242,151,195"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_lod_strategy.html" title="Strategy for determining level of detail." alt="" coords="56,79,195,104"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="128,118,128,159,123,159,123,118"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="38,5,213,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="128,44,128,79,123,79,123,44"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="269,152,464,192"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="330,202,274,242,271,238,327,198"/>
 </map>

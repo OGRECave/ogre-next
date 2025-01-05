@@ -1,5 +1,7 @@
 <map id="Ogre::v1::HardwareVertexBufferSharedPtr" name="Ogre::v1::HardwareVertexBufferSharedPtr">
-<area shape="rect" id="node1" title="Shared pointer implementation used to share vertex buffers." alt="" coords="11,184,202,225"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="5,95,208,136"/>
-<area shape="rect" id="node3" title=" " alt="" coords="8,5,205,47"/>
+<area shape="rect" id="Node000001" title="Shared pointer implementation used to share vertex buffers." alt="" coords="11,181,202,221"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="5,93,208,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,147,109,181,104,181,104,147"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="8,5,205,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,59,109,93,104,93,104,59"/>
 </map>

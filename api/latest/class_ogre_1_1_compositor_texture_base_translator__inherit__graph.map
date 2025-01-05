@@ -1,8 +1,13 @@
 <map id="Ogre::CompositorTextureBaseTranslator" name="Ogre::CompositorTextureBaseTranslator">
-<area shape="rect" id="node1" title=" " alt="" coords="400,57,616,98"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_compositor_node_translator.html" title=" " alt="" coords="664,5,899,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_compositor_shadow_node_translator.html" title=" " alt="" coords="671,57,892,98"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_compositor_workspace_translator.html" title=" " alt="" coords="678,122,885,163"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="189,64,352,91"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,64,141,91"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="439,55,655,95"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_compositor_node_translator.html" title=" " alt="" coords="703,5,937,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="655,50,758,28,759,33,656,55"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_compositor_shadow_node_translator.html" title=" " alt="" coords="709,55,931,95"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="668,73,709,73,709,78,668,78"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_compositor_workspace_translator.html" title=" " alt="" coords="717,119,923,159"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="647,96,735,117,733,122,645,101"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="228,63,391,88"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="404,73,439,73,439,78,404,78"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,63,180,88"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="194,73,228,73,228,78,194,78"/>
 </map>

@@ -1,5 +1,7 @@
 <map id="Ogre::LinearForceAffector2" name="Ogre::LinearForceAffector2">
-<area shape="rect" id="node1" title="This class defines a ParticleAffector which applies a linear force to particles in a system." alt="" coords="5,155,200,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_particle_affector2.html" title="Affectors are per ParticleSystemDef." alt="" coords="19,80,187,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="24,5,181,32"/>
+<area shape="rect" id="Node000001" title="This class defines a ParticleAffector which applies a linear force to particles in a system." alt="" coords="5,152,200,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_particle_affector2.html" title="Affectors are per ParticleSystemDef." alt="" coords="19,79,187,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,118,105,152,100,152,100,118"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="24,5,181,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,44,105,79,100,79,100,44"/>
 </map>

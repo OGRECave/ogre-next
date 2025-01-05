@@ -6,5 +6,5 @@ var class_ogre_1_1_thread_handle =
     [ "_setOsHandle", "class_ogre_1_1_thread_handle.html#a3cf59841eda1ae9b13da855ae49f87c7", null ],
     [ "_setOsHandleToSelf", "class_ogre_1_1_thread_handle.html#a0c4e8de60d3ec4606adc6495bd636bc9", null ],
     [ "getThreadIdx", "class_ogre_1_1_thread_handle.html#a1b6a58d046b67767627a836d5492fa71", null ],
-    [ "getUserParam", "class_ogre_1_1_thread_handle.html#ae814b49862f7e6fe38aa75c9468c0d57", null ]
+    [ "getUserParam", "class_ogre_1_1_thread_handle.html#ade4e910ee6bb374ae353e8e8a86074df", null ]
 ];

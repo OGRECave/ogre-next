@@ -1,5 +1,7 @@
 <map id="Ogre::LodWorkQueueWorker" name="Ogre::LodWorkQueueWorker">
-<area shape="rect" id="node1" title="Processes requests." alt="" coords="111,95,315,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_work_queue_1_1_request_handler.html" title="Interface definition for a handler of requests." alt="" coords="5,5,203,47"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="227,5,421,47"/>
+<area shape="rect" id="Node000001" title="Processes requests." alt="" coords="111,93,315,119"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_work_queue_1_1_request_handler.html" title="Interface definition for a handler of requests." alt="" coords="5,5,203,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,51,198,91,195,95,140,56"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="227,5,421,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="287,56,231,95,228,91,284,51"/>
 </map>

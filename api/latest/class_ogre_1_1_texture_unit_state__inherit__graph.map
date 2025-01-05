@@ -1,5 +1,7 @@
 <map id="Ogre::TextureUnitState" name="Ogre::TextureUnitState">
-<area shape="rect" id="node1" title="Class representing the state of a single texture unit during a Pass of a Technique,..." alt="" coords="80,80,251,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,141,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="165,5,352,32"/>
+<area shape="rect" id="Node000001" title="Class representing the state of a single texture unit during a Pass of a Technique,..." alt="" coords="110,79,281,104"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,36,180,76,177,81,119,41"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="205,5,391,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="272,41,214,81,211,76,269,36"/>
 </map>

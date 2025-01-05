@@ -1,10 +1,17 @@
 <map id="Ogre::VaoManager" name="Ogre::VaoManager">
-<area shape="rect" id="node1" title=" " alt="" coords="189,132,332,159"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_vao_manager.html" title=" " alt="" coords="384,5,571,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_vao_manager.html" title=" " alt="" coords="380,56,575,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_e_s2_vao_manager.html" title=" " alt="" coords="386,107,569,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_metal_vao_manager.html" title=" " alt="" coords="388,157,567,184"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_vao_manager.html" title=" " alt="" coords="390,208,565,235"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_vao_manager.html" title=" " alt="" coords="385,259,570,285"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,132,141,159"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="228,129,371,155"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_vao_manager.html" title=" " alt="" coords="423,5,609,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="320,117,362,77,389,57,417,40,446,28,448,33,420,44,392,61,366,81,323,121"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_l3_plus_vao_manager.html" title=" " alt="" coords="419,55,613,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="338,121,418,89,457,77,458,83,420,94,340,126"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_g_l_e_s2_vao_manager.html" title=" " alt="" coords="425,104,607,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="384,129,424,125,425,130,385,135"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_metal_vao_manager.html" title=" " alt="" coords="427,153,605,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="385,149,427,153,426,159,384,154"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_n_u_l_l_vao_manager.html" title=" " alt="" coords="429,203,603,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="341,158,420,189,459,200,457,205,418,194,339,163"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_vulkan_vao_manager.html" title=" " alt="" coords="423,252,609,277"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="323,163,366,202,420,238,448,249,446,254,417,243,362,206,320,167"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,129,180,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,139,227,139,227,145,194,145"/>
 </map>

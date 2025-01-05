@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1_name_generator.html" title="Utility class to generate a sequentially numbered series of names." alt="" coords="5,5,171,32"/>
+<area shape="rect" id="Node000000" href="$struct_ogre_1_1_metal_vao_manager_1_1_block.html" title=" " alt="" coords="5,5,184,45"/>
+<area shape="rect" id="Node000001" href="$struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html" title=" " alt="" coords="232,5,419,45"/>
+<area shape="poly" id="edge931_Node000000_Node000001" title=" " alt="" coords="198,23,232,23,232,28,198,28"/>
 </map>

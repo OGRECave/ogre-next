@@ -1,5 +1,7 @@
 <map id="Ogre::RotationAffector2" name="Ogre::RotationAffector2">
-<area shape="rect" id="node1" title="This plugin subclass of ParticleAffector allows you to alter the rotation of particles." alt="" coords="5,155,180,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_particle_affector2.html" title="Affectors are per ParticleSystemDef." alt="" coords="9,80,177,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="14,5,171,32"/>
+<area shape="rect" id="Node000001" title="This plugin subclass of ParticleAffector allows you to alter the rotation of particles." alt="" coords="5,152,180,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_particle_affector2.html" title="Affectors are per ParticleSystemDef." alt="" coords="9,79,177,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,118,95,152,90,152,90,118"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="14,5,171,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,44,95,79,90,79,90,44"/>
 </map>

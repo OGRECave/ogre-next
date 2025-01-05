@@ -1,5 +1,7 @@
 <map id="Ogre::v1::D3D11HardwareBufferManagerBase" name="Ogre::v1::D3D11HardwareBufferManagerBase">
-<area shape="rect" id="node1" title="Implementation of HardwareBufferManager for D3D11." alt="" coords="5,169,236,211"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html" title="Base definition of a hardware buffer manager." alt="" coords="27,80,214,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="53,5,189,32"/>
+<area shape="rect" id="Node000001" title="Implementation of HardwareBufferManager for D3D11." alt="" coords="5,167,236,207"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html" title="Base definition of a hardware buffer manager." alt="" coords="27,79,214,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,133,123,166,118,166,118,133"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="33,5,208,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="123,44,123,79,118,79,118,44"/>
 </map>

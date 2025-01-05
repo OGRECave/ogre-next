@@ -1,18 +1,18 @@
 var group___material =
 [
-    [ "ActiveActorData", "struct_ogre_1_1_active_actor_data.html", [
+    [ "Ogre::ActiveActorData", "struct_ogre_1_1_active_actor_data.html", [
       [ "isReserved", "struct_ogre_1_1_active_actor_data.html#aa30b9da70843a43b033ff04c28f4073e", null ],
       [ "reflectionCamera", "struct_ogre_1_1_active_actor_data.html#ab279747a88defe838d10146415f82857", null ],
       [ "reflectionTexture", "struct_ogre_1_1_active_actor_data.html#a51182669b555c0e59a061754ea9d2b39", null ],
       [ "workspace", "struct_ogre_1_1_active_actor_data.html#ad68c6b1cf86f4443fc197777482072ab", null ]
     ] ],
-    [ "ArrayActorPlane", "struct_ogre_1_1_array_actor_plane.html", [
+    [ "Ogre::ArrayActorPlane", "struct_ogre_1_1_array_actor_plane.html", [
       [ "center", "struct_ogre_1_1_array_actor_plane.html#a87e9490de2ba91226f536af5a51feb46", null ],
       [ "planeNegD", "struct_ogre_1_1_array_actor_plane.html#a4d165a288c8b104438133643c016a179", null ],
       [ "planeNormals", "struct_ogre_1_1_array_actor_plane.html#a5e3dd4cc6b92ae6629369ea16972edc0", null ],
       [ "xyHalfSize", "struct_ogre_1_1_array_actor_plane.html#a97985b96875c32fa0d8e519ef2e7f417", null ]
     ] ],
-    [ "AtmosphereNpr", "class_ogre_1_1_atmosphere_npr.html", [
+    [ "Ogre::AtmosphereNpr", "class_ogre_1_1_atmosphere_npr.html", [
       [ "Preset", "struct_ogre_1_1_atmosphere_npr_1_1_preset.html", [
         [ "Preset", "struct_ogre_1_1_atmosphere_npr_1_1_preset.html#a16100380936daef3711343b4011c986f", null ],
         [ "lerp", "struct_ogre_1_1_atmosphere_npr_1_1_preset.html#adcf454ea61f148eacbac0011a07e9d2c", null ],
@@ -52,8 +52,8 @@ var group___material =
       [ "eventOccurred", "class_ogre_1_1_atmosphere_npr.html#a36d83215e37caed36abccfd11dda27dc", null ],
       [ "getAtmosphereAt", "class_ogre_1_1_atmosphere_npr.html#a18ec6e783b487f4c1d2c4a443c36f2d1", null ],
       [ "getNumConstBuffersSlots", "class_ogre_1_1_atmosphere_npr.html#a55b07b289bcb7015236f63fd9a2264ce", null ],
-      [ "getPreset", "class_ogre_1_1_atmosphere_npr.html#adbf6852e9d6a7eb2c085b8a0d24680bc", null ],
-      [ "getPresets", "class_ogre_1_1_atmosphere_npr.html#a0c4cd1e47fa0c5b6a5e23a237cec1055", null ],
+      [ "getPreset", "class_ogre_1_1_atmosphere_npr.html#abf03449a1774b3d083d80e1d8289f5ad", null ],
+      [ "getPresets", "class_ogre_1_1_atmosphere_npr.html#a269ac2a19b91a3b5bf5122cfddc8b184", null ],
       [ "preparePassHash", "class_ogre_1_1_atmosphere_npr.html#a5bdb945240a474514a7a345f13c56c76", null ],
       [ "setLight", "class_ogre_1_1_atmosphere_npr.html#a1026e13f69c34baed70ab7454d7fd8d2", null ],
       [ "setPreset", "class_ogre_1_1_atmosphere_npr.html#ae7b3bc2959177dd1b83ddccb99845714", null ],
@@ -66,7 +66,7 @@ var group___material =
       [ "mAtmosphereSeaLevel", "class_ogre_1_1_atmosphere_npr.html#a3bbb05301e70975287bf9ae77f2d5c0d", null ],
       [ "mConvention", "class_ogre_1_1_atmosphere_npr.html#a38f0d4080064ab7aefe118c7b77ec1ec", null ]
     ] ],
-    [ "ComputeProperty", "struct_ogre_1_1_compute_property.html", [
+    [ "Ogre::ComputeProperty", "struct_ogre_1_1_compute_property.html", [
       [ "MaxTextureSlot", "struct_ogre_1_1_compute_property.html#a1a152ce3ad8a50affadf50ce912d0341", null ],
       [ "MaxUavSlot", "struct_ogre_1_1_compute_property.html#a4acf7638ac6d00b185f01833a8624673", null ],
       [ "NumTextureSlots", "struct_ogre_1_1_compute_property.html#af1ecb3f553aadac6b32de030ff6ab300", null ],
@@ -81,7 +81,7 @@ var group___material =
       [ "TypedUavLoad", "struct_ogre_1_1_compute_property.html#a445e0eaa1ffede5af943c4f2a68eb3d0", null ],
       [ "Uav", "struct_ogre_1_1_compute_property.html#a5503ecbcbeee97d79ef0b14c2cac9e85", null ]
     ] ],
-    [ "HlmsBufferManager", "class_ogre_1_1_hlms_buffer_manager.html", [
+    [ "Ogre::HlmsBufferManager", "class_ogre_1_1_hlms_buffer_manager.html", [
       [ "HlmsBufferManager", "class_ogre_1_1_hlms_buffer_manager.html#ae3f22c54275deeb8bc99cbde91e6ab39", null ],
       [ "~HlmsBufferManager", "class_ogre_1_1_hlms_buffer_manager.html#aff688ea7bf2aaf95981b9cacc2ded2a9", null ],
       [ "_changeRenderSystem", "class_ogre_1_1_hlms_buffer_manager.html#a9705e42784838362eaa8363a54d2ea5a", null ],
@@ -91,25 +91,25 @@ var group___material =
       [ "preparePassHash", "class_ogre_1_1_hlms_buffer_manager.html#a2d0a1980bba548053bc1752a31447b95", null ],
       [ "setTextureBufferDefaultSize", "class_ogre_1_1_hlms_buffer_manager.html#a6dff4f91d5b7833aec870f30ae381ccc", null ]
     ] ],
-    [ "HlmsCompute", "class_ogre_1_1_hlms_compute.html", [
+    [ "Ogre::HlmsCompute", "class_ogre_1_1_hlms_compute.html", [
       [ "HlmsCompute", "class_ogre_1_1_hlms_compute.html#a128775f130a0541cde12245710aeec97", null ],
       [ "~HlmsCompute", "class_ogre_1_1_hlms_compute.html#a4d12f5e1b68cad3a707188abbbea5d4a", null ],
       [ "_changeRenderSystem", "class_ogre_1_1_hlms_compute.html#a964f0071ede668af8abf6431f74309e3", null ],
       [ "clearShaderCache", "class_ogre_1_1_hlms_compute.html#a41328d851293f9e705d72a306a7ea4d8", null ],
-      [ "createComputeJob", "class_ogre_1_1_hlms_compute.html#aff0f65b5e8679fa2efe557027e0efac8", null ],
-      [ "createDefaultDatablock", "class_ogre_1_1_hlms_compute.html#ad6bab83862d38381068152911e8e71a6", null ],
+      [ "createComputeJob", "class_ogre_1_1_hlms_compute.html#a19d123d24c9b65b537262c4e82a83dac", null ],
+      [ "createDefaultDatablock", "class_ogre_1_1_hlms_compute.html#a8dcd0c203b2c9763d66159456335a1a9", null ],
       [ "destroyAllComputeJobs", "class_ogre_1_1_hlms_compute.html#a324be537ffc5fee9b0ca6e80d63b5348", null ],
       [ "destroyComputeJob", "class_ogre_1_1_hlms_compute.html#aa725ade963841a050fe281cc18def5be", null ],
       [ "dispatch", "class_ogre_1_1_hlms_compute.html#a93546b6a7ca06ec23bbc1e349e1c5786", null ],
       [ "fillBuffersFor", "class_ogre_1_1_hlms_compute.html#a35057572019147d8656524e54a73914b", null ],
       [ "fillBuffersForV1", "class_ogre_1_1_hlms_compute.html#acb0f598df416024e5893b12a77f0e7d4", null ],
       [ "fillBuffersForV2", "class_ogre_1_1_hlms_compute.html#a289fc643da6927c17dd2be2c279f9ce3", null ],
-      [ "findComputeJob", "class_ogre_1_1_hlms_compute.html#a28da0a8629b13939c114ec25d9ce6411", null ],
-      [ "findComputeJobNoThrow", "class_ogre_1_1_hlms_compute.html#a64acb643dce66ed3cdd153ee9caa18f4", null ],
-      [ "getJobNameStr", "class_ogre_1_1_hlms_compute.html#aba3ebeb90b43108db8aa66ba35f35def", null ],
+      [ "findComputeJob", "class_ogre_1_1_hlms_compute.html#ad3de3fd289945b985b04f3d39f466b36", null ],
+      [ "findComputeJobNoThrow", "class_ogre_1_1_hlms_compute.html#a058423db107aba685c917623d5bb3f19", null ],
+      [ "getJobNameStr", "class_ogre_1_1_hlms_compute.html#a7c6528886d3beae8a5a7cfe506b1a474", null ],
       [ "reloadFrom", "class_ogre_1_1_hlms_compute.html#a9dc3eb356c6a318389101c825483fb8b", null ]
     ] ],
-    [ "HlmsComputeJob", "class_ogre_1_1_hlms_compute_job.html", [
+    [ "Ogre::HlmsComputeJob", "class_ogre_1_1_hlms_compute_job.html", [
       [ "ThreadGroupsBasedOn", "class_ogre_1_1_hlms_compute_job.html#a297b925576b81843bd963d67ec561fbd", [
         [ "ThreadGroupsBasedOnNothing", "class_ogre_1_1_hlms_compute_job.html#a297b925576b81843bd963d67ec561fbda697e40abfad5bdecd362193e78cdbdaf", null ],
         [ "ThreadGroupsBasedOnTexture", "class_ogre_1_1_hlms_compute_job.html#a297b925576b81843bd963d67ec561fbdac33b17a1bd51fc701513327b1dd34aee", null ],
@@ -119,7 +119,7 @@ var group___material =
       [ "~HlmsComputeJob", "class_ogre_1_1_hlms_compute_job.html#a42937edc1675bd423eb227fe34b1d461", null ],
       [ "_calculateNumThreadGroupsBasedOnSetting", "class_ogre_1_1_hlms_compute_job.html#ae1f01509a37d8699f43f520833053a3a", null ],
       [ "_getRawGlTexSlotStart", "class_ogre_1_1_hlms_compute_job.html#ad4d94e5cea2029668cd0755756716954", null ],
-      [ "_getShaderParams", "class_ogre_1_1_hlms_compute_job.html#a94ea49e86dfbc11d0e64f803823bb10b", null ],
+      [ "_getShaderParams", "class_ogre_1_1_hlms_compute_job.html#a19dbeacce1cead5de442ffffde91d9a5", null ],
       [ "_setSamplerblock", "class_ogre_1_1_hlms_compute_job.html#a43e207a03438ec6db03d518cf32a3f73", null ],
       [ "_setUavBuffer", "class_ogre_1_1_hlms_compute_job.html#a6e03115e7b8d1078d9ba2e300c14e6aa", null ],
       [ "_setUavTexture", "class_ogre_1_1_hlms_compute_job.html#ab2622d6fe95f5d987feb888e6219c8d9", null ],
@@ -127,29 +127,29 @@ var group___material =
       [ "analyzeBarriers", "class_ogre_1_1_hlms_compute_job.html#a85bb5fef35d0657a068ac24e38c656d1", null ],
       [ "clearTexBuffers", "class_ogre_1_1_hlms_compute_job.html#ad4f2b2decf63085f4305268d7a618077", null ],
       [ "clearUavBuffers", "class_ogre_1_1_hlms_compute_job.html#a25d5c25c082f62e3541380d9278d6311", null ],
-      [ "clone", "class_ogre_1_1_hlms_compute_job.html#ab1889df9a4e3d48946dcbe9d2db4d1ba", null ],
+      [ "clone", "class_ogre_1_1_hlms_compute_job.html#abe4da5d564918e18319bfeb6aa64beea", null ],
       [ "cloneTo", "class_ogre_1_1_hlms_compute_job.html#ab63a38b43354ffa974bb834c3a156bc9", null ],
       [ "createShaderParams", "class_ogre_1_1_hlms_compute_job.html#aeb470bf33ca307f270a4d10bc07a4f61", null ],
-      [ "getCreator", "class_ogre_1_1_hlms_compute_job.html#ab1c607ffc160faebc5bdc277ab5d87d9", null ],
+      [ "getCreator", "class_ogre_1_1_hlms_compute_job.html#a398598a7812467ab735cd3b81a9cbf8f", null ],
       [ "getGlTexSlotStart", "class_ogre_1_1_hlms_compute_job.html#a8adf43a9909791d9254fd68308545de0", null ],
       [ "getName", "class_ogre_1_1_hlms_compute_job.html#a621b6d1d4a0ab43ebad0ed327c1d4e91", null ],
       [ "getNameStr", "class_ogre_1_1_hlms_compute_job.html#aeddddd6fce3ed5c724492049e97c820a", null ],
       [ "getNumSamplerUnits", "class_ogre_1_1_hlms_compute_job.html#a0fb7701bc448bcaa5bc393f6d9ce023f", null ],
       [ "getNumTexUnits", "class_ogre_1_1_hlms_compute_job.html#aa8903bae4e7e13da6038368740b9cbd5", null ],
-      [ "getNumThreadGroups", "class_ogre_1_1_hlms_compute_job.html#a5ae2251d185d2047258f2b864a33131d", null ],
+      [ "getNumThreadGroups", "class_ogre_1_1_hlms_compute_job.html#a592aeb8b1197ef1e67b228eb5b02cfcc", null ],
       [ "getNumThreadGroupsX", "class_ogre_1_1_hlms_compute_job.html#a8a721d57b3deaba76376497840e9c780", null ],
       [ "getNumThreadGroupsY", "class_ogre_1_1_hlms_compute_job.html#ac9e7b615125d72b73e37b427a55823f5", null ],
       [ "getNumThreadGroupsZ", "class_ogre_1_1_hlms_compute_job.html#a036ed67f010b7582bd17c2c76ca4f5e6", null ],
       [ "getNumUavUnits", "class_ogre_1_1_hlms_compute_job.html#a23ff203fc45d65a4471dfac1ab7c60d5", null ],
       [ "getProperty", "class_ogre_1_1_hlms_compute_job.html#a1219ae9a7aa15a300185a83f7af13ab7", null ],
-      [ "getShaderParams", "class_ogre_1_1_hlms_compute_job.html#afa16d873ee37f1e1c5df313205665a49", null ],
-      [ "getTexture", "class_ogre_1_1_hlms_compute_job.html#a93899a6eeceaee9ef04b416e8170d771", null ],
-      [ "getThreadsPerGroup", "class_ogre_1_1_hlms_compute_job.html#a51f9385228191738ea9672b81979fd9c", null ],
+      [ "getShaderParams", "class_ogre_1_1_hlms_compute_job.html#aa293ea88bddcaafa1d42618eaf668ecd", null ],
+      [ "getTexture", "class_ogre_1_1_hlms_compute_job.html#ad5eb96b2621980eae79f51c18d76435d", null ],
+      [ "getThreadsPerGroup", "class_ogre_1_1_hlms_compute_job.html#a7d39f27bb47ad51abe57a1cdc9df2cd2", null ],
       [ "getThreadsPerGroupX", "class_ogre_1_1_hlms_compute_job.html#ab31e558c5a0c2933bb844c13d38c0239", null ],
       [ "getThreadsPerGroupY", "class_ogre_1_1_hlms_compute_job.html#a18b4ce0a1973454a10278f03130b03a3", null ],
       [ "getThreadsPerGroupZ", "class_ogre_1_1_hlms_compute_job.html#ace6e0e104f41718b8a19265dbbd3cc2b", null ],
-      [ "getUavBuffer", "class_ogre_1_1_hlms_compute_job.html#a0ef4f6e5c7a8b447efb15f18667ba473", null ],
-      [ "getUavTexture", "class_ogre_1_1_hlms_compute_job.html#a2d408b2c429dcaf70e33b02716ff43bf", null ],
+      [ "getUavBuffer", "class_ogre_1_1_hlms_compute_job.html#ab137c32b77b7655aef6af11c7454bb47", null ],
+      [ "getUavTexture", "class_ogre_1_1_hlms_compute_job.html#acd210342c2a32eb23a1e47172c3d73ce", null ],
       [ "notifyTextureChanged", "class_ogre_1_1_hlms_compute_job.html#ad3d1dd1de771108b16db3e28d6cce844", null ],
       [ "removePiece", "class_ogre_1_1_hlms_compute_job.html#abb21babd61f9615f4ccd589278437e95", null ],
       [ "removeTexUnit", "class_ogre_1_1_hlms_compute_job.html#a8057044899733d9a73ce7ddfd24d2bbe", null ],
@@ -171,22 +171,22 @@ var group___material =
       [ "setupRootLayout", "class_ogre_1_1_hlms_compute_job.html#aa18bf6a908f4f13fc8d0063a88bc0575", null ],
       [ "HlmsCompute", "class_ogre_1_1_hlms_compute_job.html#ae0a13b48d89c085d90419e793aa9c8b9", null ]
     ] ],
-    [ "HlmsJsonPbs", "class_ogre_1_1_hlms_json_pbs.html", [
+    [ "Ogre::HlmsJsonPbs", "class_ogre_1_1_hlms_json_pbs.html", [
       [ "HlmsJsonPbs", "class_ogre_1_1_hlms_json_pbs.html#ac46e06ecfaaa275b63afcec1101efc10", null ],
       [ "collectSamplerblocks", "class_ogre_1_1_hlms_json_pbs.html#aecb2be94f24516da955eca0ad0193a08", null ],
       [ "loadMaterial", "class_ogre_1_1_hlms_json_pbs.html#a26f2feff43965ef20ef4add7af419a60", null ],
       [ "saveMaterial", "class_ogre_1_1_hlms_json_pbs.html#a3725425e9b98c65f688d38f51a3056b7", null ]
     ] ],
-    [ "HlmsJsonUnlit", "class_ogre_1_1_hlms_json_unlit.html", [
+    [ "Ogre::HlmsJsonUnlit", "class_ogre_1_1_hlms_json_unlit.html", [
       [ "HlmsJsonUnlit", "class_ogre_1_1_hlms_json_unlit.html#a665d3c6533cd3a6c6da96b2f74cc0477", null ],
       [ "collectSamplerblocks", "class_ogre_1_1_hlms_json_unlit.html#aff82115381fe9ddc34ebf8bb9fb3840f", null ],
       [ "loadMaterial", "class_ogre_1_1_hlms_json_unlit.html#a986ffcc96189a8f66b06fd2d46377fd5", null ],
       [ "saveMaterial", "class_ogre_1_1_hlms_json_unlit.html#a2ba41725589046c93f8ffd420f913be9", null ]
     ] ],
-    [ "HlmsLowLevel", "class_ogre_1_1_hlms_low_level.html", [
+    [ "Ogre::HlmsLowLevel", "class_ogre_1_1_hlms_low_level.html", [
       [ "HlmsLowLevel", "class_ogre_1_1_hlms_low_level.html#ae033fdbb53bf9a818dcd8df559b2b37a", null ],
       [ "~HlmsLowLevel", "class_ogre_1_1_hlms_low_level.html#a2fd2517b15984c75e877d20d701ac648", null ],
-      [ "_getAutoParamDataSource", "class_ogre_1_1_hlms_low_level.html#a445240d2f3e446ec0ebc14bfd4534b8f", null ],
+      [ "_getAutoParamDataSource", "class_ogre_1_1_hlms_low_level.html#ade14dba119128507283696844e31b70d", null ],
       [ "calculateHashFor", "class_ogre_1_1_hlms_low_level.html#a4abdeda754a9c16304d9b2009c21aa62", null ],
       [ "executeCommand", "class_ogre_1_1_hlms_low_level.html#a7d1ac6b4d6e7b00c56777f3c5b1cc2cd", null ],
       [ "fillBuffersFor", "class_ogre_1_1_hlms_low_level.html#a8f77b843c02cb5f77e5283ad761ec5d5", null ],
@@ -194,13 +194,13 @@ var group___material =
       [ "fillBuffersForV2", "class_ogre_1_1_hlms_low_level.html#a2a0487bee500794db0f338e4d2732be9", null ],
       [ "preparePassHash", "class_ogre_1_1_hlms_low_level.html#ac623534b088b737d1ffc5ecb9e219ba7", null ]
     ] ],
-    [ "HlmsLowLevelDatablock", "class_ogre_1_1_hlms_low_level_datablock.html", [
+    [ "Ogre::HlmsLowLevelDatablock", "class_ogre_1_1_hlms_low_level_datablock.html", [
       [ "HlmsLowLevelDatablock", "class_ogre_1_1_hlms_low_level_datablock.html#a5681e965c22dd19bc29b06c03ea852bf", null ],
       [ "~HlmsLowLevelDatablock", "class_ogre_1_1_hlms_low_level_datablock.html#ace7820498216f36d691ad242e67f95d9", null ],
       [ "HlmsLowLevel", "class_ogre_1_1_hlms_low_level_datablock.html#acec53ee0d1339b751b6be24b065d3d98", null ],
       [ "mProxyMaterial", "class_ogre_1_1_hlms_low_level_datablock.html#a010cb65f8fe6cd255283851cfbdacdbf", null ]
     ] ],
-    [ "HlmsPbs", "class_ogre_1_1_hlms_pbs.html", [
+    [ "Ogre::HlmsPbs", "class_ogre_1_1_hlms_pbs.html", [
       [ "AmbientLightMode", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67", [
         [ "AmbientAutoNormal", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a2eb19d432db5646bae679cc0889ef0cf", null ],
         [ "AmbientAutoInverted", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a659674a0de34474e1f9520530008db9b", null ],
@@ -233,23 +233,23 @@ var group___material =
       [ "fillBuffersForV2", "class_ogre_1_1_hlms_pbs.html#a450d4c518a53e896462a726334d74857", null ],
       [ "frameEnded", "class_ogre_1_1_hlms_pbs.html#a1dc0353ce9d6e59300c23d7de5b2d4fe", null ],
       [ "getAmbientLightMode", "class_ogre_1_1_hlms_pbs.html#ab3944c00dda74cb805ad9b2b4797d5d7", null ],
-      [ "getAreaLightMasks", "class_ogre_1_1_hlms_pbs.html#a43972b4a66194909b57badab110cf952", null ],
+      [ "getAreaLightMasks", "class_ogre_1_1_hlms_pbs.html#a9a279161168eaf9888254b5a97b96459", null ],
       [ "getDebugPssmSplits", "class_ogre_1_1_hlms_pbs.html#af52b13fdb164291e10a6f61aa0fb8ba4", null ],
       [ "getDefaultBrdfWithDiffuseFresnel", "class_ogre_1_1_hlms_pbs.html#a69b7fc1f154afce7d12e544a363f7960", null ],
       [ "getDefaultPaths", "class_ogre_1_1_hlms_pbs.html#acb5d8056ff22979cf55adb67521c6f13", null ],
       [ "getEsmK", "class_ogre_1_1_hlms_pbs.html#ade4a48a4d7a3a8294507f0f19da830fc", null ],
       [ "getFineLightMaskGranularity", "class_ogre_1_1_hlms_pbs.html#a5a7a60f98767f21cff7da1f91a3c23fb", null ],
       [ "getIndustryCompatible", "class_ogre_1_1_hlms_pbs.html#a7973d0909cf5fd554f6873d35f913226", null ],
-      [ "getIrradianceField", "class_ogre_1_1_hlms_pbs.html#ab9f77efb952358e27856af890b161653", null ],
-      [ "getIrradianceVolume", "class_ogre_1_1_hlms_pbs.html#ab028ad42cb5a1ca9376feb72672a1e58", null ],
-      [ "getLightProfilesTexture", "class_ogre_1_1_hlms_pbs.html#a2762c4b286d357b023cf32565aeb7a20", null ],
-      [ "getParallaxCorrectedCubemap", "class_ogre_1_1_hlms_pbs.html#a869356cfb0b096ed6eb7e384ae0fc626", null ],
+      [ "getIrradianceField", "class_ogre_1_1_hlms_pbs.html#a00f1eaf25a10495630480cead7938d5a", null ],
+      [ "getIrradianceVolume", "class_ogre_1_1_hlms_pbs.html#a429f72069cc9fb16e23dc23fd8ef233d", null ],
+      [ "getLightProfilesTexture", "class_ogre_1_1_hlms_pbs.html#afbb80dc61562ad45172087d02db7b4b8", null ],
+      [ "getParallaxCorrectedCubemap", "class_ogre_1_1_hlms_pbs.html#a71c08cd154095266e8c0a5fbdb4b28e3", null ],
       [ "getPerceptualRoughness", "class_ogre_1_1_hlms_pbs.html#a0641e3cdaacd445a1c25e0fe4e4be0f8", null ],
       [ "getShadowFilter", "class_ogre_1_1_hlms_pbs.html#a76889b8cf476ab66efbddd560d0baf46", null ],
       [ "getShadowReceiversInPixelShader", "class_ogre_1_1_hlms_pbs.html#a2fcde10eb2aa0cd35e39098572c5ee44", null ],
       [ "getUseLightBuffers", "class_ogre_1_1_hlms_pbs.html#a9915f78361904df984bc5edb5464149c", null ],
       [ "getVctFullConeCount", "class_ogre_1_1_hlms_pbs.html#aeebeec1315736e483f32f4f8c371c293", null ],
-      [ "getVctLighting", "class_ogre_1_1_hlms_pbs.html#a563f6a8ff80c7a402751d9d16aabaa5b", null ],
+      [ "getVctLighting", "class_ogre_1_1_hlms_pbs.html#a2c6c9ed299c7ff26c98c6456a91a66e1", null ],
       [ "loadLtcMatrix", "class_ogre_1_1_hlms_pbs.html#a4e61d27296552d40bba351bfcdb6a115", null ],
       [ "OGRE_DEPRECATED_VER", "class_ogre_1_1_hlms_pbs.html#ae75635dd73401dc442c07d18f028f5f4", null ],
       [ "postCommandBufferExecution", "class_ogre_1_1_hlms_pbs.html#a5977a2c286fd961c231908dd57c407de", null ],
@@ -273,7 +273,7 @@ var group___material =
       [ "setVctFullConeCount", "class_ogre_1_1_hlms_pbs.html#aa5712e150eb17b0c2354f60885420e43", null ],
       [ "setVctLighting", "class_ogre_1_1_hlms_pbs.html#aabcbb76605bde800b84597ab4ccf5901", null ]
     ] ],
-    [ "HlmsUnlit", "class_ogre_1_1_hlms_unlit.html", [
+    [ "Ogre::HlmsUnlit", "class_ogre_1_1_hlms_unlit.html", [
       [ "HlmsUnlit", "class_ogre_1_1_hlms_unlit.html#af8fc939f72f98090ee7f5cbc84828047", null ],
       [ "HlmsUnlit", "class_ogre_1_1_hlms_unlit.html#abdfe6cc9dfdd44b55d840e8fb5fd48c8", null ],
       [ "~HlmsUnlit", "class_ogre_1_1_hlms_unlit.html#a005b2f9ef8add60fd3cb8613c5666ce3", null ],
@@ -295,7 +295,7 @@ var group___material =
       [ "setOptimizationStrategy", "class_ogre_1_1_hlms_unlit.html#a36408c1dc90fcef6a90b1a7dda52dc78", null ],
       [ "setShadowSettings", "class_ogre_1_1_hlms_unlit.html#a7cbae042f1c24d201432bf8ec1c33ff9", null ]
     ] ],
-    [ "InstantRadiosity", "class_ogre_1_1_instant_radiosity.html", [
+    [ "Ogre::InstantRadiosity", "class_ogre_1_1_instant_radiosity.html", [
       [ "AreaOfInterest", "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html", [
         [ "AreaOfInterest", "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#ad94bec02d71f91fd2f543f3488d25d61", null ],
         [ "aabb", "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#aac84518f8d8108d7f7875516128b3474", null ],
@@ -338,7 +338,7 @@ var group___material =
       [ "mVplThreshold", "class_ogre_1_1_instant_radiosity.html#ade70757e93672bac8f2f9339f3fdcb6c", null ],
       [ "mVplUseIntensityForMaxRange", "class_ogre_1_1_instant_radiosity.html#a70783e8eaa9fad01e272fda9d409874b", null ]
     ] ],
-    [ "IrradianceVolume", "class_ogre_1_1_irradiance_volume.html", [
+    [ "Ogre::IrradianceVolume", "class_ogre_1_1_irradiance_volume.html", [
       [ "IrradianceVolume", "class_ogre_1_1_irradiance_volume.html#adf403ef637fbcca96b6862ff35229c8e", null ],
       [ "~IrradianceVolume", "class_ogre_1_1_irradiance_volume.html#afdd4cfcb5064f1c56661a3b77d74a283", null ],
       [ "changeVolumeData", "class_ogre_1_1_irradiance_volume.html#ab73da949007542f72d9080c69bac3945", null ],
@@ -351,11 +351,11 @@ var group___material =
       [ "gaussFilterY", "class_ogre_1_1_irradiance_volume.html#ac47eeebaee5bb4dab307febdb24996ce", null ],
       [ "gaussFilterZ", "class_ogre_1_1_irradiance_volume.html#a9674afaeca82f9960a12758e4efb72f1", null ],
       [ "getFadeAttenuationOverDistace", "class_ogre_1_1_irradiance_volume.html#a2820dea1de1309047b67f654aa966cfa", null ],
-      [ "getIrradianceCellSize", "class_ogre_1_1_irradiance_volume.html#aec3889b9920b61624524c74e00047816", null ],
+      [ "getIrradianceCellSize", "class_ogre_1_1_irradiance_volume.html#a877098f93e31eebe5b5b0c0c17348c33", null ],
       [ "getIrradianceMaxPower", "class_ogre_1_1_irradiance_volume.html#ae41b6357bcf04fa358ad2d867bc1bbbc", null ],
-      [ "getIrradianceOrigin", "class_ogre_1_1_irradiance_volume.html#a04a29ec90399a1692bfd454e5b28ed9c", null ],
-      [ "getIrradianceVolumeTexture", "class_ogre_1_1_irradiance_volume.html#a515b2d327170204a84763974ab6a0489", null ],
-      [ "getIrradSamplerblock", "class_ogre_1_1_irradiance_volume.html#ac68977ce31f29ec0a26f6ff673d66369", null ],
+      [ "getIrradianceOrigin", "class_ogre_1_1_irradiance_volume.html#aeb1a2074029d02b61207365d2be3fb50", null ],
+      [ "getIrradianceVolumeTexture", "class_ogre_1_1_irradiance_volume.html#a04124278a60f089c8e603fe977a44ec9", null ],
+      [ "getIrradSamplerblock", "class_ogre_1_1_irradiance_volume.html#ac01d68d0f738c595e08a58b4523d3229", null ],
       [ "getNumBlocksX", "class_ogre_1_1_irradiance_volume.html#ad82dbb5f460d0acae8ad182cd0773690", null ],
       [ "getNumBlocksY", "class_ogre_1_1_irradiance_volume.html#af6da4956c4d9e0849b95a8ebe88e7a00", null ],
       [ "getNumBlocksZ", "class_ogre_1_1_irradiance_volume.html#a4c91bdba1ce971051c680f49dae956ca", null ],
@@ -367,10 +367,10 @@ var group___material =
       [ "setPowerScale", "class_ogre_1_1_irradiance_volume.html#ad509b0ba9467cbd3994556afb771e079", null ],
       [ "updateIrradianceVolumeTexture", "class_ogre_1_1_irradiance_volume.html#aac37fddc5648a7530fe86a9c9e416476", null ]
     ] ],
-    [ "LowLevelProp", "struct_ogre_1_1_low_level_prop.html", [
+    [ "Ogre::LowLevelProp", "struct_ogre_1_1_low_level_prop.html", [
       [ "PassId", "struct_ogre_1_1_low_level_prop.html#a614a93eefd5f0765350202ee9342c2d3", null ]
     ] ],
-    [ "PbsProperty", "struct_ogre_1_1_pbs_property.html", [
+    [ "Ogre::PbsProperty", "struct_ogre_1_1_pbs_property.html", [
       [ "AmbientFixed", "struct_ogre_1_1_pbs_property.html#a4866419a67e296cc413219b1825afa86", null ],
       [ "AmbientHemisphere", "struct_ogre_1_1_pbs_property.html#abf2d2d6c9980b59d920b2fa696a81d1b", null ],
       [ "AmbientHemisphereInverted", "struct_ogre_1_1_pbs_property.html#a1c15c1cfb15134311203c93de410d357", null ],
@@ -495,22 +495,22 @@ var group___material =
       [ "VctEnableSpecularSdfQuality", "struct_ogre_1_1_pbs_property.html#abfa04f28f59804ba488ba105a045a997", null ],
       [ "VctNumProbes", "struct_ogre_1_1_pbs_property.html#afd78d0a6ae086dcc90f26016c966a1e3", null ]
     ] ],
-    [ "PlanarReflectionActor", "class_ogre_1_1_planar_reflection_actor.html", [
+    [ "Ogre::PlanarReflectionActor", "class_ogre_1_1_planar_reflection_actor.html", [
       [ "PlanarReflectionActor", "class_ogre_1_1_planar_reflection_actor.html#a789e47bc8715ed2e7d58055b26fa667e", null ],
       [ "PlanarReflectionActor", "class_ogre_1_1_planar_reflection_actor.html#a50b118948760de21abf5428953999c0a", null ],
-      [ "getCenter", "class_ogre_1_1_planar_reflection_actor.html#aec9f780241dcad49c3bda63316c2c23d", null ],
+      [ "getCenter", "class_ogre_1_1_planar_reflection_actor.html#aa197f8da7ad91e6de134bd82cd7b3ddc", null ],
       [ "getCurrentBoundSlot", "class_ogre_1_1_planar_reflection_actor.html#a7fb6431ce05adef0ac1fec5adb3e5c3b", null ],
-      [ "getHalfSize", "class_ogre_1_1_planar_reflection_actor.html#ad14a7454b66e2061374f497671b531b9", null ],
-      [ "getNormal", "class_ogre_1_1_planar_reflection_actor.html#a633ce9d7733899323506084dab00db10", null ],
-      [ "getOrientation", "class_ogre_1_1_planar_reflection_actor.html#a64f109c8fa160393fdf43a022f93cb7c", null ],
-      [ "getPlane", "class_ogre_1_1_planar_reflection_actor.html#afd8c2318e13199a60e3c30d6b92c9444", null ],
+      [ "getHalfSize", "class_ogre_1_1_planar_reflection_actor.html#af01f3639566af8ccede24622c790c1b4", null ],
+      [ "getNormal", "class_ogre_1_1_planar_reflection_actor.html#a147cf1b50d3cd34f2c76b748d1567ba9", null ],
+      [ "getOrientation", "class_ogre_1_1_planar_reflection_actor.html#a94e50ebd60c533b47e3988977245978b", null ],
+      [ "getPlane", "class_ogre_1_1_planar_reflection_actor.html#a255ff63e4eadbbb02873f4ad8fa62d87", null ],
       [ "getSquaredDistanceTo", "class_ogre_1_1_planar_reflection_actor.html#a5448554cd473c3bda5d6e3373fc6ec6c", null ],
       [ "hasReservation", "class_ogre_1_1_planar_reflection_actor.html#aaa5cf91ef604b9eedf05e007b63e7651", null ],
       [ "setPlane", "class_ogre_1_1_planar_reflection_actor.html#a61302ea400f8031a982274826b6d9c12", null ],
       [ "PlanarReflections", "class_ogre_1_1_planar_reflection_actor.html#a63f0f6c050e70fc198c844fe9a790bb1", null ],
       [ "mActivationPriority", "class_ogre_1_1_planar_reflection_actor.html#ae77682cf581dd2630cd2f75250473d2d", null ]
     ] ],
-    [ "PlanarReflections", "class_ogre_1_1_planar_reflections.html", [
+    [ "Ogre::PlanarReflections", "class_ogre_1_1_planar_reflections.html", [
       [ "TrackedRenderable", "struct_ogre_1_1_planar_reflections_1_1_tracked_renderable.html", [
         [ "TrackedRenderable", "struct_ogre_1_1_planar_reflections_1_1_tracked_renderable.html#a91574f77ade702510dde14dbe0198110", null ],
         [ "hlmsHashes", "struct_ogre_1_1_planar_reflections_1_1_tracked_renderable.html#a46c268b34e9b70c53bd7d8d9f0753ebc", null ],
@@ -528,7 +528,7 @@ var group___material =
       [ "~PlanarReflections", "class_ogre_1_1_planar_reflections.html#a263fc6936942eb8fd5162a5c6d3566dd", null ],
       [ "_isUpdatingRenderablesHlms", "class_ogre_1_1_planar_reflections.html#ab3e9deeab20cecd7a726be023381aab6", null ],
       [ "_notifyRenderableFlushedHlmsDatablock", "class_ogre_1_1_planar_reflections.html#ab3c42759975878d5744bfd2bebc313a4", null ],
-      [ "addActor", "class_ogre_1_1_planar_reflections.html#a1b49c2ddb719400d72433e919f328fd2", null ],
+      [ "addActor", "class_ogre_1_1_planar_reflections.html#ad67ceb649027af939376cbd4f3b62f9f", null ],
       [ "addRenderable", "class_ogre_1_1_planar_reflections.html#a50aeb6eec3120373b6d5316909128235", null ],
       [ "beginFrame", "class_ogre_1_1_planar_reflections.html#a3dd439594c476fb85b3a930a81b2864b", null ],
       [ "cameraMatches", "class_ogre_1_1_planar_reflections.html#a08baa1e192558155350dc4cae0779c39", null ],
@@ -539,7 +539,7 @@ var group___material =
       [ "getConstBufferSize", "class_ogre_1_1_planar_reflections.html#a062e2390a6435337c30cf651a496732d", null ],
       [ "getMaxActiveActors", "class_ogre_1_1_planar_reflections.html#ae67e1c9b55f6297e9c138e628446ee7a", null ],
       [ "getMaxNumMipmaps", "class_ogre_1_1_planar_reflections.html#ae8585442d3a502ca1b714b399708e8c3", null ],
-      [ "getTexture", "class_ogre_1_1_planar_reflections.html#a0d712e2f34635697669b8cf36d7c1395", null ],
+      [ "getTexture", "class_ogre_1_1_planar_reflections.html#a3e77bc1097363a43c816bb61b4c4def8", null ],
       [ "hasActiveActor", "class_ogre_1_1_planar_reflections.html#ad57f5c1c97d776977f0ac26dae2cb023", null ],
       [ "hasFlushPending", "class_ogre_1_1_planar_reflections.html#ae093845778350033e17071693735d09b", null ],
       [ "hasPlanarReflections", "class_ogre_1_1_planar_reflections.html#a115bdf1bc345cec24869a367e2d14fcc", null ],
@@ -550,7 +550,7 @@ var group___material =
       [ "setMaxDistance", "class_ogre_1_1_planar_reflections.html#a2771ce1222f8acb51cda2d9c84274d85", null ],
       [ "update", "class_ogre_1_1_planar_reflections.html#a7c96969df4853b0d5c1e3f0c6adae41a", null ]
     ] ],
-    [ "ShaderParams", "class_ogre_1_1_shader_params.html", [
+    [ "Ogre::ShaderParams", "class_ogre_1_1_shader_params.html", [
       [ "AutoParam", "struct_ogre_1_1_shader_params_1_1_auto_param.html", [
         [ "acType", "struct_ogre_1_1_shader_params_1_1_auto_param.html#ae0c5af0b812fce550aa24ef8eb748ee0", null ],
         [ "extraParamType", "struct_ogre_1_1_shader_params_1_1_auto_param.html#a163822e5cd41a88f5fa4049874efb682", null ],
@@ -600,7 +600,7 @@ var group___material =
         [ "ElementFloat", "class_ogre_1_1_shader_params.html#a2eeaceb51d472b719762ad4b8b9b5d97af52816388a8ebd51d2870a083f99505b", null ]
       ] ],
       [ "ShaderParams", "class_ogre_1_1_shader_params.html#a12e4a52470f92c2ea468410fefd5c0c3", null ],
-      [ "findParameter", "class_ogre_1_1_shader_params.html#aa2b05265860eb28361eabbaf715c72be", null ],
+      [ "findParameter", "class_ogre_1_1_shader_params.html#a20af020c6dddc2b26f854bc21e4b5d36", null ],
       [ "getUpdateCounter", "class_ogre_1_1_shader_params.html#acfd948f8985348b278999a0fbe8cadda", null ],
       [ "removeParameterNoThrow", "class_ogre_1_1_shader_params.html#a05a26dd6a79ef9e9bca1d884871a3c3c", null ],
       [ "setDirty", "class_ogre_1_1_shader_params.html#ad5c44d85355e1b2539a83141fef28e88", null ],

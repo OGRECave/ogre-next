@@ -1,4 +1,5 @@
 <map id="Ogre::VulkanFrameBufferDescKey" name="Ogre::VulkanFrameBufferDescKey">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,245,107"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_frame_buffer_desc_key.html" title=" " alt="" coords="27,5,224,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,245,104"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_frame_buffer_desc_key.html" title=" " alt="" coords="27,5,224,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,44,128,79,123,79,123,44"/>
 </map>

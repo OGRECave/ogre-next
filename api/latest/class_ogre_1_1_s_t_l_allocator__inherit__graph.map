@@ -1,4 +1,5 @@
 <map id="Ogre::STLAllocator&lt; T, AllocPolicy &gt;" name="Ogre::STLAllocator&lt; T, AllocPolicy &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="41,80,183,121"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_s_t_l_allocator_base.html" title="Wrapper class for operating as an STL container allocator." alt="" coords="5,5,219,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="41,79,183,119"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_s_t_l_allocator_base.html" title="Wrapper class for operating as an STL container allocator." alt="" coords="5,5,219,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,44,115,79,109,79,109,44"/>
 </map>

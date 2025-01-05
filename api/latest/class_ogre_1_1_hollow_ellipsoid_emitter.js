@@ -8,7 +8,7 @@ var class_ogre_1_1_hollow_ellipsoid_emitter =
     [ "getInnerSizeX", "class_ogre_1_1_hollow_ellipsoid_emitter.html#a50872b5c1f21dbb89abb5ed9588bd503", null ],
     [ "getInnerSizeY", "class_ogre_1_1_hollow_ellipsoid_emitter.html#a4bbd4a5d8fbd1eba9c15ffefaf480f0d", null ],
     [ "getInnerSizeZ", "class_ogre_1_1_hollow_ellipsoid_emitter.html#a4ccd235ed9b9b77b70792a79fd02a00d", null ],
-    [ "getType", "class_ogre_1_1_hollow_ellipsoid_emitter.html#a04d97a6304414c1b1a0a20081adf4f67", null ],
+    [ "getType", "class_ogre_1_1_hollow_ellipsoid_emitter.html#a564431ca11aafbe0c83f5bb753fddd5c", null ],
     [ "setInnerSize", "class_ogre_1_1_hollow_ellipsoid_emitter.html#a1bdc5012eeece3f155dbf97262b983c2", null ],
     [ "setInnerSizeX", "class_ogre_1_1_hollow_ellipsoid_emitter.html#addd9cd21c7a3bfdaa90a5eb9054b18e8", null ],
     [ "setInnerSizeY", "class_ogre_1_1_hollow_ellipsoid_emitter.html#ad9dd4f034b30bd8cacac7085467dcb1a", null ],

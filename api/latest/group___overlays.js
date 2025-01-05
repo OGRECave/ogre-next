@@ -1,6 +1,7 @@
 var group___overlays =
 [
-    [ "BorderPanelOverlayElement", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html", [
+    [ "Ogre::v1::OverlayElementCommands", "namespace_ogre_1_1v1_1_1_overlay_element_commands.html", null ],
+    [ "Ogre::v1::BorderPanelOverlayElement", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html", [
       [ "CmdBorderBottomLeftUV", "class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_bottom_left_u_v.html", [
         [ "doGet", "class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_bottom_left_u_v.html#a68fa96356acd738eb82c2bae6d3782c4", null ],
         [ "doSet", "class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_bottom_left_u_v.html#af610833c8419358f46329817972841f7", null ]
@@ -47,7 +48,7 @@ var group___overlays =
       [ "_restoreManualHardwareResources", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a088e279a21424fe4559cbb4086a86cd5", null ],
       [ "_update", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#ab96478c2fc2dd1dca659e152b020d159", null ],
       [ "_updateRenderQueue", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a25620e05739bd94cffdb5341eb9f7c88", null ],
-      [ "getBorderMaterialName", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#acd69bfbc9a2524cd090e31dedc3cc95f", null ],
+      [ "getBorderMaterialName", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a52b1801a00d2b5c2595dd734c4a20238", null ],
       [ "getBottomBorderSize", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a492c68701d6914eb87c67e9ae1b3cf31", null ],
       [ "getBottomBorderUVString", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a49020d11bcf3215952a1973bc0722215", null ],
       [ "getBottomLeftBorderUVString", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a5ac5d02f5087d3ba1530a7159704465a", null ],
@@ -60,7 +61,7 @@ var group___overlays =
       [ "getTopBorderUVString", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a5fab91355b5ae8dd6de157a19e581271", null ],
       [ "getTopLeftBorderUVString", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a8276ee045b06ca69818c0765d5351a69", null ],
       [ "getTopRightBorderUVString", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#af82bebd71e6631af41cd6d2994cee257", null ],
-      [ "getTypeName", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a986019ea63b25ddf0739e72b1e977575", null ],
+      [ "getTypeName", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a0c6fc93110f6ed9818f055b14a348954", null ],
       [ "initialise", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a5853260fbf547e1a1e758e1d89ca0cd5", null ],
       [ "setBorderMaterialName", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a1dbab8843072234684d96438ee06fa51", null ],
       [ "setBorderSize", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a2763195ab07b260682ac1c17018e8ffd", null ],
@@ -77,21 +78,21 @@ var group___overlays =
       [ "setTopRightBorderUV", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a4345b91047a226fc1e4c54ff4645676d", null ],
       [ "BorderRenderable", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a34cbfdb610c9f91d01c1b4adff0844ab", null ]
     ] ],
-    [ "BorderPanelOverlayElementFactory", "class_ogre_1_1v1_1_1_border_panel_overlay_element_factory.html", [
-      [ "createOverlayElement", "class_ogre_1_1v1_1_1_border_panel_overlay_element_factory.html#a432c62ea069c5ec1d97423590aa1227c", null ],
-      [ "getTypeName", "class_ogre_1_1v1_1_1_border_panel_overlay_element_factory.html#a43b9f69924f1e4219a1ca8f1cc101405", null ]
+    [ "Ogre::v1::BorderPanelOverlayElementFactory", "class_ogre_1_1v1_1_1_border_panel_overlay_element_factory.html", [
+      [ "createOverlayElement", "class_ogre_1_1v1_1_1_border_panel_overlay_element_factory.html#af22d1915b50cfcc5eb15a1e14c388a1f", null ],
+      [ "getTypeName", "class_ogre_1_1v1_1_1_border_panel_overlay_element_factory.html#a63d46b23b7ec7ef24f082600f07811e3", null ]
     ] ],
-    [ "BorderRenderable", "class_ogre_1_1v1_1_1_border_renderable.html", [
+    [ "Ogre::v1::BorderRenderable", "class_ogre_1_1v1_1_1_border_renderable.html", [
       [ "BorderRenderable", "class_ogre_1_1v1_1_1_border_renderable.html#a054d9ea0993e2c2f19d9c314d965b2d6", null ],
-      [ "getLights", "class_ogre_1_1v1_1_1_border_renderable.html#a486dabfeebce9130acb834e96804df71", null ],
+      [ "getLights", "class_ogre_1_1v1_1_1_border_renderable.html#afdbfc31b81f4a2245da8e85c6a0e0929", null ],
       [ "getNumWorldTransforms", "class_ogre_1_1v1_1_1_border_renderable.html#a7815c5dfb941f736a8a9ebd914fbc268", null ],
       [ "getPolygonModeOverrideable", "class_ogre_1_1v1_1_1_border_renderable.html#adb3f504f290fd2b14f47e1cfbda7ea4d", null ],
       [ "getRenderOperation", "class_ogre_1_1v1_1_1_border_renderable.html#aef7c578acf527aa2ee0580a3fcc1ce18", null ],
       [ "getWorldTransforms", "class_ogre_1_1v1_1_1_border_renderable.html#a58a75b4727cd25a5a8725cefa0ae16a1", null ]
     ] ],
-    [ "Overlay", "class_ogre_1_1v1_1_1_overlay.html", [
+    [ "Ogre::v1::Overlay", "class_ogre_1_1v1_1_1_overlay.html", [
       [ "Overlay2DElementsIterator", "class_ogre_1_1v1_1_1_overlay.html#ad23a78d707fe4e86eb3bc328eb846fc7", null ],
-      [ "OverlayContainerList", "class_ogre_1_1v1_1_1_overlay.html#a74f3e3b39c192fde0b97e095b03ac4cc", null ],
+      [ "OverlayContainerList", "class_ogre_1_1v1_1_1_overlay.html#ae6a4cf9a177e20ed01ef9d50458084d0", null ],
       [ "Overlay", "class_ogre_1_1v1_1_1_overlay.html#a92917ba28e18aa48675bdc2dd52095b2", null ],
       [ "~Overlay", "class_ogre_1_1v1_1_1_overlay.html#ade1c81927dac81d6f94a48091eea3a2e", null ],
       [ "_getWorldTransforms", "class_ogre_1_1v1_1_1_overlay.html#a9f03df484db022435598c9cbdc747018", null ],
@@ -99,12 +100,12 @@ var group___overlays =
       [ "_updateRenderQueue", "class_ogre_1_1v1_1_1_overlay.html#affb6343c5fad6cd011a63ff18fdf08ad", null ],
       [ "add2D", "class_ogre_1_1v1_1_1_overlay.html#a6776244eb01e7c1c1fb20644ec109719", null ],
       [ "clear", "class_ogre_1_1v1_1_1_overlay.html#afadf3f4d6bbee851683a546a179398d1", null ],
-      [ "findElementAt", "class_ogre_1_1v1_1_1_overlay.html#ace762a4cc61c1bb5702b72ffccbb05a1", null ],
+      [ "findElementAt", "class_ogre_1_1v1_1_1_overlay.html#a21b5a84e7363a8d7e0791ff6e81f4c0e", null ],
       [ "get2DElementsIterator", "class_ogre_1_1v1_1_1_overlay.html#a7c9d2d1febc3eae313e1a11c343292bd", null ],
-      [ "getChild", "class_ogre_1_1v1_1_1_overlay.html#a8c12e2d84673aad3462ea01402ab6763", null ],
-      [ "getMovableType", "class_ogre_1_1v1_1_1_overlay.html#ae3663dd763b92a8c501555d395baa0d4", null ],
-      [ "getOrigin", "class_ogre_1_1v1_1_1_overlay.html#ab613d4a9c2c0a992b39523c9462c7fd0", null ],
-      [ "getRotate", "class_ogre_1_1v1_1_1_overlay.html#ab73f9930c65c02980cef672e98ff207d", null ],
+      [ "getChild", "class_ogre_1_1v1_1_1_overlay.html#af7d8e1c29f95e483a2ba48d84a4f3755", null ],
+      [ "getMovableType", "class_ogre_1_1v1_1_1_overlay.html#a63e815739cd85431d7d8654ac607310c", null ],
+      [ "getOrigin", "class_ogre_1_1v1_1_1_overlay.html#aa211010647efa6576e4a9d0aa905dd90", null ],
+      [ "getRotate", "class_ogre_1_1v1_1_1_overlay.html#a20925f143d6d9065e3f92ab3701cdd70", null ],
       [ "getScaleX", "class_ogre_1_1v1_1_1_overlay.html#ae7883f00a08ea44a03b29c10ecbe5286", null ],
       [ "getScaleY", "class_ogre_1_1v1_1_1_overlay.html#a03ea2ee5d7139ebe196f3d56db7a8a00", null ],
       [ "getScrollX", "class_ogre_1_1v1_1_1_overlay.html#a1ea44de69382b2f7833b60337d381c8b", null ],
@@ -121,11 +122,11 @@ var group___overlays =
       [ "setZOrder", "class_ogre_1_1v1_1_1_overlay.html#abb15339acec3b8b57f7b5f5fb5311d09", null ],
       [ "show", "class_ogre_1_1v1_1_1_overlay.html#ad147e5ac2171a46094c6ec57faf5e26d", null ]
     ] ],
-    [ "OverlayContainer", "class_ogre_1_1v1_1_1_overlay_container.html", [
+    [ "Ogre::v1::OverlayContainer", "class_ogre_1_1v1_1_1_overlay_container.html", [
       [ "ChildContainerIterator", "class_ogre_1_1v1_1_1_overlay_container.html#a2e432364d94627b70218d4a3256f837b", null ],
-      [ "ChildContainerMap", "class_ogre_1_1v1_1_1_overlay_container.html#a8c5afed2c4d19b578a23e35a7b5797e3", null ],
+      [ "ChildContainerMap", "class_ogre_1_1v1_1_1_overlay_container.html#a923910ec443f0b69e074d7035bc00c8d", null ],
       [ "ChildIterator", "class_ogre_1_1v1_1_1_overlay_container.html#adb5dca7f1007e43aa3b9c14b7e42d85c", null ],
-      [ "ChildMap", "class_ogre_1_1v1_1_1_overlay_container.html#a4fdde33565249304b6299e3688070ad6", null ],
+      [ "ChildMap", "class_ogre_1_1v1_1_1_overlay_container.html#a0cf8a3604c528314c889bb8ac195a2fd", null ],
       [ "OverlayContainer", "class_ogre_1_1v1_1_1_overlay_container.html#a5d6f6ddedca7b796feb4bfb8e6229f8b", null ],
       [ "~OverlayContainer", "class_ogre_1_1v1_1_1_overlay_container.html#a298091ca8e51073530dd921a80125fe6", null ],
       [ "_addChild", "class_ogre_1_1v1_1_1_overlay_container.html#ad94eac5e0f8a2c835306cc54c92675b1", null ],
@@ -139,10 +140,10 @@ var group___overlays =
       [ "addChild", "class_ogre_1_1v1_1_1_overlay_container.html#a082216b8d094268dd35b6e5758c76c64", null ],
       [ "addChildImpl", "class_ogre_1_1v1_1_1_overlay_container.html#ae3e71c8bd33e733ca35e645ceec16c3b", null ],
       [ "addChildImpl", "class_ogre_1_1v1_1_1_overlay_container.html#a3ff5200cfcbfe0243007727738fc2353", null ],
-      [ "clone", "class_ogre_1_1v1_1_1_overlay_container.html#a9c0d5212616298e12263c9665cd1ae9e", null ],
+      [ "clone", "class_ogre_1_1v1_1_1_overlay_container.html#a11de846b6f0a18860ed40fee58ff42c1", null ],
       [ "copyFromTemplate", "class_ogre_1_1v1_1_1_overlay_container.html#a8a91a3c554ad64c3be70317b32f2c618", null ],
-      [ "findElementAt", "class_ogre_1_1v1_1_1_overlay_container.html#ac3009c576d17ee35a0dc604686b1c679", null ],
-      [ "getChild", "class_ogre_1_1v1_1_1_overlay_container.html#acc8282b67f0ef8eeded64261bc7eb54e", null ],
+      [ "findElementAt", "class_ogre_1_1v1_1_1_overlay_container.html#aaac938c3019ab279356d331f5a342897", null ],
+      [ "getChild", "class_ogre_1_1v1_1_1_overlay_container.html#a4d0fb44c6c4bb3fbe2afba5dc3abcdc0", null ],
       [ "getChildContainerIterator", "class_ogre_1_1v1_1_1_overlay_container.html#a9775d50463c3d2e0e82183eb11d5bf24", null ],
       [ "getChildIterator", "class_ogre_1_1v1_1_1_overlay_container.html#a0e80786e961d9a6e12654d4faab23a7b", null ],
       [ "initialise", "class_ogre_1_1v1_1_1_overlay_container.html#a40a185c093c03c766f9a29d7e94a2ccb", null ],
@@ -151,7 +152,7 @@ var group___overlays =
       [ "removeChild", "class_ogre_1_1v1_1_1_overlay_container.html#a94086ab3d6f7725ab5bd7f4b167a869e", null ],
       [ "setChildrenProcessEvents", "class_ogre_1_1v1_1_1_overlay_container.html#aeaee1add4de5dd92f9844bccfdd30c50", null ]
     ] ],
-    [ "OverlayElement", "class_ogre_1_1v1_1_1_overlay_element.html", [
+    [ "Ogre::v1::OverlayElement", "class_ogre_1_1v1_1_1_overlay_element.html", [
       [ "OverlayElement", "class_ogre_1_1v1_1_1_overlay_element.html#a53cf978397d1ea1790375ea6455deeda", null ],
       [ "~OverlayElement", "class_ogre_1_1v1_1_1_overlay_element.html#ad3c48207865dcdac10b22115f6c6bdec", null ],
       [ "_getClippingRegion", "class_ogre_1_1v1_1_1_overlay_element.html#a016bd427d981a25477e787157809d034", null ],
@@ -178,24 +179,24 @@ var group___overlays =
       [ "_update", "class_ogre_1_1v1_1_1_overlay_element.html#a2efe7554604631782aa980db6fc8b744", null ],
       [ "_updateFromParent", "class_ogre_1_1v1_1_1_overlay_element.html#adeb69271ea016044e6ab9fb161fca504", null ],
       [ "_updateRenderQueue", "class_ogre_1_1v1_1_1_overlay_element.html#a00af977bc3b03ded500df0b7e76dc5ac", null ],
-      [ "clone", "class_ogre_1_1v1_1_1_overlay_element.html#a505a8bb551b86a72973624844ff54046", null ],
+      [ "clone", "class_ogre_1_1v1_1_1_overlay_element.html#ac368cd86789116370b4a6f9a82f55664", null ],
       [ "contains", "class_ogre_1_1v1_1_1_overlay_element.html#ac0ad51c78a8a1a69f87beac6c77317f5", null ],
       [ "copyFromTemplate", "class_ogre_1_1v1_1_1_overlay_element.html#aae730d15dcdfd60176ee2ac01f2f0312", null ],
-      [ "findElementAt", "class_ogre_1_1v1_1_1_overlay_element.html#a2860308ca3879b535f01ebfe3755b423", null ],
-      [ "getCaption", "class_ogre_1_1v1_1_1_overlay_element.html#a7d0d7a28a01879c85be61119a6047013", null ],
-      [ "getColour", "class_ogre_1_1v1_1_1_overlay_element.html#a5b7a59121e7c05dc5364c45eafa96180", null ],
+      [ "findElementAt", "class_ogre_1_1v1_1_1_overlay_element.html#aad50697686b0d35940e243179003814a", null ],
+      [ "getCaption", "class_ogre_1_1v1_1_1_overlay_element.html#a19ac60f519b6ed0be5d7a0a73aec9bca", null ],
+      [ "getColour", "class_ogre_1_1v1_1_1_overlay_element.html#afc5511f9053a0351cd34645bcef6cbc5", null ],
       [ "getHeight", "class_ogre_1_1v1_1_1_overlay_element.html#a8ac1bd33d7dfb81b449f4247189ffd87", null ],
       [ "getHorizontalAlignment", "class_ogre_1_1v1_1_1_overlay_element.html#a19a3d3d9af49a2b353cbc819ac728623", null ],
       [ "getLeft", "class_ogre_1_1v1_1_1_overlay_element.html#acfc875518c1f8a93cdcdf66f89e98fe6", null ],
-      [ "getLights", "class_ogre_1_1v1_1_1_overlay_element.html#a98ca9d52cd97e52d361ff242b7497ac9", null ],
-      [ "getMaterial", "class_ogre_1_1v1_1_1_overlay_element.html#aabb777dc654d5c1fe48c6dc36ec97c8a", null ],
-      [ "getMaterialName", "class_ogre_1_1v1_1_1_overlay_element.html#a5124f6b139d9f26cf735ddad97e0ad47", null ],
+      [ "getLights", "class_ogre_1_1v1_1_1_overlay_element.html#a3e64b2212300a1b62dff9b8f89af1419", null ],
+      [ "getMaterial", "class_ogre_1_1v1_1_1_overlay_element.html#abb3e87b7bcd6a9c886c8a235e3def843", null ],
+      [ "getMaterialName", "class_ogre_1_1v1_1_1_overlay_element.html#acca7c72ab230156386fdd0e2269f50bd", null ],
       [ "getMetricsMode", "class_ogre_1_1v1_1_1_overlay_element.html#ab1f267309d99810f50fb2b39028515c1", null ],
-      [ "getName", "class_ogre_1_1v1_1_1_overlay_element.html#a34b45c84f697bcd17c4ec33425a4e3ce", null ],
-      [ "getParent", "class_ogre_1_1v1_1_1_overlay_element.html#a29eb43a5962a0f43eb5106850fdaa7cf", null ],
-      [ "getSourceTemplate", "class_ogre_1_1v1_1_1_overlay_element.html#aebe6714d6b40abdc5240dfcd4cbc0655", null ],
+      [ "getName", "class_ogre_1_1v1_1_1_overlay_element.html#a19e860d29fe721d1d9a4cd090e92b73d", null ],
+      [ "getParent", "class_ogre_1_1v1_1_1_overlay_element.html#a8a897a640158b42cf8114d4f1173607f", null ],
+      [ "getSourceTemplate", "class_ogre_1_1v1_1_1_overlay_element.html#a1367139aff6918358ced545652d8bebc", null ],
       [ "getTop", "class_ogre_1_1v1_1_1_overlay_element.html#aa379e4a83592aa3e068bd25773ea45ea", null ],
-      [ "getTypeName", "class_ogre_1_1v1_1_1_overlay_element.html#ab72f4cf828e280881925dce5cd7df72b", null ],
+      [ "getTypeName", "class_ogre_1_1v1_1_1_overlay_element.html#a276bad1407bf1dfcaa0e2c6e74d19166", null ],
       [ "getVerticalAlignment", "class_ogre_1_1v1_1_1_overlay_element.html#aab02643d2ac2f2dd0ac51a9348fd6265", null ],
       [ "getWidth", "class_ogre_1_1v1_1_1_overlay_element.html#aa4cb0865e8f54b6e28990c38f0719ebd", null ],
       [ "getWorldTransforms", "class_ogre_1_1v1_1_1_overlay_element.html#a48a7cfaa9e0f5437c8c59c3a8aa60488", null ],
@@ -222,16 +223,16 @@ var group___overlays =
       [ "setWidth", "class_ogre_1_1v1_1_1_overlay_element.html#aee48fdf58b0797e32fc4449fba7d8309", null ],
       [ "show", "class_ogre_1_1v1_1_1_overlay_element.html#afad2d855edfa7af895e08a5cef69abde", null ]
     ] ],
-    [ "OverlayElementFactory", "class_ogre_1_1v1_1_1_overlay_element_factory.html", [
+    [ "Ogre::v1::OverlayElementFactory", "class_ogre_1_1v1_1_1_overlay_element_factory.html", [
       [ "~OverlayElementFactory", "class_ogre_1_1v1_1_1_overlay_element_factory.html#aa89747e190e0ca1d4f59c1d89936ebba", null ],
-      [ "createOverlayElement", "class_ogre_1_1v1_1_1_overlay_element_factory.html#ae63dc9363e987c74ce2ed5f707544870", null ],
+      [ "createOverlayElement", "class_ogre_1_1v1_1_1_overlay_element_factory.html#afaf3856ffccea5f1e89eb4d4fdfd4913", null ],
       [ "destroyOverlayElement", "class_ogre_1_1v1_1_1_overlay_element_factory.html#a8c367ce3e3962f091b1d112e4036fae0", null ],
-      [ "getTypeName", "class_ogre_1_1v1_1_1_overlay_element_factory.html#ad8e3b42efc0d84f6d7b781e4570670f8", null ]
+      [ "getTypeName", "class_ogre_1_1v1_1_1_overlay_element_factory.html#a69b024d389be4ddf3009108fb71eeb74", null ]
     ] ],
-    [ "OverlayManager", "class_ogre_1_1v1_1_1_overlay_manager.html", [
-      [ "ElementMap", "class_ogre_1_1v1_1_1_overlay_manager.html#ade5e4ca525fed39a2e55075788919ca8", null ],
-      [ "FactoryMap", "class_ogre_1_1v1_1_1_overlay_manager.html#a66eea57c7a608b2a69837621f9109008", null ],
-      [ "OverlayMap", "class_ogre_1_1v1_1_1_overlay_manager.html#ac69ae4cd657b7a535ebb61307b93d338", null ],
+    [ "Ogre::v1::OverlayManager", "class_ogre_1_1v1_1_1_overlay_manager.html", [
+      [ "ElementMap", "class_ogre_1_1v1_1_1_overlay_manager.html#a7ff00f198282f27e78e7a8e03f63292d", null ],
+      [ "FactoryMap", "class_ogre_1_1v1_1_1_overlay_manager.html#ac2151d0c1fb0bcaee0c1141b6eda82ee", null ],
+      [ "OverlayMap", "class_ogre_1_1v1_1_1_overlay_manager.html#a806bb09bd815639d0f6a3892de5be91b", null ],
       [ "OverlayMapIterator", "class_ogre_1_1v1_1_1_overlay_manager.html#abe28668c59af7458ea8c79ba6761af60", null ],
       [ "TemplateIterator", "class_ogre_1_1v1_1_1_overlay_manager.html#a0ab7251905e3a85159f6b8217a39dc5a", null ],
       [ "OverlayManager", "class_ogre_1_1v1_1_1_overlay_manager.html#a4e257c787c247ef4b7415ced7fe627b7", null ],
@@ -240,25 +241,25 @@ var group___overlays =
       [ "_releaseManualHardwareResources", "class_ogre_1_1v1_1_1_overlay_manager.html#a0e5c76045cacf1eda8b4ffd0065bfe7a", null ],
       [ "_restoreManualHardwareResources", "class_ogre_1_1v1_1_1_overlay_manager.html#a540910e6e92d6f6aaaf91819572b3759", null ],
       [ "addOverlayElementFactory", "class_ogre_1_1v1_1_1_overlay_manager.html#a4702070f1292431a0a21c198345202af", null ],
-      [ "cloneOverlayElementFromTemplate", "class_ogre_1_1v1_1_1_overlay_manager.html#a733ce292142f93eb0b7ef5ae0b27f651", null ],
-      [ "create", "class_ogre_1_1v1_1_1_overlay_manager.html#a2e182642ff4eabbd10cf06d12b1aab3c", null ],
-      [ "createOverlayElement", "class_ogre_1_1v1_1_1_overlay_manager.html#a132512d97d4cc7d35dcc82abdc1a9972", null ],
-      [ "createOverlayElementFromFactory", "class_ogre_1_1v1_1_1_overlay_manager.html#ad07016ca0e12f498b327d0cad55cf8d1", null ],
-      [ "createOverlayElementFromTemplate", "class_ogre_1_1v1_1_1_overlay_manager.html#a4b3b720c842158ee7f32b5b02917babc", null ],
+      [ "cloneOverlayElementFromTemplate", "class_ogre_1_1v1_1_1_overlay_manager.html#a85f0f98091500d90cb3b4a0d1a9ef79b", null ],
+      [ "create", "class_ogre_1_1v1_1_1_overlay_manager.html#a102d0894cf5347a9be318c15dc8cd39d", null ],
+      [ "createOverlayElement", "class_ogre_1_1v1_1_1_overlay_manager.html#a9abd4337ef24278bec61c9e369a1b219", null ],
+      [ "createOverlayElementFromFactory", "class_ogre_1_1v1_1_1_overlay_manager.html#ab5b4873fbec0ef65b0ab81025eb1a35f", null ],
+      [ "createOverlayElementFromTemplate", "class_ogre_1_1v1_1_1_overlay_manager.html#a8967fe542c58a2d0a347540d45e89fb6", null ],
       [ "destroy", "class_ogre_1_1v1_1_1_overlay_manager.html#ad6f01e708ca381663c36c2dc9d46c69f", null ],
       [ "destroy", "class_ogre_1_1v1_1_1_overlay_manager.html#a286b1223d4cd0787d4a8aea1b25465b7", null ],
       [ "destroyAll", "class_ogre_1_1v1_1_1_overlay_manager.html#a77c1c25ab09e9a87c8339e2121b554e0", null ],
       [ "destroyAllOverlayElements", "class_ogre_1_1v1_1_1_overlay_manager.html#aa406919574fa5383e463063dcc755d34", null ],
       [ "destroyOverlayElement", "class_ogre_1_1v1_1_1_overlay_manager.html#ac20ecd06a4cd804026a165307f4f9fa4", null ],
       [ "destroyOverlayElement", "class_ogre_1_1v1_1_1_overlay_manager.html#abf1cc9ec41c602d69e1e82a0cf5054e5", null ],
-      [ "getByName", "class_ogre_1_1v1_1_1_overlay_manager.html#af27d83f0144a6ea23ed38a1a9e532560", null ],
+      [ "getByName", "class_ogre_1_1v1_1_1_overlay_manager.html#aeae14f43f89cb63a05db3b2a0afd90c1", null ],
       [ "getLoadingOrder", "class_ogre_1_1v1_1_1_overlay_manager.html#a3b10a261415384953eff205d1267fdf3", null ],
-      [ "getOverlayElement", "class_ogre_1_1v1_1_1_overlay_manager.html#a1db7cd1a3dde07df50594bdf84b77b2d", null ],
-      [ "getOverlayElementFactoryMap", "class_ogre_1_1v1_1_1_overlay_manager.html#aafdb7cc8581b409197fe370f804d4839", null ],
+      [ "getOverlayElement", "class_ogre_1_1v1_1_1_overlay_manager.html#a7eb089df4264e9f013e1fde2fbbb4c79", null ],
+      [ "getOverlayElementFactoryMap", "class_ogre_1_1v1_1_1_overlay_manager.html#a59b05f7056ab2179683bc82b93237b8d", null ],
       [ "getOverlayIterator", "class_ogre_1_1v1_1_1_overlay_manager.html#a1350dd569ebb577540bb6fc17344a817", null ],
-      [ "getScriptPatterns", "class_ogre_1_1v1_1_1_overlay_manager.html#a54a01871aa3689f07d48323bc37cda69", null ],
-      [ "getSingleton", "class_ogre_1_1v1_1_1_overlay_manager.html#a6ff07a2592aa7c732dc0b86bfefaea34", null ],
-      [ "getSingletonPtr", "class_ogre_1_1v1_1_1_overlay_manager.html#a9110d981d96d5ad73d2f57ec41e08ee6", null ],
+      [ "getScriptPatterns", "class_ogre_1_1v1_1_1_overlay_manager.html#a1eacc00d480e58a0c1c225c5716c4e63", null ],
+      [ "getSingleton", "class_ogre_1_1v1_1_1_overlay_manager.html#a55e1986e31a1bebee1db2c14dde578c4", null ],
+      [ "getSingletonPtr", "class_ogre_1_1v1_1_1_overlay_manager.html#a12e8419f1403b0e93aa3fd6a5aae8d87", null ],
       [ "getTemplateIterator", "class_ogre_1_1v1_1_1_overlay_manager.html#a80ab3c3e0b858d42472d084d3c1bba00", null ],
       [ "getViewportAspectRatio", "class_ogre_1_1v1_1_1_overlay_manager.html#a59e1b0f83f88cfa48376ddbb204653c1", null ],
       [ "getViewportHeight", "class_ogre_1_1v1_1_1_overlay_manager.html#a47ba1969af6ccddc554bc309ef803207", null ],
@@ -268,7 +269,7 @@ var group___overlays =
       [ "parseScript", "class_ogre_1_1v1_1_1_overlay_manager.html#a3c2daf2a229943554a7b6f32c194b122", null ],
       [ "mDefaultRenderQueueId", "class_ogre_1_1v1_1_1_overlay_manager.html#a211908affb1fa364c80a35c69541b4e2", null ]
     ] ],
-    [ "OverlayProfileSessionListener", "class_ogre_1_1v1_1_1_overlay_profile_session_listener.html", [
+    [ "Ogre::v1::OverlayProfileSessionListener", "class_ogre_1_1v1_1_1_overlay_profile_session_listener.html", [
       [ "OverlayProfileSessionListener", "group___overlays.html#gaf96873756b51491bc20d706d2450e4b9", null ],
       [ "~OverlayProfileSessionListener", "group___overlays.html#ga1ea90ae9c967abfc26e82d7e7cb5c7d2", null ],
       [ "changeEnableState", "group___overlays.html#gaafabc8b9eb74285fc6650561b3c038a6", null ],
@@ -282,13 +283,13 @@ var group___overlays =
       [ "setOverlayDimensions", "group___overlays.html#gaac7c63414ff4b68005199d69fc43711d", null ],
       [ "setOverlayPosition", "group___overlays.html#ga5406201cb254a9980129f10961d63d61", null ]
     ] ],
-    [ "OverlaySystem", "class_ogre_1_1v1_1_1_overlay_system.html", [
+    [ "Ogre::v1::OverlaySystem", "class_ogre_1_1v1_1_1_overlay_system.html", [
       [ "OverlaySystem", "group___overlays.html#gaa6b58aedc7ee95bb33f1b279dadbdc69", null ],
       [ "~OverlaySystem", "group___overlays.html#gae1d6c06ac576b131891ae5d8ce928382", null ],
       [ "eventOccurred", "group___overlays.html#gabe75bfccba069139c95bd3612a206189", null ],
       [ "renderQueueStarted", "group___overlays.html#ga5a2b0f8ce0f57f6b5281f93db0e27c51", null ]
     ] ],
-    [ "PanelOverlayElement", "class_ogre_1_1v1_1_1_panel_overlay_element.html", [
+    [ "Ogre::v1::PanelOverlayElement", "class_ogre_1_1v1_1_1_panel_overlay_element.html", [
       [ "CmdTiling", "class_ogre_1_1v1_1_1_panel_overlay_element_1_1_cmd_tiling.html", [
         [ "doGet", "class_ogre_1_1v1_1_1_panel_overlay_element_1_1_cmd_tiling.html#a9f37db5525ad291458a95334716c55c8", null ],
         [ "doSet", "class_ogre_1_1v1_1_1_panel_overlay_element_1_1_cmd_tiling.html#aae54d4b7e871d84610f17721ae6b2965", null ]
@@ -309,7 +310,7 @@ var group___overlays =
       [ "getRenderOperation", "class_ogre_1_1v1_1_1_panel_overlay_element.html#a025ff330cf5a70d742e0b689ec9be542", null ],
       [ "getTileX", "class_ogre_1_1v1_1_1_panel_overlay_element.html#a407b6feed54a0dd33281e1006baa34d7", null ],
       [ "getTileY", "class_ogre_1_1v1_1_1_panel_overlay_element.html#a2fa487abd75cf2ad5cbac4d31066b4ff", null ],
-      [ "getTypeName", "class_ogre_1_1v1_1_1_panel_overlay_element.html#a7490d15a27c918c519af23534042a954", null ],
+      [ "getTypeName", "class_ogre_1_1v1_1_1_panel_overlay_element.html#a36410b1dbcbaa072852d54b934ab5408", null ],
       [ "getUV", "class_ogre_1_1v1_1_1_panel_overlay_element.html#ad455a218685e03e7bce3c1088a1ae559", null ],
       [ "initialise", "class_ogre_1_1v1_1_1_panel_overlay_element.html#a141bf79e9bc30c4d2c18055f4a1f1902", null ],
       [ "isTransparent", "class_ogre_1_1v1_1_1_panel_overlay_element.html#afe3794b4d4d639dfc0829c01d41322fd", null ],
@@ -318,11 +319,11 @@ var group___overlays =
       [ "setTransparent", "class_ogre_1_1v1_1_1_panel_overlay_element.html#adda2c8bcd3ace90f76fd95524444466f", null ],
       [ "setUV", "class_ogre_1_1v1_1_1_panel_overlay_element.html#af59d2b59dd76057f31e19cde6456c176", null ]
     ] ],
-    [ "PanelOverlayElementFactory", "class_ogre_1_1v1_1_1_panel_overlay_element_factory.html", [
-      [ "createOverlayElement", "class_ogre_1_1v1_1_1_panel_overlay_element_factory.html#a7d766ae399f6ba635e0aab0b092d961b", null ],
-      [ "getTypeName", "class_ogre_1_1v1_1_1_panel_overlay_element_factory.html#ae3e511b12e5146e520a94f62b9915e4d", null ]
+    [ "Ogre::v1::PanelOverlayElementFactory", "class_ogre_1_1v1_1_1_panel_overlay_element_factory.html", [
+      [ "createOverlayElement", "class_ogre_1_1v1_1_1_panel_overlay_element_factory.html#ac051d4c6b1390bec88dc9fd3ca98f8f7", null ],
+      [ "getTypeName", "class_ogre_1_1v1_1_1_panel_overlay_element_factory.html#ae3367554c63f3647bb6292d51f8328cf", null ]
     ] ],
-    [ "TextAreaOverlayElement", "class_ogre_1_1v1_1_1_text_area_overlay_element.html", [
+    [ "Ogre::v1::TextAreaOverlayElement", "class_ogre_1_1v1_1_1_text_area_overlay_element.html", [
       [ "CmdAlignment", "class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_alignment.html", [
         [ "doGet", "class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_alignment.html#aaa09055d52170be84f5ca9ef463937a1", null ],
         [ "doSet", "class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_alignment.html#a81484657affb7843974880fb627d3b2a", null ]
@@ -367,14 +368,14 @@ var group___overlays =
       [ "_update", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a11283cc176cc7baf009f892a6fcf5500", null ],
       [ "getAlignment", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#addf61e1aa9360e80abcfd10ca79bcfc8", null ],
       [ "getCharHeight", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a2f154d326570a6be5adfc1a401373e30", null ],
-      [ "getColour", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a602cd98bec81823e06efc91fe318bbb6", null ],
-      [ "getColourBottom", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a0c792f2428c2cfcc2f791148bbdf5f5d", null ],
-      [ "getColourTop", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a7f754be23108ac9eeff43d9414126200", null ],
-      [ "getFontName", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a413ff879429c6ed6bfdcae51c77cfd96", null ],
-      [ "getMaterial", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a29db8099f5780d688c019124911f1bc7", null ],
+      [ "getColour", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a10cc7ca0ebb3afe4b2ef7cc644281f97", null ],
+      [ "getColourBottom", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#ac6fe5f4e889fdfc701f4cb0333cd48e0", null ],
+      [ "getColourTop", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#ad7de857c4ea95dd1ab2292788a3a2953", null ],
+      [ "getFontName", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#adcee8b582578f5634c7f5e80081bc3f9", null ],
+      [ "getMaterial", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a569c49c276579a6cdbba82be3911d478", null ],
       [ "getRenderOperation", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a7ab2830886843adc11a3dcb9584c4d07", null ],
       [ "getSpaceWidth", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a8936891486382fe5a963e7671d744a7c", null ],
-      [ "getTypeName", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a909655ad4f2754ee6333aa147d26b45c", null ],
+      [ "getTypeName", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a32cb4f3ddd047be384227530f76a70b5", null ],
       [ "initialise", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a56bc7c8b5417fe12d124d50a34dd6e31", null ],
       [ "setAlignment", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#aed11ed110c4f02848b7728b0db2a0219", null ],
       [ "setCaption", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a7581d759e2ae7ada0d5320c41798537c", null ],
@@ -387,41 +388,41 @@ var group___overlays =
       [ "setMetricsMode", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#aacb854a435835e0e3db97a480ad79ec2", null ],
       [ "setSpaceWidth", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a3cc1f8cfa314410a1a712ed6f700e9dc", null ]
     ] ],
-    [ "TextAreaOverlayElementFactory", "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html", [
-      [ "createOverlayElement", "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html#a619c784b800a4bbcc2f21ee5c75690ea", null ],
-      [ "getTypeName", "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html#a087cab45b426045b61def99cf339b92c", null ]
+    [ "Ogre::v1::TextAreaOverlayElementFactory", "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html", [
+      [ "createOverlayElement", "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html#af3b8e34729802d41492cb27cc5f695b6", null ],
+      [ "getTypeName", "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html#a010e9e812109cfdfb72b74273c34a2f6", null ]
     ] ],
     [ "OGRE_DEREF_DISPLAYSTRING_ITERATOR", "group___overlays.html#ga7840a0c97898ebe977e3331199ca28f5", null ],
-    [ "DisplayString", "group___overlays.html#gaee1daf9c6299d9ebcc7dd5670862c58a", null ],
-    [ "GuiHorizontalAlignment", "group___overlays.html#gaf00dd954640209bdaf41c561803c337c", [
-      [ "GHA_LEFT", "group___overlays.html#ggaf00dd954640209bdaf41c561803c337caf857d25b34f9cac63a6f80a7fd98e57c", null ],
-      [ "GHA_CENTER", "group___overlays.html#ggaf00dd954640209bdaf41c561803c337ca4321f070cebb60c6cbc0e986dc368f99", null ],
-      [ "GHA_RIGHT", "group___overlays.html#ggaf00dd954640209bdaf41c561803c337cacf63e7efa224817351582a18a5b85c9f", null ]
+    [ "Ogre::v1::DisplayString", "group___overlays.html#gaee1daf9c6299d9ebcc7dd5670862c58a", null ],
+    [ "Ogre::v1::GuiHorizontalAlignment", "group___overlays.html#gaf00dd954640209bdaf41c561803c337c", [
+      [ "Ogre::v1::GHA_LEFT", "group___overlays.html#ggaf00dd954640209bdaf41c561803c337caf857d25b34f9cac63a6f80a7fd98e57c", null ],
+      [ "Ogre::v1::GHA_CENTER", "group___overlays.html#ggaf00dd954640209bdaf41c561803c337ca4321f070cebb60c6cbc0e986dc368f99", null ],
+      [ "Ogre::v1::GHA_RIGHT", "group___overlays.html#ggaf00dd954640209bdaf41c561803c337cacf63e7efa224817351582a18a5b85c9f", null ]
     ] ],
-    [ "GuiMetricsMode", "group___overlays.html#ga978febf62001d1ba30eb43e9087c8d80", [
-      [ "GMM_RELATIVE", "group___overlays.html#gga978febf62001d1ba30eb43e9087c8d80ae1fba94681d4c7f4e81f57877d96f1ad", null ],
-      [ "GMM_PIXELS", "group___overlays.html#gga978febf62001d1ba30eb43e9087c8d80ab914a124f07acce7d85d977a75d1e67d", null ],
-      [ "GMM_RELATIVE_ASPECT_ADJUSTED", "group___overlays.html#gga978febf62001d1ba30eb43e9087c8d80a9c52a0d1123215c72e44c3503c73d04f", null ]
+    [ "Ogre::v1::GuiMetricsMode", "group___overlays.html#ga978febf62001d1ba30eb43e9087c8d80", [
+      [ "Ogre::v1::GMM_RELATIVE", "group___overlays.html#gga978febf62001d1ba30eb43e9087c8d80ae1fba94681d4c7f4e81f57877d96f1ad", null ],
+      [ "Ogre::v1::GMM_PIXELS", "group___overlays.html#gga978febf62001d1ba30eb43e9087c8d80ab914a124f07acce7d85d977a75d1e67d", null ],
+      [ "Ogre::v1::GMM_RELATIVE_ASPECT_ADJUSTED", "group___overlays.html#gga978febf62001d1ba30eb43e9087c8d80a9c52a0d1123215c72e44c3503c73d04f", null ]
     ] ],
-    [ "GuiVerticalAlignment", "group___overlays.html#ga9e3894529c45039606127f43c750382d", [
-      [ "GVA_TOP", "group___overlays.html#gga9e3894529c45039606127f43c750382da129954c420771057ddcd5657fcaf2068", null ],
-      [ "GVA_CENTER", "group___overlays.html#gga9e3894529c45039606127f43c750382da7350663734264399184470166677247c", null ],
-      [ "GVA_BOTTOM", "group___overlays.html#gga9e3894529c45039606127f43c750382dac17101e3c70054f17d2d90f5f21cbb03", null ]
+    [ "Ogre::v1::GuiVerticalAlignment", "group___overlays.html#ga9e3894529c45039606127f43c750382d", [
+      [ "Ogre::v1::GVA_TOP", "group___overlays.html#gga9e3894529c45039606127f43c750382da129954c420771057ddcd5657fcaf2068", null ],
+      [ "Ogre::v1::GVA_CENTER", "group___overlays.html#gga9e3894529c45039606127f43c750382da7350663734264399184470166677247c", null ],
+      [ "Ogre::v1::GVA_BOTTOM", "group___overlays.html#gga9e3894529c45039606127f43c750382dac17101e3c70054f17d2d90f5f21cbb03", null ]
     ] ],
-    [ "OverlayProfileSessionListener", "group___overlays.html#gaf96873756b51491bc20d706d2450e4b9", null ],
-    [ "OverlaySystem", "group___overlays.html#gaa6b58aedc7ee95bb33f1b279dadbdc69", null ],
-    [ "~OverlayProfileSessionListener", "group___overlays.html#ga1ea90ae9c967abfc26e82d7e7cb5c7d2", null ],
-    [ "~OverlaySystem", "group___overlays.html#gae1d6c06ac576b131891ae5d8ce928382", null ],
-    [ "changeEnableState", "group___overlays.html#gaafabc8b9eb74285fc6650561b3c038a6", null ],
-    [ "displayResults", "group___overlays.html#ga931a24b12cdd5179270ae63e0783f9bd", null ],
-    [ "eventOccurred", "group___overlays.html#gabe75bfccba069139c95bd3612a206189", null ],
-    [ "finializeSession", "group___overlays.html#ga6c8370e4a9fed6817d8bcb070fbc44cb", null ],
-    [ "getOverlayHeight", "group___overlays.html#ga70549c3123e67cd2ef5196a54e51dbfa", null ],
-    [ "getOverlayLeft", "group___overlays.html#ga2117486d0481326c3e05b3e6f9054cc0", null ],
-    [ "getOverlayTop", "group___overlays.html#ga33fe6178c1b3f06de511b3f229b6bb2e", null ],
-    [ "getOverlayWidth", "group___overlays.html#ga59d28be2ee0385b21f79b5f077900a2a", null ],
-    [ "initializeSession", "group___overlays.html#gad9caa5abfbee70dc91c40963c7204186", null ],
-    [ "renderQueueStarted", "group___overlays.html#ga5a2b0f8ce0f57f6b5281f93db0e27c51", null ],
-    [ "setOverlayDimensions", "group___overlays.html#gaac7c63414ff4b68005199d69fc43711d", null ],
-    [ "setOverlayPosition", "group___overlays.html#ga5406201cb254a9980129f10961d63d61", null ]
+    [ "Ogre::v1::OverlayProfileSessionListener::OverlayProfileSessionListener", "group___overlays.html#gaf96873756b51491bc20d706d2450e4b9", null ],
+    [ "Ogre::v1::OverlaySystem::OverlaySystem", "group___overlays.html#gaa6b58aedc7ee95bb33f1b279dadbdc69", null ],
+    [ "Ogre::v1::OverlayProfileSessionListener::~OverlayProfileSessionListener", "group___overlays.html#ga1ea90ae9c967abfc26e82d7e7cb5c7d2", null ],
+    [ "Ogre::v1::OverlaySystem::~OverlaySystem", "group___overlays.html#gae1d6c06ac576b131891ae5d8ce928382", null ],
+    [ "Ogre::v1::OverlayProfileSessionListener::changeEnableState", "group___overlays.html#gaafabc8b9eb74285fc6650561b3c038a6", null ],
+    [ "Ogre::v1::OverlayProfileSessionListener::displayResults", "group___overlays.html#ga931a24b12cdd5179270ae63e0783f9bd", null ],
+    [ "Ogre::v1::OverlaySystem::eventOccurred", "group___overlays.html#gabe75bfccba069139c95bd3612a206189", null ],
+    [ "Ogre::v1::OverlayProfileSessionListener::finializeSession", "group___overlays.html#ga6c8370e4a9fed6817d8bcb070fbc44cb", null ],
+    [ "Ogre::v1::OverlayProfileSessionListener::getOverlayHeight", "group___overlays.html#ga70549c3123e67cd2ef5196a54e51dbfa", null ],
+    [ "Ogre::v1::OverlayProfileSessionListener::getOverlayLeft", "group___overlays.html#ga2117486d0481326c3e05b3e6f9054cc0", null ],
+    [ "Ogre::v1::OverlayProfileSessionListener::getOverlayTop", "group___overlays.html#ga33fe6178c1b3f06de511b3f229b6bb2e", null ],
+    [ "Ogre::v1::OverlayProfileSessionListener::getOverlayWidth", "group___overlays.html#ga59d28be2ee0385b21f79b5f077900a2a", null ],
+    [ "Ogre::v1::OverlayProfileSessionListener::initializeSession", "group___overlays.html#gad9caa5abfbee70dc91c40963c7204186", null ],
+    [ "Ogre::v1::OverlaySystem::renderQueueStarted", "group___overlays.html#ga5a2b0f8ce0f57f6b5281f93db0e27c51", null ],
+    [ "Ogre::v1::OverlayProfileSessionListener::setOverlayDimensions", "group___overlays.html#gaac7c63414ff4b68005199d69fc43711d", null ],
+    [ "Ogre::v1::OverlayProfileSessionListener::setOverlayPosition", "group___overlays.html#ga5406201cb254a9980129f10961d63d61", null ]
 ];

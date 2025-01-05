@@ -1,8 +1,13 @@
 <map id="Ogre::NULLTextureGpuRenderTarget" name="Ogre::NULLTextureGpuRenderTarget">
-<area shape="rect" id="node1" title=" " alt="" coords="93,304,308,345"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_n_u_l_l_texture_gpu.html" title=" " alt="" coords="117,229,285,256"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_texture_gpu.html" title=" " alt="" coords="133,155,268,181"/>
-<area shape="rect" id="node4" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,80,201,107"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_gpu_resource.html" title=" " alt="" coords="226,80,373,107"/>
-<area shape="rect" id="node6" title=" " alt="" coords="231,5,367,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="93,299,308,339"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_n_u_l_l_texture_gpu.html" title=" " alt="" coords="117,225,285,251"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,264,203,299,198,299,198,264"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_texture_gpu.html" title=" " alt="" coords="133,152,268,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="203,191,203,225,198,225,198,191"/>
+<area shape="rect" id="Node000004" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,79,201,104"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="132,110,186,150,183,154,129,114"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_gpu_resource.html" title=" " alt="" coords="226,79,373,104"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="274,114,218,154,215,150,271,110"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="212,5,387,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="302,44,302,79,297,79,297,44"/>
 </map>

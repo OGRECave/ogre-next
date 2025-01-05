@@ -1,11 +1,19 @@
 <map id="Ogre::IteratorWrapper&lt; T, IteratorType, ValType &gt;" name="Ogre::IteratorWrapper&lt; T, IteratorType, ValType &gt;">
-<area shape="rect" id="node1" title="Basefunctionality for IteratorWrappers." alt="" coords="5,104,209,145"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_map_iterator_wrapper.html" title=" " alt="" coords="264,5,456,47"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_map_iterator_wrapper.html" title=" " alt="" coords="264,71,456,112"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_vector_iterator_wrapper.html" title=" " alt="" coords="257,136,463,177"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_vector_iterator_wrapper.html" title=" " alt="" coords="257,201,463,243"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_map_iterator.html" title="Concrete IteratorWrapper for nonconst access to the underlying key&#45;value container." alt="" coords="536,13,711,39"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_const_map_iterator.html" title="Concrete IteratorWrapper for const access to the underlying key&#45;value container." alt="" coords="517,78,729,105"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_vector_iterator.html" title="Concrete IteratorWrapper for nonconst access to the underlying container." alt="" coords="529,143,717,170"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_const_vector_iterator.html" title="Concrete IteratorWrapper for const access to the underlying container." alt="" coords="511,209,736,235"/>
+<area shape="rect" id="Node000001" title="Basefunctionality for IteratorWrappers." alt="" coords="5,101,209,141"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_map_iterator_wrapper.html" title=" " alt="" coords="264,5,456,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,93,256,55,291,43,293,48,258,60,166,98"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_map_iterator_wrapper.html" title=" " alt="" coords="264,69,456,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="223,104,263,99,264,104,223,109"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_vector_iterator_wrapper.html" title=" " alt="" coords="257,133,463,173"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="223,133,258,138,257,143,223,139"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_vector_iterator_wrapper.html" title=" " alt="" coords="257,197,463,237"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="166,145,258,183,293,195,291,200,256,188,164,149"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_const_map_iterator.html" title="Concrete IteratorWrapper for const access to the underlying key&#45;value container." alt="" coords="517,13,729,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="470,23,517,23,517,28,470,28"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_map_iterator.html" title="Concrete IteratorWrapper for nonconst access to the underlying key&#45;value container." alt="" coords="536,77,711,102"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="470,87,536,87,536,92,470,92"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_const_vector_iterator.html" title="Concrete IteratorWrapper for const access to the underlying container." alt="" coords="511,141,736,166"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="476,151,510,151,510,156,476,156"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_vector_iterator.html" title="Concrete IteratorWrapper for nonconst access to the underlying container." alt="" coords="529,205,717,230"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="476,215,529,215,529,220,476,220"/>
 </map>

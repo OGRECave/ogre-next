@@ -1,6 +1,6 @@
 var _ogre_ies_loader_8h =
 [
-    [ "IesLoader", "class_ogre_1_1_ies_loader.html", "class_ogre_1_1_ies_loader" ],
+    [ "Ogre::IesLoader", "class_ogre_1_1_ies_loader.html", "class_ogre_1_1_ies_loader" ],
     [ "LampConeType", "_ogre_ies_loader_8h.html#a6dfdc0962f55b3c26763ed1def663976", [
       [ "Type90", "_ogre_ies_loader_8h.html#a6dfdc0962f55b3c26763ed1def663976a8ef5b2c99523003b38b4f9662555a0b1", null ],
       [ "Type180", "_ogre_ies_loader_8h.html#a6dfdc0962f55b3c26763ed1def663976a327b7d5b24879864f0edc01eb0c30364", null ]

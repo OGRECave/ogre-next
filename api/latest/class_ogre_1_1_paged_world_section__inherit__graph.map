@@ -1,4 +1,5 @@
 <map id="Ogre::PagedWorldSection" name="Ogre::PagedWorldSection">
-<area shape="rect" id="node1" title="Represents a section of the PagedWorld which uses a given PageStrategy, and which is made up of a gen..." alt="" coords="5,80,191,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="55,5,141,32"/>
+<area shape="rect" id="Node000001" title="Represents a section of the PagedWorld which uses a given PageStrategy, and which is made up of a gen..." alt="" coords="5,79,191,104"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="55,5,141,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,44,101,79,95,79,95,44"/>
 </map>

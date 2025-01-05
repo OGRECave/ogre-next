@@ -1,4 +1,5 @@
 <map id="Ogre::RenderSystemCapabilities" name="Ogre::RenderSystemCapabilities">
-<area shape="rect" id="node1" title="singleton class for storing the capabilities of the graphics card." alt="" coords="5,80,239,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="54,5,190,32"/>
+<area shape="rect" id="Node000001" title="singleton class for storing the capabilities of the graphics card." alt="" coords="5,79,239,104"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="35,5,209,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,44,125,79,119,79,119,44"/>
 </map>

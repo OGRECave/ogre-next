@@ -1,5 +1,7 @@
 <map id="Ogre::SkeletonManager" name="Ogre::SkeletonManager">
-<area shape="rect" id="node1" title="Handles the management of skeleton resources." alt="" coords="109,95,284,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,199,47"/>
-<area shape="rect" id="node3" title=" " alt="" coords="223,13,359,39"/>
+<area shape="rect" id="Node000001" title="Handles the management of skeleton resources." alt="" coords="119,93,293,119"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,199,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="139,51,192,91,189,95,136,56"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="223,13,397,38"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="286,48,223,95,220,91,282,44"/>
 </map>

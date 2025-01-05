@@ -1,4 +1,5 @@
 <map id="Ogre::v1::GLES2RenderToVertexBuffer" name="Ogre::v1::GLES2RenderToVertexBuffer">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,233,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="38,5,201,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,233,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="38,5,201,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,44,122,79,117,79,117,44"/>
 </map>

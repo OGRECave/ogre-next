@@ -1,4 +1,5 @@
 <map id="Ogre::CbLowLevelMaterial" name="Ogre::CbLowLevelMaterial">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,199,107"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_cb_base.html" title=" " alt="" coords="47,5,157,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,199,104"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_cb_base.html" title=" " alt="" coords="47,5,157,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,44,105,79,99,79,99,44"/>
 </map>

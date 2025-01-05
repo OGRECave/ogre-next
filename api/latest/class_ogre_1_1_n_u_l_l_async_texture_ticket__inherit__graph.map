@@ -1,6 +1,9 @@
 <map id="Ogre::NULLAsyncTextureTicket" name="Ogre::NULLAsyncTextureTicket">
-<area shape="rect" id="node1" title="See AsyncTextureTicket." alt="" coords="54,155,277,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_async_texture_ticket.html" title="In Ogre 2.2 reading data from GPU back to CPU is asynchronous." alt="" coords="72,80,259,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,141,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="165,5,352,32"/>
+<area shape="rect" id="Node000001" title="See AsyncTextureTicket." alt="" coords="84,152,307,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_async_texture_ticket.html" title="In Ogre 2.2 reading data from GPU back to CPU is asynchronous." alt="" coords="102,79,289,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,118,198,152,193,152,193,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="122,36,180,76,177,81,119,41"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="205,5,391,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="272,41,214,81,211,76,269,36"/>
 </map>

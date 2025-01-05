@@ -32,7 +32,7 @@ var class_ogre_1_1_pixel_format_gpu_utils =
       [ "PFL_R8", "class_ogre_1_1_pixel_format_gpu_utils.html#ad8c6704e31e61fa0963e8adfc6573996a9e80ebcd1741652a829a06823445c09a", null ],
       [ "PFL_COUNT", "class_ogre_1_1_pixel_format_gpu_utils.html#ad8c6704e31e61fa0963e8adfc6573996a059a2c893bad094c3c57e867d99d2b77", null ]
     ] ],
-    [ "advancePointerToMip", "class_ogre_1_1_pixel_format_gpu_utils.html#a8924550f72a12bac742787a7868314f3", null ],
+    [ "advancePointerToMip", "class_ogre_1_1_pixel_format_gpu_utils.html#ae7c53bd98ca5a8f17f6b39d6d8d4e78f", null ],
     [ "bulkPixelConversion", "class_ogre_1_1_pixel_format_gpu_utils.html#af78f1f21c6fe6d68b8d1b4be15a0bf06", null ],
     [ "calculateSizeBytes", "class_ogre_1_1_pixel_format_gpu_utils.html#a94a49f7166b2bb6b3682474035331550", null ],
     [ "convertForNormalMapping", "class_ogre_1_1_pixel_format_gpu_utils.html#abad57a12180f5bf372c17dc67c5b5629", null ],
@@ -71,7 +71,7 @@ var class_ogre_1_1_pixel_format_gpu_utils =
     [ "packColour", "class_ogre_1_1_pixel_format_gpu_utils.html#a50ae04c63c0474a1a739fbec09c012c5", null ],
     [ "supportsHwMipmaps", "class_ogre_1_1_pixel_format_gpu_utils.html#a03fb412b5d3d058f7de015eb50f29e40", null ],
     [ "toSRGB", "class_ogre_1_1_pixel_format_gpu_utils.html#a29255ccf10ce3f825a9f9ad1c31c5835", null ],
-    [ "toString", "class_ogre_1_1_pixel_format_gpu_utils.html#a256a65b56f10850b502ae681de8a3fb8", null ],
+    [ "toString", "class_ogre_1_1_pixel_format_gpu_utils.html#a7f1fbdfef79cc93f1e207bfcad1dbd52", null ],
     [ "unpackColour", "class_ogre_1_1_pixel_format_gpu_utils.html#a3d9cbef8eda0e7842ed8a5e620b307e7", null ],
     [ "unpackColour", "class_ogre_1_1_pixel_format_gpu_utils.html#af3fd8cfad6b76b223061683fa5718044", null ]
 ];

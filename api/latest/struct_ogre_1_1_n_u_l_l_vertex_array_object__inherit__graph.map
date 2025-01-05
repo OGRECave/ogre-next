@@ -1,5 +1,7 @@
 <map id="Ogre::NULLVertexArrayObject" name="Ogre::NULLVertexArrayObject">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,219,181"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_vertex_array_object.html" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i..." alt="" coords="22,80,202,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="44,5,180,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,152,219,177"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_vertex_array_object.html" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i..." alt="" coords="22,79,202,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,118,115,152,109,152,109,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="25,5,199,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="115,44,115,79,109,79,109,44"/>
 </map>

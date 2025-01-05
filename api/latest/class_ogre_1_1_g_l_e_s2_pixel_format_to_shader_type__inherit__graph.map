@@ -1,4 +1,5 @@
 <map id="Ogre::GLES2PixelFormatToShaderType" name="Ogre::GLES2PixelFormatToShaderType">
-<area shape="rect" id="node1" title=" " alt="" coords="22,80,215,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_pixel_format_to_shader_type.html" title=" " alt="" coords="5,5,232,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="22,79,215,119"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_pixel_format_to_shader_type.html" title=" " alt="" coords="5,5,232,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,44,121,79,116,79,116,44"/>
 </map>

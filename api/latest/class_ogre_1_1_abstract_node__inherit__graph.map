@@ -1,9 +1,15 @@
 <map id="Ogre::AbstractNode" name="Ogre::AbstractNode">
-<area shape="rect" id="node1" title=" " alt="" coords="189,107,339,133"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_atom_abstract_node.html" title="This is an abstract node which cannot be broken down further." alt="" coords="418,5,602,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_import_abstract_node.html" title="This abstract node represents an import statement." alt="" coords="414,56,606,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_object_abstract_node.html" title="This specific abstract node represents a script object." alt="" coords="415,107,605,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_property_abstract_node.html" title="This abstract node represents a script property." alt="" coords="408,157,612,184"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_variable_access_abstract_node.html" title="This abstract node represents a variable assignment." alt="" coords="387,208,633,235"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,107,141,133"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="189,104,339,129"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_atom_abstract_node.html" title="This is an abstract node which cannot be broken down further." alt="" coords="418,5,602,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="291,94,334,65,386,40,423,28,424,33,388,44,337,70,294,98"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_import_abstract_node.html" title="This abstract node represents an import statement." alt="" coords="414,55,606,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="339,98,386,89,443,77,444,83,387,94,340,104"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_object_abstract_node.html" title="This specific abstract node represents a script object." alt="" coords="415,104,605,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="353,114,415,114,415,119,353,119"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_property_abstract_node.html" title="This abstract node represents a script property." alt="" coords="408,153,612,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="340,130,387,139,444,151,443,156,386,145,339,135"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_variable_access_abstract_node.html" title="This abstract node represents a variable assignment." alt="" coords="387,203,633,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="294,135,337,163,388,189,424,200,423,205,386,194,334,168,291,140"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,104,141,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,114,189,114,189,119,155,119"/>
 </map>

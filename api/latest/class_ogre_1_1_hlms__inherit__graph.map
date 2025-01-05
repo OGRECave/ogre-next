@@ -1,9 +1,15 @@
 <map id="Ogre::Hlms" name="Ogre::Hlms">
-<area shape="rect" id="node1" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="288,95,383,121"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_hlms_buffer_manager.html" title="Managing constant and texture buffers for sending shader parameters is a very similar process to most..." alt="" coords="43,169,233,196"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_hlms_compute.html" title="HLMS implementation that handles compute shaders." alt="" coords="258,169,413,196"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_hlms_low_level.html" title="This is an HLMS implementation that acts as proxy to use the Material system from Ogre 1...." alt="" coords="437,169,593,196"/>
-<area shape="rect" id="node2" title=" " alt="" coords="246,5,425,47"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_hlms_pbs.html" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys..." alt="" coords="5,244,124,271"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_hlms_unlit.html" title="Implementation without lighting or skeletal animation specfically designed for OpenGL 3+,..." alt="" coords="148,244,275,271"/>
+<area shape="rect" id="Node000001" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="288,93,383,119"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_hlms_buffer_manager.html" title="Managing constant and texture buffers for sending shader parameters is a very similar process to most..." alt="" coords="43,167,233,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="292,126,171,169,169,164,290,121"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_hlms_compute.html" title="HLMS implementation that handles compute shaders." alt="" coords="258,167,413,192"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="338,132,338,167,333,167,333,132"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_hlms_low_level.html" title="This is an HLMS implementation that acts as proxy to use the Material system from Ogre 1...." alt="" coords="437,167,593,192"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="378,121,487,164,485,169,376,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="246,5,425,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="338,59,338,93,333,93,333,59"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_hlms_pbs.html" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys..." alt="" coords="5,240,124,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="118,204,78,242,75,238,114,200"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_hlms_unlit.html" title="Implementation without lighting or skeletal animation specfically designed for OpenGL 3+,..." alt="" coords="148,240,275,265"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="162,200,201,238,198,242,158,204"/>
 </map>

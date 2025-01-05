@@ -1,8 +1,13 @@
 <map id="Ogre::v1::Rectangle2D" name="Ogre::v1::Rectangle2D">
-<area shape="rect" id="node1" title="Allows the rendering of a simple 2D rectangle This class renders a simple 2D rectangle; this rectangl..." alt="" coords="93,155,261,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="25,80,159,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="183,80,342,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,171,32"/>
-<area shape="rect" id="node5" title=" " alt="" coords="195,5,331,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="355,5,469,32"/>
+<area shape="rect" id="Node000001" title="Allows the rendering of a simple 2D rectangle This class renders a simple 2D rectangle; this rectangl..." alt="" coords="113,152,281,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="45,79,179,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,110,185,150,182,154,134,115"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="203,79,362,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="260,115,213,154,210,150,257,110"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,171,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="133,33,252,76,250,81,131,38"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="195,5,370,31"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="285,44,285,79,280,79,280,44"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="395,5,509,31"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="413,38,311,81,309,76,411,34"/>
 </map>

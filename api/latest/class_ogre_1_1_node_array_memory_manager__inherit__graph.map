@@ -1,4 +1,5 @@
 <map id="Ogre::NodeArrayMemoryManager" name="Ogre::NodeArrayMemoryManager">
-<area shape="rect" id="node1" title="Implementation to create the Transform variables needed by Nodes &amp; SceneNodes." alt="" coords="5,80,247,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_array_memory_manager.html" title="Abstract memory manager for managing large chunks of contiguous memory, optimized for SoA (Structure ..." alt="" coords="23,5,229,32"/>
+<area shape="rect" id="Node000001" title="Implementation to create the Transform variables needed by Nodes &amp; SceneNodes." alt="" coords="5,79,247,104"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_array_memory_manager.html" title="Abstract memory manager for managing large chunks of contiguous memory, optimized for SoA (Structure ..." alt="" coords="23,5,229,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,44,129,79,123,79,123,44"/>
 </map>
