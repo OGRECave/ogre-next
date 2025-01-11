@@ -251,6 +251,8 @@ namespace Ogre
         }
         mDescriptorPools.clear();
 
+        mUsedDescriptorPools.clear();
+
         mEmptyVboPools.clear();
 
         for( size_t i = 0; i < MAX_VBO_FLAG; ++i )
