@@ -2669,6 +2669,7 @@ var namespace_ogre =
     [ "any_cast", "group___general.html#ga4298c911e328360f7348511a848fe4ff", null ],
     [ "any_cast", "group___general.html#ga2024a5fb8d0223391b75632d9443a0d2", null ],
     [ "any_cast", "group___general.html#ga517155088465ff92d2c1514fe34752a5", null ],
+    [ "bit_cast", "namespace_ogre.html#a28241b101431f1cf9f50b9329e9e2cf3", null ],
     [ "cleanerArrayAabb", "group___memory.html#ga585d805d0bd700286f91158e4e82ec52", null ],
     [ "cleanerArrayQuaternion", "group___memory.html#ga01d3d3ffc8fa63836b9d336c1ea17141", null ],
     [ "cleanerArrayVector3Unit", "group___memory.html#ga6d44cc03e3544990ed2fe1861c03fd79", null ],

@@ -96,6 +96,7 @@ $(document).ready(function(){initNavTree('_ogre_common_8h.html',''); initResizab
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
@@ -142,6 +143,11 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespace_ogre_1_1_msaa_patterns" id="r_namespace_ogre_1_1_msaa_patterns"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre_1_1_msaa_patterns.html">Ogre::MsaaPatterns</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:adc94d4b644498e7d0da29470e22a9ff6" id="r_adc94d4b644498e7d0da29470e22a9ff6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_common_8h.html#adc94d4b644498e7d0da29470e22a9ff6">OGRE_HAS_BUILTIN</a>(x)&#160;&#160;&#160;0</td></tr>
+<tr class="separator:adc94d4b644498e7d0da29470e22a9ff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -435,6 +441,10 @@ Functions</h2></td></tr>
 <tr class="memitem:ac7792056030e699c5444481316d68f00" id="r_ac7792056030e699c5444481316d68f00"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#ac7792056030e699c5444481316d68f00">Ogre::alignToPreviousMult</a> (size_t offset, size_t alignment)</td></tr>
 <tr class="memdesc:ac7792056030e699c5444481316d68f00"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function has been purposedly not been named 'alignToPrevMultiple' to avoid easily confusing it with alignToNextMultiple.  <br /></td></tr>
 <tr class="separator:ac7792056030e699c5444481316d68f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28241b101431f1cf9f50b9329e9e2cf3" id="r_a28241b101431f1cf9f50b9329e9e2cf3"><td class="memTemplParams" colspan="2">template&lt;class Dest , class Source &gt; </td></tr>
+<tr class="memitem:a28241b101431f1cf9f50b9329e9e2cf3"><td class="memTemplItemLeft" align="right" valign="top">Dest&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a28241b101431f1cf9f50b9329e9e2cf3">Ogre::bit_cast</a> (const Source &amp;source)</td></tr>
+<tr class="memdesc:a28241b101431f1cf9f50b9329e9e2cf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs the same as std::bit_cast i.e.  <br /></td></tr>
+<tr class="separator:a28241b101431f1cf9f50b9329e9e2cf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6b522a41a22d53734a3bc4835a2b3f5" id="r_af6b522a41a22d53734a3bc4835a2b3f5"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:af6b522a41a22d53734a3bc4835a2b3f5"><td class="memTemplItemLeft" align="right" valign="top">T::iterator&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#af6b522a41a22d53734a3bc4835a2b3f5">Ogre::efficientVectorRemove</a> (T &amp;container, typename T::iterator &amp;iterator)</td></tr>
 <tr class="memdesc:af6b522a41a22d53734a3bc4835a2b3f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used for efficient removal in std::vector and std::deque (like an std::list) However it assumes the order of elements in container is not important or something external to the container holds the index of an element in it (but still should be kept deterministically across machines) Basically it swaps the iterator with the last iterator, and pops back Returns the next iterator.  <br /></td></tr>
@@ -460,6 +470,25 @@ Variables</h2></td></tr>
 <tr class="memitem:ga2c85ae8dd7a6ead0501fd670295c3f19" id="r_ga2c85ae8dd7a6ead0501fd670295c3f19"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga2c85ae8dd7a6ead0501fd670295c3f19">Ogre::c_computeStageMask</a> = 1u &lt;&lt; <a class="el" href="group___general.html#gga7049ce296bb4883feab25251d3865035a0bf893209b217d59e15abaf48092d132">NumShaderTypes</a></td></tr>
 <tr class="separator:ga2c85ae8dd7a6ead0501fd670295c3f19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="adc94d4b644498e7d0da29470e22a9ff6" name="adc94d4b644498e7d0da29470e22a9ff6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc94d4b644498e7d0da29470e22a9ff6">&#9670;&#160;</a></span>OGRE_HAS_BUILTIN</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define OGRE_HAS_BUILTIN</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td>&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

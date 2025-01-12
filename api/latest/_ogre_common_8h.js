@@ -1,5 +1,6 @@
 var _ogre_common_8h =
 [
+    [ "OGRE_HAS_BUILTIN", "_ogre_common_8h.html#adc94d4b644498e7d0da29470e22a9ff6", null ],
     [ "AliasTextureNamePairList", "_ogre_common_8h.html#ga6ba37dfc5b90ddf191695822b26b3eff", null ],
     [ "BinaryOptionList", "_ogre_common_8h.html#ga1349994da6582545bdc210cb63d00e36", null ],
     [ "FloatRect", "_ogre_common_8h.html#ga39213af9254535e83b4beca0859e8a2f", null ],
@@ -208,6 +209,7 @@ var _ogre_common_8h =
     ] ],
     [ "alignToNextMultiple", "_ogre_common_8h.html#ab0535a174ea88d45d21487e6c8d9d1b9", null ],
     [ "alignToPreviousMult", "_ogre_common_8h.html#ac7792056030e699c5444481316d68f00", null ],
+    [ "bit_cast", "_ogre_common_8h.html#a28241b101431f1cf9f50b9329e9e2cf3", null ],
     [ "efficientVectorRemove", "_ogre_common_8h.html#af6b522a41a22d53734a3bc4835a2b3f5", null ],
     [ "FastHash", "_ogre_common_8h.html#ga2be47c9c5b63cc7860edcec9b22e6f10", null ],
     [ "findCommandLineOpts", "_ogre_common_8h.html#gad78e25bde5597796c07e75d4f857a3cd", null ],
