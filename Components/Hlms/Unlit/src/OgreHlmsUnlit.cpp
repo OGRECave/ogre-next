@@ -578,9 +578,9 @@ namespace Ogre
             setProperty( kNoTid, UnlitProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlit::notifyPropertiesMergedPreGenerationStep( const size_t tid )
+    void HlmsUnlit::notifyPropertiesMergedPreGenerationStep( const size_t tid, PiecesMap *inOutPieces )
     {
-        Hlms::notifyPropertiesMergedPreGenerationStep( tid );
+        Hlms::notifyPropertiesMergedPreGenerationStep( tid, inOutPieces );
 
         const int32 samplerStateStart = getProperty( tid, UnlitProperty::SamplerStateStart );
         int32 texUnit = samplerStateStart;

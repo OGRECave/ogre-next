@@ -1126,9 +1126,9 @@ namespace Ogre
             setProperty( kNoTid, PbsProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::notifyPropertiesMergedPreGenerationStep( const size_t tid )
+    void HlmsPbs::notifyPropertiesMergedPreGenerationStep( const size_t tid, PiecesMap *inOutPieces )
     {
-        Hlms::notifyPropertiesMergedPreGenerationStep( tid );
+        Hlms::notifyPropertiesMergedPreGenerationStep( tid, inOutPieces );
 
         const int32 numVctProbes = getProperty( tid, PbsProperty::VctNumProbes );
         const bool hasVct = numVctProbes > 0;

@@ -516,12 +516,19 @@ namespace Ogre
                                                          HlmsCache              *reservedStubEntry,
                                                          size_t                  threadIdx );
 
-        /// This function gets called right before starting parsing all templates, and after
-        /// the renderable properties have been merged with the pass properties.
-        ///
-        /// Warning: For the HlmsDiskCache to work properly, this function should not rely
-        /// on member variables or other state. All state info should come from getProperty()
-        virtual void notifyPropertiesMergedPreGenerationStep( size_t tid );
+        /** This function gets called right before starting parsing all templates, and after
+            the renderable properties have been merged with the pass properties.
+
+            Warning: For the HlmsDiskCache to work properly, this function should not rely
+            on member variables or other state. All state info should come from getProperty().
+        @param tid
+            Thread idx of caller.
+        @param inOutPieces [in/out]
+            An array of size inOutPieces[NumShaderTypes]. Can be modified.
+            Warning: Do not later modify these pieces, or else HlmsDiskCache may be unable to
+            recompile the cache from outdated templates.
+        */
+        virtual void notifyPropertiesMergedPreGenerationStep( size_t tid, PiecesMap *inOutPieces );
 
         virtual HlmsDatablock *createDatablockImpl( IdString              datablockName,
                                                     const HlmsMacroblock *macroblock,

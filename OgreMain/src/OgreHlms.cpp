@@ -2549,13 +2549,14 @@ namespace Ogre
                 setProperty( tid, *itor++, 1 );
         }
 
-        notifyPropertiesMergedPreGenerationStep( tid );
+        ShaderCodeCache codeCache( renderableCache.pieces );
+
+        notifyPropertiesMergedPreGenerationStep( tid, codeCache.mergedCache.pieces );
         mListener->propertiesMergedPreGenerationStep( this, passCache, renderableCache.setProperties,
                                                       renderableCache.pieces, mT[tid].setProperties,
                                                       queuedRenderable, tid );
 
         // Retrieve the shader code from the code cache
-        ShaderCodeCache codeCache( renderableCache.pieces );
         unsetProperty( tid, HlmsPsoProp::Macroblock );
         unsetProperty( tid, HlmsPsoProp::Blendblock );
         unsetProperty( tid, HlmsPsoProp::InputLayoutId );
@@ -2659,12 +2660,60 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::notifyPropertiesMergedPreGenerationStep( const size_t tid )
+    void Hlms::notifyPropertiesMergedPreGenerationStep( const size_t tid, PiecesMap *inOutPieces )
     {
         if( getProperty( tid, HlmsBaseProp::AlphaToCoverage ) == HlmsBlendblock::A2cEnabledMsaaOnly )
         {
             if( getProperty( tid, HlmsBaseProp::MsaaSamples ) <= 1 )
                 setProperty( tid, HlmsBaseProp::AlphaToCoverage, 0 );
+        }
+
+        // Pass cache data cannot cache pieces, so it stored shadow maps' UV values as raw
+        // floating point in the properties. We can now turn it into pieces.
+        const int32 numShadowMapLights = getProperty( tid, HlmsBaseProp::NumShadowMapLights );
+
+        char tmpBuffer[64];
+        LwString propName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+
+        char tmpBuffer2[32];
+        LwString valueStr( LwString::FromEmptyPointer( tmpBuffer2, sizeof( tmpBuffer2 ) ) );
+
+        propName = "hlms_shadowmap";
+        const size_t basePropNameSize = propName.size();
+
+        for( int32 i = 0; i < numShadowMapLights; ++i )
+        {
+            propName.resize( basePropNameSize );
+            propName.a( i );  // hlms_shadowmap0
+
+            const size_t basePropSize = propName.size();
+
+            const uint32 kNumSuffixes = 6u;
+            const char *suffixes[kNumSuffixes] = { "_uv_min_x",    "_uv_min_y",  //
+                                                   "_uv_max_x",    "_uv_max_y",
+                                                   "_uv_length_x", "_uv_length_y" };
+
+            for( uint32 j = 0; j < kNumSuffixes; ++j )
+            {
+                propName.resize( basePropSize );
+                propName.a( suffixes[j] );
+
+                const IdString propNameHash = propName.c_str();
+
+                const int32_t value = getProperty( tid, propNameHash, -1 );
+                if( value != -1 )
+                {
+                    const float fValue = bit_cast<float>( value );
+
+                    valueStr.clear();
+                    valueStr.a( fValue );
+
+                    const PiecesMap::value_type v = { propNameHash, valueStr.c_str() };
+
+                    for( size_t k = 0u; k < NumShaderTypes; ++k )
+                        inOutPieces[k].insert( v );
+                }
+            }
         }
     }
     //-----------------------------------------------------------------------------------
@@ -3011,40 +3060,24 @@ namespace Ogre
                             setProperty( kNoTid, propName.c_str(), 1 );
                         }
 
-                        float intPart, fractPart;
+                        propName.resize( basePropSize );
+                        propName.a( "_uv_min_x" );
+                        setProperty( kNoTid, propName.c_str(),
+                                     bit_cast<int32_t>( (float)shadowTexDef->uvOffset.x ) );
 
-                        fractPart = modff( (float)shadowTexDef->uvOffset.x, &intPart );
                         propName.resize( basePropSize );
-                        propName.a( "_uv_min_x_int" );
-                        setProperty( kNoTid, propName.c_str(), (int32)intPart );
-                        propName.resize( basePropSize );
-                        propName.a( "_uv_min_x_fract" );
-                        setProperty( kNoTid, propName.c_str(), (int32)( fractPart * 100000.0f ) );
+                        propName.a( "_uv_min_y" );
+                        setProperty( kNoTid, propName.c_str(),
+                                     bit_cast<int32_t>( (float)shadowTexDef->uvOffset.y ) );
 
-                        fractPart = modff( (float)shadowTexDef->uvOffset.y, &intPart );
+                        const Vector2 uvMax = shadowTexDef->uvOffset + shadowTexDef->uvLength;
                         propName.resize( basePropSize );
-                        propName.a( "_uv_min_y_int" );
-                        setProperty( kNoTid, propName.c_str(), (int32)intPart );
-                        propName.resize( basePropSize );
-                        propName.a( "_uv_min_y_fract" );
-                        setProperty( kNoTid, propName.c_str(), (int32)( fractPart * 100000.0f ) );
+                        propName.a( "_uv_max_x" );
+                        setProperty( kNoTid, propName.c_str(), bit_cast<int32_t>( (float)uvMax.x ) );
 
-                        Vector2 uvMax = shadowTexDef->uvOffset + shadowTexDef->uvLength;
-                        fractPart = modff( (float)uvMax.x, &intPart );
                         propName.resize( basePropSize );
-                        propName.a( "_uv_max_x_int" );
-                        setProperty( kNoTid, propName.c_str(), (int32)intPart );
-                        propName.resize( basePropSize );
-                        propName.a( "_uv_max_x_fract" );
-                        setProperty( kNoTid, propName.c_str(), (int32)( fractPart * 100000.0f ) );
-
-                        fractPart = modff( (float)uvMax.y, &intPart );
-                        propName.resize( basePropSize );
-                        propName.a( "_uv_max_y_int" );
-                        setProperty( kNoTid, propName.c_str(), (int32)intPart );
-                        propName.resize( basePropSize );
-                        propName.a( "_uv_max_y_fract" );
-                        setProperty( kNoTid, propName.c_str(), (int32)( fractPart * 100000.0f ) );
+                        propName.a( "_uv_max_y" );
+                        setProperty( kNoTid, propName.c_str(), bit_cast<int32_t>( (float)uvMax.y ) );
 
                         propName.resize( basePropSize );
                         propName.a( "_array_idx" );
@@ -3053,21 +3086,15 @@ namespace Ogre
                         const Light *light = shadowNode->getLightAssociatedWith( shadowMapTexIdx );
                         if( useStaticBranchShadowMapLights )
                         {
-                            fractPart = modff( (float)shadowTexDef->uvLength.x, &intPart );
                             propName.resize( basePropSize );
-                            propName.a( "_uv_length_x_int" );
-                            setProperty( kNoTid, propName.c_str(), (int32)intPart );
-                            propName.resize( basePropSize );
-                            propName.a( "_uv_length_x_fract" );
-                            setProperty( kNoTid, propName.c_str(), (int32)( fractPart * 100000.0f ) );
+                            propName.a( "_uv_length_x" );
+                            setProperty( kNoTid, propName.c_str(),
+                                        bit_cast<int32_t>( (float)shadowTexDef->uvLength.x ) );
 
-                            fractPart = modff( (float)shadowTexDef->uvLength.y, &intPart );
                             propName.resize( basePropSize );
-                            propName.a( "_uv_length_y_int" );
-                            setProperty( kNoTid, propName.c_str(), (int32)intPart );
-                            propName.resize( basePropSize );
-                            propName.a( "_uv_length_y_fract" );
-                            setProperty( kNoTid, propName.c_str(), (int32)( fractPart * 100000.0f ) );
+                            propName.a( "_uv_length_y" );
+                            setProperty( kNoTid, propName.c_str(),
+                                        bit_cast<int32_t>( (float)shadowTexDef->uvLength.y ) );
 
                             if( light->getType() == Light::LT_DIRECTIONAL )
                             {
@@ -3098,23 +3125,15 @@ namespace Ogre
                                 propName.a( "_is_point_light" );
                                 setProperty( kNoTid, propName.c_str(), 1 );
 
-                                fractPart = modff( (float)shadowTexDef->uvLength.x, &intPart );
                                 propName.resize( basePropSize );
-                                propName.a( "_uv_length_x_int" );
-                                setProperty( kNoTid, propName.c_str(), (int32)intPart );
-                                propName.resize( basePropSize );
-                                propName.a( "_uv_length_x_fract" );
+                                propName.a( "_uv_length_x" );
                                 setProperty( kNoTid, propName.c_str(),
-                                             (int32)( fractPart * 100000.0f ) );
+                                             bit_cast<int32_t>( (float)shadowTexDef->uvLength.x ) );
 
-                                fractPart = modff( (float)shadowTexDef->uvLength.y, &intPart );
                                 propName.resize( basePropSize );
-                                propName.a( "_uv_length_y_int" );
-                                setProperty( kNoTid, propName.c_str(), (int32)intPart );
-                                propName.resize( basePropSize );
-                                propName.a( "_uv_length_y_fract" );
+                                propName.a( "_uv_length_y" );
                                 setProperty( kNoTid, propName.c_str(),
-                                             (int32)( fractPart * 100000.0f ) );
+                                             bit_cast<int32_t>( (float)shadowTexDef->uvLength.y ) );
                             }
                             else if( light->getType() == Light::LT_SPOTLIGHT )
                             {

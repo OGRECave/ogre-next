@@ -418,9 +418,9 @@ namespace Ogre
         setProperty( kNoTid, TerraProperty::ZUp, terrainCell->isZUp() );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsTerra::notifyPropertiesMergedPreGenerationStep( const size_t tid )
+    void HlmsTerra::notifyPropertiesMergedPreGenerationStep( const size_t tid, PiecesMap *inOutPieces )
     {
-        HlmsPbs::notifyPropertiesMergedPreGenerationStep( tid );
+        HlmsPbs::notifyPropertiesMergedPreGenerationStep( tid, inOutPieces );
 
         int32 texSlotsStart = 0;
         if( getProperty( tid, HlmsBaseProp::ForwardPlus ) )
