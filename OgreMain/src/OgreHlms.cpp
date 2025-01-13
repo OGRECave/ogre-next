@@ -3089,12 +3089,12 @@ namespace Ogre
                             propName.resize( basePropSize );
                             propName.a( "_uv_length_x" );
                             setProperty( kNoTid, propName.c_str(),
-                                        bit_cast<int32_t>( (float)shadowTexDef->uvLength.x ) );
+                                         bit_cast<int32_t>( (float)shadowTexDef->uvLength.x ) );
 
                             propName.resize( basePropSize );
                             propName.a( "_uv_length_y" );
                             setProperty( kNoTid, propName.c_str(),
-                                        bit_cast<int32_t>( (float)shadowTexDef->uvLength.y ) );
+                                         bit_cast<int32_t>( (float)shadowTexDef->uvLength.y ) );
 
                             if( light->getType() == Light::LT_DIRECTIONAL )
                             {

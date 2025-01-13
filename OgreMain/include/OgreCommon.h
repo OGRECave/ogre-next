@@ -1172,9 +1172,9 @@ namespace Ogre
     }
 
 #if defined( __has_builtin )
-#	define OGRE_HAS_BUILTIN( x ) __has_builtin( x )
+#    define OGRE_HAS_BUILTIN( x ) __has_builtin( x )
 #else
-#	define OGRE_HAS_BUILTIN( x ) 0
+#    define OGRE_HAS_BUILTIN( x ) 0
 #endif
 
     /// Performs the same as std::bit_cast
@@ -1192,11 +1192,11 @@ namespace Ogre
         return __builtin_bit_cast( Dest, source );
 #else
         static_assert( sizeof( Dest ) == sizeof( Source ),
-                      "bit_cast requires source and destination to be the same size" );
+                       "bit_cast requires source and destination to be the same size" );
         static_assert( std::is_trivially_copyable<Dest>::value,
-                      "bit_cast requires the destination type to be copyable" );
+                       "bit_cast requires the destination type to be copyable" );
         static_assert( std::is_trivially_copyable<Source>::value,
-                      "bit_cast requires the source type to be copyable" );
+                       "bit_cast requires the source type to be copyable" );
         Dest dest;
         memcpy( &dest, &source, sizeof( dest ) );
         return dest;
