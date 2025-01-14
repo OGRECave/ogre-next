@@ -117,13 +117,15 @@ namespace Ogre
     //---------------------------------------------------------------------
     RenderQueue::~RenderQueue()
     {
-        delete mCommandBuffer;
-
         _releaseManualHardwareResources();
+
+        delete mCommandBuffer;
     }
     //-----------------------------------------------------------------------
     void RenderQueue::_releaseManualHardwareResources()
     {
+        mCommandBuffer->clear();
+
         for( IndirectBufferPacked *buf : mUsedIndirectBuffers )
         {
             if( buf->getMappingState() != MS_UNMAPPED )
