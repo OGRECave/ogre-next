@@ -3,6 +3,7 @@ var class_ogre_1_1_command_buffer =
     [ "CommandBufferExecuteFunc", "class_ogre_1_1_command_buffer.html#a693cfb8ae0f133e99130f7d3e95c4423", null ],
     [ "CommandBuffer", "class_ogre_1_1_command_buffer.html#a0fb2dffbbf688486ea25ffa30bed47ed", null ],
     [ "addCommand", "class_ogre_1_1_command_buffer.html#a0ae1b9b9301c441f8be79ddcd371c674", null ],
+    [ "clear", "class_ogre_1_1_command_buffer.html#a2c9f5e0db00c8efbc48f31f57e390da5", null ],
     [ "execute", "class_ogre_1_1_command_buffer.html#a747bcd5af8a293274aefe8dca5f0d40c", null ],
     [ "getCommandFromOffset", "class_ogre_1_1_command_buffer.html#a234ba12e303ea02601a5e155d3a09e34", null ],
     [ "getCommandOffset", "class_ogre_1_1_command_buffer.html#adf9234bc43e0aef812f043cdc4ccae29", null ],
