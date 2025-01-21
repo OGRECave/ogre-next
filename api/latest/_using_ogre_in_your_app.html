@@ -110,15 +110,15 @@ $(document).ready(function(){initNavTree('_using_ogre_in_your_app.html',''); ini
 </div>
 <div class="textblock"><h1><a class="anchor" id="UsingOgreInYourAppOverview"></a>
 Overview</h1>
-<p>We'll setup an application that uses <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>. For that, we'll use the Demo Framework that comes with the samples as a starting point.</p>
-<p>For <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.1 to work correctly, you'll need to register Hlms implementations. We provide PBS (Physically Based Shading) and Unlit implementations for you to use out of the box. These implementations will require you to include their data folders, it's not just header and libraries.</p>
+<p>We'll setup an application that uses OgreNext. For that, we'll use the Demo Framework that comes with the samples as a starting point.</p>
+<p>For OgreNext to work correctly, you'll need to register Hlms implementations. We provide PBS (Physically Based Shading) and Unlit implementations for you to use out of the box. These implementations will require you to include their data folders, it's not just header and libraries.</p>
 <p>You will need to:</p><ul>
 <li>Include OgreMain/include</li>
 <li>Include Components/Hlms/Common/include</li>
 <li>Include Components/Hlms/Pbs/include</li>
 <li>Include Components/Hlms/Unlit/include</li>
-<li>Include build/Release/include (that's where OgreBuildSettings.h is)</li>
-<li>Add the link path build/Release/lib/</li>
+<li>Include build/Release/include (that's where OgreBuildSettings.h is). This path depends on the platform. On Windows (<a class="el" href="class_visual.html">Visual</a> Studio) it's build/include</li>
+<li>Add the link path build/Release/lib/. This path depends on the platform. On Windows (<a class="el" href="class_visual.html">Visual</a> Studio) it's build/lib/Release</li>
 <li>Link against OgreHlmsPbs.lib</li>
 <li>Link against OgreHlmsUnlit.lib</li>
 <li>Link against OgreMain.lib</li>
@@ -147,7 +147,7 @@ Speeding things up</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Folder   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">build   </td><td class="markdownTableBodyNone">Internally used by CMake. Ignore it. Also likely object and PDB files from your compiler will end up there.    </td></tr>
+<td class="markdownTableBodyNone">build   </td><td class="markdownTableBodyNone">Internally used by CMake. That's where the solution/project file for <a class="el" href="class_visual.html">Visual</a> Studio is stored (or makefiles for GNU Make, etc). Also likely object and PDB files from your compiler will end up there.    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">bin   </td><td class="markdownTableBodyNone">That's where your binaries will be generated. Your binaries will actually be in bin/Release bin/Debug, etc.    </td></tr>
 <tr class="markdownTableRowOdd">
