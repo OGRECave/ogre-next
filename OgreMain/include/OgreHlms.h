@@ -513,8 +513,8 @@ namespace Ogre
         virtual const HlmsCache *createShaderCacheEntry( uint32           renderableHash,
                                                          const HlmsCache &passCache, uint32 finalHash,
                                                          const QueuedRenderable &queuedRenderable,
-                                                         HlmsCache              *reservedStubEntry,
-                                                         size_t                  threadIdx );
+                                                         HlmsCache *reservedStubEntry, uint64 deadline,
+                                                         size_t threadIdx );
 
         enum PropertiesMergeStatus
         {
@@ -936,6 +936,8 @@ namespace Ogre
             See lastReturnedValue from getMaterial()
         @param reservedStubEntry
             The stub cache entry (return value of getMaterial()) to fill.
+        @param deadline
+            Deadline in ms, after which long shader compilation could be skipped to avoid frame stutter.
         @param queuedRenderable
             See getMaterial()
         @param renderableHash
@@ -943,7 +945,7 @@ namespace Ogre
         @param tid
             Thread idx of caller
         */
-        void compileStubEntry( const HlmsCache &passCache, HlmsCache *reservedStubEntry,
+        void compileStubEntry( const HlmsCache &passCache, HlmsCache *reservedStubEntry, uint64 deadline,
                                QueuedRenderable queuedRenderable, uint32 renderableHash,
                                uint32 finalHash, size_t tid );
 

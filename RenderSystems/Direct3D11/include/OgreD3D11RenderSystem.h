@@ -264,7 +264,7 @@ namespace Ogre
         void _setTextureBlendMode( size_t unit, const LayerBlendModeEx &bm ) override;
         void _setTextureMatrix( size_t unit, const Matrix4 &xform ) override;
 
-        void _hlmsPipelineStateObjectCreated( HlmsPso *newPso ) override;
+        bool _hlmsPipelineStateObjectCreated( HlmsPso *newPso, uint64 deadline ) override;
         void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso ) override;
         void _hlmsMacroblockCreated( HlmsMacroblock *newBlock ) override;
         void _hlmsMacroblockDestroyed( HlmsMacroblock *block ) override;

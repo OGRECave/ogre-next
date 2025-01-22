@@ -242,7 +242,8 @@ namespace Ogre
         const HlmsCache *createShaderCacheEntry( uint32 renderableHash, const HlmsCache &passCache,
                                                  uint32                  finalHash,
                                                  const QueuedRenderable &queuedRenderable,
-                                                 HlmsCache *reservedStubEntry, size_t tid ) override;
+                                                 HlmsCache *reservedStubEntry, uint64 deadline,
+                                                 size_t tid ) override;
 
         HlmsDatablock *createDatablockImpl( IdString datablockName, const HlmsMacroblock *macroblock,
                                             const HlmsBlendblock *blendblock,

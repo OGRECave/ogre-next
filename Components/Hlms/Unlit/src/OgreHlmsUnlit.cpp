@@ -208,12 +208,13 @@ namespace Ogre
     const HlmsCache *HlmsUnlit::createShaderCacheEntry( uint32 renderableHash,
                                                         const HlmsCache &passCache, uint32 finalHash,
                                                         const QueuedRenderable &queuedRenderable,
-                                                        HlmsCache *reservedStubEntry, const size_t tid )
+                                                        HlmsCache *reservedStubEntry, uint64 deadline,
+                                                        const size_t tid )
     {
         OgreProfileExhaustive( "HlmsUnlit::createShaderCacheEntry" );
 
         const HlmsCache *retVal = Hlms::createShaderCacheEntry(
-            renderableHash, passCache, finalHash, queuedRenderable, reservedStubEntry, tid );
+            renderableHash, passCache, finalHash, queuedRenderable, reservedStubEntry, deadline, tid );
 
         if( mShaderProfile != "glsl" )
         {
@@ -730,7 +731,7 @@ namespace Ogre
         const uint32 hash = uint32( it - mPassCache.begin() ) << HlmsBits::PassShift;
 
         // Fill the buffers
-        HlmsCache retVal( hash, mType, HlmsPso() );
+        HlmsCache retVal( hash, mType, HLMS_CACHE_FLAGS_NONE, HlmsPso() );
         retVal.setProperties = mT[kNoTid].setProperties;
         retVal.pso.pass = passCache.passPso;
 

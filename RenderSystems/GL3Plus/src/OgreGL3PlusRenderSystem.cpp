@@ -1670,7 +1670,7 @@ namespace Ogre
             glMemoryBarrier( barriers );
     }
 
-    void GL3PlusRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newBlock )
+    bool GL3PlusRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newBlock, uint64 deadline )
     {
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         debugLogPso( newBlock );
@@ -1766,6 +1766,7 @@ namespace Ogre
         }
 
         newBlock->rsData = pso;
+        return true;
     }
 
     void GL3PlusRenderSystem::_hlmsPipelineStateObjectDestroyed( HlmsPso *pso )

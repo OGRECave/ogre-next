@@ -65,7 +65,7 @@ namespace Ogre
     const HlmsCache *HlmsLowLevel::createShaderCacheEntry( uint32 renderableHash,
                                                            const HlmsCache &passCache, uint32 finalHash,
                                                            const QueuedRenderable &queuedRenderable,
-                                                           HlmsCache *reservedStubEntry,
+                                                           HlmsCache *reservedStubEntry, uint64 deadline,
                                                            const size_t tid )
     {
         Renderable *renderable = queuedRenderable.renderable;
@@ -130,7 +130,7 @@ namespace Ogre
 
         applyStrongMacroblockRules( pso );
 
-        mRenderSystem->_hlmsPipelineStateObjectCreated( &pso );
+        mRenderSystem->_hlmsPipelineStateObjectCreated( &pso, (uint64)-1 );
 
         if( reservedStubEntry )
         {

@@ -1593,7 +1593,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newPso )
+    bool MetalRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newPso, uint64 deadline )
     {
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         debugLogPso( newPso );
@@ -1774,6 +1774,7 @@ namespace Ogre
         }
 
         newPso->rsData = metalPso;
+        return true;
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_hlmsPipelineStateObjectDestroyed( HlmsPso *pso )

@@ -379,7 +379,7 @@ namespace Ogre
         void endCopyEncoder() override;
         void executeResourceTransition( const ResourceTransitionArray &rstCollection ) override;
 
-        void _hlmsPipelineStateObjectCreated( HlmsPso *newPso ) override;
+        bool _hlmsPipelineStateObjectCreated( HlmsPso *newPso, uint64 deadline ) override;
         void _hlmsPipelineStateObjectDestroyed( HlmsPso *pos ) override;
         void _hlmsMacroblockCreated( HlmsMacroblock *newBlock ) override;
         void _hlmsMacroblockDestroyed( HlmsMacroblock *block ) override;

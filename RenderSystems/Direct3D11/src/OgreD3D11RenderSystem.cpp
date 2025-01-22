@@ -2155,7 +2155,7 @@ namespace Ogre
         mStencilRef = refValue;
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *block )
+    bool D3D11RenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *block, uint64 deadline )
     {
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         debugLogPso( block );
@@ -2352,6 +2352,7 @@ namespace Ogre
         }
 
         block->rsData = pso;
+        return true;
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_hlmsPipelineStateObjectDestroyed( HlmsPso *pso )

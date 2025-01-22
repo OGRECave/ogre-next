@@ -321,7 +321,7 @@ namespace Ogre
          */
         void _setViewport( Viewport *vp );
 
-        virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );
+        virtual bool _hlmsPipelineStateObjectCreated( HlmsPso *newPso, uint64 deadline );
         virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso );
         virtual void _hlmsMacroblockCreated( HlmsMacroblock *newBlock );
         virtual void _hlmsMacroblockDestroyed( HlmsMacroblock *block );

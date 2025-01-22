@@ -590,12 +590,13 @@ namespace Ogre
     const HlmsCache *HlmsPbs::createShaderCacheEntry( uint32 renderableHash, const HlmsCache &passCache,
                                                       uint32 finalHash,
                                                       const QueuedRenderable &queuedRenderable,
-                                                      HlmsCache *reservedStubEntry, const size_t tid )
+                                                      HlmsCache *reservedStubEntry, uint64 deadline,
+                                                      const size_t tid )
     {
         OgreProfileExhaustive( "HlmsPbs::createShaderCacheEntry" );
 
         const HlmsCache *retVal = Hlms::createShaderCacheEntry(
-            renderableHash, passCache, finalHash, queuedRenderable, reservedStubEntry, tid );
+            renderableHash, passCache, finalHash, queuedRenderable, reservedStubEntry, deadline, tid );
 
         if( mShaderProfile != "glsl" )
         {

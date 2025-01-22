@@ -89,6 +89,8 @@ namespace Ogre
         LightweightMutex     mMutex;
         Semaphore            mSemaphore;
         std::atomic<bool>    mKeepCompiling;
+        uint64               mCompilationDeadline;           // 16ms in the future, or (uint64)-1
+        std::atomic<uint64>  mCompilationIncompleteCounter;  // at least one was skipped
 
         bool               mExceptionFound;     // GUARDED_BY( mMutex )
         std::exception_ptr mThreadedException;  // GUARDED_BY( mMutex )
@@ -99,11 +101,16 @@ namespace Ogre
         inline void pushRequest( const Request &&request )
         {
             ScopedLock lock( mMutex );
+            request.reservedStubEntry->flags = HLMS_CACHE_FLAGS_COMPILATION_REQUESTED;
             mRequests.emplace_back( request );
             mSemaphore.increment();
         }
 
-        inline void pushWarmUpRequest( const Request &&request ) { mRequests.emplace_back( request ); }
+        inline void pushWarmUpRequest( const Request &&request )
+        {
+            request.reservedStubEntry->flags = HLMS_CACHE_FLAGS_COMPILATION_REQUESTED;
+            mRequests.emplace_back( request );
+        }
 
         /** Starts worker threads (job queue) so they start accepting work every time pushRequest()
             gets called and will keep compiling those shaders until stopAndWait() is called.

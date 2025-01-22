@@ -864,6 +864,8 @@ namespace Ogre
 
             if( extensionName == VK_KHR_MAINTENANCE2_EXTENSION_NAME )
                 deviceExtensions.push_back( VK_KHR_MAINTENANCE2_EXTENSION_NAME );
+            else if( extensionName == VK_EXT_PIPELINE_CREATION_CACHE_CONTROL_EXTENSION_NAME )
+                deviceExtensions.push_back( VK_EXT_PIPELINE_CREATION_CACHE_CONTROL_EXTENSION_NAME );
             else if( extensionName == VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME )
                 deviceExtensions.push_back( VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME );
             else if( extensionName == VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME )

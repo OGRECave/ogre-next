@@ -235,6 +235,8 @@ namespace Ogre
         mInterruptedRenderCommandEncoder( false ),
         mValidationError( false )
     {
+        mPsoRequestsTimeout = 16;  // ms
+
         memset( &mGlobalTable, 0, sizeof( mGlobalTable ) );
         mGlobalTable.reset();
 
@@ -1956,23 +1958,32 @@ namespace Ogre
             executeRenderPassDescriptorDelayedActions( false );
         }
 
+        // check, if we deferred pipeline compilation due to the skipped deadline
+        // TODO: set some fallback? Dummy here, or more clever at compilation site?
+        if( pso && !pso->rsData )
+            pso = 0;
+
         if( mPso != pso )
         {
-            VulkanRootLayout *oldRootLayout = 0;
-            if( mPso )
-                oldRootLayout = reinterpret_cast<VulkanHlmsPso *>( mPso->rsData )->rootLayout;
-
-            VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
-            OGRE_ASSERT_LOW( pso && pso->rsData );
-            VulkanHlmsPso *vulkanPso = reinterpret_cast<VulkanHlmsPso *>( pso->rsData );
-            vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanPso->pso );
-            mPso = pso;
-
-            if( vulkanPso && vulkanPso->rootLayout != oldRootLayout )
+            if( pso )
             {
-                mGlobalTable.setAllDirty();
-                mTableDirty = true;
+                VulkanRootLayout *oldRootLayout = 0;
+                if( mPso )
+                    oldRootLayout = reinterpret_cast<VulkanHlmsPso *>( mPso->rsData )->rootLayout;
+
+                OGRE_ASSERT_LOW( pso->rsData );
+                VulkanHlmsPso *vulkanPso = reinterpret_cast<VulkanHlmsPso *>( pso->rsData );
+                VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
+                vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanPso->pso );
+
+                if( vulkanPso->rootLayout != oldRootLayout )
+                {
+                    mGlobalTable.setAllDirty();
+                    mTableDirty = true;
+                }
             }
+
+            mPso = pso;
         }
     }
     //-------------------------------------------------------------------------
@@ -1982,16 +1993,14 @@ namespace Ogre
 
         if( mComputePso != pso )
         {
-            VulkanRootLayout *oldRootLayout = 0;
-            if( mComputePso )
-                oldRootLayout = reinterpret_cast<VulkanHlmsPso *>( mComputePso->rsData )->rootLayout;
-
-            VulkanHlmsPso *vulkanPso = 0;
-
             if( pso )
             {
+                VulkanRootLayout *oldRootLayout = 0;
+                if( mComputePso )
+                    oldRootLayout = reinterpret_cast<VulkanHlmsPso *>( mComputePso->rsData )->rootLayout;
+
                 OGRE_ASSERT_LOW( pso->rsData );
-                vulkanPso = reinterpret_cast<VulkanHlmsPso *>( pso->rsData );
+                VulkanHlmsPso *vulkanPso = reinterpret_cast<VulkanHlmsPso *>( pso->rsData );
                 VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
                 vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, vulkanPso->pso );
 
@@ -2082,6 +2091,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const CbDrawCallIndexed *cmd )
     {
+        // check, if we deferred pipeline compilation due to the skipped deadline
+        if( mPso == nullptr )
+            return;
+
         flushRootLayout();
 
         VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
@@ -2092,6 +2105,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const CbDrawCallStrip *cmd )
     {
+        // check, if we deferred pipeline compilation due to the skipped deadline
+        if( mPso == nullptr )
+            return;
+
         flushRootLayout();
 
         VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
@@ -2102,6 +2119,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_renderEmulated( const CbDrawCallIndexed *cmd )
     {
+        // check, if we deferred pipeline compilation due to the skipped deadline
+        if( mPso == nullptr )
+            return;
+
         flushRootLayout();
 
         CbDrawIndexed *drawCmd = reinterpret_cast<CbDrawIndexed *>( mSwIndirectBufferPtr +
@@ -2120,6 +2141,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_renderEmulated( const CbDrawCallStrip *cmd )
     {
+        // check, if we deferred pipeline compilation due to the skipped deadline
+        if( mPso == nullptr )
+            return;
+
         flushRootLayout();
 
         CbDrawStrip *drawCmd =
@@ -2198,6 +2223,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const v1::CbDrawCallIndexed *cmd )
     {
+        // check, if we deferred pipeline compilation due to the skipped deadline
+        if( mPso == nullptr )
+            return;
+
         flushRootLayout();
 
         VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
@@ -2207,6 +2236,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const v1::CbDrawCallStrip *cmd )
     {
+        // check, if we deferred pipeline compilation due to the skipped deadline
+        if( mPso == nullptr )
+            return;
+
         flushRootLayout();
 
         VkCommandBuffer cmdBuffer = mDevice->mGraphicsQueue.getCurrentCmdBuffer();
@@ -2216,6 +2249,10 @@ namespace Ogre
 
     void VulkanRenderSystem::_render( const v1::RenderOperation &op )
     {
+        // check, if we deferred pipeline compilation due to the skipped deadline
+        if( mPso == nullptr )
+            return;
+
         flushRootLayout();
 
         // Call super class.
@@ -3125,7 +3162,7 @@ namespace Ogre
         mImageBarriers.clear();
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newPso )
+    bool VulkanRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newPso, uint64 deadline )
     {
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         debugLogPso( newPso );
@@ -3412,6 +3449,12 @@ namespace Ogre
         VkGraphicsPipelineCreateInfo pipeline;
         makeVkStruct( pipeline, VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO );
 
+        pipeline.flags =
+            deadline != (uint64)-1 &&
+                    (int64)( Root::getSingleton().getTimer()->getMilliseconds() - deadline ) > 0 &&
+                    mDevice->hasDeviceExtension( VK_EXT_PIPELINE_CREATION_CACHE_CONTROL_EXTENSION_NAME )
+                ? VK_PIPELINE_CREATE_FAIL_ON_PIPELINE_COMPILE_REQUIRED_BIT_EXT
+                : 0;
         pipeline.layout = layout;
         pipeline.stageCount = static_cast<uint32>( numShaderStages );
         pipeline.pStages = shaderStages;
@@ -3433,6 +3476,9 @@ namespace Ogre
         VkPipeline vulkanPso = 0;
         VkResult result = vkCreateGraphicsPipelines( mDevice->mDevice, mDevice->mPipelineCache, 1u,
                                                      &pipeline, 0, &vulkanPso );
+        if( result == VK_PIPELINE_COMPILE_REQUIRED_EXT )
+            return false;
+
         checkVkResult( mDevice, result, "vkCreateGraphicsPipelines" );
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
@@ -3459,6 +3505,7 @@ namespace Ogre
 
         VulkanHlmsPso *pso = new VulkanHlmsPso( vulkanPso, rootLayout );
         newPso->rsData = pso;
+        return true;
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_hlmsPipelineStateObjectDestroyed( HlmsPso *pso )

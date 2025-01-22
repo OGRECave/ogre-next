@@ -1181,7 +1181,7 @@ namespace Ogre {
 #endif
     }
 
-    void GLES2RenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newBlock )
+    bool GLES2RenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newBlock, uint64 deadline )
     {
         GLES2HlmsPso *pso = new GLES2HlmsPso();
         memset( pso, 0, sizeof(GLES2HlmsPso) );
@@ -1257,6 +1257,7 @@ namespace Ogre {
         }
         
         newBlock->rsData = pso;
+        return true;
     }
 
     void GLES2RenderSystem::_hlmsPipelineStateObjectDestroyed( HlmsPso *pso )
