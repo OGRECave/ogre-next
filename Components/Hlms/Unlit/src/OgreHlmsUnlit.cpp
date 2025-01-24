@@ -578,9 +578,13 @@ namespace Ogre
             setProperty( kNoTid, UnlitProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlit::notifyPropertiesMergedPreGenerationStep( const size_t tid, PiecesMap *inOutPieces )
+    Hlms::PropertiesMergeStatus HlmsUnlit::notifyPropertiesMergedPreGenerationStep(
+        const size_t tid, PiecesMap *inOutPieces )
     {
-        Hlms::notifyPropertiesMergedPreGenerationStep( tid, inOutPieces );
+        PropertiesMergeStatus status = Hlms::notifyPropertiesMergedPreGenerationStep( tid, inOutPieces );
+
+        if( status == PropertiesMergeStatusError )
+            return status;
 
         const int32 samplerStateStart = getProperty( tid, UnlitProperty::SamplerStateStart );
         int32 texUnit = samplerStateStart;
@@ -623,6 +627,8 @@ namespace Ogre
             else
                 setProperty( tid, "particleSystemGpuData", mParticleSystemSlot );
         }
+
+        return status;
     }
     //-----------------------------------------------------------------------------------
     HlmsCache HlmsUnlit::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,

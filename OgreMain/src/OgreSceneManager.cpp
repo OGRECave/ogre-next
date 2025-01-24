@@ -4419,6 +4419,31 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
+    String SceneManager::deduceMovableObjectName( const MovableObject *movableObject )
+    {
+        String meshName = movableObject->getName();
+        if( !meshName.empty() )
+            return meshName;
+
+        {
+            const Item *item = dynamic_cast<const Item *>( movableObject );
+            if( item && item->getMesh() )
+                return item->getMesh()->getName();
+        }
+        {
+            const v1::Entity *entity = dynamic_cast<const v1::Entity *>( movableObject );
+            if( entity && entity->getMesh() )
+                return entity->getMesh()->getName();
+        }
+        {
+            const ParticleSystem2 *ps2 = dynamic_cast<const ParticleSystem2 *>( movableObject );
+            if( ps2 && ps2->getParticleSystemDef() )
+                return ps2->getParticleSystemDef()->getName();
+        }
+
+        return "[Unknown MovableObject type: " + movableObject->getMovableType() + "]";
+    }
+    //---------------------------------------------------------------------
     void SceneManager::_renderSingleObject( Renderable *pRend, const MovableObject *pMovableObject,
                                             bool casterPass, bool dualParaboloid )
     {

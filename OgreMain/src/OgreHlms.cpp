@@ -2551,7 +2551,26 @@ namespace Ogre
 
         ShaderCodeCache codeCache( renderableCache.pieces );
 
-        notifyPropertiesMergedPreGenerationStep( tid, codeCache.mergedCache.pieces );
+        const PropertiesMergeStatus status =
+            notifyPropertiesMergedPreGenerationStep( tid, codeCache.mergedCache.pieces );
+        if( status != PropertiesMergeStatusOk )
+        {
+            const HlmsDatablock *datablock = queuedRenderable.renderable->getDatablock();
+            const String meshName =
+                SceneManager::deduceMovableObjectName( queuedRenderable.movableObject );
+
+            LogManager::getSingleton().logMessage(
+                "[tid = " + StringConverter::toString( tid ) + "] datablock '" +
+                *datablock->getNameStr() + "' from MovableObject '" + meshName +
+                "' has issues. See previous log entries matching the same tid." );
+
+            if( status == PropertiesMergeStatusError )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                             "Errors encountered while generating shaders. See Ogre.log",
+                             "Hlms::createShaderCacheEntry" );
+            }
+        }
         mListener->propertiesMergedPreGenerationStep( this, passCache, renderableCache.setProperties,
                                                       renderableCache.pieces, mT[tid].setProperties,
                                                       queuedRenderable, tid );
@@ -2660,7 +2679,8 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::notifyPropertiesMergedPreGenerationStep( const size_t tid, PiecesMap *inOutPieces )
+    Hlms::PropertiesMergeStatus Hlms::notifyPropertiesMergedPreGenerationStep( const size_t tid,
+                                                                               PiecesMap *inOutPieces )
     {
         if( getProperty( tid, HlmsBaseProp::AlphaToCoverage ) == HlmsBlendblock::A2cEnabledMsaaOnly )
         {
@@ -2715,6 +2735,8 @@ namespace Ogre
                 }
             }
         }
+
+        return PropertiesMergeStatusOk;
     }
     //-----------------------------------------------------------------------------------
     uint16 Hlms::calculateHashForV1( Renderable *renderable )

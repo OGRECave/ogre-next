@@ -516,6 +516,13 @@ namespace Ogre
                                                          HlmsCache              *reservedStubEntry,
                                                          size_t                  threadIdx );
 
+        enum PropertiesMergeStatus
+        {
+            PropertiesMergeStatusOk,
+            PropertiesMergeStatusWarning,
+            PropertiesMergeStatusError
+        };
+
         /** This function gets called right before starting parsing all templates, and after
             the renderable properties have been merged with the pass properties.
 
@@ -527,8 +534,12 @@ namespace Ogre
             An array of size inOutPieces[NumShaderTypes]. Can be modified.
             Warning: Do not later modify these pieces, or else HlmsDiskCache may be unable to
             recompile the cache from outdated templates.
+        @return
+            If inconsistencies or errors were encountered.
+            Returning PropertiesMergeStatusError will raise an exception.
         */
-        virtual void notifyPropertiesMergedPreGenerationStep( size_t tid, PiecesMap *inOutPieces );
+        virtual PropertiesMergeStatus notifyPropertiesMergedPreGenerationStep( size_t     tid,
+                                                                               PiecesMap *inOutPieces );
 
         virtual HlmsDatablock *createDatablockImpl( IdString              datablockName,
                                                     const HlmsMacroblock *macroblock,

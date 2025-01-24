@@ -113,7 +113,8 @@ namespace Ogre
         void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces,
                                         const PiecesMap *normalPassPieces ) override;
 
-        void notifyPropertiesMergedPreGenerationStep( size_t tid, PiecesMap *inOutPieces ) override;
+        PropertiesMergeStatus notifyPropertiesMergedPreGenerationStep( size_t     tid,
+                                                                       PiecesMap *inOutPieces ) override;
 
         void destroyAllBuffers() override;
 
