@@ -97,6 +97,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_scene_manager.html','')
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="class_ogre_1_1_scene_manager-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::SceneManager Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group___core.html">Core</a> &#124; <a class="el" href="group___component.html">Component</a> &raquo; <a class="el" href="group___scene.html">Scene</a></div></div></div>
@@ -904,6 +905,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a57e0523432c6e5133ff4fc251111a60e inherit pub_methods_class_ogre_1_1_id_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ae22596b5bd2a3faf2958ab3d109d1f inherit pub_methods_class_ogre_1_1_id_object" id="r_a0ae22596b5bd2a3faf2958ab3d109d1f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#a0ae22596b5bd2a3faf2958ab3d109d1f">operator()</a> (const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> *left, const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> *right)</td></tr>
 <tr class="separator:a0ae22596b5bd2a3faf2958ab3d109d1f inherit pub_methods_class_ogre_1_1_id_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a023b133be3c71b3696dbdf5050d14179" id="r_a023b133be3c71b3696dbdf5050d14179"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a023b133be3c71b3696dbdf5050d14179">deduceMovableObjectName</a> (const <a class="el" href="class_ogre_1_1_movable_object.html">MovableObject</a> *movableObject)</td></tr>
+<tr class="memdesc:a023b133be3c71b3696dbdf5050d14179"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deduces a debug-friendly name for this <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a>.  <br /></td></tr>
+<tr class="separator:a023b133be3c71b3696dbdf5050d14179"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -4135,6 +4142,42 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a023b133be3c71b3696dbdf5050d14179" name="a023b133be3c71b3696dbdf5050d14179"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a023b133be3c71b3696dbdf5050d14179">&#9670;&#160;</a></span>deduceMovableObjectName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> Ogre::SceneManager::deduceMovableObjectName </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_ogre_1_1_movable_object.html">MovableObject</a> *&#160;</td>
+          <td class="paramname"><em>movableObject</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Deduces a debug-friendly name for this <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a>. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not optimized for speed, but for debugging and error reporting. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">movableObject</td><td>Object we want the name from (i.e. the mesh it's based on). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A user-friendly name. If it could not be deduced, a generic name is used instead. </dd></dl>
 
 </div>
 </div>

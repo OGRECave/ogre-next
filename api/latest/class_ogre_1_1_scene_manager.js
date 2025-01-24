@@ -120,6 +120,7 @@ var class_ogre_1_1_scene_manager =
     [ "createTagPoint", "class_ogre_1_1_scene_manager.html#ab289e99dd8aad3fd80deccfc93eb60b3", null ],
     [ "createWireAabb", "class_ogre_1_1_scene_manager.html#af799e7b51fb404a358944fe63ab7672a", null ],
     [ "cullLights", "class_ogre_1_1_scene_manager.html#a97b975559cf03c869e70fdcbe38c07ce", null ],
+    [ "deduceMovableObjectName", "class_ogre_1_1_scene_manager.html#a023b133be3c71b3696dbdf5050d14179", null ],
     [ "defragmentMemoryPools", "class_ogre_1_1_scene_manager.html#ad6bdefcfe64f080519d42f7082c232c1", null ],
     [ "destroyAllAnimations", "class_ogre_1_1_scene_manager.html#a7c69befc9541ac1d62f8514444ab4382", null ],
     [ "destroyAllAnimationStates", "class_ogre_1_1_scene_manager.html#a7d1f49ae1e1beaa6016873ecf13d2086", null ],
