@@ -411,8 +411,10 @@ namespace Ogre
             Range is [firstRq; lastRq)
         @param lastRq
             See firstRq
+        @return
+            The created shadow node def in case you want to do further changes to it.
         */
-        static void createShadowNodeWithSettings(
+        static CompositorShadowNodeDef *createShadowNodeWithSettings(
             CompositorManager2                     *compositorManager,                    //
             const RenderSystemCapabilities         *capabilities,                         //
             const String                           &shadowNodeName,                       //

@@ -987,7 +987,7 @@ namespace Ogre
         supportedLightTypes |= 1u << lightType;
     }
     //-----------------------------------------------------------------------------------
-    void ShadowNodeHelper::createShadowNodeWithSettings(
+    CompositorShadowNodeDef *ShadowNodeHelper::createShadowNodeWithSettings(
         CompositorManager2 *compositorManager,                 //
         const RenderSystemCapabilities *capabilities,          //
         const String &shadowNodeName,                          //
@@ -1443,5 +1443,7 @@ namespace Ogre
                 }
             }
         }
+
+        return shadowNodeDef;
     }
 }  // namespace Ogre
