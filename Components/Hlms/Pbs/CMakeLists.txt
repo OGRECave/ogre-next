@@ -9,7 +9,6 @@
 
 # Configure Ogre HLMS Physically Based Shading for OpenGL 3.3+ and D3D11 build
 
-PROJECT(${OGRE_NEXT}HlmsPbs)
 
 file(
 	GLOB HEADER_FILES

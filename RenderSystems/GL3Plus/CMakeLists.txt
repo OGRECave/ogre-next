@@ -33,7 +33,7 @@ if( OGRE_GLSUPPORT_USE_COCOA )
 	file(GLOB PLATFORM_SOURCES "src/windowing/OSX/*.mm")
 	set( PLATFORM_HEADERS_OSX ${PLATFORM_HEADERS} )
 
-	include_directories( include/windowing/OSX "${OGRE_SOURCE_DIR}/OgreMain/include/OSX" )
+	include_directories( include/windowing/OSX "${PROJECT_SOURCE_DIR}/OgreMain/include/OSX" )
 	if( OGRE_GLSUPPORT_NUM_INTERFACES EQUAL 1 )
 		include_directories( src/windowing/OSX )
 	endif()

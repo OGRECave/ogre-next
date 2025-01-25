@@ -11,7 +11,6 @@
 # Overlay optional component
 ############################################################
 
-PROJECT(${OGRE_NEXT}Overlay)
 
 # define header and source files for the library
 file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
@@ -22,7 +21,7 @@ add_definitions(-DOGRE_OVERLAY_EXPORTS -D_MT -D_USRDLL)
 
 # include headers
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-include_directories(${OGRE_SOURCE_DIR}/OgreMain/include)
+include_directories(${PROJECT_SOURCE_DIR}/OgreMain/include)
 
 ogre_add_component_include_dir(Hlms/Unlit)
 #ogre_add_component_include_dir(Hlms/UnlitMobile)
