@@ -1,5 +1,7 @@
 <map id="Ogre::D3D11StereoDriverNVIDIA" name="Ogre::D3D11StereoDriverNVIDIA">
-<area shape="rect" id="node1" title="Interface of the NVIDIA stereo driver." alt="" coords="5,155,239,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_d3_d11_stereo_driver_impl.html" title="Virtual interface of the stereo driver." alt="" coords="14,80,230,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="54,5,190,32"/>
+<area shape="rect" id="Node000001" title="Interface of the NVIDIA stereo driver." alt="" coords="5,152,239,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_d3_d11_stereo_driver_impl.html" title="Virtual interface of the stereo driver." alt="" coords="14,79,230,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,118,125,152,119,152,119,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="35,5,209,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="125,44,125,79,119,79,119,44"/>
 </map>

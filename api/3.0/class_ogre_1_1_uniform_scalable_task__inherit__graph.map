@@ -1,4 +1,5 @@
 <map id="Ogre::UniformScalableTask" name="Ogre::UniformScalableTask">
-<area shape="rect" id="node1" title="A uniform task is a highly parallelizable task that can be divided in many threads where all threads ..." alt="" coords="5,5,204,32"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_forward_clustered.html" title="Implementation of Clustered Forward Shading." alt="" coords="17,80,192,107"/>
+<area shape="rect" id="Node000001" title="A uniform task is a highly parallelizable task that can be divided in many threads where all threads ..." alt="" coords="5,5,204,31"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_forward_clustered.html" title="Implementation of Clustered Forward Shading." alt="" coords="17,79,192,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,44,107,79,102,79,102,44"/>
 </map>

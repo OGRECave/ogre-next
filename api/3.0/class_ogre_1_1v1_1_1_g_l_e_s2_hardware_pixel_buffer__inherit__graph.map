@@ -1,6 +1,9 @@
 <map id="Ogre::v1::GLES2HardwarePixelBuffer" name="Ogre::v1::GLES2HardwarePixelBuffer">
-<area shape="rect" id="node1" title=" " alt="" coords="118,80,338,121"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_g_l_e_s2_render_buffer.html" title="Renderbuffer surface." alt="" coords="5,169,216,196"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer.html" title="Texture surface." alt="" coords="240,169,453,196"/>
-<area shape="rect" id="node2" title=" " alt="" coords="151,5,305,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="118,79,338,119"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_g_l_e_s2_render_buffer.html" title="Renderbuffer surface." alt="" coords="5,167,216,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="189,129,129,169,126,164,187,124"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer.html" title="Texture surface." alt="" coords="240,167,453,192"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="270,124,331,164,328,169,267,129"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="151,5,305,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="231,44,231,79,225,79,225,44"/>
 </map>

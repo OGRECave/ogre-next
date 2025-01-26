@@ -1,5 +1,7 @@
 <map id="Ogre::AndroidEGLSupport" name="Ogre::AndroidEGLSupport">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,192,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_e_g_l_support.html" title=" " alt="" coords="31,80,167,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_g_l_e_s2_support.html" title=" " alt="" coords="23,5,175,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,152,192,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_e_g_l_support.html" title=" " alt="" coords="31,79,167,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,118,101,152,96,152,96,118"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_g_l_e_s2_support.html" title=" " alt="" coords="23,5,175,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,44,101,79,96,79,96,44"/>
 </map>

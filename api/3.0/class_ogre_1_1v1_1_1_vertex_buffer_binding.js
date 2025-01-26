@@ -1,12 +1,12 @@
 var class_ogre_1_1v1_1_1_vertex_buffer_binding =
 [
-    [ "BindingIndexMap", "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#a5ffdad51a85c2e31b600d2e28913d5f6", null ],
-    [ "VertexBufferBindingMap", "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#a5ff118fdcd8ae36b59f3f09a2a695c89", null ],
+    [ "BindingIndexMap", "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#af2406446fa3c141843bd190a9f2602c9", null ],
+    [ "VertexBufferBindingMap", "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#aa3d4249b39f9910d0a84b5b17d09bb6c", null ],
     [ "VertexBufferBinding", "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#a8590d4c220a3968e594b9b4fe55a0e28", null ],
     [ "~VertexBufferBinding", "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#ac72c6a85fedd9d22cd7bf7c080ab36f9", null ],
     [ "closeGaps", "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#aaf35db6d7858883f97547833d8c3c206", null ],
-    [ "getBindings", "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#a0c152169a7b35a9038e40f14cd03f86b", null ],
-    [ "getBuffer", "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#ab53b6b19d2c0b591b86b4df7721de343", null ],
+    [ "getBindings", "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#aaa4236d7a7f556292fb1673f95ccd12f", null ],
+    [ "getBuffer", "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#adb7a7e889bece2e2461d90a117ff8394", null ],
     [ "getBufferCount", "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#ab8b3ad33436e1e95c09b3696125a2319", null ],
     [ "getHasInstanceData", "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#af1c791b6ec7a89fd4fd437c7f47e9536", null ],
     [ "getLastBoundIndex", "class_ogre_1_1v1_1_1_vertex_buffer_binding.html#a2ac428f2cfbc09cb957e9389fb08403c", null ],

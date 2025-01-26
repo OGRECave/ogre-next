@@ -6,8 +6,8 @@ var class_ogre_1_1_movable_plane =
     [ "MovablePlane", "class_ogre_1_1_movable_plane.html#ac38be209943579e1f1f416bfee92c771", null ],
     [ "MovablePlane", "class_ogre_1_1_movable_plane.html#a2bf440328cb0e625a2ca550df77d0315", null ],
     [ "~MovablePlane", "class_ogre_1_1_movable_plane.html#abd4226c57d90aa58da213b2aaa28a444", null ],
-    [ "_getDerivedPlane", "class_ogre_1_1_movable_plane.html#a14c68f13c20532f68813103b5103b389", null ],
+    [ "_getDerivedPlane", "class_ogre_1_1_movable_plane.html#a47a98b382cb7babd947817a6007d1241", null ],
     [ "_updateRenderQueue", "class_ogre_1_1_movable_plane.html#a0f836afc2ad723ffc322ab5875cc1204", null ],
-    [ "getBoundingBox", "class_ogre_1_1_movable_plane.html#a430c35c0a33b977284e915620ad866ee", null ],
-    [ "getMovableType", "class_ogre_1_1_movable_plane.html#a9ee0fceafa01f6b89df90243e3c1d81e", null ]
+    [ "getBoundingBox", "class_ogre_1_1_movable_plane.html#acbe5c682e669d9017429f714d2888a42", null ],
+    [ "getMovableType", "class_ogre_1_1_movable_plane.html#aa5836527df24fd8ba7f7aaac5cb105a7", null ]
 ];

@@ -15,7 +15,7 @@ var class_ogre_1_1_material_serializer =
     [ "endSection", "class_ogre_1_1_material_serializer.html#adf543cc3f4c912ef1035f07cc542d78b", null ],
     [ "exportMaterial", "class_ogre_1_1_material_serializer.html#a9738a042ee8b40f84feabd61f89d88a3", null ],
     [ "exportQueued", "class_ogre_1_1_material_serializer.html#aad0415f95d43e60cce716cd3cca59739", null ],
-    [ "getQueuedAsString", "class_ogre_1_1_material_serializer.html#af682adbc3c11a1a4a3de3645604208d1", null ],
+    [ "getQueuedAsString", "class_ogre_1_1_material_serializer.html#a16149e43c20c7285dcdc79eb0a4b3b12", null ],
     [ "queueForExport", "class_ogre_1_1_material_serializer.html#a7f9ca3f37b24546d3e6c659ec19da2e0", null ],
     [ "quoteWord", "class_ogre_1_1_material_serializer.html#aabdeca87659895ccbcb7756f24818739", null ],
     [ "removeListener", "class_ogre_1_1_material_serializer.html#a110e95db5986af560c8986705132e601", null ],

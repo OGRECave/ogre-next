@@ -1,6 +1,9 @@
 <map id="Ogre::FileSystemArchiveFactory" name="Ogre::FileSystemArchiveFactory">
-<area shape="rect" id="node1" title="Specialisation of ArchiveFactory for FileSystem files." alt="" coords="94,155,323,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_archive_factory.html" title="Abstract factory class, archive codec plugins can register concrete subclasses of this." alt="" coords="130,80,287,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_factory_obj.html" title=" " alt="" coords="5,5,215,32"/>
-<area shape="rect" id="node4" title=" " alt="" coords="239,5,375,32"/>
+<area shape="rect" id="Node000001" title="Specialisation of ArchiveFactory for FileSystem files." alt="" coords="103,152,333,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_archive_factory.html" title="Abstract factory class, archive codec plugins can register concrete subclasses of this." alt="" coords="139,79,297,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="221,118,221,152,215,152,215,118"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_factory_obj.html" title=" " alt="" coords="5,5,215,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="140,36,202,76,199,81,137,40"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="239,5,413,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="299,40,237,81,234,76,296,36"/>
 </map>

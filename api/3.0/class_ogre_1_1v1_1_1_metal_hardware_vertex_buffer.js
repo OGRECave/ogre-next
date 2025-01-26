@@ -5,9 +5,9 @@ var class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer =
     [ "_notifyDeviceStalled", "class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#a467071b2d6acfe339374bcb8c4064280", null ],
     [ "_updateFromShadow", "class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#acb486838eb2b4adea9983de5232a47e0", null ],
     [ "copyData", "class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#a61d33a048fc1ed3cd0e7824fe09b3fa4", null ],
-    [ "getBufferName", "class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#a30ea3edd5d4b8fa064079ef8f787d6d4", null ],
-    [ "getBufferNameForGpuWrite", "class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#ab0d371ae81c6dae84e0b686bebeeae07", null ],
-    [ "getRenderSystemData", "class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#ac29aea433769d93d944a0e5955208a7e", null ],
+    [ "getBufferName", "class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#a8c6d623413f3b29077294ca6c8b5a81f", null ],
+    [ "getBufferNameForGpuWrite", "class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#a4d60e2ef2f815b6f4ecdf7cc5eded64b", null ],
+    [ "getRenderSystemData", "class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#a6db12ff7f3d401b9a4320018e9e50670", null ],
     [ "readData", "class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#ada4c62404662e3d3a22cf9513894bbd9", null ],
     [ "writeData", "class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#a4634f1d6c789220395dce498c172f77f", null ]
 ];

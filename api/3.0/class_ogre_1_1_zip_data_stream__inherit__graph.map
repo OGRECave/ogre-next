@@ -1,5 +1,7 @@
 <map id="Ogre::ZipDataStream" name="Ogre::ZipDataStream">
-<area shape="rect" id="node1" title="Specialisation of DataStream to handle streaming data from zip archives." alt="" coords="5,155,165,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_data_stream.html" title="General purpose class used for encapsulating the reading and writing of data." alt="" coords="16,80,155,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="17,5,153,32"/>
+<area shape="rect" id="Node000001" title="Specialisation of DataStream to handle streaming data from zip archives." alt="" coords="13,152,173,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_data_stream.html" title="General purpose class used for encapsulating the reading and writing of data." alt="" coords="23,79,162,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,118,95,152,90,152,90,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,44,95,79,90,79,90,44"/>
 </map>

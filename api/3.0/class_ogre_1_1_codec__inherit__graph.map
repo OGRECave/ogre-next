@@ -1,12 +1,21 @@
 <map id="Ogre::Codec" name="Ogre::Codec">
-<area shape="rect" id="node1" title="Abstract class that defines a &#39;codec&#39;." alt="" coords="189,157,291,184"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_image_codec2.html" title="Codec specialized in images." alt="" coords="339,157,489,184"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,157,141,184"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_a_s_t_c_codec.html" title="Codec specialized in loading ASTC (ARM Adaptive Scalable Texture Compression) images." alt="" coords="559,5,694,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_d_d_s_codec2.html" title="Codec specialized in loading DDS (Direct Draw Surface) images." alt="" coords="558,56,695,83"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_e_t_c_codec.html" title="Codec specialized in loading ETC (Ericsson Texture Compression) images." alt="" coords="564,107,689,133"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_free_image_codec2.html" title="Codec specialized in images loaded using FreeImage." alt="" coords="537,157,716,184"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_o_i_t_d_codec.html" title="Codec specialized in loading OITD (Ogre Internal Texture Dump) format." alt="" coords="560,208,693,235"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_p_v_r_t_c_codec.html" title="Codec specialized in loading PVRTC (PowerVR) images." alt="" coords="555,259,698,285"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_s_t_b_i_image_codec.html" title="Codec specialized in images loaded using stbi (https://github.com/nothings/stb)." alt="" coords="541,309,712,336"/>
+<area shape="rect" id="Node000001" title="Abstract class that defines a &#39;codec&#39;." alt="" coords="228,153,329,179"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_image_codec2.html" title="Codec specialized in images." alt="" coords="377,153,528,179"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="343,163,377,163,377,169,343,169"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,153,180,179"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,163,228,163,228,169,194,169"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_a_s_t_c_codec.html" title="Codec specialized in loading ASTC (ARM Adaptive Scalable Texture Compression) images." alt="" coords="598,5,733,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="469,141,513,90,542,63,575,40,600,28,602,33,577,44,545,67,517,93,473,144"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_d_d_s_codec2.html" title="Codec specialized in loading DDS (Direct Draw Surface) images." alt="" coords="597,55,734,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="481,143,524,115,575,89,607,78,609,83,577,94,527,120,484,147"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_e_t_c_codec.html" title="Codec specialized in loading ETC (Ericsson Texture Compression) images." alt="" coords="603,104,728,129"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="521,148,609,127,610,132,522,153"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_free_image_codec2.html" title="Codec specialized in images loaded using FreeImage." alt="" coords="576,153,755,179"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="542,163,576,163,576,169,542,169"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_o_i_t_d_codec.html" title="Codec specialized in loading OITD (Ogre Internal Texture Dump) format." alt="" coords="599,203,732,228"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="522,179,610,200,609,205,521,184"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_p_v_r_t_c_codec.html" title="Codec specialized in loading PVRTC (PowerVR) images." alt="" coords="594,252,737,277"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="484,185,527,212,577,238,609,249,607,254,575,243,524,217,481,189"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_s_t_b_i_image_codec.html" title="Codec specialized in images loaded using stbi (https://github.com/nothings/stb)." alt="" coords="580,301,751,327"/>
+<area shape="poly" id="edge9_Node000003_Node000010" title=" " alt="" coords="473,188,517,239,545,265,577,288,602,299,600,304,575,292,542,269,513,242,469,191"/>
 </map>

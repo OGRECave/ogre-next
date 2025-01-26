@@ -1,6 +1,6 @@
 var _ogre_vulkan_global_binding_table_8h =
 [
-    [ "VulkanGlobalBindingTable", "struct_ogre_1_1_vulkan_global_binding_table.html", "struct_ogre_1_1_vulkan_global_binding_table" ],
+    [ "Ogre::VulkanGlobalBindingTable", "struct_ogre_1_1_vulkan_global_binding_table.html", "struct_ogre_1_1_vulkan_global_binding_table" ],
     [ "NUM_BIND_CONST_BUFFERS", "_ogre_vulkan_global_binding_table_8h.html#a2203355bd205e3cd20447a8b0240ae65", null ],
     [ "NUM_BIND_READONLY_BUFFERS", "_ogre_vulkan_global_binding_table_8h.html#a29bd5d0a5b4ee9a2e6607a21743b680a", null ],
     [ "NUM_BIND_SAMPLERS", "_ogre_vulkan_global_binding_table_8h.html#aa36ee96afdc29b5d43f5f153e559cbf9", null ],

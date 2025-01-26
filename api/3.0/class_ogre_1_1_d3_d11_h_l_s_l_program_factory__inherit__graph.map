@@ -1,5 +1,7 @@
 <map id="Ogre::D3D11HLSLProgramFactory" name="Ogre::D3D11HLSLProgramFactory">
-<area shape="rect" id="node1" title="Factory class for D3D11 HLSL programs." alt="" coords="5,169,244,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_high_level_gpu_program_factory.html" title="Interface definition for factories of HighLevelGpuProgram." alt="" coords="21,80,228,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="57,5,193,32"/>
+<area shape="rect" id="Node000001" title="Factory class for D3D11 HLSL programs." alt="" coords="5,167,244,192"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_high_level_gpu_program_factory.html" title="Interface definition for factories of HighLevelGpuProgram." alt="" coords="21,79,228,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,132,127,166,122,166,122,132"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="37,5,212,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,44,127,79,122,79,122,44"/>
 </map>

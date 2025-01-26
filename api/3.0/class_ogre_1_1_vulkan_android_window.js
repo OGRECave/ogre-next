@@ -6,7 +6,7 @@ var class_ogre_1_1_vulkan_android_window =
     [ "_setVisible", "class_ogre_1_1_vulkan_android_window.html#a2421714bb3fd00bef7268d92daadc5e3", null ],
     [ "destroy", "class_ogre_1_1_vulkan_android_window.html#a683d441b5c51cd18a31ed8581d7b9de3", null ],
     [ "getCustomAttribute", "class_ogre_1_1_vulkan_android_window.html#a5d5fdfe9fed7934275a7016eaf3c4192", null ],
-    [ "getRequiredExtensionName", "class_ogre_1_1_vulkan_android_window.html#a40f7e799573b343411c002aad77aad3d", null ],
+    [ "getRequiredExtensionName", "class_ogre_1_1_vulkan_android_window.html#a96b3c1a4223d8de55d423dcb6af1fff0", null ],
     [ "isHidden", "class_ogre_1_1_vulkan_android_window.html#a5a0a6a008d94955631351a2d49122da1", null ],
     [ "isVisible", "class_ogre_1_1_vulkan_android_window.html#af7dbc1fe0e7562760ef2591f9ac6e564", null ],
     [ "reposition", "class_ogre_1_1_vulkan_android_window.html#a6245c967ecb321b7cd60fe90ea787395", null ],

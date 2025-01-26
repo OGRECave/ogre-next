@@ -1,4 +1,5 @@
 <map id="Ogre::VulkanBufferInterface" name="Ogre::VulkanBufferInterface">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,207,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_buffer_interface.html" title="Most (if not all) buffers, can be treated with the same code." alt="" coords="27,5,185,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,207,104"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_buffer_interface.html" title="Most (if not all) buffers, can be treated with the same code." alt="" coords="27,5,185,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,44,109,79,103,79,103,44"/>
 </map>

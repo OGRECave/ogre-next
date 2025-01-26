@@ -9,7 +9,7 @@ var class_ogre_1_1_n_u_l_l_vao_manager =
     [ "_update", "class_ogre_1_1_n_u_l_l_vao_manager.html#a3d56cf0561c76828b4d073a2fc7ccb67", null ],
     [ "cleanupEmptyPools", "class_ogre_1_1_n_u_l_l_vao_manager.html#a81e19d8012b2de503a8dc931c6bbc35d", null ],
     [ "createAsyncTicket", "class_ogre_1_1_n_u_l_l_vao_manager.html#ae225d09a92c2d2d4a6d28d3df094c337", null ],
-    [ "createStagingBuffer", "class_ogre_1_1_n_u_l_l_vao_manager.html#aaff1979a659427454341793163a50ca2", null ],
+    [ "createStagingBuffer", "class_ogre_1_1_n_u_l_l_vao_manager.html#ad7bd70cab7d59ce7ee1662c27c2f1076", null ],
     [ "getMemoryStats", "class_ogre_1_1_n_u_l_l_vao_manager.html#a8f35fe25cb3d5a27f23b36a8fae24ff6", null ],
     [ "isFrameFinished", "class_ogre_1_1_n_u_l_l_vao_manager.html#a6b3f5c09195ea5b32e79bd13e221dcac", null ],
     [ "supportsArbBufferStorage", "class_ogre_1_1_n_u_l_l_vao_manager.html#a59bbdfab61f3f95d0a3a23b6be105575", null ],

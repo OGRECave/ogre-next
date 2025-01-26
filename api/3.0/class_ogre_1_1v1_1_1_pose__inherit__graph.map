@@ -1,4 +1,5 @@
 <map id="Ogre::v1::Pose" name="Ogre::v1::Pose">
-<area shape="rect" id="node1" title="A pose is a linked set of vertex offsets applying to one set of vertex data." alt="" coords="15,80,131,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,141,32"/>
+<area shape="rect" id="Node000001" title="A pose is a linked set of vertex offsets applying to one set of vertex data." alt="" coords="35,79,151,104"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,44,95,79,90,79,90,44"/>
 </map>

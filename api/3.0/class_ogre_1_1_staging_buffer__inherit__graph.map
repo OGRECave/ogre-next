@@ -1,10 +1,17 @@
 <map id="Ogre::StagingBuffer" name="Ogre::StagingBuffer">
-<area shape="rect" id="node1" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="189,132,339,159"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_staging_buffer.html" title="NOTE FOR D3D12 PORTING: The GL3Plus implementation should be used as reference, since it is much lowe..." alt="" coords="391,5,584,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="387,56,588,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_e_s2_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="392,107,583,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_metal_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="394,157,581,184"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="396,208,579,235"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="391,259,583,285"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,132,141,159"/>
+<area shape="rect" id="Node000001" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="228,129,377,155"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_staging_buffer.html" title="NOTE FOR D3D12 PORTING: The GL3Plus implementation should be used as reference, since it is much lowe..." alt="" coords="429,5,623,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="324,117,368,77,395,57,424,40,453,28,455,33,426,44,398,61,371,81,327,121"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_l3_plus_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="425,55,627,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="342,121,424,89,465,77,466,83,426,94,344,126"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_g_l_e_s2_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="431,104,621,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="390,129,430,125,431,130,391,135"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_metal_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="433,153,619,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="391,149,433,153,432,159,391,154"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_n_u_l_l_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="435,203,617,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="346,158,426,189,466,200,465,205,424,194,344,163"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_vulkan_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="430,252,622,277"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="327,163,371,202,427,238,455,249,453,254,424,243,368,206,324,167"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,129,180,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,139,228,139,228,145,194,145"/>
 </map>

@@ -1,4 +1,5 @@
 <map id="Ogre::v1::BillboardParticleRenderer::CmdPointRendering" name="Ogre::v1::BillboardParticleRenderer::CmdPointRendering">
-<area shape="rect" id="node1" title="Command object for point rendering (see ParamCommand)." alt="" coords="5,80,224,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="30,5,199,32"/>
+<area shape="rect" id="Node000001" title="Command object for point rendering (see ParamCommand)." alt="" coords="5,79,224,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="30,5,199,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,44,117,79,112,79,112,44"/>
 </map>

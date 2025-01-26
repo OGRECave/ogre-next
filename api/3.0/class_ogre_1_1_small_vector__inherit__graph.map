@@ -1,9 +1,15 @@
 <map id="Ogre::SmallVector&lt; T, N &gt;" name="Ogre::SmallVector&lt; T, N &gt;">
-<area shape="rect" id="node1" title="SmallVector &#45; This is a &#39;vector&#39; (really, a variable&#45;sized array), optimized for the case when the ar..." alt="" coords="134,348,285,389"/>
-<area shape="rect" id="node6" href="$struct_ogre_1_1_vector_set.html" title=" " alt="" coords="5,437,195,479"/>
-<area shape="rect" id="node7" href="$struct_ogre_1_1_vector_set.html" title=" " alt="" coords="219,445,421,471"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_small_vector_impl.html" title="SmallVectorImpl &#45; This class consists of common code factored out of the SmallVector class to reduce ..." alt="" coords="106,273,313,300"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="110,169,309,225"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="110,80,309,121"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_small_vector_base.html" title="SmallVectorBase &#45; This is all the non&#45;templated stuff common to all SmallVectors." alt="" coords="124,5,295,32"/>
+<area shape="rect" id="Node000001" title="SmallVector &#45; This is a &#39;vector&#39; (really, a variable&#45;sized array), optimized for the case when the ar..." alt="" coords="140,343,291,383"/>
+<area shape="rect" id="Node000006" href="$struct_ogre_1_1_vector_set.html" title=" " alt="" coords="5,438,207,463"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="182,393,123,440,119,435,179,389"/>
+<area shape="rect" id="Node000007" href="$struct_ogre_1_1_vector_set.html" title=" " alt="" coords="231,431,421,471"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="252,389,303,428,300,433,249,393"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_small_vector_impl.html" title="SmallVectorImpl &#45; This class consists of common code factored out of the SmallVector class to reduce ..." alt="" coords="112,269,319,295"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,308,218,343,213,343,213,308"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="116,167,315,221"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="218,235,218,269,213,269,213,235"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="116,79,315,119"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="218,132,218,167,213,167,213,132"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_small_vector_base.html" title="SmallVectorBase &#45; This is all the non&#45;templated stuff common to all SmallVectors." alt="" coords="130,5,301,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="218,44,218,79,213,79,213,44"/>
 </map>

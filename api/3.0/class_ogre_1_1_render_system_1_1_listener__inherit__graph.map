@@ -1,5 +1,7 @@
 <map id="Ogre::RenderSystem::Listener" name="Ogre::RenderSystem::Listener">
-<area shape="rect" id="node1" title="Defines a listener on the custom events that this render system can raise." alt="" coords="171,5,327,47"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_d3_d11_render_pass_descriptor.html" title="D3D11 will share groups of ID3D11RenderTargetView all D3D11RenderPassDescriptor that share the same R..." alt="" coords="5,95,252,121"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_overlay_system.html" title="This class simplify initialization / finalization of the overlay system." alt="" coords="276,95,461,121"/>
+<area shape="rect" id="Node000001" title="Defines a listener on the custom events that this render system can raise." alt="" coords="171,5,327,45"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_d3_d11_render_pass_descriptor.html" title="D3D11 will share groups of ID3D11RenderTargetView all D3D11RenderPassDescriptor that share the same R..." alt="" coords="5,93,252,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,55,148,95,145,91,207,51"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_overlay_system.html" title="This class simplify initialization / finalization of the overlay system." alt="" coords="276,93,461,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="290,51,352,91,350,95,288,55"/>
 </map>

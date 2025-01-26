@@ -6,7 +6,7 @@ var class_ogre_1_1_uav_buffer_packed =
     [ "destroyAllBufferViews", "class_ogre_1_1_uav_buffer_packed.html#a1f7820447682499c158ab9e22031f2f2", null ],
     [ "destroyReadOnlyBufferView", "class_ogre_1_1_uav_buffer_packed.html#a1d0317de4ff16afc324d417a201db195", null ],
     [ "destroyTexBufferView", "class_ogre_1_1_uav_buffer_packed.html#ac591b274d3c5663fefb0ceb382ce4878", null ],
-    [ "getAsReadOnlyBufferView", "class_ogre_1_1_uav_buffer_packed.html#abc8614c4e063e4a870bb37dfc3505adb", null ],
-    [ "getAsTexBufferView", "class_ogre_1_1_uav_buffer_packed.html#ae0c76ea54f4932010a93b412b9ae4c8a", null ],
+    [ "getAsReadOnlyBufferView", "class_ogre_1_1_uav_buffer_packed.html#a300aa104fa0b16759937e0d0d31091d5", null ],
+    [ "getAsTexBufferView", "class_ogre_1_1_uav_buffer_packed.html#a08b7bfb98310a65e4bdac7bd1f59be23", null ],
     [ "getBufferPackedType", "class_ogre_1_1_uav_buffer_packed.html#a74827d2dd4b0077218f008c003ad8585", null ]
 ];

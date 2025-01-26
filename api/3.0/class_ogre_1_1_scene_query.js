@@ -11,7 +11,7 @@ var class_ogre_1_1_scene_query =
     [ "SceneQuery", "class_ogre_1_1_scene_query.html#a672e5a9a95f02100b62cd4a6421525d6", null ],
     [ "~SceneQuery", "class_ogre_1_1_scene_query.html#a373ec5891d755ecaac409e2de1e5e54e", null ],
     [ "getQueryMask", "class_ogre_1_1_scene_query.html#a4bbd7579599c469f367a104d43f9efce", null ],
-    [ "getSupportedWorldFragmentTypes", "class_ogre_1_1_scene_query.html#a9842b4155b787db211dc0c67c42716c2", null ],
+    [ "getSupportedWorldFragmentTypes", "class_ogre_1_1_scene_query.html#a3450fcb09a39b0e92e369814cdc10709", null ],
     [ "getWorldFragmentType", "class_ogre_1_1_scene_query.html#aa11f71d4b66bbb56df0b2025412f7f1f", null ],
     [ "setQueryMask", "class_ogre_1_1_scene_query.html#ad392a7fc0b338e5507540d3183f82cfb", null ],
     [ "setWorldFragmentType", "class_ogre_1_1_scene_query.html#aec3aa0b8b16c41fae990ee78150f8d2a", null ],

@@ -1,11 +1,11 @@
 var _ogre_gpu_program_params_8h =
 [
-    [ "AutoConstantDefinition", "struct_ogre_1_1_gpu_program_parameters_1_1_auto_constant_definition.html", "struct_ogre_1_1_gpu_program_parameters_1_1_auto_constant_definition" ],
+    [ "Ogre::GpuProgramParameters::AutoConstantDefinition", "struct_ogre_1_1_gpu_program_parameters_1_1_auto_constant_definition.html", "struct_ogre_1_1_gpu_program_parameters_1_1_auto_constant_definition" ],
     [ "DoubleConstantList", "_ogre_gpu_program_params_8h.html#ga2d78a9c98de30377b250afcc5d669221", null ],
     [ "FloatConstantList", "_ogre_gpu_program_params_8h.html#ga85c9b7d7f5d35f36d118af514f18ab5b", null ],
     [ "GpuConstantDefinitionIterator", "_ogre_gpu_program_params_8h.html#gaff7bf5891ea6cfed80f4e50edc5d3695", null ],
-    [ "GpuConstantDefinitionMap", "_ogre_gpu_program_params_8h.html#ga90b266af540c4396c8c18ac2c43fd0f3", null ],
-    [ "GpuLogicalIndexUseMap", "_ogre_gpu_program_params_8h.html#ga2275e636e8d9bbe23e350ef676e289b5", null ],
+    [ "GpuConstantDefinitionMap", "_ogre_gpu_program_params_8h.html#ga54e355c2130bf3ebfbab22aad453b894", null ],
+    [ "GpuLogicalIndexUseMap", "_ogre_gpu_program_params_8h.html#ga0e04db87be9eb21d46116ac2f5612999", null ],
     [ "IntConstantList", "_ogre_gpu_program_params_8h.html#ga0f6f75258759920f3879eb1b4b590121", null ],
     [ "UnsignedIntConstantList", "_ogre_gpu_program_params_8h.html#gab353aaf9b52a6f32e2f81985364b2426", null ],
     [ "BaseConstantType", "_ogre_gpu_program_params_8h.html#ga31815ee0cc489402a8be91f2c87a84c6", [

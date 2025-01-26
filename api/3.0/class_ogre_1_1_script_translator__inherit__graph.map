@@ -1,27 +1,51 @@
 <map id="Ogre::ScriptTranslator" name="Ogre::ScriptTranslator">
-<area shape="rect" id="node1" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="189,593,352,619"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_compositor_load_action_translator.html" title=" " alt="" coords="416,5,624,47"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_compositor_pass_translator.html" title=" " alt="" coords="405,71,635,98"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_compositor_render_target_view_translator.html" title=" " alt="" coords="409,123,631,164"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_compositor_shadow_map_repeat_translator.html" title=" " alt="" coords="413,188,627,229"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_compositor_shadow_map_target_translator.html" title=" " alt="" coords="413,253,627,295"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_compositor_shadow_map_target_type_translator.html" title=" " alt="" coords="413,319,627,360"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_compositor_store_action_translator.html" title=" " alt="" coords="415,384,625,425"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_compositor_target_translator.html" title=" " alt="" coords="400,450,640,477"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1_compositor_texture_base_translator.html" title=" " alt="" coords="412,501,628,543"/>
-<area shape="rect" id="node15" href="$class_ogre_1_1_gpu_program_translator.html" title=" " alt="" coords="417,567,623,594"/>
-<area shape="rect" id="node16" href="$class_ogre_1_1_hlms_translator.html" title=" " alt="" coords="441,618,599,645"/>
-<area shape="rect" id="node17" href="$class_ogre_1_1_material_translator.html" title=" " alt="" coords="431,669,609,695"/>
-<area shape="rect" id="node18" href="$class_ogre_1_1_particle_affector_translator.html" title=" " alt="" coords="408,719,632,746"/>
-<area shape="rect" id="node19" href="$class_ogre_1_1_particle_emitter_translator.html" title=" " alt="" coords="409,770,631,797"/>
-<area shape="rect" id="node20" href="$class_ogre_1_1_particle_system_translator.html" title=" " alt="" coords="409,821,631,847"/>
-<area shape="rect" id="node21" href="$class_ogre_1_1_pass_translator.html" title=" " alt="" coords="443,871,597,898"/>
-<area shape="rect" id="node22" href="$class_ogre_1_1_shared_params_translator.html" title=" " alt="" coords="411,922,629,949"/>
-<area shape="rect" id="node23" href="$class_ogre_1_1_technique_translator.html" title=" " alt="" coords="425,973,615,999"/>
-<area shape="rect" id="node24" href="$class_ogre_1_1_texture_source_translator.html" title=" " alt="" coords="411,1023,629,1050"/>
-<area shape="rect" id="node25" href="$class_ogre_1_1_texture_unit_translator.html" title=" " alt="" coords="420,1074,620,1101"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,593,141,619"/>
-<area shape="rect" id="node12" href="$class_ogre_1_1_compositor_node_translator.html" title=" " alt="" coords="688,450,923,477"/>
-<area shape="rect" id="node13" href="$class_ogre_1_1_compositor_shadow_node_translator.html" title=" " alt="" coords="695,501,916,543"/>
-<area shape="rect" id="node14" href="$class_ogre_1_1_compositor_workspace_translator.html" title=" " alt="" coords="702,567,909,608"/>
+<area shape="rect" id="Node000001" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="228,581,391,606"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_compositor_load_action_translator.html" title=" " alt="" coords="455,5,663,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="311,566,325,456,350,303,367,225,387,154,410,96,437,56,452,43,456,47,441,59,415,98,392,156,372,226,355,304,330,457,316,567"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_compositor_pass_translator.html" title=" " alt="" coords="444,70,673,95"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="311,566,326,465,353,327,370,257,390,193,412,141,437,106,455,93,458,98,441,110,417,144,395,195,375,258,358,328,332,466,317,567"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_compositor_render_target_view_translator.html" title=" " alt="" coords="447,120,670,160"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="308,567,312,489,329,383,345,325,368,269,398,216,437,170,453,158,456,162,441,174,402,219,373,271,350,327,335,384,317,490,313,567"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_compositor_shadow_map_repeat_translator.html" title=" " alt="" coords="451,184,666,224"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="309,567,317,500,338,410,354,362,375,316,403,272,437,234,453,222,456,226,440,238,407,275,380,318,359,364,343,412,323,501,315,567"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_compositor_shadow_map_target_translator.html" title=" " alt="" coords="451,248,666,288"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="312,567,323,511,346,438,363,400,383,363,408,328,437,298,455,286,458,290,440,302,412,332,387,366,367,402,351,440,329,512,317,568"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_compositor_shadow_map_target_type_translator.html" title=" " alt="" coords="451,312,666,352"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="315,567,330,522,355,467,390,410,412,384,437,362,456,350,459,354,440,366,416,388,395,413,360,469,335,524,320,569"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_compositor_store_action_translator.html" title=" " alt="" coords="453,376,664,416"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="321,567,366,497,399,459,437,427,462,414,465,419,440,432,402,463,370,501,326,570"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_compositor_target_translator.html" title=" " alt="" coords="439,441,679,466"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="328,569,374,521,404,497,437,476,470,464,472,469,440,481,407,501,378,525,331,572"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_compositor_texture_base_translator.html" title=" " alt="" coords="451,491,667,531"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="353,573,438,541,481,528,482,533,440,547,355,578"/>
+<area shape="rect" id="Node000015" href="$class_ogre_1_1_gpu_program_translator.html" title=" " alt="" coords="455,555,662,581"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="404,581,455,576,455,581,405,586"/>
+<area shape="rect" id="Node000016" href="$class_ogre_1_1_hlms_translator.html" title=" " alt="" coords="479,605,638,630"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="405,600,480,607,479,612,404,605"/>
+<area shape="rect" id="Node000017" href="$class_ogre_1_1_material_translator.html" title=" " alt="" coords="469,654,648,679"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="353,609,439,640,485,651,484,657,438,645,351,614"/>
+<area shape="rect" id="Node000018" href="$class_ogre_1_1_particle_affector_translator.html" title=" " alt="" coords="447,703,671,729"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="335,614,381,653,409,673,440,690,471,701,469,706,438,694,407,678,378,657,331,618"/>
+<area shape="rect" id="Node000019" href="$class_ogre_1_1_particle_emitter_translator.html" title=" " alt="" coords="448,753,669,778"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="327,616,372,679,404,712,440,739,465,750,463,755,437,744,400,716,368,683,323,620"/>
+<area shape="rect" id="Node000020" href="$class_ogre_1_1_particle_system_translator.html" title=" " alt="" coords="447,802,670,827"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="322,618,339,657,364,704,398,750,440,788,461,800,459,804,437,793,394,754,360,706,334,659,317,620"/>
+<area shape="rect" id="Node000021" href="$class_ogre_1_1_pass_translator.html" title=" " alt="" coords="481,851,636,877"/>
+<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="319,618,333,666,356,726,392,787,414,815,440,838,460,849,482,856,480,861,458,854,437,842,410,818,387,790,352,729,328,668,314,620"/>
+<area shape="rect" id="Node000022" href="$class_ogre_1_1_shared_params_translator.html" title=" " alt="" coords="449,901,668,926"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="317,619,327,676,349,749,366,787,386,824,411,858,440,887,458,898,456,903,437,891,407,862,382,827,361,790,344,751,322,677,311,620"/>
+<area shape="rect" id="Node000023" href="$class_ogre_1_1_technique_translator.html" title=" " alt="" coords="463,950,654,975"/>
+<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="315,619,323,685,343,771,359,817,380,861,407,902,440,937,464,951,462,955,437,941,403,905,375,863,354,819,338,772,317,685,309,620"/>
+<area shape="rect" id="Node000024" href="$class_ogre_1_1_texture_source_translator.html" title=" " alt="" coords="450,999,667,1025"/>
+<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="313,620,318,693,336,793,352,846,374,897,403,945,440,986,457,997,454,1002,437,990,399,948,370,900,347,848,331,794,313,694,308,620"/>
+<area shape="rect" id="Node000025" href="$class_ogre_1_1_texture_unit_translator.html" title=" " alt="" coords="459,1049,659,1074"/>
+<area shape="poly" id="edge24_Node000001_Node000025" title=" " alt="" coords="312,620,314,702,320,756,330,814,346,875,368,934,400,988,440,1035,460,1048,457,1053,437,1039,395,991,364,936,340,876,324,815,314,756,309,702,307,620"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,581,180,606"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,591,228,591,228,596,194,596"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_compositor_node_translator.html" title=" " alt="" coords="727,441,961,466"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="672,485,780,463,781,469,673,491"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_compositor_shadow_node_translator.html" title=" " alt="" coords="733,491,955,531"/>
+<area shape="poly" id="edge12_Node000011_Node000013" title=" " alt="" coords="680,508,733,508,733,513,680,513"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1_compositor_workspace_translator.html" title=" " alt="" coords="741,555,947,595"/>
+<area shape="poly" id="edge13_Node000011_Node000014" title=" " alt="" coords="662,531,755,552,754,557,661,536"/>
 </map>

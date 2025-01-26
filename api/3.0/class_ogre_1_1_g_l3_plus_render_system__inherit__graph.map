@@ -1,5 +1,7 @@
 <map id="Ogre::GL3PlusRenderSystem" name="Ogre::GL3PlusRenderSystem">
-<area shape="rect" id="node1" title="Implementation of GL 3 as a rendering system." alt="" coords="5,155,213,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API." alt="" coords="31,80,187,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="41,5,177,32"/>
+<area shape="rect" id="Node000001" title="Implementation of GL 3 as a rendering system." alt="" coords="5,152,213,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API." alt="" coords="31,79,187,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,118,112,152,107,152,107,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="22,5,197,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,44,112,79,107,79,107,44"/>
 </map>

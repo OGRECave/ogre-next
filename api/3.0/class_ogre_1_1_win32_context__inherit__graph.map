@@ -1,4 +1,5 @@
 <map id="Ogre::Win32Context" name="Ogre::Win32Context">
-<area shape="rect" id="node1" title=" " alt="" coords="11,80,164,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_g_l3_plus_context.html" title="Class that encapsulates an GL context." alt="" coords="5,5,169,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="11,79,164,104"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l3_plus_context.html" title="Class that encapsulates an GL context." alt="" coords="5,5,169,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,44,90,79,85,79,85,44"/>
 </map>

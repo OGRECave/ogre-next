@@ -1,4 +1,5 @@
 <map id="Ogre::SkeletonAnimation" name="Ogre::SkeletonAnimation">
-<area shape="rect" id="node1" title="Represents the instance of a Skeletal animation based on its definition." alt="" coords="5,80,189,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="29,5,165,32"/>
+<area shape="rect" id="Node000001" title="Represents the instance of a Skeletal animation based on its definition." alt="" coords="5,79,189,104"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="10,5,185,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,44,100,79,95,79,95,44"/>
 </map>

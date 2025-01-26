@@ -1,5 +1,7 @@
 <map id="Ogre::CbSharedDraw" name="Ogre::CbSharedDraw">
-<area shape="rect" id="node1" title=" " alt="" coords="96,5,253,32"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_cb_draw_indexed.html" title=" " alt="" coords="5,80,168,107"/>
-<area shape="rect" id="node3" href="$struct_ogre_1_1_cb_draw_strip.html" title=" " alt="" coords="193,80,335,107"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="96,5,253,31"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_cb_draw_indexed.html" title=" " alt="" coords="5,79,168,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,41,103,81,99,76,148,37"/>
+<area shape="rect" id="Node000003" href="$struct_ogre_1_1_cb_draw_strip.html" title=" " alt="" coords="193,79,335,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="201,37,251,76,248,81,198,41"/>
 </map>

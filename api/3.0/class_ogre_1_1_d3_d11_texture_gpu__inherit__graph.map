@@ -1,10 +1,17 @@
 <map id="Ogre::D3D11TextureGpu" name="Ogre::D3D11TextureGpu">
-<area shape="rect" id="node1" title=" " alt="" coords="210,229,389,256"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_d3_d11_texture_gpu_render_target.html" title=" " alt="" coords="187,304,412,345"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_texture_gpu.html" title=" " alt="" coords="133,155,268,181"/>
-<area shape="rect" id="node3" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,80,201,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_gpu_resource.html" title=" " alt="" coords="226,80,373,107"/>
-<area shape="rect" id="node5" title=" " alt="" coords="231,5,367,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_d3_d11_device_resource.html" title="Represents a Direct3D rendering resource." alt="" coords="293,155,503,181"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_d3_d11_texture_gpu_window.html" title=" " alt="" coords="184,393,415,420"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="210,225,389,251"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_d3_d11_texture_gpu_render_target.html" title=" " alt="" coords="187,299,412,339"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="302,264,302,299,297,299,297,264"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_texture_gpu.html" title=" " alt="" coords="133,152,268,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="229,183,285,223,282,227,226,187"/>
+<area shape="rect" id="Node000003" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,79,201,104"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="132,110,186,150,183,154,129,114"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_gpu_resource.html" title=" " alt="" coords="226,79,373,104"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="274,114,218,154,215,150,271,110"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="212,5,387,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="302,44,302,79,297,79,297,44"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_d3_d11_device_resource.html" title="Represents a Direct3D rendering resource." alt="" coords="293,152,503,177"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="373,187,317,227,314,223,370,183"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_d3_d11_texture_gpu_window.html" title=" " alt="" coords="184,387,415,412"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="302,352,302,386,297,386,297,352"/>
 </map>

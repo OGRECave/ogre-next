@@ -13,7 +13,7 @@ var class_ogre_1_1_compositor_pass_quad_def =
     ] ],
     [ "CompositorPassQuadDef", "class_ogre_1_1_compositor_pass_quad_def.html#aec8f6ba4b673d0032866e19837785c87", null ],
     [ "addQuadTextureSource", "class_ogre_1_1_compositor_pass_quad_def.html#a7a2d8ff5dad8d63495dfa0d2fc70a39a", null ],
-    [ "getTextureSources", "class_ogre_1_1_compositor_pass_quad_def.html#acf770b335d8c99d2d419185ef34fbe86", null ],
+    [ "getTextureSources", "class_ogre_1_1_compositor_pass_quad_def.html#a02ac0c9aeb1227f95b0343798d743b83", null ],
     [ "mAnalyzeAllTextureLayouts", "class_ogre_1_1_compositor_pass_quad_def.html#a7b742952771570b4fbb6f1c246f31a75", null ],
     [ "mCameraCubemapReorient", "class_ogre_1_1_compositor_pass_quad_def.html#aa115367c85e90c5f16d7d8941ef1ce78", null ],
     [ "mCameraName", "class_ogre_1_1_compositor_pass_quad_def.html#aafcf80695604bc36020dc67d2e8fbcfb", null ],

@@ -11,7 +11,7 @@ var class_ogre_1_1_default_work_queue_base =
     [ "addRequest", "class_ogre_1_1_default_work_queue_base.html#a15f5effebeec30f3d30926a66ca9871a", null ],
     [ "addRequestHandler", "class_ogre_1_1_default_work_queue_base.html#a3b0a7e54f7982743a60c06f56f86aa63", null ],
     [ "addResponseHandler", "class_ogre_1_1_default_work_queue_base.html#a67763faa933aff479056a72814e148d8", null ],
-    [ "getName", "class_ogre_1_1_default_work_queue_base.html#a21e659d67e6c2512c78e0fcb987d6d3c", null ],
+    [ "getName", "class_ogre_1_1_default_work_queue_base.html#a3b38abc5e3d472c3282b0f1a3b6b8809", null ],
     [ "getRequestsAccepted", "class_ogre_1_1_default_work_queue_base.html#a89d7c1d6659662f3d6317a2234e3cf1a", null ],
     [ "getResponseProcessingTimeLimit", "class_ogre_1_1_default_work_queue_base.html#a4e37fee918294527bdc90819a371d625", null ],
     [ "getWorkersCanAccessRenderSystem", "class_ogre_1_1_default_work_queue_base.html#abc3c6f7c29d30bb833a94c516560016c", null ],

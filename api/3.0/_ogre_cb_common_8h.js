@@ -1,6 +1,6 @@
 var _ogre_cb_common_8h =
 [
-    [ "CbBase", "struct_ogre_1_1_cb_base.html", "struct_ogre_1_1_cb_base" ],
+    [ "Ogre::CbBase", "struct_ogre_1_1_cb_base.html", "struct_ogre_1_1_cb_base" ],
     [ "CbType", "_ogre_cb_common_8h.html#a769d41c00dac951b9c2162c6c1a73573", [
       [ "CB_INVALID", "_ogre_cb_common_8h.html#a769d41c00dac951b9c2162c6c1a73573ad140d7cf4b76782f45987b5b8146e9d3", null ],
       [ "CB_SET_VAO", "_ogre_cb_common_8h.html#a769d41c00dac951b9c2162c6c1a73573af164b4af402508669d8483fd4333c3db", null ],

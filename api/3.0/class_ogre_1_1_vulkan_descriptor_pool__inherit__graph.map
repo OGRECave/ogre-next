@@ -1,4 +1,5 @@
 <map id="Ogre::VulkanDescriptorPool" name="Ogre::VulkanDescriptorPool">
-<area shape="rect" id="node1" title="The VulkanDescriptorPool class A VulkanDescriptorPool manages the pool of a single set (i...." alt="" coords="5,80,204,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="37,5,173,32"/>
+<area shape="rect" id="Node000001" title="The VulkanDescriptorPool class A VulkanDescriptorPool manages the pool of a single set (i...." alt="" coords="5,79,204,104"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="17,5,192,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,44,107,79,102,79,102,44"/>
 </map>

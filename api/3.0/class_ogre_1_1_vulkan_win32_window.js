@@ -6,7 +6,7 @@ var class_ogre_1_1_vulkan_win32_window =
     [ "_setVisible", "class_ogre_1_1_vulkan_win32_window.html#af612267387e49bda1754c8290686fdf4", null ],
     [ "destroy", "class_ogre_1_1_vulkan_win32_window.html#adc313854abfb69a8568a660bafffefef", null ],
     [ "getCustomAttribute", "class_ogre_1_1_vulkan_win32_window.html#acc15e72c6b6e8e90a93ca44f07a8b1e8", null ],
-    [ "getRequiredExtensionName", "class_ogre_1_1_vulkan_win32_window.html#af90988aa7a3720a96fbcfed0d438d011", null ],
+    [ "getRequiredExtensionName", "class_ogre_1_1_vulkan_win32_window.html#a019a021d4befdbb2f8fc8b17f322a4a2", null ],
     [ "isHidden", "class_ogre_1_1_vulkan_win32_window.html#ad8b19041de6128048b116236d3a52a7b", null ],
     [ "isVisible", "class_ogre_1_1_vulkan_win32_window.html#aa71e2c9180163fe76283dae8032c544b", null ],
     [ "reposition", "class_ogre_1_1_vulkan_win32_window.html#acb0325a0408c937781c74764cee7f736", null ],

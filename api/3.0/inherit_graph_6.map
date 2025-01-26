@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$struct_d_x_g_i___s_w_a_p___c_h_a_i_n___f_u_l_l_s_c_r_e_e_n___d_e_s_c.html" title=" " alt="" coords="5,5,287,32"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,5,177,45"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_g_l_e_s2_f_b_o_render_texture.html" title="RenderTexture for GL ES 2 FBO." alt="" coords="225,13,448,38"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="191,23,225,23,225,28,191,28"/>
 </map>

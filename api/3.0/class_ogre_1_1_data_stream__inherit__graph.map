@@ -1,9 +1,15 @@
 <map id="Ogre::DataStream" name="Ogre::DataStream">
-<area shape="rect" id="node1" title="General purpose class used for encapsulating the reading and writing of data." alt="" coords="189,107,328,133"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_deflate_stream.html" title="Stream which compresses / uncompresses data using the &#39;deflate&#39; compression algorithm." alt="" coords="403,5,558,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_file_handle_data_stream.html" title="Common subclass of DataStream for handling data from C&#45;style file handles." alt="" coords="377,56,585,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_file_stream_data_stream.html" title="Common subclass of DataStream for handling data from std::basic_istream." alt="" coords="376,107,585,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_memory_data_stream.html" title="Common subclass of DataStream for handling data from chunks of memory." alt="" coords="384,157,577,184"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_zip_data_stream.html" title="Specialisation of DataStream to handle streaming data from zip archives." alt="" coords="401,208,561,235"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,107,141,133"/>
+<area shape="rect" id="Node000001" title="General purpose class used for encapsulating the reading and writing of data." alt="" coords="228,104,367,129"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_deflate_stream.html" title="Stream which compresses / uncompresses data using the &#39;deflate&#39; compression algorithm." alt="" coords="442,5,597,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="324,94,365,65,414,40,447,28,449,33,416,44,368,70,327,98"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_file_handle_data_stream.html" title="Common subclass of DataStream for handling data from C&#45;style file handles." alt="" coords="415,55,623,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="368,98,461,77,462,83,369,104"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_file_stream_data_stream.html" title="Common subclass of DataStream for handling data from std::basic_istream." alt="" coords="415,104,624,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="380,114,414,114,414,119,380,119"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_memory_data_stream.html" title="Common subclass of DataStream for handling data from chunks of memory." alt="" coords="423,153,616,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="369,130,462,151,461,156,368,135"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_zip_data_stream.html" title="Specialisation of DataStream to handle streaming data from zip archives." alt="" coords="439,203,599,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="327,135,368,163,416,189,449,200,447,205,414,194,365,168,324,140"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,104,180,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,114,228,114,228,119,194,119"/>
 </map>

@@ -1,7 +1,11 @@
 <map id="Ogre::Volume::CSGUnarySource" name="Ogre::Volume::CSGUnarySource">
-<area shape="rect" id="node1" title="Source which does a unary operation to another one." alt="" coords="216,56,444,83"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_volume_1_1_c_s_g_negate_source.html" title="Negates the given volume." alt="" coords="492,5,728,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_volume_1_1_c_s_g_noise_source.html" title=" " alt="" coords="497,56,723,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_volume_1_1_c_s_g_scale_source.html" title="Scales the given volume source." alt="" coords="498,107,722,133"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="5,56,168,83"/>
+<area shape="rect" id="Node000001" title="Source which does a unary operation to another one." alt="" coords="216,55,444,80"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_volume_1_1_c_s_g_negate_source.html" title="Negates the given volume." alt="" coords="492,5,728,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="416,50,537,28,537,33,417,55"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_volume_1_1_c_s_g_noise_source.html" title=" " alt="" coords="497,55,723,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="458,65,496,65,496,70,458,70"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_volume_1_1_c_s_g_scale_source.html" title="Scales the given volume source." alt="" coords="498,104,722,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="417,80,537,101,537,107,416,85"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="5,55,168,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,65,216,65,216,70,182,70"/>
 </map>

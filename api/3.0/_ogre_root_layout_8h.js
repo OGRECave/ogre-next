@@ -1,8 +1,8 @@
 var _ogre_root_layout_8h =
 [
-    [ "DescBindingRange", "struct_ogre_1_1_desc_binding_range.html", "struct_ogre_1_1_desc_binding_range" ],
-    [ "RootLayout", "class_ogre_1_1_root_layout.html", "class_ogre_1_1_root_layout" ],
-    [ "ArrayDesc", "struct_ogre_1_1_root_layout_1_1_array_desc.html", "struct_ogre_1_1_root_layout_1_1_array_desc" ],
+    [ "Ogre::DescBindingRange", "struct_ogre_1_1_desc_binding_range.html", "struct_ogre_1_1_desc_binding_range" ],
+    [ "Ogre::RootLayout", "class_ogre_1_1_root_layout.html", "class_ogre_1_1_root_layout" ],
+    [ "Ogre::RootLayout::ArrayDesc", "struct_ogre_1_1_root_layout_1_1_array_desc.html", "struct_ogre_1_1_root_layout_1_1_array_desc" ],
     [ "OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS", "_ogre_root_layout_8h.html#a27adb7082b35d3f58fcf9b174e4e2ef2", null ],
     [ "DescBindingTypes", "_ogre_root_layout_8h.html#af97aae360aa16970ee0873372c96c6be", [
       [ "ParamBuffer", "_ogre_root_layout_8h.html#af97aae360aa16970ee0873372c96c6beac9488e21d6dd2a1a3ea05f0ca76a3cbc", null ],

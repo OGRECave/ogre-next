@@ -1,4 +1,5 @@
 <map id="Ogre::RenderPassDepthTarget" name="Ogre::RenderPassDepthTarget">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,220,107"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_render_pass_target_base.html" title=" " alt="" coords="9,5,217,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,220,104"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_render_pass_target_base.html" title=" " alt="" coords="9,5,217,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,44,115,79,110,79,110,44"/>
 </map>

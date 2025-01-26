@@ -1,5 +1,7 @@
 <map id="Ogre::GL3PlusVertexArrayObject" name="Ogre::GL3PlusVertexArrayObject">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,196,196"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_vertex_array_object.html" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i..." alt="" coords="11,80,191,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="33,5,169,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,152,196,192"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_vertex_array_object.html" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i..." alt="" coords="11,79,191,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,118,103,152,98,152,98,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="13,5,188,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="103,44,103,79,98,79,98,44"/>
 </map>

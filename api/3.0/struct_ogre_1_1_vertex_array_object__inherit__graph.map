@@ -1,8 +1,13 @@
 <map id="Ogre::VertexArrayObject" name="Ogre::VertexArrayObject">
-<area shape="rect" id="node1" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i..." alt="" coords="189,93,369,120"/>
-<area shape="rect" id="node3" href="$struct_ogre_1_1_d3_d11_vertex_array_object.html" title=" " alt="" coords="417,5,641,32"/>
-<area shape="rect" id="node4" href="$struct_ogre_1_1_g_l3_plus_vertex_array_object.html" title=" " alt="" coords="434,57,625,98"/>
-<area shape="rect" id="node5" href="$struct_ogre_1_1_g_l_e_s2_vertex_array_object.html" title=" " alt="" coords="419,123,640,149"/>
-<area shape="rect" id="node6" href="$struct_ogre_1_1_n_u_l_l_vertex_array_object.html" title=" " alt="" coords="423,173,636,200"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,93,141,120"/>
+<area shape="rect" id="Node000001" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i..." alt="" coords="228,92,408,117"/>
+<area shape="rect" id="Node000003" href="$struct_ogre_1_1_d3_d11_vertex_array_object.html" title=" " alt="" coords="456,5,680,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="355,83,402,62,455,41,500,28,502,33,457,46,404,66,357,88"/>
+<area shape="rect" id="Node000004" href="$struct_ogre_1_1_g_l3_plus_vertex_array_object.html" title=" " alt="" coords="473,55,663,95"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="421,90,472,84,473,89,422,95"/>
+<area shape="rect" id="Node000005" href="$struct_ogre_1_1_g_l_e_s2_vertex_array_object.html" title=" " alt="" coords="457,120,679,145"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="422,114,457,118,457,123,421,119"/>
+<area shape="rect" id="Node000006" href="$struct_ogre_1_1_n_u_l_l_vertex_array_object.html" title=" " alt="" coords="461,169,675,195"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="361,120,457,155,500,167,499,172,455,161,360,125"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,92,180,117"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,102,228,102,228,107,193,107"/>
 </map>

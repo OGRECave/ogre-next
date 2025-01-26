@@ -1,5 +1,7 @@
 <map id="Ogre::AtmosphereComponent" name="Ogre::AtmosphereComponent">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,220,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_atmosphere_npr.html" title="Non&#45;physically&#45;based&#45;render (NPR) Atmosphere solution." alt="" coords="31,155,194,181"/>
-<area shape="rect" id="node2" title=" " alt="" coords="45,5,181,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,220,104"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_atmosphere_npr.html" title="Non&#45;physically&#45;based&#45;render (NPR) Atmosphere solution." alt="" coords="31,152,194,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="115,118,115,152,110,152,110,118"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="25,5,200,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,44,115,79,110,79,110,44"/>
 </map>

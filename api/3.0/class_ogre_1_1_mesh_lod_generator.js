@@ -10,6 +10,6 @@ var class_ogre_1_1_mesh_lod_generator =
     [ "generateAutoconfiguredLodLevels", "class_ogre_1_1_mesh_lod_generator.html#aecc1830274f471e5d424b9dc8c3a4bc4", null ],
     [ "generateLodLevels", "class_ogre_1_1_mesh_lod_generator.html#a3cdd91b72ba29ee177e3c8714f6f07a4", null ],
     [ "getAutoconfig", "class_ogre_1_1_mesh_lod_generator.html#aa5d9afdd405700411396c605699f0f34", null ],
-    [ "getSingleton", "class_ogre_1_1_mesh_lod_generator.html#af6f1c4233222649f885f7d0a718fff13", null ],
-    [ "getSingletonPtr", "class_ogre_1_1_mesh_lod_generator.html#a7ecbb1aa6a5b42342af4f21fc40acc05", null ]
+    [ "getSingleton", "class_ogre_1_1_mesh_lod_generator.html#a3f38d846ec2c0d5cefa5c76dc8cdf95b", null ],
+    [ "getSingletonPtr", "class_ogre_1_1_mesh_lod_generator.html#af3ece84d474e2955b8806c9910d42a3a", null ]
 ];

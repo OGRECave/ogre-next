@@ -9,6 +9,6 @@ var class_ogre_1_1_metal_staging_buffer =
     [ "_unmapToV1", "class_ogre_1_1_metal_staging_buffer.html#a1c30d062d8acf7485f7b5c273f839dc3", null ],
     [ "canDownload", "class_ogre_1_1_metal_staging_buffer.html#a78ad96178baf9c41b67d8451a7a23743", null ],
     [ "cleanUnfencedHazards", "class_ogre_1_1_metal_staging_buffer.html#afa75b9fc24827d5cd83283de7254bc13", null ],
-    [ "getBufferName", "class_ogre_1_1_metal_staging_buffer.html#a6668e8d33438bdae98b75b7069a7945a", null ],
+    [ "getBufferName", "class_ogre_1_1_metal_staging_buffer.html#a2a5852c0c0255267898f48ace9c8b124", null ],
     [ "uploadWillStall", "class_ogre_1_1_metal_staging_buffer.html#a7ffe5c09f2fdb06aa864f7af28d101ce", null ]
 ];

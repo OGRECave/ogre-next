@@ -1,4 +1,5 @@
 <map id="Ogre::v1::EdgeData" name="Ogre::v1::EdgeData">
-<area shape="rect" id="node1" title="This class contains the information required to describe the edge connectivity of a given set of vert..." alt="" coords="5,80,153,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="11,5,147,32"/>
+<area shape="rect" id="Node000001" title="This class contains the information required to describe the edge connectivity of a given set of vert..." alt="" coords="19,79,167,104"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,44,95,79,90,79,90,44"/>
 </map>

@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$struct_ogre_1_1_active_actor_data.html" title=" " alt="" coords="5,5,172,32"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,31,160,56"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1v1_1_1_g_l_e_s2_hardware_pixel_buffer.html" title=" " alt="" coords="208,23,428,63"/>
+<area shape="poly" id="edge6_Node000000_Node000001" title=" " alt="" coords="174,41,208,41,208,46,174,46"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_g_l_e_s2_render_buffer.html" title="Renderbuffer surface." alt="" coords="477,5,688,31"/>
+<area shape="poly" id="edge7_Node000001_Node000002" title=" " alt="" coords="441,29,477,25,477,31,442,34"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer.html" title="Texture surface." alt="" coords="476,55,689,80"/>
+<area shape="poly" id="edge8_Node000001_Node000003" title=" " alt="" coords="442,52,476,55,476,60,441,57"/>
 </map>

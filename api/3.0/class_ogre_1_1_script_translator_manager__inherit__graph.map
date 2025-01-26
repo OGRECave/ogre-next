@@ -1,5 +1,7 @@
 <map id="Ogre::ScriptTranslatorManager" name="Ogre::ScriptTranslatorManager">
-<area shape="rect" id="node1" title="The ScriptTranslatorManager manages the lifetime and access to script translators." alt="" coords="5,80,224,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_builtin_script_translator_manager.html" title="This class manages the builtin translators." alt="" coords="13,155,217,196"/>
-<area shape="rect" id="node2" title=" " alt="" coords="47,5,183,32"/>
+<area shape="rect" id="Node000001" title="The ScriptTranslatorManager manages the lifetime and access to script translators." alt="" coords="5,79,224,104"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_builtin_script_translator_manager.html" title="This class manages the builtin translators." alt="" coords="13,152,217,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="117,118,117,152,112,152,112,118"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="27,5,202,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,44,117,79,112,79,112,44"/>
 </map>

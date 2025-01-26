@@ -1,5 +1,7 @@
 <map id="Ogre::FileSystemArchive" name="Ogre::FileSystemArchive">
-<area shape="rect" id="node1" title="Specialisation of the Archive class to allow reading of files from filesystem folders / directories." alt="" coords="5,155,188,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_archive.html" title="Archive&#45;handling class." alt="" coords="41,80,152,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="29,5,165,32"/>
+<area shape="rect" id="Node000001" title="Specialisation of the Archive class to allow reading of files from filesystem folders / directories." alt="" coords="5,152,188,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_archive.html" title="Archive&#45;handling class." alt="" coords="41,79,152,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,118,99,152,94,152,94,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="9,5,184,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,44,99,79,94,79,94,44"/>
 </map>

@@ -1,6 +1,9 @@
 <map id="Ogre::VulkanSupport" name="Ogre::VulkanSupport">
-<area shape="rect" id="node1" title=" " alt="" coords="254,5,409,32"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_vulkan_android_support.html" title=" " alt="" coords="5,80,209,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_vulkan_win32_support.html" title=" " alt="" coords="234,80,429,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_vulkan_xcb_support.html" title=" " alt="" coords="453,80,631,107"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="254,5,409,31"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_vulkan_android_support.html" title=" " alt="" coords="5,79,209,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="283,37,144,81,143,76,282,32"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_vulkan_win32_support.html" title=" " alt="" coords="234,79,429,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="334,44,334,79,329,79,329,44"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_vulkan_xcb_support.html" title=" " alt="" coords="453,79,631,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="379,32,509,76,507,81,377,37"/>
 </map>

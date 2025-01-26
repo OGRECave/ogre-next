@@ -1,9 +1,9 @@
 var class_ogre_1_1_config_file =
 [
     [ "SectionIterator", "class_ogre_1_1_config_file.html#aa0167bf5f0a33e109d2de01a6a14f2f0", null ],
-    [ "SettingsBySection", "class_ogre_1_1_config_file.html#a1f52ed6a7bb70bb5e424f453e8791aad", null ],
+    [ "SettingsBySection", "class_ogre_1_1_config_file.html#a42170ea1bba5c3f5591c7fe87746e479", null ],
     [ "SettingsIterator", "class_ogre_1_1_config_file.html#adf764e20ebcf5c52d0ea887b1468a283", null ],
-    [ "SettingsMultiMap", "class_ogre_1_1_config_file.html#ac6682c7a1a92d2304f208eede43f009c", null ],
+    [ "SettingsMultiMap", "class_ogre_1_1_config_file.html#a1f7ee36885fdf936056ff773500cdff6", null ],
     [ "ConfigFile", "class_ogre_1_1_config_file.html#ae9cea1fe4ad70279841635eb892ba514", null ],
     [ "~ConfigFile", "class_ogre_1_1_config_file.html#aeb74fca345254b1701f509d3b0e77694", null ],
     [ "clear", "class_ogre_1_1_config_file.html#a26a785bacd44b6a50e99880ad09b56fe", null ],

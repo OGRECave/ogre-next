@@ -1,5 +1,7 @@
 <map id="Ogre::Volume::HalfFloatGridSource" name="Ogre::Volume::HalfFloatGridSource">
-<area shape="rect" id="node1" title="A volume source from a 16 Bit float 3D grid capable of loading volume serializations." alt="" coords="5,155,211,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_volume_1_1_grid_source.html" title="A volume source from a discrete 3d grid." alt="" coords="13,80,203,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="27,5,189,32"/>
+<area shape="rect" id="Node000001" title="A volume source from a 16 Bit float 3D grid capable of loading volume serializations." alt="" coords="5,152,211,192"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_volume_1_1_grid_source.html" title="A volume source from a discrete 3d grid." alt="" coords="13,79,203,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,118,111,152,105,152,105,118"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="27,5,189,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="111,44,111,79,105,79,105,44"/>
 </map>

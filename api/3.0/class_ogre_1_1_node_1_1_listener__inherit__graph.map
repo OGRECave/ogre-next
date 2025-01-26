@@ -1,4 +1,5 @@
 <map id="Ogre::Node::Listener" name="Ogre::Node::Listener">
-<area shape="rect" id="node1" title="Listener which gets called back on Node events." alt="" coords="7,5,161,32"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_ribbon_trail.html" title="Subclass of BillboardChain which automatically leaves a trail behind one or more Node instances." alt="" coords="5,80,163,107"/>
+<area shape="rect" id="Node000001" title="Listener which gets called back on Node events." alt="" coords="7,5,161,31"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_ribbon_trail.html" title="Subclass of BillboardChain which automatically leaves a trail behind one or more Node instances." alt="" coords="5,79,163,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,44,87,79,81,79,81,44"/>
 </map>

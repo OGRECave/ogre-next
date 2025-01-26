@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1_resource_background_queue_1_1_listener.html" title="This abstract listener interface lets you get notifications of completed background processes instead..." alt="" coords="5,5,204,47"/>
+<area shape="rect" id="Node000000" href="$struct_ogre_1_1_render_pass_target_base.html" title=" " alt="" coords="5,55,213,80"/>
+<area shape="rect" id="Node000001" href="$struct_ogre_1_1_render_pass_colour_target.html" title=" " alt="" coords="262,5,481,31"/>
+<area shape="poly" id="edge1013_Node000000_Node000001" title=" " alt="" coords="190,49,302,28,303,33,191,55"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_render_pass_depth_target.html" title=" " alt="" coords="264,55,479,80"/>
+<area shape="poly" id="edge1014_Node000000_Node000002" title=" " alt="" coords="227,65,264,65,264,70,227,70"/>
+<area shape="rect" id="Node000003" href="$struct_ogre_1_1_render_pass_stencil_target.html" title=" " alt="" coords="261,104,481,129"/>
+<area shape="poly" id="edge1015_Node000000_Node000003" title=" " alt="" coords="191,80,303,101,302,107,190,85"/>
 </map>

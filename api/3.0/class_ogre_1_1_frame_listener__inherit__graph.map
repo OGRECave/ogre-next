@@ -1,5 +1,7 @@
 <map id="Ogre::FrameListener" name="Ogre::FrameListener">
-<area shape="rect" id="node1" title="A interface class defining a listener which can be used to receive notifications of frame events." alt="" coords="129,5,283,32"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_frame_time_controller_value.html" title="Predefined controller value for getting the latest frame time." alt="" coords="5,80,204,121"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_volume_1_1_chunk.html" title="A single volume chunk mesh." alt="" coords="228,87,387,114"/>
+<area shape="rect" id="Node000001" title="A interface class defining a listener which can be used to receive notifications of frame events." alt="" coords="129,5,283,31"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_frame_time_controller_value.html" title="Predefined controller value for getting the latest frame time." alt="" coords="5,79,204,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,41,131,81,127,76,179,37"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_volume_1_1_chunk.html" title="A single volume chunk mesh." alt="" coords="228,86,387,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="234,37,294,84,291,88,230,41"/>
 </map>

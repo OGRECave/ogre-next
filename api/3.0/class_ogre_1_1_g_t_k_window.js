@@ -5,7 +5,7 @@ var class_ogre_1_1_g_t_k_window =
     [ "copyContentsToMemory", "class_ogre_1_1_g_t_k_window.html#a206bdfe2158ef14dbe49459f5773dcea", null ],
     [ "create", "class_ogre_1_1_g_t_k_window.html#a04e25bb2fdc39df437fe48647a8d647f", null ],
     [ "destroy", "class_ogre_1_1_g_t_k_window.html#af7c7edc6d2da1622f271879be561888e", null ],
-    [ "get_ogre_widget", "class_ogre_1_1_g_t_k_window.html#af59f9602ae44b22d6c086bacc9465684", null ],
+    [ "get_ogre_widget", "class_ogre_1_1_g_t_k_window.html#ac7002d31807d93c217b39cbe078dde82", null ],
     [ "getCustomAttribute", "class_ogre_1_1_g_t_k_window.html#a7266d1396c0db1866e19cdbae0ee9db6", null ],
     [ "isActive", "class_ogre_1_1_g_t_k_window.html#affd7a8806254fbe56be2558cac2addba", null ],
     [ "isClosed", "class_ogre_1_1_g_t_k_window.html#a4f3309c8d88b28637a38181998631dcf", null ],

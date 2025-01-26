@@ -1,10 +1,17 @@
 <map id="Ogre::RenderSystem" name="Ogre::RenderSystem">
-<area shape="rect" id="node1" title="Defines the functionality of a 3D API." alt="" coords="189,132,345,159"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_render_system.html" title="Implementation of DirectX11 as a rendering system." alt="" coords="397,5,597,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_render_system.html" title="Implementation of GL 3 as a rendering system." alt="" coords="393,56,601,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_e_s2_render_system.html" title="Implementation of GL ES 2.x as a rendering system." alt="" coords="399,107,596,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_metal_render_system.html" title="Implementation of Metal as a rendering system." alt="" coords="401,157,594,184"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_render_system.html" title="Implementation of NULL as a rendering system." alt="" coords="402,208,593,235"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_render_system.html" title="Implementation of Vulkan as a rendering system." alt="" coords="398,259,597,285"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,132,141,159"/>
+<area shape="rect" id="Node000001" title="Defines the functionality of a 3D API." alt="" coords="228,129,384,155"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_render_system.html" title="Implementation of DirectX11 as a rendering system." alt="" coords="436,5,636,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="327,117,372,77,401,57,431,40,461,28,463,33,433,44,404,61,376,82,331,121"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_l3_plus_render_system.html" title="Implementation of GL 3 as a rendering system." alt="" coords="432,55,640,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="347,121,431,89,472,78,474,83,433,94,349,126"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_g_l_e_s2_render_system.html" title="Implementation of GL ES 2.x as a rendering system." alt="" coords="437,104,635,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="397,129,437,125,438,130,398,135"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_metal_render_system.html" title="Implementation of Metal as a rendering system." alt="" coords="439,153,633,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="398,149,440,153,439,159,397,154"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_n_u_l_l_render_system.html" title="Implementation of NULL as a rendering system." alt="" coords="441,203,631,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="350,158,433,189,474,200,473,205,431,194,348,163"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_vulkan_render_system.html" title="Implementation of Vulkan as a rendering system." alt="" coords="437,252,635,277"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="331,162,376,202,404,221,433,238,463,249,461,254,431,243,401,226,373,206,327,166"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,129,180,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,139,228,139,228,145,194,145"/>
 </map>

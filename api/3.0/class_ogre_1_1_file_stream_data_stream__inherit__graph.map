@@ -1,5 +1,7 @@
 <map id="Ogre::FileStreamDataStream" name="Ogre::FileStreamDataStream">
-<area shape="rect" id="node1" title="Common subclass of DataStream for handling data from std::basic_istream." alt="" coords="5,155,215,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_data_stream.html" title="General purpose class used for encapsulating the reading and writing of data." alt="" coords="41,80,179,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="42,5,178,32"/>
+<area shape="rect" id="Node000001" title="Common subclass of DataStream for handling data from std::basic_istream." alt="" coords="5,152,215,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_data_stream.html" title="General purpose class used for encapsulating the reading and writing of data." alt="" coords="41,79,179,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,118,113,152,107,152,107,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="23,5,197,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="113,44,113,79,107,79,107,44"/>
 </map>

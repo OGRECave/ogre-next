@@ -1,5 +1,7 @@
 <map id="Ogre::v1::BorderRenderable" name="Ogre::v1::BorderRenderable">
-<area shape="rect" id="node1" title="Class for rendering the border of a BorderPanelOverlayElement." alt="" coords="51,80,254,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="5,5,140,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="165,5,301,32"/>
+<area shape="rect" id="Node000001" title="Class for rendering the border of a BorderPanelOverlayElement." alt="" coords="61,79,263,104"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="5,5,140,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,37,149,76,146,81,96,41"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="164,5,339,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="228,41,178,81,175,76,225,37"/>
 </map>

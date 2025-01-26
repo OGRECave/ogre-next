@@ -1,5 +1,7 @@
 <map id="Ogre::HlmsManager" name="Ogre::HlmsManager">
-<area shape="rect" id="node1" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="82,80,234,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,5,148,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="173,5,309,32"/>
+<area shape="rect" id="Node000001" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="91,79,243,104"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,5,148,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,37,154,76,151,81,101,41"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="172,5,347,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="236,41,184,81,181,76,232,37"/>
 </map>

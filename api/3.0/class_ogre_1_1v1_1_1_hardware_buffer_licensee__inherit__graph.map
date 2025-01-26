@@ -1,4 +1,5 @@
 <map id="Ogre::v1::HardwareBufferLicensee" name="Ogre::v1::HardwareBufferLicensee">
-<area shape="rect" id="node1" title="Abstract interface representing a &#39;licensee&#39; of a hardware buffer copy." alt="" coords="31,5,217,47"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_temp_blended_buffer_info.html" title="Structure for recording the use of temporary blend buffers." alt="" coords="5,95,243,121"/>
+<area shape="rect" id="Node000001" title="Abstract interface representing a &#39;licensee&#39; of a hardware buffer copy." alt="" coords="31,5,217,45"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_temp_blended_buffer_info.html" title="Structure for recording the use of temporary blend buffers." alt="" coords="5,93,243,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,59,127,93,121,93,121,59"/>
 </map>

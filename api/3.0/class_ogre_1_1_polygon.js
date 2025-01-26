@@ -7,8 +7,8 @@ var class_ogre_1_1_polygon =
     [ "~Polygon", "class_ogre_1_1_polygon.html#a7ce008c85c18f7c28776a7e6b5fb60f3", null ],
     [ "Polygon", "class_ogre_1_1_polygon.html#a86fb38e409c2792034bb6754ff373dc0", null ],
     [ "deleteVertex", "class_ogre_1_1_polygon.html#a2326d35755fe008fb437c208c6b007d6", null ],
-    [ "getNormal", "class_ogre_1_1_polygon.html#a2f6f8ca3ff5356ed6ddebb55f9c158bd", null ],
-    [ "getVertex", "class_ogre_1_1_polygon.html#ae88f6dcead5afbf639ab42959662dac3", null ],
+    [ "getNormal", "class_ogre_1_1_polygon.html#ac18f8f762f8f931ce1d4975d7232e559", null ],
+    [ "getVertex", "class_ogre_1_1_polygon.html#a54477f45af2ab161d65160461985cacc", null ],
     [ "getVertexCount", "class_ogre_1_1_polygon.html#ab790017a0ed88f903c3f08680a3a570e", null ],
     [ "insertVertex", "class_ogre_1_1_polygon.html#ac32b2d0a6e7c0cee21471fdaf6da13c4", null ],
     [ "insertVertex", "class_ogre_1_1_polygon.html#a8853087632d98ac16fa4e1c04e537353", null ],
@@ -19,5 +19,5 @@ var class_ogre_1_1_polygon =
     [ "reset", "class_ogre_1_1_polygon.html#a820a2030d0864cace5d649e1dc607838", null ],
     [ "setVertex", "class_ogre_1_1_polygon.html#a0d19a9876f714cde041e3b7c4598e3b4", null ],
     [ "storeEdges", "class_ogre_1_1_polygon.html#a6c6bde3911911e1bdf7ff2ed93209eda", null ],
-    [ "operator<<", "class_ogre_1_1_polygon.html#a4ecd1e0336a4e27b0c09ae3f75a1da72", null ]
+    [ "operator<<", "class_ogre_1_1_polygon.html#a642f59093f01be26321a884468a29e54", null ]
 ];

@@ -1,5 +1,7 @@
 <map id="Ogre::NULLStagingBuffer" name="Ogre::NULLStagingBuffer">
-<area shape="rect" id="node1" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="5,155,188,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="22,80,171,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="29,5,165,32"/>
+<area shape="rect" id="Node000001" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="5,152,188,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="22,79,171,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,118,99,152,94,152,94,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="9,5,184,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,44,99,79,94,79,94,44"/>
 </map>

@@ -1,6 +1,9 @@
 <map id="Ogre::v1::OldNode" name="Ogre::v1::OldNode">
-<area shape="rect" id="node1" title="Class representing a general&#45;purpose OldNode an articulated scene graph." alt="" coords="5,80,147,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_old_bone.html" title="A bone in a skeleton." alt="" coords="6,155,146,181"/>
-<area shape="rect" id="node2" title=" " alt="" coords="8,5,144,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1v1_1_1_tag_point.html" title="A tagged point on a skeleton, which can be used to attach entities to on specific other entities." alt="" coords="6,229,146,256"/>
+<area shape="rect" id="Node000001" title="Class representing a general&#45;purpose OldNode an articulated scene graph." alt="" coords="22,79,163,104"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_old_bone.html" title="A bone in a skeleton." alt="" coords="23,152,163,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="95,118,95,152,90,152,90,118"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,44,95,79,90,79,90,44"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1v1_1_1_tag_point.html" title="A tagged point on a skeleton, which can be used to attach entities to on specific other entities." alt="" coords="23,225,163,251"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="95,191,95,225,90,225,90,191"/>
 </map>

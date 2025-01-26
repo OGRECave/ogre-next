@@ -1,11 +1,19 @@
 <map id="Ogre::GL3PlusSupport" name="Ogre::GL3PlusSupport">
-<area shape="rect" id="node1" title=" " alt="" coords="5,183,168,209"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_e_g_l_g_l_support.html" title=" " alt="" coords="237,5,391,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_egl_p_buffer_support.html" title=" " alt="" coords="225,56,403,83"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_g_l_x_g_l_support.html" title=" " alt="" coords="237,107,391,133"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_g_t_k_g_l_support.html" title="GL support in a GTK window." alt="" coords="237,157,391,184"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_gl_switchable_support.html" title=" " alt="" coords="216,208,412,235"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_o_s_x_g_l3_plus_support.html" title=" " alt="" coords="219,259,409,285"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_s_d_l_g_l_support.html" title=" " alt="" coords="237,309,391,336"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_win32_g_l_support.html" title=" " alt="" coords="229,360,399,387"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,179,168,204"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_e_g_l_g_l_support.html" title=" " alt="" coords="237,5,391,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,165,145,102,178,68,215,40,239,28,241,33,217,44,181,72,150,105,104,168"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_egl_p_buffer_support.html" title=" " alt="" coords="225,55,403,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="109,167,155,127,215,89,245,78,247,82,217,94,158,131,112,171"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_l_x_g_l_support.html" title=" " alt="" coords="237,104,391,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="129,171,215,138,255,127,257,132,217,143,131,176"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_g_t_k_g_l_support.html" title="GL support in a GTK window." alt="" coords="237,153,391,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="182,178,236,172,237,177,182,183"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_gl_switchable_support.html" title=" " alt="" coords="216,203,412,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="182,199,216,202,216,208,182,204"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_o_s_x_g_l3_plus_support.html" title=" " alt="" coords="219,252,409,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="133,207,217,237,261,249,259,255,215,242,131,212"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_s_d_l_g_l_support.html" title=" " alt="" coords="237,301,391,327"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="113,211,159,250,217,286,250,299,249,304,215,291,156,254,109,215"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_win32_g_l_support.html" title=" " alt="" coords="229,351,399,376"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="105,214,150,276,182,308,217,336,245,348,242,353,215,340,178,312,146,279,101,217"/>
 </map>

@@ -4,7 +4,7 @@ var class_ogre_1_1_free_image_codec2 =
     [ "~FreeImageCodec2", "class_ogre_1_1_free_image_codec2.html#a4492325ab9cd1de8fd85c55be7d04c7f", null ],
     [ "decode", "class_ogre_1_1_free_image_codec2.html#a9543ecde2b0a4e625dca80f1f1702e0b", null ],
     [ "encode", "class_ogre_1_1_free_image_codec2.html#a62139c7c9f7d8547cb068ed9c776f6a0", null ],
-    [ "encodeBitmap", "class_ogre_1_1_free_image_codec2.html#aedd6632495b01ccd224fd8956e6acad4", null ],
+    [ "encodeBitmap", "class_ogre_1_1_free_image_codec2.html#a35e19352c78a63f685f11f2ec9b45dd4", null ],
     [ "encodeToFile", "class_ogre_1_1_free_image_codec2.html#a74125902e805d855880cc2109b6d6cd5", null ],
     [ "getType", "class_ogre_1_1_free_image_codec2.html#ad9d112d6e033833873be45f62d232777", null ],
     [ "magicNumberToFileExt", "class_ogre_1_1_free_image_codec2.html#af6db7e1f71f235fb9ffd18fcd98026d9", null ],

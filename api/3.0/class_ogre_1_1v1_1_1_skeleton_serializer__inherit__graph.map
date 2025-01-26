@@ -1,5 +1,7 @@
 <map id="Ogre::v1::SkeletonSerializer" name="Ogre::v1::SkeletonSerializer">
-<area shape="rect" id="node1" title="Class for serialising skeleton data to/from an OGRE .skeleton file." alt="" coords="5,155,208,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_serializer.html" title="Generic class for serialising data to / from binary stream&#45;based files." alt="" coords="45,80,168,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="39,5,175,32"/>
+<area shape="rect" id="Node000001" title="Class for serialising skeleton data to/from an OGRE .skeleton file." alt="" coords="5,152,208,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_serializer.html" title="Generic class for serialising data to / from binary stream&#45;based files." alt="" coords="45,79,168,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,118,109,152,104,152,104,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="19,5,194,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,44,109,79,104,79,104,44"/>
 </map>

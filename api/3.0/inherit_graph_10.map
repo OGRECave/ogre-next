@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$struct_ogre_1_1_abi_cookie.html" title=" " alt="" coords="5,5,132,32"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,5,192,45"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_g_l_e_s2_hardware_occlusion_query.html" title=" " alt="" coords="240,5,468,45"/>
+<area shape="poly" id="edge5_Node000000_Node000001" title=" " alt="" coords="206,23,240,23,240,28,206,28"/>
 </map>

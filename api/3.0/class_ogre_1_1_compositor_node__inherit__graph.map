@@ -1,6 +1,9 @@
 <map id="Ogre::CompositorNode" name="Ogre::CompositorNode">
-<area shape="rect" id="node1" title="Compositor nodes are the core subject of compositing." alt="" coords="63,80,233,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_compositor_shadow_node.html" title="Shadow Nodes are special nodes (not to be confused with CompositorNode) that are only used for render..." alt="" coords="37,155,259,181"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,141,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="165,5,280,32"/>
+<area shape="rect" id="Node000001" title="Compositor nodes are the core subject of compositing." alt="" coords="91,79,262,104"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_compositor_shadow_node.html" title="Shadow Nodes are special nodes (not to be confused with CompositorNode) that are only used for render..." alt="" coords="66,152,287,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="179,118,179,152,174,152,174,118"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,38,165,76,161,80,115,42"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="205,5,319,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="240,41,192,80,189,76,236,37"/>
 </map>

@@ -1,8 +1,13 @@
 <map id="Ogre::GLES2Context" name="Ogre::GLES2Context">
-<area shape="rect" id="node1" title="Class that encapsulates an GL context." alt="" coords="5,81,159,108"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_e_g_l_context.html" title=" " alt="" coords="207,81,344,108"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_android_e_g_l_context.html" title=" " alt="" coords="404,5,591,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_emscripten_e_g_l_context.html" title=" " alt="" coords="392,56,603,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_win32_e_g_l_context.html" title=" " alt="" coords="408,107,587,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_x11_e_g_l_context.html" title=" " alt="" coords="416,157,579,184"/>
+<area shape="rect" id="Node000001" title="Class that encapsulates an GL context." alt="" coords="5,80,159,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_e_g_l_context.html" title=" " alt="" coords="207,80,344,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,90,207,90,207,95,172,95"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_android_e_g_l_context.html" title=" " alt="" coords="404,5,591,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="313,72,391,39,432,28,433,33,393,45,315,77"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_emscripten_e_g_l_context.html" title=" " alt="" coords="392,55,603,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="357,81,392,77,392,82,358,86"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_win32_e_g_l_context.html" title=" " alt="" coords="408,104,587,129"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="358,99,408,104,407,110,357,104"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_x11_e_g_l_context.html" title=" " alt="" coords="416,153,579,179"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="317,109,393,138,437,151,436,156,391,143,315,113"/>
 </map>

@@ -1,7 +1,11 @@
 <map id="Ogre::v1::D3D11HardwareBufferManager" name="Ogre::v1::D3D11HardwareBufferManager">
-<area shape="rect" id="node1" title="D3D11HardwareBufferManagerBase as a Singleton." alt="" coords="91,259,322,300"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_hardware_buffer_manager.html" title="Singleton wrapper for hardware buffer manager." alt="" coords="113,169,300,211"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html" title="Base definition of a hardware buffer manager." alt="" coords="5,80,192,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="31,5,167,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="216,80,416,121"/>
+<area shape="rect" id="Node000001" title="D3D11HardwareBufferManagerBase as a Singleton." alt="" coords="91,255,322,295"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_hardware_buffer_manager.html" title="Singleton wrapper for hardware buffer manager." alt="" coords="113,167,300,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="209,221,209,254,204,254,204,221"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html" title="Base definition of a hardware buffer manager." alt="" coords="5,79,192,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="135,125,184,164,181,169,132,129"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="11,5,186,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="101,44,101,79,96,79,96,44"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="216,79,416,119"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="283,129,233,169,229,164,279,125"/>
 </map>

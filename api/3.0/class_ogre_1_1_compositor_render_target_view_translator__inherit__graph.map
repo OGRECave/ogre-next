@@ -1,5 +1,7 @@
 <map id="Ogre::CompositorRenderTargetViewTranslator" name="Ogre::CompositorRenderTargetViewTranslator">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,228,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="35,80,198,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="49,5,185,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,152,228,192"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="35,79,198,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,118,119,152,114,152,114,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="29,5,204,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="119,44,119,79,114,79,114,44"/>
 </map>

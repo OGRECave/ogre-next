@@ -1,7 +1,11 @@
 <map id="Ogre::WorkQueue::RequestHandler" name="Ogre::WorkQueue::RequestHandler">
-<area shape="rect" id="node1" title="Interface definition for a handler of requests." alt="" coords="5,78,203,119"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_lod_work_queue_worker.html" title="Processes requests." alt="" coords="254,5,458,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_page.html" title="Page class." alt="" coords="310,56,402,83"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_resource_background_queue.html" title="This class is used to perform Resource operations in a background thread." alt="" coords="257,107,455,149"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_volume_1_1_chunk_handler.html" title="Handles the WorkQueue management of the chunks." alt="" coords="251,173,461,200"/>
+<area shape="rect" id="Node000001" title="Interface definition for a handler of requests." alt="" coords="5,77,203,117"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_lod_work_queue_worker.html" title="Processes requests." alt="" coords="254,5,458,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,69,250,39,293,28,294,33,251,45,167,74"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_page.html" title="Page class." alt="" coords="310,55,402,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,81,309,70,310,75,217,86"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_resource_background_queue.html" title="This class is used to perform Resource operations in a background thread." alt="" coords="257,105,455,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="216,106,257,111,256,116,216,112"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_volume_1_1_chunk_handler.html" title="Handles the WorkQueue management of the chunks." alt="" coords="251,169,461,195"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="163,120,252,154,296,167,295,172,250,159,161,125"/>
 </map>

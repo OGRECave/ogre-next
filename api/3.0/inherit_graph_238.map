@@ -1,3 +1,47 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$struct_ogre_1_1_g_l3_plus_vao_manager_1_1_vao_1_1_vertex_binding.html" title=" " alt="" coords="5,5,200,47"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_frame_listener.html" title="A interface class defining a listener which can be used to receive notifications of frame events." alt="" coords="204,59,359,84"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_frame_time_controller_value.html" title="Predefined controller value for getting the latest frame time." alt="" coords="447,55,646,95"/>
+<area shape="poly" id="edge795_Node000000_Node000001" title=" " alt="" coords="373,70,447,71,447,77,372,75"/>
+<area shape="rect" id="Node000021" href="$class_ogre_1_1_volume_1_1_chunk.html" title="A single volume chunk mesh." alt="" coords="467,5,626,31"/>
+<area shape="poly" id="edge796_Node000000_Node000021" title=" " alt="" coords="358,53,482,28,483,33,359,58"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="5,500,141,525"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_controller.html" title=" " alt="" coords="189,524,373,549"/>
+<area shape="poly" id="edge797_Node000007_Node000008" title=" " alt="" coords="156,519,189,523,189,529,155,525"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_controller_function.html" title=" " alt="" coords="191,705,371,745"/>
+<area shape="poly" id="edge798_Node000007_Node000009" title=" " alt="" coords="99,534,262,702,258,706,95,538"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_controller_value.html" title=" " alt="" coords="201,215,362,255"/>
+<area shape="poly" id="edge804_Node000007_Node000002" title=" " alt="" coords="90,487,263,254,267,257,94,490"/>
+<area shape="rect" id="Node000015" href="$class_ogre_1_1_abstract_node.html" title=" " alt="" coords="207,475,356,500"/>
+<area shape="poly" id="edge810_Node000007_Node000015" title=" " alt="" coords="155,500,206,494,207,499,156,505"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_animation_controller_function.html" title="Predefined controller function for dealing with animation." alt="" coords="451,737,643,777"/>
+<area shape="poly" id="edge799_Node000009_Node000010" title=" " alt="" coords="385,734,451,742,450,748,385,740"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_linear_controller_function.html" title="Predefined controller function based on linear function interpolation." alt="" coords="437,801,657,827"/>
+<area shape="poly" id="edge800_Node000009_Node000011" title=" " alt="" coords="333,748,376,768,422,786,469,799,468,804,421,791,374,773,331,753"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_passthrough_controller_function.html" title="Predefined controller function which just passes through the original source directly to dest." alt="" coords="445,851,649,891"/>
+<area shape="poly" id="edge801_Node000009_Node000012" title=" " alt="" coords="313,753,362,796,391,818,423,837,451,849,449,854,420,842,388,823,358,801,309,757"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_scale_controller_function.html" title="Predefined controller function which simply scales an input to an output value." alt="" coords="439,623,654,648"/>
+<area shape="poly" id="edge802_Node000009_Node000013" title=" " alt="" coords="331,696,374,676,421,658,468,646,469,651,422,663,376,681,333,701"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1_waveform_controller_function.html" title="Predefined controller function based on a waveform." alt="" coords="451,673,643,713"/>
+<area shape="poly" id="edge803_Node000009_Node000014" title=" " alt="" coords="385,710,450,702,451,707,385,715"/>
+<area shape="poly" id="edge806_Node000002_Node000001" title=" " alt="" coords="306,203,355,152,386,127,420,105,447,93,449,98,423,110,389,131,359,156,310,207"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_float_gpu_parameter_controller_value.html" title="Predefined controller value for setting a single floating&#45; point value in a constant parameter of a v..." alt="" coords="421,183,672,223"/>
+<area shape="poly" id="edge805_Node000002_Node000003" title=" " alt="" coords="375,221,421,216,421,221,376,227"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_tex_coord_modifier_controller_value.html" title="Predefined controller value for getting / setting a texture coordinate modifications (scales and tran..." alt="" coords="427,247,666,287"/>
+<area shape="poly" id="edge807_Node000002_Node000004" title=" " alt="" coords="376,244,428,250,427,256,375,249"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_texture_frame_controller_value.html" title="Predefined controller value for getting / setting the frame number of a texture layer." alt="" coords="439,311,654,351"/>
+<area shape="poly" id="edge808_Node000002_Node000005" title=" " alt="" coords="335,259,422,297,460,309,459,314,420,302,332,264"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1v1_1_1_animation_state_controller_value.html" title="ControllerValue wrapper class for AnimationState." alt="" coords="453,119,640,159"/>
+<area shape="poly" id="edge809_Node000002_Node000006" title=" " alt="" coords="332,207,420,169,459,157,460,162,422,174,335,212"/>
+<area shape="rect" id="Node000016" href="$class_ogre_1_1_atom_abstract_node.html" title="This is an abstract node which cannot be broken down further." alt="" coords="455,425,639,451"/>
+<area shape="poly" id="edge811_Node000015_Node000016" title=" " alt="" coords="363,470,477,448,478,453,364,475"/>
+<area shape="rect" id="Node000017" href="$class_ogre_1_1_import_abstract_node.html" title="This abstract node represents an import statement." alt="" coords="451,475,643,500"/>
+<area shape="poly" id="edge812_Node000015_Node000017" title=" " alt="" coords="370,485,451,485,451,490,370,490"/>
+<area shape="rect" id="Node000018" href="$class_ogre_1_1_object_abstract_node.html" title="This specific abstract node represents a script object." alt="" coords="451,524,642,549"/>
+<area shape="poly" id="edge813_Node000015_Node000018" title=" " alt="" coords="364,500,478,521,477,527,363,505"/>
+<area shape="rect" id="Node000019" href="$class_ogre_1_1_property_abstract_node.html" title="This abstract node represents a script property." alt="" coords="445,573,649,599"/>
+<area shape="poly" id="edge814_Node000015_Node000019" title=" " alt="" coords="359,502,375,510,390,523,399,536,408,549,423,560,450,571,448,576,420,564,404,552,395,539,386,527,372,515,357,507"/>
+<area shape="rect" id="Node000020" href="$class_ogre_1_1_variable_access_abstract_node.html" title="This abstract node represents a variable assignment." alt="" coords="423,376,670,401"/>
+<area shape="poly" id="edge815_Node000015_Node000020" title=" " alt="" coords="313,465,362,437,420,411,465,399,466,404,422,417,365,442,315,470"/>
+<area shape="rect" id="Node000022" title=" " alt="" coords="211,5,352,31"/>
+<area shape="poly" id="edge816_Node000022_Node000021" title=" " alt="" coords="366,15,467,15,467,21,366,21"/>
 </map>

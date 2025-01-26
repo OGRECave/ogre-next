@@ -1,12 +1,21 @@
 <map id="Ogre::GpuProgram" name="Ogre::GpuProgram">
-<area shape="rect" id="node1" title="Defines a program which runs on the GPU such as a vertex or fragment program." alt="" coords="380,107,523,133"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_high_level_gpu_program.html" title="Abstract base class representing a high&#45;level program (a vertex or fragment program)." alt="" coords="571,107,777,133"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g." alt="" coords="211,107,332,133"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,81,163,108"/>
-<area shape="rect" id="node4" title=" " alt="" coords="16,132,152,159"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_d3_d11_h_l_s_l_program.html" title="Specialization of HighLevelGpuProgram to provide support for D3D11 High&#45;Level Shader Language (HLSL)." alt="" coords="829,5,1021,32"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_g_l_s_l_shader.html" title="Specialisation of HighLevelGpuProgram to encapsulate shader objects obtained from compiled shaders wr..." alt="" coords="855,56,994,83"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_metal_program.html" title="Specialisation of HighLevelGpuProgram to provide support for Metal Shader Language." alt="" coords="848,107,1001,133"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_unified_high_level_gpu_program.html" title="Specialisation of HighLevelGpuProgram which just delegates its implementation to one other high level..." alt="" coords="825,158,1024,199"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_vulkan_program.html" title="Specialisation of HighLevelGpuProgram to provide support for Vulkan Shader Language." alt="" coords="845,224,1004,251"/>
+<area shape="rect" id="Node000001" title="Defines a program which runs on the GPU such as a vertex or fragment program." alt="" coords="397,104,540,129"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_high_level_gpu_program.html" title="Abstract base class representing a high&#45;level program (a vertex or fragment program)." alt="" coords="588,104,795,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="554,114,588,114,588,119,554,119"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g." alt="" coords="228,104,349,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="363,114,397,114,397,119,363,119"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="14,79,171,104"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="185,101,228,106,227,111,184,106"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,128,180,153"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="194,126,227,121,228,127,194,131"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_d3_d11_h_l_s_l_program.html" title="Specialization of HighLevelGpuProgram to provide support for D3D11 High&#45;Level Shader Language (HLSL)." alt="" coords="846,5,1038,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="725,95,779,67,842,39,879,28,880,33,844,45,781,72,727,100"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_g_l_s_l_shader.html" title="Specialisation of HighLevelGpuProgram to encapsulate shader objects obtained from compiled shaders wr..." alt="" coords="873,55,1011,80"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="769,99,876,77,877,83,770,104"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_metal_program.html" title="Specialisation of HighLevelGpuProgram to provide support for Metal Shader Language." alt="" coords="865,104,1019,129"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="809,114,865,114,865,119,809,119"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_unified_high_level_gpu_program.html" title="Specialisation of HighLevelGpuProgram which just delegates its implementation to one other high level..." alt="" coords="843,154,1041,194"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="762,130,855,151,854,157,760,135"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_vulkan_program.html" title="Specialisation of HighLevelGpuProgram to provide support for Vulkan Shader Language." alt="" coords="863,219,1021,244"/>
+<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="723,135,777,170,844,204,881,216,879,221,842,208,775,174,720,139"/>
 </map>

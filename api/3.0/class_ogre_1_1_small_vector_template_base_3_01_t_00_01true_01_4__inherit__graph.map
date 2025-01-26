@@ -1,5 +1,7 @@
 <map id="Ogre::SmallVectorTemplateBase&lt; T, true &gt;" name="Ogre::SmallVectorTemplateBase&lt; T, true &gt;">
-<area shape="rect" id="node1" title="SmallVectorTemplateBase&lt;isPodLike = true&gt; &#45; This is where we put method implementations that are desi..." alt="" coords="5,169,204,211"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="5,80,204,121"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_small_vector_base.html" title="SmallVectorBase &#45; This is all the non&#45;templated stuff common to all SmallVectors." alt="" coords="19,5,190,32"/>
+<area shape="rect" id="Node000001" title="SmallVectorTemplateBase&lt;isPodLike = true&gt; &#45; This is where we put method implementations that are desi..." alt="" coords="5,167,204,207"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="5,79,204,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,133,107,166,102,166,102,133"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_small_vector_base.html" title="SmallVectorBase &#45; This is all the non&#45;templated stuff common to all SmallVectors." alt="" coords="19,5,190,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="107,44,107,79,102,79,102,44"/>
 </map>

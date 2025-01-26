@@ -1,5 +1,7 @@
 <map id="Ogre::MetalVaoManager" name="Ogre::MetalVaoManager">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,184,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_vao_manager.html" title=" " alt="" coords="23,80,166,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="27,5,163,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,152,184,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_vao_manager.html" title=" " alt="" coords="23,79,166,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,118,97,152,92,152,92,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="7,5,182,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="97,44,97,79,92,79,92,44"/>
 </map>

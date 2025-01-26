@@ -1,7 +1,11 @@
 <map id="Ogre::ArrayMemoryManager" name="Ogre::ArrayMemoryManager">
-<area shape="rect" id="node1" title="Abstract memory manager for managing large chunks of contiguous memory, optimized for SoA (Structure ..." alt="" coords="5,93,212,120"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_bone_array_memory_manager.html" title="Implementation to create the Transform variables needed by Bones." alt="" coords="261,5,501,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_kf_transform_array_memory_manager.html" title="Implementation to create the KfTransform variables needed by SkeletonTrack See SkeletonAnimationDef a..." alt="" coords="266,57,495,98"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_node_array_memory_manager.html" title="Implementation to create the Transform variables needed by Nodes &amp; SceneNodes." alt="" coords="260,123,501,149"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_object_data_array_memory_manager.html" title="Implementation to create the ObjectData variables needed by MovableObjects." alt="" coords="269,174,492,215"/>
+<area shape="rect" id="Node000001" title="Abstract memory manager for managing large chunks of contiguous memory, optimized for SoA (Structure ..." alt="" coords="5,92,212,117"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_bone_array_memory_manager.html" title="Implementation to create the Transform variables needed by Bones." alt="" coords="261,5,501,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="148,84,201,62,259,41,308,28,309,33,261,46,202,67,151,89"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_kf_transform_array_memory_manager.html" title="Implementation to create the KfTransform variables needed by SkeletonTrack See SkeletonAnimationDef a..." alt="" coords="266,55,495,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,89,266,85,266,90,226,95"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_node_array_memory_manager.html" title="Implementation to create the Transform variables needed by Nodes &amp; SceneNodes." alt="" coords="260,120,501,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="226,114,260,118,259,123,225,119"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_object_data_array_memory_manager.html" title="Implementation to create the ObjectData variables needed by MovableObjects." alt="" coords="269,170,492,210"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="159,120,261,154,305,167,304,172,259,159,157,125"/>
 </map>

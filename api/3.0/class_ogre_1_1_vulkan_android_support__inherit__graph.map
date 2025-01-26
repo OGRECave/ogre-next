@@ -1,4 +1,5 @@
 <map id="Ogre::VulkanAndroidSupport" name="Ogre::VulkanAndroidSupport">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,209,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_vulkan_support.html" title=" " alt="" coords="30,5,185,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,209,104"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_vulkan_support.html" title=" " alt="" coords="30,5,185,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,44,110,79,105,79,105,44"/>
 </map>

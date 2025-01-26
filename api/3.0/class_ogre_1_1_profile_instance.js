@@ -1,7 +1,7 @@
 var class_ogre_1_1_profile_instance =
 [
-    [ "ProfileChildrenMap", "class_ogre_1_1_profile_instance.html#acc3490b18265fde1ddae8eac7f5cdf61", null ],
-    [ "ProfileChildrenVec", "class_ogre_1_1_profile_instance.html#a79479be81ff4dfa1aec37579fd3a6061", null ],
+    [ "ProfileChildrenMap", "class_ogre_1_1_profile_instance.html#a57bcfc956ed84e6e4a85bf485a98d7c3", null ],
+    [ "ProfileChildrenVec", "class_ogre_1_1_profile_instance.html#a0d07b5ee2f25241fed784e92accd86c1", null ],
     [ "ProfileInstance", "class_ogre_1_1_profile_instance.html#a2666f952c4b36d605980445b65879266", null ],
     [ "~ProfileInstance", "class_ogre_1_1_profile_instance.html#a77420edd6dca7558b74b825092284e61", null ],
     [ "destroyAllChildren", "class_ogre_1_1_profile_instance.html#a41f4675a0f1e9bebe386851423f2e682", null ],

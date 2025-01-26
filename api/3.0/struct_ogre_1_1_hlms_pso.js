@@ -7,7 +7,7 @@ var struct_ogre_1_1_hlms_pso =
     [ "initialize", "struct_ogre_1_1_hlms_pso.html#a5dd6c4910676b36f7d1846bb12ddfc26", null ],
     [ "lessNonPod", "struct_ogre_1_1_hlms_pso.html#a96f75c799a4f17cc425c4a1372f16ae5", null ],
     [ "lessThanExcludePassData", "struct_ogre_1_1_hlms_pso.html#a21993177743971b2fc5b88dd9b57cd26", null ],
-    [ "operator=", "struct_ogre_1_1_hlms_pso.html#a29b97467711c5b22b3e8d544e93937ee", null ],
+    [ "operator=", "struct_ogre_1_1_hlms_pso.html#a6f41a4f2834593212fcf1fb75728b554", null ],
     [ "blendblock", "struct_ogre_1_1_hlms_pso.html#aed396bea648967171646224bb74bd123", null ],
     [ "clipDistances", "struct_ogre_1_1_hlms_pso.html#a5b992d10857a9d5dc699b56983966917", null ],
     [ "enablePrimitiveRestart", "struct_ogre_1_1_hlms_pso.html#a98b85399cb50916cad81513ddc0c3c0e", null ],

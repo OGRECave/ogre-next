@@ -1,4 +1,5 @@
 <map id="Ogre::MaterialSerializer" name="Ogre::MaterialSerializer">
-<area shape="rect" id="node1" title="Class for serializing Materials to / from a .material script." alt="" coords="5,80,181,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="25,5,161,32"/>
+<area shape="rect" id="Node000001" title="Class for serializing Materials to / from a .material script." alt="" coords="5,79,181,104"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="6,5,181,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,44,96,79,91,79,91,44"/>
 </map>

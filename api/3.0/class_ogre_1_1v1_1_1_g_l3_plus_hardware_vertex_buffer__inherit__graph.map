@@ -1,6 +1,9 @@
 <map id="Ogre::v1::GL3PlusHardwareVertexBuffer" name="Ogre::v1::GL3PlusHardwareVertexBuffer">
-<area shape="rect" id="node1" title="Specialisation of HardwareVertexBuffer for OpenGL." alt="" coords="5,244,205,285"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_hardware_vertex_buffer.html" title="Specialisation of HardwareBuffer for a vertex buffer." alt="" coords="10,155,201,196"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_hardware_buffer.html" title="Abstract class defining common features of hardware buffers." alt="" coords="12,80,199,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="37,5,173,32"/>
+<area shape="rect" id="Node000001" title="Specialisation of HardwareVertexBuffer for OpenGL." alt="" coords="5,240,205,280"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_hardware_vertex_buffer.html" title="Specialisation of HardwareBuffer for a vertex buffer." alt="" coords="10,152,201,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,206,108,240,103,240,103,206"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_hardware_buffer.html" title="Abstract class defining common features of hardware buffers." alt="" coords="12,79,199,104"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="108,118,108,152,103,152,103,118"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="18,5,193,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="108,44,108,79,103,79,103,44"/>
 </map>

@@ -1,5 +1,7 @@
 <map id="Ogre::Volume::Chunk" name="Ogre::Volume::Chunk">
-<area shape="rect" id="node1" title="A single volume chunk mesh." alt="" coords="82,80,241,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,147,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_frame_listener.html" title="A interface class defining a listener which can be used to receive notifications of frame events." alt="" coords="171,5,325,32"/>
+<area shape="rect" id="Node000001" title="A single volume chunk mesh." alt="" coords="82,79,241,104"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,147,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,37,149,76,146,80,98,41"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_frame_listener.html" title="A interface class defining a listener which can be used to receive notifications of frame events." alt="" coords="171,5,325,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,41,177,81,174,76,222,37"/>
 </map>

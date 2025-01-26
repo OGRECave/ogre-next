@@ -8,8 +8,8 @@ var class_ogre_1_1_vulkan_buffer_interface =
     [ "copyTo", "class_ogre_1_1_vulkan_buffer_interface.html#a4dae0a4ce1bdc6c015bd404dba85cc67", null ],
     [ "getVboName", "class_ogre_1_1_vulkan_buffer_interface.html#a045c6d62edd4be469fcd3a8944f674d7", null ],
     [ "getVboPoolIndex", "class_ogre_1_1_vulkan_buffer_interface.html#a8d61dc0f392f4604417ec755212b33c1", null ],
-    [ "getVulkanDataPtr", "class_ogre_1_1_vulkan_buffer_interface.html#a25415a70ec57b831b13bda38c5b71a09", null ],
-    [ "map", "class_ogre_1_1_vulkan_buffer_interface.html#ac6441f7d049dbe39dffa217bf5d8b9ab", null ],
+    [ "getVulkanDataPtr", "class_ogre_1_1_vulkan_buffer_interface.html#a47a97b90657b90a62b948be7cc78de1b", null ],
+    [ "map", "class_ogre_1_1_vulkan_buffer_interface.html#a56c6b9c693887d2f2a0145e560d8e152", null ],
     [ "regressFrame", "class_ogre_1_1_vulkan_buffer_interface.html#a90ac15e16e0c72cc7a9f743ded3da2fe", null ],
     [ "unmap", "class_ogre_1_1_vulkan_buffer_interface.html#a0559a28f2565e9963cd77c4b7044ec26", null ]
 ];

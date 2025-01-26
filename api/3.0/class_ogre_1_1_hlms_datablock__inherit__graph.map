@@ -1,5 +1,7 @@
 <map id="Ogre::HlmsDatablock" name="Ogre::HlmsDatablock">
-<area shape="rect" id="node1" title="An hlms datablock contains individual information about a specific material." alt="" coords="36,80,197,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_hlms_low_level_datablock.html" title="Contains information needed by the UI (2D) for OpenGL ES 2.0." alt="" coords="5,155,228,181"/>
-<area shape="rect" id="node2" title=" " alt="" coords="49,5,185,32"/>
+<area shape="rect" id="Node000001" title="An hlms datablock contains individual information about a specific material." alt="" coords="36,79,197,104"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_hlms_low_level_datablock.html" title="Contains information needed by the UI (2D) for OpenGL ES 2.0." alt="" coords="5,152,228,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="119,118,119,152,114,152,114,118"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="29,5,204,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,44,119,79,114,79,114,44"/>
 </map>

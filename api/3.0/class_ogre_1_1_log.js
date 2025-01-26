@@ -5,7 +5,7 @@ var class_ogre_1_1_log =
     [ "~Log", "class_ogre_1_1_log.html#a7d36bb9b3f6f6890dd78ae503b6ce349", null ],
     [ "addListener", "class_ogre_1_1_log.html#a4af71adcded1cde866f7163855c509cc", null ],
     [ "getLogDetail", "class_ogre_1_1_log.html#adeb20fbc595dac65a425d16178d68a4d", null ],
-    [ "getName", "class_ogre_1_1_log.html#af95c369bbc30d396b8ee6465e93b0223", null ],
+    [ "getName", "class_ogre_1_1_log.html#a64285ed5cfd15b1fcf2c4f70122586ca", null ],
     [ "isDebugOutputEnabled", "class_ogre_1_1_log.html#af90bdea2b5ac4b7f466c78124c49d644", null ],
     [ "isFileOutputSuppressed", "class_ogre_1_1_log.html#a43c0713b32a96a22afa67fdcb33ea652", null ],
     [ "isTimeStampEnabled", "class_ogre_1_1_log.html#a8adb9e21b32bf07e67dd5d6b8b9b504e", null ],

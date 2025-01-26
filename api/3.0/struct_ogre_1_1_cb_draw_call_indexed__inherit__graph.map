@@ -1,5 +1,7 @@
 <map id="Ogre::CbDrawCallIndexed" name="Ogre::CbDrawCallIndexed">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,193,181"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_cb_draw_call.html" title=" " alt="" coords="31,80,168,107"/>
-<area shape="rect" id="node3" href="$struct_ogre_1_1_cb_base.html" title=" " alt="" coords="44,5,155,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,152,193,177"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_cb_draw_call.html" title=" " alt="" coords="31,79,168,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,118,102,152,97,152,97,118"/>
+<area shape="rect" id="Node000003" href="$struct_ogre_1_1_cb_base.html" title=" " alt="" coords="44,5,155,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="102,44,102,79,97,79,97,44"/>
 </map>

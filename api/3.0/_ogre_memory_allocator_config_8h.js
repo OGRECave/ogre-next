@@ -1,6 +1,5 @@
 var _ogre_memory_allocator_config_8h =
 [
-    [ "AlignAllocPolicy", "class_ogre_1_1_align_alloc_policy.html", null ],
     [ "OGRE_ALLOC_DEBUG_METADATA", "_ogre_memory_allocator_config_8h.html#ac58a7b49881053256292ce9558b1016f", null ],
     [ "OGRE_ALLOC_T", "_ogre_memory_allocator_config_8h.html#a3211e4a6a806aa789b38dce2432ef472", null ],
     [ "OGRE_ALLOC_T_SIMD", "_ogre_memory_allocator_config_8h.html#a728b719dd1425d46a78fe87d6f9ea6a5", null ],
@@ -16,8 +15,6 @@ var _ogre_memory_allocator_config_8h =
     [ "OGRE_NEW", "_ogre_memory_allocator_config_8h.html#ab5fc1358fd5a889de0a06d07e45df1ff", null ],
     [ "OGRE_NEW_ARRAY_T", "_ogre_memory_allocator_config_8h.html#a6c428bbdad197df6a4ba22d3c1d48f5a", null ],
     [ "OGRE_NEW_T", "_ogre_memory_allocator_config_8h.html#a46253f12658ce0922e982a8a9dd11312", null ],
-    [ "AllocPolicy", "_ogre_memory_allocator_config_8h.html#a9000765a2c5f709988df05193d308655", null ],
-    [ "OgreAllocatedObj", "_ogre_memory_allocator_config_8h.html#a85b9cd421a5e843f0ec04472eee48887", null ],
     [ "MemoryCategory", "_ogre_memory_allocator_config_8h.html#ga830fab51be174d6f2849857cb1abb36a", [
       [ "MEMCATEGORY_GENERAL", "_ogre_memory_allocator_config_8h.html#gga830fab51be174d6f2849857cb1abb36aa8ac29a2852b1b5fe79d1659b16f521cb", null ],
       [ "MEMCATEGORY_GEOMETRY", "_ogre_memory_allocator_config_8h.html#gga830fab51be174d6f2849857cb1abb36aaf9e04ff475de4493bc942a9c73da4c2e", null ],
@@ -29,5 +26,5 @@ var _ogre_memory_allocator_config_8h =
       [ "MEMCATEGORY_RENDERSYS", "_ogre_memory_allocator_config_8h.html#gga830fab51be174d6f2849857cb1abb36aa29274489311d683a88676dbb1c779788", null ],
       [ "MEMCATEGORY_COUNT", "_ogre_memory_allocator_config_8h.html#gga830fab51be174d6f2849857cb1abb36aa4ff2b9446477e2ea4170b09d8aaa1b67", null ]
     ] ],
-    [ "constructN", "_ogre_memory_allocator_config_8h.html#gae542663b49eb68a74336d84e11ba0b9c", null ]
+    [ "constructN", "_ogre_memory_allocator_config_8h.html#ga0b9086ad544aba73e4dc0d8cbb41b93a", null ]
 ];

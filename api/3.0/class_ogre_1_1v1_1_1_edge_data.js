@@ -9,7 +9,7 @@ var class_ogre_1_1v1_1_1_edge_data =
     [ "TriangleLightFacingList", "class_ogre_1_1v1_1_1_edge_data.html#a2b1d687ea4871ee5ad09891a6173e321", null ],
     [ "TriangleList", "class_ogre_1_1v1_1_1_edge_data.html#a45723039bb49600179299233d4306224", null ],
     [ "EdgeData", "class_ogre_1_1v1_1_1_edge_data.html#a3cf19c3b830128033aabfe6d0c71c045", null ],
-    [ "clone", "class_ogre_1_1v1_1_1_edge_data.html#aabccdb9449263b09f8f14820cec83870", null ],
+    [ "clone", "class_ogre_1_1v1_1_1_edge_data.html#afd6ea027484c4e739ec5db39e5a2c22f", null ],
     [ "log", "class_ogre_1_1v1_1_1_edge_data.html#adf559492b955ae7f03a177e2a42d48b2", null ],
     [ "updateFaceNormals", "class_ogre_1_1v1_1_1_edge_data.html#a413755554618e79b8bcc7618c444372e", null ],
     [ "updateTriangleLightFacing", "class_ogre_1_1v1_1_1_edge_data.html#a295ed0123f4ed2a931229646dfee7e90", null ],

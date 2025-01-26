@@ -32,7 +32,7 @@ var class_ogre_1_1_vulkan_queue =
     [ "getEncoderState", "class_ogre_1_1_vulkan_queue.html#a643ba4b203d2859598a0e483d4e4ca54", null ],
     [ "getFamilyIdx", "class_ogre_1_1_vulkan_queue.html#a424e609f3f750db0c72ad16fb36d3af3", null ],
     [ "getGraphicsEncoder", "class_ogre_1_1_vulkan_queue.html#abae5002a538f1bca9308dac2fd0af409", null ],
-    [ "getVaoManager", "class_ogre_1_1_vulkan_queue.html#afca887606375591fe6a34508ef83513e", null ],
+    [ "getVaoManager", "class_ogre_1_1_vulkan_queue.html#af6869cf963af52ffb366dc997b4ad168", null ],
     [ "init", "class_ogre_1_1_vulkan_queue.html#af5430e25473c2c56f7add128096f83f6", null ],
     [ "isFenceFlushed", "class_ogre_1_1_vulkan_queue.html#aa81e74a7a7bf8ca155e3db8d944c9e27", null ],
     [ "notifyTextureDestroyed", "class_ogre_1_1_vulkan_queue.html#aa2744c3b250b6973b7a6c61dc230ffc2", null ],

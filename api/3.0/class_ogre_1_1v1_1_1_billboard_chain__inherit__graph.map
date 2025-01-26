@@ -1,9 +1,15 @@
 <map id="Ogre::v1::BillboardChain" name="Ogre::v1::BillboardChain">
-<area shape="rect" id="node1" title="Allows the rendering of a chain of connected billboards." alt="" coords="258,155,438,181"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1v1_1_1_ribbon_trail.html" title="Subclass of BillboardChain which automatically leaves a trail behind one or more Node instances." alt="" coords="269,229,427,256"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="183,80,342,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,171,32"/>
-<area shape="rect" id="node4" title=" " alt="" coords="195,5,331,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="355,5,469,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="366,80,501,107"/>
+<area shape="rect" id="Node000001" title="Allows the rendering of a chain of connected billboards." alt="" coords="278,152,458,177"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1v1_1_1_ribbon_trail.html" title="Subclass of BillboardChain which automatically leaves a trail behind one or more Node instances." alt="" coords="289,225,447,251"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="371,191,371,225,365,225,365,191"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="203,79,362,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="308,110,356,150,352,154,305,115"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,171,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="133,33,252,76,250,81,131,38"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="195,5,370,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="285,44,285,79,280,79,280,44"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="395,5,509,31"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="413,38,311,81,309,76,411,34"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="386,79,521,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="431,115,384,154,380,150,428,110"/>
 </map>
