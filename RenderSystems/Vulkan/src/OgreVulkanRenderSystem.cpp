@@ -1056,11 +1056,10 @@ namespace Ogre
 
         if( !bAnySupported )
         {
-            LogManager::getSingleton().logMessage(
-                "Vulkan support found but instance is uncapable of "
-                "drawing to the screen! Cannot continue",
-                LML_CRITICAL );
-            return;
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Vulkan layer loaded but instance is uncapable of drawing to the screen! "
+                         "Cannot continue.",
+                         "VulkanRenderSystem::initializeVkInstance" );
         }
 
         // Check supported layers we may want
