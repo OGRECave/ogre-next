@@ -34,8 +34,10 @@ echo "--- Going to gh-pages repo ---"
 cd ../../gh-pages || exit $?
 cd api || exit $?
 echo "--- Removing old ${OGRE_VERSION} ---"
-git rm -rf ${OGRE_VERSION} || exit $?
-rm -rf ${OGRE_VERSION} || exit $?
+if [ -d "${OGRE_VERSION}" ]; then
+	git rm -rf ${OGRE_VERSION} || exit $?
+	rm -rf ${OGRE_VERSION} || exit $?
+fi
 echo "--- Copying new ${OGRE_VERSION} ---"
 mv ../../build/Doxygen/api/html ${OGRE_VERSION} || exit $?
 
