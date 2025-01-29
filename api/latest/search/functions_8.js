@@ -121,7 +121,7 @@ var searchData=
   ['hlms_118',['Hlms',['../class_ogre_1_1_hlms.html#a95b467bb6efd01598aa3116ebdd41381',1,'Ogre::Hlms']]],
   ['hlmsblendblock_119',['HlmsBlendblock',['../struct_ogre_1_1_hlms_blendblock.html#a920ff67adb5aaa2238ce71994d7f9c7e',1,'Ogre::HlmsBlendblock']]],
   ['hlmsbuffermanager_120',['HlmsBufferManager',['../class_ogre_1_1_hlms_buffer_manager.html#ae3f22c54275deeb8bc99cbde91e6ab39',1,'Ogre::HlmsBufferManager']]],
-  ['hlmscache_121',['hlmscache',['../struct_ogre_1_1_hlms_cache.html#a85e977c7f472b4f5026735144e0a9c84',1,'Ogre::HlmsCache::HlmsCache()'],['../struct_ogre_1_1_hlms_cache.html#a91161811873d0a45abf13fe4a1cd0ec9',1,'Ogre::HlmsCache::HlmsCache(uint32 _hash, HlmsTypes _type, const HlmsPso &amp;_pso)']]],
+  ['hlmscache_121',['hlmscache',['../struct_ogre_1_1_hlms_cache.html#a85e977c7f472b4f5026735144e0a9c84',1,'Ogre::HlmsCache::HlmsCache()'],['../struct_ogre_1_1_hlms_cache.html#ac49f426cb9e8be95caf8fa2fa0bb6805',1,'Ogre::HlmsCache::HlmsCache(uint32 _hash, HlmsTypes _type, HlmsCacheFlags _flags, const HlmsPso &amp;_pso)']]],
   ['hlmscompute_122',['HlmsCompute',['../class_ogre_1_1_hlms_compute.html#a128775f130a0541cde12245710aeec97',1,'Ogre::HlmsCompute']]],
   ['hlmscomputejob_123',['HlmsComputeJob',['../class_ogre_1_1_hlms_compute_job.html#aa2f584f8a3a801d850b6e16533bb14c5',1,'Ogre::HlmsComputeJob']]],
   ['hlmsdatablock_124',['HlmsDatablock',['../class_ogre_1_1_hlms_datablock.html#a2e445901fc23c28ce598be2fb57e16ab',1,'Ogre::HlmsDatablock']]],

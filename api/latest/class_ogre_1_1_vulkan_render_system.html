@@ -164,8 +164,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afd2e8d68a6c6c7cd61bbfd73611ef6f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44bb556c9cde77f8845ecda8cad67393" id="r_a44bb556c9cde77f8845ecda8cad67393"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a44bb556c9cde77f8845ecda8cad67393">_hlmsMacroblockDestroyed</a> (<a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> *block) override</td></tr>
 <tr class="separator:a44bb556c9cde77f8845ecda8cad67393"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d2642e8790ace6431246310ca6cd5d1" id="r_a8d2642e8790ace6431246310ca6cd5d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a8d2642e8790ace6431246310ca6cd5d1">_hlmsPipelineStateObjectCreated</a> (<a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> *newPso) override</td></tr>
-<tr class="separator:a8d2642e8790ace6431246310ca6cd5d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d7ecc1be3a7abd534a2495e53a44e59" id="r_a3d7ecc1be3a7abd534a2495e53a44e59"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a3d7ecc1be3a7abd534a2495e53a44e59">_hlmsPipelineStateObjectCreated</a> (<a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> *newPso, <a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a> deadline) override</td></tr>
+<tr class="memdesc:a3d7ecc1be3a7abd534a2495e53a44e59"><td class="mdescLeft">&#160;</td><td class="mdescRight">return false for recoverable errors, for example for exhausted per-frame time budget  <br /></td></tr>
+<tr class="separator:a3d7ecc1be3a7abd534a2495e53a44e59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e67d3c5331fdc5cdc67500e6412e289" id="r_a9e67d3c5331fdc5cdc67500e6412e289"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a9e67d3c5331fdc5cdc67500e6412e289">_hlmsPipelineStateObjectDestroyed</a> (<a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> *pos) override</td></tr>
 <tr class="separator:a9e67d3c5331fdc5cdc67500e6412e289"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d3245d29d677a866dbaf6bf1b851c6f" id="r_a3d3245d29d677a866dbaf6bf1b851c6f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a3d3245d29d677a866dbaf6bf1b851c6f">_hlmsSamplerblockCreated</a> (<a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *newBlock) override</td></tr>
@@ -506,6 +507,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a37208fe7f2e29b71a2972defdf9d04b2 inherit pub_methods_class_ogre_1_1_render_system" id="r_a37208fe7f2e29b71a2972defdf9d04b2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a37208fe7f2e29b71a2972defdf9d04b2">_makeRsProjectionMatrix</a> (const <a class="el" href="class_ogre_1_1_matrix4.html">Matrix4</a> &amp;matrix, <a class="el" href="class_ogre_1_1_matrix4.html">Matrix4</a> &amp;dest, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> nearPlane, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> farPlane, <a class="el" href="group___math.html#gaf5dd9a3d1fd373b17108baa16065b1ce">ProjectionType</a> projectionType)</td></tr>
 <tr class="memdesc:a37208fe7f2e29b71a2972defdf9d04b2 inherit pub_methods_class_ogre_1_1_render_system"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes a regular source projection matrix in range [-1; 1] and converts it to a projection matrix in 'dest' with reverse Z range [1; 0].  <br /></td></tr>
 <tr class="separator:a37208fe7f2e29b71a2972defdf9d04b2 inherit pub_methods_class_ogre_1_1_render_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38a086ccaac52dc9c9dbbb7aa473a7d1 inherit pub_methods_class_ogre_1_1_render_system" id="r_a38a086ccaac52dc9c9dbbb7aa473a7d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a38a086ccaac52dc9c9dbbb7aa473a7d1">_notifyIncompletePsoRequests</a> (<a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a> count)</td></tr>
+<tr class="separator:a38a086ccaac52dc9c9dbbb7aa473a7d1 inherit pub_methods_class_ogre_1_1_render_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad47a85bcc637f332100756b7a48b3f53 inherit pub_methods_class_ogre_1_1_render_system" id="r_ad47a85bcc637f332100756b7a48b3f53"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="struct_ogre_1_1_render_system_1_1_render_system_context.html">RenderSystemContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#ad47a85bcc637f332100756b7a48b3f53">_pauseFrame</a> ()</td></tr>
 <tr class="memdesc:ad47a85bcc637f332100756b7a48b3f53 inherit pub_methods_class_ogre_1_1_render_system"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pause rendering for a frame.  <br /></td></tr>
 <tr class="separator:ad47a85bcc637f332100756b7a48b3f53 inherit pub_methods_class_ogre_1_1_render_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -611,6 +614,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af41e08cc1bc54e34d0314f4c9ffa58f6 inherit pub_methods_class_ogre_1_1_render_system" id="r_af41e08cc1bc54e34d0314f4c9ffa58f6"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#af41e08cc1bc54e34d0314f4c9ffa58f6">getGlobalNumberOfInstances</a> () const</td></tr>
 <tr class="memdesc:af41e08cc1bc54e34d0314f4c9ffa58f6 inherit pub_methods_class_ogre_1_1_render_system"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the global number of instances.  <br /></td></tr>
 <tr class="separator:af41e08cc1bc54e34d0314f4c9ffa58f6 inherit pub_methods_class_ogre_1_1_render_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90af952bd348e0d592a2e2ceadef1e8e inherit pub_methods_class_ogre_1_1_render_system" id="r_a90af952bd348e0d592a2e2ceadef1e8e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a90af952bd348e0d592a2e2ceadef1e8e">getIncompletePsoRequestsCounter</a> () const</td></tr>
+<tr class="separator:a90af952bd348e0d592a2e2ceadef1e8e inherit pub_methods_class_ogre_1_1_render_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d4d8022d696854c4bb41a7d378fb0ca inherit pub_methods_class_ogre_1_1_render_system" id="r_a3d4d8022d696854c4bb41a7d378fb0ca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a3d4d8022d696854c4bb41a7d378fb0ca">getInvertedClipSpaceY</a> () const</td></tr>
 <tr class="memdesc:a3d4d8022d696854c4bb41a7d378fb0ca inherit pub_methods_class_ogre_1_1_render_system"><td class="mdescLeft">&#160;</td><td class="mdescRight">+Y is downwards in NDC (Normalized Device Coordinates). Only Vulkan has this problem.  <br /></td></tr>
 <tr class="separator:a3d4d8022d696854c4bb41a7d378fb0ca inherit pub_methods_class_ogre_1_1_render_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -627,6 +632,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9d89d5e2e2f0c2c30e72032eae4482ec inherit pub_methods_class_ogre_1_1_render_system" id="r_a9d89d5e2e2f0c2c30e72032eae4482ec"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a9d89d5e2e2f0c2c30e72032eae4482ec">getNativeShadingLanguageVersion</a> () const</td></tr>
 <tr class="memdesc:a9d89d5e2e2f0c2c30e72032eae4482ec inherit pub_methods_class_ogre_1_1_render_system"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the native shading language version for this render system.  <br /></td></tr>
 <tr class="separator:a9d89d5e2e2f0c2c30e72032eae4482ec inherit pub_methods_class_ogre_1_1_render_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64937009d6debfecd39cd254a4eab63c inherit pub_methods_class_ogre_1_1_render_system" id="r_a64937009d6debfecd39cd254a4eab63c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a64937009d6debfecd39cd254a4eab63c">getPsoRequestsTimeout</a> () const</td></tr>
+<tr class="separator:a64937009d6debfecd39cd254a4eab63c inherit pub_methods_class_ogre_1_1_render_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0eb9358077e34df5039b8715647446d inherit pub_methods_class_ogre_1_1_render_system" id="r_ae0eb9358077e34df5039b8715647446d"><td class="memItemLeft" align="right" valign="top">RENDERDOC_API_1_4_1 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#ae0eb9358077e34df5039b8715647446d">getRenderDocApi</a> ()</td></tr>
 <tr class="memdesc:ae0eb9358077e34df5039b8715647446d inherit pub_methods_class_ogre_1_1_render_system"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the RenderDoc API handle in case you want to do more advanced functionality than what we expose.  <br /></td></tr>
 <tr class="separator:ae0eb9358077e34df5039b8715647446d inherit pub_methods_class_ogre_1_1_render_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -693,6 +700,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a697f9a8c12f2d08ccc6185cd7992c238 inherit pub_methods_class_ogre_1_1_render_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabd963520ca3e4e48ad5d64eabc4d76d inherit pub_methods_class_ogre_1_1_render_system" id="r_aabd963520ca3e4e48ad5d64eabc4d76d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#aabd963520ca3e4e48ad5d64eabc4d76d">setMetricsRecordingEnabled</a> (bool bEnable)</td></tr>
 <tr class="separator:aabd963520ca3e4e48ad5d64eabc4d76d inherit pub_methods_class_ogre_1_1_render_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80f3ff58250bcf7761d9792621fedabe inherit pub_methods_class_ogre_1_1_render_system" id="r_a80f3ff58250bcf7761d9792621fedabe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a80f3ff58250bcf7761d9792621fedabe">setPsoRequestsTimeout</a> (int ms)</td></tr>
+<tr class="memdesc:a80f3ff58250bcf7761d9792621fedabe inherit pub_methods_class_ogre_1_1_render_system"><td class="mdescLeft">&#160;</td><td class="mdescRight">PSO creation on Vulkan could be skipped after exhausting per-frame time budget.  <br /></td></tr>
+<tr class="separator:a80f3ff58250bcf7761d9792621fedabe inherit pub_methods_class_ogre_1_1_render_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d0de2f7b75ffb2d4048534ebe90bb73 inherit pub_methods_class_ogre_1_1_render_system" id="r_a2d0de2f7b75ffb2d4048534ebe90bb73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a2d0de2f7b75ffb2d4048534ebe90bb73">setUavStartingSlot</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> startingSlot)</td></tr>
 <tr class="memdesc:a2d0de2f7b75ffb2d4048534ebe90bb73 inherit pub_methods_class_ogre_1_1_render_system"><td class="mdescLeft">&#160;</td><td class="mdescRight">In Direct3D11, UAV &amp; RenderTargets share the same slots.  <br /></td></tr>
 <tr class="separator:a2d0de2f7b75ffb2d4048534ebe90bb73 inherit pub_methods_class_ogre_1_1_render_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1468,8 +1478,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a8d2642e8790ace6431246310ca6cd5d1" name="a8d2642e8790ace6431246310ca6cd5d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d2642e8790ace6431246310ca6cd5d1">&#9670;&#160;</a></span>_hlmsPipelineStateObjectCreated()</h2>
+<a id="a3d7ecc1be3a7abd534a2495e53a44e59" name="a3d7ecc1be3a7abd534a2495e53a44e59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d7ecc1be3a7abd534a2495e53a44e59">&#9670;&#160;</a></span>_hlmsPipelineStateObjectCreated()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1478,11 +1488,21 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Ogre::VulkanRenderSystem::_hlmsPipelineStateObjectCreated </td>
+          <td class="memname">bool Ogre::VulkanRenderSystem::_hlmsPipelineStateObjectCreated </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> *&#160;</td>
-          <td class="paramname"><em>newPso</em></td><td>)</td>
+          <td class="paramname"><em>newPso</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a>&#160;</td>
+          <td class="paramname"><em>deadline</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -1492,7 +1512,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented from <a class="el" href="class_ogre_1_1_render_system.html#ac682bcc56a7fb4cb8ae83772dfc6b7f3">Ogre::RenderSystem</a>.</p>
+<p>return false for recoverable errors, for example for exhausted per-frame time budget </p>
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_render_system.html#acb8f74ae70cb7f297fef47037b2e40de">Ogre::RenderSystem</a>.</p>
 
 </div>
 </div>

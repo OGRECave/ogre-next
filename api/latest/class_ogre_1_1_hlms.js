@@ -44,7 +44,7 @@ var class_ogre_1_1_hlms =
     [ "analyzeBarriers", "class_ogre_1_1_hlms.html#ad2b1ed80ecf35fa559da066bbdef5d20", null ],
     [ "calculateHashFor", "class_ogre_1_1_hlms.html#a5b71158453ed0a2411a92ecf767af130", null ],
     [ "compileShaderCode", "class_ogre_1_1_hlms.html#a0ef77fcae4df5d51475d7e5ff3baafd8", null ],
-    [ "compileStubEntry", "class_ogre_1_1_hlms.html#a0bfc990f4f1edf446ca68b6f2f971c32", null ],
+    [ "compileStubEntry", "class_ogre_1_1_hlms.html#afa61df0f4d69b0bfdacbe3d089175b35", null ],
     [ "createDatablock", "class_ogre_1_1_hlms.html#a029b71d6801fc4acbb682d362cf4a1bd", null ],
     [ "destroyAllDatablocks", "class_ogre_1_1_hlms.html#a60ed9de97ae0b9d5b5c12648e17df989", null ],
     [ "destroyDatablock", "class_ogre_1_1_hlms.html#a42e458f42a60363648a6b1ce368feb4b", null ],

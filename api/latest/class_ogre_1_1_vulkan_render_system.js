@@ -23,7 +23,7 @@ var class_ogre_1_1_vulkan_render_system =
     [ "_hlmsComputePipelineStateObjectDestroyed", "class_ogre_1_1_vulkan_render_system.html#ad8c1238861bc7af8bcf316349465389a", null ],
     [ "_hlmsMacroblockCreated", "class_ogre_1_1_vulkan_render_system.html#afd2e8d68a6c6c7cd61bbfd73611ef6f6", null ],
     [ "_hlmsMacroblockDestroyed", "class_ogre_1_1_vulkan_render_system.html#a44bb556c9cde77f8845ecda8cad67393", null ],
-    [ "_hlmsPipelineStateObjectCreated", "class_ogre_1_1_vulkan_render_system.html#a8d2642e8790ace6431246310ca6cd5d1", null ],
+    [ "_hlmsPipelineStateObjectCreated", "class_ogre_1_1_vulkan_render_system.html#a3d7ecc1be3a7abd534a2495e53a44e59", null ],
     [ "_hlmsPipelineStateObjectDestroyed", "class_ogre_1_1_vulkan_render_system.html#a9e67d3c5331fdc5cdc67500e6412e289", null ],
     [ "_hlmsSamplerblockCreated", "class_ogre_1_1_vulkan_render_system.html#a3d3245d29d677a866dbaf6bf1b851c6f", null ],
     [ "_hlmsSamplerblockDestroyed", "class_ogre_1_1_vulkan_render_system.html#a2731076fc4a4f2e9bd16dddc289afbcb", null ],

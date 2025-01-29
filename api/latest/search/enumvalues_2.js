@@ -98,7 +98,7 @@ var searchData=
   ['codecvalid_95',['CodecValid',['../class_ogre_1_1_codec.html#a4c74f9daafec4f0fff30b92baa8fc627a47a4a53ad7af88177b1dc789714f14f2',1,'Ogre::Codec']]],
   ['collect_96',['Collect',['../class_ogre_1_1_compositor_pass_warm_up_def.html#a1b7d900a5e4e78d26e6be93186549639a58275ed3fcd58c8d922abea40edf6b28',1,'Ogre::CompositorPassWarmUpDef']]],
   ['collectandtrigger_97',['CollectAndTrigger',['../class_ogre_1_1_compositor_pass_warm_up_def.html#a1b7d900a5e4e78d26e6be93186549639a4ab983b4074d9e7a156c48832698df0b',1,'Ogre::CompositorPassWarmUpDef']]],
-  ['colour_98',['colour',['../class_ogre_1_1_render_pass_descriptor.html#ae003dc630410b352f3e14668b7938254a0cc6e5e862027a924aece253df107fa7',1,'Ogre::RenderPassDescriptor::Colour'],['../class_ogre_1_1_animable_value.html#adccd62bb2b72c602b9c59ca651256d69a019d638a0420937709b0ca4ded01a57e',1,'Ogre::AnimableValue::COLOUR']]],
+  ['colour_98',['colour',['../class_ogre_1_1_animable_value.html#adccd62bb2b72c602b9c59ca651256d69a019d638a0420937709b0ca4ded01a57e',1,'Ogre::AnimableValue::COLOUR'],['../class_ogre_1_1_render_pass_descriptor.html#ae003dc630410b352f3e14668b7938254a0cc6e5e862027a924aece253df107fa7',1,'Ogre::RenderPassDescriptor::Colour']]],
   ['colour0_99',['Colour0',['../class_ogre_1_1_render_pass_descriptor.html#ae003dc630410b352f3e14668b7938254ac6494c572533b8d986293e55386a9e1c',1,'Ogre::RenderPassDescriptor']]],
   ['colour1_100',['Colour1',['../class_ogre_1_1_render_pass_descriptor.html#ae003dc630410b352f3e14668b7938254a00bb1e173df8c90358df29c602493303',1,'Ogre::RenderPassDescriptor']]],
   ['colour2_101',['Colour2',['../class_ogre_1_1_render_pass_descriptor.html#ae003dc630410b352f3e14668b7938254a30eaf56a5479dccc8229937233ed96ee',1,'Ogre::RenderPassDescriptor']]],

@@ -802,7 +802,7 @@ var group___resources =
       [ "analyzeBarriers", "class_ogre_1_1_hlms.html#ad2b1ed80ecf35fa559da066bbdef5d20", null ],
       [ "calculateHashFor", "class_ogre_1_1_hlms.html#a5b71158453ed0a2411a92ecf767af130", null ],
       [ "compileShaderCode", "class_ogre_1_1_hlms.html#a0ef77fcae4df5d51475d7e5ff3baafd8", null ],
-      [ "compileStubEntry", "class_ogre_1_1_hlms.html#a0bfc990f4f1edf446ca68b6f2f971c32", null ],
+      [ "compileStubEntry", "class_ogre_1_1_hlms.html#afa61df0f4d69b0bfdacbe3d089175b35", null ],
       [ "createDatablock", "class_ogre_1_1_hlms.html#a029b71d6801fc4acbb682d362cf4a1bd", null ],
       [ "destroyAllDatablocks", "class_ogre_1_1_hlms.html#a60ed9de97ae0b9d5b5c12648e17df989", null ],
       [ "destroyDatablock", "class_ogre_1_1_hlms.html#a42e458f42a60363648a6b1ce368feb4b", null ],
@@ -1040,7 +1040,8 @@ var group___resources =
     ] ],
     [ "Ogre::HlmsCache", "struct_ogre_1_1_hlms_cache.html", [
       [ "HlmsCache", "struct_ogre_1_1_hlms_cache.html#a85e977c7f472b4f5026735144e0a9c84", null ],
-      [ "HlmsCache", "struct_ogre_1_1_hlms_cache.html#a91161811873d0a45abf13fe4a1cd0ec9", null ],
+      [ "HlmsCache", "struct_ogre_1_1_hlms_cache.html#ac49f426cb9e8be95caf8fa2fa0bb6805", null ],
+      [ "flags", "struct_ogre_1_1_hlms_cache.html#a753597909fb54aa4a3fdedab2dcf3c2a", null ],
       [ "hash", "struct_ogre_1_1_hlms_cache.html#ae31b6ca04a14961af76d27bfc3c4a228", null ],
       [ "pso", "struct_ogre_1_1_hlms_cache.html#a10f7d236d36d5474ae26065d97418167", null ],
       [ "setProperties", "struct_ogre_1_1_hlms_cache.html#a043582c43da82d0e690f10f59c46b31f", null ],
@@ -3058,17 +3059,22 @@ var group___resources =
       [ "Ogre::BLOCK_SAMPLER", "group___resources.html#ggaf7c7c73e6a7e3dfb3e74484e3a971346a713127682fe0b6a745f1179d6758b378", null ],
       [ "Ogre::NUM_BASIC_BLOCKS", "group___resources.html#ggaf7c7c73e6a7e3dfb3e74484e3a971346aa676709141e3a45e7275eceecf266596", null ]
     ] ],
-    [ "Ogre::HlmsTypes", "group___resources.html#gacbb211b021bd3350291861d7232dd02d", [
-      [ "Ogre::HLMS_LOW_LEVEL", "group___resources.html#ggacbb211b021bd3350291861d7232dd02dac29ce6995e66d47058d5d484684b3955", null ],
-      [ "Ogre::HLMS_PBS", "group___resources.html#ggacbb211b021bd3350291861d7232dd02da13e2e3a750ce584ece805f3ab1ee8e1c", null ],
-      [ "Ogre::HLMS_TOON", "group___resources.html#ggacbb211b021bd3350291861d7232dd02da02a6cf9fc43ff47686a43d88600675be", null ],
-      [ "Ogre::HLMS_UNLIT", "group___resources.html#ggacbb211b021bd3350291861d7232dd02dafa2c6c1c26f311b136d64b08d6f85da5", null ],
-      [ "Ogre::HLMS_USER0", "group___resources.html#ggacbb211b021bd3350291861d7232dd02daf16bf5d148be7f1764b08b5f3e50f8d7", null ],
-      [ "Ogre::HLMS_USER1", "group___resources.html#ggacbb211b021bd3350291861d7232dd02da2e82061ae8d367824a1a3575699bb8b3", null ],
-      [ "Ogre::HLMS_USER2", "group___resources.html#ggacbb211b021bd3350291861d7232dd02da95e5031bb8c4ed1a3f33a102e42f260b", null ],
-      [ "Ogre::HLMS_USER3", "group___resources.html#ggacbb211b021bd3350291861d7232dd02dabf86a8c0504a6f063ac15e87309269e2", null ],
-      [ "Ogre::HLMS_MAX", "group___resources.html#ggacbb211b021bd3350291861d7232dd02da2663e41fffee06c02083239f15c43b38", null ],
-      [ "Ogre::HLMS_COMPUTE", "group___resources.html#ggacbb211b021bd3350291861d7232dd02daa5f92a03fa65d90791a0c02f63f06b23", null ]
+    [ "Ogre::HlmsCacheFlags", "group___resources.html#ga880ab7a167290fb308acb6e7ce39c87e", [
+      [ "Ogre::HLMS_CACHE_FLAGS_NONE", "group___resources.html#gga880ab7a167290fb308acb6e7ce39c87ea3222cbf74d91fb62108240379d0dad0c", null ],
+      [ "Ogre::HLMS_CACHE_FLAGS_COMPILATION_REQUIRED", "group___resources.html#gga880ab7a167290fb308acb6e7ce39c87eaadebd486a056953fee9744972857a276", null ],
+      [ "Ogre::HLMS_CACHE_FLAGS_COMPILATION_REQUESTED", "group___resources.html#gga880ab7a167290fb308acb6e7ce39c87eaeeb98a102a556a313961fc1779e3993e", null ]
+    ] ],
+    [ "Ogre::HlmsTypes", "group___resources.html#ga11d7536f610632f563befe49447d8107", [
+      [ "Ogre::HLMS_LOW_LEVEL", "group___resources.html#gga11d7536f610632f563befe49447d8107ac29ce6995e66d47058d5d484684b3955", null ],
+      [ "Ogre::HLMS_PBS", "group___resources.html#gga11d7536f610632f563befe49447d8107a13e2e3a750ce584ece805f3ab1ee8e1c", null ],
+      [ "Ogre::HLMS_TOON", "group___resources.html#gga11d7536f610632f563befe49447d8107a02a6cf9fc43ff47686a43d88600675be", null ],
+      [ "Ogre::HLMS_UNLIT", "group___resources.html#gga11d7536f610632f563befe49447d8107afa2c6c1c26f311b136d64b08d6f85da5", null ],
+      [ "Ogre::HLMS_USER0", "group___resources.html#gga11d7536f610632f563befe49447d8107af16bf5d148be7f1764b08b5f3e50f8d7", null ],
+      [ "Ogre::HLMS_USER1", "group___resources.html#gga11d7536f610632f563befe49447d8107a2e82061ae8d367824a1a3575699bb8b3", null ],
+      [ "Ogre::HLMS_USER2", "group___resources.html#gga11d7536f610632f563befe49447d8107a95e5031bb8c4ed1a3f33a102e42f260b", null ],
+      [ "Ogre::HLMS_USER3", "group___resources.html#gga11d7536f610632f563befe49447d8107abf86a8c0504a6f063ac15e87309269e2", null ],
+      [ "Ogre::HLMS_MAX", "group___resources.html#gga11d7536f610632f563befe49447d8107a2663e41fffee06c02083239f15c43b38", null ],
+      [ "Ogre::HLMS_COMPUTE", "group___resources.html#gga11d7536f610632f563befe49447d8107aa5f92a03fa65d90791a0c02f63f06b23", null ]
     ] ],
     [ "Ogre::MeshChunkID", "group___resources.html#ga7b904fc5463a8ef1e61f6de39b603fc4", [
       [ "Ogre::M_HEADER", "group___resources.html#gga7b904fc5463a8ef1e61f6de39b603fc4ae377c85390fc6c2cb7d57009bbcb48a3", null ],

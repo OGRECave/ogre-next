@@ -202,8 +202,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4ff8308ab34ef75574f1f5cc005d0f8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93c80e0f7c8dfc22f197a7211a5401f1" id="r_a93c80e0f7c8dfc22f197a7211a5401f1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a93c80e0f7c8dfc22f197a7211a5401f1">_hlmsMacroblockDestroyed</a> (<a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> *block)</td></tr>
 <tr class="separator:a93c80e0f7c8dfc22f197a7211a5401f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac682bcc56a7fb4cb8ae83772dfc6b7f3" id="r_ac682bcc56a7fb4cb8ae83772dfc6b7f3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#ac682bcc56a7fb4cb8ae83772dfc6b7f3">_hlmsPipelineStateObjectCreated</a> (<a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> *newPso)</td></tr>
-<tr class="separator:ac682bcc56a7fb4cb8ae83772dfc6b7f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb8f74ae70cb7f297fef47037b2e40de" id="r_acb8f74ae70cb7f297fef47037b2e40de"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#acb8f74ae70cb7f297fef47037b2e40de">_hlmsPipelineStateObjectCreated</a> (<a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> *newPso, <a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a> deadline=(<a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a>) -1)</td></tr>
+<tr class="memdesc:acb8f74ae70cb7f297fef47037b2e40de"><td class="mdescLeft">&#160;</td><td class="mdescRight">return false for recoverable errors, for example for exhausted per-frame time budget  <br /></td></tr>
+<tr class="separator:acb8f74ae70cb7f297fef47037b2e40de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9120e92d45da9294119cc88f3ad8bd19" id="r_a9120e92d45da9294119cc88f3ad8bd19"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a9120e92d45da9294119cc88f3ad8bd19">_hlmsPipelineStateObjectDestroyed</a> (<a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> *pso)</td></tr>
 <tr class="separator:a9120e92d45da9294119cc88f3ad8bd19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5df47d554298bec7130841b77b301034" id="r_a5df47d554298bec7130841b77b301034"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a5df47d554298bec7130841b77b301034">_hlmsSamplerblockCreated</a> (<a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *newBlock)</td></tr>
@@ -216,6 +217,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a37208fe7f2e29b71a2972defdf9d04b2" id="r_a37208fe7f2e29b71a2972defdf9d04b2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a37208fe7f2e29b71a2972defdf9d04b2">_makeRsProjectionMatrix</a> (const <a class="el" href="class_ogre_1_1_matrix4.html">Matrix4</a> &amp;matrix, <a class="el" href="class_ogre_1_1_matrix4.html">Matrix4</a> &amp;dest, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> nearPlane, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> farPlane, <a class="el" href="group___math.html#gaf5dd9a3d1fd373b17108baa16065b1ce">ProjectionType</a> projectionType)</td></tr>
 <tr class="memdesc:a37208fe7f2e29b71a2972defdf9d04b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes a regular source projection matrix in range [-1; 1] and converts it to a projection matrix in 'dest' with reverse Z range [1; 0].  <br /></td></tr>
 <tr class="separator:a37208fe7f2e29b71a2972defdf9d04b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38a086ccaac52dc9c9dbbb7aa473a7d1" id="r_a38a086ccaac52dc9c9dbbb7aa473a7d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a38a086ccaac52dc9c9dbbb7aa473a7d1">_notifyIncompletePsoRequests</a> (<a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a> count)</td></tr>
+<tr class="separator:a38a086ccaac52dc9c9dbbb7aa473a7d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad47a85bcc637f332100756b7a48b3f53" id="r_ad47a85bcc637f332100756b7a48b3f53"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="struct_ogre_1_1_render_system_1_1_render_system_context.html">RenderSystemContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#ad47a85bcc637f332100756b7a48b3f53">_pauseFrame</a> ()</td></tr>
 <tr class="memdesc:ad47a85bcc637f332100756b7a48b3f53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pause rendering for a frame.  <br /></td></tr>
 <tr class="separator:ad47a85bcc637f332100756b7a48b3f53"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -476,6 +479,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a524a4df6708122fe619811e8f81afced" id="r_a524a4df6708122fe619811e8f81afced"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a524a4df6708122fe619811e8f81afced">getHorizontalTexelOffset</a> ()=0</td></tr>
 <tr class="memdesc:a524a4df6708122fe619811e8f81afced"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the horizontal texel offset value required for mapping texel origins to pixel origins in this rendersystem.  <br /></td></tr>
 <tr class="separator:a524a4df6708122fe619811e8f81afced"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90af952bd348e0d592a2e2ceadef1e8e" id="r_a90af952bd348e0d592a2e2ceadef1e8e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a90af952bd348e0d592a2e2ceadef1e8e">getIncompletePsoRequestsCounter</a> () const</td></tr>
+<tr class="separator:a90af952bd348e0d592a2e2ceadef1e8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d4d8022d696854c4bb41a7d378fb0ca" id="r_a3d4d8022d696854c4bb41a7d378fb0ca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a3d4d8022d696854c4bb41a7d378fb0ca">getInvertedClipSpaceY</a> () const</td></tr>
 <tr class="memdesc:a3d4d8022d696854c4bb41a7d378fb0ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">+Y is downwards in NDC (Normalized Device Coordinates). Only Vulkan has this problem.  <br /></td></tr>
 <tr class="separator:a3d4d8022d696854c4bb41a7d378fb0ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -509,6 +514,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9b1ee9f299e9097bec1185a4ec478cf7" id="r_a9b1ee9f299e9097bec1185a4ec478cf7"><td class="memItemLeft" align="right" valign="top">virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a9b1ee9f299e9097bec1185a4ec478cf7">getPriorityConfigOption</a> (size_t idx) const</td></tr>
 <tr class="memdesc:a9b1ee9f299e9097bec1185a4ec478cf7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Some options depend on other options.  <br /></td></tr>
 <tr class="separator:a9b1ee9f299e9097bec1185a4ec478cf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64937009d6debfecd39cd254a4eab63c" id="r_a64937009d6debfecd39cd254a4eab63c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a64937009d6debfecd39cd254a4eab63c">getPsoRequestsTimeout</a> () const</td></tr>
+<tr class="separator:a64937009d6debfecd39cd254a4eab63c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0eb9358077e34df5039b8715647446d" id="r_ae0eb9358077e34df5039b8715647446d"><td class="memItemLeft" align="right" valign="top">RENDERDOC_API_1_4_1 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#ae0eb9358077e34df5039b8715647446d">getRenderDocApi</a> ()</td></tr>
 <tr class="memdesc:ae0eb9358077e34df5039b8715647446d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the RenderDoc API handle in case you want to do more advanced functionality than what we expose.  <br /></td></tr>
 <tr class="separator:ae0eb9358077e34df5039b8715647446d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -612,6 +619,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a697f9a8c12f2d08ccc6185cd7992c238"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabd963520ca3e4e48ad5d64eabc4d76d" id="r_aabd963520ca3e4e48ad5d64eabc4d76d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#aabd963520ca3e4e48ad5d64eabc4d76d">setMetricsRecordingEnabled</a> (bool bEnable)</td></tr>
 <tr class="separator:aabd963520ca3e4e48ad5d64eabc4d76d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80f3ff58250bcf7761d9792621fedabe" id="r_a80f3ff58250bcf7761d9792621fedabe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a80f3ff58250bcf7761d9792621fedabe">setPsoRequestsTimeout</a> (int ms)</td></tr>
+<tr class="memdesc:a80f3ff58250bcf7761d9792621fedabe"><td class="mdescLeft">&#160;</td><td class="mdescRight">PSO creation on Vulkan could be skipped after exhausting per-frame time budget.  <br /></td></tr>
+<tr class="separator:a80f3ff58250bcf7761d9792621fedabe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62c4d393915276eb56752890a0029f92" id="r_a62c4d393915276eb56752890a0029f92"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a62c4d393915276eb56752890a0029f92">setStencilBufferParams</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> refValue, const <a class="el" href="struct_ogre_1_1_stencil_params.html">StencilParams</a> &amp;stencilParams)</td></tr>
 <tr class="memdesc:a62c4d393915276eb56752890a0029f92"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method allows you to set all the stencil buffer parameters in one call.  <br /></td></tr>
 <tr class="separator:a62c4d393915276eb56752890a0029f92"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1679,8 +1689,8 @@ See _createRenderWindow for details about each member. </td></tr>
 
 </div>
 </div>
-<a id="ac682bcc56a7fb4cb8ae83772dfc6b7f3" name="ac682bcc56a7fb4cb8ae83772dfc6b7f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac682bcc56a7fb4cb8ae83772dfc6b7f3">&#9670;&#160;</a></span>_hlmsPipelineStateObjectCreated()</h2>
+<a id="acb8f74ae70cb7f297fef47037b2e40de" name="acb8f74ae70cb7f297fef47037b2e40de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb8f74ae70cb7f297fef47037b2e40de">&#9670;&#160;</a></span>_hlmsPipelineStateObjectCreated()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1689,11 +1699,21 @@ See _createRenderWindow for details about each member. </td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::RenderSystem::_hlmsPipelineStateObjectCreated </td>
+          <td class="memname">virtual bool Ogre::RenderSystem::_hlmsPipelineStateObjectCreated </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> *&#160;</td>
-          <td class="paramname"><em>newPso</em></td><td>)</td>
+          <td class="paramname"><em>newPso</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a>&#160;</td>
+          <td class="paramname"><em>deadline</em> = <code>(<a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a>)-1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -1703,7 +1723,9 @@ See _createRenderWindow for details about each member. </td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a83f844c47484e44a95345ba11ebeb56b">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a87cf4912ffcd9185ba6ab1b019b76ef0">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a2a2faaec46f174b6aa4994f0be6d51bc">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a3f3039e13d1104aef8868a8f3d198438">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_vulkan_render_system.html#a8d2642e8790ace6431246310ca6cd5d1">Ogre::VulkanRenderSystem</a>.</p>
+<p>return false for recoverable errors, for example for exhausted per-frame time budget </p>
+
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#ab2b3cfbca927078a37a8ec6a60bcad21">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a9cf8c532e2939c43c72c99e465b4b526">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#aa0035a2af059aa3ff78258c9e56ad7f3">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#abe11307bf7d4b8b85ba14f105838c835">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_vulkan_render_system.html#a3d7ecc1be3a7abd534a2495e53a44e59">Ogre::VulkanRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -1905,6 +1927,32 @@ See _createRenderWindow for details about each member. </td></tr>
 </dl>
 
 <p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#aca9af9a5c791cc74a1421281972d3e2c">Ogre::GL3PlusRenderSystem</a>.</p>
+
+</div>
+</div>
+<a id="a38a086ccaac52dc9c9dbbb7aa473a7d1" name="a38a086ccaac52dc9c9dbbb7aa473a7d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38a086ccaac52dc9c9dbbb7aa473a7d1">&#9670;&#160;</a></span>_notifyIncompletePsoRequests()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::RenderSystem::_notifyIncompletePsoRequests </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a>&#160;</td>
+          <td class="paramname"><em>count</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -5365,6 +5413,31 @@ that the shininess value is still taken from shininess)</a> and TVC_EMISSIVE. TV
 
 </div>
 </div>
+<a id="a90af952bd348e0d592a2e2ceadef1e8e" name="a90af952bd348e0d592a2e2ceadef1e8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90af952bd348e0d592a2e2ceadef1e8e">&#9670;&#160;</a></span>getIncompletePsoRequestsCounter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a> Ogre::RenderSystem::getIncompletePsoRequestsCounter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a3d4d8022d696854c4bb41a7d378fb0ca" name="a3d4d8022d696854c4bb41a7d378fb0ca"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3d4d8022d696854c4bb41a7d378fb0ca">&#9670;&#160;</a></span>getInvertedClipSpaceY()</h2>
 
@@ -5709,6 +5782,31 @@ that the shininess value is still taken from shininess)</a> and TVC_EMISSIVE. TV
 <p>Options must be set in ascending order, i.e. idx = 0 must be called before idx = 1 </p><dl class="section return"><dt>Returns</dt><dd>The name to use in setConfigOption( name, value ) </dd></dl>
 
 <p>Reimplemented in <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a946f4c8189a88238996e97e5e970594a">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ae9b9942ca383f3fd5207c2d494860095">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_vulkan_render_system.html#a4beba61f4172a160b1dd7d8ac65d41e2">Ogre::VulkanRenderSystem</a>.</p>
+
+</div>
+</div>
+<a id="a64937009d6debfecd39cd254a4eab63c" name="a64937009d6debfecd39cd254a4eab63c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64937009d6debfecd39cd254a4eab63c">&#9670;&#160;</a></span>getPsoRequestsTimeout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Ogre::RenderSystem::getPsoRequestsTimeout </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -6866,6 +6964,34 @@ Once this init sequence is completed the threads are independent but this startu
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a80f3ff58250bcf7761d9792621fedabe" name="a80f3ff58250bcf7761d9792621fedabe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80f3ff58250bcf7761d9792621fedabe">&#9670;&#160;</a></span>setPsoRequestsTimeout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::RenderSystem::setPsoRequestsTimeout </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ms</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>PSO creation on Vulkan could be skipped after exhausting per-frame time budget. </p>
 
 </div>
 </div>
