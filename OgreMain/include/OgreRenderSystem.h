@@ -909,7 +909,7 @@ namespace Ogre
         void   setPsoRequestsTimeout( int ms ) { mPsoRequestsTimeout = ms; }
         int    getPsoRequestsTimeout() const { return mPsoRequestsTimeout; }
         uint64 getIncompletePsoRequestsCounter() const { return mIncompletePsoRequestsCounter; }
-        void   _notifyIncompletePsoRequests( uint64 count ) { mIncompletePsoRequestsCounter += count; }
+        void   _notifyIncompletePsoRequests( uint64 count );
 
         /// return false for recoverable errors, for example for exhausted per-frame time budget
         virtual bool _hlmsPipelineStateObjectCreated( HlmsPso *newPso, uint64 deadline = (uint64)-1 )

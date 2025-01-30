@@ -1381,6 +1381,19 @@ namespace Ogre
     //---------------------------------------------------------------------
     void RenderSystem::savePipelineCache( DataStreamPtr stream ) const {}
     //---------------------------------------------------------------------
+    void RenderSystem::_notifyIncompletePsoRequests( uint64 count )
+    {
+        if( count > 0 )
+        {
+            LogManager::getSingleton().logMessage(
+                "Deferred to next frame " + StringConverter::toString( count ) +
+                " PSO creation requests after exceeding " +
+                StringConverter::toString( mPsoRequestsTimeout ) + "ms time budget" );
+        }
+
+        mIncompletePsoRequestsCounter += count;
+    }
+    //---------------------------------------------------------------------
     bool RenderSystem::startGpuDebuggerFrameCapture( Window *window )
     {
         if( !mRenderDocApi )
