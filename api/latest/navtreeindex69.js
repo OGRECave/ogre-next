@@ -1,6 +1,6 @@
 var NAVTREEINDEX69 =
 {
-"class_ogre_1_1_pool.html#abafd7c72963d86ef829c0373fe50aa7f":[7,0,0,782,2],
+"class_ogre_1_1_pool.html#abafd7c72963d86ef829c0373fe50aa7f":[8,0,0,753,2],
 "class_ogre_1_1_pool.html#af399adb462aa706c25e1e961cdfb5a1e":[7,0,0,782,3],
 "class_ogre_1_1_pool.html#af399adb462aa706c25e1e961cdfb5a1e":[8,0,0,753,3],
 "class_ogre_1_1_pre_apply_texture_aliases_script_compiler_event.html":[6,2,2,84],
