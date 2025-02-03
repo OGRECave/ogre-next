@@ -600,7 +600,7 @@ namespace Ogre
         VkPhysicalDeviceFeatures2 &deviceFeatures2,
         VkPhysicalDevice16BitStorageFeatures &device16BitStorageFeatures,
         VkPhysicalDeviceShaderFloat16Int8Features &deviceShaderFloat16Int8Features,
-        VkPhysicalDevicePipelineCreationCacheControlFeatures &deviceCacheControlFeatures )
+        VkPhysicalDevicePipelineCreationCacheControlFeaturesEXT &deviceCacheControlFeatures )
     {
         if( !VulkanInstance::hasExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
             return false;
@@ -768,7 +768,7 @@ namespace Ogre
             VkPhysicalDeviceFeatures2 deviceFeatures2;
             VkPhysicalDevice16BitStorageFeatures device16BitStorageFeatures;
             VkPhysicalDeviceShaderFloat16Int8Features deviceShaderFloat16Int8Features;
-            VkPhysicalDevicePipelineCreationCacheControlFeatures deviceCacheControlFeatures;
+            VkPhysicalDevicePipelineCreationCacheControlFeaturesEXT deviceCacheControlFeatures;
             fillDeviceFeatures2( deviceFeatures2, device16BitStorageFeatures,
                                  deviceShaderFloat16Int8Features, deviceCacheControlFeatures );
         }
@@ -977,7 +977,7 @@ namespace Ogre
         VkPhysicalDeviceFeatures2 deviceFeatures2;
         VkPhysicalDevice16BitStorageFeatures device16BitStorageFeatures;
         VkPhysicalDeviceShaderFloat16Int8Features deviceShaderFloat16Int8Features;
-        VkPhysicalDevicePipelineCreationCacheControlFeatures deviceCacheControlFeatures;
+        VkPhysicalDevicePipelineCreationCacheControlFeaturesEXT deviceCacheControlFeatures;
         if( fillDeviceFeatures2( deviceFeatures2, device16BitStorageFeatures,
                                  deviceShaderFloat16Int8Features, deviceCacheControlFeatures ) )
         {

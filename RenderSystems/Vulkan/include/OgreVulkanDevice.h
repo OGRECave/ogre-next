@@ -174,7 +174,7 @@ namespace Ogre
             VkPhysicalDeviceFeatures2 &deviceFeatures2,
             VkPhysicalDevice16BitStorageFeatures &device16BitStorageFeatures,
             VkPhysicalDeviceShaderFloat16Int8Features &deviceShaderFloat16Int8Features,
-            VkPhysicalDevicePipelineCreationCacheControlFeatures &deviceCacheControlFeatures );
+            VkPhysicalDevicePipelineCreationCacheControlFeaturesEXT &deviceCacheControlFeatures );
 
         static void destroyQueues( FastArray<VulkanQueue> &queueArray );
 
