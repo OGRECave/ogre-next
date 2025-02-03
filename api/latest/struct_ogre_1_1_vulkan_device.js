@@ -9,7 +9,7 @@ var struct_ogre_1_1_vulkan_device =
     [ "destroy", "struct_ogre_1_1_vulkan_device.html#a667a53c9cc215aa3dd896d1a31335260", null ],
     [ "destroyQueues", "struct_ogre_1_1_vulkan_device.html#a55ecf3d331abc31e467ca32ce386490a", null ],
     [ "fillDeviceFeatures", "struct_ogre_1_1_vulkan_device.html#a168c0d0ca21a2e3df6fa7abbfa594a5d", null ],
-    [ "fillDeviceFeatures2", "struct_ogre_1_1_vulkan_device.html#aafe17e63d910b9a3aa7c7fffce941614", null ],
+    [ "fillDeviceFeatures2", "struct_ogre_1_1_vulkan_device.html#a8b374d82e3fb6706230c6a5dd31bf72c", null ],
     [ "fillQueueCreationInfo", "struct_ogre_1_1_vulkan_device.html#a857f4d05cc191573c3a56adf69581c07", null ],
     [ "findComputeQueue", "struct_ogre_1_1_vulkan_device.html#a273b42eb4822c8b473698a7b71f4ebf8", null ],
     [ "findGraphicsQueue", "struct_ogre_1_1_vulkan_device.html#ab3d60c37eccfa0bf7963344e3ef8e5db", null ],
