@@ -3450,9 +3450,8 @@ namespace Ogre
         makeVkStruct( pipeline, VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO );
 
         pipeline.flags =
-            deadline != (uint64)-1 &&
-                    (int64)( Root::getSingleton().getTimer()->getMilliseconds() - deadline ) > 0 &&
-                    mDevice->hasDeviceExtension( VK_EXT_PIPELINE_CREATION_CACHE_CONTROL_EXTENSION_NAME )
+            mDevice->mDeviceExtraFeatures.pipelineCreationCacheControl && deadline != (uint64)-1 &&
+                    (int64)( Root::getSingleton().getTimer()->getMilliseconds() - deadline ) > 0
                 ? VK_PIPELINE_CREATE_FAIL_ON_PIPELINE_COMPILE_REQUIRED_BIT_EXT
                 : 0;
         pipeline.layout = layout;

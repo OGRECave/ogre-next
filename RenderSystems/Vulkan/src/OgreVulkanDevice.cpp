@@ -599,7 +599,8 @@ namespace Ogre
     bool VulkanDevice::fillDeviceFeatures2(
         VkPhysicalDeviceFeatures2 &deviceFeatures2,
         VkPhysicalDevice16BitStorageFeatures &device16BitStorageFeatures,
-        VkPhysicalDeviceShaderFloat16Int8Features &deviceShaderFloat16Int8Features )
+        VkPhysicalDeviceShaderFloat16Int8Features &deviceShaderFloat16Int8Features,
+        VkPhysicalDevicePipelineCreationCacheControlFeatures &deviceCacheControlFeatures )
     {
         if( !VulkanInstance::hasExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
             return false;
@@ -609,6 +610,8 @@ namespace Ogre
                       VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES );
         makeVkStruct( deviceShaderFloat16Int8Features,
                       VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES );
+        makeVkStruct( deviceCacheControlFeatures,
+                      VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PIPELINE_CREATION_CACHE_CONTROL_FEATURES_EXT );
 
         PFN_vkGetPhysicalDeviceFeatures2KHR GetPhysicalDeviceFeatures2KHR =
             (PFN_vkGetPhysicalDeviceFeatures2KHR)vkGetInstanceProcAddr(
@@ -625,11 +628,18 @@ namespace Ogre
             *lastNext = &deviceShaderFloat16Int8Features;
             lastNext = &deviceShaderFloat16Int8Features.pNext;
         }
+        if( hasDeviceExtension( VK_EXT_PIPELINE_CREATION_CACHE_CONTROL_EXTENSION_NAME ) )
+        {
+            *lastNext = &deviceCacheControlFeatures;
+            lastNext = &deviceCacheControlFeatures.pNext;
+        }
 
         GetPhysicalDeviceFeatures2KHR( mPhysicalDevice, &deviceFeatures2 );
         mDeviceExtraFeatures.storageInputOutput16 = device16BitStorageFeatures.storageInputOutput16;
         mDeviceExtraFeatures.shaderFloat16 = deviceShaderFloat16Int8Features.shaderFloat16;
         mDeviceExtraFeatures.shaderInt8 = deviceShaderFloat16Int8Features.shaderInt8;
+        mDeviceExtraFeatures.pipelineCreationCacheControl =
+            deviceCacheControlFeatures.pipelineCreationCacheControl;
         return true;
     }
     //-------------------------------------------------------------------------
@@ -758,8 +768,9 @@ namespace Ogre
             VkPhysicalDeviceFeatures2 deviceFeatures2;
             VkPhysicalDevice16BitStorageFeatures device16BitStorageFeatures;
             VkPhysicalDeviceShaderFloat16Int8Features deviceShaderFloat16Int8Features;
+            VkPhysicalDevicePipelineCreationCacheControlFeatures deviceCacheControlFeatures;
             fillDeviceFeatures2( deviceFeatures2, device16BitStorageFeatures,
-                                 deviceShaderFloat16Int8Features );
+                                 deviceShaderFloat16Int8Features, deviceCacheControlFeatures );
         }
 
         vkGetPhysicalDeviceProperties( mPhysicalDevice, &mDeviceProperties );
@@ -966,8 +977,9 @@ namespace Ogre
         VkPhysicalDeviceFeatures2 deviceFeatures2;
         VkPhysicalDevice16BitStorageFeatures device16BitStorageFeatures;
         VkPhysicalDeviceShaderFloat16Int8Features deviceShaderFloat16Int8Features;
+        VkPhysicalDevicePipelineCreationCacheControlFeatures deviceCacheControlFeatures;
         if( fillDeviceFeatures2( deviceFeatures2, device16BitStorageFeatures,
-                                 deviceShaderFloat16Int8Features ) )
+                                 deviceShaderFloat16Int8Features, deviceCacheControlFeatures ) )
         {
             createInfo.pNext = &deviceFeatures2;
             deviceFeatures2.features = mDeviceFeatures;

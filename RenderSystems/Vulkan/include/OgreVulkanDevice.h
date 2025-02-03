@@ -131,6 +131,9 @@ namespace Ogre
             // VkPhysicalDeviceShaderFloat16Int8Features
             VkBool32 shaderFloat16;
             VkBool32 shaderInt8;
+
+            // VkPhysicalDevicePipelineCreationCacheControlFeatures
+            VkBool32 pipelineCreationCacheControl;
         };
 
         // clang-format off
@@ -170,7 +173,8 @@ namespace Ogre
         bool fillDeviceFeatures2(
             VkPhysicalDeviceFeatures2 &deviceFeatures2,
             VkPhysicalDevice16BitStorageFeatures &device16BitStorageFeatures,
-            VkPhysicalDeviceShaderFloat16Int8Features &deviceShaderFloat16Int8Features );
+            VkPhysicalDeviceShaderFloat16Int8Features &deviceShaderFloat16Int8Features,
+            VkPhysicalDevicePipelineCreationCacheControlFeatures &deviceCacheControlFeatures );
 
         static void destroyQueues( FastArray<VulkanQueue> &queueArray );
 
