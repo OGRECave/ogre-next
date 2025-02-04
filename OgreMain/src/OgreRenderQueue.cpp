@@ -388,7 +388,7 @@ namespace Ogre
         if( rs->supportsMultithreadedShaderCompilation() && mSceneManager->getNumWorkerThreads() > 1u )
         {
             parallelCompileQueue = &mParallelHlmsCompileQueue;
-            mParallelHlmsCompileQueue.start( mSceneManager );
+            mParallelHlmsCompileQueue.start( mSceneManager, casterPass );
         }
 
         bool supportsIndirectBuffers = mVaoManager->supportsIndirectBuffers();
@@ -1192,10 +1192,10 @@ namespace Ogre
         mParallelHlmsCompileQueue.updateThread( threadIdx, mHlmsManager );
     }
     //-----------------------------------------------------------------------
-    void ParallelHlmsCompileQueue::start( SceneManager *sceneManager )
+    void ParallelHlmsCompileQueue::start( SceneManager *sceneManager, bool casterPass )
     {
         mKeepCompiling = true;
-        int timeout = Root::getSingleton().getRenderSystem()->getPsoRequestsTimeout();
+        int timeout = casterPass ? 0 : Root::getSingleton().getRenderSystem()->getPsoRequestsTimeout();
         mCompilationDeadline =
             timeout <= 0 ? (uint64)-1 : Root::getSingleton().getTimer()->getMilliseconds() + timeout;
         mCompilationIncompleteCounter = 0;

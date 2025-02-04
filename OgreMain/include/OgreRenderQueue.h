@@ -121,7 +121,7 @@ namespace Ogre
             is false.
         @param sceneManager
         */
-        void start( SceneManager *sceneManager );
+        void start( SceneManager *sceneManager, bool casterPass );
         /** Signals worker threads we won't be submitting more work, so they should stop once they're
             done compiling all pending shaders / PSOs.
 
