@@ -113,15 +113,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae38048ebb76edabb33f61e0745d796d0" id="r_ae38048ebb76edabb33f61e0745d796d0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#ae38048ebb76edabb33f61e0745d796d0">ParallelHlmsCompileQueue</a> ()</td></tr>
 <tr class="separator:ae38048ebb76edabb33f61e0745d796d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a392eb4d02e34df8841097ac7be82b852" id="r_a392eb4d02e34df8841097ac7be82b852"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#a392eb4d02e34df8841097ac7be82b852">fireWarmUpParallel</a> (<a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *sceneManager)</td></tr>
-<tr class="memdesc:a392eb4d02e34df8841097ac7be82b852"><td class="mdescLeft">&#160;</td><td class="mdescRight">Similar to <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#a6e2a94362f7bae8919e3074587b252b9" title="Starts worker threads (job queue) so they start accepting work every time pushRequest() gets called a...">start()</a> and <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#ab6f85d23748cecb3d025f464a928bf2a" title="Signals worker threads we won&#39;t be submitting more work, so they should stop once they&#39;re done compil...">stopAndWait()</a> at the same time: It assumes all work has already been gathered in mRequests via <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#aac24523f28c40d659b84f80d2a43fd95">pushWarmUpRequest()</a> (instead of gather it as we go) and fires all threads to compile the shaders and PSOs in parallel.  <br /></td></tr>
+<tr class="memdesc:a392eb4d02e34df8841097ac7be82b852"><td class="mdescLeft">&#160;</td><td class="mdescRight">Similar to <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#a5f58298ed8a892fdf0bc4dfa0a936281" title="Starts worker threads (job queue) so they start accepting work every time pushRequest() gets called a...">start()</a> and <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#ab6f85d23748cecb3d025f464a928bf2a" title="Signals worker threads we won&#39;t be submitting more work, so they should stop once they&#39;re done compil...">stopAndWait()</a> at the same time: It assumes all work has already been gathered in mRequests via <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#aac24523f28c40d659b84f80d2a43fd95">pushWarmUpRequest()</a> (instead of gather it as we go) and fires all threads to compile the shaders and PSOs in parallel.  <br /></td></tr>
 <tr class="separator:a392eb4d02e34df8841097ac7be82b852"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf595df16ab16cb9459154049bdd86d1" id="r_aaf595df16ab16cb9459154049bdd86d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#aaf595df16ab16cb9459154049bdd86d1">pushRequest</a> (const <a class="el" href="struct_ogre_1_1_parallel_hlms_compile_queue_1_1_request.html">Request</a> &amp;&amp;request)</td></tr>
 <tr class="separator:aaf595df16ab16cb9459154049bdd86d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac24523f28c40d659b84f80d2a43fd95" id="r_aac24523f28c40d659b84f80d2a43fd95"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#aac24523f28c40d659b84f80d2a43fd95">pushWarmUpRequest</a> (const <a class="el" href="struct_ogre_1_1_parallel_hlms_compile_queue_1_1_request.html">Request</a> &amp;&amp;request)</td></tr>
 <tr class="separator:aac24523f28c40d659b84f80d2a43fd95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e2a94362f7bae8919e3074587b252b9" id="r_a6e2a94362f7bae8919e3074587b252b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#a6e2a94362f7bae8919e3074587b252b9">start</a> (<a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *sceneManager)</td></tr>
-<tr class="memdesc:a6e2a94362f7bae8919e3074587b252b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts worker threads (job queue) so they start accepting work every time <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#aaf595df16ab16cb9459154049bdd86d1">pushRequest()</a> gets called and will keep compiling those shaders until <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#ab6f85d23748cecb3d025f464a928bf2a" title="Signals worker threads we won&#39;t be submitting more work, so they should stop once they&#39;re done compil...">stopAndWait()</a> is called.  <br /></td></tr>
-<tr class="separator:a6e2a94362f7bae8919e3074587b252b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f58298ed8a892fdf0bc4dfa0a936281" id="r_a5f58298ed8a892fdf0bc4dfa0a936281"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#a5f58298ed8a892fdf0bc4dfa0a936281">start</a> (<a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *sceneManager, bool casterPass)</td></tr>
+<tr class="memdesc:a5f58298ed8a892fdf0bc4dfa0a936281"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts worker threads (job queue) so they start accepting work every time <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#aaf595df16ab16cb9459154049bdd86d1">pushRequest()</a> gets called and will keep compiling those shaders until <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#ab6f85d23748cecb3d025f464a928bf2a" title="Signals worker threads we won&#39;t be submitting more work, so they should stop once they&#39;re done compil...">stopAndWait()</a> is called.  <br /></td></tr>
+<tr class="separator:a5f58298ed8a892fdf0bc4dfa0a936281"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6f85d23748cecb3d025f464a928bf2a" id="r_ab6f85d23748cecb3d025f464a928bf2a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#ab6f85d23748cecb3d025f464a928bf2a">stopAndWait</a> (<a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *sceneManager)</td></tr>
 <tr class="memdesc:ab6f85d23748cecb3d025f464a928bf2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signals worker threads we won't be submitting more work, so they should stop once they're done compiling all pending shaders / PSOs.  <br /></td></tr>
 <tr class="separator:ab6f85d23748cecb3d025f464a928bf2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -170,7 +170,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Similar to <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#a6e2a94362f7bae8919e3074587b252b9" title="Starts worker threads (job queue) so they start accepting work every time pushRequest() gets called a...">start()</a> and <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#ab6f85d23748cecb3d025f464a928bf2a" title="Signals worker threads we won&#39;t be submitting more work, so they should stop once they&#39;re done compil...">stopAndWait()</a> at the same time: It assumes all work has already been gathered in mRequests via <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#aac24523f28c40d659b84f80d2a43fd95">pushWarmUpRequest()</a> (instead of gather it as we go) and fires all threads to compile the shaders and PSOs in parallel. </p>
+<p>Similar to <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#a5f58298ed8a892fdf0bc4dfa0a936281" title="Starts worker threads (job queue) so they start accepting work every time pushRequest() gets called a...">start()</a> and <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#ab6f85d23748cecb3d025f464a928bf2a" title="Signals worker threads we won&#39;t be submitting more work, so they should stop once they&#39;re done compil...">stopAndWait()</a> at the same time: It assumes all work has already been gathered in mRequests via <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html#aac24523f28c40d659b84f80d2a43fd95">pushWarmUpRequest()</a> (instead of gather it as we go) and fires all threads to compile the shaders and PSOs in parallel. </p>
 <p>It will wait until all threads are done. </p>
 
 </div>
@@ -231,8 +231,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a6e2a94362f7bae8919e3074587b252b9" name="a6e2a94362f7bae8919e3074587b252b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6e2a94362f7bae8919e3074587b252b9">&#9670;&#160;</a></span>start()</h2>
+<a id="a5f58298ed8a892fdf0bc4dfa0a936281" name="a5f58298ed8a892fdf0bc4dfa0a936281"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f58298ed8a892fdf0bc4dfa0a936281">&#9670;&#160;</a></span>start()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -241,8 +241,18 @@ Public Member Functions</h2></td></tr>
           <td class="memname">void Ogre::ParallelHlmsCompileQueue::start </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *&#160;</td>
-          <td class="paramname"><em>sceneManager</em></td><td>)</td>
+          <td class="paramname"><em>sceneManager</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>casterPass</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
