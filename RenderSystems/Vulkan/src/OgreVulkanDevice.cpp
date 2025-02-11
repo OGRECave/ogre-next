@@ -1067,8 +1067,8 @@ namespace Ogre
         //
         // We can't have potentially dangling API handles in a cmd buffer.
         // We must submit our current pending work so far and wait until that's done.
-        commitAndNextCommandBuffer( SubmissionType::FlushOnly );
         mRenderSystem->resetAllBindings();
+        commitAndNextCommandBuffer( SubmissionType::FlushOnly );
 
         VkResult result = vkDeviceWaitIdle( mDevice );
         checkVkResult( this, result, "vkDeviceWaitIdle" );
