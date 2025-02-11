@@ -406,8 +406,7 @@ namespace Ogre
         mCurrentAutoParamsBufferPtr = 0;
         mCurrentAutoParamsBufferSpaceLeft = 0;
 
-        if( !mDevice->isDeviceLost() )
-            mDevice->stall();
+        mDevice->stallIgnoringDeviceLost();
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::destroyVkResources1()

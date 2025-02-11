@@ -85,7 +85,7 @@ namespace Ogre
     {
         if( mNativeWindow )
         {
-            mDevice->stall();
+            mDevice->stallIgnoringDeviceLost();
         }
 
         VulkanWindowSwapChainBased::destroy();
@@ -220,7 +220,7 @@ namespace Ogre
         if( newWidth == getWidth() && newHeight == getHeight() && !mRebuildingSwapchain )
             return;
 
-        mDevice->stall();
+        mDevice->stallIgnoringDeviceLost();
 
 #ifdef OGRE_VULKAN_USE_SWAPPY
         // Code to detect buggy devices (if it's buggy, we disable Swappy).
@@ -336,7 +336,7 @@ namespace Ogre
         // We must flush all our references to the old swapchain otherwise when
         // the app goes to foreground again and submit that stale content Mali
         // will return DEVICE_LOST
-        mDevice->stall();
+        mDevice->stallIgnoringDeviceLost();
 
         destroySwapchain();
         destroySurface();

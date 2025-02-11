@@ -1076,6 +1076,20 @@ namespace Ogre
         mRenderSystem->_notifyDeviceStalled();
     }
     //-------------------------------------------------------------------------
+    void VulkanDevice::stallIgnoringDeviceLost()
+    {
+        try
+        {
+            if( !isDeviceLost() )
+                stall();
+        }
+        catch( const RenderingAPIException & )
+        {
+            if( !isDeviceLost() )
+                throw;
+        }
+    }
+    //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     VulkanDevice::SelectedQueue::SelectedQueue() :

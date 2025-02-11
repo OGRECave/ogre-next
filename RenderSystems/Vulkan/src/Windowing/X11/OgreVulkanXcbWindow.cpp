@@ -492,7 +492,7 @@ namespace Ogre
         if( newWidth == getWidth() && newHeight == getHeight() && !mRebuildingSwapchain )
             return;
 
-        mDevice->stall();
+        mDevice->stallIgnoringDeviceLost();
 
         destroySwapchain();
         setFinalResolution( newWidth, newHeight );

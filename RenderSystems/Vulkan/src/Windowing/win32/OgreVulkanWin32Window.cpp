@@ -693,7 +693,7 @@ namespace Ogre
         if( !bResolutionChanged && !mRebuildingSwapchain )
             return;
 
-        mDevice->stall();
+        mDevice->stallIgnoringDeviceLost();
 
         destroySwapchain();
         setFinalResolution( mRequestedWidth, mRequestedHeight );

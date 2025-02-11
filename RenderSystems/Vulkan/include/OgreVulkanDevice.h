@@ -207,6 +207,7 @@ namespace Ogre
 
         /// Waits for the GPU to finish all pending commands.
         void stall();
+        void stallIgnoringDeviceLost();
 
         bool isDeviceLost() const { return mDeviceLostReason != VK_SUCCESS; }
     };
