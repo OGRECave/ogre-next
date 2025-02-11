@@ -362,12 +362,6 @@ namespace Ogre
         if( !mNativeWindow )
             return;
 
-        mClosed = false;
-        mFocused = true;
-        // WindowEventUtilities::_addRenderWindow( this );
-
-        createSurface();
-
         const uint32 newWidth = static_cast<uint32>( ANativeWindow_getWidth( mNativeWindow ) );
         const uint32 newHeight = static_cast<uint32>( ANativeWindow_getHeight( mNativeWindow ) );
 
@@ -376,37 +370,7 @@ namespace Ogre
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
 
-        // mTexture is in OnStorage only once ever: at startup. Set these parameters once
-        if( mTexture->getResidencyStatus() == GpuResidency::OnStorage )
-        {
-            mTexture->setPixelFormat( chooseSurfaceFormat( mHwGamma ) );
-            if( mDepthBuffer )
-            {
-                mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
-                if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
-                    mStencilBuffer = mDepthBuffer;
-            }
-
-            mSampleDescription = mDevice->mRenderSystem->validateSampleDescription(
-                mRequestedSampleDescription, mTexture->getPixelFormat(),
-                TextureFlags::NotTexture | TextureFlags::RenderWindowSpecific );
-            mTexture->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
-            if( mDepthBuffer )
-                mDepthBuffer->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
-
-            if( mDepthBuffer )
-            {
-                mTexture->_setDepthBufferDefaults( mDepthBuffer->isTilerMemoryless()
-                                                       ? DepthBuffer::POOL_MEMORYLESS
-                                                       : DepthBuffer::NO_POOL_EXPLICIT_RTV,
-                                                   false, mDepthBuffer->getPixelFormat() );
-            }
-            else
-            {
-                mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
-            }
-        }
-
+        createSurface();
         createSwapchain();
     }
     //-------------------------------------------------------------------------
