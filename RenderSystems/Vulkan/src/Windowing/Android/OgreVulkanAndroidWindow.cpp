@@ -341,15 +341,6 @@ namespace Ogre
         destroySwapchain();
         destroySurface();
 
-        // Depth & Stencil buffer are normal textures; thus they need to be reeinitialized normally
-        if( mDepthBuffer && mDepthBuffer->getResidencyStatus() != GpuResidency::OnStorage )
-            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-        if( mStencilBuffer && mStencilBuffer != mDepthBuffer &&
-            mStencilBuffer->getResidencyStatus() != GpuResidency::OnStorage )
-        {
-            mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-        }
-
         if( mNativeWindow != nativeWindow )
         {
             if( mNativeWindow )
