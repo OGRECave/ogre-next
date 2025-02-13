@@ -530,8 +530,6 @@ namespace Ogre
 
         // We need to retransition the main texture now to re-create MSAA surfaces (if any).
         // We need to do it now, because doing it later will overwrite the VkImage handles with NULL.
-        if( mTexture->getResidencyStatus() != GpuResidency::OnStorage )
-            mTexture->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
         mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
 
         acquireNextSwapchain();
@@ -586,6 +584,8 @@ namespace Ogre
         }
         else
         {
+            if( mTexture && mTexture->getResidencyStatus() != GpuResidency::OnStorage )
+                mTexture->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
             if( mDepthBuffer && mDepthBuffer->getResidencyStatus() != GpuResidency::OnStorage )
                 mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
             if( mStencilBuffer && mStencilBuffer != mDepthBuffer &&
