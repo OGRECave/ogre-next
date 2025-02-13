@@ -218,6 +218,15 @@ THE SOFTWARE.
 #define OGRE_QUOTE( x ) OGRE_QUOTE_INPLACE( x )
 #define OGRE_WARN( x ) message( __FILE__ "(" QUOTE( __LINE__ ) ") : " x "\n" )
 
+// portable analog of __PRETTY_FUNCTION__, see also BOOST_CURRENT_FUNCTION
+#if OGRE_COMPILER == OGRE_COMPILER_GNUC || OGRE_COMPILER == OGRE_COMPILER_CLANG
+#    define OGRE_CURRENT_FUNCTION __PRETTY_FUNCTION__
+#elif OGRE_COMPILER == OGRE_COMPILER_MSVC || defined( __FUNCSIG__ )
+#    define OGRE_CURRENT_FUNCTION __FUNCSIG__
+#else  // C++11
+#    define OGRE_CURRENT_FUNCTION __func__
+#endif
+
 // For marking functions as deprecated
 #if __cplusplus >= 201402L || OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER >= 1900
 #    define OGRE_DEPRECATED [[deprecated]]

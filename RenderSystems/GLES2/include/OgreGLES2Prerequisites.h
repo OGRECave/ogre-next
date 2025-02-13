@@ -69,7 +69,6 @@ THE SOFTWARE.
 #else
 #   if (OGRE_PLATFORM == OGRE_PLATFORM_WIN32)
 #       if !defined( __MINGW32__ )
-#           define __PRETTY_FUNCTION__ __FUNCTION__
 #           ifndef WIN32_LEAN_AND_MEAN
 #               define WIN32_LEAN_AND_MEAN 1
 #           endif
@@ -309,7 +308,7 @@ namespace Ogre {
             } \
             char msgBuf[4096]; \
             StringVector tokens = StringUtil::split(#glFunc, "("); \
-            sprintf(msgBuf, "OpenGL error 0x%04X %s in %s at line %i for %s\n", e, errorString, __PRETTY_FUNCTION__, __LINE__, tokens[0].c_str()); \
+            sprintf(msgBuf, "OpenGL error 0x%04X %s in %s at line %i for %s\n", e, errorString, OGRE_CURRENT_FUNCTION, __LINE__, tokens[0].c_str()); \
             LogManager::getSingleton().logMessage(msgBuf); \
         } \
     }
@@ -326,9 +325,9 @@ namespace Ogre {
         if ((e != 0) && (e != EGL_SUCCESS))\
         { \
             char msgBuf[4096]; \
-            sprintf(msgBuf, "EGL error 0x%04X in %s at line %i\n", e, __PRETTY_FUNCTION__, __LINE__); \
+            sprintf(msgBuf, "EGL error 0x%04X in %s at line %i\n", e, OGRE_CURRENT_FUNCTION, __LINE__); \
             LogManager::getSingleton().logMessage(msgBuf); \
-            OGRE_EXCEPT(Exception::ERR_INTERNAL_ERROR, msgBuf, __PRETTY_FUNCTION__); \
+            OGRE_EXCEPT(Exception::ERR_INTERNAL_ERROR, msgBuf, OGRE_CURRENT_FUNCTION); \
         } \
     }
 #else

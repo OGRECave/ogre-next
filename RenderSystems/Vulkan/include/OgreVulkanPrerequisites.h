@@ -151,27 +151,15 @@ namespace Ogre
                           const char *file, long line );
 }  // namespace Ogre
 
-#if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#    define checkVkResult( device, result, functionName ) \
-        do \
+#define checkVkResult( device, result, functionName ) \
+    do \
+    { \
+        if( result != VK_SUCCESS ) \
         { \
-            if( result != VK_SUCCESS ) \
-            { \
-                onVulkanFailure( device, result, functionName " failed", __FUNCSIG__, __FILE__, \
-                                 __LINE__ ); \
-            } \
-        } while( 0 )
-#else
-#    define checkVkResult( device, result, functionName ) \
-        do \
-        { \
-            if( result != VK_SUCCESS ) \
-            { \
-                onVulkanFailure( device, result, functionName " failed", __PRETTY_FUNCTION__, __FILE__, \
-                                 __LINE__ ); \
-            } \
-        } while( 0 )
-#endif
+            onVulkanFailure( device, result, functionName " failed", OGRE_CURRENT_FUNCTION, __FILE__, \
+                             __LINE__ ); \
+        } \
+    } while( 0 )
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #    if !defined( __MINGW32__ )
