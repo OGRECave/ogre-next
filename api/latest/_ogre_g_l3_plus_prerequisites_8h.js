@@ -1,6 +1,5 @@
 var _ogre_g_l3_plus_prerequisites_8h =
 [
-    [ "__PRETTY_FUNCTION__", "_ogre_g_l3_plus_prerequisites_8h.html#a9c15fe1e91b07ea3280f5239f9841b67", null ],
     [ "_CRT_SECURE_NO_DEPRECATE", "_ogre_g_l3_plus_prerequisites_8h.html#a411c46599e926f8cdf49c63957255359", null ],
     [ "_OgreGL3PlusExport", "_ogre_g_l3_plus_prerequisites_8h.html#ab37328c530017705e7c1ad9515a87e6a", null ],
     [ "EGL_CHECK_ERROR", "_ogre_g_l3_plus_prerequisites_8h.html#a970bd7d687d827541d8b0d765d808048", null ],

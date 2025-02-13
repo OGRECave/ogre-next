@@ -231,14 +231,15 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">        <span class="keywordflow">do</span> \</div>
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">do</span> \</div>
+<div class="line">    { \</div>
+<div class="line">        if( result != VK_SUCCESS ) \</div>
 <div class="line">        { \</div>
-<div class="line">            if( result != VK_SUCCESS ) \</div>
-<div class="line">            { \</div>
-<div class="line">                onVulkanFailure( device, result, functionName <span class="stringliteral">&quot; failed&quot;</span>, __FUNCSIG__, __FILE__, \</div>
-<div class="line">                                 __LINE__ ); \</div>
-<div class="line">            } \</div>
-<div class="line">        } <span class="keywordflow">while</span>( 0 )</div>
+<div class="line">            onVulkanFailure( device, result, functionName <span class="stringliteral">&quot; failed&quot;</span>, <a class="code hl_define" href="_ogre_platform_8h.html#afdff03e0cc4408ea19ece2caf1d12bcf">OGRE_CURRENT_FUNCTION</a>, __FILE__, \</div>
+<div class="line">                             __LINE__ ); \</div>
+<div class="line">        } \</div>
+<div class="line">    } <span class="keywordflow">while</span>( 0 )</div>
+<div class="ttc" id="a_ogre_platform_8h_html_afdff03e0cc4408ea19ece2caf1d12bcf"><div class="ttname"><a href="_ogre_platform_8h.html#afdff03e0cc4408ea19ece2caf1d12bcf">OGRE_CURRENT_FUNCTION</a></div><div class="ttdeci">#define OGRE_CURRENT_FUNCTION</div><div class="ttdef"><b>Definition</b> OgrePlatform.h:223</div></div>
 </div><!-- fragment -->
 </div>
 </div>

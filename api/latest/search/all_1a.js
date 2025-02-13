@@ -1651,7 +1651,7 @@ var searchData=
   ['string_1648',['String',['../namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45',1,'Ogre']]],
   ['stringconverter_1649',['StringConverter',['../class_ogre_1_1_string_converter.html',1,'Ogre']]],
   ['stringinterface_1650',['stringinterface',['../class_ogre_1_1_string_interface.html#ad57e8c6f0793dde7d1b479361e55e419',1,'Ogre::StringInterface::StringInterface()'],['../class_ogre_1_1_string_interface.html',1,'Ogre::StringInterface']]],
-  ['stringstream_1651',['stringstream',['../namespace_ogre.html#a9f14407f349c1ec70ddab871a7806590',1,'Ogre::StringStream'],['../namespace_ogre.html#a64e76a61ffe0fc66797727c518151d35',1,'Ogre::stringstream']]],
+  ['stringstream_1651',['stringstream',['../namespace_ogre.html#a64e76a61ffe0fc66797727c518151d35',1,'Ogre::stringstream'],['../namespace_ogre.html#a9f14407f349c1ec70ddab871a7806590',1,'Ogre::StringStream']]],
   ['stringutil_1652',['StringUtil',['../class_ogre_1_1_string_util.html',1,'Ogre']]],
   ['stringvector_1653',['StringVector',['../group___general.html#ga0899c03496d3c25c6555889aa76a78db',1,'Ogre']]],
   ['stringvectorptr_1654',['StringVectorPtr',['../group___general.html#gae6b84ceebcdcc285f37bf9fba216697d',1,'Ogre']]],

@@ -28,6 +28,7 @@ var _ogre_platform_8h =
     [ "OGRE_CPU_PPC", "_ogre_platform_8h.html#a98616201d2102b59d9d10666f3ce8762", null ],
     [ "OGRE_CPU_UNKNOWN", "_ogre_platform_8h.html#ae606623294d49af88c609d5855ee418b", null ],
     [ "OGRE_CPU_X86", "_ogre_platform_8h.html#a03ad9692ca81e2302d7048c9d7695415", null ],
+    [ "OGRE_CURRENT_FUNCTION", "_ogre_platform_8h.html#afdff03e0cc4408ea19ece2caf1d12bcf", null ],
     [ "OGRE_DEBUG_HIGH", "_ogre_platform_8h.html#ae9ca4a25b6e01dedadb359fc285c93fd", null ],
     [ "OGRE_DEBUG_LOW", "_ogre_platform_8h.html#a8515e97868bc6f57d45684fe5cffaf46", null ],
     [ "OGRE_DEBUG_MEDIUM", "_ogre_platform_8h.html#a8b8b5a1578d8ea2f4dc553b1c545367c", null ],
