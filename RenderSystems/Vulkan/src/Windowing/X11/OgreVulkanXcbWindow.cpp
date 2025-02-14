@@ -191,8 +191,6 @@ namespace Ogre
                          "VulkanXcbWindow::_initialize" );
         }
 
-        createSurface();
-
         VulkanTextureGpuManager *textureManager =
             static_cast<VulkanTextureGpuManager *>( textureGpuManager );
 
@@ -206,11 +204,15 @@ namespace Ogre
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
 
+        createSurface();
         createSwapchain();
     }
     //-------------------------------------------------------------------------
     void VulkanXcbWindow::createSurface()
     {
+        if( mDevice->isDeviceLost() )  // notifyDeviceRestored() will call us again
+            return;
+
         PFN_vkCreateXcbSurfaceKHR create_xcb_surface = (PFN_vkCreateXcbSurfaceKHR)vkGetInstanceProcAddr(
             mDevice->mInstance->mVkInstance, "vkCreateXcbSurfaceKHR" );
 

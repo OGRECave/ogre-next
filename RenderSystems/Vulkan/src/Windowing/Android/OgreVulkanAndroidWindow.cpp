@@ -367,6 +367,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::createSurface()
     {
+        if( mDevice->isDeviceLost() )  // notifyDeviceRestored() will call us again
+            return;
+
         VkAndroidSurfaceCreateInfoKHR andrSurfCreateInfo;
         makeVkStruct( andrSurfCreateInfo, VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR );
         andrSurfCreateInfo.window = mNativeWindow;

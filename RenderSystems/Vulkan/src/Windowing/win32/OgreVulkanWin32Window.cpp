@@ -445,12 +445,13 @@ namespace Ogre
                 << "Created VulkanWin32Window '" << mTitle << "' : " << mRequestedWidth << "x"
                 << mRequestedHeight << ", " << mColourDepth << "bpp";
         }
-
-        createSurface();
     }
     //-------------------------------------------------------------------------
     void VulkanWin32Window::createSurface()
     {
+        if( mDevice->isDeviceLost() )  // notifyDeviceRestored() will call us again
+            return;
+
         VkWin32SurfaceCreateInfoKHR createInfo;
         makeVkStruct( createInfo, VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR );
         createInfo.hwnd = mHwnd;
@@ -532,6 +533,7 @@ namespace Ogre
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
 
+        createSurface();
         createSwapchain();
 
         setHidden( mHidden );

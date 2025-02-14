@@ -293,6 +293,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanWindowSwapChainBased::createSwapchain()
     {
+        if( mDevice->isDeviceLost() )  // notifyDeviceRestored() will call us again
+            return;
+
         mSuboptimal = false;
 
         // Update pixelFormat, sample description, depth buffer defaults
