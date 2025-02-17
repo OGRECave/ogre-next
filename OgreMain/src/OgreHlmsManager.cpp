@@ -34,12 +34,10 @@ THE SOFTWARE.
 #include "OgreHlmsCompute.h"
 #include "OgreLogManager.h"
 #include "OgreRenderSystem.h"
+#include "OgreResourceGroupManager.h"
 #include "OgreTextureFilters.h"
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuManager.h"
-#if !OGRE_NO_JSON
-#    include "OgreResourceGroupManager.h"
-#endif
 
 #include <fstream>
 
