@@ -3449,7 +3449,7 @@ namespace Ogre
         makeVkStruct( pipeline, VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO );
 
         bool deadlineMissed =
-            deadline != (uint64)-1 &&
+            deadline != UINT64_MAX &&
             (int64)( Root::getSingleton().getTimer()->getMilliseconds() - deadline ) > 0;
         pipeline.flags = deadlineMissed && mDevice->mDeviceExtraFeatures.pipelineCreationCacheControl
                              ? VK_PIPELINE_CREATE_FAIL_ON_PIPELINE_COMPILE_REQUIRED_BIT_EXT

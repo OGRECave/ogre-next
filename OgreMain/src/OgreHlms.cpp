@@ -3719,7 +3719,7 @@ namespace Ogre
                 if( !parallelQueue || mType == HLMS_LOW_LEVEL )
                 {
                     lastReturnedValue = createShaderCacheEntry(
-                        hash[0], passCache, finalHash, queuedRenderable, nullptr, (uint64)-1, kNoTid );
+                        hash[0], passCache, finalHash, queuedRenderable, nullptr, UINT64_MAX, kNoTid );
                 }
                 else
                 {

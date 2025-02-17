@@ -906,13 +906,14 @@ namespace Ogre
         virtual void executeResourceTransition( const ResourceTransitionArray &rstCollection ) {}
 
         /// PSO creation on Vulkan could be skipped after exhausting per-frame time budget
-        void   setPsoRequestsTimeout( int ms ) { mPsoRequestsTimeout = ms; }
-        int    getPsoRequestsTimeout() const { return mPsoRequestsTimeout; }
+        void   setPsoRequestsTimeout( uint32 ms ) { mPsoRequestsTimeout = ms; }
+        uint32 getPsoRequestsTimeout() const { return mPsoRequestsTimeout; }
+
         uint64 getIncompletePsoRequestsCounter() const { return mIncompletePsoRequestsCounter; }
         void   _notifyIncompletePsoRequests( uint64 count );
 
         /// return false for recoverable errors, for example for exhausted per-frame time budget
-        virtual bool _hlmsPipelineStateObjectCreated( HlmsPso *newPso, uint64 deadline = (uint64)-1 )
+        virtual bool _hlmsPipelineStateObjectCreated( HlmsPso *newPso, uint64 deadline = UINT64_MAX )
         {
             return true;
         }
@@ -1719,7 +1720,7 @@ namespace Ogre
         bool mReverseDepth;
         bool mInvertedClipSpaceY;
 
-        int    mPsoRequestsTimeout;  // ms, per frame, or 0 to disable
+        uint32 mPsoRequestsTimeout;  // ms, per frame, or 0 to disable
         uint64 mIncompletePsoRequestsCounter;
     };
     /** @} */

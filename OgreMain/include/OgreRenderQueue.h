@@ -89,8 +89,8 @@ namespace Ogre
         LightweightMutex     mMutex;
         Semaphore            mSemaphore;
         std::atomic<bool>    mKeepCompiling;
-        uint64               mCompilationDeadline;           // 16ms in the future, or (uint64)-1
-        std::atomic<uint64>  mCompilationIncompleteCounter;  // at least one was skipped
+        uint64               mCompilationDeadline;           // 16ms in the future, or UINT64_MAX.
+        std::atomic<uint64>  mCompilationIncompleteCounter;  // at least one was skipped.
 
         bool               mExceptionFound;     // GUARDED_BY( mMutex )
         std::exception_ptr mThreadedException;  // GUARDED_BY( mMutex )

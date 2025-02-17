@@ -111,7 +111,7 @@ namespace Ogre
         mTexProjRelativeOrigin( Vector3::ZERO ),
         mReverseDepth( true ),
         mInvertedClipSpaceY( false ),
-        mPsoRequestsTimeout( 0 ),
+        mPsoRequestsTimeout( 0u ),
         mIncompletePsoRequestsCounter( 0 )
     {
         mEventNames.push_back( "RenderSystemCapabilitiesCreated" );
@@ -1383,7 +1383,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     void RenderSystem::_notifyIncompletePsoRequests( uint64 count )
     {
-        if( count > 0 )
+        if( count > 0u )
         {
             LogManager::getSingleton().logMessage(
                 "Deferred to next frame " + StringConverter::toString( count ) +

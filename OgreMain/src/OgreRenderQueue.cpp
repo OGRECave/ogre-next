@@ -1195,9 +1195,11 @@ namespace Ogre
     void ParallelHlmsCompileQueue::start( SceneManager *sceneManager, bool casterPass )
     {
         mKeepCompiling = true;
-        int timeout = casterPass ? 0 : Root::getSingleton().getRenderSystem()->getPsoRequestsTimeout();
-        mCompilationDeadline =
-            timeout <= 0 ? (uint64)-1 : Root::getSingleton().getTimer()->getMilliseconds() + timeout;
+        uint32 timeout =
+            casterPass ? 0u : Root::getSingleton().getRenderSystem()->getPsoRequestsTimeout();
+        mCompilationDeadline = timeout == 0u
+                                   ? UINT64_MAX
+                                   : ( Root::getSingleton().getTimer()->getMilliseconds() + timeout );
         mCompilationIncompleteCounter = 0;
         sceneManager->_fireParallelHlmsCompile();
     }
@@ -1232,7 +1234,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void ParallelHlmsCompileQueue::fireWarmUpParallel( SceneManager *sceneManager )
     {
-        mCompilationDeadline = (uint64)-1;
+        mCompilationDeadline = UINT64_MAX;
         mCompilationIncompleteCounter = 0;
         sceneManager->_fireWarmUpShadersCompile();
         OGRE_ASSERT_LOW( mRequests.empty() );  // Should be empty, whether we found an exception or not.
@@ -1272,7 +1274,7 @@ namespace Ogre
             try
             {
                 hlms->compileStubEntry( passCaches[reinterpret_cast<size_t>( request.passCache )],
-                                        request.reservedStubEntry, (uint64)-1, request.queuedRenderable,
+                                        request.reservedStubEntry, UINT64_MAX, request.queuedRenderable,
                                         request.renderableHash, request.finalHash, threadIdx );
                 OGRE_ASSERT_LOW( request.reservedStubEntry->flags == HLMS_CACHE_FLAGS_NONE );
             }
@@ -1292,14 +1294,14 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void ParallelHlmsCompileQueue::warmUpSerial( HlmsManager *hlmsManager, const HlmsCache *passCaches )
     {
-        mCompilationDeadline = (uint64)-1;
+        mCompilationDeadline = UINT64_MAX;
         mCompilationIncompleteCounter = 0;
         for( const Request &request : mRequests )
         {
             const HlmsDatablock *datablock = request.queuedRenderable.renderable->getDatablock();
             Hlms *hlms = hlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
             hlms->compileStubEntry( passCaches[reinterpret_cast<size_t>( request.passCache )],
-                                    request.reservedStubEntry, (uint64)-1, request.queuedRenderable,
+                                    request.reservedStubEntry, UINT64_MAX, request.queuedRenderable,
                                     request.renderableHash, request.finalHash, 0u );
             OGRE_ASSERT_LOW( request.reservedStubEntry->flags == HLMS_CACHE_FLAGS_NONE );
         }
