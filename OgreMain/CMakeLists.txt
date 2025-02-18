@@ -418,15 +418,8 @@ else ()
 	endif()
 endif ()
 ogre_add_library(${OGRE_NEXT}Main ${OGRE_LIB_TYPE} ${PREC_HEADER} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES} SEPARATE ${BROKEN_FILES_IN_UNITY_BUILD})
-# In visual studio 2010 - 64 bit we get this error: "LINK : fatal error LNK1210: exceeded internal ILK size limit; link with /INCREMENTAL:NO"
-if(WIN32 AND MSVC10 AND CMAKE_CL_64)
-  set_target_properties(${OGRE_NEXT}Main PROPERTIES
-                        VERSION ${OGRE_SOVERSION}
-                        LINK_FLAGS "/INCREMENTAL:NO"
-                      )
-else()
-  set_target_properties(${OGRE_NEXT}Main PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
-endif()
+
+set_target_properties(${OGRE_NEXT}Main PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
 
 if (NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   if(OGRE_GCC_VERSION VERSION_EQUAL 4.8 OR OGRE_GCC_VERSION VERSION_GREATER 4.8)
@@ -488,19 +481,12 @@ if (MINGW)
   target_link_libraries(${OGRE_NEXT}Main ws2_32)
 endif ()
 
-#set_source_files_properties( ${SOURCE_FILES} PROPERTIES HEADER_FILE_ONLY TRUE)
-#set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/src/OgreItem.cpp" PROPERTIES HEADER_FILE_ONLY FALSE)
-#set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/src/OgreMesh.cpp" PROPERTIES HEADER_FILE_ONLY FALSE)
-#set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/src/OgreMesh2.cpp" PROPERTIES HEADER_FILE_ONLY FALSE)
-#set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/src/OgreSubMesh2.cpp" PROPERTIES HEADER_FILE_ONLY FALSE)
-
 # specify a precompiled header to use
 use_precompiled_header(${OGRE_NEXT}Main
   "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreStableHeaders.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/OgrePrecompiledHeaders.cpp"
 )
 
-# install ${OGRE_NEXT}Main
 ogre_config_lib(${OGRE_NEXT}Main TRUE)
 foreach(HEADER_FILE ${HEADER_FILES})
 	string(REGEX REPLACE "((${CMAKE_CURRENT_SOURCE_DIR}|${OGRE_BINARY_DIR})/)?(include|src)/" "" RELATIVE_HEADER_FILE ${HEADER_FILE})
