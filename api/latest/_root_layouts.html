@@ -197,6 +197,12 @@ Setting up root layouts</h1>
 <div class="line">        &quot;samplers&quot;          : [1,2],</div>
 <div class="line">        &quot;uav_buffers&quot;       : [1,2],</div>
 <div class="line">        &quot;uav_textures&quot;      : [0,1]</div>
+<div class="line">    },</div>
+<div class="line">    &quot;1&quot; :</div>
+<div class="line">    {</div>
+<div class="line">        &quot;baked&quot; : true,</div>
+<div class="line">        &quot;uav_buffers&quot;       : [1,2],</div>
+<div class="line">        &quot;uav_textures&quot;      : [0,1]</div>
 <div class="line">    }</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>That is, explicitly declare that you're using const buffer range [4; 7), tex buffer range [1; 2) etc.</p>
@@ -303,8 +309,9 @@ Declaring Root Layouts in shaders</h1>
 </div><!-- fragment --><h1><a class="anchor" id="RootLayoutsBakedSets"></a>
 Baked sets</h1>
 <p>Non-baked sets are meant to behave very similarly to table models in D3D11 and OpenGL.</p>
-<p>Baked sets on the other hand are meant exclusively for binding <code>DescriptorSetTexture</code>, <code>DescriptorSetSampler</code>, <code>DescriptorSetTexture2</code> and <code>DescriptorSetUav</code></p>
-<p>The size of the DescriptorSet* must match <em>exactly</em> the amount of bindings slots in the RootLayout</p>
+<p>Baked sets on the other hand are meant exclusively for binding <code>DescriptorSetTexture</code>, <code>DescriptorSetSampler</code>, <code>DescriptorSetTexture2</code> and <code>DescriptorSetUav</code>.</p>
+<p>The size of the DescriptorSet* must match <em>exactly</em> the amount of bindings slots in the RootLayout.</p>
+<p>Since UAVs can only be bound via <code>DescriptorSetUav</code>, UAVs must be placed in baked sets.</p>
 <h1><a class="anchor" id="RootLayoutPrefabs"></a>
 Prefab Root Layouts for low level materials</h1>
 <p>To ease porting of low level materials (i.e. *.material and *.program scripts), most low level materials don't need to declare Root Layouts because we have prefabs for them:</p>
