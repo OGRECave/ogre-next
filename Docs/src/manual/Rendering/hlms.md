@@ -899,7 +899,7 @@ customized:
 @end
 ```
 
-See ScreenSpaceReflections on how to setup an MRT compositor. Or see this [forum post reply](https://forums.ogre3d.org/viewtopic.php?p=557199#p557199).
+See ScreenSpaceReflections on how to setup an MRT compositor. Or see this [forum post reply](https://forums.ogre3d.org/viewtopic.php?p=557199#p557199). Also see the [RTV section](@ref CompositorRTV) and the [Examples](@ref CompositorRtv_Examples) of the manual.
 
 # Run-time rendering {#HlmsRuntimeRendering}
 
