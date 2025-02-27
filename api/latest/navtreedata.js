@@ -155,12 +155,14 @@ var NAVTREE =
             [ "Common conventions", "hlms.html#HlmsCreationOfShadersConventions", null ],
             [ "Hot reloading", "hlms.html#HlmsCreationOfShadersHotReloading", null ],
             [ "Disabling a stage", "hlms.html#HlmsCreationOfShadersDisablingStage", null ],
-            [ "Customizing an existing implementation", "hlms.html#HlmsCreationOfShadersCustomizing", null ]
+            [ "Customizing an existing implementation", "hlms.html#HlmsCreationOfShadersCustomizing", [
+              [ "Examples:", "hlms.html#autotoc_md109", null ]
+            ] ]
           ] ],
           [ "Run-time rendering", "hlms.html#HlmsRuntimeRendering", [
             [ "preparePassHash", "hlms.html#HlmsRuntimeRenderingPreparePassHash", null ],
             [ "fillBuffersFor", "hlms.html#HlmsRuntimeRenderingFillBuffersFor", null ],
-            [ "Multithreaded Shader Compilation", "hlms.html#autotoc_md109", null ]
+            [ "Multithreaded Shader Compilation", "hlms.html#autotoc_md110", null ]
           ] ],
           [ "Using the HLMS implementations", "hlms.html#UsingHlmsImplementation", [
             [ "Initialization", "hlms.html#UsingHlmsImplementationInitialization", null ],
@@ -182,7 +184,7 @@ var NAVTREE =
           [ "Troubleshooting", "hlms.html#HlmsTroubleshooting", [
             [ "My shadows don't show up or are very glitchy", "hlms.html#HlmsTroubleshootingShadow", null ]
           ] ],
-          [ "Precision / Quality", "hlms.html#autotoc_md110", null ],
+          [ "Precision / Quality", "hlms.html#autotoc_md111", null ],
           [ "Multithreaded Shader Compilation", "_hlms_threading.html", [
             [ "CMake Options", "_hlms_threading.html#HlmsThreading_CMakeOptions", null ],
             [ "The tid (Thread ID) argument", "_hlms_threading.html#HlmsThreading_tidArgument", [
@@ -258,7 +260,7 @@ var NAVTREE =
         ] ]
       ] ],
       [ "Scripts", "_scripts.html", [
-        [ "Loading scripts", "_scripts.html#autotoc_md120", null ],
+        [ "Loading scripts", "_scripts.html#autotoc_md121", null ],
         [ "Format", "_scripts.html#Format", [
           [ "Script Inheritance", "_scripts.html#Script-Inheritance", [
             [ "Advanced Script Inheritance", "_scripts.html#Advanced-Script-Inheritance", null ]
@@ -332,7 +334,7 @@ var NAVTREE =
             ] ],
             [ "PBS Datablock Parameters", "hlmspbsdatablockref.html#dbPBSParameters", [
               [ "Parameter: brdf", "hlmspbsdatablockref.html#dbParamBRDF", null ],
-              [ "Parameter: refraction_strength", "hlmspbsdatablockref.html#autotoc_md111", null ],
+              [ "Parameter: refraction_strength", "hlmspbsdatablockref.html#autotoc_md112", null ],
               [ "Parameter: detail_diffuse[X]", "hlmspbsdatablockref.html#dbParamDetailDiffuse", null ],
               [ "Parameter: detail_normal[X]", "hlmspbsdatablockref.html#dbParamDetailNormal", null ],
               [ "Parameter: detail_weight", "hlmspbsdatablockref.html#dbParamDetailWeight", null ],
@@ -387,7 +389,7 @@ var NAVTREE =
               [ "Locally declared textures", "compositor.html#CompositorNodesChannelsAndRTTsLocalTextures", null ],
               [ "Textures coming from input channels", "compositor.html#CompositorNodesChannelsAndRTTsFromInputChannel", null ],
               [ "Global Textures", "compositor.html#CompositorNodesChannelsAndRTTsGlobal", null ],
-              [ "compositor_node parameters", "compositor.html#autotoc_md113", [
+              [ "compositor_node parameters", "compositor.html#autotoc_md114", [
                 [ "in", "compositor.html#CompositorNode_in", null ],
                 [ "out", "compositor.html#CompositorNode_out", null ],
                 [ "in_buffer", "compositor.html#CompositorNode_in_buffer", null ],
@@ -397,12 +399,12 @@ var NAVTREE =
               [ "Main RenderTarget", "compositor.html#CompositorNodesChannelsAndRTTsMainRenderTarget", null ]
             ] ],
             [ "Target", "compositor.html#CompositorNodesTarget", [
-              [ "target parameters", "compositor.html#autotoc_md114", [
+              [ "target parameters", "compositor.html#autotoc_md115", [
                 [ "target_level_barrier", "compositor.html#CompositorTarget_target_level_barrier", null ]
               ] ]
             ] ],
             [ "Passes", "compositor.html#CompositorNodesPasses", [
-              [ "pass parameters", "compositor.html#autotoc_md115", [
+              [ "pass parameters", "compositor.html#autotoc_md116", [
                 [ "pass", "compositor.html#CompositorPass_pass", null ],
                 [ "num_initial", "compositor.html#CompositorPass_num_initial", null ],
                 [ "flush_command_buffers", "compositor.html#CompositorPass_flush_command_buffers", null ],
@@ -530,13 +532,13 @@ var NAVTREE =
             [ "Default values", "compositor.html#CompositorWorkspacesStereoDefaultValues", null ]
           ] ],
           [ "Advanced MSAA", "compositor.html#AdvancedMSAA", [
-            [ "What is MSAA?", "compositor.html#autotoc_md116", [
-              [ "Supersampling Antialiasing (SSAA) vs MSAA", "compositor.html#autotoc_md117", null ],
-              [ "MSAA approach to the problem", "compositor.html#autotoc_md118", [
+            [ "What is MSAA?", "compositor.html#autotoc_md117", [
+              [ "Supersampling Antialiasing (SSAA) vs MSAA", "compositor.html#autotoc_md118", null ],
+              [ "MSAA approach to the problem", "compositor.html#autotoc_md119", [
                 [ "Resources", "compositor.html#CompositorNodesTexturesMsaaResources", null ]
               ] ]
             ] ],
-            [ "Ogre + MSAA with Implicit Resolves", "compositor.html#autotoc_md119", null ],
+            [ "Ogre + MSAA with Implicit Resolves", "compositor.html#autotoc_md120", null ],
             [ "Ogre + MSAA with Explicit Resolves", "compositor.html#MSAAExplicitResolves", null ]
           ] ],
           [ "RTV (RenderTargetView)", "compositor.html#CompositorRTV", [
@@ -570,7 +572,7 @@ var NAVTREE =
           ] ],
           [ "Particle Emitters", "_particle-_scripts.html#Particle-Emitters", [
             [ "Emitting Emitters", "_particle-_scripts.html#Emitting-Emitters", null ],
-            [ "Common Emitter Attributes", "_particle-_scripts.html#autotoc_md112", null ],
+            [ "Common Emitter Attributes", "_particle-_scripts.html#autotoc_md113", null ],
             [ "angle", "_particle-_scripts.html#ParticleEmitterAttributes_angle", null ],
             [ "colour", "_particle-_scripts.html#ParticleEmitterAttributes_colour", null ],
             [ "colour_range_start & colour_range_end", "_particle-_scripts.html#ParticleEmitterAttributes_colour_range_start", null ],
@@ -966,24 +968,24 @@ var NAVTREEINDEX =
 "group___image.html#gga71f09fe41a1db41186262f1aa5814a18ab2f078a5769c0b8b6aadf7e2d03f104b",
 "group___optional.html#ga0a51b33ebdb559ee9b4a09db58a4e43a",
 "group___render_system.html#ggaafd4c573704bd74fac9ec9c02071ad08a9ed892a5327285f49d0bb2d6a0465207",
-"hlmsblendblockref.html#bbParamBlendOperation",
-"namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9adb62fa4394e5ed5eb8d45742e6b28719",
-"namespace_ogre_1_1_desc_binding_types.html#af97aae360aa16970ee0873372c96c6beab47a8e4d5684fcd9d3e6aea8884cf5e8",
-"namespace_ogre_1_1v1.html#a2348646dd6dc0d382222eb16955ece6e",
-"struct_ogre_1_1_billboard.html#a9126c29605e55b8bdb5f81adf267259a",
-"struct_ogre_1_1_compositor_pass_def_1_1_viewport_rect.html#aa14c3399810865a3a2c134435cce6e3d",
-"struct_ogre_1_1_descriptor_set_texture2_1_1_slot.html#a4ca5ecff604b3f0278f7165fd8ba8003",
-"struct_ogre_1_1_g_l_e_s2_hlms_samplerblock.html#ac5e4e8190f2e840a93b62b28f741e4ad",
-"struct_ogre_1_1_hlms_base_prop.html#aed1ad09e3a75eb803111f5a9e8971d13",
-"struct_ogre_1_1_irradiance_field_settings.html",
+"hlmsblendblockref.html#bbParamAlphaToCoverage",
+"namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9ab90d85a967d1647087d9e525778e9bc1",
+"namespace_ogre_1_1_desc_binding_types.html#af97aae360aa16970ee0873372c96c6bea627e090a72c5b3f2593c6994f6422ce2",
+"namespace_ogre_1_1v1.html#a19db7502fb86a64292b1067b641e11e0",
+"struct_ogre_1_1_billboard.html#a8e4586f53c221072e595499bfaa51d42",
+"struct_ogre_1_1_compositor_pass_def_1_1_viewport_rect.html#a936c42d5572b5c5d6d20a6b962195b1e",
+"struct_ogre_1_1_descriptor_set_texture2_1_1_slot.html#a234af23257f7b946943ceefec188b678",
+"struct_ogre_1_1_g_l_e_s2_hlms_samplerblock.html#a73ed76b2bd3d8672c5c87ee4aa9aff0b",
+"struct_ogre_1_1_hlms_base_prop.html#aec485191b959843f9bda48c39808f7d8",
+"struct_ogre_1_1_intersection_scene_query_result.html#ae58676373c408a358f7cc01874703abc",
 "struct_ogre_1_1_lod_index_buffer.html#a7d4f0449f9d4b938d3300ba50ba5f47f",
-"struct_ogre_1_1_object_data.html#a0a22f7505805d72aecc7b76286e01aad",
-"struct_ogre_1_1_queued_renderable.html#a8d6b87f3ec79e59736e0a7e38b6fcd44",
-"struct_ogre_1_1_shadow_node_helper_1_1_resolution.html#afb6c016b17587cdd5024bce6b12e8191",
-"struct_ogre_1_1_transform.html#a428e6d74235756c8617eb0a4261694e1",
-"struct_ogre_1_1_vct_material_1_1_datablock_conversion_result.html",
-"struct_ogre_1_1_volume_1_1_chunk_tree_shared_data.html#a5945276049999e1e44dc07e200ddc162",
-"struct_ogre_1_1_vulkan_external_device.html#acb15a207049e2b5818c320ecbd5c92f8",
+"struct_ogre_1_1_object_data.html",
+"struct_ogre_1_1_queued_renderable.html#a824405b401150a9fe60811fc7c9fe8c7",
+"struct_ogre_1_1_shadow_node_helper_1_1_resolution.html#aea5ac676e1d7a40e0d461974d081fc41",
+"struct_ogre_1_1_transform.html#a330c28b71dd6cba61d12ee999b6e9628",
+"struct_ogre_1_1_vct_cascade_setting.html#afbfc7af951a572da7eccff17d63c6a5f",
+"struct_ogre_1_1_volume_1_1_chunk_tree_shared_data.html#a2469f72a70b68b236d10171f124dd39f",
+"struct_ogre_1_1_vulkan_external_device.html#a5b0885f035ad244cf6500aa464a9a1d5",
 "struct_ogre_1_1is_pod_like_3_01signed_01char_01_4.html"
 ];
 
