@@ -336,15 +336,13 @@ void ParticleSystemManager2::_prepareParallel()
     }
 }
 //-----------------------------------------------------------------------------
-void ParticleSystemManager2::_updateParallel( const size_t threadIdx, const size_t numThreads )
+void ParticleSystemManager2::_updateParallel01( const size_t threadIdx, const size_t numThreads )
 {
-    const ArrayReal timeSinceLast = Mathlib::SetAll( mTimeSinceLast );
-
     for( ParticleSystemDef *systemDef : mActiveParticleSystemDefs )
     {
         const size_t numEmitters = systemDef->mEmitters.size();
 
-        // We split particle systems
+        // We split particle systems.
         size_t currOffset = 0u;
 
         ParticleCpuData cpuData = systemDef->getParticleCpuData();
@@ -383,6 +381,17 @@ void ParticleSystemManager2::_updateParallel( const size_t threadIdx, const size
                 currOffset += newParticlesPerEmitter;
             }
         }
+    }
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemManager2::_updateParallel02( const size_t threadIdx, const size_t numThreads )
+{
+    const ArrayReal timeSinceLast = Mathlib::SetAll( mTimeSinceLast );
+
+    for( ParticleSystemDef *systemDef : mActiveParticleSystemDefs )
+    {
+        // We split particle systems.
+        ParticleCpuData cpuData = systemDef->getParticleCpuData();
 
         // We have the following guarantees:
         //      1. systemDef->mFirstParticleIdx is in range [0; quota)

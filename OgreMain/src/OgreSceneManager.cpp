@@ -1729,8 +1729,9 @@ namespace Ogre
             updateWorkerThreadImpl( 0 );
         else
         {
-            mWorkerThreadsBarrier->sync();  // Fire threads
-            mWorkerThreadsBarrier->sync();  // Wait them to complete
+            mWorkerThreadsBarrier->sync();  // Fire threads.
+            mWorkerThreadsBarrier->sync();  // Wait them to complete stage 01.
+            mWorkerThreadsBarrier->sync();  // Wait them to complete stage 02.
         }
     }
     //-----------------------------------------------------------------------
@@ -4775,7 +4776,10 @@ namespace Ogre
             mRenderQueue->_compileShadersThread( threadIdx );
             break;
         case PARTICLE_SYSTEM_MANAGER2:
-            mParticleSystemManager2->_updateParallel( threadIdx, mNumWorkerThreads );
+            mParticleSystemManager2->_updateParallel01( threadIdx, mNumWorkerThreads );
+            if( !mForceMainThread )
+                mWorkerThreadsBarrier->sync();
+            mParticleSystemManager2->_updateParallel02( threadIdx, mNumWorkerThreads );
             break;
         case USER_UNIFORM_SCALABLE_TASK:
             mUserTask->execute( threadIdx, mNumWorkerThreads );

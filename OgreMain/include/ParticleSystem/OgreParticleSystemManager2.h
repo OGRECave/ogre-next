@@ -247,11 +247,24 @@ namespace Ogre
             This function is called from multiple threads.
         @remarks
             Unlike _prepareParallel(), each thread concurrently access the same ParticleSystemDef.
+            This function is in charge of initializing new particles.
+            Each thread handles one particle (i.e. 2 threads won't concurrently access the same
+            ParticleCpuData).
+            @par
+            We must split the parallel update in two stages because otherwise particles
+            initialized by thread A could be ticked (tickParticles()) by thread B.
+            See https://github.com/OGRECave/ogre-next/issues/480
+        */
+        void _updateParallel01( size_t threadIdx, size_t numThreads );
+
+        /** See _updateParallel01().
+        @remarks
+            Unlike _prepareParallel(), each thread concurrently access the same ParticleSystemDef.
             This function is in charge of advancing the simulation of each particle forward.
             Each thread handles one particle (i.e. 2 threads won't concurrently access the same
             ParticleCpuData).
         */
-        void _updateParallel( size_t threadIdx, size_t numThreads );
+        void _updateParallel02( size_t threadIdx, size_t numThreads );
 
         /// See prepareForUpdate()
         ///
