@@ -181,24 +181,26 @@ namespace Ogre
 
         /** Clears all the connection between channels of the nodes @see connect
         @remarks
-            1. We don't clear the output connection (@see connectOutput, @see clearOutputConnections)
-            2. The node aliases (both implicit and explicit) will still exist. @see clearAll.
+            1. We don't clear the output connection (see CompositorNode::connectExternalRT, see
+        clearOutputConnections())
+            2. The node aliases (both implicit and explicit) will still exist. see clearAll.
             3. A node with incomplete inputs should be disabled before the workspace is instantiated
-               (@see CompositorNodeDef::setStartEnabled). If the workspace has already been instantiated,
-               the node instance should be disabled, @see CompositorNode::setEnabled)
+               (see CompositorNodeDef::setStartEnabled). If the workspace has already been instantiated,
+               the node instance should be disabled, see CompositorNode::setEnabled)
             4. It is safe to call this function while there are still workspaces, but you must call
                CompositorWorkspace::reconnectAllNodes after you're done setting the new node connections
         */
         void clearAllInterNodeConnections();
 
-        /** Clears the connection from the "final output RenderTarget" (i.e. usually the RenderWindow)
-            that goes to the input channel of one of our nodes. @see connectOutput.
+        /** Clears the connection from the "final output RenderTarget" (i.e., usually the RenderWindow)
+            that goes to the input channel of one of our nodes. See CompositorNode::connectExternalRT.
         @remarks
-            1. We don't clear other type of connections (@see connect, @see clearAllInterNodeConnections)
-            2. The node aliases (both implicit and explicit) will still exist. @see clearAll.
+            1. We don't clear other type of connections (see connect(), see
+        clearAllInterNodeConnections())
+            2. The node aliases (both implicit and explicit) will still exist. see clearAll.
             3. A node with incomplete inputs should be disabled before the workspace is instantiated
-               (@see CompositorNodeDef::setStartEnabled). If the workspace has already been instantiated,
-               the node instance should be disabled, @see CompositorNode::setEnabled)
+               (see CompositorNodeDef::setStartEnabled). If the workspace has already been instantiated,
+               the node instance should be disabled, see CompositorNode::setEnabled)
             4. It is safe to call this function while there are still workspaces, but you must call
                CompositorWorkspace::reconnectAllNodes after you're done setting the new node connections
         */
@@ -214,7 +216,7 @@ namespace Ogre
 
         /** An alias is explicitly used when the user wants to use multiple, independent
             instances of the same node. Each alias equals one instance.
-            An implicit alias is when the name of the alias and it's node name match.
+            An implicit alias is when the name of the alias and its node name match.
         @remarks
             When the name of the node and its alias are the same, it is said to be called an
             "implicit" alias.

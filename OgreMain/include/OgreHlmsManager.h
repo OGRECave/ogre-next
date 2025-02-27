@@ -191,13 +191,18 @@ namespace Ogre
             on them, as we need to ensure caches of HlmsPso remain valid.
 
         @param baseParams
+        @parblock
             A macroblock reference to base the parameters. This reference may live on the stack,
-            on the heap, etc; it's RS-specific data does not have to be filled.
+            on the heap, etc; its RS-specific data does not have to be filled.
             e.g. this is fine:
+
+            @code{.cpp}
                 HlmsMacroblock myRef;
                 myRef.mDepthCheck = false;
                 HlmsMacroblock *finalBlock = manager->getMacroblock( myRef );
                 //myRef.mRsData == finalBlock.mRsData not necessarily true
+            @endcode
+        @endparblock
         @return
             Created or cached datablock with same parameters as baseParams
         */
