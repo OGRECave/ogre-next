@@ -121,9 +121,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:acf4c31df6949d27e2d0160de40385ea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a791958702227de6a894f1d6c8606b7f3" id="r_a791958702227de6a894f1d6c8606b7f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_manager2.html#a791958702227de6a894f1d6c8606b7f3">_removeParticleSystemDefFromActive</a> (<a class="el" href="class_ogre_1_1_particle_system_def.html">ParticleSystemDef</a> *def)</td></tr>
 <tr class="separator:a791958702227de6a894f1d6c8606b7f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aacc4c19c7cbf35a6c9120b3e1288b3b3" id="r_aacc4c19c7cbf35a6c9120b3e1288b3b3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_manager2.html#aacc4c19c7cbf35a6c9120b3e1288b3b3">_updateParallel</a> (size_t threadIdx, size_t numThreads)</td></tr>
-<tr class="memdesc:aacc4c19c7cbf35a6c9120b3e1288b3b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_particle_system_manager2.html#ae2f274d472ad9d7a108c14ef9c3b14e3" title="The order of function calls is:">prepareForUpdate()</a> This function is called from multiple threads.  <br /></td></tr>
-<tr class="separator:aacc4c19c7cbf35a6c9120b3e1288b3b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44f762ffaa50abf8a5362e8622a538c3" id="r_a44f762ffaa50abf8a5362e8622a538c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_manager2.html#a44f762ffaa50abf8a5362e8622a538c3">_updateParallel01</a> (size_t threadIdx, size_t numThreads)</td></tr>
+<tr class="memdesc:a44f762ffaa50abf8a5362e8622a538c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_particle_system_manager2.html#ae2f274d472ad9d7a108c14ef9c3b14e3" title="The order of function calls is:">prepareForUpdate()</a> This function is called from multiple threads.  <br /></td></tr>
+<tr class="separator:a44f762ffaa50abf8a5362e8622a538c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab60ba875a353e740e8b492806d9b7770" id="r_ab60ba875a353e740e8b492806d9b7770"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_manager2.html#ab60ba875a353e740e8b492806d9b7770">_updateParallel02</a> (size_t threadIdx, size_t numThreads)</td></tr>
+<tr class="memdesc:ab60ba875a353e740e8b492806d9b7770"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_particle_system_manager2.html#a44f762ffaa50abf8a5362e8622a538c3" title="See prepareForUpdate() This function is called from multiple threads.">_updateParallel01()</a>.  <br /></td></tr>
+<tr class="separator:ab60ba875a353e740e8b492806d9b7770"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a097722d2d200bbf9b6965d0220a9a606" id="r_a097722d2d200bbf9b6965d0220a9a606"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_billboard_set.html">BillboardSet</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_manager2.html#a097722d2d200bbf9b6965d0220a9a606">createBillboardSet</a> ()</td></tr>
 <tr class="memdesc:a097722d2d200bbf9b6965d0220a9a606"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,...">BillboardSet</a>.  <br /></td></tr>
 <tr class="separator:a097722d2d200bbf9b6965d0220a9a606"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -374,14 +377,14 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aacc4c19c7cbf35a6c9120b3e1288b3b3" name="aacc4c19c7cbf35a6c9120b3e1288b3b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aacc4c19c7cbf35a6c9120b3e1288b3b3">&#9670;&#160;</a></span>_updateParallel()</h2>
+<a id="a44f762ffaa50abf8a5362e8622a538c3" name="a44f762ffaa50abf8a5362e8622a538c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44f762ffaa50abf8a5362e8622a538c3">&#9670;&#160;</a></span>_updateParallel01()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Ogre::ParticleSystemManager2::_updateParallel </td>
+          <td class="memname">void Ogre::ParticleSystemManager2::_updateParallel01 </td>
           <td>(</td>
           <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>threadIdx</em>, </td>
@@ -401,6 +404,38 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>See <a class="el" href="class_ogre_1_1_particle_system_manager2.html#ae2f274d472ad9d7a108c14ef9c3b14e3" title="The order of function calls is:">prepareForUpdate()</a> This function is called from multiple threads. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Unlike <a class="el" href="class_ogre_1_1_particle_system_manager2.html#acf4c31df6949d27e2d0160de40385ea3" title="See prepareForUpdate() This function is called from multiple threads.">_prepareParallel()</a>, each thread concurrently access the same <a class="el" href="class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene.">ParticleSystemDef</a>. This function is in charge of initializing new particles. Each thread handles one particle (i.e. 2 threads won't concurrently access the same <a class="el" href="struct_ogre_1_1_particle_cpu_data.html">ParticleCpuData</a>). </dd></dl>
+<dl class="section user"><dt></dt><dd>We must split the parallel update in two stages because otherwise particles initialized by thread A could be ticked (tickParticles()) by thread B. See <a href="https://github.com/OGRECave/ogre-next/issues/480">https://github.com/OGRECave/ogre-next/issues/480</a> </dd></dl>
+
+</div>
+</div>
+<a id="ab60ba875a353e740e8b492806d9b7770" name="ab60ba875a353e740e8b492806d9b7770"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab60ba875a353e740e8b492806d9b7770">&#9670;&#160;</a></span>_updateParallel02()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::ParticleSystemManager2::_updateParallel02 </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>threadIdx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>numThreads</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>See <a class="el" href="class_ogre_1_1_particle_system_manager2.html#a44f762ffaa50abf8a5362e8622a538c3" title="See prepareForUpdate() This function is called from multiple threads.">_updateParallel01()</a>. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>Unlike <a class="el" href="class_ogre_1_1_particle_system_manager2.html#acf4c31df6949d27e2d0160de40385ea3" title="See prepareForUpdate() This function is called from multiple threads.">_prepareParallel()</a>, each thread concurrently access the same <a class="el" href="class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene.">ParticleSystemDef</a>. This function is in charge of advancing the simulation of each particle forward. Each thread handles one particle (i.e. 2 threads won't concurrently access the same <a class="el" href="struct_ogre_1_1_particle_cpu_data.html">ParticleCpuData</a>). </dd></dl>
 
 </div>

@@ -1,10 +1,10 @@
 var NAVTREEINDEX45 =
 {
-"class_ogre_1_1_gpu_resource.html#a97a51a82de7ad88e7c09410d23d16d28":[7,0,0,468,8],
+"class_ogre_1_1_gpu_resource.html#a97a51a82de7ad88e7c09410d23d16d28":[8,0,0,439,8],
 "class_ogre_1_1_gpu_resource.html#aa747c8f9b2503e09c167d885e9dcbdee":[7,0,0,468,5],
 "class_ogre_1_1_gpu_resource.html#aa747c8f9b2503e09c167d885e9dcbdee":[8,0,0,439,5],
-"class_ogre_1_1_gpu_resource.html#acfbc14f1a5f1750b92a5197215f5e6dc":[8,0,0,439,7],
 "class_ogre_1_1_gpu_resource.html#acfbc14f1a5f1750b92a5197215f5e6dc":[7,0,0,468,7],
+"class_ogre_1_1_gpu_resource.html#acfbc14f1a5f1750b92a5197215f5e6dc":[8,0,0,439,7],
 "class_ogre_1_1_gpu_resource.html#ad623ee0c97e95e276074d3cfd64c374c":[7,0,0,468,2],
 "class_ogre_1_1_gpu_resource.html#ad623ee0c97e95e276074d3cfd64c374c":[8,0,0,439,2],
 "class_ogre_1_1_gpu_shared_parameters.html":[6,2,5,11],
