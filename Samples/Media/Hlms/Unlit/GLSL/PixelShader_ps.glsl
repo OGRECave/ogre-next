@@ -14,6 +14,8 @@ layout(location = FRAG_COLOR, index = 0) out midf4 outColour;
 layout(location = FRAG_COLOR, index = 0) out midf outColour;
 @end
 
+@insertpiece( custom_ps_output_types )
+
 // START UNIFORM DECLARATION
 @insertpiece( custom_ps_uniformDeclaration )
 // END UNIFORM DECLARATION

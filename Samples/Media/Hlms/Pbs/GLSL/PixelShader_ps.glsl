@@ -25,6 +25,8 @@ layout(std140) uniform;
 	@end
 @end
 
+@insertpiece( custom_ps_output_types )
+
 @property( hlms_use_prepass )
 	@property( !hlms_use_prepass_msaa )
 		vulkan_layout( ogre_t@value(gBuf_normals) )			uniform texture2D gBuf_normals;
