@@ -158,6 +158,8 @@ namespace Ogre
 /// Swappy causes the Swapchain to be recreated indefinitely, slowing down FPS to a crawl.
 /// On Android 14 (latest at the time of writing) Google Pixel (and a few other phones)
 /// cause a crash. The blocklist is maintained by hand.
+///
+/// Fixed in Swappy 2.2.0
 #    define OGRE_VK_WORKAROUND_SWAPPY_CRASH
 #endif
     };
