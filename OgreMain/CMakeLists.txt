@@ -472,7 +472,7 @@ if (APPLE)
 
   # Framework is called 'Ogre'
   if (OGRE_BUILD_LIBS_AS_FRAMEWORKS)
-    set_target_properties(${OGRE_NEXT}Main PROPERTIES	OUTPUT_NAME Ogre)
+    set_target_properties(${OGRE_NEXT}Main PROPERTIES	OUTPUT_NAME ${OGRE_NEXT})
   endif ()
 endif ()
 target_link_libraries(${OGRE_NEXT}Main ${LIBRARIES})
