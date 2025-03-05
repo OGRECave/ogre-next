@@ -754,6 +754,9 @@ namespace Ogre
         case 0x1010:
             rsc->setVendor( GPU_IMGTEC );  // PowerVR
             break;
+        case 0x144D:
+            rsc->setVendor( GPU_SAMSUNG );  // Samsung Xclipse
+            break;
         }
 
         if( rsc->getVendor() != GPU_NVIDIA )

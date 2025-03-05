@@ -422,6 +422,7 @@ namespace Ogre {
             msGPUVendorStrings[GPU_MOZILLA] = "mozilla";
             msGPUVendorStrings[GPU_WEBKIT] = "webkit";
             msGPUVendorStrings[GPU_IMGTEC] = "powervr";
+            msGPUVendorStrings[GPU_SAMSUNG] = "samsung";
         }
     }
     //---------------------------------------------------------------------
