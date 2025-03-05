@@ -1,5 +1,6 @@
 var NAVTREEINDEX120 =
 {
+"namespace_ogre_1_1_desc_binding_types.html#af97aae360aa16970ee0873372c96c6bea55f09bab256a84ac0937190ccf4f3794":[7,0,0,6,0,4],
 "namespace_ogre_1_1_desc_binding_types.html#af97aae360aa16970ee0873372c96c6bea627e090a72c5b3f2593c6994f6422ce2":[7,0,0,6,0,6],
 "namespace_ogre_1_1_desc_binding_types.html#af97aae360aa16970ee0873372c96c6beab47a8e4d5684fcd9d3e6aea8884cf5e8":[7,0,0,6,0,7],
 "namespace_ogre_1_1_desc_binding_types.html#af97aae360aa16970ee0873372c96c6beac9488e21d6dd2a1a3ea05f0ca76a3cbc":[7,0,0,6,0,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX120 =
 "namespace_ogre_1_1_voxelizer_job_setting.html#a0704993dc80760ffa9afad8d5c1dac3c":[7,0,0,32,0],
 "namespace_ogre_1_1_voxelizer_job_setting.html#a0704993dc80760ffa9afad8d5c1dac3ca80bb269667ba051a4da6585f888d3126":[7,0,0,32,0,3],
 "namespace_ogre_1_1_voxelizer_job_setting.html#a0704993dc80760ffa9afad8d5c1dac3ca8a8435ba0f1a8976a3f769292fece57d":[7,0,0,32,0,2],
-"namespace_ogre_1_1_voxelizer_job_setting.html#a0704993dc80760ffa9afad8d5c1dac3ca9cf82209c94092b6d8fed900489bcb2e":[7,0,0,32,0,0],
-"namespace_ogre_1_1_voxelizer_job_setting.html#a0704993dc80760ffa9afad8d5c1dac3cae7408b0d90558f90bafb2449aa1fb21f":[7,0,0,32,0,1]
+"namespace_ogre_1_1_voxelizer_job_setting.html#a0704993dc80760ffa9afad8d5c1dac3ca9cf82209c94092b6d8fed900489bcb2e":[7,0,0,32,0,0]
 };

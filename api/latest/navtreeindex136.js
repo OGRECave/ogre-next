@@ -1,5 +1,6 @@
 var NAVTREEINDEX136 =
 {
+"struct_ogre_1_1is_pod_like_3_01short_01_4.html#ab5fec72e8ec9973e27578b54045b0b04":[8,0,0,524,0],
 "struct_ogre_1_1is_pod_like_3_01signed_01char_01_4.html":[7,0,0,554],
 "struct_ogre_1_1is_pod_like_3_01signed_01char_01_4.html":[8,0,0,525],
 "struct_ogre_1_1is_pod_like_3_01signed_01char_01_4.html#af8ad32023ee81d5136137cfa8e5f5941":[7,0,0,554,0],

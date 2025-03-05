@@ -1990,6 +1990,7 @@ var namespace_ogre =
       [ "GPU_MOZILLA", "group___render_system.html#ggac4c251bcc05376f701348bfe0f4a53b4aab1c43d5dcd6f1713640463680ffadad", null ],
       [ "GPU_WEBKIT", "group___render_system.html#ggac4c251bcc05376f701348bfe0f4a53b4a1b40ea797205e9b18025b417a0762fe1", null ],
       [ "GPU_IMGTEC", "group___render_system.html#ggac4c251bcc05376f701348bfe0f4a53b4ab54dcb72ac2bddffccd7d2585aecbe34", null ],
+      [ "GPU_SAMSUNG", "group___render_system.html#ggac4c251bcc05376f701348bfe0f4a53b4a26ed31f35f379d940abc42820ec5fe47", null ],
       [ "GPU_VENDOR_COUNT", "group___render_system.html#ggac4c251bcc05376f701348bfe0f4a53b4a39ecb7f5b44964fe66db54c9043731fc", null ]
     ] ],
     [ "Grid2DMode", "group___paging.html#ga725e3c2dccf1dbcec4a12f165681317c", [

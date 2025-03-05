@@ -1,5 +1,6 @@
 var NAVTREEINDEX121 =
 {
+"namespace_ogre_1_1_voxelizer_job_setting.html#a0704993dc80760ffa9afad8d5c1dac3cae7408b0d90558f90bafb2449aa1fb21f":[7,0,0,32,0,1],
 "namespace_ogre_1_1v1.html#a19db7502fb86a64292b1067b641e11e0":[7,0,0,29,153],
 "namespace_ogre_1_1v1.html#a2348646dd6dc0d382222eb16955ece6e":[7,0,0,29,155],
 "namespace_ogre_1_1v1.html#a47f47b1d5bab50fcb65ef93ced388d15":[7,0,0,29,156],
@@ -248,6 +249,5 @@ var NAVTREEINDEX121 =
 "struct_ogre_1_1_billboard.html#a538183e60f27aa99785c57070e8c5ddf":[8,0,0,57,1],
 "struct_ogre_1_1_billboard.html#a538183e60f27aa99785c57070e8c5ddf":[7,0,0,86,1],
 "struct_ogre_1_1_billboard.html#a83bb256aa8ee80ad55b570ea7fe0f826":[7,0,0,86,4],
-"struct_ogre_1_1_billboard.html#a83bb256aa8ee80ad55b570ea7fe0f826":[8,0,0,57,4],
-"struct_ogre_1_1_billboard.html#a8e4586f53c221072e595499bfaa51d42":[7,0,0,86,8]
+"struct_ogre_1_1_billboard.html#a83bb256aa8ee80ad55b570ea7fe0f826":[8,0,0,57,4]
 };

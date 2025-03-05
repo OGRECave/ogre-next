@@ -1,5 +1,6 @@
 var NAVTREEINDEX130 =
 {
+"struct_ogre_1_1_queued_renderable.html#a61f6e4fb55cd404c431faa2678af53c8":[6,2,9,5,3],
 "struct_ogre_1_1_queued_renderable.html#a824405b401150a9fe60811fc7c9fe8c7":[6,2,9,5,0],
 "struct_ogre_1_1_queued_renderable.html#a8d6b87f3ec79e59736e0a7e38b6fcd44":[6,2,9,5,2],
 "struct_ogre_1_1_queued_renderable.html#a9d6f3abc79c72f43d91fdf8013b740c5":[6,2,9,5,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX130 =
 "struct_ogre_1_1_shader_params_1_1_param.html#aecc3ba3ceac4e80b17b3471260b8942e":[6,0,0,19,3,22],
 "struct_ogre_1_1_shadow_node_helper_1_1_resolution.html":[6,2,1,52,0],
 "struct_ogre_1_1_shadow_node_helper_1_1_resolution.html#a274cb1b6817759212de6f6ff27830dbb":[6,2,1,52,0,2],
-"struct_ogre_1_1_shadow_node_helper_1_1_resolution.html#a3085167caccdb6a2ac3f0d45f789a37f":[6,2,1,52,0,1],
-"struct_ogre_1_1_shadow_node_helper_1_1_resolution.html#a9f23e2f0b3877884e4d1c54b70721806":[6,2,1,52,0,4]
+"struct_ogre_1_1_shadow_node_helper_1_1_resolution.html#a3085167caccdb6a2ac3f0d45f789a37f":[6,2,1,52,0,1]
 };

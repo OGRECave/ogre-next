@@ -1,5 +1,6 @@
 var NAVTREEINDEX126 =
 {
+"struct_ogre_1_1_hlms_base_prop.html#aebb44a4d9255a4d33551837c41171ce4":[6,2,10,62,21],
 "struct_ogre_1_1_hlms_base_prop.html#aec485191b959843f9bda48c39808f7d8":[6,2,10,62,19],
 "struct_ogre_1_1_hlms_base_prop.html#aed1ad09e3a75eb803111f5a9e8971d13":[6,2,10,62,108],
 "struct_ogre_1_1_hlms_base_prop.html#aed2d16eee28d8cc3ab64dcd50b5b7da9":[6,2,10,62,69],
@@ -248,6 +249,5 @@ var NAVTREEINDEX126 =
 "struct_ogre_1_1_intersection_scene_query_result.html":[6,0,1,26],
 "struct_ogre_1_1_intersection_scene_query_result.html":[6,2,11,26],
 "struct_ogre_1_1_intersection_scene_query_result.html#a7f5b38d7ff668a368bcef9886fff1941":[6,2,11,26,1],
-"struct_ogre_1_1_intersection_scene_query_result.html#a7f5b38d7ff668a368bcef9886fff1941":[6,0,1,26,1],
-"struct_ogre_1_1_intersection_scene_query_result.html#ae58676373c408a358f7cc01874703abc":[6,0,1,26,0]
+"struct_ogre_1_1_intersection_scene_query_result.html#a7f5b38d7ff668a368bcef9886fff1941":[6,0,1,26,1]
 };

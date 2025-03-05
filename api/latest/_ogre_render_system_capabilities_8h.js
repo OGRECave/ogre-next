@@ -119,6 +119,7 @@ var _ogre_render_system_capabilities_8h =
       [ "GPU_MOZILLA", "_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4aab1c43d5dcd6f1713640463680ffadad", null ],
       [ "GPU_WEBKIT", "_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a1b40ea797205e9b18025b417a0762fe1", null ],
       [ "GPU_IMGTEC", "_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4ab54dcb72ac2bddffccd7d2585aecbe34", null ],
+      [ "GPU_SAMSUNG", "_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a26ed31f35f379d940abc42820ec5fe47", null ],
       [ "GPU_VENDOR_COUNT", "_ogre_render_system_capabilities_8h.html#ggac4c251bcc05376f701348bfe0f4a53b4a39ecb7f5b44964fe66db54c9043731fc", null ]
     ] ]
 ];

@@ -1,5 +1,6 @@
 var NAVTREEINDEX123 =
 {
+"struct_ogre_1_1_compositor_pass_def_1_1_viewport_rect.html#a7aa871bbe3b7f61640120b83cb0cc5b4":[6,2,1,9,1,6],
 "struct_ogre_1_1_compositor_pass_def_1_1_viewport_rect.html#a936c42d5572b5c5d6d20a6b962195b1e":[6,2,1,9,1,0],
 "struct_ogre_1_1_compositor_pass_def_1_1_viewport_rect.html#aa14c3399810865a3a2c134435cce6e3d":[6,2,1,9,1,5],
 "struct_ogre_1_1_compositor_pass_def_1_1_viewport_rect.html#ad0b81dcf85f11093315a0a74e6f7ddcf":[6,2,1,9,1,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX123 =
 "struct_ogre_1_1_descriptor_set_texture2_1_1_buffer_slot.html#aa1fb876d0b78752aab44da73c34292a4":[6,2,10,31,0,3],
 "struct_ogre_1_1_descriptor_set_texture2_1_1_buffer_slot.html#acc949d28418b5740368551b8bf591464":[6,2,10,31,0,0],
 "struct_ogre_1_1_descriptor_set_texture2_1_1_slot.html":[6,2,10,31,1],
-"struct_ogre_1_1_descriptor_set_texture2_1_1_slot.html#a051ad02cc5c19219d26e0464f3d69ba8":[6,2,10,31,1,13],
-"struct_ogre_1_1_descriptor_set_texture2_1_1_slot.html#a07156faf41c80cfb33573c49b3127e44":[6,2,10,31,1,5]
+"struct_ogre_1_1_descriptor_set_texture2_1_1_slot.html#a051ad02cc5c19219d26e0464f3d69ba8":[6,2,10,31,1,13]
 };

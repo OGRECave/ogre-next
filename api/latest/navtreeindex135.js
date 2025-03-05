@@ -1,5 +1,6 @@
 var NAVTREEINDEX135 =
 {
+"struct_ogre_1_1_vulkan_external_device.html#a5b0885f035ad244cf6500aa464a9a1d5":[8,0,0,1009,2],
 "struct_ogre_1_1_vulkan_external_device.html#a5b0885f035ad244cf6500aa464a9a1d5":[7,0,0,1038,2],
 "struct_ogre_1_1_vulkan_external_device.html#acb15a207049e2b5818c320ecbd5c92f8":[8,0,0,1009,1],
 "struct_ogre_1_1_vulkan_external_device.html#acb15a207049e2b5818c320ecbd5c92f8":[7,0,0,1038,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX135 =
 "struct_ogre_1_1is_pod_like_3_01long_01_4.html#a0f0020a7f46d74d45988af6730689e4f":[8,0,0,523,0],
 "struct_ogre_1_1is_pod_like_3_01short_01_4.html":[7,0,0,553],
 "struct_ogre_1_1is_pod_like_3_01short_01_4.html":[8,0,0,524],
-"struct_ogre_1_1is_pod_like_3_01short_01_4.html#ab5fec72e8ec9973e27578b54045b0b04":[7,0,0,553,0],
-"struct_ogre_1_1is_pod_like_3_01short_01_4.html#ab5fec72e8ec9973e27578b54045b0b04":[8,0,0,524,0]
+"struct_ogre_1_1is_pod_like_3_01short_01_4.html#ab5fec72e8ec9973e27578b54045b0b04":[7,0,0,553,0]
 };
