@@ -78,7 +78,7 @@ if( WINDOWS_STORE OR WINDOWS_PHONE )
 		  ${CMAKE_SOURCE_DIR}/Samples/Media/VCT )
 endif()
 if( WIN32 AND NOT WINDOWS_STORE AND NOT WINDOWS_PHONE )
-	set( SAMPLE_COMMON_RESOURCES ${CMAKE_SOURCE_DIR}/CMake/Templates/OSCompatibility.Win32.manifest )
+	set( SAMPLE_COMMON_RESOURCES ${OGRE_TEMPLATES_DIR}/OSCompatibility.Win32.manifest )
 endif()
 
 function(ogre_config_sample_pkg SAMPLENAME)
