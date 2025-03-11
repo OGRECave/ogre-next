@@ -29,6 +29,8 @@ THE SOFTWARE.
 
 #include "UnitTestSuite.h"
 
+#include <functional>
+
 // Register the test suite
 CPPUNIT_TEST_SUITE_REGISTRATION(PropertyTests);
 
@@ -53,6 +55,8 @@ public:
 //--------------------------------------------------------------------------
 void PropertyTests::testStringProp()
 {
+	using::std;
+	
     UnitTestSuite::getSingletonPtr()->startTestMethod(__FUNCTION__);
 
     PropertyDefMap propertyDefs;
@@ -65,8 +69,8 @@ void PropertyTests::testStringProp()
 
     props.addProperty(
         OGRE_NEW Property<String>(&(defi->second),
-        boost::bind(&Foo::getName, &foo), 
-        boost::bind(&Foo::setName, &foo, _1)));
+        bind(&Foo::getName, &foo), 
+        bind(&Foo::setName, &foo, _1)));
 
     Ogre::String strName, strTest;
     strTest = "A simple name";
