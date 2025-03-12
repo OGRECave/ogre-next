@@ -1644,6 +1644,11 @@ var hierarchy =
     [ "Ogre::ProfileSessionListener", "class_ogre_1_1_profile_session_listener.html", [
       [ "Ogre::v1::OverlayProfileSessionListener", "class_ogre_1_1v1_1_1_overlay_profile_session_listener.html", null ]
     ] ],
+    [ "Ogre::PropertyBase", "class_ogre_1_1_property_base.html", [
+      [ "Ogre::Property< T >", "class_ogre_1_1_property.html", null ]
+    ] ],
+    [ "Ogre::PropertyDef", "class_ogre_1_1_property_def.html", null ],
+    [ "Ogre::PropertySet", "class_ogre_1_1_property_set.html", null ],
     [ "Ogre::PropertyValue", "struct_ogre_1_1_property_value.html", null ],
     [ "Ogre::Quaternion", "class_ogre_1_1_quaternion.html", null ],
     [ "Ogre::QueuedRenderable", "struct_ogre_1_1_queued_renderable.html", null ],
@@ -2074,13 +2079,6 @@ var hierarchy =
     ] ],
     [ "Ogre::Pool< ResourcePtr >", "class_ogre_1_1_pool.html", [
       [ "Ogre::ResourceManager::ResourcePool", "class_ogre_1_1_resource_manager_1_1_resource_pool.html", null ]
-    ] ],
-    [ "PropertyAlloc", null, [
-      [ "Ogre::PropertyBase", "class_ogre_1_1_property_base.html", [
-        [ "Ogre::Property< T >", "class_ogre_1_1_property.html", null ]
-      ] ],
-      [ "Ogre::PropertyDef", "class_ogre_1_1_property_def.html", null ],
-      [ "Ogre::PropertySet", "class_ogre_1_1_property_set.html", null ]
     ] ],
     [ "RadialDensityMaskVrGenerator", "class_radial_density_mask_vr_generator.html", null ],
     [ "Ogre::RadixSort< ActiveBillboardList, Ogre::v1::Billboard *, float >", "class_ogre_1_1_radix_sort.html", null ],

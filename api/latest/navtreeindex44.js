@@ -1,6 +1,5 @@
 var NAVTREEINDEX44 =
 {
-"class_ogre_1_1_gpu_program_parameters.html#a155c886f15e0c10d2c33c224f0d43ce3a709e64ce954b9369269ab28545ed8cb6":[6,2,5,8,7,30],
 "class_ogre_1_1_gpu_program_parameters.html#a155c886f15e0c10d2c33c224f0d43ce3a71583cbcadab67e636571e37f98f41b0":[6,2,5,8,7,9],
 "class_ogre_1_1_gpu_program_parameters.html#a155c886f15e0c10d2c33c224f0d43ce3a7252f693f607f47c7b68cf6a4a4f16cb":[6,2,5,8,7,61],
 "class_ogre_1_1_gpu_program_parameters.html#a155c886f15e0c10d2c33c224f0d43ce3a7275e8261e14808f72ca6bc56cae5fb2":[6,2,5,8,7,96],
@@ -235,19 +234,20 @@ var NAVTREEINDEX44 =
 "class_ogre_1_1_gpu_program_usage.html#af0b7f1484e221d21f661dcf0139e97e2":[6,2,5,10,4],
 "class_ogre_1_1_gpu_program_usage.html#af6a5ff538c08b2cb2e49b3bf9168e699":[6,2,5,10,3],
 "class_ogre_1_1_gpu_program_usage.html#afb0dde967665c333ee4882bb8e7fc4ba":[6,2,5,10,14],
-"class_ogre_1_1_gpu_resource.html":[8,0,0,439],
 "class_ogre_1_1_gpu_resource.html":[7,0,0,468],
+"class_ogre_1_1_gpu_resource.html":[8,0,0,439],
 "class_ogre_1_1_gpu_resource.html#a006af8969409dd6a58306b4d44ecf677":[7,0,0,468,6],
 "class_ogre_1_1_gpu_resource.html#a006af8969409dd6a58306b4d44ecf677":[8,0,0,439,6],
-"class_ogre_1_1_gpu_resource.html#a070b7c583f5541ecbd8ad3b1aa919140":[8,0,0,439,9],
 "class_ogre_1_1_gpu_resource.html#a070b7c583f5541ecbd8ad3b1aa919140":[7,0,0,468,9],
+"class_ogre_1_1_gpu_resource.html#a070b7c583f5541ecbd8ad3b1aa919140":[8,0,0,439,9],
 "class_ogre_1_1_gpu_resource.html#a396a21931e716ebd97553a0a99978838":[7,0,0,468,0],
 "class_ogre_1_1_gpu_resource.html#a396a21931e716ebd97553a0a99978838":[8,0,0,439,0],
 "class_ogre_1_1_gpu_resource.html#a3ecbf330f3a8ee478c77b250abb85ea9":[7,0,0,468,1],
 "class_ogre_1_1_gpu_resource.html#a3ecbf330f3a8ee478c77b250abb85ea9":[8,0,0,439,1],
-"class_ogre_1_1_gpu_resource.html#a56ccef279ef9251c5a4b40bfaf7b9e05":[7,0,0,468,3],
 "class_ogre_1_1_gpu_resource.html#a56ccef279ef9251c5a4b40bfaf7b9e05":[8,0,0,439,3],
+"class_ogre_1_1_gpu_resource.html#a56ccef279ef9251c5a4b40bfaf7b9e05":[7,0,0,468,3],
 "class_ogre_1_1_gpu_resource.html#a9311078ea7d4d85ed5cbaae4e641f765":[7,0,0,468,4],
 "class_ogre_1_1_gpu_resource.html#a9311078ea7d4d85ed5cbaae4e641f765":[8,0,0,439,4],
+"class_ogre_1_1_gpu_resource.html#a97a51a82de7ad88e7c09410d23d16d28":[7,0,0,468,8],
 "class_ogre_1_1_gpu_resource.html#a97a51a82de7ad88e7c09410d23d16d28":[8,0,0,439,8]
 };

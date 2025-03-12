@@ -94,20 +94,16 @@ $(document).ready(function(){initNavTree('group___property.html',''); initResiza
 
 <div class="header">
   <div class="summary">
-<a href="#files">Files</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle"><div class="title">Property<div class="ingroups"><a class="el" href="group___optional.html">Components</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Associate values of arbitrary type with names.  
+<a href="#details">More...</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="files" name="files"></a>
-Files</h2></td></tr>
-<tr class="memitem:_ogre_property_8h" id="r__ogre_property_8h"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_property_8h.html">OgreProperty.h</a></td></tr>
-<tr class="memdesc:_ogre_property_8h"><td class="mdescLeft">&#160;</td><td class="mdescRight">OGRE's property system allows you to associate values of arbitrary type with names, and have those values exposed via a self-describing interface. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_property.html">Ogre::Property&lt; T &gt;</a></td></tr>
@@ -128,12 +124,12 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ga2bc8b844e70b9894324b0c2f9271ac06" id="r_ga2bc8b844e70b9894324b0c2f9271ac06"><td class="memItemLeft" align="right" valign="top">typedef map&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>, <a class="el" href="class_ogre_1_1_property_def.html">PropertyDef</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___property.html#ga2bc8b844e70b9894324b0c2f9271ac06">Ogre::PropertyDefMap</a></td></tr>
-<tr class="memdesc:ga2bc8b844e70b9894324b0c2f9271ac06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map from property name to shared definition.  <br /></td></tr>
-<tr class="separator:ga2bc8b844e70b9894324b0c2f9271ac06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga714751b888fe3b1783b79fe0bf8d8bbf" id="r_ga714751b888fe3b1783b79fe0bf8d8bbf"><td class="memItemLeft" align="right" valign="top">typedef map&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>, <a class="el" href="struct_ogre_1_1_property_value.html">PropertyValue</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___property.html#ga714751b888fe3b1783b79fe0bf8d8bbf">Ogre::PropertyValueMap</a></td></tr>
-<tr class="memdesc:ga714751b888fe3b1783b79fe0bf8d8bbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a transferable map of properties using wrapped value types (<a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Ogre::Any</a>)  <br /></td></tr>
-<tr class="separator:ga714751b888fe3b1783b79fe0bf8d8bbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9593f2591ec9da54c1c19c65db39a068" id="r_ga9593f2591ec9da54c1c19c65db39a068"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">Ogre::String</a>, <a class="el" href="class_ogre_1_1_property_def.html">Ogre::PropertyDef</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___property.html#ga9593f2591ec9da54c1c19c65db39a068">Ogre::PropertyDefMap</a></td></tr>
+<tr class="memdesc:ga9593f2591ec9da54c1c19c65db39a068"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map from property name to shared definition.  <br /></td></tr>
+<tr class="separator:ga9593f2591ec9da54c1c19c65db39a068"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab85fed93c3a16a944fd7750b9ad5da38" id="r_gab85fed93c3a16a944fd7750b9ad5da38"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>, <a class="el" href="struct_ogre_1_1_property_value.html">PropertyValue</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___property.html#gab85fed93c3a16a944fd7750b9ad5da38">Ogre::PropertyValueMap</a></td></tr>
+<tr class="memdesc:gab85fed93c3a16a944fd7750b9ad5da38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a transferable map of properties using wrapped value types (<a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Ogre::Any</a>)  <br /></td></tr>
+<tr class="separator:gab85fed93c3a16a944fd7750b9ad5da38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -165,15 +161,39 @@ Enumerations</h2></td></tr>
 <tr class="separator:ga0883a5af9197151407965df0bacc4f3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<h2 class="groupheader">Typedef Documentation</h2>
-<a id="ga2bc8b844e70b9894324b0c2f9271ac06" name="ga2bc8b844e70b9894324b0c2f9271ac06"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga2bc8b844e70b9894324b0c2f9271ac06">&#9670;&#160;</a></span>PropertyDefMap</h2>
+<p>Associate values of arbitrary type with names. </p>
+<p>OGRE's property system allows you to associate values of arbitrary type with names, and have those values exposed via a self-describing interface. Unlike <a class="el" href="class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection-style,...">Ogre::StringInterface</a>, the values are passed as their native types without needing conversion to or from strings; they are simply wrapped in an <a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Ogre::Any</a> and casts are performed to access them.</p>
+<p><a class="el" href="class_ogre_1_1_property.html" title="Property instance with passthrough calls to a given object.">Property</a> values are actually not stored in this system; instead the property definitions reference getter &amp; setter methods which provide the 'backing' for the property. This means you can directly expose features of your classes as properties without any duplication.</p>
+<p>There are two aspects to exposing a property on your class. One is exposing the definition of the property (<a class="el" href="class_ogre_1_1_property_def.html" title="Definition of a property of an object.">PropertyDef</a>), which should be shared between all instances and probably stored in a static PropertyDefMap somewhere. The second is the instance 'wiring' which ensures that a call to set a property calls a method on this particular instance of the class; this is formed by a number of <a class="el" href="class_ogre_1_1_property.html" title="Property instance with passthrough calls to a given object.">Property</a> instances, contained in a <a class="el" href="class_ogre_1_1_property_set.html" title="Defines a complete set of properties for a single object instance.">PropertySet</a>. Each <a class="el" href="class_ogre_1_1_property.html" title="Property instance with passthrough calls to a given object.">Property</a> has an explicit binding to getter and setter instance methods.</p>
+<p>So, here's an example of setting up properties on an instance:</p>
+<div class="fragment"><div class="line"><span class="comment">// Make sure the property definition is created </span></div>
+<div class="line"><span class="comment">// propertyDefs is a variable of type PropertyDefMap, shared between instances</span></div>
+<div class="line">PropertyDefMap::iterator defi = propertyDefs.find(<span class="stringliteral">&quot;name&quot;</span>);</div>
+<div class="line"><span class="keywordflow">if</span> (defi == propertyDefs.end())</div>
+<div class="line">{</div>
+<div class="line">    defi = propertyDefs.emplace(<span class="stringliteral">&quot;name&quot;</span>,</div>
+<div class="line">        PropertyDef(<span class="stringliteral">&quot;name&quot;</span>, </div>
+<div class="line">            <span class="stringliteral">&quot;The name of the object.&quot;</span>, <a class="code hl_enumvalue" href="group___property.html#gga0883a5af9197151407965df0bacc4f3aa7964244e71bea1a0b721d42e6fa4ae53">PROP_STRING</a>)).first;</div>
+<div class="line">}</div>
+<div class="line"><span class="comment">// This has established the property definition, and its description.</span></div>
+<div class="line"><span class="comment">// Now, we need to &#39;wire&#39; a property instance for this object instance</span></div>
+<div class="line"><span class="comment">// We assume the class is called &#39;Foo&#39; and the instance is pointed to by a variable called &#39;inst&#39;</span></div>
+<div class="line"><span class="comment">// &#39;props&#39; is a PropertySet, specific to the instance</span></div>
+<div class="line">props.addProperty(</div>
+<div class="line">    <a class="code hl_define" href="_ogre_memory_allocator_config_8h.html#ab5fc1358fd5a889de0a06d07e45df1ff">OGRE_NEW</a> Property&lt;String&gt;(&amp;(defi-&gt;second),</div>
+<div class="line">        std::bind(&amp;Foo::getName, inst),</div>
+<div class="line">        std::bind(&amp;Foo::setName, inst, _1)));</div>
+<div class="ttc" id="a_ogre_memory_allocator_config_8h_html_ab5fc1358fd5a889de0a06d07e45df1ff"><div class="ttname"><a href="_ogre_memory_allocator_config_8h.html#ab5fc1358fd5a889de0a06d07e45df1ff">OGRE_NEW</a></div><div class="ttdeci">#define OGRE_NEW</div><div class="ttdoc">new / delete for classes deriving from AllocatedObject (alignment determined by per-class policy)</div><div class="ttdef"><b>Definition</b> OgreMemoryAllocatorConfig.h:368</div></div>
+<div class="ttc" id="agroup___property_html_gga0883a5af9197151407965df0bacc4f3aa7964244e71bea1a0b721d42e6fa4ae53"><div class="ttname"><a href="group___property.html#gga0883a5af9197151407965df0bacc4f3aa7964244e71bea1a0b721d42e6fa4ae53">Ogre::PROP_STRING</a></div><div class="ttdeci">@ PROP_STRING</div><div class="ttdef"><b>Definition</b> OgreProperty.h:114</div></div>
+</div><!-- fragment --> <h2 class="groupheader">Typedef Documentation</h2>
+<a id="ga9593f2591ec9da54c1c19c65db39a068" name="ga9593f2591ec9da54c1c19c65db39a068"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga9593f2591ec9da54c1c19c65db39a068">&#9670;&#160;</a></span>PropertyDefMap</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef map&lt;<a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>,<a class="el" href="class_ogre_1_1_property_def.html">PropertyDef</a>&gt;::type <a class="el" href="group___property.html#ga2bc8b844e70b9894324b0c2f9271ac06">Ogre::PropertyDefMap</a></td>
+          <td class="memname">typedef std::map&lt;<a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">Ogre::String</a>, <a class="el" href="class_ogre_1_1_property_def.html">Ogre::PropertyDef</a>&gt; <a class="el" href="group___property.html#ga9593f2591ec9da54c1c19c65db39a068">Ogre::PropertyDefMap</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -182,14 +202,14 @@ Enumerations</h2></td></tr>
 
 </div>
 </div>
-<a id="ga714751b888fe3b1783b79fe0bf8d8bbf" name="ga714751b888fe3b1783b79fe0bf8d8bbf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga714751b888fe3b1783b79fe0bf8d8bbf">&#9670;&#160;</a></span>PropertyValueMap</h2>
+<a id="gab85fed93c3a16a944fd7750b9ad5da38" name="gab85fed93c3a16a944fd7750b9ad5da38"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab85fed93c3a16a944fd7750b9ad5da38">&#9670;&#160;</a></span>PropertyValueMap</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef map&lt;<a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>,<a class="el" href="struct_ogre_1_1_property_value.html">PropertyValue</a>&gt;::type <a class="el" href="group___property.html#ga714751b888fe3b1783b79fe0bf8d8bbf">Ogre::PropertyValueMap</a></td>
+          <td class="memname">typedef std::map&lt;<a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>, <a class="el" href="struct_ogre_1_1_property_value.html">PropertyValue</a>&gt; <a class="el" href="group___property.html#gab85fed93c3a16a944fd7750b9ad5da38">Ogre::PropertyValueMap</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
