@@ -131,7 +131,7 @@ namespace Ogre
         To get started, the minimum you need is a PagedWorld with at least one PagedWorldSection
         within it, and at least one Camera being tracked (see addCamera). 
     */
-    class _OgrePagingExport PageManager : public PageAlloc
+    class _OgrePagingExport PageManager
     {
     public:
         PageManager();

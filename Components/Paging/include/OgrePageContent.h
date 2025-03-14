@@ -46,7 +46,7 @@ namespace Ogre
 
     /** Interface definition for a unit of content within a page. 
     */
-    class _OgrePagingExport PageContent : public PageAlloc
+    class _OgrePagingExport PageContent
     {
     protected:
         PageContentFactory* mCreator;

@@ -46,7 +46,7 @@ namespace Ogre
     /** Abstract marker class representing the data held against the PagedWorldSection
     which is specifically used by the PageStrategy.
     */
-    class _OgrePagingExport PageStrategyData : public PageAlloc
+    class _OgrePagingExport PageStrategyData
     {
     public:
         PageStrategyData() {}
@@ -70,7 +70,7 @@ namespace Ogre
         to the events raised on it and to call methods on other classes (such as
         requesting new pages). 
     */
-    class _OgrePagingExport PageStrategy : public PageAlloc
+    class _OgrePagingExport PageStrategy
     {
     protected:
         String mName;
