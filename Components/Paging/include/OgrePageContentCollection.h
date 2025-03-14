@@ -52,7 +52,7 @@ namespace Ogre
         if required. For example, potentially you might want to define Page-level LOD
         in which different collections of PageContent are loaded at different times.
     */
-    class _OgrePagingExport PageContentCollection : public PageAlloc
+    class _OgrePagingExport PageContentCollection
     {
     protected:
         PageContentCollectionFactory* mCreator;

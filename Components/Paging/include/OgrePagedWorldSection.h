@@ -66,7 +66,7 @@ namespace Ogre
         instance name are saved and that SceneManager is looked up on loading, or
         created if it didn't exist. 
     */
-    class _OgrePagingExport PagedWorldSection : public PageAlloc
+    class _OgrePagingExport PagedWorldSection
     {
     public:
         typedef map<PageID, Page*>::type PageMap;
@@ -298,7 +298,7 @@ namespace Ogre
 
     /** A factory class for creating types of world section.
     */
-    class _OgrePagingExport PagedWorldSectionFactory : public PageAlloc
+    class _OgrePagingExport PagedWorldSectionFactory
     {
     public:
         virtual ~PagedWorldSectionFactory() {}

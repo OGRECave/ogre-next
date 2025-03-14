@@ -52,7 +52,7 @@ namespace Ogre
         world and knows how to find out about the contents of it. It does not, 
         by design, contain all elements of the world, in memory, at once. 
     */
-    class _OgrePagingExport PagedWorld : public PageAlloc
+    class _OgrePagingExport PagedWorld
     {
     protected:
         String mName;

@@ -52,8 +52,6 @@ namespace Ogre
     class SimplePageContentCollectionFactory;
 
 
-    typedef GeneralAllocatedObject PageAlloc;
-
     /// Identifier for a page
     typedef uint32 PageID;
 

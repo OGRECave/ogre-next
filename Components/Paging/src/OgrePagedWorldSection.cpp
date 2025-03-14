@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgrePage.h"
 #include "OgreLogManager.h"
 #include "OgreRoot.h"
+#include "OgrePlatformInformation.h"
 
 namespace Ogre
 {
