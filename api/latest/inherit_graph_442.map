@@ -1,3 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$struct_ogre_1_1_particle_gpu_data.html" title=" " alt="" coords="5,5,172,31"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_page_strategy_data.html" title="Abstract marker class representing the data held against the PagedWorldSection which is specifically ..." alt="" coords="5,31,184,56"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_grid2_d_page_strategy_data.html" title="Specialisation of PageStrategyData for Grid2DPageStrategy." alt="" coords="232,5,455,31"/>
+<area shape="poly" id="edge924_Node000000_Node000001" title=" " alt="" coords="197,30,231,27,232,32,198,36"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_grid3_d_page_strategy_data.html" title="Specialisation of PageStrategyData for Grid3DPageStrategy." alt="" coords="232,55,455,80"/>
+<area shape="poly" id="edge925_Node000000_Node000002" title=" " alt="" coords="198,51,232,54,231,59,197,56"/>
 </map>

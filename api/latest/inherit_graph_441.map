@@ -1,15 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_particle_emitter_def_data_factory.html" title="Abstract class defining the interface to be implemented by creators of EmitterDefData subclasses." alt="" coords="5,126,185,166"/>
-<area shape="rect" id="Node000001" href="$class_ogre_1_1_box_emitter_factory2.html" title=" " alt="" coords="248,5,437,31"/>
-<area shape="poly" id="edge1086_Node000000_Node000001" title=" " alt="" coords="125,115,173,75,232,40,264,28,265,33,234,44,176,80,129,119"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_cylinder_emitter_factory2.html" title=" " alt="" coords="233,55,452,80"/>
-<area shape="poly" id="edge1087_Node000000_Node000002" title=" " alt="" coords="154,118,233,89,275,78,276,83,234,94,155,123"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_ellipsoid_emitter_factory2.html" title=" " alt="" coords="233,104,452,129"/>
-<area shape="poly" id="edge1088_Node000000_Node000003" title=" " alt="" coords="199,131,235,127,236,132,199,136"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_hollow_ellipsoid_emitter_factory2.html" title=" " alt="" coords="238,154,447,194"/>
-<area shape="poly" id="edge1089_Node000000_Node000004" title=" " alt="" coords="199,155,238,160,238,165,198,160"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_point_emitter_factory2.html" title=" " alt="" coords="244,219,441,244"/>
-<area shape="poly" id="edge1090_Node000000_Node000005" title=" " alt="" coords="150,169,234,203,279,216,278,221,232,209,148,174"/>
-<area shape="rect" id="Node000006" href="$class_ogre_1_1_ring_emitter_factory2.html" title=" " alt="" coords="246,268,439,293"/>
-<area shape="poly" id="edge1091_Node000000_Node000006" title=" " alt="" coords="127,174,175,215,235,253,268,265,266,270,232,258,172,219,124,178"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_page_strategy.html" title="Defines the interface to a strategy class which is responsible for deciding when Page instances are r..." alt="" coords="5,31,152,56"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_grid2_d_page_strategy.html" title="Page strategy which loads new pages based on a regular 2D grid." alt="" coords="200,5,392,31"/>
+<area shape="poly" id="edge922_Node000000_Node000001" title=" " alt="" coords="165,31,200,27,200,32,166,36"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_grid3_d_page_strategy.html" title="Page strategy which loads new pages based on a regular 3D grid." alt="" coords="200,55,392,80"/>
+<area shape="poly" id="edge923_Node000000_Node000002" title=" " alt="" coords="166,50,200,54,200,59,165,56"/>
 </map>

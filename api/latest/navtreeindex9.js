@@ -1,6 +1,5 @@
 var NAVTREEINDEX9 =
 {
-"_ogre_x11_e_g_l_support_8h.html#ae5c897aa51c66db783d5757979a9cee7":[9,0,4,2,0,0,3,3,33],
 "_ogre_x11_e_g_l_support_8h.html#af5c3b39d44706b903a2c61448a84f132":[9,0,4,2,0,0,3,3,70],
 "_ogre_x11_e_g_l_support_8h.html#af75b95ff51c6dd61e2eca9c8d725fcc9":[9,0,4,2,0,0,3,3,18],
 "_ogre_x11_e_g_l_support_8h.html#afc54547780a069f6a4d8c7279091e60f":[9,0,4,2,0,0,3,3,31],
@@ -249,5 +248,6 @@ var NAVTREEINDEX9 =
 "annotated.html":[8,0],
 "azdo.html":[4,0,2],
 "azdo.html#RenderQueue":[4,0,2,1],
-"azdo.html#V2AndV1Objects":[4,0,2,0]
+"azdo.html#V2AndV1Objects":[4,0,2,0],
+"azdo.html#V2AndV1ObjectsV1Longevity":[4,0,2,0,0]
 };

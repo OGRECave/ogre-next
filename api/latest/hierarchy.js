@@ -1446,7 +1446,27 @@ var hierarchy =
       [ "Ogre::v1::VertexElement", "class_ogre_1_1v1_1_1_vertex_element.html", null ]
     ] ],
     [ "Ogre::OptimisedUtil", "class_ogre_1_1_optimised_util.html", null ],
+    [ "Ogre::PageContent", "class_ogre_1_1_page_content.html", null ],
+    [ "Ogre::PageContentCollection", "class_ogre_1_1_page_content_collection.html", [
+      [ "Ogre::SimplePageContentCollection", "class_ogre_1_1_simple_page_content_collection.html", null ]
+    ] ],
+    [ "Ogre::PageContentCollectionFactory", "class_ogre_1_1_page_content_collection_factory.html", [
+      [ "Ogre::SimplePageContentCollectionFactory", "class_ogre_1_1_simple_page_content_collection_factory.html", null ]
+    ] ],
+    [ "Ogre::PageContentFactory", "class_ogre_1_1_page_content_factory.html", null ],
+    [ "Ogre::PagedWorld", "class_ogre_1_1_paged_world.html", null ],
+    [ "Ogre::PagedWorldSection", "class_ogre_1_1_paged_world_section.html", null ],
+    [ "Ogre::PagedWorldSectionFactory", "class_ogre_1_1_paged_world_section_factory.html", null ],
+    [ "Ogre::PageManager", "class_ogre_1_1_page_manager.html", null ],
     [ "Ogre::PageProvider", "class_ogre_1_1_page_provider.html", null ],
+    [ "Ogre::PageStrategy", "class_ogre_1_1_page_strategy.html", [
+      [ "Ogre::Grid2DPageStrategy", "class_ogre_1_1_grid2_d_page_strategy.html", null ],
+      [ "Ogre::Grid3DPageStrategy", "class_ogre_1_1_grid3_d_page_strategy.html", null ]
+    ] ],
+    [ "Ogre::PageStrategyData", "class_ogre_1_1_page_strategy_data.html", [
+      [ "Ogre::Grid2DPageStrategyData", "class_ogre_1_1_grid2_d_page_strategy_data.html", null ],
+      [ "Ogre::Grid3DPageStrategyData", "class_ogre_1_1_grid3_d_page_strategy_data.html", null ]
+    ] ],
     [ "Ogre::ParallaxCorrectedCubemapAutoListener", "class_ogre_1_1_parallax_corrected_cubemap_auto_listener.html", [
       [ "Ogre::PccPerPixelGridPlacement", "class_ogre_1_1_pcc_per_pixel_grid_placement.html", null ]
     ] ],
@@ -2053,29 +2073,6 @@ var hierarchy =
         [ "Ogre::PropertyAbstractNode", "class_ogre_1_1_property_abstract_node.html", null ],
         [ "Ogre::VariableAccessAbstractNode", "class_ogre_1_1_variable_access_abstract_node.html", null ]
       ] ]
-    ] ],
-    [ "PageAlloc", null, [
-      [ "Ogre::Page", "class_ogre_1_1_page.html", null ],
-      [ "Ogre::PageContent", "class_ogre_1_1_page_content.html", null ],
-      [ "Ogre::PageContentCollection", "class_ogre_1_1_page_content_collection.html", [
-        [ "Ogre::SimplePageContentCollection", "class_ogre_1_1_simple_page_content_collection.html", null ]
-      ] ],
-      [ "Ogre::PageContentCollectionFactory", "class_ogre_1_1_page_content_collection_factory.html", [
-        [ "Ogre::SimplePageContentCollectionFactory", "class_ogre_1_1_simple_page_content_collection_factory.html", null ]
-      ] ],
-      [ "Ogre::PageContentFactory", "class_ogre_1_1_page_content_factory.html", null ],
-      [ "Ogre::PageManager", "class_ogre_1_1_page_manager.html", null ],
-      [ "Ogre::PageStrategy", "class_ogre_1_1_page_strategy.html", [
-        [ "Ogre::Grid2DPageStrategy", "class_ogre_1_1_grid2_d_page_strategy.html", null ],
-        [ "Ogre::Grid3DPageStrategy", "class_ogre_1_1_grid3_d_page_strategy.html", null ]
-      ] ],
-      [ "Ogre::PageStrategyData", "class_ogre_1_1_page_strategy_data.html", [
-        [ "Ogre::Grid2DPageStrategyData", "class_ogre_1_1_grid2_d_page_strategy_data.html", null ],
-        [ "Ogre::Grid3DPageStrategyData", "class_ogre_1_1_grid3_d_page_strategy_data.html", null ]
-      ] ],
-      [ "Ogre::PagedWorld", "class_ogre_1_1_paged_world.html", null ],
-      [ "Ogre::PagedWorldSection", "class_ogre_1_1_paged_world_section.html", null ],
-      [ "Ogre::PagedWorldSectionFactory", "class_ogre_1_1_paged_world_section_factory.html", null ]
     ] ],
     [ "Ogre::Pool< ResourcePtr >", "class_ogre_1_1_pool.html", [
       [ "Ogre::ResourceManager::ResourcePool", "class_ogre_1_1_resource_manager_1_1_resource_pool.html", null ]

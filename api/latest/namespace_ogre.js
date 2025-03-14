@@ -1534,7 +1534,6 @@ var namespace_ogre =
     [ "MicroCode", "namespace_ogre.html#a00d4a79ab9d0df3408d7a15be1e31d9a", null ],
     [ "NameValuePairList", "group___general.html#gad887d0555b483f6499fcd3a4dab0e0c6", null ],
     [ "OverlayUnlitDatablock", "namespace_ogre.html#ab5430ec5cdcce5e618aa66ab0e67804e", null ],
-    [ "PageAlloc", "namespace_ogre.html#a660664a63929ba9f460ae738a3ed59eb", null ],
     [ "PageID", "namespace_ogre.html#a5126a9c9fbccbfe4c78070263098acb2", null ],
     [ "ParamCommandMap", "group___general.html#ga57e6391934276e7e753050ad0b755583", null ],
     [ "ParameterList", "group___general.html#gac3c212f18e4a3e6aba496571cfbe5400", null ],

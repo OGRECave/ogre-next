@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_parallax_corrected_cubemap_auto_listener.html" title=" " alt="" coords="5,5,244,45"/>
-<area shape="rect" id="Node000001" href="$class_ogre_1_1_pcc_per_pixel_grid_placement.html" title="Placing multiple PCC probes by hand can be difficult and even error prone." alt="" coords="292,13,523,38"/>
-<area shape="poly" id="edge937_Node000000_Node000001" title=" " alt="" coords="258,23,292,23,292,28,258,28"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_page_content_collection.html" title="Definition of the interface for a collection of PageContent instances." alt="" coords="5,5,213,31"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_simple_page_content_collection.html" title="Specialisation of PageContentCollection which just provides a simple list of PageContent instances." alt="" coords="261,5,515,31"/>
+<area shape="poly" id="edge920_Node000000_Node000001" title=" " alt="" coords="227,15,261,15,261,21,227,21"/>
 </map>

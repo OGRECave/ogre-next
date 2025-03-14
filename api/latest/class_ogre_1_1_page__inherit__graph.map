@@ -1,9 +1,7 @@
 <map id="Ogre::Page" name="Ogre::Page">
-<area shape="rect" id="Node000001" title="Page class." alt="" coords="285,93,377,119"/>
+<area shape="rect" id="Node000001" title="Page class." alt="" coords="171,93,263,119"/>
 <area shape="rect" id="Node000002" href="$class_ogre_1_1_work_queue_1_1_request_handler.html" title="Interface definition for a handler of requests." alt="" coords="5,5,203,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,47,298,91,296,96,171,52"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,51,202,91,199,95,141,55"/>
 <area shape="rect" id="Node000003" href="$class_ogre_1_1_work_queue_1_1_response_handler.html" title="Interface definition for a handler of responses." alt="" coords="227,5,434,45"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="333,59,333,93,328,93,328,59"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="459,13,544,38"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="465,46,357,96,354,91,463,41"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="294,55,236,95,233,91,291,51"/>
 </map>

@@ -1,15 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_pixel_format_to_shader_type.html" title=" " alt="" coords="5,173,232,198"/>
-<area shape="rect" id="Node000001" href="$class_ogre_1_1_d3_d11_pixel_format_to_shader_type.html" title=" " alt="" coords="313,5,509,45"/>
-<area shape="poly" id="edge1092_Node000000_Node000001" title=" " alt="" coords="140,161,199,108,237,79,279,55,311,42,313,47,281,60,240,84,202,112,143,165"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l3_plus_pixel_format_to_shader_type.html" title=" " alt="" coords="315,69,506,109"/>
-<area shape="poly" id="edge1093_Node000000_Node000002" title=" " alt="" coords="160,165,279,119,320,107,322,112,281,124,162,170"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_g_l_e_s2_pixel_format_to_shader_type.html" title=" " alt="" coords="314,133,507,173"/>
-<area shape="poly" id="edge1094_Node000000_Node000003" title=" " alt="" coords="245,169,313,161,314,167,246,174"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_metal_pixel_format_to_shader_type.html" title=" " alt="" coords="316,197,505,237"/>
-<area shape="poly" id="edge1095_Node000000_Node000004" title=" " alt="" coords="246,197,316,204,316,210,246,202"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_n_u_l_l_pixel_format_to_shader_type.html" title=" " alt="" coords="280,262,541,287"/>
-<area shape="poly" id="edge1096_Node000000_Node000005" title=" " alt="" coords="161,201,217,225,281,247,332,259,331,265,279,252,215,230,158,206"/>
-<area shape="rect" id="Node000006" href="$class_ogre_1_1_vulkan_pixel_format_to_shader_type.html" title=" " alt="" coords="313,312,508,352"/>
-<area shape="poly" id="edge1097_Node000000_Node000006" title=" " alt="" coords="146,205,205,251,242,275,281,296,316,309,314,314,279,301,240,280,202,256,143,209"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_param_dictionary.html" title="Class to hold a dictionary of parameters for a single class." alt="" coords="5,5,175,31"/>
 </map>
