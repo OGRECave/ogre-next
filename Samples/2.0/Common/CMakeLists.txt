@@ -64,3 +64,12 @@ target_link_libraries(${OGRE_SAMPLES_COMMON_LIBRARY} ${SDL2_LIBRARY} ${OGRE_NEXT
 if( OGRE_BUILD_COMPONENT_ATMOSPHERE )
 	target_link_libraries(${OGRE_SAMPLES_COMMON_LIBRARY} ${OGRE_NEXT}Atmosphere)
 endif()
+
+if( OGRE_BUILD_COMPONENT_OVERLAY )
+	target_link_libraries(${OGRE_SAMPLES_COMMON_LIBRARY} ${OGRE_NEXT}Overlay)
+	if (OGRE_SDK_BUILD)	#like ogre_add_component_include_dir
+		target_include_directories(${OGRE_NEXT}Overlay PUBLIC ${OGRE_INCLUDE_DIR}/${OGRE_NEXT}Overlay})
+	else()
+		target_include_directories(${OGRE_NEXT}Overlay PUBLIC ${OGRE_SOURCE_DIR}/Components/${OGRE_NEXT}Overlay/include)	
+	endif()
+endif()
