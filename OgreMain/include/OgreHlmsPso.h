@@ -65,8 +65,6 @@ namespace Ogre
         /// For multi-GPU support
         uint32 adapterId;
 
-        uint8 strongMacroblockBits;
-
         bool operator==( const HlmsPassPso &_r ) const
         {
             for( size_t i = 0u; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
@@ -77,8 +75,7 @@ namespace Ogre
             return !( this->stencilParams != _r.stencilParams ) &&     //
                    this->depthFormat == _r.depthFormat &&              //
                    this->sampleDescription == _r.sampleDescription &&  //
-                   this->adapterId == _r.adapterId &&                  //
-                   this->strongMacroblockBits == _r.strongMacroblockBits;
+                   this->adapterId == _r.adapterId;
         }
         bool operator!=( const HlmsPassPso &_r ) const { return !( *this == _r ); }
         bool operator<( const HlmsPassPso &other ) const
@@ -96,24 +93,9 @@ namespace Ogre
                 return this->depthFormat < other.depthFormat;
             if( this->sampleDescription != other.sampleDescription )
                 return this->sampleDescription < other.sampleDescription;
-            if( this->adapterId != other.adapterId )
-                return this->adapterId < other.adapterId;
 
-            return this->strongMacroblockBits < other.strongMacroblockBits;
+            return this->adapterId < other.adapterId;
         }
-
-        bool hasStrongMacroblock() const { return strongMacroblockBits != 0u; }
-
-        enum StrongMacroblockBits
-        {
-            // clang-format off
-            ForceDisableDepthWrites     = 1u << 0u,
-            InvertVertexWinding         = 1u << 1u,
-            NoDepthBuffer               = 1u << 2u,
-            ForceDepthClamp             = 1u << 3u,
-            ForceCullNone               = 1u << 4u,
-            // clang-format on
-        };
     };
 
     /** Defines a PipelineStateObject as required by Vulkan, Metal & DX12.
@@ -142,11 +124,21 @@ namespace Ogre
         bool          enablePrimitiveRestart;
         uint8         clipDistances;  // Bitmask. Only needed by GL.
 
+        uint8                 strongBlocks;  /// @see StrongBlocks enum.
         HlmsMacroblock const *macroblock;
         HlmsBlendblock const *blendblock;
         // No independent blenblocks for now
-        //      HlmsBlendblock const    *blendblock[8];
-        //      bool                    independentBlend;
+        //  HlmsBlendblock const    *blendblock[8];
+        //  bool                    independentBlend;
+
+        /// The values for strongBasicBlocks member
+        enum StrongBlocks
+        {
+            /// If set, the macroblock was overridden and the HlmsPso holds a strong ref.
+            HasStrongMacroblock = 1u << 0u,
+            /// If set, the blendblock was overridden and the HlmsPso holds a strong ref.
+            HasStrongBlendblock = 1u << 1u
+        };
 
         // TODO: Stream Out.
         //-dark_sylinc update: Stream Out seems to be dying.

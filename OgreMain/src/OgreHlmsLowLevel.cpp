@@ -128,7 +128,7 @@ namespace Ogre
             pso.enablePrimitiveRestart = false;
         }
 
-        applyStrongMacroblockRules( pso );
+        applyStrongBlockRules( pso, tid );
 
         mRenderSystem->_hlmsPipelineStateObjectCreated( &pso, (uint64)-1 );
 
