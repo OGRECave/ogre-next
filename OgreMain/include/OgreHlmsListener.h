@@ -210,14 +210,14 @@ namespace Ogre
         /// renderables within a pass. The listener can set a property or multiple properties in
         /// preparePassHash which can be accessed from this method to modify input macroblock.
         /// @see Hlms::applyStrongMacroblockRules
-        virtual void applyStrongMacroblockRules( HlmsMacroblock &macroblock, Hlms &hlms ) {}
+        virtual void applyStrongMacroblockRules( HlmsMacroblock &macroblock, const Hlms &hlms ) const {}
 
         /// Called from Hlms::createShaderCacheEntry after a PassPso is initialized. It allows to modify
         /// a blendblock currently assigned in PassPso. This allows to override the blendblocks for all
         /// renderables within a pass. The listener can set a property or multiple properties in
         /// preparePassHash which can be accessed from this method to modify input blendblock.
         /// @see applyStrongBlendblockRules
-        virtual void applyStrongBlendblockRules( HlmsBlendblock &blendblock, Hlms &hlms ) {}
+        virtual void applyStrongBlendblockRules( HlmsBlendblock &blendblock, const Hlms &hlms ) const {}
     };
 
     /** @} */

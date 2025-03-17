@@ -602,13 +602,13 @@ namespace Ogre
         /// The implementation can set the HlmsPsoProp::StrongMacroblockBits property to any combination
         /// of HlmsPassPso::StrongMacroblockBits values within preparePassHash and default implementation
         /// interprets them to modify the macroblock.
-        virtual void applyStrongMacroblockRules( HlmsMacroblock &macroblock );
+        virtual void applyStrongMacroblockRules( HlmsMacroblock &macroblock ) const;
         /// Similar to applyStrongMacroblockRules, but modifies PSO's blendblock if needed.
         ///
         /// The implementation can set the HlmsPsoProp::StrongBlendblockBits property to any combination
         /// of HlmsPassPso::StrongBlendblockBits values within preparePassHash and default implementation
         /// interprets them to modify the blendblock.
-        virtual void applyStrongBlendblockRules( HlmsBlendblock &blendblock );
+        virtual void applyStrongBlendblockRules( HlmsBlendblock &blendblock ) const;
 
     public:
         /**

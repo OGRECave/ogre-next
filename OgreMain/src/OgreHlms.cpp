@@ -2236,7 +2236,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::applyStrongMacroblockRules( HlmsMacroblock &macroblock )
+    void Hlms::applyStrongMacroblockRules( HlmsMacroblock &macroblock ) const
     {
         const uint32 strongMacroblockBits = getProperty(HlmsPsoProp::StrongMacroblockBits);
         if (strongMacroblockBits == 0)
@@ -2324,7 +2324,7 @@ namespace Ogre
             macroblock.mPolygonMode = static_cast<PolygonMode>( polygonMode >> 16u );
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::applyStrongBlendblockRules( HlmsBlendblock &blendblock )
+    void Hlms::applyStrongBlendblockRules( HlmsBlendblock &blendblock ) const
     {
         const uint32 strongBlendblockBits = getProperty( HlmsPsoProp::StrongBlendblockBits );
         if( strongBlendblockBits == 0 )
@@ -3780,7 +3780,7 @@ namespace Ogre
             strongMacroblockBits |= HlmsPassPso::DepthClampEnabled;
 
         if( bForceCullNone )
-            passPso.strongMacroblockBits |= HlmsPassPso::ForceCullNone;
+            strongMacroblockBits |= HlmsPassPso::CullingMode_NONE;
 
         const bool invertVertexWinding = mRenderSystem->getInvertVertexWinding();
 
