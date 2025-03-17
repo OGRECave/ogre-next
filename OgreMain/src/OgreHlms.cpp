@@ -2209,7 +2209,7 @@ namespace Ogre
         applyStrongMacroblockRules(
             macroblock );  // Allows the implementation (inherited classes) to modify a macroblock
         OGRE_ASSERT_LOW( macroblock.mRsData ==
-                         nullptr );  //  // Check implementation didn't reassign the blendblock.
+                         nullptr );  // Check implementation didn't reassign the blendblock.
         if( macroblock != *pso.macroblock )
         {
             // mHlmsManager->getMacroblock may be called from different Hlms implementations
