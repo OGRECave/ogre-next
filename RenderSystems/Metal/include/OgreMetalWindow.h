@@ -78,7 +78,8 @@ namespace Ogre
         virtual void create( bool fullScreen, const NameValuePairList *miscParams );
         void         destroy() override;
 
-        void _initialize( TextureGpuManager *textureGpuManager ) override;
+        void _initialize( TextureGpuManager       *textureGpuManager,
+                          const NameValuePairList *miscParams ) override;
 
         void reposition( int32 left, int32 top ) override;
         void requestResolution( uint32 width, uint32 height ) override;

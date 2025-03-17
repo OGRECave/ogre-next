@@ -248,7 +248,7 @@ namespace Ogre
                 mPsoCache.insert( itor, 1u, entry );
                 itor = mPsoCache.begin() + idx;
 
-                mRenderSystem->_hlmsPipelineStateObjectCreated( &itor->pso );
+                mRenderSystem->_hlmsPipelineStateObjectCreated( &itor->pso, UINT64_MAX );
             }
 
             mLastFinalHash = finalHash;

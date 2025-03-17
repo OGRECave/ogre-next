@@ -23,11 +23,11 @@
 
 @foreach( hlms_num_shadow_map_lights, n )
 	#define hlms_shadowmap@n texShadowMap@value( hlms_shadowmap@n )
-	#define hlms_shadowmap@n_uv_min float2( @value( hlms_shadowmap@n_uv_min_x_int ).@value( hlms_shadowmap@n_uv_min_x_fract ), @value( hlms_shadowmap@n_uv_min_y_int ).@value( hlms_shadowmap@n_uv_min_y_fract ) )
-	#define hlms_shadowmap@n_uv_max float2( @value( hlms_shadowmap@n_uv_max_x_int ).@value( hlms_shadowmap@n_uv_max_x_fract ), @value( hlms_shadowmap@n_uv_max_y_int ).@value( hlms_shadowmap@n_uv_max_y_fract ) )
+	#define hlms_shadowmap@n_uv_min float2( @insertpiece( hlms_shadowmap@n_uv_min_x ), @insertpiece( hlms_shadowmap@n_uv_min_y ) )
+	#define hlms_shadowmap@n_uv_max float2( @insertpiece( hlms_shadowmap@n_uv_max_x ), @insertpiece( hlms_shadowmap@n_uv_max_y ) )
 	@property( hlms_shadowmap@n_uvs_fulltex )
 		@property( hlms_shadowmap@n_is_point_light || hlms_static_branch_shadow_map_lights )
-			#define hlms_shadowmap@n_uv_length float2( @value( hlms_shadowmap@n_uv_length_x_int ).@value( hlms_shadowmap@n_uv_length_x_fract ), @value( hlms_shadowmap@n_uv_length_y_int ).@value( hlms_shadowmap@n_uv_length_y_fract ) )
+			#define hlms_shadowmap@n_uv_length float2( @insertpiece( hlms_shadowmap@n_uv_length_x ), @insertpiece( hlms_shadowmap@n_uv_length_y ) )
 		@end
 		@property( hlms_shadowmap@n_is_point_light )
 			#define hlms_shadowmap@n_uv_param , hlms_shadowmap@n_uv_min, hlms_shadowmap@n_uv_max, hlms_shadowmap@n_uv_length

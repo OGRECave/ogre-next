@@ -418,9 +418,14 @@ namespace Ogre
         setProperty( kNoTid, TerraProperty::ZUp, terrainCell->isZUp() );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsTerra::notifyPropertiesMergedPreGenerationStep( const size_t tid )
+    Hlms::PropertiesMergeStatus HlmsTerra::notifyPropertiesMergedPreGenerationStep(
+        const size_t tid, PiecesMap *inOutPieces )
     {
-        HlmsPbs::notifyPropertiesMergedPreGenerationStep( tid );
+        PropertiesMergeStatus status =
+            HlmsPbs::notifyPropertiesMergedPreGenerationStep( tid, inOutPieces );
+
+        if( status == PropertiesMergeStatusError )
+            return status;
 
         int32 texSlotsStart = 0;
         if( getProperty( tid, HlmsBaseProp::ForwardPlus ) )
@@ -431,6 +436,8 @@ namespace Ogre
             setTextureReg( tid, PixelShader, "terrainNormals", texSlotsStart + 1 );
             setTextureReg( tid, PixelShader, "terrainShadows", texSlotsStart + 2 );
         }
+
+        return status;
     }
     //-----------------------------------------------------------------------------------
     void HlmsTerra::analyzeBarriers( BarrierSolver &barrierSolver,

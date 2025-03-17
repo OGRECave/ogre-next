@@ -138,6 +138,18 @@ namespace Ogre
 #        define OGRE_VK_WORKAROUND_ADRENO_618_0VERTEX_INDIRECT
         static bool mAdreno618_0VertexIndirect;
 
+/// Adreno 6xx read 0 bytes for SSBOs (i.e. ReadOnlyBuffers) bound after slot > 4.
+/// It does not affect Adreno 5xx.
+///
+/// We use TexBuffers instead just like we do in D3D11 and OpenGL.
+///
+/// Driver 512.502.0 is known to have the problem. Other versions unknown.
+///
+/// First seen: 2023-08-01
+/// Last seen: 2024-12-05
+#        define OGRE_VK_WORKAROUND_ADRENO_6xx_READONLY_IS_TBUFFER
+        static bool mAdreno6xxReadOnlyIsTBuffer;
+
 /// PowerVR 8xxx & 9xxx will raise a VK_ERROR_OUT_OF_DEVICE_MEMORY in
 /// vkQueueSubmit when vkCmdCopyBuffer srcOffset or dstOffset aren't
 /// multiple of 16 bytes.

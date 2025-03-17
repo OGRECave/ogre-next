@@ -287,8 +287,23 @@ namespace Ogre
          */
         virtual void shutdown();
 
-        /** Some render systems have moments when GPU device is temporarily unavailable,
-            for example when D3D11 device is lost, or when iOS app is in background, etc.
+        /** Returns true if device was lost and the application should destroy and recreate
+            the device and all device depended resources using validateDevice() call. Note,
+            that initial device lost condition detection is asynchronous, and can be reported
+            by any 3D API call, resulting in RenderingApiException that should be catched.
+            Device lost conditions are reported by 3D APIs as
+            - Direct3D 9: D3DERR_DEVICELOST
+            - Direct3D 10+: DXGI_ERROR_DEVICE_REMOVED/_RESET/_HUNG/etc
+            - Vulkan: VK_ERROR_DEVICE_LOST
+            - OpenGL[ES]: GL_CONTEXT_LOST
+            - Metal: MTLCommandBufferErrorDeviceRemoved/AccessRevoked, MTLDeviceWasRemovedNotification
+         */
+        virtual bool isDeviceLost() { return false; }
+
+        /** Checks if device was lost and recreates it with all depended resources.
+            Optionally elects best physical device even if current device was not lost.
+            Without forceDeviceElection param this function is pretty lightweight
+            and is automatically called by Ogre on start of each frame.
          */
         virtual bool validateDevice( bool forceDeviceElection = false ) { return true; }
 
@@ -890,7 +905,18 @@ namespace Ogre
 
         virtual void executeResourceTransition( const ResourceTransitionArray &rstCollection ) {}
 
-        virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso ) {}
+        /// PSO creation on Vulkan could be skipped after exhausting per-frame time budget
+        void   setPsoRequestsTimeout( uint32 ms ) { mPsoRequestsTimeout = ms; }
+        uint32 getPsoRequestsTimeout() const { return mPsoRequestsTimeout; }
+
+        uint64 getIncompletePsoRequestsCounter() const { return mIncompletePsoRequestsCounter; }
+        void   _notifyIncompletePsoRequests( uint64 count );
+
+        /// return false for recoverable errors, for example for exhausted per-frame time budget
+        virtual bool _hlmsPipelineStateObjectCreated( HlmsPso *newPso, uint64 deadline = UINT64_MAX )
+        {
+            return true;
+        }
         virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso ) {}
         virtual void _hlmsMacroblockCreated( HlmsMacroblock *newBlock ) {}
         virtual void _hlmsMacroblockDestroyed( HlmsMacroblock *block ) {}
@@ -1693,6 +1719,9 @@ namespace Ogre
 
         bool mReverseDepth;
         bool mInvertedClipSpaceY;
+
+        uint32 mPsoRequestsTimeout;  // ms, per frame, or 0 to disable
+        uint64 mIncompletePsoRequestsCounter;
     };
     /** @} */
     /** @} */

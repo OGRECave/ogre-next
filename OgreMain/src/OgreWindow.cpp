@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreWindow.h"
 
 #include "OgreException.h"
+#include "OgreStringConverter.h"
 
 namespace Ogre
 {
@@ -70,6 +71,20 @@ namespace Ogre
             mDepthBuffer->setResolution( widthPx, heightPx, 1u );
         if( mStencilBuffer )
             mStencilBuffer->setResolution( widthPx, heightPx, 1u );
+    }
+    //-------------------------------------------------------------------------
+    bool Window::requestedMemoryless( const NameValuePairList *ogre_nullable miscParams )
+    {
+        if( !miscParams )
+            return false;
+
+        NameValuePairList::const_iterator opt;
+        NameValuePairList::const_iterator end = miscParams->end();
+
+        opt = miscParams->find( "memoryless_depth_buffer" );
+        if( opt != end )
+            return StringConverter::parseBool( opt->second );
+        return false;
     }
     //-----------------------------------------------------------------------------------
     void Window::setTitle( const String &title ) { mTitle = title; }

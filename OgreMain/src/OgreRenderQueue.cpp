@@ -46,6 +46,7 @@ THE SOFTWARE.
 #include "OgreSceneManager.h"
 #include "OgreSceneManagerEnumerator.h"
 #include "OgreTechnique.h"
+#include "OgreTimer.h"
 #include "ParticleSystem/OgreParticleSystem2.h"
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreIndexBufferPacked.h"
@@ -58,7 +59,7 @@ namespace Ogre
 {
     AtomicScalar<uint32> v1::RenderOperation::MeshIndexId( 0 );
 
-    const HlmsCache c_dummyCache( 0, HLMS_MAX, HlmsPso() );
+    const HlmsCache c_dummyCache( 0, HLMS_MAX, HLMS_CACHE_FLAGS_NONE, HlmsPso() );
 
     // clang-format off
     const int RqBits::SubRqIdBits           = 3;
@@ -117,20 +118,30 @@ namespace Ogre
     //---------------------------------------------------------------------
     RenderQueue::~RenderQueue()
     {
+        _releaseManualHardwareResources();
+
         delete mCommandBuffer;
+    }
+    //-----------------------------------------------------------------------
+    void RenderQueue::_releaseManualHardwareResources()
+    {
+        mCommandBuffer->clear();
 
-        assert( mUsedIndirectBuffers.empty() );
-
-        IndirectBufferPackedVec::const_iterator itor = mFreeIndirectBuffers.begin();
-        IndirectBufferPackedVec::const_iterator endt = mFreeIndirectBuffers.end();
-
-        while( itor != endt )
+        for( IndirectBufferPacked *buf : mUsedIndirectBuffers )
         {
-            if( ( *itor )->getMappingState() != MS_UNMAPPED )
-                ( *itor )->unmap( UO_UNMAP_ALL );
-            mVaoManager->destroyIndirectBuffer( *itor );
-            ++itor;
+            if( buf->getMappingState() != MS_UNMAPPED )
+                buf->unmap( UO_UNMAP_ALL );
+            mVaoManager->destroyIndirectBuffer( buf );
         }
+        mUsedIndirectBuffers.clear();
+
+        for( IndirectBufferPacked *buf : mFreeIndirectBuffers )
+        {
+            if( buf->getMappingState() != MS_UNMAPPED )
+                buf->unmap( UO_UNMAP_ALL );
+            mVaoManager->destroyIndirectBuffer( buf );
+        }
+        mFreeIndirectBuffers.clear();
     }
     //-----------------------------------------------------------------------
     IndirectBufferPacked *RenderQueue::getIndirectBuffer( size_t numDraws )
@@ -377,7 +388,7 @@ namespace Ogre
         if( rs->supportsMultithreadedShaderCompilation() && mSceneManager->getNumWorkerThreads() > 1u )
         {
             parallelCompileQueue = &mParallelHlmsCompileQueue;
-            mParallelHlmsCompileQueue.start( mSceneManager );
+            mParallelHlmsCompileQueue.start( mSceneManager, casterPass );
         }
 
         bool supportsIndirectBuffers = mVaoManager->supportsIndirectBuffers();
@@ -1181,9 +1192,15 @@ namespace Ogre
         mParallelHlmsCompileQueue.updateThread( threadIdx, mHlmsManager );
     }
     //-----------------------------------------------------------------------
-    void ParallelHlmsCompileQueue::start( SceneManager *sceneManager )
+    void ParallelHlmsCompileQueue::start( SceneManager *sceneManager, bool casterPass )
     {
         mKeepCompiling = true;
+        uint32 timeout =
+            casterPass ? 0u : Root::getSingleton().getRenderSystem()->getPsoRequestsTimeout();
+        mCompilationDeadline = timeout == 0u
+                                   ? UINT64_MAX
+                                   : ( Root::getSingleton().getTimer()->getMilliseconds() + timeout );
+        mCompilationIncompleteCounter = 0;
         sceneManager->_fireParallelHlmsCompile();
     }
     //-----------------------------------------------------------------------
@@ -1195,6 +1212,10 @@ namespace Ogre
         mKeepCompiling.store( false, std::memory_order::memory_order_relaxed );
         mSemaphore.increment( static_cast<uint32_t>( sceneManager->getNumWorkerThreads() ) );
         sceneManager->waitForParallelHlmsCompile();
+
+        Root::getSingleton().getRenderSystem()->_notifyIncompletePsoRequests(
+            mCompilationIncompleteCounter );
+        mCompilationIncompleteCounter = 0;
 
         // No need to use mMutex because we guarantee no write access from other threads
         // after this point.
@@ -1213,6 +1234,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void ParallelHlmsCompileQueue::fireWarmUpParallel( SceneManager *sceneManager )
     {
+        mCompilationDeadline = UINT64_MAX;
+        mCompilationIncompleteCounter = 0;
         sceneManager->_fireWarmUpShadersCompile();
         OGRE_ASSERT_LOW( mRequests.empty() );  // Should be empty, whether we found an exception or not.
         // See comments in ParallelHlmsCompileQueue::stopAndWait implementation.
@@ -1251,8 +1274,9 @@ namespace Ogre
             try
             {
                 hlms->compileStubEntry( passCaches[reinterpret_cast<size_t>( request.passCache )],
-                                        request.reservedStubEntry, request.queuedRenderable,
+                                        request.reservedStubEntry, UINT64_MAX, request.queuedRenderable,
                                         request.renderableHash, request.finalHash, threadIdx );
+                OGRE_ASSERT_LOW( request.reservedStubEntry->flags == HLMS_CACHE_FLAGS_NONE );
             }
             catch( Exception & )
             {
@@ -1270,13 +1294,16 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void ParallelHlmsCompileQueue::warmUpSerial( HlmsManager *hlmsManager, const HlmsCache *passCaches )
     {
+        mCompilationDeadline = UINT64_MAX;
+        mCompilationIncompleteCounter = 0;
         for( const Request &request : mRequests )
         {
             const HlmsDatablock *datablock = request.queuedRenderable.renderable->getDatablock();
             Hlms *hlms = hlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
             hlms->compileStubEntry( passCaches[reinterpret_cast<size_t>( request.passCache )],
-                                    request.reservedStubEntry, request.queuedRenderable,
+                                    request.reservedStubEntry, UINT64_MAX, request.queuedRenderable,
                                     request.renderableHash, request.finalHash, 0u );
+            OGRE_ASSERT_LOW( request.reservedStubEntry->flags == HLMS_CACHE_FLAGS_NONE );
         }
 
         mRequests.clear();
@@ -1348,8 +1375,11 @@ namespace Ogre
                 try
                 {
                     hlms->compileStubEntry( *request.passCache, request.reservedStubEntry,
-                                            request.queuedRenderable, request.renderableHash,
-                                            request.finalHash, threadIdx );
+                                            mCompilationDeadline, request.queuedRenderable,
+                                            request.renderableHash, request.finalHash, threadIdx );
+                    if( request.reservedStubEntry->flags == HLMS_CACHE_FLAGS_COMPILATION_REQUIRED )
+                        mCompilationIncompleteCounter.fetch_add(
+                            1, std::memory_order::memory_order_relaxed );
                 }
                 catch( Exception & )
                 {
@@ -1463,6 +1493,8 @@ namespace Ogre
     ParallelHlmsCompileQueue::ParallelHlmsCompileQueue() :
         mSemaphore( 0u ),
         mKeepCompiling( false ),
+        mCompilationDeadline( 0 ),
+        mCompilationIncompleteCounter( 0 ),
         mExceptionFound( false )
     {
     }

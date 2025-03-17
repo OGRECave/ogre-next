@@ -43,6 +43,8 @@ in block
 	@end
 @end
 
+@insertpiece( custom_ps_output_types )
+
 @property( !hlms_shadowcaster )
 
 @property( hlms_use_prepass )

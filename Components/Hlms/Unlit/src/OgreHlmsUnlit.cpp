@@ -208,12 +208,13 @@ namespace Ogre
     const HlmsCache *HlmsUnlit::createShaderCacheEntry( uint32 renderableHash,
                                                         const HlmsCache &passCache, uint32 finalHash,
                                                         const QueuedRenderable &queuedRenderable,
-                                                        HlmsCache *reservedStubEntry, const size_t tid )
+                                                        HlmsCache *reservedStubEntry, uint64 deadline,
+                                                        const size_t tid )
     {
         OgreProfileExhaustive( "HlmsUnlit::createShaderCacheEntry" );
 
         const HlmsCache *retVal = Hlms::createShaderCacheEntry(
-            renderableHash, passCache, finalHash, queuedRenderable, reservedStubEntry, tid );
+            renderableHash, passCache, finalHash, queuedRenderable, reservedStubEntry, deadline, tid );
 
         if( mShaderProfile != "glsl" )
         {
@@ -578,9 +579,13 @@ namespace Ogre
             setProperty( kNoTid, UnlitProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlit::notifyPropertiesMergedPreGenerationStep( const size_t tid )
+    Hlms::PropertiesMergeStatus HlmsUnlit::notifyPropertiesMergedPreGenerationStep(
+        const size_t tid, PiecesMap *inOutPieces )
     {
-        Hlms::notifyPropertiesMergedPreGenerationStep( tid );
+        PropertiesMergeStatus status = Hlms::notifyPropertiesMergedPreGenerationStep( tid, inOutPieces );
+
+        if( status == PropertiesMergeStatusError )
+            return status;
 
         const int32 samplerStateStart = getProperty( tid, UnlitProperty::SamplerStateStart );
         int32 texUnit = samplerStateStart;
@@ -623,6 +628,8 @@ namespace Ogre
             else
                 setProperty( tid, "particleSystemGpuData", mParticleSystemSlot );
         }
+
+        return status;
     }
     //-----------------------------------------------------------------------------------
     HlmsCache HlmsUnlit::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
@@ -709,7 +716,7 @@ namespace Ogre
         mListener->preparePassHash( shadowNode, casterPass, dualParaboloid, sceneManager, this );
 
         PassCache passCache;
-        passCache.passPso = getPassPsoForScene( sceneManager );
+        passCache.passPso = getPassPsoForScene( sceneManager, false );
         passCache.properties = mT[kNoTid].setProperties;
 
         assert( mPassCache.size() <= (size_t)HlmsBits::PassMask &&
@@ -724,7 +731,7 @@ namespace Ogre
         const uint32 hash = uint32( it - mPassCache.begin() ) << HlmsBits::PassShift;
 
         // Fill the buffers
-        HlmsCache retVal( hash, mType, HlmsPso() );
+        HlmsCache retVal( hash, mType, HLMS_CACHE_FLAGS_NONE, HlmsPso() );
         retVal.setProperties = mT[kNoTid].setProperties;
         retVal.pso.pass = passCache.passPso;
 

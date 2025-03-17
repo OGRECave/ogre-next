@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include "Animation/OgreSkeletonDef.h"
 #include "Animation/OgreSkeletonInstance.h"
-#include "Animation/OgreTagPoint.h"
+#include "Animation/OgreTagPoint2.h"
 #include "Compositor/OgreCompositorShadowNode.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 #include "Math/Array/OgreBooleanMask.h"
@@ -277,8 +277,11 @@ namespace Ogre
         mForwardPlusSystem = 0;
         mForwardPlusImpl = 0;
 
-        OGRE_DELETE mSky;
-        mSky = 0;
+        if( mSky )
+        {
+            destroyRectangle2D( mSky );
+            mSky = 0;
+        }
 
         OGRE_DELETE mRadialDensityMask;
         mRadialDensityMask = 0;
@@ -1080,8 +1083,7 @@ namespace Ogre
         {
             if( !mSky )
             {
-                mSky = OGRE_NEW Rectangle2D( Id::generateNewId<MovableObject>(),
-                                             &mEntityMemoryManager[SCENE_STATIC], this );
+                mSky = createRectangle2D( SCENE_STATIC );
                 // We can't use BT_DYNAMIC_* because the scene may be rendered from multiple cameras
                 // in the same frame, and dynamic supports only one set of values per frame
                 mSky->initialize( BT_DEFAULT,
@@ -1146,9 +1148,11 @@ namespace Ogre
         else
         {
             if( mSky )
+            {
                 mSky->detachFromParent();
-            OGRE_DELETE mSky;
-            mSky = 0;
+                destroyRectangle2D( mSky );
+                mSky = 0;
+            }
             if( mSkyMaterial )
             {
                 materialManager.remove( mSkyMaterial );
@@ -1725,8 +1729,9 @@ namespace Ogre
             updateWorkerThreadImpl( 0 );
         else
         {
-            mWorkerThreadsBarrier->sync();  // Fire threads
-            mWorkerThreadsBarrier->sync();  // Wait them to complete
+            mWorkerThreadsBarrier->sync();  // Fire threads.
+            mWorkerThreadsBarrier->sync();  // Wait them to complete stage 01.
+            mWorkerThreadsBarrier->sync();  // Wait them to complete stage 02.
         }
     }
     //-----------------------------------------------------------------------
@@ -1748,6 +1753,10 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void SceneManager::_releaseManualHardwareResources()
     {
+        // release indirect buffers in render queue
+        if( mRenderQueue )
+            mRenderQueue->_releaseManualHardwareResources();
+
         // release hardware resources inside all movable objects
         OGRE_LOCK_MUTEX( mMovableObjectCollectionMapMutex );
         for( MovableObjectCollectionMap::iterator ci = mMovableObjectCollectionMap.begin(),
@@ -4411,6 +4420,31 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
+    String SceneManager::deduceMovableObjectName( const MovableObject *movableObject )
+    {
+        String meshName = movableObject->getName();
+        if( !meshName.empty() )
+            return meshName;
+
+        {
+            const Item *item = dynamic_cast<const Item *>( movableObject );
+            if( item && item->getMesh() )
+                return item->getMesh()->getName();
+        }
+        {
+            const v1::Entity *entity = dynamic_cast<const v1::Entity *>( movableObject );
+            if( entity && entity->getMesh() )
+                return entity->getMesh()->getName();
+        }
+        {
+            const ParticleSystem2 *ps2 = dynamic_cast<const ParticleSystem2 *>( movableObject );
+            if( ps2 && ps2->getParticleSystemDef() )
+                return ps2->getParticleSystemDef()->getName();
+        }
+
+        return "[Unknown MovableObject type: " + movableObject->getMovableType() + "]";
+    }
+    //---------------------------------------------------------------------
     void SceneManager::_renderSingleObject( Renderable *pRend, const MovableObject *pMovableObject,
                                             bool casterPass, bool dualParaboloid )
     {
@@ -4742,7 +4776,10 @@ namespace Ogre
             mRenderQueue->_compileShadersThread( threadIdx );
             break;
         case PARTICLE_SYSTEM_MANAGER2:
-            mParticleSystemManager2->_updateParallel( threadIdx, mNumWorkerThreads );
+            mParticleSystemManager2->_updateParallel01( threadIdx, mNumWorkerThreads );
+            if( !mForceMainThread )
+                mWorkerThreadsBarrier->sync();
+            mParticleSystemManager2->_updateParallel02( threadIdx, mNumWorkerThreads );
             break;
         case USER_UNIFORM_SCALABLE_TASK:
             mUserTask->execute( threadIdx, mNumWorkerThreads );

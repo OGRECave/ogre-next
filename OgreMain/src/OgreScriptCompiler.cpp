@@ -1364,6 +1364,8 @@ namespace Ogre
         mIds["kernel_radius"] = ID_KERNEL_RADIUS;
         mIds["gauss_deviation"] = ID_GAUSS_DEVIATION;
 
+        mIds["mip_range"] = ID_MIP_RANGE;
+
         mIds["samples_per_iteration"] = ID_SAMPLES_PER_ITERATION;
         mIds["samples_single_iteration_fallback"] = ID_SAMPLES_SINGLE_ITERATION_FALLBACK;
         mIds["force_mipmap_fallback"] = ID_FORCE_MIPMAP_FALLBACK;

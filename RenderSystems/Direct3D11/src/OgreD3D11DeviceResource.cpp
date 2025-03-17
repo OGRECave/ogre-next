@@ -42,7 +42,7 @@ namespace Ogre
     }
 
     // ------------------------------------------------------------------------
-    static D3D11DeviceResourceManager *gs_D3D11DeviceResourceManager = NULL;
+    static D3D11DeviceResourceManager *gs_D3D11DeviceResourceManager = nullptr;
 
     D3D11DeviceResourceManager *D3D11DeviceResourceManager::get()
     {
@@ -51,7 +51,7 @@ namespace Ogre
 
     D3D11DeviceResourceManager::D3D11DeviceResourceManager()
     {
-        assert( gs_D3D11DeviceResourceManager == NULL );
+        assert( gs_D3D11DeviceResourceManager == nullptr );
         gs_D3D11DeviceResourceManager = this;
     }
 
@@ -59,7 +59,7 @@ namespace Ogre
     {
         assert( mResources.empty() );
         assert( gs_D3D11DeviceResourceManager == this );
-        gs_D3D11DeviceResourceManager = NULL;
+        gs_D3D11DeviceResourceManager = nullptr;
     }
 
     void D3D11DeviceResourceManager::notifyResourceCreated( D3D11DeviceResource *deviceResource )
@@ -86,14 +86,10 @@ namespace Ogre
         assert( mResourcesCopy.empty() );  // reentrancy is not expected nor supported
         mResourcesCopy = mResources;
 
-        vector<D3D11DeviceResource *>::type::iterator it = mResourcesCopy.begin();
-        vector<D3D11DeviceResource *>::type::iterator en = mResourcesCopy.end();
-        while( it != en )
-        {
-            if( D3D11DeviceResource *deviceResource = *it )
-                deviceResource->notifyDeviceLost( device );
-            ++it;
-        }
+        for( D3D11DeviceResource *deviceResource : mResourcesCopy )
+            if( deviceResource != nullptr )
+                deviceResource->notifyDeviceLost( device );  // notifyResourceDestroyed() can be called
+
         mResourcesCopy.clear();
     }
 
@@ -101,17 +97,12 @@ namespace Ogre
     {
         assert( mResourcesCopy.empty() );  // reentrancy is not expected nor supported
         mResourcesCopy = mResources;
+
         for( unsigned pass = 0; pass < 2; ++pass )
-        {
-            vector<D3D11DeviceResource *>::type::iterator it = mResourcesCopy.begin();
-            vector<D3D11DeviceResource *>::type::iterator en = mResourcesCopy.end();
-            while( it != en )
-            {
-                if( D3D11DeviceResource *deviceResource = *it )
-                    deviceResource->notifyDeviceRestored( device, pass );
-                ++it;
-            }
-        }
+            for( D3D11DeviceResource *deviceResource : mResourcesCopy )
+                if( deviceResource != nullptr )
+                    deviceResource->notifyDeviceRestored( device, pass );  // subresources created
+
         mResourcesCopy.clear();
     }
 

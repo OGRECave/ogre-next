@@ -133,7 +133,7 @@ namespace Ogre
 
         // Create the Vulkan descriptor pool
         VkResult result = vkCreateDescriptorPool( device->mDevice, &poolCi, 0, &pool.pool );
-        checkVkResult( result, "vkCreateDescriptorPool" );
+        checkVkResult( device, result, "vkCreateDescriptorPool" );
 
         mPools.push_back( pool );
         mCurrentPoolIdx = mPools.size() - 1u;
@@ -191,7 +191,8 @@ namespace Ogre
 
         while( itor != endt )
         {
-            vkResetDescriptorPool( device->mDevice, itor->pool, 0 );
+            VkResult result = vkResetDescriptorPool( device->mDevice, itor->pool, 0 );
+            checkVkResult( device, result, "vkResetDescriptorPool" );
             itor->size = 0u;
             ++itor;
         }

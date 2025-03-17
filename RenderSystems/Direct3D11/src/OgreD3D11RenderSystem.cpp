@@ -59,6 +59,7 @@ THE SOFTWARE.
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreProfiler.h"
 #include "OgreSceneManagerEnumerator.h"
+#include "OgreTimer.h"
 #include "OgreViewport.h"
 #include "Vao/OgreD3D11BufferInterface.h"
 #include "Vao/OgreD3D11ReadOnlyBufferPacked.h"
@@ -1029,7 +1030,7 @@ namespace Ogre
             mSecondaryWindows.push_back( win );
         }
 
-        win->_initialize( mTextureGpuManager );
+        win->_initialize( mTextureGpuManager, miscParams );
 
         return win;
     }
@@ -1711,6 +1712,9 @@ namespace Ogre
     {
         LogManager::getSingleton().logMessage( "D3D11: Device was lost, recreating." );
 
+        Timer timer;
+        uint64 startTime = timer.getMicroseconds();
+
         // release device depended resources
         fireDeviceEvent( &mDevice, "DeviceLost" );
 
@@ -1724,10 +1728,10 @@ namespace Ogre
 
         MeshManager::getSingleton().unloadAll( Resource::LF_MARKED_FOR_RELOAD );
 
+        notifyDeviceLost( &mDevice );
+
         static_cast<D3D11TextureGpuManager *>( mTextureGpuManager )->_destroyD3DResources();
         static_cast<D3D11VaoManager *>( mVaoManager )->_destroyD3DResources();
-
-        notifyDeviceLost( &mDevice );
 
         // Release all automatic temporary buffers and free unused
         // temporary buffers, so we doesn't need to recreate them,
@@ -1755,8 +1759,12 @@ namespace Ogre
 
         fireDeviceEvent( &mDevice, "DeviceRestored" );
 
-        LogManager::getSingleton().logMessage( "D3D11: Device was restored." );
+        uint64 passedTime = ( timer.getMicroseconds() - startTime ) / 1000;
+        LogManager::getSingleton().logMessage( "D3D11: Device was restored in " +
+                                               StringConverter::toString( passedTime ) + "ms" );
     }
+    //---------------------------------------------------------------------
+    bool D3D11RenderSystem::isDeviceLost() { return !mDevice.isNull() && mDevice.IsDeviceLost(); }
     //---------------------------------------------------------------------
     bool D3D11RenderSystem::validateDevice( bool forceDeviceElection )
     {
@@ -2147,7 +2155,7 @@ namespace Ogre
         mStencilRef = refValue;
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *block )
+    bool D3D11RenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *block, uint64 deadline )
     {
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         debugLogPso( block );
@@ -2344,6 +2352,7 @@ namespace Ogre
         }
 
         block->rsData = pso;
+        return true;
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_hlmsPipelineStateObjectDestroyed( HlmsPso *pso )

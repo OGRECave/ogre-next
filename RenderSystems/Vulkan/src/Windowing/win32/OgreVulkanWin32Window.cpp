@@ -60,6 +60,7 @@ namespace Ogre
     VulkanWin32Window::VulkanWin32Window( const String &title, uint32 width, uint32 height,
                                           bool fullscreenMode ) :
         VulkanWindowSwapChainBased( title, width, height, fullscreenMode ),
+        mHinstance( 0 ),
         mHwnd( 0 ),
         mHDC( 0 ),
         mColourDepth( 32 ),
@@ -71,36 +72,35 @@ namespace Ogre
         mWindowedWinStyle( 0 ),
         mFullscreenWinStyle( 0 )
     {
+        // Grab the HINSTANCE by asking the OS what's the hinstance at an address in this process
+#ifdef __MINGW32__
+#    ifdef OGRE_STATIC_LIB
+        mHinstance = GetModuleHandle( NULL );
+#    else
+#        if OGRE_DEBUG_MODE
+        mHinstance = GetModuleHandle( "RenderSystem_Vulkan_d.dll" );
+#        else
+        mHinstance = GetModuleHandle( "RenderSystem_Vulkan.dll" );
+#        endif
+#    endif
+#else
+        static const TCHAR staticVar;
+        GetModuleHandleEx(
+            GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+            &staticVar, &mHinstance );
+#endif
     }
     //-------------------------------------------------------------------------
-    VulkanWin32Window::~VulkanWin32Window()
-    {
-        destroy();
-
-        if( mTexture )
-        {
-            mTexture->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
-            OGRE_DELETE mTexture;
-            mTexture = 0;
-        }
-        if( mDepthBuffer )
-        {
-            mDepthBuffer->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
-            OGRE_DELETE mDepthBuffer;
-            mDepthBuffer = 0;
-        }
-        // Depth & Stencil buffers are the same pointer
-        // OGRE_DELETE mStencilBuffer;
-        mStencilBuffer = 0;
-    }
+    VulkanWin32Window::~VulkanWin32Window() { destroy(); }
     //-------------------------------------------------------------------------
     const char *VulkanWin32Window::getRequiredExtensionName()
     {
         return VK_KHR_WIN32_SURFACE_EXTENSION_NAME;
     }
     //-------------------------------------------------------------------------
-    void VulkanWin32Window::updateWindowRect()
+    bool VulkanWin32Window::updateWindowRect()
     {
+        bool bResolutionChanged = false;
         RECT rc;
         BOOL result;
         result = GetWindowRect( mHwnd, &rc );
@@ -108,8 +108,9 @@ namespace Ogre
         {
             mTop = 0;
             mLeft = 0;
+            bResolutionChanged = true;
             setFinalResolution( 0, 0 );
-            return;
+            return bResolutionChanged;
         }
 
         mTop = rc.top;
@@ -119,17 +120,21 @@ namespace Ogre
         {
             mTop = 0;
             mLeft = 0;
+            bResolutionChanged = true;
             setFinalResolution( 0, 0 );
-            return;
+            return bResolutionChanged;
         }
         uint32 width = static_cast<uint32>( rc.right - rc.left );
         uint32 height = static_cast<uint32>( rc.bottom - rc.top );
         if( width != getWidth() || height != getHeight() )
         {
+            bResolutionChanged = true;
             mRequestedWidth = static_cast<uint32>( rc.right - rc.left );
             mRequestedHeight = static_cast<uint32>( rc.bottom - rc.top );
             setFinalResolution( mRequestedWidth, mRequestedHeight );
         }
+
+        return bResolutionChanged;
     }
     //-------------------------------------------------------------------------
     void VulkanWin32Window::destroy()
@@ -174,7 +179,6 @@ namespace Ogre
         int monitorIndex = -1;
         HMONITOR hMonitor = NULL;
         // uint8 msaaQuality = 0;
-        HINSTANCE hInstance = NULL;
 
         mFrequencyDenominator = 1u;
 
@@ -363,24 +367,6 @@ namespace Ogre
                 mRequestedWidth = static_cast<uint32>( rc.right - rc.left );
                 mRequestedHeight = static_cast<uint32>( rc.bottom - rc.top );
             }
-            // Grab the HINSTANCE by asking the OS what's the hinstance at an address in this process
-
-#ifdef __MINGW32__
-#    ifdef OGRE_STATIC_LIB
-            hInstance = GetModuleHandle( NULL );
-#    else
-#        if OGRE_DEBUG_MODE
-            hInstance = GetModuleHandle( "RenderSystem_Vulkan_d.dll" );
-#        else
-            hInstance = GetModuleHandle( "RenderSystem_Vulkan.dll" );
-#        endif
-#    endif
-#else
-            static const TCHAR staticVar;
-            GetModuleHandleEx(
-                GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-                &staticVar, &hInstance );
-#endif
 
             // register class and create window
             WNDCLASSEX wcex;
@@ -389,7 +375,7 @@ namespace Ogre
             wcex.lpfnWndProc = WindowEventUtilities::_WndProc;
             wcex.cbClsExtra = 0;
             wcex.cbWndExtra = 0;
-            wcex.hInstance = hInstance;
+            wcex.hInstance = mHinstance;
             wcex.hIcon = LoadIcon( (HINSTANCE)0, (LPCTSTR)IDI_APPLICATION );
             wcex.hCursor = LoadCursor( (HINSTANCE)0, IDC_ARROW );
             wcex.hbrBackground = (HBRUSH)GetStockObject( BLACK_BRUSH );
@@ -451,7 +437,7 @@ namespace Ogre
                 CreateWindowEx( dwStyleEx, "OgreVulkanWindow", mTitle.c_str(),
                                 getWindowStyle( mRequestedFullscreenMode ), mLeft, mTop,
                                 static_cast<int>( mRequestedWidth ),
-                                static_cast<int>( mRequestedHeight ), parentHwnd, 0, hInstance, this );
+                                static_cast<int>( mRequestedHeight ), parentHwnd, 0, mHinstance, this );
 
             WindowEventUtilities::_addRenderWindow( this );
 
@@ -459,11 +445,17 @@ namespace Ogre
                 << "Created VulkanWin32Window '" << mTitle << "' : " << mRequestedWidth << "x"
                 << mRequestedHeight << ", " << mColourDepth << "bpp";
         }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanWin32Window::createSurface()
+    {
+        if( mDevice->isDeviceLost() )  // notifyDeviceRestored() will call us again
+            return;
 
         VkWin32SurfaceCreateInfoKHR createInfo;
         makeVkStruct( createInfo, VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR );
         createInfo.hwnd = mHwnd;
-        createInfo.hinstance = hInstance;
+        createInfo.hinstance = mHinstance;
 
         VkBool32 presentationSupportError = vkGetPhysicalDeviceWin32PresentationSupportKHR(
             mDevice->mPhysicalDevice, mDevice->mGraphicsQueue.mFamilyIdx );
@@ -475,12 +467,9 @@ namespace Ogre
                          "VulkanWin32Window::_initialize" );
         }
 
-        VkSurfaceKHR surface;
-
-        VkResult result = vkCreateWin32SurfaceKHR( mDevice->mInstance, &createInfo, 0, &surface );
-        checkVkResult( result, "vkCreateWin32SurfaceKHR" );
-
-        mSurfaceKHR = surface;
+        VkResult result =
+            vkCreateWin32SurfaceKHR( mDevice->mInstance->mVkInstance, &createInfo, 0, &mSurfaceKHR );
+        checkVkResult( mDevice, result, "vkCreateWin32SurfaceKHR" );
     }
     //-------------------------------------------------------------------------
     void VulkanWin32Window::adjustWindow( uint32 clientWidth, uint32 clientHeight,
@@ -537,38 +526,14 @@ namespace Ogre
 
         mTexture = textureManager->createTextureGpuWindow( this );
         if( DepthBuffer::DefaultDepthBufferFormat != PFG_NULL )
-            mDepthBuffer = textureManager->createWindowDepthBuffer();
+        {
+            const bool bMemoryLess = requestedMemoryless( miscParams );
+            mDepthBuffer = textureManager->createWindowDepthBuffer( bMemoryLess );
+        }
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
 
-        // if( mColourDepth == 16u )
-        //     mTexture->setPixelFormat( PFG_B5G5R5A1_UNORM );
-        // else
-        mTexture->setPixelFormat( chooseSurfaceFormat( mHwGamma ) );
-        if( mDepthBuffer )
-        {
-            mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
-            if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
-                mStencilBuffer = mDepthBuffer;
-        }
-
-        mSampleDescription = mDevice->mRenderSystem->validateSampleDescription(
-            mRequestedSampleDescription, mTexture->getPixelFormat(),
-            TextureFlags::NotTexture | TextureFlags::RenderWindowSpecific );
-        mTexture->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
-        if( mDepthBuffer )
-            mDepthBuffer->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
-
-        if( mDepthBuffer )
-        {
-            mTexture->_setDepthBufferDefaults( DepthBuffer::NO_POOL_EXPLICIT_RTV, false,
-                                               mDepthBuffer->getPixelFormat() );
-        }
-        else
-        {
-            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
-        }
-
+        createSurface();
         createSwapchain();
 
         setHidden( mHidden );
@@ -725,23 +690,15 @@ namespace Ogre
         if( !mHwnd || IsIconic( mHwnd ) )
             return;
 
-        updateWindowRect();
+        const bool bResolutionChanged = updateWindowRect();
 
-        if( mRequestedWidth == getWidth() && mRequestedHeight == getHeight() && !mRebuildingSwapchain )
+        if( !bResolutionChanged && !mRebuildingSwapchain )
             return;
 
-        mDevice->stall();
+        mDevice->stallIgnoringDeviceLost();
 
         destroySwapchain();
-
-        // Depth & Stencil buffer are normal textures; thus they need to be reeinitialized normally
-        if( mDepthBuffer )
-            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
-            mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-
         setFinalResolution( mRequestedWidth, mRequestedHeight );
-
         createSwapchain();
     }
     //-------------------------------------------------------------------------

@@ -65,7 +65,7 @@ namespace Ogre
     const HlmsCache *HlmsLowLevel::createShaderCacheEntry( uint32 renderableHash,
                                                            const HlmsCache &passCache, uint32 finalHash,
                                                            const QueuedRenderable &queuedRenderable,
-                                                           HlmsCache *reservedStubEntry,
+                                                           HlmsCache *reservedStubEntry, uint64 deadline,
                                                            const size_t tid )
     {
         Renderable *renderable = queuedRenderable.renderable;
@@ -98,7 +98,7 @@ namespace Ogre
         if( pass->hasFragmentProgram() )
             pso.pixelShader = pass->getFragmentProgram();
 
-        bool casterPass = getProperty( tid, HlmsBaseProp::ShadowCaster ) != 0;
+        bool casterPass = getProperty( passCache.setProperties, HlmsBaseProp::ShadowCaster ) != 0;
 
         const HlmsDatablock *datablock = queuedRenderable.renderable->getDatablock();
         pso.macroblock = datablock->getMacroblock( casterPass );
@@ -130,7 +130,7 @@ namespace Ogre
 
         applyStrongBlockRules( pso );
 
-        mRenderSystem->_hlmsPipelineStateObjectCreated( &pso );
+        mRenderSystem->_hlmsPipelineStateObjectCreated( &pso, (uint64)-1 );
 
         if( reservedStubEntry )
         {

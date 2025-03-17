@@ -861,6 +861,45 @@ customized:
 | custom_ps_uv_modifier_macros |  PBS specific. Allows you to override the macros defined in Samples/Media/Hlms/Pbs/Any/UvModifierMacros_piece_ps.any so you can apply custom transformations to each UV. e.g. `#undef UV_DIFFUSE #define UV_DIFFUSE( x ) ((x) * 2.0)` |
 | custom_ps_functions          |  Used to declare functions outside the main body of the shader |
 | custom_ps_pixelData          |  Declare additional data in `struct PixelData` from Pixel Shader |
+| custom_ps_output_types       |  Declare additional outputs for MRT (Multiple Render Targets). The variable rtv_target can be used to continue where standard Hlms left off (almost always 1). You don't have to use it if you are certain you aren't using features that required rtv_target to go > 1. |
+
+### Examples:
+
+```
+// Add an extra float output (e.g. to be used with PFG_R32_FLOAT).
+@piece( custom_ps_output_types )
+@property( syntax == glsl || syntax == glslvk )
+    layout(location = @counter(rtv_target)) out float outPs_colour@counter(rtv_target);
+@end
+
+@property( syntax == hlsl )
+    float outPs_colour@counter(rtv_target) : SV_Target@counter(rtv_target);
+@end
+
+@property( syntax == metal )
+    float outPs_colour@counter(rtv_target) : [[ color(@counter(rtv_target)) ]];
+@end
+@end
+```
+
+```
+// Alternatively just assume it's always 1, since you're in control of the compositor.
+@piece( custom_ps_output_types )
+@property( syntax == glsl || syntax == glslvk )
+    layout(location = 1) out float outPs_colour1;
+@end
+
+@property( syntax == hlsl )
+    float outPs_colour1 : SV_Target1;
+@end
+
+@property( syntax == metal )
+    float outPs_colour1 : [[ color(1) ]];
+@end
+@end
+```
+
+See ScreenSpaceReflections on how to setup an MRT compositor. Or see this [forum post reply](https://forums.ogre3d.org/viewtopic.php?p=557199#p557199). Also see the [RTV section](@ref CompositorRTV) and the [Examples](@ref CompositorRtv_Examples) of the manual.
 
 # Run-time rendering {#HlmsRuntimeRendering}
 

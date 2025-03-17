@@ -73,6 +73,11 @@ namespace Ogre
         ~D3D11DeviceResourceManager();  // protected and non-virtual
 
     private:
+        // Originally the order in which resources were restored mattered (e.g. Meshes being
+        // destroyed before their vertex & index buffers).
+        // If anyone wants to change this vector for something else (e.g. a hashset), make
+        // sure to test it extensively to see if order no longer matters. And if so, a more robust
+        // system would be needed to handle these order dependencies.
         vector<D3D11DeviceResource *>::type mResources, mResourcesCopy;
     };
 

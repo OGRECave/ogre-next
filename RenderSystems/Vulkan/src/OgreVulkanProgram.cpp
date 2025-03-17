@@ -51,41 +51,7 @@ THE SOFTWARE.
 #if defined( __GNUC__ ) && !defined( __clang__ )
 #    pragma GCC diagnostic pop
 #endif
-#include "glslang/SPIRV/Logger.h"
-
-// Inclusion of SPIRV headers triggers lots of C++11 errors we don't care
-namespace glslang
-{
-    struct SpvOptions
-    {
-        SpvOptions() :
-            generateDebugInfo( false ),
-            stripDebugInfo( false ),
-            disableOptimizer( true ),
-            optimizeSize( false ),
-            disassemble( false ),
-            validate( false )
-        {
-        }
-        bool generateDebugInfo;
-        bool stripDebugInfo;
-        bool disableOptimizer;
-        bool optimizeSize;
-        bool disassemble;
-        bool validate;
-    };
-
-    void GetSpirvVersion( std::string & );
-    int GetSpirvGeneratorVersion();
-    void GlslangToSpv( const glslang::TIntermediate &intermediate, std::vector<unsigned int> &spirv,
-                       SpvOptions *options = 0 );
-    void GlslangToSpv( const glslang::TIntermediate &intermediate, std::vector<unsigned int> &spirv,
-                       spv::SpvBuildLogger *logger, SpvOptions *options = 0 );
-    void OutputSpvBin( const std::vector<unsigned int> &spirv, const char *baseName );
-    void OutputSpvHex( const std::vector<unsigned int> &spirv, const char *baseName,
-                       const char *varName );
-
-}  // namespace glslang
+#include "glslang/SPIRV/GlslangToSpv.h"
 
 namespace Ogre
 {
@@ -105,8 +71,8 @@ namespace Ogre
 
     private:
         // Prevent being able to copy this object
-        FreeModuleOnDestructor( const FreeModuleOnDestructor & );
-        FreeModuleOnDestructor &operator=( const FreeModuleOnDestructor & );
+        FreeModuleOnDestructor( const FreeModuleOnDestructor & ) = delete;
+        FreeModuleOnDestructor &operator=( const FreeModuleOnDestructor & ) = delete;
     };
 
     //-----------------------------------------------------------------------
@@ -143,7 +109,7 @@ namespace Ogre
         mShaderSyntax = ( languageName.find( "hlsl" ) != String::npos ) ? HLSL : GLSL;
         mDrawIdLocation = ( mShaderSyntax == GLSL ) ? 15 : 0;
     }
-    //---------------------------------------------------------------------------
+    //-----------------------------------------------------------------------
     VulkanProgram::~VulkanProgram()
     {
         // Have to call this here rather than in Resource destructor
@@ -155,6 +121,31 @@ namespace Ogre
         else
         {
             unloadHighLevel();
+        }
+    }
+    //-----------------------------------------------------------------------
+    void VulkanProgram::notifyDeviceLost()
+    {
+        if( mShaderModule )
+        {
+            vkDestroyShaderModule( mDevice->mDevice, mShaderModule, 0 );
+            mShaderModule = 0;
+        }
+    }
+    //-----------------------------------------------------------------------
+    void VulkanProgram::notifyDeviceRestored( unsigned pass )
+    {
+        if( pass == 0 && mCompiled && !mSpirv.empty() )
+        {
+            VkShaderModuleCreateInfo moduleCi;
+            makeVkStruct( moduleCi, VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO );
+            moduleCi.codeSize = mSpirv.size() * sizeof( uint32 );
+            moduleCi.pCode = mSpirv.data();
+            VkResult result = vkCreateShaderModule( mDevice->mDevice, &moduleCi, 0, &mShaderModule );
+            checkVkResult( mDevice, result, "vkCreateShaderModule" );
+
+            setObjectName( mDevice->mDevice, (uint64_t)mShaderModule,
+                           VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT, mName.c_str() );
         }
     }
     //-----------------------------------------------------------------------
@@ -358,7 +349,7 @@ namespace Ogre
                     moduleCi.pCode = mSpirv.data();
                     VkResult result =
                         vkCreateShaderModule( mDevice->mDevice, &moduleCi, 0, &mShaderModule );
-                    checkVkResult( result, "vkCreateShaderModule" );
+                    checkVkResult( mDevice, result, "vkCreateShaderModule" );
 
                     setObjectName( mDevice->mDevice, (uint64_t)mShaderModule,
                                    VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT, mName.c_str() );
@@ -754,12 +745,14 @@ namespace Ogre
                          "VulkanProgram::compile" );
         }
 
-        // TODO: Support SPIR-Vs with mReflectArrayRootLayouts == true or with mCustomRootLayout == false
-        // Is it even worth it? Most shaders won't need and it just adds complexity.
-        if( mCompiled && !mSpirv.empty() && mCustomRootLayout && !mReflectArrayRootLayouts )
+        if( mCompiled && !mSpirv.empty() )
         {
             GpuProgramManager &gpuProgramManager = GpuProgramManager::getSingleton();
-            if( gpuProgramManager.getSaveMicrocodesToCache() )
+            // TODO: Support caching SPIR-Vs with mReflectArrayRootLayouts == true or with
+            // mCustomRootLayout == false Is it even worth it? Most shaders won't need and it
+            // just adds complexity.
+            if( gpuProgramManager.getSaveMicrocodesToCache() && mCustomRootLayout &&
+                !mReflectArrayRootLayouts )
             {
                 const uint32 spirvSizeBytes = static_cast<uint32>( mSpirv.size() * sizeof( uint32 ) );
                 GpuProgramManager::Microcode newMicrocode =
@@ -775,7 +768,7 @@ namespace Ogre
             moduleCi.codeSize = mSpirv.size() * sizeof( uint32 );
             moduleCi.pCode = mSpirv.data();
             VkResult result = vkCreateShaderModule( mDevice->mDevice, &moduleCi, 0, &mShaderModule );
-            checkVkResult( result, "vkCreateShaderModule" );
+            checkVkResult( mDevice, result, "vkCreateShaderModule" );
 
             setObjectName( mDevice->mDevice, (uint64_t)mShaderModule,
                            VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT, mName.c_str() );

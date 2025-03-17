@@ -28,7 +28,7 @@ cd Ogre
 IF NOT EXIST ogre-next-deps (
 	mkdir ogre-next-deps
 	echo --- Cloning ogre-next-deps ---
-	git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps
+	call git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps
 ) ELSE (
 	echo --- ogre-next-deps repo detected. Cloning skipped ---
 )
@@ -45,7 +45,7 @@ echo --- Building ogre-next-deps ---
 cd ../../
 IF NOT EXIST ogre-next (
 	echo --- Cloning Ogre master ---
-	git clone --branch %OGRE_BRANCH_NAME% https://github.com/OGRECave/ogre-next
+	call git clone --branch %OGRE_BRANCH_NAME% https://github.com/OGRECave/ogre-next
 )
 cd ogre-next
 IF NOT EXIST Dependencies (

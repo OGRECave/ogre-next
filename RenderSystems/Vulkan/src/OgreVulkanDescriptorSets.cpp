@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreVulkanTextureGpuManager.h"
 #include "OgreVulkanUtils.h"
 #include "Vao/OgreVulkanReadOnlyBufferPacked.h"
+#include "Vao/OgreVulkanReadOnlyTBufferWorkaround.h"
 #include "Vao/OgreVulkanTexBufferPacked.h"
 #include "Vao/OgreVulkanUavBufferPacked.h"
 
@@ -58,8 +59,8 @@ namespace Ogre
             {
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
                 sampler = static_cast<VkSampler>( samplerblock->mRsData );
-#else // VK handles are always 64bit, even on 32bit systems
-                sampler = *static_cast<VkSampler*>( samplerblock->mRsData );
+#else  // VK handles are always 64bit, even on 32bit systems
+                sampler = *static_cast<VkSampler *>( samplerblock->mRsData );
 #endif
             }
             VkDescriptorImageInfo imageInfo;
@@ -163,7 +164,14 @@ namespace Ogre
 
         mTextures.reserve( numTextures );
         mBuffers.resizePOD( numTexBuffers );
+#ifdef OGRE_VK_WORKAROUND_ADRENO_6xx_READONLY_IS_TBUFFER
+        if( Workarounds::mAdreno6xxReadOnlyIsTBuffer )
+            mReadOnlyBuffers2.resizePOD( numROBuffers );
+        else
+            mReadOnlyBuffers.resizePOD( numROBuffers );
+#else
         mReadOnlyBuffers.resizePOD( numROBuffers );
+#endif
         numTexBuffers = 0u;
         numROBuffers = 0u;
 
@@ -189,12 +197,35 @@ namespace Ogre
                 }
                 else
                 {
+#ifdef OGRE_VK_WORKAROUND_ADRENO_6xx_READONLY_IS_TBUFFER
+                    if( Workarounds::mAdreno6xxReadOnlyIsTBuffer )
+                    {
+                        OGRE_ASSERT_HIGH(
+                            dynamic_cast<VulkanReadOnlyTBufferWorkaround *>( bufferSlot.buffer ) );
+                        VulkanReadOnlyTBufferWorkaround *vulkanBuffer =
+                            static_cast<VulkanReadOnlyTBufferWorkaround *>( bufferSlot.buffer );
+
+                        mReadOnlyBuffers2[numROBuffers] =
+                            vulkanBuffer->createBufferView( bufferSlot.offset, bufferSlot.sizeBytes );
+                    }
+                    else
+                    {
+                        OGRE_ASSERT_HIGH(
+                            dynamic_cast<VulkanReadOnlyBufferPacked *>( bufferSlot.buffer ) );
+                        VulkanReadOnlyBufferPacked *vulkanBuffer =
+                            static_cast<VulkanReadOnlyBufferPacked *>( bufferSlot.buffer );
+
+                        vulkanBuffer->setupBufferInfo( mReadOnlyBuffers[numROBuffers], bufferSlot.offset,
+                                                       bufferSlot.sizeBytes );
+                    }
+#else
                     OGRE_ASSERT_HIGH( dynamic_cast<VulkanReadOnlyBufferPacked *>( bufferSlot.buffer ) );
                     VulkanReadOnlyBufferPacked *vulkanBuffer =
                         static_cast<VulkanReadOnlyBufferPacked *>( bufferSlot.buffer );
 
                     vulkanBuffer->setupBufferInfo( mReadOnlyBuffers[numROBuffers], bufferSlot.offset,
                                                    bufferSlot.sizeBytes );
+#endif
                     ++numROBuffers;
                 }
             }

@@ -204,6 +204,8 @@ namespace Ogre
     const IdString HlmsBaseProp::AlphaBlend = IdString( "hlms_alphablend" );
     const IdString HlmsBaseProp::AlphaToCoverage = IdString( "hlms_alpha_to_coverage" );
     const IdString HlmsBaseProp::AlphaHash = IdString( "hlms_alpha_hash" );
+    const IdString HlmsBaseProp::AccurateNonUniformNormalScaling =
+        IdString( "hlms_accurate_non_uniform_normal_scaling" );
     const IdString HlmsBaseProp::ScreenSpaceRefractions = IdString( "hlms_screen_space_refractions" );
     // We use a different convention because it's a really private property that ideally
     // shouldn't be exposed to users.
@@ -2036,7 +2038,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HlmsCache *Hlms::addStubShaderCache( uint32 hash )
     {
-        HlmsCache cache( hash, mType, HlmsPso() );
+        HlmsCache cache( hash, mType, HLMS_CACHE_FLAGS_COMPILATION_REQUIRED, HlmsPso() );
         HlmsCacheVec::iterator it =
             std::lower_bound( mShaderCache.begin(), mShaderCache.end(), &cache, OrderCacheByHash );
 
@@ -2054,7 +2056,7 @@ namespace Ogre
     {
         ScopedLock lock( mMutex );
 
-        HlmsCache cache( hash, mType, pso );
+        HlmsCache cache( hash, mType, HLMS_CACHE_FLAGS_NONE, pso );
         HlmsCacheVec::iterator it =
             std::lower_bound( mShaderCache.begin(), mShaderCache.end(), &cache, OrderCacheByHash );
 
@@ -2070,7 +2072,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     const HlmsCache *Hlms::getShaderCache( uint32 hash ) const
     {
-        HlmsCache cache( hash, mType, HlmsPso() );
+        HlmsCache cache( hash, mType, HLMS_CACHE_FLAGS_NONE, HlmsPso() );
         HlmsCacheVec::const_iterator it =
             std::lower_bound( mShaderCache.begin(), mShaderCache.end(), &cache, OrderCacheByHash );
 
@@ -2666,7 +2668,8 @@ namespace Ogre
     const HlmsCache *Hlms::createShaderCacheEntry( uint32 renderableHash, const HlmsCache &passCache,
                                                    uint32 finalHash,
                                                    const QueuedRenderable &queuedRenderable,
-                                                   HlmsCache *reservedStubEntry, const size_t tid )
+                                                   HlmsCache *reservedStubEntry, uint64 deadline,
+                                                   const size_t tid )
     {
         OgreProfileExhaustive( "Hlms::createShaderCacheEntry" );
 
@@ -2705,13 +2708,33 @@ namespace Ogre
                 setProperty( tid, *itor++, 1 );
         }
 
-        notifyPropertiesMergedPreGenerationStep( tid );
+        ShaderCodeCache codeCache( renderableCache.pieces );
+
+        const PropertiesMergeStatus status =
+            notifyPropertiesMergedPreGenerationStep( tid, codeCache.mergedCache.pieces );
+        if( status != PropertiesMergeStatusOk )
+        {
+            const HlmsDatablock *datablock = queuedRenderable.renderable->getDatablock();
+            const String meshName =
+                SceneManager::deduceMovableObjectName( queuedRenderable.movableObject );
+
+            LogManager::getSingleton().logMessage(
+                "[tid = " + StringConverter::toString( tid ) + "] datablock '" +
+                *datablock->getNameStr() + "' from MovableObject '" + meshName +
+                "' has issues. See previous log entries matching the same tid." );
+
+            if( status == PropertiesMergeStatusError )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                             "Errors encountered while generating shaders. See Ogre.log",
+                             "Hlms::createShaderCacheEntry" );
+            }
+        }
         mListener->propertiesMergedPreGenerationStep( this, passCache, renderableCache.setProperties,
                                                       renderableCache.pieces, mT[tid].setProperties,
                                                       queuedRenderable, tid );
 
         // Retrieve the shader code from the code cache
-        ShaderCodeCache codeCache( renderableCache.pieces );
         unsetProperty( tid, HlmsPsoProp::Macroblock );
         unsetProperty( tid, HlmsPsoProp::Blendblock );
         unsetProperty( tid, HlmsPsoProp::InputLayoutId );
@@ -2795,7 +2818,7 @@ namespace Ogre
         LogManager::getSingleton().logMessage(
             "Compiling new PSO for datablock: " + datablock->getName().getFriendlyText(), LML_TRIVIAL );
 #endif
-        mRenderSystem->_hlmsPipelineStateObjectCreated( &pso );
+        bool rsPsoCreated = mRenderSystem->_hlmsPipelineStateObjectCreated( &pso, deadline );
 
         if( reservedStubEntry )
         {
@@ -2804,7 +2827,12 @@ namespace Ogre
                              !reservedStubEntry->pso.tesselationHullShader &&
                              !reservedStubEntry->pso.tesselationDomainShader &&
                              !reservedStubEntry->pso.pixelShader && "Race condition?" );
-            reservedStubEntry->pso = pso;
+            if( rsPsoCreated )
+                reservedStubEntry->pso = pso;
+            reservedStubEntry->flags =
+                !rsPsoCreated && reservedStubEntry->flags == HLMS_CACHE_FLAGS_COMPILATION_REQUESTED
+                    ? HLMS_CACHE_FLAGS_COMPILATION_REQUIRED  // recoverable error (timeout?), reschedule
+                    : HLMS_CACHE_FLAGS_NONE;
         }
 
         const HlmsCache *retVal =
@@ -2815,13 +2843,64 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::notifyPropertiesMergedPreGenerationStep( const size_t tid )
+    Hlms::PropertiesMergeStatus Hlms::notifyPropertiesMergedPreGenerationStep( const size_t tid,
+                                                                               PiecesMap *inOutPieces )
     {
         if( getProperty( tid, HlmsBaseProp::AlphaToCoverage ) == HlmsBlendblock::A2cEnabledMsaaOnly )
         {
             if( getProperty( tid, HlmsBaseProp::MsaaSamples ) <= 1 )
                 setProperty( tid, HlmsBaseProp::AlphaToCoverage, 0 );
         }
+
+        // Pass cache data cannot cache pieces, so it stored shadow maps' UV values as raw
+        // floating point in the properties. We can now turn it into pieces.
+        const int32 numShadowMapLights = getProperty( tid, HlmsBaseProp::NumShadowMapLights );
+
+        char tmpBuffer[64];
+        LwString propName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+
+        char tmpBuffer2[32];
+        LwString valueStr( LwString::FromEmptyPointer( tmpBuffer2, sizeof( tmpBuffer2 ) ) );
+
+        propName = "hlms_shadowmap";
+        const size_t basePropNameSize = propName.size();
+
+        for( int32 i = 0; i < numShadowMapLights; ++i )
+        {
+            propName.resize( basePropNameSize );
+            propName.a( i );  // hlms_shadowmap0
+
+            const size_t basePropSize = propName.size();
+
+            const uint32 kNumSuffixes = 6u;
+            const char *suffixes[kNumSuffixes] = { "_uv_min_x",    "_uv_min_y",  //
+                                                   "_uv_max_x",    "_uv_max_y",
+                                                   "_uv_length_x", "_uv_length_y" };
+
+            for( uint32 j = 0; j < kNumSuffixes; ++j )
+            {
+                propName.resize( basePropSize );
+                propName.a( suffixes[j] );
+
+                const IdString propNameHash = propName.c_str();
+
+                const int32_t value = getProperty( tid, propNameHash, -1 );
+                if( value != -1 )
+                {
+                    const float fValue = bit_cast<float>( value );
+
+                    valueStr.clear();
+                    valueStr.a( fValue );
+
+                    const PiecesMap::value_type v = { propNameHash, valueStr.c_str() };
+
+                    for( size_t k = 0u; k < NumShaderTypes; ++k )
+                        inOutPieces[k].insert( v );
+                }
+            }
+        }
+
+        return PropertiesMergeStatusOk;
     }
     //-----------------------------------------------------------------------------------
     uint16 Hlms::calculateHashForV1( Renderable *renderable )
@@ -3084,6 +3163,8 @@ namespace Ogre
 
         const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
 
+        bool bForceCullNone = false;
+
         if( !casterPass )
         {
             size_t numShadowMapLights = 0u;
@@ -3165,40 +3246,24 @@ namespace Ogre
                             setProperty( kNoTid, propName.c_str(), 1 );
                         }
 
-                        float intPart, fractPart;
+                        propName.resize( basePropSize );
+                        propName.a( "_uv_min_x" );
+                        setProperty( kNoTid, propName.c_str(),
+                                     bit_cast<int32_t>( (float)shadowTexDef->uvOffset.x ) );
 
-                        fractPart = modff( (float)shadowTexDef->uvOffset.x, &intPart );
                         propName.resize( basePropSize );
-                        propName.a( "_uv_min_x_int" );
-                        setProperty( kNoTid, propName.c_str(), (int32)intPart );
-                        propName.resize( basePropSize );
-                        propName.a( "_uv_min_x_fract" );
-                        setProperty( kNoTid, propName.c_str(), (int32)( fractPart * 100000.0f ) );
+                        propName.a( "_uv_min_y" );
+                        setProperty( kNoTid, propName.c_str(),
+                                     bit_cast<int32_t>( (float)shadowTexDef->uvOffset.y ) );
 
-                        fractPart = modff( (float)shadowTexDef->uvOffset.y, &intPart );
+                        const Vector2 uvMax = shadowTexDef->uvOffset + shadowTexDef->uvLength;
                         propName.resize( basePropSize );
-                        propName.a( "_uv_min_y_int" );
-                        setProperty( kNoTid, propName.c_str(), (int32)intPart );
-                        propName.resize( basePropSize );
-                        propName.a( "_uv_min_y_fract" );
-                        setProperty( kNoTid, propName.c_str(), (int32)( fractPart * 100000.0f ) );
+                        propName.a( "_uv_max_x" );
+                        setProperty( kNoTid, propName.c_str(), bit_cast<int32_t>( (float)uvMax.x ) );
 
-                        Vector2 uvMax = shadowTexDef->uvOffset + shadowTexDef->uvLength;
-                        fractPart = modff( (float)uvMax.x, &intPart );
                         propName.resize( basePropSize );
-                        propName.a( "_uv_max_x_int" );
-                        setProperty( kNoTid, propName.c_str(), (int32)intPart );
-                        propName.resize( basePropSize );
-                        propName.a( "_uv_max_x_fract" );
-                        setProperty( kNoTid, propName.c_str(), (int32)( fractPart * 100000.0f ) );
-
-                        fractPart = modff( (float)uvMax.y, &intPart );
-                        propName.resize( basePropSize );
-                        propName.a( "_uv_max_y_int" );
-                        setProperty( kNoTid, propName.c_str(), (int32)intPart );
-                        propName.resize( basePropSize );
-                        propName.a( "_uv_max_y_fract" );
-                        setProperty( kNoTid, propName.c_str(), (int32)( fractPart * 100000.0f ) );
+                        propName.a( "_uv_max_y" );
+                        setProperty( kNoTid, propName.c_str(), bit_cast<int32_t>( (float)uvMax.y ) );
 
                         propName.resize( basePropSize );
                         propName.a( "_array_idx" );
@@ -3207,21 +3272,15 @@ namespace Ogre
                         const Light *light = shadowNode->getLightAssociatedWith( shadowMapTexIdx );
                         if( useStaticBranchShadowMapLights )
                         {
-                            fractPart = modff( (float)shadowTexDef->uvLength.x, &intPart );
                             propName.resize( basePropSize );
-                            propName.a( "_uv_length_x_int" );
-                            setProperty( kNoTid, propName.c_str(), (int32)intPart );
-                            propName.resize( basePropSize );
-                            propName.a( "_uv_length_x_fract" );
-                            setProperty( kNoTid, propName.c_str(), (int32)( fractPart * 100000.0f ) );
+                            propName.a( "_uv_length_x" );
+                            setProperty( kNoTid, propName.c_str(),
+                                         bit_cast<int32_t>( (float)shadowTexDef->uvLength.x ) );
 
-                            fractPart = modff( (float)shadowTexDef->uvLength.y, &intPart );
                             propName.resize( basePropSize );
-                            propName.a( "_uv_length_y_int" );
-                            setProperty( kNoTid, propName.c_str(), (int32)intPart );
-                            propName.resize( basePropSize );
-                            propName.a( "_uv_length_y_fract" );
-                            setProperty( kNoTid, propName.c_str(), (int32)( fractPart * 100000.0f ) );
+                            propName.a( "_uv_length_y" );
+                            setProperty( kNoTid, propName.c_str(),
+                                         bit_cast<int32_t>( (float)shadowTexDef->uvLength.y ) );
 
                             if( light->getType() == Light::LT_DIRECTIONAL )
                             {
@@ -3252,23 +3311,15 @@ namespace Ogre
                                 propName.a( "_is_point_light" );
                                 setProperty( kNoTid, propName.c_str(), 1 );
 
-                                fractPart = modff( (float)shadowTexDef->uvLength.x, &intPart );
                                 propName.resize( basePropSize );
-                                propName.a( "_uv_length_x_int" );
-                                setProperty( kNoTid, propName.c_str(), (int32)intPart );
-                                propName.resize( basePropSize );
-                                propName.a( "_uv_length_x_fract" );
+                                propName.a( "_uv_length_x" );
                                 setProperty( kNoTid, propName.c_str(),
-                                             (int32)( fractPart * 100000.0f ) );
+                                             bit_cast<int32_t>( (float)shadowTexDef->uvLength.x ) );
 
-                                fractPart = modff( (float)shadowTexDef->uvLength.y, &intPart );
                                 propName.resize( basePropSize );
-                                propName.a( "_uv_length_y_int" );
-                                setProperty( kNoTid, propName.c_str(), (int32)intPart );
-                                propName.resize( basePropSize );
-                                propName.a( "_uv_length_y_fract" );
+                                propName.a( "_uv_length_y" );
                                 setProperty( kNoTid, propName.c_str(),
-                                             (int32)( fractPart * 100000.0f ) );
+                                             bit_cast<int32_t>( (float)shadowTexDef->uvLength.y ) );
                             }
                             else if( light->getType() == Light::LT_SPOTLIGHT )
                             {
@@ -3326,6 +3377,7 @@ namespace Ogre
                     static_cast<const CompositorPassSceneDef *>( pass->getDefinition() );
                 if( passSceneDef->mUvBakingSet != 0xFF )
                 {
+                    bForceCullNone = true;
                     setProperty( kNoTid, HlmsBaseProp::UseUvBaking, 1 );
                     setProperty( kNoTid, HlmsBaseProp::UvBaking, passSceneDef->mUvBakingSet );
                     if( passSceneDef->mBakeLightingOnly )
@@ -3656,7 +3708,7 @@ namespace Ogre
         mListener->preparePassHash( shadowNode, casterPass, dualParaboloid, sceneManager, this );
 
         PassCache passCache;
-        passCache.passPso = getPassPsoForScene( sceneManager );
+        passCache.passPso = getPassPsoForScene( sceneManager, bForceCullNone );
         passCache.properties = mT[kNoTid].setProperties;
 
         assert( mPassCache.size() <= HlmsBits::PassMask &&
@@ -3670,14 +3722,14 @@ namespace Ogre
 
         const uint32 hash = static_cast<uint32>( it - mPassCache.begin() ) << HlmsBits::PassShift;
 
-        HlmsCache retVal( hash, mType, HlmsPso() );
+        HlmsCache retVal( hash, mType, HLMS_CACHE_FLAGS_NONE, HlmsPso() );
         retVal.setProperties = mT[kNoTid].setProperties;
         retVal.pso.pass = passCache.passPso;
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    HlmsPassPso Hlms::getPassPsoForScene( SceneManager *sceneManager )
+    HlmsPassPso Hlms::getPassPsoForScene( SceneManager *sceneManager, const bool bForceCullNone )
     {
         const RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
 
@@ -3726,6 +3778,9 @@ namespace Ogre
 
         if( sceneManager->getCamerasInProgress().renderingCamera->getNeedsDepthClamp() )
             strongMacroblockBits |= HlmsPassPso::DepthClampEnabled;
+
+        if( bForceCullNone )
+            passPso.strongMacroblockBits |= HlmsPassPso::ForceCullNone;
 
         const bool invertVertexWinding = mRenderSystem->getInvertVertexWinding();
 
@@ -3824,13 +3879,8 @@ namespace Ogre
                 // Low level is a special case because it doesn't (yet?) support parallel compilation
                 if( !parallelQueue || mType == HLMS_LOW_LEVEL )
                 {
-                    bool saveShadowCasterProp = getProperty( kNoTid, HlmsBaseProp::ShadowCaster );
-                    if( saveShadowCasterProp != casterPass )
-                        setProperty( kNoTid, HlmsBaseProp::ShadowCaster, casterPass );
-                    lastReturnedValue = createShaderCacheEntry( hash[0], passCache, finalHash,
-                                                                queuedRenderable, nullptr, kNoTid );
-                    if( saveShadowCasterProp != casterPass )
-                        setProperty( kNoTid, HlmsBaseProp::ShadowCaster, saveShadowCasterProp );
+                    lastReturnedValue = createShaderCacheEntry(
+                        hash[0], passCache, finalHash, queuedRenderable, nullptr, UINT64_MAX, kNoTid );
                 }
                 else
                 {
@@ -3842,17 +3892,26 @@ namespace Ogre
                         { &passCache, stubEntry, queuedRenderable, hash[0], finalHash } );
                 }
             }
+            else if( lastReturnedValue->flags == HLMS_CACHE_FLAGS_COMPILATION_REQUIRED )
+            {
+                // Stub entry was created for previous frame, but compilation was skipped
+                // due to exhausted time budget, and attempt should be repeated
+                HlmsCache *stubEntry = const_cast<HlmsCache *>( lastReturnedValue );
+
+                parallelQueue->pushRequest(
+                    { &passCache, stubEntry, queuedRenderable, hash[0], finalHash } );
+            }
         }
 
         return lastReturnedValue;
     }
     //-----------------------------------------------------------------------------------
     void Hlms::compileStubEntry( const HlmsCache &passCache, HlmsCache *reservedStubEntry,
-                                 QueuedRenderable queuedRenderable, uint32 renderableHash,
-                                 uint32 finalHash, size_t tid )
+                                 uint64 deadline, QueuedRenderable queuedRenderable,
+                                 uint32 renderableHash, uint32 finalHash, size_t tid )
     {
         createShaderCacheEntry( renderableHash, passCache, finalHash, queuedRenderable,
-                                reservedStubEntry, tid );
+                                reservedStubEntry, deadline, tid );
     }
     //-----------------------------------------------------------------------------------
     uint32 Hlms::getMaterialSerial01( uint32 lastReturnedValue, const HlmsCache &passCache,

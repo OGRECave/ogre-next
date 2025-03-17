@@ -1,17 +1,9 @@
-compositor_node SSAO_RenderNode
+compositor_node SSAO_MainRender
 {
-	in 0 rt_renderwindow
-
 	texture RT0				target_width target_height PFG_RGBA8_UNORM_SRGB		msaa_auto
-	texture gBufferNormals	target_width target_height PFG_R10G10B10A2_UNORM	msaa_auto explicit_resolve
+	texture gBufferNormals	target_width target_height PFG_R10G10B10A2_UNORM	msaa_auto
 	
-	texture depthTexture		target_width			target_height				PFG_D32_FLOAT msaa_auto
-	texture depthTextureCopy	target_width_scaled 0.5	target_height_scaled 0.5	PFG_D32_FLOAT
-	
-	texture ssaoTexture target_width_scaled 0.5 target_height_scaled 0.5 PFG_R16_FLOAT depth_pool 0
-	
-	texture blurTextureHorizontal	target_width target_height PFG_R16_FLOAT depth_pool 0
-	texture blurTextureVertical		target_width target_height PFG_R16_FLOAT depth_pool 0
+	texture depthTexture	target_width			target_height				PFG_D32_FLOAT msaa_auto
 
 	rtv RT0
 	{
@@ -35,16 +27,62 @@ compositor_node SSAO_RenderNode
 			gen_normals_gbuffer true
 		}
 	}
-	
+
+	out 0 RT0
+	out 1 gBufferNormals
+	out 2 depthTexture
+}
+
+compositor_node SSAO_DepthDownsampler
+{
+	in 0 depthTexture
+
+	texture depthTextureCopy	target_width_scaled 0.5	target_height_scaled 0.5	PFG_D32_FLOAT
+
 	target depthTextureCopy
 	{
 		pass render_quad
 		{
 			load { all dont_care }
 			material Ogre/Depth/DownscaleMax
-	    	input 0 depthTexture
+			input 0 depthTexture
 		}
 	}
+
+	out 0 depthTextureCopy
+}
+
+compositor_node SSAO_DepthDownsamplerMSAA
+{
+	in 0 depthTexture
+
+	texture depthTextureCopy	target_width_scaled 0.5	target_height_scaled 0.5	PFG_D32_FLOAT
+
+	target depthTextureCopy
+	{
+		pass render_quad
+		{
+			load { all dont_care }
+			material Ogre/Depth/DownscaleMax_Subsample0
+			input 0 depthTexture
+		}
+	}
+
+	out 0 depthTextureCopy
+}
+
+compositor_node SSAO_GenerationSSAO_and_Composite
+{
+	in 0 RT0
+	in 1 gBufferNormals
+	in 2 depthTextureCopy
+
+	in 3 rt_renderwindow
+
+	texture ssaoTexture target_width_scaled 0.5 target_height_scaled 0.5 PFG_R16_FLOAT depth_pool 0
+
+	texture blurTextureHorizontal	target_width target_height PFG_R16_FLOAT depth_pool 0
+	texture blurTextureVertical		target_width target_height PFG_R16_FLOAT depth_pool 0
 
 	target ssaoTexture
 	{
@@ -56,13 +94,13 @@ compositor_node SSAO_RenderNode
 				clear_colour	1 1 1 1
 			}
 			material SSAO/HS
-	    	input 0 depthTextureCopy
+			input 0 depthTextureCopy
 			input 1 gBufferNormals
 
 			quad_normals	camera_far_corners_view_space
 		}
 	}
-	
+
 	target blurTextureHorizontal
 	{
 		pass render_quad
@@ -73,7 +111,7 @@ compositor_node SSAO_RenderNode
 			input 1 depthTextureCopy
 		}
 	}
-	
+
 	target blurTextureVertical
 	{
 		pass render_quad
@@ -90,13 +128,31 @@ compositor_node SSAO_RenderNode
 		pass render_quad
 		{
 			load { all dont_care }
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
 			material SSAO/Apply
 			input 0 blurTextureVertical
 			input 1 RT0
 		}
-		
+
 		pass render_scene
 		{
+			// We must set depth & stencil to dont_care because the
+			// Window's DepthBuffer is Memoryless by default and Overlays break the pass.
+			load
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
+
 			lod_update_list	off
 
 			//Render Overlays
@@ -109,5 +165,35 @@ compositor_node SSAO_RenderNode
 
 workspace SSAOWorkspace
 {
-	connect_output SSAO_RenderNode 0
+	/**
+		SSAO_MainRender							SSAO_GenerationSSAO_and_Composite
+			0 ---------------------------------> 0
+			1 ---------------------------------> 1
+					SSAO_DepthDownsampler
+			2 ---->  0  -----------------------> 2
+
+		connect_output ------------------------> 3
+	*/
+	connect SSAO_MainRender				2	SSAO_DepthDownsampler				0
+	connect SSAO_MainRender				0 1 SSAO_GenerationSSAO_and_Composite	0 1
+	connect SSAO_DepthDownsampler		0	SSAO_GenerationSSAO_and_Composite	2
+	connect_output							SSAO_GenerationSSAO_and_Composite	3
+}
+
+
+workspace SSAOWorkspaceMSAA
+{
+	/**
+		SSAO_MainRender							SSAO_GenerationSSAO_and_Composite
+			0 ---------------------------------> 0
+			1 ---------------------------------> 1
+					SSAO_DepthDownsamplerMSAA
+			2 ---->  0  -----------------------> 2
+
+		connect_output ------------------------> 3
+	*/
+	connect SSAO_MainRender				2	SSAO_DepthDownsamplerMSAA			0
+	connect SSAO_MainRender				0 1 SSAO_GenerationSSAO_and_Composite	0 1
+	connect SSAO_DepthDownsamplerMSAA	0	SSAO_GenerationSSAO_and_Composite	2
+	connect_output							SSAO_GenerationSSAO_and_Composite	3
 }

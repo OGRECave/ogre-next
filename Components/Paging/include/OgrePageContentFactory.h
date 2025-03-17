@@ -47,7 +47,7 @@ namespace Ogre
     /** Define the interface to a factory class that will create subclasses
     of PageContent. 
     */
-    class PageContentFactory : public PageAlloc
+    class PageContentFactory
     {
     public:
         PageContentFactory() {}

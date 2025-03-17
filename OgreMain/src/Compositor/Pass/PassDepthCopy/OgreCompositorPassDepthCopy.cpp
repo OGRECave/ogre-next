@@ -66,7 +66,7 @@ namespace Ogre
         CompositorPass( definition, parentNode ),
         mDefinition( definition )
     {
-        initialize( rtv );
+        initialize( 0, true );
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassDepthCopy::execute( const Camera *lodCamera )
@@ -95,11 +95,19 @@ namespace Ogre
         TextureGpu *srcChannel = mParentNode->getDefinedTexture( mDefinition->mSrcDepthTextureName );
         TextureGpu *dstChannel = mParentNode->getDefinedTexture( mDefinition->mDstDepthTextureName );
 
-        TextureBox srcBox = srcChannel->getEmptyBox( 0 );
-        TextureBox dstBox = dstChannel->getEmptyBox( 0 );
-        srcChannel->copyTo( dstChannel, dstBox, 0, srcBox, 0, false,
-                            CopyEncTransitionMode::AlreadyInLayoutThenAuto,
-                            CopyEncTransitionMode::AlreadyInLayoutThenAuto );
+        uint8 lastMipmapPlus1 = mDefinition->mMipLevelStart + mDefinition->mNumMiplevels;
+        if( mDefinition->mNumMiplevels == 0u )
+            lastMipmapPlus1 = srcChannel->getNumMipmaps();
+
+        CopyEncTransitionMode::CopyEncTransitionMode mode =
+            CopyEncTransitionMode::AlreadyInLayoutThenAuto;
+        for( uint8 mipLevel = mDefinition->mMipLevelStart; mipLevel < lastMipmapPlus1; ++mipLevel )
+        {
+            TextureBox srcBox = srcChannel->getEmptyBox( mipLevel );
+            TextureBox dstBox = dstChannel->getEmptyBox( mipLevel );
+            srcChannel->copyTo( dstChannel, dstBox, mipLevel, srcBox, mipLevel, false, mode, mode );
+            mode = CopyEncTransitionMode::Auto;
+        }
 
         notifyPassPosExecuteListeners();
     }

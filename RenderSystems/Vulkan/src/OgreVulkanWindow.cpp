@@ -63,13 +63,6 @@ namespace Ogre
         mDevice = device;
     }
     //-------------------------------------------------------------------------
-    void VulkanWindow::_initialize( TextureGpuManager *textureGpuManager )
-    {
-        OGRE_EXCEPT( Exception::ERR_INVALID_CALL,
-                     "Call _initialize( TextureGpuManager*, const NameValuePairList * ) instead",
-                     "VulkanWindow::_initialize" );
-    }
-    //-------------------------------------------------------------------------
     VulkanWindowNull::VulkanWindowNull( const String &title, uint32 width, uint32 height,
                                         bool fullscreenMode ) :
         VulkanWindow( title, width, height, fullscreenMode )
@@ -201,6 +194,21 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VulkanWindowSwapChainBased::~VulkanWindowSwapChainBased() {}
     //-------------------------------------------------------------------------
+    void VulkanWindowSwapChainBased::notifyDeviceLost()
+    {
+        destroySwapchain();
+        destroySurface();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanWindowSwapChainBased::notifyDeviceRestored( unsigned pass )
+    {
+        if( pass == 0 )
+        {
+            createSurface();
+            createSwapchain();
+        }
+    }
+    //-------------------------------------------------------------------------
     void VulkanWindowSwapChainBased::parseSharedParams( const NameValuePairList *miscParams )
     {
         NameValuePairList::const_iterator opt;
@@ -234,7 +242,7 @@ namespace Ogre
         uint32 numFormats = 0u;
         VkResult result = vkGetPhysicalDeviceSurfaceFormatsKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
                                                                 &numFormats, 0 );
-        checkVkResult( result, "vkGetPhysicalDeviceSurfaceFormatsKHR" );
+        checkVkResult( mDevice, result, "vkGetPhysicalDeviceSurfaceFormatsKHR" );
         if( numFormats == 0 )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
@@ -246,7 +254,7 @@ namespace Ogre
         formats.resize( numFormats );
         result = vkGetPhysicalDeviceSurfaceFormatsKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
                                                        &numFormats, formats.begin() );
-        checkVkResult( result, "vkGetPhysicalDeviceSurfaceFormatsKHR" );
+        checkVkResult( mDevice, result, "vkGetPhysicalDeviceSurfaceFormatsKHR" );
 
         PixelFormatGpu pixelFormat = PFG_UNKNOWN;
         for( size_t i = 0; i < numFormats && pixelFormat == PFG_UNKNOWN; ++i )
@@ -285,12 +293,43 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanWindowSwapChainBased::createSwapchain()
     {
+        if( mDevice->isDeviceLost() )  // notifyDeviceRestored() will call us again
+            return;
+
         mSuboptimal = false;
+
+        // Update pixelFormat, sample description, depth buffer defaults
+        mTexture->setPixelFormat( chooseSurfaceFormat( mHwGamma ) );
+        if( mDepthBuffer )
+        {
+            mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
+            if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
+                mStencilBuffer = mDepthBuffer;
+        }
+
+        mSampleDescription = mDevice->mRenderSystem->validateSampleDescription(
+            mRequestedSampleDescription, mTexture->getPixelFormat(),
+            TextureFlags::NotTexture | TextureFlags::RenderWindowSpecific );
+        mTexture->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
+        if( mDepthBuffer )
+            mDepthBuffer->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
+
+        if( mDepthBuffer )
+        {
+            mTexture->_setDepthBufferDefaults( mDepthBuffer->isTilerMemoryless()
+                                                   ? DepthBuffer::POOL_MEMORYLESS
+                                                   : DepthBuffer::NO_POOL_EXPLICIT_RTV,
+                                               false, mDepthBuffer->getPixelFormat() );
+        }
+        else
+        {
+            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
+        }
 
         VkSurfaceCapabilitiesKHR surfaceCaps;
         VkResult result = vkGetPhysicalDeviceSurfaceCapabilitiesKHR( mDevice->mPhysicalDevice,
                                                                      mSurfaceKHR, &surfaceCaps );
-        checkVkResult( result, "vkGetPhysicalDeviceSurfaceCapabilitiesKHR" );
+        checkVkResult( mDevice, result, "vkGetPhysicalDeviceSurfaceCapabilitiesKHR" );
 
         // Swapchain may be smaller/bigger than requested
         setFinalResolution( Math::Clamp( getWidth(), surfaceCaps.minImageExtent.width,
@@ -301,7 +340,7 @@ namespace Ogre
         VkBool32 supported;
         result = vkGetPhysicalDeviceSurfaceSupportKHR(
             mDevice->mPhysicalDevice, mDevice->mGraphicsQueue.mFamilyIdx, mSurfaceKHR, &supported );
-        checkVkResult( result, "vkGetPhysicalDeviceSurfaceSupportKHR" );
+        checkVkResult( mDevice, result, "vkGetPhysicalDeviceSurfaceSupportKHR" );
 
         if( !supported )
         {
@@ -311,12 +350,15 @@ namespace Ogre
         }
 
         uint32 numPresentModes = 0u;
-        vkGetPhysicalDeviceSurfacePresentModesKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
-                                                   &numPresentModes, 0 );
+        result = vkGetPhysicalDeviceSurfacePresentModesKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
+                                                            &numPresentModes, 0 );
+        checkVkResult( mDevice, result, "vkGetPhysicalDeviceSurfacePresentModesKHR" );
+
         FastArray<VkPresentModeKHR> presentModes;
         presentModes.resize( numPresentModes );
-        vkGetPhysicalDeviceSurfacePresentModesKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
-                                                   &numPresentModes, presentModes.begin() );
+        result = vkGetPhysicalDeviceSurfacePresentModesKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
+                                                            &numPresentModes, presentModes.begin() );
+        checkVkResult( mDevice, result, "vkGetPhysicalDeviceSurfacePresentModesKHR" );
 
         // targetPresentModes[0] is the target, targetPresentModes[1] is the fallback
         bool presentModesFound[2] = { false, false };
@@ -476,23 +518,21 @@ namespace Ogre
         //-----------------------------
 
         result = vkCreateSwapchainKHR( mDevice->mDevice, &swapchainCreateInfo, 0, &mSwapchain );
-        checkVkResult( result, "vkCreateSwapchainKHR" );
+        checkVkResult( mDevice, result, "vkCreateSwapchainKHR" );
 
         uint32 numSwapchainImages = 0u;
         result = vkGetSwapchainImagesKHR( mDevice->mDevice, mSwapchain, &numSwapchainImages, NULL );
-        checkVkResult( result, "vkGetSwapchainImagesKHR" );
+        checkVkResult( mDevice, result, "vkGetSwapchainImagesKHR" );
 
         OGRE_ASSERT_LOW( numSwapchainImages > 0u );
 
         mSwapchainImages.resize( numSwapchainImages );
         result = vkGetSwapchainImagesKHR( mDevice->mDevice, mSwapchain, &numSwapchainImages,
                                           mSwapchainImages.begin() );
-        checkVkResult( result, "vkGetSwapchainImagesKHR" );
+        checkVkResult( mDevice, result, "vkGetSwapchainImagesKHR" );
 
         // We need to retransition the main texture now to re-create MSAA surfaces (if any).
         // We need to do it now, because doing it later will overwrite the VkImage handles with NULL.
-        if( mTexture->getResidencyStatus() != GpuResidency::OnStorage )
-            mTexture->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
         mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
 
         acquireNextSwapchain();
@@ -505,7 +545,7 @@ namespace Ogre
         mDevice->mRenderSystem->notifySwapchainCreated( this );
     }
     //-------------------------------------------------------------------------
-    void VulkanWindowSwapChainBased::destroySwapchain()
+    void VulkanWindowSwapChainBased::destroySwapchain( bool finalDestruction )
     {
         mDevice->mRenderSystem->notifySwapchainDestroyed( this );
 
@@ -522,6 +562,39 @@ namespace Ogre
         }
 
         mSwapchainStatus = SwapchainReleased;
+
+        if( finalDestruction )
+        {
+            if( mTexture )
+            {
+                mTexture->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
+                OGRE_DELETE mTexture;
+                mTexture = 0;
+            }
+            if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
+            {
+                mStencilBuffer->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
+                OGRE_DELETE mStencilBuffer;
+                mStencilBuffer = 0;
+            }
+            if( mDepthBuffer )
+            {
+                mDepthBuffer->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
+                OGRE_DELETE mDepthBuffer;
+                mDepthBuffer = 0;
+                mStencilBuffer = 0;
+            }
+        }
+        else
+        {
+            if( mTexture && mTexture->getResidencyStatus() != GpuResidency::OnStorage )
+                mTexture->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+            if( mDepthBuffer && mDepthBuffer->getResidencyStatus() != GpuResidency::OnStorage )
+                mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+            if( mStencilBuffer && mStencilBuffer != mDepthBuffer &&
+                mStencilBuffer->getResidencyStatus() != GpuResidency::OnStorage )
+                mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+        }
     }
     //-------------------------------------------------------------------------
     void VulkanWindowSwapChainBased::acquireNextSwapchain()
@@ -568,10 +641,15 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanWindowSwapChainBased::destroy()
     {
-        destroySwapchain();
+        destroySwapchain( true );
+        destroySurface();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanWindowSwapChainBased::destroySurface()
+    {
         if( mSurfaceKHR )
         {
-            vkDestroySurfaceKHR( mDevice->mInstance, mSurfaceKHR, 0 );
+            vkDestroySurfaceKHR( mDevice->mInstance->mVkInstance, mSurfaceKHR, 0 );
             mSurfaceKHR = 0;
         }
     }
@@ -612,12 +690,6 @@ namespace Ogre
         mVSync = vSync;
 
         destroySwapchain();
-
-        if( mDepthBuffer )
-            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
-            mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-
         createSwapchain();
     }
     //-------------------------------------------------------------------------
@@ -629,12 +701,6 @@ namespace Ogre
         mCanDownloadData = bWantsToDownload;
 
         destroySwapchain();
-
-        if( mDepthBuffer )
-            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
-            mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-
         createSwapchain();
     }
     //-------------------------------------------------------------------------
@@ -726,7 +792,7 @@ namespace Ogre
     {
         if( name == "RENDERDOC_DEVICE" )
         {
-            *static_cast<VkInstance *>( pData ) = mDevice->mInstance;
+            *static_cast<VkInstance *>( pData ) = mDevice->mInstance->mVkInstance;
             return;
         }
         else

@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgreVulkanPrerequisites.h"
 
+#include "OgreVulkanDeviceResource.h"
 #include "OgreWindow.h"
 
 namespace Ogre
@@ -47,9 +48,6 @@ namespace Ogre
         VulkanWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
 
         void _setDevice( VulkanDevice *device );
-        void _initialize( TextureGpuManager *textureGpuManager ) override;
-        virtual void _initialize( TextureGpuManager *textureGpuManager,
-                                  const NameValuePairList *ogre_nullable miscParams ) = 0;
     };
 
     class VulkanWindowNull : public VulkanWindow
@@ -70,7 +68,7 @@ namespace Ogre
         void swapBuffers() override;
     };
 
-    class VulkanWindowSwapChainBased : public VulkanWindow
+    class VulkanWindowSwapChainBased : public VulkanWindow, protected VulkanDeviceResource
     {
     public:
         enum Backend
@@ -117,8 +115,13 @@ namespace Ogre
         void parseSharedParams( const NameValuePairList *miscParams );
 
         PixelFormatGpu chooseSurfaceFormat( bool hwGamma );
+        virtual void createSurface() = 0;
+        virtual void destroySurface();
         virtual void createSwapchain();
-        virtual void destroySwapchain();
+        virtual void destroySwapchain( bool finalDestruction = false );
+
+        void notifyDeviceLost() override;
+        void notifyDeviceRestored( unsigned pass ) override;
 
     public:
         void acquireNextSwapchain();

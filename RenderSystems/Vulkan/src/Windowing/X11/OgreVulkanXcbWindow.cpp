@@ -86,26 +86,6 @@ namespace Ogre
     {
         destroy();
 
-        if( mTexture )
-        {
-            mTexture->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
-            OGRE_DELETE mTexture;
-            mTexture = 0;
-        }
-        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
-        {
-            mStencilBuffer->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
-            OGRE_DELETE mStencilBuffer;
-            mStencilBuffer = 0;
-        }
-        if( mDepthBuffer )
-        {
-            mDepthBuffer->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
-            OGRE_DELETE mDepthBuffer;
-            mDepthBuffer = 0;
-            mStencilBuffer = 0;
-        }
-
         if( !mIsExternal )
         {
             xcb_destroy_window( mConnection, mXcbWindow );
@@ -202,9 +182,7 @@ namespace Ogre
 
         PFN_vkGetPhysicalDeviceXcbPresentationSupportKHR get_xcb_presentation_support =
             (PFN_vkGetPhysicalDeviceXcbPresentationSupportKHR)vkGetInstanceProcAddr(
-                mDevice->mInstance, "vkGetPhysicalDeviceXcbPresentationSupportKHR" );
-        PFN_vkCreateXcbSurfaceKHR create_xcb_surface = (PFN_vkCreateXcbSurfaceKHR)vkGetInstanceProcAddr(
-            mDevice->mInstance, "vkCreateXcbSurfaceKHR" );
+                mDevice->mInstance->mVkInstance, "vkGetPhysicalDeviceXcbPresentationSupportKHR" );
 
         if( !get_xcb_presentation_support( mDevice->mPhysicalDevice, mDevice->mGraphicsQueue.mFamilyIdx,
                                            mConnection, mScreen->root_visual ) )
@@ -213,48 +191,39 @@ namespace Ogre
                          "VulkanXcbWindow::_initialize" );
         }
 
-        VkXcbSurfaceCreateInfoKHR xcbSurfCreateInfo;
-        memset( &xcbSurfCreateInfo, 0, sizeof( xcbSurfCreateInfo ) );
-        xcbSurfCreateInfo.sType = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
-        xcbSurfCreateInfo.connection = mConnection;
-        xcbSurfCreateInfo.window = mXcbWindow;
-        create_xcb_surface( mDevice->mInstance, &xcbSurfCreateInfo, 0, &mSurfaceKHR );
-
         VulkanTextureGpuManager *textureManager =
             static_cast<VulkanTextureGpuManager *>( textureGpuManager );
 
         mTexture = textureManager->createTextureGpuWindow( this );
         if( DepthBuffer::DefaultDepthBufferFormat != PFG_NULL )
-            mDepthBuffer = textureManager->createWindowDepthBuffer();
+        {
+            const bool bMemoryLess = requestedMemoryless( miscParams );
+            mDepthBuffer = textureManager->createWindowDepthBuffer( bMemoryLess );
+        }
         mStencilBuffer = 0;
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
-        mTexture->setPixelFormat( chooseSurfaceFormat( mHwGamma ) );
-        if( mDepthBuffer )
-        {
-            mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
-            if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
-                mStencilBuffer = mDepthBuffer;
-        }
 
-        mSampleDescription = mDevice->mRenderSystem->validateSampleDescription(
-            mRequestedSampleDescription, mTexture->getPixelFormat(),
-            TextureFlags::NotTexture | TextureFlags::RenderWindowSpecific );
-        mTexture->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
-        if( mDepthBuffer )
-            mDepthBuffer->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
-
-        if( mDepthBuffer )
-        {
-            mTexture->_setDepthBufferDefaults( DepthBuffer::NO_POOL_EXPLICIT_RTV, false,
-                                               mDepthBuffer->getPixelFormat() );
-        }
-        else
-        {
-            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
-        }
-
+        createSurface();
         createSwapchain();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanXcbWindow::createSurface()
+    {
+        if( mDevice->isDeviceLost() )  // notifyDeviceRestored() will call us again
+            return;
+
+        PFN_vkCreateXcbSurfaceKHR create_xcb_surface = (PFN_vkCreateXcbSurfaceKHR)vkGetInstanceProcAddr(
+            mDevice->mInstance->mVkInstance, "vkCreateXcbSurfaceKHR" );
+
+        VkXcbSurfaceCreateInfoKHR xcbSurfCreateInfo;
+        memset( &xcbSurfCreateInfo, 0, sizeof( xcbSurfCreateInfo ) );
+        xcbSurfCreateInfo.sType = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
+        xcbSurfCreateInfo.connection = mConnection;
+        xcbSurfCreateInfo.window = mXcbWindow;
+        VkResult result =
+            create_xcb_surface( mDevice->mInstance->mVkInstance, &xcbSurfCreateInfo, 0, &mSurfaceKHR );
+        checkVkResult( mDevice, result, "vkCreateXcbSurfaceKHR" );
     }
     //-------------------------------------------------------------------------
     void VulkanXcbWindow::initConnection()
@@ -525,18 +494,10 @@ namespace Ogre
         if( newWidth == getWidth() && newHeight == getHeight() && !mRebuildingSwapchain )
             return;
 
-        mDevice->stall();
+        mDevice->stallIgnoringDeviceLost();
 
         destroySwapchain();
-
-        // Depth & Stencil buffer are normal textures; thus they need to be reeinitialized normally
-        if( mDepthBuffer )
-            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
-            mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-
         setFinalResolution( newWidth, newHeight );
-
         createSwapchain();
     }
     //-------------------------------------------------------------------------

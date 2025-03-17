@@ -19,11 +19,11 @@ void ColourFaderAffector2FX2::_cloneFrom( const ParticleAffector2 *_original )
     OGRE_ASSERT_HIGH( dynamic_cast<const ColourFaderAffector2FX2 *>( _original ) );
 
     const ColourFaderAffector2FX2 *original = static_cast<const ColourFaderAffector2FX2 *>( _original );
-    this->mStateChangeVal = original->mStateChangeVal;
     this->mColourAdj1 = original->mColourAdj1;
     this->mColourAdj2 = original->mColourAdj2;
     this->mMinColour = original->mMinColour;
     this->mMaxColour = original->mMaxColour;
+    this->mStateChangeVal = original->mStateChangeVal;
 }
 
 //-----------------------------------------------------------------------------
@@ -44,8 +44,8 @@ void ColourImageAffector2::_cloneFrom( const ParticleAffector2 *_original )
 
     const ColourImageAffector2 *original = static_cast<const ColourImageAffector2 *>( _original );
     this->mColourData = original->mColourData;
-    this->mInitialized = original->mInitialized;
     this->mColourImageName = original->mColourImageName;
+    this->mInitialized = original->mInitialized;
 }
 
 //-----------------------------------------------------------------------------
@@ -67,9 +67,9 @@ void DeflectorPlaneAffector2::_cloneFrom( const ParticleAffector2 *_original )
     OGRE_ASSERT_HIGH( dynamic_cast<const DeflectorPlaneAffector2 *>( _original ) );
 
     const DeflectorPlaneAffector2 *original = static_cast<const DeflectorPlaneAffector2 *>( _original );
-    this->mBounce = original->mBounce;
     this->mPlanePoint = original->mPlanePoint;
     this->mPlaneNormal = original->mPlaneNormal;
+    this->mBounce = original->mBounce;
 }
 
 //-----------------------------------------------------------------------------
@@ -90,8 +90,8 @@ void LinearForceAffector2::_cloneFrom( const ParticleAffector2 *_original )
     OGRE_ASSERT_HIGH( dynamic_cast<const LinearForceAffector2 *>( _original ) );
 
     const LinearForceAffector2 *original = static_cast<const LinearForceAffector2 *>( _original );
-    this->mForceApplication = original->mForceApplication;
     this->mForceVector = original->mForceVector;
+    this->mForceApplication = original->mForceApplication;
 }
 
 //-----------------------------------------------------------------------------

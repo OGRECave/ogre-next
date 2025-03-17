@@ -445,6 +445,7 @@ Types of passes:
 - stencil (PASS\_STENCIL)
 - [uav_queue](@ref CompositorNodesPassesUavQueue) (PASS\_UAV)
 - [compute](@ref CompositorNodesPassesCompute) (PASS\_COMPUTE)
+- [texture_copy] / [depth_copy] (@ref CompositorNodesPassesDepthCopy) (PASS\_DEPTHCOPY)
 - custom (PASS\_CUSTOM)
 
 
@@ -2006,6 +2007,72 @@ compositor_node MyNode
 Also setting Textures that are RenderTargets is dangerous. For RenderTargets, change the [CompositorPassComputeDef](@ref Ogre::CompositorPassComputeDef) instead.
 @par
 @note Don't interleave compute and graphics passes. For optimum performance, try to batch everything of the same type together.
+
+### texture_copy / depth_copy {#CompositorNodesPassesDepthCopy}
+
+This pass lets you perform a raw copy between textures. You can think of it as a literal mempcy.
+
+@note The pass is called "depth" copy because originally it only supported copying depth buffers in OgreNext 2.1. However it was later expanded in 2.2 to be able to copy any arbitrary texture. For historical reasons it carries the "depth" name. **But in this context "texture" and "depth" copy are synonyms**.
+@par
+@note Both src and dst texture must have the same resolution and pixel formats.
+
+ - [in](#CompositorPassDepthCopy_in)
+ - [out](#CompositorPassDepthCopy_out)
+ - [mip_range](#CompositorPassDepthCopy_mip_range)
+
+This pass does not require a named target and thus can be left blank, e.g.
+
+@par
+```cpp
+target  // <-- target does not specify a texture name.
+{
+    pass texture_copy
+    {
+        in	src_tex
+        out	dst_tex
+
+        // Copy all mipmaps.
+        mip_range 0 0
+
+        profiling_id "Final Copy to Texture"
+    }
+}
+```
+
+#### in {#CompositorPassDepthCopy_in}
+
+@par
+Format:
+```cpp
+in <src_texture>
+```
+
+The name of the texture to copy.
+
+#### out {#CompositorPassDepthCopy_out}
+
+@par
+Format:
+```cpp
+out <dst_texture>
+```
+
+The name of the texture that will hold the copy.
+
+#### mip\_range {#CompositorPassDepthCopy_mip_range}
+
+@par
+Format:
+```cpp
+mip_range <first_mip> <num_mipmaps>
+
+// Default:
+mip_range 0 1
+```
+
+Sets which mipmaps to copy. Mipmaps to copy are in range `[first_mip; first_mip + num_mipmaps)`.
+
+If `num_mipmaps` is the special value 0, then all mipmaps starting from `first_mip` until the end are copied.
 
 ## texture {#CompositorNodesTextures}
 

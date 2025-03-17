@@ -238,6 +238,9 @@ namespace Ogre
 
         datablock->mShadowConstantBias = mShadowConstantBias;
 
+        for( size_t i = 0u; i < NumShaderTypes; ++i )
+            datablock->mCustomPieceFileIdHash[i] = mCustomPieceFileIdHash[i];
+
         cloneImpl( datablock );
 
         datablock->calculateHash();
@@ -448,6 +451,15 @@ namespace Ogre
             // be different but be assigned a different ID (old one's API construct was already
             // destroyed) or be equal but have a different ID. It's not random or chaotic and
             // there are guarantees, but it's tricky to get it right and not worth it.
+            flushRenderables();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsDatablock::setAccurateNonUniformNormalScaling( bool bAccurate )
+    {
+        if( mAccurateNonUniformNormalScaling != bAccurate )
+        {
+            mAccurateNonUniformNormalScaling = bAccurate;
             flushRenderables();
         }
     }

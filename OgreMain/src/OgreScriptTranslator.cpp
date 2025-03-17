@@ -8555,17 +8555,6 @@ namespace Ogre{
 
         uint8 shadowMapSupportedLightTypes = 0;
 
-        size_t numPasses = 0;
-        for(AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
-        {
-            if((*i)->type == ANT_OBJECT)
-            {
-                ObjectAbstractNode *nodeObj = reinterpret_cast<ObjectAbstractNode*>( i->get() );
-                if( !nodeObj->abstract && nodeObj->id == ID_PASS )
-                    ++numPasses;
-            }
-        }
-
         String lightTypeStr;
         AbstractNodeList::const_iterator namesIt = obj->values.begin();
         for( size_t j=0; j<obj->values.size() + 1; ++j )
@@ -9482,6 +9471,37 @@ namespace Ogre{
                         }
                     }
                     break;
+                case ID_MIP_RANGE:
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
+                    }
+                    else if(prop->values.size() != 2)
+                    {
+                        compiler->addError(ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file, prop->line,
+                                           "mip_range must have exactly 2 arguments");
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it1 = prop->values.begin();
+                        AbstractNodeList::const_iterator it0 = it1++;
+
+                        uint32 mipLevelStart = 0u;
+                        uint32 numMiplevels = 1u;
+                        if( getUInt( *it0, &mipLevelStart ) && getUInt( *it1, &numMiplevels ) )
+                        {
+                            passDepthCopy->mMipLevelStart = mipLevelStart;
+                            passDepthCopy->mNumMiplevels = numMiplevels;
+                        }
+                        else
+                        {
+                            compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS, prop->file,
+                                                prop->line,
+                                                ( *it0 )->getValue() + " " + ( *it1 )->getValue() +
+                                                    " expecting two integers: mip_start num_mipmaps" );
+                        }
+                    }
+                break;
                 case ID_IDENTIFIER:
                 case ID_FLUSH_COMMAND_BUFFERS:
                 case ID_NUM_INITIAL:

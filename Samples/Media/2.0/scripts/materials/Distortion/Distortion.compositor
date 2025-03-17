@@ -62,6 +62,11 @@ compositor_node DistortionNode
 			{
 				all dont_care
 			}
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
 			material Distortion/Quad
 	    	input 0 rt_scene
             input 1 rt_distortion
@@ -70,6 +75,19 @@ compositor_node DistortionNode
 		pass render_scene
 		{
 			lod_update_list	off
+
+			// We must set depth & stencil to dont_care because the
+			// Window's DepthBuffer is Memoryless by default and Overlays break the pass.
+			load
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
 
 			//Render Overlays
 			overlays	on

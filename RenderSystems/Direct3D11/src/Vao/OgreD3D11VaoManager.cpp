@@ -587,9 +587,6 @@ namespace Ogre
     void D3D11VaoManager::deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
                                          BufferType bufferType, InternalBufferType internalType )
     {
-        if( vboIdx == 0xFFFFFFFF )
-            return;
-
         if( bufferType >= BT_DYNAMIC_DEFAULT )
         {
             bufferType = BT_DYNAMIC_DEFAULT;  // Persitent mapping not supported in D3D11.

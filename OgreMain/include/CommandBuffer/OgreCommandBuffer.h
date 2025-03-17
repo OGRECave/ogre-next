@@ -106,6 +106,8 @@ namespace Ogre
         static CommandBufferExecuteFunc execute_lowLevelMaterial;
         static CommandBufferExecuteFunc execute_invalidCommand;
 
+        void clear();
+
         /// Executes all the commands in the command buffer. Clears the cmd buffer afterwards
         void execute();
 

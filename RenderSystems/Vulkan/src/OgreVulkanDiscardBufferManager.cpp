@@ -40,16 +40,34 @@ namespace Ogre
         mDevice( device ),
         mVaoManager( vaoManager )
     {
+        createVkResources();
+    }
+
+    VulkanDiscardBufferManager::~VulkanDiscardBufferManager() { destroyVkResources(); }
+
+    void VulkanDiscardBufferManager::notifyDeviceLost() { destroyVkResources(); }
+
+    void VulkanDiscardBufferManager::notifyDeviceRestored( unsigned pass )
+    {
+        if( pass == 0 )
+            createVkResources();
+    }
+
+    void VulkanDiscardBufferManager::createVkResources()
+    {
         const size_t defaultCapacity = 4 * 1024 * 1024;
 
-        VulkanVaoManager *vaoMgr = static_cast<VulkanVaoManager *>( vaoManager );
+        VulkanVaoManager *vaoMgr = static_cast<VulkanVaoManager *>( mVaoManager );
         mBuffer = vaoMgr->allocateRawBuffer( VulkanVaoManager::CPU_WRITE_PERSISTENT, defaultCapacity );
 
         mFreeBlocks.push_back( VulkanVaoManager::Block( 0, defaultCapacity ) );
     }
 
-    VulkanDiscardBufferManager::~VulkanDiscardBufferManager()
+    void VulkanDiscardBufferManager::destroyVkResources()
     {
+        mFreeBlocks.clear();
+        mUnsafeBlocks.clear();
+
         VulkanDiscardBufferVec::const_iterator itor = mDiscardBuffers.begin();
         VulkanDiscardBufferVec::const_iterator endt = mDiscardBuffers.end();
 
@@ -110,7 +128,7 @@ namespace Ogre
         }
 
         LogManager::getSingleton().logMessage(
-            "PERFORMANCE WARNING: MetalDiscardBufferManager::growToFit must stall."
+            "PERFORMANCE WARNING: VulkanDiscardBufferManager::growToFit must stall."
             "Consider increasing the default discard capacity to at least " +
             StringConverter::toString( newCapacity ) + " bytes" );
 

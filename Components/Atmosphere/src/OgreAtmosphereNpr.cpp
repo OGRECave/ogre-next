@@ -77,10 +77,14 @@ namespace Ogre
     {
         mHlmsBuffer = vaoManager->createConstBuffer( sizeof( AtmoSettingsGpu ), BT_DEFAULT, 0, false );
         createMaterial();
+
+        RenderSystem::addSharedListener( this );
     }
     //-------------------------------------------------------------------------
     AtmosphereNpr::~AtmosphereNpr()
     {
+        RenderSystem::removeSharedListener( this );
+
         std::map<Ogre::SceneManager *, Rectangle2D *>::const_iterator itor = mSkies.begin();
         std::map<Ogre::SceneManager *, Rectangle2D *>::const_iterator endt = mSkies.end();
 
@@ -90,7 +94,7 @@ namespace Ogre
                 itor->first->_setAtmosphere( nullptr );
 
             itor->second->detachFromParent();
-            OGRE_DELETE itor->second;
+            itor->first->destroyRectangle2D( itor->second );
 
             ++itor;
         }
@@ -107,6 +111,20 @@ namespace Ogre
 
         mVaoManager->destroyConstBuffer( mHlmsBuffer );
         mHlmsBuffer = 0;
+    }
+    //-------------------------------------------------------------------------
+    void AtmosphereNpr::eventOccurred( const String &eventName, const NameValuePairList *parameters )
+    {
+        if( eventName == "DeviceLost" )
+        {
+            mVaoManager->destroyConstBuffer( mHlmsBuffer );
+            mHlmsBuffer = 0;
+        }
+        else if( eventName == "DeviceRestored" )
+        {
+            mHlmsBuffer =
+                mVaoManager->createConstBuffer( sizeof( AtmoSettingsGpu ), BT_DEFAULT, 0, false );
+        }
     }
     //-------------------------------------------------------------------------
     void AtmosphereNpr::createMaterial()
@@ -226,9 +244,7 @@ namespace Ogre
         std::map<Ogre::SceneManager *, Rectangle2D *>::iterator itor = mSkies.find( sceneManager );
         if( itor == mSkies.end() )
         {
-            sky = OGRE_NEW Rectangle2D( Id::generateNewId<MovableObject>(),
-                                        &sceneManager->_getEntityMemoryManager( SCENE_STATIC ),
-                                        sceneManager );
+            sky = sceneManager->createRectangle2D( SCENE_STATIC );
             // We can't use BT_DYNAMIC_* because the scene may be rendered from multiple cameras
             // in the same frame, and dynamic supports only one set of values per frame
             sky->initialize( BT_DEFAULT,
@@ -259,7 +275,7 @@ namespace Ogre
         std::map<Ogre::SceneManager *, Rectangle2D *>::iterator itor = mSkies.find( sceneManager );
         if( itor != mSkies.end() )
         {
-            OGRE_DELETE itor->second;
+            sceneManager->destroyRectangle2D( itor->second );
             mSkies.erase( itor );
         }
     }

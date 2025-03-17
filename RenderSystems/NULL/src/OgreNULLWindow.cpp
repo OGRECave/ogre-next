@@ -85,7 +85,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     bool NULLWindow::isHidden() const { return false; }
     //-------------------------------------------------------------------------
-    void NULLWindow::_initialize( TextureGpuManager *textureGpuManager )
+    void NULLWindow::_initialize( TextureGpuManager *textureGpuManager, const NameValuePairList * )
     {
         destroy();
 

@@ -44,6 +44,7 @@ namespace Ogre
         mSpotOuter( Degree( 40.0f ) ),
         mSpotInner( Degree( 30.0f ) ),
         mTanHalfAngle( Math::Tan( mSpotOuter * 0.5f ) ),
+        mSinHalfAngle( Math::Sin( mSpotOuter * 0.5f ) ),
         mSpotFalloff( 1.0f ),
         mSpotNearClip( 0.0f ),
         mRange( 23.0f ),
@@ -156,6 +157,7 @@ namespace Ogre
         mSpotFalloff = falloff;
 
         mTanHalfAngle = Math::Tan( mSpotOuter * 0.5f );
+        mSinHalfAngle = Math::Sin( mSpotOuter * 0.5f );
 
         if( boundsChanged && mLightType == LT_SPOTLIGHT )
             updateLightBounds();
@@ -168,6 +170,7 @@ namespace Ogre
         bool boundsChanged = mSpotOuter != val;
         mSpotOuter = val;
         mTanHalfAngle = Math::Tan( mSpotOuter * 0.5f );
+        mSinHalfAngle = Math::Sin( mSpotOuter * 0.5f );
         if( boundsChanged && mLightType == LT_SPOTLIGHT )
             updateLightBounds();
     }
@@ -277,9 +280,25 @@ namespace Ogre
             {
                 // In local space, lights are centered at origin, facing towards +Z
                 Aabb aabb;
-                Real lenOpposite = mTanHalfAngle * mRange;
-                aabb.mCenter = Vector3( 0, 0, -mRange * 0.5f );
-                aabb.mHalfSize = Vector3( lenOpposite, lenOpposite, mRange * 0.5f );
+                if( mTanHalfAngle <= 1.0f )
+                {
+                    const Real lenOpposite = mTanHalfAngle * mRange;
+                    aabb.mCenter = Vector3( 0, 0, -mRange * 0.5f );
+                    aabb.mHalfSize = Vector3( lenOpposite, lenOpposite, mRange * 0.5f );
+                }
+                else
+                {
+                    // Spotlight with outer angle > 90°. tan(45°) starts growing too large very quickly,
+                    // yet the spotlight's light reach is limited by its radius, causing the "false"
+                    // positives to blow up (they're not technically false positives because light is
+                    // infinite, but for practical purposes, they are).
+                    // Just doing the OBB that encloses the spotlight is much more conservative.
+                    // This might cause issues with shadow mapping though (if the range is too small for
+                    // the light attentuation and the outer angle is not too large yet).
+                    const Real lenOpposite = mSinHalfAngle * mRange;
+                    aabb.mCenter = Vector3( 0, 0, -mRange * 0.5f );
+                    aabb.mHalfSize = Vector3( lenOpposite, lenOpposite, mRange * 0.5f );
+                }
                 mObjectData.mLocalRadius[mObjectData.mIndex] = aabb.getRadius();
                 mObjectData.mLocalAabb->setFromAabb( aabb, mObjectData.mIndex );
             }

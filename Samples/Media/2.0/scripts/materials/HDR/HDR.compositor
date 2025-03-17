@@ -261,13 +261,15 @@ compositor_node HdrPostprocessingNode
 	{
 		pass render_quad
 		{
-			load		{ colour dont_care }
+			load		{ all dont_care }
 			store
 			{
 				//Required by Metal as the overlays in the next pass will break the render encoder,
 				//causing this pass to be resolved and then the overlays would render over a black
 				//background (unfortunately, this also causes a performance hit).
-				colour store
+				colour  store
+				depth   dont_care
+				stencil dont_care
 			}
 			material	HDR/FinalToneMapping
 			input		0	rt0
@@ -289,6 +291,19 @@ compositor_node HdrRenderUi
 	{
 		pass render_scene
 		{
+			load
+			{
+				colour load
+				depth dont_care
+				stencil dont_care
+			}
+			store
+			{
+				colour  store
+				depth   dont_care
+				stencil dont_care
+			}
+
 			lod_update_list	off
 
 			//Render Overlays

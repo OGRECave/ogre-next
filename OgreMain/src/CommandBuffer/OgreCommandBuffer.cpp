@@ -96,6 +96,8 @@ namespace Ogre
                      "CommandBuffer::execute_setInvalidCommand" );
     }
     //-----------------------------------------------------------------------------------
+    void CommandBuffer::clear() { mCommandBuffer.clear(); }
+    //-----------------------------------------------------------------------------------
     void CommandBuffer::execute()
     {
         unsigned char const *RESTRICT_ALIAS cmdBase = mCommandBuffer.begin();

@@ -358,6 +358,7 @@ namespace Ogre
 
     protected:
         bool  mIgnoreFlushRenderables;
+        bool  mAccurateNonUniformNormalScaling;
         bool  mAlphaHashing;
         uint8 mAlphaTestCmp;  ///< @see CompareFunction
         bool  mAlphaTestShadowCasterOnly;
@@ -491,6 +492,49 @@ namespace Ogre
         {
             return mBlendblock[casterBlock];
         }
+
+        /** When objects are scaled by non-uniform values, normals tend to get skewed or deformed
+            causing wrong lighting.
+
+            This setting enables the use of additional math in the vertex shader to ensure normals
+            are properly scaled in these situations.
+
+            Calling this function triggers a HlmsDatablock::flushRenderables.
+        @remark
+            This setting would make more sense to be per object (or ideally autodetect when scale
+            factor isn't uniform) but this is expensive to perform. Therefore the setting lives
+            in the material instead, which is the best next thing.
+        @par
+        @remark
+            Due to the way the math works, the normal isn't exactly the same even if there is no scaling
+            involved. This is particularly noticeable with normal-offset bias in directional lights
+            shadow mapping, as the shadow displaces a little bit.
+        @par
+        @remark
+            Non-uniform scaling is when the scale is not the same for all axes.
+            Examples of non-uniform scaling:
+            @code
+                node->setScale( 2.0f, 5.0f, 0.02f );
+                node->setScale( 1.0f, 5.0f, 1.0f );
+            @endcode
+            Examples of uniform scaling:
+            @code
+                node->setScale( 1.0f, 1.0f, 1.0f );
+                node->setScale( 3.0f, 3.0f, 3.0f );
+            @endcode
+        @par
+        @remark
+            For more info see:
+              - https://x.com/iquilezles/status/1866219178409316362
+              - https://www.shadertoy.com/view/3s33zj
+              - https://github.com/graphitemaster/normals_revisited
+        @param bAccurate
+            True to enable the additional math for correction.
+            False otherwise (default value).
+        */
+        void setAccurateNonUniformNormalScaling( bool bAccurate );
+
+        bool getAccurateNonUniformNormalScaling() const { return mAccurateNonUniformNormalScaling; }
 
         /** Uses a trick to *mimic* true Order Independent Transparency alpha blending.
             The advantage of this method is that it is compatible with depth buffer writes

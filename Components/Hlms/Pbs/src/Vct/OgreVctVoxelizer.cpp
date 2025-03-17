@@ -61,8 +61,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    static const size_t c_numVctProperties = 4u;
-    static const size_t c_numAabCalcProperties = 2u;
+    static const uint32 c_numVctProperties = 4u;
+    static const uint32 c_numAabCalcProperties = 2u;
 
     struct VctVoxelizerProp
     {
@@ -147,7 +147,7 @@ namespace Ogre
             indexStart -= 1u;
             ++numIndices;
         }
-        numIndices = static_cast<uint32>( alignToNextMultiple( numIndices, 2u ) );
+        numIndices = alignToNextMultiple( numIndices, 2u );
         return adjustedIndexStart;
     }
     //-------------------------------------------------------------------------
@@ -173,15 +173,15 @@ namespace Ogre
                          "VctVoxelizer::createComputeJobs" );
         }
 
-        size_t numVariants = 1u << c_numVctProperties;
+        uint32 numVariants = 1u << c_numVctProperties;
 
         char tmpBuffer[128];
         LwString jobName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
 
-        for( size_t variant = 0u; variant < numVariants; ++variant )
+        for( uint32 variant = 0u; variant < numVariants; ++variant )
         {
             jobName.clear();
-            jobName.a( "VCT/Voxelizer/", static_cast<uint32>( variant ) );
+            jobName.a( "VCT/Voxelizer/", variant );
 
             mComputeJobs[variant] = hlmsCompute->findComputeJobNoThrow( jobName.c_str() );
 
@@ -205,7 +205,7 @@ namespace Ogre
                 }
                 mComputeJobs[variant]->setNumTexUnits( numTexUnits );
 
-                for( size_t property = 0; property < c_numVctProperties; ++property )
+                for( uint32 property = 0; property < c_numVctProperties; ++property )
                 {
                     const int32 propValue = variant & ( 1u << property ) ? 1 : 0;
                     mComputeJobs[variant]->setProperty( *VctVoxelizerProp::AllProps[property],
@@ -220,10 +220,10 @@ namespace Ogre
         aabbCalc->setThreadsPerGroup( caps->getMaxThreadsPerThreadgroupAxis()[0], 1u, 1u );
 
         numVariants = 1u << c_numAabCalcProperties;
-        for( size_t variant = 0u; variant < numVariants; ++variant )
+        for( uint32 variant = 0u; variant < numVariants; ++variant )
         {
             jobName.clear();
-            jobName.a( "VCT/AabbCalculator/", static_cast<uint32>( variant ) );
+            jobName.a( "VCT/AabbCalculator/", variant );
 
             mAabbCalculator[variant] = hlmsCompute->findComputeJobNoThrow( jobName.c_str() );
 
@@ -231,7 +231,7 @@ namespace Ogre
             {
                 mAabbCalculator[variant] = aabbCalc->clone( jobName.c_str() );
 
-                for( size_t property = 0; property < c_numAabCalcProperties; ++property )
+                for( uint32 property = 0; property < c_numAabCalcProperties; ++property )
                 {
                     const int32 propValue = variant & ( 1u << property ) ? 1 : 0;
                     mAabbCalculator[variant]->setProperty( *VctVoxelizerProp::AllProps[property],
@@ -257,9 +257,9 @@ namespace Ogre
         }
 
         {
-            const size_t numVariants = 1u << c_numAabCalcProperties;
+            const uint32 numVariants = 1u << c_numAabCalcProperties;
 
-            for( size_t i = 0; i < numVariants; ++i )
+            for( uint32 i = 0; i < numVariants; ++i )
             {
                 mAabbCalculator[i]->clearUavBuffers();
                 mAabbCalculator[i]->clearTexBuffers();
@@ -316,7 +316,7 @@ namespace Ogre
                     totalNumIndices32 += numIndices;
                 }
 
-                totalNumVertices += vao->getBaseVertexBuffer()->getNumElements();
+                totalNumVertices += static_cast<uint32>( vao->getBaseVertexBuffer()->getNumElements() );
             }
             else
             {
@@ -336,9 +336,8 @@ namespace Ogre
             const uint32 numPartitions =
                 queuedMesh.indexCountSplit == std::numeric_limits<uint32>::max()
                     ? 1u
-                    : static_cast<uint32>(
-                          alignToNextMultiple( numIndices, queuedMesh.indexCountSplit ) /
-                          queuedMesh.indexCountSplit );
+                    : alignToNextMultiple( numIndices, queuedMesh.indexCountSplit ) /
+                          queuedMesh.indexCountSplit;
             queuedMesh.submeshes[subMeshIdx].partSubMeshes.resize( numPartitions );
 
             for( uint32 partition = 0u; partition < numPartitions; ++partition )
@@ -390,9 +389,9 @@ namespace Ogre
             OGRE_MALLOC_SIMD( totalNumMeshes * sizeof( PartitionedSubMesh ), MEMCATEGORY_GEOMETRY ) );
         FreeOnDestructor partitionedSubMeshGpuPtr( partitionedSubMeshGpu );
 
-        const size_t numVariants = 1u << c_numAabCalcProperties;
+        const uint32 numVariants = 1u << c_numAabCalcProperties;
 
-        size_t submeshStarts[numVariants];
+        uint32 submeshStarts[numVariants];
         submeshStarts[0] = 0u;                                                  // 16-bit uncompressed
         submeshStarts[1] = submeshStarts[0] + mNumUncompressedPartSubMeshes16;  // 32-bit uncompressed
         submeshStarts[2] = submeshStarts[1] + mNumUncompressedPartSubMeshes32;  // 16-bit compressed
@@ -601,7 +600,7 @@ namespace Ogre
         if( indexCountSplit == 0u )
             indexCountSplit = mDefaultIndexCountSplit;
         if( indexCountSplit != std::numeric_limits<uint32>::max() )
-            indexCountSplit = static_cast<uint32>( alignToNextMultiple( indexCountSplit, 3u ) );
+            indexCountSplit = alignToNextMultiple( indexCountSplit, 3u );
 
         MeshPtrMap::iterator itor = mMeshesV2.find( mesh );
 
@@ -1170,7 +1169,7 @@ namespace Ogre
         OgreProfile( "VctVoxelizer::computeMeshAabbs" );
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
 
-        const size_t numVariants = 1u << c_numAabCalcProperties;
+        const uint32 numVariants = 1u << c_numAabCalcProperties;
 
         OGRE_STATIC_ASSERT( sizeof( mAabbCalculator ) / sizeof( mAabbCalculator[0] ) == numVariants );
 

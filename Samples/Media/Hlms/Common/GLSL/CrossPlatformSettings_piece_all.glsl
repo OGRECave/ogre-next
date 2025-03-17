@@ -77,6 +77,8 @@
 
 #define buildFloat4x4( row0, row1, row2, row3 ) mat4( row0, row1, row2, row3 )
 
+#define getMatrixRow( mat, idx ) mat[idx]
+
 // Let's explain this madness:
 //
 // We use the keyword "midf" because "half" is already taken on Metal.
@@ -358,10 +360,18 @@
 	#define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) layout_constbuffer(ogre_B##bindingPoint) uniform structName
 	#define CONST_BUFFER_STRUCT_END( variableName ) variableName
 
-	#define ReadOnlyBufferF( slot, varType, varName ) layout(std430, ogre_R##slot) readonly restrict buffer _##varName { varType varName[]; }
-	#define ReadOnlyBufferU ReadOnlyBufferF
-	#define readOnlyFetch( bufferVar, idx ) bufferVar[idx]
-	#define readOnlyFetch1( bufferVar, idx ) bufferVar[idx]
+	@property( hlms_readonly_is_tex )
+		#define ReadOnlyBufferF( slot, varType, varName ) layout(ogre_R##slot) uniform samplerBuffer varName
+		#define ReadOnlyBufferU( slot, varType, varName ) layout(ogre_R##slot) uniform usamplerBuffer varName
+		#define ReadOnlyBufferVarF( varType ) samplerBuffer
+		#define readOnlyFetch( buffer, idx ) texelFetch( buffer, idx )
+		#define readOnlyFetch1( buffer, idx ) texelFetch( buffer, idx ).x
+	@else
+		#define ReadOnlyBufferF( slot, varType, varName ) layout(std430, ogre_R##slot) readonly restrict buffer _##varName { varType varName[]; }
+		#define ReadOnlyBufferU ReadOnlyBufferF
+		#define readOnlyFetch( bufferVar, idx ) bufferVar[idx]
+		#define readOnlyFetch1( bufferVar, idx ) bufferVar[idx]
+	@end
 @end
 
 

@@ -67,6 +67,15 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     ReadOnlyBufferPacked *VulkanUavBufferPacked::getAsReadOnlyBufferImpl()
     {
+#ifdef OGRE_VK_WORKAROUND_ADRENO_6xx_READONLY_IS_TBUFFER
+        if( Workarounds::mAdreno6xxReadOnlyIsTBuffer )
+        {
+            OGRE_EXCEPT(
+                Exception::ERR_RENDERINGAPI_ERROR,
+                "This Adreno driver version does not support this operation due to applied workarounds.",
+                "VulkanUavBufferPacked::getAsReadOnlyBufferImpl" );
+        }
+#endif
         OGRE_ASSERT_HIGH( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
 
         VulkanBufferInterface *bufferInterface =

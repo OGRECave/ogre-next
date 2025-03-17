@@ -19,7 +19,7 @@ def setup_clang(library):
         if sys.platform.startswith("win32"):
             clang.cindex.Config.set_library_path("C:/Program Files/LLVM/bin")
         else:
-            clang.cindex.Config.set_library_file(find_library('clang-10'))
+            clang.cindex.Config.set_library_file(find_library('clang-18'))
             # clang.cindex.Config.set_library_path("/usr/lib")
     else:
         clang.cindex.Config.set_library_file(library)

@@ -239,7 +239,7 @@ namespace Ogre
         void _beginFrame() override;
         void _endFrame() override;
 
-        void _hlmsPipelineStateObjectCreated( HlmsPso *newPso ) override;
+        bool _hlmsPipelineStateObjectCreated( HlmsPso *newPso, uint64 deadline ) override;
         void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso ) override;
         void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock ) override;
         void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block ) override;

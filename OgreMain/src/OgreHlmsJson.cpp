@@ -514,6 +514,10 @@ namespace Ogre
             }
         }
 
+        itor = json.FindMember( "accurate_non_uniform_normal_scaling" );
+        if( itor != json.MemberEnd() && itor->value.IsBool() )
+            datablock->setAccurateNonUniformNormalScaling( itor->value.GetBool() );
+
         itor = json.FindMember( "alpha_test" );
         if( itor != json.MemberEnd() && itor->value.IsArray() )
         {
@@ -1053,6 +1057,9 @@ namespace Ogre
                 }
             }
         }
+
+        if( datablock->getAccurateNonUniformNormalScaling() )
+            outString += ",\n\t\t\t\"accurate_non_uniform_normal_scaling\" : true";
 
         if( datablock->getAlphaTest() != CMPF_ALWAYS_PASS )
         {

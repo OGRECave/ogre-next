@@ -38,27 +38,15 @@
 #define MY_VK_EXCEPT( code, num, desc, src ) \
     OGRE_EXCEPT( code, desc + ( "\nVkResult = " + std::to_string( num ) ), src )
 
-#if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#    define myCheckVkResult( result, functionName ) \
-        do \
+#define myCheckVkResult( result, functionName ) \
+    do \
+    { \
+        if( result != VK_SUCCESS ) \
         { \
-            if( result != VK_SUCCESS ) \
-            { \
-                MY_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, functionName " failed", \
-                              __FUNCSIG__ ); \
-            } \
-        } while( 0 )
-#else
-#    define myCheckVkResult( result, functionName ) \
-        do \
-        { \
-            if( result != VK_SUCCESS ) \
-            { \
-                MY_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, functionName " failed", \
-                              __PRETTY_FUNCTION__ ); \
-            } \
-        } while( 0 )
-#endif
+            MY_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, functionName " failed", \
+                          OGRE_CURRENT_FUNCTION ); \
+        } \
+    } while( 0 )
 
 /**
 @brief createVulkanInstance
@@ -308,12 +296,16 @@ static void createVulkanDevice( const Ogre::VulkanExternalInstance &externalInst
     FastArray<const char *> deviceExtensions;
     {
         uint32_t numExtensions = 0;
-        vkEnumerateDeviceExtensionProperties( outExternalDevice.physicalDevice, 0, &numExtensions, 0 );
+        VkResult result = vkEnumerateDeviceExtensionProperties( outExternalDevice.physicalDevice, 0,
+                                                                &numExtensions, 0 );
+        myCheckVkResult( result, "vkCreateInstance" );
 
         FastArray<VkExtensionProperties> availableExtensions;
         availableExtensions.resize( numExtensions );
-        vkEnumerateDeviceExtensionProperties( outExternalDevice.physicalDevice, 0, &numExtensions,
-                                              availableExtensions.begin() );
+        result = vkEnumerateDeviceExtensionProperties( outExternalDevice.physicalDevice, 0,
+                                                       &numExtensions, availableExtensions.begin() );
+        myCheckVkResult( result, "vkCreateInstance" );
+
         for( size_t i = 0u; i < numExtensions; ++i )
         {
             const String extensionName = availableExtensions[i].extensionName;

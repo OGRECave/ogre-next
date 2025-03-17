@@ -75,7 +75,7 @@ namespace Ogre
             If caller doesn't delete it, it will leak.
         */
         TextureGpu *createTextureGpuWindow( MetalWindow *window );
-        TextureGpu *createWindowDepthBuffer();
+        TextureGpu *createWindowDepthBuffer( const bool bMemoryLess );
 
         id<MTLTexture> getBlankTextureMetalName( TextureTypes::TextureTypes textureType ) const;
 

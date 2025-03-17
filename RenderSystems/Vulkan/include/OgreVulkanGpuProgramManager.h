@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreVulkanPrerequisites.h"
 
 #include "OgreGpuProgramManager.h"
+#include "OgreVulkanDeviceResource.h"
 
 #include "vulkan/vulkan_core.h"
 
@@ -44,7 +45,8 @@ namespace Ogre
 
     bool operator<( const VulkanSingleSetLayoutDesc &a, const VulkanSingleSetLayoutDesc &b );
 
-    class _OgreVulkanExport VulkanGpuProgramManager final : public GpuProgramManager
+    class _OgreVulkanExport VulkanGpuProgramManager final : public GpuProgramManager,
+                                                            protected VulkanDeviceResource
     {
     public:
         typedef GpuProgram *( *CreateGpuProgramCallback )( ResourceManager *creator, const String &name,
@@ -86,6 +88,11 @@ namespace Ogre
         Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
                               bool isManual, ManualResourceLoader *loader, GpuProgramType gptype,
                               const String &syntaxCode ) override;
+
+        void destroyDescriptorSetLayouts();
+
+        void notifyDeviceLost() override;
+        void notifyDeviceRestored( unsigned pass ) override;
 
     public:
         VulkanGpuProgramManager( VulkanDevice *device );

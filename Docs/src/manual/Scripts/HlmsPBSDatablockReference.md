@@ -12,6 +12,11 @@ Reference Guide: HLMS PBS Datablock {#hlmspbsdatablockref}
 
 # Common Datablock Parameters: {#dbCommonParameters}
 
+## Parameter: accurate_non_uniform_normal_scaling {#dbParamAccurateNonUniformNormalScaling}
+- See Ogre::HlmsDatablock::setAccurateNonUniformNormalScaling
+- Value of type bool
+- **DEFAULT=false** 
+
 ## Parameter: alpha_test {#dbParamAlphaTest}
 - Sets the alpha test to the given compare function
 - Alpha_test value is type array:

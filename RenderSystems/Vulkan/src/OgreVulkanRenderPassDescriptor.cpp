@@ -66,6 +66,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     VulkanRenderPassDescriptor::~VulkanRenderPassDescriptor() { releaseFbo(); }
     //-----------------------------------------------------------------------------------
+    void VulkanRenderPassDescriptor::notifyDeviceLost() { releaseFbo(); }
+    //-----------------------------------------------------------------------------------
+    void VulkanRenderPassDescriptor::notifyDeviceRestored( unsigned pass )
+    {
+        if( pass == 1 )
+            entriesModified( RenderPassDescriptor::All );
+    }
+    //-----------------------------------------------------------------------------------
     void VulkanRenderPassDescriptor::checkRenderWindowStatus()
     {
         if( ( mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific() ) ||
@@ -605,7 +613,7 @@ namespace Ogre
         renderPassCreateInfo.pSubpasses = &subpass;
         VkResult result =
             vkCreateRenderPass( mQueue->mDevice, &renderPassCreateInfo, 0, &fboDesc.mRenderPass );
-        checkVkResult( result, "vkCreateRenderPass" );
+        checkVkResult( mQueue->mOwnerDevice, result, "vkCreateRenderPass" );
 
         VkFramebufferCreateInfo fbCreateInfo;
         makeVkStruct( fbCreateInfo, VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO );
@@ -623,7 +631,7 @@ namespace Ogre
             if( !fboDesc.mWindowImageViews.empty() )
                 fboDesc.mImageViews[windowAttachmentIdx] = fboDesc.mWindowImageViews[i];
             result = vkCreateFramebuffer( mQueue->mDevice, &fbCreateInfo, 0, &fboDesc.mFramebuffers[i] );
-            checkVkResult( result, "vkCreateFramebuffer" );
+            checkVkResult( mQueue->mOwnerDevice, result, "vkCreateFramebuffer" );
             if( !fboDesc.mWindowImageViews.empty() )
                 fboDesc.mImageViews[windowAttachmentIdx] = 0;
         }

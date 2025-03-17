@@ -20,14 +20,19 @@ compositor_node TutorialComputeTest02_UavBufferRenderingNode
 
 	target rt_renderwindow
 	{
-		pass clear
-		{
-			colour_value 0.2 0.4 0.6 1
-		}
-
 		//The bindings made by pass bind_uav PERSIST even after we're out of rt_renderwindow.
 		pass bind_uav
 		{
+			load
+			{
+				all		dont_care
+			}
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
+
 			starting_slot 1
 			uav_buffer 0 testBuffer			read
 		}
@@ -36,12 +41,35 @@ compositor_node TutorialComputeTest02_UavBufferRenderingNode
 		//it knows testTexture will be used as a texture.
 		pass render_quad
 		{
+			load
+			{
+				all		dont_care
+			}
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
+
 			material DrawFromUavBuffer
 			uses_uav 0 read
 		}
 
 		pass render_scene
 		{
+			// We must set depth & stencil to dont_care because the
+			// Window's DepthBuffer is Memoryless by default and Overlays break the pass.
+			load
+			{
+				depth	clear
+				stencil	clear
+			}
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
+
 			overlays	on
 		}
 	}

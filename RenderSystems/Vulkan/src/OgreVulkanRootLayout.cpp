@@ -66,7 +66,13 @@ namespace Ogre
             // clang-format off
         case DescBindingTypes::ParamBuffer:       return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         case DescBindingTypes::ConstBuffer:       return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+#ifdef OGRE_VK_WORKAROUND_ADRENO_6xx_READONLY_IS_TBUFFER
+        case DescBindingTypes::ReadOnlyBuffer:    return Workarounds::mAdreno6xxReadOnlyIsTBuffer ?
+                                                            VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER :
+                                                            VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+#else
         case DescBindingTypes::ReadOnlyBuffer:    return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+#endif
         case DescBindingTypes::TexBuffer:         return VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER;
         case DescBindingTypes::Texture:           return VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
         case DescBindingTypes::Sampler:           return VK_DESCRIPTOR_TYPE_SAMPLER;
@@ -94,6 +100,20 @@ namespace Ogre
             mRootLayout = 0;
         }
     }
+    //-------------------------------------------------------------------------
+    void VulkanRootLayout::notifyDeviceLost()
+    {
+        if( mRootLayout )
+        {
+            vkDestroyPipelineLayout( mProgramManager->getDevice()->mDevice, mRootLayout, 0 );
+            mRootLayout = 0;
+        }
+
+        mSets.resize( 0 );
+        mPools.resize( 0 );
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRootLayout::notifyDeviceRestored( unsigned pass ) {}
     //-------------------------------------------------------------------------
     void VulkanRootLayout::copyFrom( const RootLayout &rootLayout, bool bIncludeArrayBindings )
     {
@@ -334,7 +354,7 @@ namespace Ogre
         VkPipelineLayout rootLayoutResult;
         VkResult result =
             vkCreatePipelineLayout( device->mDevice, &pipelineLayoutCi, 0, &rootLayoutResult );
-        checkVkResult( result, "vkCreatePipelineLayout" );
+        checkVkResult( device, result, "vkCreatePipelineLayout" );
 
         mRootLayout.store( rootLayoutResult, std::memory_order::memory_order_relaxed );
 
@@ -431,8 +451,22 @@ namespace Ogre
         VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
         bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges,
                     arrayedSlots[DescBindingTypes::ReadOnlyBuffer] );
+
+#ifdef OGRE_VK_WORKAROUND_ADRENO_6xx_READONLY_IS_TBUFFER
+        if( Workarounds::mAdreno6xxReadOnlyIsTBuffer )
+        {
+            writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER;
+            writeDescSet.pTexelBufferView = &table.readOnlyBuffers2[bindRanges.start];
+        }
+        else
+        {
+            writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+            writeDescSet.pBufferInfo = &table.readOnlyBuffers[bindRanges.start];
+        }
+#else
         writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
         writeDescSet.pBufferInfo = &table.readOnlyBuffers[bindRanges.start];
+#endif
     }
     //-------------------------------------------------------------------------
     inline void VulkanRootLayout::bindTexBuffers( VkWriteDescriptorSet *writeDescSets,
@@ -514,13 +548,14 @@ namespace Ogre
             }
             else
             {
-                bDirty |= table.dirtyBakedTextures &
+                bDirty |= (int)table.dirtyBakedTextures &
                           ( (int)ranges[DescBindingTypes::ReadOnlyBuffer].isInUse() |
                             (int)ranges[DescBindingTypes::TexBuffer].isInUse() |
                             (int)ranges[DescBindingTypes::Texture].isInUse() );
-                bDirty |= table.dirtyBakedSamplers & ranges[DescBindingTypes::Sampler].isInUse();
-                bDirty |= table.dirtyBakedUavs & ( (int)ranges[DescBindingTypes::UavBuffer].isInUse() |
-                                                   (int)ranges[DescBindingTypes::UavTexture].isInUse() );
+                bDirty |= (int)table.dirtyBakedSamplers & ranges[DescBindingTypes::Sampler].isInUse();
+                bDirty |=
+                    (int)table.dirtyBakedUavs & ( (int)ranges[DescBindingTypes::UavBuffer].isInUse() |
+                                                  (int)ranges[DescBindingTypes::UavTexture].isInUse() );
             }
 
             if( bDirty )

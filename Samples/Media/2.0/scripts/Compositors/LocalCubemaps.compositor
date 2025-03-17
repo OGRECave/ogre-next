@@ -148,6 +148,11 @@ compositor_node LocalCubemapsRenderingNode
 		//Render overlays
 		pass render_scene
 		{
+			load
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
 			store
 			{
 				depth	dont_care
@@ -164,6 +169,11 @@ compositor_node LocalCubemapsRenderingNode
 		//Render sky (see TutorialSky_Postprocess)
 		/*pass render_quad
 		{
+			load
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
 			store
 			{
 				depth	dont_care
@@ -176,6 +186,11 @@ compositor_node LocalCubemapsRenderingNode
 		//Render transparent stuff after sky
 		pass render_scene
 		{
+			load
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
 			store
 			{
 				depth	dont_care

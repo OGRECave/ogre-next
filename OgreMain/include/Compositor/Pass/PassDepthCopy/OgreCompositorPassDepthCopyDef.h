@@ -57,10 +57,16 @@ namespace Ogre
         CompositorNodeDef *mParentNodeDef;
 
     public:
+        uint8_t mMipLevelStart;
+        uint8_t mNumMiplevels;  /// If set to 0, it will cover up until the max mip.
+
+    public:
         CompositorPassDepthCopyDef( CompositorNodeDef   *parentNodeDef,
                                     CompositorTargetDef *parentTargetDef ) :
             CompositorPassDef( PASS_DEPTHCOPY, parentTargetDef ),
-            mParentNodeDef( parentNodeDef )
+            mParentNodeDef( parentNodeDef ),
+            mMipLevelStart( 0u ),
+            mNumMiplevels( 1u )
         {
         }
 

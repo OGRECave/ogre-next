@@ -470,9 +470,10 @@ namespace Ogre
         setHidden( mHidden );
     }
     //-----------------------------------------------------------------------------------
-    void D3D11WindowHwnd::_initialize( TextureGpuManager *textureGpuManager )
+    void D3D11WindowHwnd::_initialize( TextureGpuManager *textureGpuManager,
+                                       const NameValuePairList *miscParams )
     {
-        D3D11WindowSwapChainBased::_initialize( textureGpuManager );
+        D3D11WindowSwapChainBased::_initialize( textureGpuManager, miscParams );
 
         IDXGIFactory1 *dxgiFactory1 = mDevice.GetDXGIFactory();
         dxgiFactory1->MakeWindowAssociation( mHwnd,

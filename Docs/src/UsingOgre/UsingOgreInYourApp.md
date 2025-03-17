@@ -5,10 +5,10 @@
 
 # Overview {#UsingOgreInYourAppOverview}
 
-We'll setup an application that uses Ogre. For that, we'll use the Demo Framework that
+We'll setup an application that uses OgreNext. For that, we'll use the Demo Framework that
 comes with the samples as a starting point.
 
-For Ogre 2.1 to work correctly, you'll need to register Hlms implementations.
+For OgreNext to work correctly, you'll need to register Hlms implementations.
 We provide PBS (Physically Based Shading) and Unlit implementations for you to use out of the box.
 These implementations will require you to include their data folders, it's not just header and libraries.
 
@@ -17,8 +17,8 @@ You will need to:
     * Include Components/Hlms/Common/include
     * Include Components/Hlms/Pbs/include
     * Include Components/Hlms/Unlit/include
-    * Include build/Release/include (that's where OgreBuildSettings.h is)
-    * Add the link path build/Release/lib/
+    * Include build/Release/include (that's where OgreBuildSettings.h is). This path depends on the platform. On Windows (Visual Studio) it's build/include
+    * Add the link path build/Release/lib/. This path depends on the platform. On Windows (Visual Studio) it's build/lib/Release
     * Link against OgreHlmsPbs.lib
     * Link against OgreHlmsUnlit.lib
     * Link against OgreMain.lib
@@ -60,7 +60,7 @@ This script can be found in **Samples/2.0/Tutorials/EmptyProject**
 It will setup a project with the following folder structure:
 Folder                          | Description
 --------------------------------|-------------------------------------------
-build                           | Internally used by CMake. Ignore it. Also likely object and PDB files from your compiler will end up there.
+build                           | Internally used by CMake. That's where the solution/project file for Visual Studio is stored (or makefiles for GNU Make, etc). Also likely object and PDB files from your compiler will end up there.
 bin                             | That's where your binaries will be generated. Your binaries will actually be in bin/Release bin/Debug, etc.
 bin/Data                        | That's where your assets should go. The script will automatically copy the Hlms data files to this location every time you run CMake's Generate.
 CMake                           | Files used by the CMake script we're talking about.

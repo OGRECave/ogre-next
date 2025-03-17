@@ -64,6 +64,51 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     VulkanTextureGpu::~VulkanTextureGpu() { destroyInternalResourcesImpl(); }
     //-----------------------------------------------------------------------------------
+    void VulkanTextureGpu::notifyDeviceLost()
+    {
+        // release VkImage
+        mPendingResidencyChanges = 0;  // we already cleared D3D11TextureGpuManager::mScheduledTasks
+        mTexturePool = 0;              // texture pool is already destroyed
+        mInternalSliceStart = 0;
+        if( getResidencyStatus() == GpuResidency::Resident )
+        {
+            _transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+            mNextResidencyStatus = GpuResidency::Resident;
+        }
+        mDisplayTextureName = 0;
+
+        // release VkImageView
+        if( mDefaultDisplaySrv && mOwnsSrv )
+        {
+            VulkanTextureGpuManager *textureManager =
+                static_cast<VulkanTextureGpuManager *>( mTextureManager );
+            VulkanDevice *device = textureManager->getDevice();
+
+            vkDestroyImageView( device->mDevice, mDefaultDisplaySrv, 0 );
+            mDefaultDisplaySrv = 0;
+            mOwnsSrv = false;
+        }
+        mDefaultDisplaySrv = 0;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanTextureGpu::notifyDeviceRestored( unsigned pass )
+    {
+        if( pass == 0 )
+        {
+            // VulkanWindow*::notifyDeviceRestored handles RenderWindow-specific textures
+            if( !isRenderWindowSpecific() )
+            {
+                _setToDisplayDummyTexture();
+
+                if( getNextResidencyStatus() == GpuResidency::Resident )
+                {
+                    mNextResidencyStatus = mResidencyStatus;
+                    scheduleTransitionTo( GpuResidency::Resident );
+                }
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     PixelFormatGpu VulkanTextureGpu::getWorkaroundedPixelFormat( const PixelFormatGpu pixelFormat ) const
     {
         PixelFormatGpu retVal = pixelFormat;
@@ -144,6 +189,15 @@ namespace Ogre
         if( isUav() )
             imageInfo.usage |= VK_IMAGE_USAGE_STORAGE_BIT;
 
+        const bool bAllowMemoryless = mTextureManager->allowMemoryless();
+        if( bAllowMemoryless && isTilerMemoryless() )
+        {
+            imageInfo.usage |= VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
+            imageInfo.usage &=
+                ( VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
+                  VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT );
+        }
+
         String textureName = getNameStr();
 
         VulkanTextureGpuManager *textureManager =
@@ -151,7 +205,7 @@ namespace Ogre
         VulkanDevice *device = textureManager->getDevice();
 
         VkResult imageResult = vkCreateImage( device->mDevice, &imageInfo, 0, &mFinalTextureName );
-        checkVkResult( imageResult, "vkCreateImage" );
+        checkVkResult( device, imageResult, "vkCreateImage" );
 
         setObjectName( device->mDevice, (uint64_t)mFinalTextureName,
                        VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, textureName.c_str() );
@@ -166,7 +220,7 @@ namespace Ogre
 
         VkResult result =
             vkBindImageMemory( device->mDevice, mFinalTextureName, deviceMemory, mInternalBufferStart );
-        checkVkResult( result, "vkBindImageMemory" );
+        checkVkResult( device, result, "vkBindImageMemory" );
 
         if( isPoolOwner() )
         {
@@ -814,7 +868,7 @@ namespace Ogre
 
         VkImageView imageView;
         VkResult result = vkCreateImageView( device->mDevice, &imageViewCi, 0, &imageView );
-        checkVkResult( result, "vkCreateImageView" );
+        checkVkResult( device, result, "vkCreateImageView" );
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         const String textureName = getNameStr() + "(View)";
@@ -979,6 +1033,17 @@ namespace Ogre
                                ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
                                : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
+        const bool bAllowMemoryless = mTextureManager->allowMemoryless();
+        if( bAllowMemoryless )
+        {
+            // mMsaaFramebufferName is always Memoryless because the user *NEVER* has access to it
+            // and we always auto-resolve in the same pass, thus MSAA contents are always transient.
+            imageInfo.usage |= VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
+            imageInfo.usage &=
+                ( VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
+                  VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT );
+        }
+
         String textureName = getNameStr() + "/MsaaImplicit";
 
         VulkanTextureGpuManager *textureManager =
@@ -986,7 +1051,7 @@ namespace Ogre
         VulkanDevice *device = textureManager->getDevice();
 
         VkResult imageResult = vkCreateImage( device->mDevice, &imageInfo, 0, &mMsaaFramebufferName );
-        checkVkResult( imageResult, "vkCreateImage" );
+        checkVkResult( device, imageResult, "vkCreateImage" );
 
         setObjectName( device->mDevice, (uint64_t)mMsaaFramebufferName,
                        VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, textureName.c_str() );
@@ -1001,7 +1066,7 @@ namespace Ogre
 
         VkResult result = vkBindImageMemory( device->mDevice, mMsaaFramebufferName, deviceMemory,
                                              mMsaaInternalBufferStart );
-        checkVkResult( result, "vkBindImageMemory" );
+        checkVkResult( device, result, "vkBindImageMemory" );
 
         // Immediately transition to its only state
         VkImageMemoryBarrier imageBarrier = this->getImageMemoryBarrier();

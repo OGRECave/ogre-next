@@ -81,6 +81,7 @@ generators = \
 platforms = \
 [
 	'Win32',
+	'ARM64',
 	'x64'
 ]
 

@@ -479,7 +479,7 @@ namespace Ogre
                     }
                 }
             }
-            else
+            else if( ( *itLight )->getSpotlightTanHalfAngle() <= 1.0f )
             {
                 // Spotlight. Do pyramid vs frustum intersection. This pyramid
                 // has 5 sides and encloses the spotlight's cone.
@@ -492,13 +492,13 @@ namespace Ogre
                 const Real lightRange = ( *itLight )->getAttenuationRange();
                 const Real lenOpposite = ( *itLight )->getSpotlightTanHalfAngle() * lightRange;
 
-                Vector3 leftCorner =
-                    lightNode->_getDerivedOrientation() * Vector3( -lenOpposite, lenOpposite, 0 );
-                Vector3 rightCorner =
-                    lightNode->_getDerivedOrientation() * Vector3( lenOpposite, lenOpposite, 0 );
+                const Quaternion lightRot = lightNode->_getDerivedOrientation();
 
-                Vector3 scalarLightPos = ( *itLight )->getParentNode()->_getDerivedPosition();
-                Vector3 scalarLightDir = ( *itLight )->getDerivedDirection() * lightRange;
+                const Vector3 leftCorner = lightRot * Vector3( -lenOpposite, lenOpposite, 0 );
+                const Vector3 rightCorner = lightRot * Vector3( lenOpposite, lenOpposite, 0 );
+
+                const Vector3 scalarLightPos = ( *itLight )->getParentNode()->_getDerivedPosition();
+                const Vector3 scalarLightDir = ( *itLight )->getDerivedDirection() * lightRange;
 
                 Plane scalarPlane[6];
 
@@ -585,6 +585,147 @@ namespace Ogre
                                 dotResult =
                                     pyramidPlane[k].normal.dotProduct( frustumRegion->corners[l] ) -
                                     pyramidPlane[k].negD;
+                                vertexMask = Mathlib::Or(
+                                    vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
+                            }
+
+                            mask = Mathlib::And( mask, vertexMask );
+                        }
+                    }
+
+                    const uint32 scalarMask = BooleanMask4::getScalarMask( mask );
+
+                    for( size_t k = 0; k < ARRAY_PACKED_REALS; ++k )
+                    {
+                        if( IS_BIT_SET( k, scalarMask ) )
+                        {
+                            const size_t idx = ( frustumStartIdx + j ) * ARRAY_PACKED_REALS + k;
+                            FastArray<LightCount>::iterator numLightsInCell =
+                                mLightCountInCell.begin() + idx;
+
+                            // assert( numLightsInCell < mLightCountInCell.end() );
+
+                            if( numLightsInCell->lightCount[0] < mLightsPerCell )
+                            {
+                                uint16 *RESTRICT_ALIAS cellElem =
+                                    mGridBuffer + idx * mObjsPerCell +
+                                    ( numLightsInCell->lightCount[0] + c_reservedLightSlotsPerCell );
+                                *cellElem = static_cast<uint16>( i * c_ForwardPlusNumFloat4PerLight );
+                                ++numLightsInCell->lightCount[0];
+                                ++numLightsInCell->lightCount[lightType];
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // Spotlight with outer angle > 90°. tan(45°) starts growing too large very quickly,
+                // yet the spotlight's light reach is limited by its radius, causing the "false"
+                // positives to blow up (they're not technically false positives because light is
+                // infinite, but for practical purposes, they are).
+                // Just doing the OBB that encloses the spotlight is much more conservative.
+
+                Node *lightNode = ( *itLight )->getParentNode();
+
+                // Generate the 6 OBB vertices
+                const Real lightRange = ( *itLight )->getAttenuationRange();
+                const Real lenOpposite = ( *itLight )->getSpotlightSinHalfAngle() * lightRange;
+
+                const Quaternion lightRot = lightNode->_getDerivedOrientation();
+
+                const Vector3 bottomLeftCorner = lightRot * Vector3( -lenOpposite, -lenOpposite, 0 );
+                const Vector3 topRightCorner = -bottomLeftCorner;
+
+                const Vector3 scalarLightPos = ( *itLight )->getParentNode()->_getDerivedPosition();
+                const Vector3 scalarLightDir = ( *itLight )->getDerivedDirection() * lightRange;
+
+                Plane scalarPlane[6];
+
+                scalarPlane[FRUSTUM_PLANE_FAR] =
+                    Plane( lightRot.zAxis(), scalarLightPos + scalarLightDir );
+                scalarPlane[FRUSTUM_PLANE_NEAR] =
+                    Plane( -scalarPlane[FRUSTUM_PLANE_FAR].normal, scalarLightPos );
+
+                scalarPlane[FRUSTUM_PLANE_LEFT] =
+                    Plane( lightRot.xAxis(), scalarLightPos + bottomLeftCorner );
+                scalarPlane[FRUSTUM_PLANE_RIGHT] =
+                    Plane( -scalarPlane[FRUSTUM_PLANE_LEFT].normal, scalarLightPos + topRightCorner );
+
+                scalarPlane[FRUSTUM_PLANE_TOP] =
+                    Plane( -lightRot.yAxis(), scalarLightPos + topRightCorner );
+                scalarPlane[FRUSTUM_PLANE_BOTTOM] =
+                    Plane( -scalarPlane[FRUSTUM_PLANE_TOP].normal, scalarLightPos + bottomLeftCorner );
+
+                ArrayPlane obbPlane[6];
+                obbPlane[0].normal.setAll( scalarPlane[0].normal );
+                obbPlane[0].negD = Mathlib::SetAll( -scalarPlane[0].d );
+                obbPlane[1].normal.setAll( scalarPlane[1].normal );
+                obbPlane[1].negD = Mathlib::SetAll( -scalarPlane[1].d );
+                obbPlane[2].normal.setAll( scalarPlane[2].normal );
+                obbPlane[2].negD = Mathlib::SetAll( -scalarPlane[2].d );
+                obbPlane[3].normal.setAll( scalarPlane[3].normal );
+                obbPlane[3].negD = Mathlib::SetAll( -scalarPlane[3].d );
+                obbPlane[4].normal.setAll( scalarPlane[4].normal );
+                obbPlane[4].negD = Mathlib::SetAll( -scalarPlane[4].d );
+                obbPlane[5].normal.setAll( scalarPlane[5].normal );
+                obbPlane[5].negD = Mathlib::SetAll( -scalarPlane[5].d );
+
+                const Vector3 topLeftCorner = lightRot * Vector3( -lenOpposite, lenOpposite, 0 );
+                const Vector3 bottomRightCorner = -topLeftCorner;
+
+                ArrayVector3 obbVertex[8];
+
+                obbVertex[0].setAll( scalarLightPos + bottomLeftCorner );
+                obbVertex[0].setAll( scalarLightPos + topRightCorner );
+                obbVertex[1].setAll( scalarLightPos + scalarLightDir + bottomLeftCorner );
+                obbVertex[2].setAll( scalarLightPos + scalarLightDir + topRightCorner );
+
+                obbVertex[3].setAll( scalarLightPos + topLeftCorner );
+                obbVertex[4].setAll( scalarLightPos + bottomRightCorner );
+                obbVertex[5].setAll( scalarLightPos + scalarLightDir + topLeftCorner );
+                obbVertex[6].setAll( scalarLightPos + scalarLightDir + bottomRightCorner );
+
+                for( size_t j = 0; j < numPackedFrustumsPerSlice; ++j )
+                {
+                    const FrustumRegion *RESTRICT_ALIAS frustumRegion =
+                        mFrustumRegions.get() + frustumStartIdx + j;
+
+                    ArrayReal dotResult;
+                    ArrayMaskR mask;
+
+                    mask = BooleanMask4::getAllSetMask();
+
+                    // There is no intersection if for at least one of the 12 planes
+                    //(6+6) all the vertices (8+8 verts.) are on the negative side.
+
+                    // Test all 8 obb vertices against each of the 6 frustum planes.
+                    for( int k = 0; k < 6; ++k )
+                    {
+                        ArrayMaskR vertexMask = ARRAY_MASK_ZERO;
+
+                        for( int l = 0; l < 8; ++l )
+                        {
+                            dotResult = frustumRegion->plane[k].normal.dotProduct( obbVertex[l] ) -
+                                        frustumRegion->plane[k].negD;
+                            vertexMask = Mathlib::Or(
+                                vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
+                        }
+
+                        mask = Mathlib::And( mask, vertexMask );
+                    }
+
+                    if( BooleanMask4::getScalarMask( mask ) != 0 )
+                    {
+                        // Test all 8 frustum corners against each of the 6 obb planes.
+                        for( int k = 0; k < 6; ++k )
+                        {
+                            ArrayMaskR vertexMask = ARRAY_MASK_ZERO;
+
+                            for( int l = 0; l < 8; ++l )
+                            {
+                                dotResult = obbPlane[k].normal.dotProduct( frustumRegion->corners[l] ) -
+                                            obbPlane[k].negD;
                                 vertexMask = Mathlib::Or(
                                     vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
                             }

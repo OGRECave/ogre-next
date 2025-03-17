@@ -25,6 +25,8 @@ layout(std140) uniform;
 	@end
 @end
 
+@insertpiece( custom_ps_output_types )
+
 @property( hlms_use_prepass )
 	@property( !hlms_use_prepass_msaa )
 		vulkan_layout( ogre_t@value(gBuf_normals) )			uniform texture2D gBuf_normals;
@@ -67,7 +69,7 @@ in vec4 gl_FragCoord;
 
 @insertpiece( PccManualProbeDecl )
 
-@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || alpha_test || hlms_alpha_hash || exponential_shadow_maps )
+@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || ( ( alpha_test || hlms_alpha_hash ) && hlms_uv_count ) || exponential_shadow_maps || hlms_shadowcaster_point )
 vulkan_layout( location = 0 ) in block
 {
 @insertpiece( VStoPS_block )

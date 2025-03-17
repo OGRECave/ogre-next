@@ -100,6 +100,7 @@ namespace Ogre
     TextureGpuManager::TextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem ) :
         mDefaultMipmapGen( DefaultMipmapGen::HwMode ),
         mDefaultMipmapGenCubemaps( DefaultMipmapGen::SwMode ),
+        mAllowMemoryLess( false ),
         mShuttingDown( false ),
         mUseMultiload( false ),
         mTryLockMutexFailureCount( 0u ),
@@ -1163,8 +1164,9 @@ namespace Ogre
                                             size_t &outUsedStagingTextureBytes,
                                             size_t &outAvailableStagingTextureBytes )
     {
-        outUsedStagingTextureBytes = getConsumedMemoryByStagingTextures( mAvailableStagingTextures );
-        outAvailableStagingTextureBytes = getConsumedMemoryByStagingTextures( mUsedStagingTextures );
+        outAvailableStagingTextureBytes =
+            getConsumedMemoryByStagingTextures( mAvailableStagingTextures );
+        outUsedStagingTextureBytes = getConsumedMemoryByStagingTextures( mUsedStagingTextures );
 
         size_t textureBytesCpu = 0;
         size_t textureBytesGpu = 0;
@@ -2091,6 +2093,23 @@ namespace Ogre
     DefaultMipmapGen::DefaultMipmapGen TextureGpuManager::getDefaultMipmapGenerationCubemaps() const
     {
         return mDefaultMipmapGenCubemaps;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::setAllowMemoryless( const bool bAllowMemoryLess )
+    {
+        if( !mRenderSystem->getCapabilities()->hasCapability( RSC_IS_TILER ) )
+        {
+            mAllowMemoryLess = false;
+            LogManager::getSingleton().logMessage(
+                "Device is NOT tiler. TilerMemoryless flag will be ignored." );
+        }
+        else
+        {
+            mAllowMemoryLess = bAllowMemoryLess;
+            LogManager::getSingleton().logMessage(
+                String( "Device IS tiler. TilerMemoryless flag will be: " ) +
+                ( bAllowMemoryLess ? "allowed." : "ignored" ) );
+        }
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_reserveSlotForTexture( TextureGpu *texture )

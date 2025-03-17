@@ -24,5 +24,6 @@
 		@end
 
 		@insertpiece( ExtraOutputTypes )
+		@insertpiece( custom_ps_output_types )
 	};
 @end

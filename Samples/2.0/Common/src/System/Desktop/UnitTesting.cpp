@@ -692,10 +692,10 @@ namespace Demo
                             img.save( outputFolder + frameIdxStr + "RenderWindow_colour.png", 0u,
                                       texture->getNumMipmaps() );
 
-                            texture = renderWindow->getDepthBuffer();
+                            /*texture = renderWindow->getDepthBuffer();
                             img.convertFromTexture( texture, 0u, texture->getNumMipmaps() - 1u );
                             img.save( outputFolder + frameIdxStr + "RenderWindow_depth.exr", 0u,
-                                      texture->getNumMipmaps() );
+                                      texture->getNumMipmaps() );*/
                         }
 
                         Ogre::StringVector::const_iterator itor =

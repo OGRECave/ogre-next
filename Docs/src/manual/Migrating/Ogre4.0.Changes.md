@@ -82,3 +82,14 @@ The variable `HlmsUnlit::mSamplerUnitSlotStart` was removed and `HlmsUnlit::mTex
 Users deriving from HlmsUnlit must set mReservedTexBufferSlots & mReservedTexSlots instead, like it is done for HlmsPbs.
 
 See [Colibri project's commit](https://github.com/darksylinc/colibrigui/commit/87e74824973007ee9f7f3f46719d2a6ba4948678) for an example of how the change was ported.
+
+## Header renames
+
+Due to issues with different IDEs and build systems, renamed several headers so that all header files have a unique name, even if they live in a different folder.
+
+For example `Animation/OgreTagPoint.h` is now `Animation/OgreTagPoint2.h` because `OgreTagPoint.h` already existed. This can cause build errors when upgrading to 4.0 that are easily fix by switching to their new names.
+
+See commits [75801f33df72844384549b11de96b10421584bce](https://github.com/OGRECave/ogre-next/commit/75801f33df72844384549b11de96b10421584bce) and [67f9fddd4292877dbedb2507fba7719c42aad97c](https://github.com/OGRECave/ogre-next/commit/67f9fddd4292877dbedb2507fba7719c42aad97c) for affected files.
+The message of the commit was:
+
+> Avoid identically named source files - some build systems have problems with it, even if CMake have none (headermaps in XCode, shared intermediate folder in Visual Studio)

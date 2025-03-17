@@ -204,6 +204,10 @@ namespace Ogre
 
     protected:
         void         checkRequiresTextureFlipping();
+        void         validateMemorylessTexture( const TextureGpu              *texture,
+                                                const LoadAction::LoadAction   loadAction,
+                                                const StoreAction::StoreAction storeAction,
+                                                const bool                     bIsDepthStencil );
         virtual void colourEntriesModified();
 
     public:

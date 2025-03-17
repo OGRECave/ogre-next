@@ -10,7 +10,7 @@ syntax: glob
 *.rule
 *.sdf
 .DS_Store
-Dependencies/*
+Dependencies
 iOSDependencies
 build/*
 SDK/OSX/sdk_contents

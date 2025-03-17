@@ -124,6 +124,12 @@ Would work using the following RootLayout:
 		"samplers"          : [1,2],
 		"uav_buffers"       : [1,2],
 		"uav_textures"      : [0,1]
+	},
+	"1" :
+	{
+		"baked" : true,
+		"uav_buffers"       : [1,2],
+		"uav_textures"      : [0,1]
 	}
 }
 ```
@@ -233,16 +239,16 @@ void HlmsUnlit::setupRootLayout( RootLayout &rootLayout )
 {
     DescBindingRange *descBindingRanges = rootLayout.mDescBindingRanges[0];
 
-	// We have up to 3 const buffers at slots 0, 1 and 2
+    // We have up to 3 const buffers at slots 0, 1 and 2
     descBindingRanges[DescBindingTypes::ConstBuffer].end = 3u;
 
-	// When there's texture matrix animations, we must consume one extra buffer slot
+    // When there's texture matrix animations, we must consume one extra buffer slot
     if( getProperty( UnlitProperty::TextureMatrix ) == 0 )
         descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 1u;
     else
         descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 2u;
 
-	// Baked sets are the ones that use DescriptorSetTexture/Sampler/Texture2/Uav
+    // Baked sets are the ones that use DescriptorSetTexture/Sampler/Texture2/Uav
     rootLayout.mBaked[1] = true;
     DescBindingRange *bakedRanges = rootLayout.mDescBindingRanges[1];
     bakedRanges[DescBindingTypes::Sampler].start = (uint16)mSamplerUnitSlotStart;
@@ -261,9 +267,11 @@ void HlmsUnlit::setupRootLayout( RootLayout &rootLayout )
 
 Non-baked sets are meant to behave very similarly to table models in D3D11 and OpenGL.
 
-Baked sets on the other hand are meant exclusively for binding `DescriptorSetTexture`, `DescriptorSetSampler`, `DescriptorSetTexture2` and `DescriptorSetUav`
+Baked sets on the other hand are meant exclusively for binding `DescriptorSetTexture`, `DescriptorSetSampler`, `DescriptorSetTexture2` and `DescriptorSetUav`.
 
-The size of the DescriptorSet\* must match *exactly* the amount of bindings slots in the RootLayout
+The size of the DescriptorSet\* must match *exactly* the amount of bindings slots in the RootLayout.
+
+Since UAVs can only be bound via `DescriptorSetUav`, UAVs must be placed in baked sets.
 
 # Prefab Root Layouts for low level materials {#RootLayoutPrefabs}
 
@@ -318,7 +326,7 @@ rootLayout.addArrayBinding( DescBindingTypes::Sampler, ArrayDesc( 0, 3 ) );
     "arrays" :
     {
         "textures" : [[0, 5], [0, 4]],
-		"samplers" : [[0, 3]],
+        "samplers" : [[0, 3]],
     }
 }
 ```

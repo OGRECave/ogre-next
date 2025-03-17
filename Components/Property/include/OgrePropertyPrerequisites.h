@@ -31,13 +31,6 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-namespace Ogre
-{
-
-    typedef GeneralAllocatedObject PropertyAlloc;
-
-}
-
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #   if defined( OGRE_STATIC_LIB )
 #       define _OgrePropertyExport

@@ -123,6 +123,11 @@ compositor_node RefractionsRefractionsNode
 		pass render_quad
 		{
 			load { all dont_care }
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
 			material Ogre/Copy/4xFP32
 			input 0 rtt_final
 

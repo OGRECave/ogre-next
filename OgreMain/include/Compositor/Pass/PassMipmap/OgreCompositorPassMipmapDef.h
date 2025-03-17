@@ -80,6 +80,10 @@ namespace Ogre
             mGaussianDeviationFactor( 0.5f ),
             mKernelRadius( 8 )
         {
+            mLoadActionDepth = LoadAction::DontCare;
+            mLoadActionStencil = LoadAction::DontCare;
+            mStoreActionDepth = StoreAction::DontCare;
+            mStoreActionStencil = StoreAction::DontCare;
         }
     };
 

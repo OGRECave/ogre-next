@@ -2505,6 +2505,16 @@ namespace Ogre
         */
         virtual void extractAllMovableObjectsByType( const String &typeName );
 
+        /** Deduces a debug-friendly name for this MovableObject.
+        @remarks
+            This function is not optimized for speed, but for debugging and error reporting.
+        @param movableObject
+            Object we want the name from (i.e. the mesh it's based on).
+        @return
+            A user-friendly name. If it could not be deduced, a generic name is used instead.
+         */
+        static String deduceMovableObjectName( const MovableObject *movableObject );
+
         /** Sets a mask which is bitwise 'and'ed with objects own visibility masks
             to determine if the object is visible.
         @remarks

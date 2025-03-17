@@ -47,7 +47,7 @@ namespace Ogre
     /** Page class
     */
     class _OgrePagingExport Page : public WorkQueue::RequestHandler, 
-        public WorkQueue::ResponseHandler, public PageAlloc
+        public WorkQueue::ResponseHandler
     {
     public:
         typedef vector<PageContentCollection*>::type ContentCollectionList;
@@ -63,7 +63,7 @@ namespace Ogre
         SceneNode* mDebugNode;
         void updateDebugDisplay();
 
-        struct PageData : public PageAlloc
+        struct PageData
         {
             ContentCollectionList collectionsToAdd;
         };

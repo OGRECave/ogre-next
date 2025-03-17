@@ -146,7 +146,7 @@ namespace Ogre
 
         VkResult result = vkWaitForFences( device->mDevice, 1, &syncObj, VK_TRUE,
                                            UINT64_MAX );  // You can't wait forever in Vulkan?!?
-        checkVkResult( result, "VulkanStagingBuffer::wait" );
+        checkVkResult( device, result, "VulkanStagingBuffer::wait" );
     }
     //-----------------------------------------------------------------------------------
     void VulkanStagingBuffer::waitIfNeeded()
@@ -354,7 +354,8 @@ namespace Ogre
         OGRE_ASSERT_HIGH( !Workarounds::mPowerVRAlignment ||
                           ( region.dstOffset % Workarounds::mPowerVRAlignment ) == 0u );
 #endif
-        vkCmdCopyBuffer( device->mGraphicsQueue.getCurrentCmdBuffer(), mVboName, dstBuffer, 1u, &region );
+        vkCmdCopyBuffer( device->mGraphicsQueue.getCurrentCmdBuffer(), mVboName, dstBuffer, 1u,
+                         &region );
 
         if( mUploadOnly )
         {
@@ -417,7 +418,8 @@ namespace Ogre
         OGRE_ASSERT_HIGH( !Workarounds::mPowerVRAlignment ||
                           ( region.dstOffset % Workarounds::mPowerVRAlignment ) == 0u );
 #endif
-        vkCmdCopyBuffer( device->mGraphicsQueue.getCurrentCmdBuffer(), srcBuffer, mVboName, 1u, &region );
+        vkCmdCopyBuffer( device->mGraphicsQueue.getCurrentCmdBuffer(), srcBuffer, mVboName, 1u,
+                         &region );
 
         return freeRegionOffset + extraOffset;
     }

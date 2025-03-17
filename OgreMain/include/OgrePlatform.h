@@ -81,7 +81,8 @@ THE SOFTWARE.
 #if defined( __x86_64__ ) || defined( _M_X64 ) || defined( _M_X64 ) || defined( _M_AMD64 ) || \
     defined( __ppc64__ ) || defined( __PPC64__ ) || defined( __arm64__ ) || defined( __aarch64__ ) || \
     defined( _M_ARM64 ) || defined( __mips64 ) || defined( __mips64_ ) || defined( __alpha__ ) || \
-    defined( __ia64__ ) || defined( __e2k__ ) || defined( __s390__ ) || defined( __s390x__ )
+    defined( __ia64__ ) || defined( __e2k__ ) || defined( __s390__ ) || defined( __s390x__ ) || \
+    (defined(__riscv) && __riscv_xlen == 64)
 #    define OGRE_ARCH_TYPE OGRE_ARCHITECTURE_64
 #else
 #    define OGRE_ARCH_TYPE OGRE_ARCHITECTURE_32
@@ -216,6 +217,15 @@ THE SOFTWARE.
 #define OGRE_QUOTE_INPLACE( x ) #x
 #define OGRE_QUOTE( x ) OGRE_QUOTE_INPLACE( x )
 #define OGRE_WARN( x ) message( __FILE__ "(" QUOTE( __LINE__ ) ") : " x "\n" )
+
+// portable analog of __PRETTY_FUNCTION__, see also BOOST_CURRENT_FUNCTION
+#if OGRE_COMPILER == OGRE_COMPILER_GNUC || OGRE_COMPILER == OGRE_COMPILER_CLANG
+#    define OGRE_CURRENT_FUNCTION __PRETTY_FUNCTION__
+#elif OGRE_COMPILER == OGRE_COMPILER_MSVC || defined( __FUNCSIG__ )
+#    define OGRE_CURRENT_FUNCTION __FUNCSIG__
+#else  // C++11
+#    define OGRE_CURRENT_FUNCTION __func__
+#endif
 
 // For marking functions as deprecated
 #if __cplusplus >= 201402L || OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER >= 1900
@@ -508,7 +518,8 @@ THE SOFTWARE.
 
 // Define whether or not Ogre compiled with NEON support.
 #    if OGRE_DOUBLE_PRECISION == 0 && OGRE_CPU == OGRE_CPU_ARM && \
-        ( defined( __aarch64__ ) || defined( __ARM_NEON__ ) || \
+        ( defined( __aarch64__ ) || defined( __arm64__ ) || defined( _M_ARM64 ) || \
+          defined( __ARM_NEON__ ) || \
           defined( _WIN32_WINNT_WIN8 ) && _WIN32_WINNT >= _WIN32_WINNT_WIN8 )
 #        define __OGRE_HAVE_NEON 1
 #    endif

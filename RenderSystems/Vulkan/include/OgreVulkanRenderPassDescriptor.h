@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreCommon.h"
 #include "OgrePixelFormatGpu.h"
 #include "OgreRenderPassDescriptor.h"
+#include "OgreVulkanDeviceResource.h"
 
 #include "vulkan/vulkan_core.h"
 
@@ -88,7 +89,8 @@ namespace Ogre
     typedef map<VulkanFrameBufferDescKey, VulkanFrameBufferDescValue>::type VulkanFrameBufferDescMap;
     typedef map<FrameBufferDescKey, VulkanFlushOnlyDescValue>::type VulkanFlushOnlyDescMap;
 
-    class _OgreVulkanExport VulkanRenderPassDescriptor final : public RenderPassDescriptor
+    class _OgreVulkanExport VulkanRenderPassDescriptor final : public RenderPassDescriptor,
+                                                               protected VulkanDeviceResource
     {
     protected:
         // 1 per MRT
@@ -153,6 +155,9 @@ namespace Ogre
     public:
         VulkanRenderPassDescriptor( VulkanQueue *graphicsQueue, VulkanRenderSystem *renderSystem );
         ~VulkanRenderPassDescriptor() override;
+
+        void notifyDeviceLost() override;
+        void notifyDeviceRestored( unsigned pass ) override;
 
         void notifySwapchainCreated( VulkanWindow *window );
         void notifySwapchainDestroyed( VulkanWindow *window );

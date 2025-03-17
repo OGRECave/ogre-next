@@ -36,6 +36,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    OGRE_ASSUME_NONNULL_BEGIN
+
     class _OgrePrivate GLXWindow final : public Window
     {
     protected:
@@ -60,7 +62,8 @@ namespace Ogre
                    GLXGLSupport *glsupport );
         ~GLXWindow() override;
 
-        void _initialize( TextureGpuManager *textureManager ) override;
+        void _initialize( TextureGpuManager                     *textureManager,
+                          const NameValuePairList *ogre_nullable miscParams ) override;
 
         void setVSync( bool vSync, uint32 vSyncInterval ) override;
         void reposition( int32 left, int32 top ) override;
@@ -108,6 +111,8 @@ namespace Ogre
 
         bool requiresTextureFlipping() const { return false; }
     };
+
+    OGRE_ASSUME_NONNULL_END
 }  // namespace Ogre
 
 #endif

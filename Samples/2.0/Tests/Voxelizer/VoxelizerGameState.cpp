@@ -403,7 +403,7 @@ namespace Demo
 
             const float xPos = ( i % 16u ) - 7.5f;
             const float zPos = ( i / 16u ) % 16u - 7.5f;
-            const float yPos = i / ( 16u * 16u );
+            const float yPos = static_cast<float>( i / ( 16u * 16u ) );
 
             sceneNode->setPosition( xPos * 0.12f, 0.05f + 0.35f * yPos, zPos * 0.12f );
             sceneNode->attachObject( item );

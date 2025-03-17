@@ -32,6 +32,17 @@ compositor_node InstancedStereoNode
 		//Render overlays last on the entire screen
 		pass render_scene
 		{
+			load
+			{
+				depth dont_care
+				stencil dont_care
+			}
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
+
 			rq_first	254
 			rq_last		255
 

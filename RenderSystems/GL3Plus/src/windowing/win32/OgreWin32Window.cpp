@@ -642,7 +642,7 @@ namespace Ogre
         mFullscreenMode = mRequestedFullscreenMode;
     }
     //-----------------------------------------------------------------------------------
-    void Win32Window::_initialize( TextureGpuManager *textureGpuManager )
+    void Win32Window::_initialize( TextureGpuManager *textureGpuManager, const NameValuePairList * )
     {
         GL3PlusTextureGpuManager *textureManager =
             static_cast<GL3PlusTextureGpuManager *>( textureGpuManager );

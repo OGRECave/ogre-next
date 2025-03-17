@@ -130,6 +130,7 @@ namespace Ogre
         uint32 getNumSlices() const { return mNumSlices; }
         uint32 getLightsPerCell() const { return static_cast<uint32>( mLightsPerCell ); }
         uint32 getDecalsPerCell() const { return static_cast<uint32>( mDecalsPerCell ); }
+        uint32 getCubemapProbesPerCell() const { return static_cast<uint32>( mCubemapProbesPerCell ); }
         float  getMinDistance() const { return mMinDistance; }
         float  getMaxDistance() const { return mMaxDistance; }
 

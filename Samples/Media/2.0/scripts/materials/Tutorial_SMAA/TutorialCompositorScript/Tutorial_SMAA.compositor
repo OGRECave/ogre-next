@@ -37,12 +37,24 @@ compositor_node FinalComposition
 		pass render_quad
 		{
 			load { all dont_care }
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
 			material Ogre/Copy/4xFP32
 			input 0 rtN
 		}
 
 		pass render_scene
 		{
+			// We must set depth & stencil to dont_care because the
+			// Window's DepthBuffer is Memoryless by default and Overlays break the pass.
+			load
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
 			store
 			{
 				depth	dont_care

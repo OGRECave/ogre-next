@@ -33,7 +33,7 @@ echo %PYTHONPATH%
 IF NOT EXIST %BUILD_FOLDER%\..\ogre-next-deps (
 	mkdir %BUILD_FOLDER%\..\ogre-next-deps
 	echo --- Cloning ogre-next-deps ---
-	git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps %BUILD_FOLDER%\..\ogre-next-deps
+	call git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps %BUILD_FOLDER%\..\ogre-next-deps
 
 	mkdir %BUILD_FOLDER%\..\ogre-next-deps\build
 	cd %BUILD_FOLDER%\..\ogre-next-deps\build

@@ -310,9 +310,37 @@ namespace Ogre
                                    rtv->preferDepthTexture, rtv->depthBufferFormat );
         }
 
+        if( mDefinition->mSkipLoadStoreSemantics )
+        {
+            // Set everything to dont_care since validation must not complain.
+            const size_t numColourEntries = renderPassDesc->getNumColourEntries();
+            for( size_t i = 0u; i < numColourEntries; ++i )
+            {
+                renderPassDesc->mColour[i].loadAction = LoadAction::DontCare;
+                renderPassDesc->mColour[i].storeAction = StoreAction::DontCare;
+            }
+            renderPassDesc->mDepth.loadAction = LoadAction::DontCare;
+            renderPassDesc->mDepth.storeAction = StoreAction::DontCare;
+            renderPassDesc->mStencil.loadAction = LoadAction::DontCare;
+            renderPassDesc->mStencil.storeAction = StoreAction::DontCare;
+        }
+
         postRenderPassDescriptorSetup( renderPassDesc );
 
-        renderPassDesc->entriesModified( RenderPassDescriptor::All );
+        try
+        {
+            renderPassDesc->entriesModified( RenderPassDescriptor::All );
+        }
+        catch( Exception & )
+        {
+            LogManager::getSingleton().logMessage(
+                "The compositor pass '" + mDefinition->mProfilingId + "' from Node: '" +
+                    mParentNode->getDefinition()->getNameStr() + "' in Workspace: '" +
+                    mParentNode->getWorkspace()->getDefinition()->getNameStr() +
+                    "' threw the following Exception:",
+                LML_CRITICAL );
+            throw;
+        }
     }
     //-----------------------------------------------------------------------------------
     void CompositorPass::setupRenderPassTarget( RenderPassTargetBase *renderPassTargetAttachment,

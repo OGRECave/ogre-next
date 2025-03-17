@@ -14,10 +14,12 @@ layout(location = FRAG_COLOR, index = 0) out midf4 outColour;
 layout(location = FRAG_COLOR, index = 0) out midf outColour;
 @end
 
+@insertpiece( custom_ps_output_types )
+
 // START UNIFORM DECLARATION
 @insertpiece( custom_ps_uniformDeclaration )
 // END UNIFORM DECLARATION
-@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || alpha_test || hlms_alpha_hash || exponential_shadow_maps )
+@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || ( ( alpha_test || hlms_alpha_hash ) && hlms_uv_count ) || exponential_shadow_maps || hlms_shadowcaster_point )
 	vulkan_layout( location = 0 ) in block
 	{
 		@insertpiece( VStoPS_block )

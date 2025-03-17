@@ -81,6 +81,11 @@ namespace Ogre
         Rectangle2D( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
         ~Rectangle2D() override;
 
+        /** @copydoc MovableObject::_releaseManualHardwareResources */
+        void _releaseManualHardwareResources() override;
+        /** @copydoc MovableObject::_restoreManualHardwareResources */
+        void _restoreManualHardwareResources() override;
+
         bool       isQuad() const;
         bool       isStereo() const;
         bool       hasNormals() const;

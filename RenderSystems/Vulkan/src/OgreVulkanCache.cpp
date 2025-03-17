@@ -183,7 +183,13 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VulkanCache::VulkanCache( VulkanDevice *device ) : mDevice( device ) {}
     //-------------------------------------------------------------------------
-    VulkanCache::~VulkanCache()
+    VulkanCache::~VulkanCache() { destroy(); }
+    //-------------------------------------------------------------------------
+    void VulkanCache::notifyDeviceLost() { destroy(); }
+    //-------------------------------------------------------------------------
+    void VulkanCache::notifyDeviceRestored( unsigned pass ) {}
+    //-------------------------------------------------------------------------
+    void VulkanCache::destroy()
     {
         VkRenderPassMap::const_iterator itor = mRenderPassCache.begin();
         VkRenderPassMap::const_iterator endt = mRenderPassCache.end();
@@ -315,7 +321,7 @@ namespace Ogre
 
             VkResult result =
                 vkCreateRenderPass( mDevice->mGraphicsQueue.mDevice, &rpciCopy, 0, &retVal );
-            checkVkResult( result, "vkCreateRenderPass" );
+            checkVkResult( mDevice, result, "vkCreateRenderPass" );
 
             mRenderPassCache[rpciCopy] = retVal;
         }

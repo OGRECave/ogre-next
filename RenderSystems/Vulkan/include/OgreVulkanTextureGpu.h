@@ -29,11 +29,12 @@ THE SOFTWARE.
 #ifndef _OgreVulkanTextureGpu_H_
 #define _OgreVulkanTextureGpu_H_
 
-#include "OgreDescriptorSetTexture.h"
-#include "OgreDescriptorSetUav.h"
 #include "OgreVulkanPrerequisites.h"
 
+#include "OgreDescriptorSetTexture.h"
+#include "OgreDescriptorSetUav.h"
 #include "OgreTextureGpu.h"
+#include "OgreVulkanDeviceResource.h"
 
 #include "vulkan/vulkan_core.h"
 
@@ -48,7 +49,7 @@ namespace Ogre
      *  @{
      */
 
-    class _OgreVulkanExport VulkanTextureGpu : public TextureGpu
+    class _OgreVulkanExport VulkanTextureGpu : public TextureGpu, protected VulkanDeviceResource
     {
     protected:
         /// The general case is that the whole D3D11 texture will be accessed through the SRV.
@@ -105,6 +106,9 @@ namespace Ogre
 
         virtual void createMsaaSurface();
         virtual void destroyMsaaSurface();
+
+        void notifyDeviceLost() override;
+        void notifyDeviceRestored( unsigned pass ) override;
 
     public:
         VulkanTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, VaoManager *vaoManager,

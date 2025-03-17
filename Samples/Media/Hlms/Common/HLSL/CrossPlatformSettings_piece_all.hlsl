@@ -17,6 +17,8 @@
 
 #define buildFloat4x4( row0, row1, row2, row3 ) transpose( float4x4( row0, row1, row2, row3 ) )
 
+#define getMatrixRow( mat, idx ) transpose( mat )[idx]
+
 // See CrossPlatformSettings_piece_all.glsl for an explanation
 @property( precision_mode == full32 )
 	#define _h(x) (x)

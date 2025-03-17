@@ -506,15 +506,33 @@ namespace Ogre
         virtual const HlmsCache *createShaderCacheEntry( uint32           renderableHash,
                                                          const HlmsCache &passCache, uint32 finalHash,
                                                          const QueuedRenderable &queuedRenderable,
-                                                         HlmsCache              *reservedStubEntry,
-                                                         size_t                  threadIdx );
+                                                         HlmsCache *reservedStubEntry, uint64 deadline,
+                                                         size_t threadIdx );
 
-        /// This function gets called right before starting parsing all templates, and after
-        /// the renderable properties have been merged with the pass properties.
-        ///
-        /// Warning: For the HlmsDiskCache to work properly, this function should not rely
-        /// on member variables or other state. All state info should come from getProperty()
-        virtual void notifyPropertiesMergedPreGenerationStep( size_t tid );
+        enum PropertiesMergeStatus
+        {
+            PropertiesMergeStatusOk,
+            PropertiesMergeStatusWarning,
+            PropertiesMergeStatusError
+        };
+
+        /** This function gets called right before starting parsing all templates, and after
+            the renderable properties have been merged with the pass properties.
+
+            Warning: For the HlmsDiskCache to work properly, this function should not rely
+            on member variables or other state. All state info should come from getProperty().
+        @param tid
+            Thread idx of caller.
+        @param inOutPieces [in/out]
+            An array of size inOutPieces[NumShaderTypes]. Can be modified.
+            Warning: Do not later modify these pieces, or else HlmsDiskCache may be unable to
+            recompile the cache from outdated templates.
+        @return
+            If inconsistencies or errors were encountered.
+            Returning PropertiesMergeStatusError will raise an exception.
+        */
+        virtual PropertiesMergeStatus notifyPropertiesMergedPreGenerationStep( size_t     tid,
+                                                                               PiecesMap *inOutPieces );
 
         virtual HlmsDatablock *createDatablockImpl( IdString              datablockName,
                                                     const HlmsMacroblock *macroblock,
@@ -540,7 +558,7 @@ namespace Ogre
         HlmsCache preparePassHashBase( const Ogre::CompositorShadowNode *shadowNode, bool casterPass,
                                        bool dualParaboloid, SceneManager *sceneManager );
 
-        HlmsPassPso getPassPsoForScene( SceneManager *sceneManager );
+        HlmsPassPso getPassPsoForScene( SceneManager *sceneManager, const bool bForceCullNone );
 
         /// OpenGL sets texture binding slots from C++
         /// All other APIs set the slots from shader.
@@ -939,6 +957,8 @@ namespace Ogre
             See lastReturnedValue from getMaterial()
         @param reservedStubEntry
             The stub cache entry (return value of getMaterial()) to fill.
+        @param deadline
+            Deadline in ms, after which long shader compilation could be skipped to avoid frame stutter.
         @param queuedRenderable
             See getMaterial()
         @param renderableHash
@@ -946,7 +966,7 @@ namespace Ogre
         @param tid
             Thread idx of caller
         */
-        void compileStubEntry( const HlmsCache &passCache, HlmsCache *reservedStubEntry,
+        void compileStubEntry( const HlmsCache &passCache, HlmsCache *reservedStubEntry, uint64 deadline,
                                QueuedRenderable queuedRenderable, uint32 renderableHash,
                                uint32 finalHash, size_t tid );
 
@@ -1273,6 +1293,7 @@ namespace Ogre
         static const IdString AlphaBlend;
         static const IdString AlphaToCoverage;
         static const IdString AlphaHash;
+        static const IdString AccurateNonUniformNormalScaling;
         // Per material. Related with SsRefractionsAvailable
         static const IdString ScreenSpaceRefractions;
         static const IdString

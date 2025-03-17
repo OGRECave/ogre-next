@@ -100,7 +100,7 @@ namespace Ogre
         VkSemaphoreArray                mGpuWaitSemaphForCurrCmdBuff;
         FastArray<VkPipelineStageFlags> mGpuWaitFlags;
         /// Collection of semaphore we will signal when our queue
-        /// submitted in commitAndNextCommandBuffer is done
+        /// submitted in commitAndNextCommandBuffer is done. Semaphores are owned.
         VkSemaphoreArray                mGpuSignalSemaphForCurrCmdBuff;
         // clang-format on
 
@@ -222,7 +222,8 @@ namespace Ogre
     public:
         VkCommandBuffer getCurrentCmdBuffer()
         {
-            OGRE_ASSERT_LOW( mCurrentCmdBuffer );
+            if( !mCurrentCmdBuffer )  // device lost or any other error happens near vkSubmitQueue()
+                checkVkResult( mOwnerDevice, VK_ERROR_DEVICE_LOST, "getCurrentCmdBuffer" );
             return mCurrentCmdBuffer;
         }
         EncoderState getEncoderState() const { return mEncoderState; }

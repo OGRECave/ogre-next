@@ -99,7 +99,8 @@ namespace Ogre
         const HlmsCache *createShaderCacheEntry( uint32 renderableHash, const HlmsCache &passCache,
                                                  uint32                  finalHash,
                                                  const QueuedRenderable &queuedRenderable,
-                                                 HlmsCache *reservedStubEntry, size_t tid ) override;
+                                                 HlmsCache *reservedStubEntry, uint64 deadline,
+                                                 size_t tid ) override;
 
         HlmsDatablock *createDatablockImpl( IdString datablockName, const HlmsMacroblock *macroblock,
                                             const HlmsBlendblock *blendblock,
@@ -113,7 +114,8 @@ namespace Ogre
         void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces,
                                         const PiecesMap *normalPassPieces ) override;
 
-        void notifyPropertiesMergedPreGenerationStep( size_t tid ) override;
+        PropertiesMergeStatus notifyPropertiesMergedPreGenerationStep( size_t     tid,
+                                                                       PiecesMap *inOutPieces ) override;
 
         void destroyAllBuffers() override;
 

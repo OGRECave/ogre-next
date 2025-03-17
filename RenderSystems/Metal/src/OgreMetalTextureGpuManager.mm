@@ -40,6 +40,7 @@ THE SOFTWARE.
 #include "Vao/OgreMetalVaoManager.h"
 
 #include "OgreException.h"
+#include "OgreRoot.h"
 
 namespace Ogre
 {
@@ -157,11 +158,12 @@ namespace Ogre
                                                TextureTypes::Type2D, this, window );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu *MetalTextureGpuManager::createWindowDepthBuffer()
+    TextureGpu *MetalTextureGpuManager::createWindowDepthBuffer( const bool bMemoryLess )
     {
         return OGRE_NEW MetalTextureGpuRenderTarget(
             GpuPageOutStrategy::Discard, mVaoManager, "RenderWindow DepthBuffer",
             TextureFlags::NotTexture | TextureFlags::RenderToTexture |
+                ( ( bMemoryLess && allowMemoryless() ) ? TextureFlags::TilerMemoryless : 0 ) |
                 TextureFlags::RenderWindowSpecific | TextureFlags::DiscardableContent,
             TextureTypes::Type2D, this );
     }

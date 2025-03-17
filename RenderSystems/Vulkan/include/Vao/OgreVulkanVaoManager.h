@@ -440,36 +440,37 @@ namespace Ogre
              6. Runs a compute shader to write to the UAV buffer
 
             There is no guarantee the Compute Shader in 2 doesn't overlap with the one in 6.
-            This could happen to anything, i.e. it could be a Vertex Buffer instead of an
-            UAV Buffer, and the Compute Shader could overlap with the Transfer operation
-            to fill it.
+            This could happen to anything, e.g. it could be a Vertex Buffer instead of an
+            UAV Buffer, and the Compute Shader would still overlap with the Transfer operation
+            to fill it. We can't have two write operations simultaneously running on the same region.
 
             This is rare to happen in practice (and most GPUs are not THAT parallel) but you
-            may hit this bug if using various Compute Shaders and allocate -> destroy -> allocate
-            resources too quickly. Specially on AMD.
+            may hit this bug if using various Compute Shaders in quick succession and perfor
+            allocate -> destroy -> allocate resources too quickly. Specially on AMD.
 
             But this is hard to manage because READ = anything WRITE = anything.
 
             So we can solve this in 3 ways:
 
             1. Track absolutely everything that happened so far for deallocated objects and try
-            to find the least blocking barrier when the next allocation is requested (this is madness)
-            2. Issue a full barrier often, which kills GPU parallelism
+               to find the least blocking barrier when the next allocation is requested (this is
+               madness).
+            2. Issue a full barrier often, which kills GPU parallelism.
             3. Delay deallocation for a bit. This is what OgreNext does.
 
-            So deallocateVbo() delays the allocation for a frame which should be more or less safe to do
-            (we don't make fully sure it's 100% safe; but in practice this is good enough)
+            So deallocateVbo() delays deallocation for a frame which should be more or less safe to do
+            (we don't make fully sure it's 100% safe; but in practice this is good enough).
 
-            But to prevent memory from ballooning, if the amount of of delayed memory exceeds
+            But to prevent memory from ballooning, if the amount of delayed memory exceeds
             mDelayedBlocksFlushThreshold we will issue flushAllGpuDelayedBlocks( true )
-            which frees all delayed deallocations and issues a full GPU -> GPU barrier which
-            makes it safe.
+            which frees all pending delayed deallocations and issues a full GPU -> GPU barrier
+            which makes it safe.
 
             Note that a GPU -> GPU barrier is not as expensive as a stall; because a stall makes
             the CPU wait for the GPU.
         @param bIssueBarrier
-            When true, we issue a barrier and release all delayed deallocations
-            When false, we don't issue a barrier and release all delayed deallocations
+            When true, we issue a barrier and release all delayed deallocations.
+            When false, we don't issue a barrier and release all delayed deallocations.
         @return
             True if we released all delayed deallocations.
 
@@ -494,6 +495,9 @@ namespace Ogre
         VulkanVaoManager( VulkanDevice *device, VulkanRenderSystem *renderSystem,
                           const NameValuePairList *params );
         ~VulkanVaoManager() override;
+
+        void createVkResources();
+        void destroyVkResources( bool finalDestruction = false );
 
         void initDrawIdVertexBuffer();
         void bindDrawIdVertexBuffer( VkCommandBuffer cmdBuffer, uint32 binding = 15 );
@@ -537,7 +541,7 @@ namespace Ogre
         VulkanDevice *getDevice() const { return mDevice; }
 
         /// Insert into the end of semaphoreArray 'numSemaphores'
-        /// number of semaphores that are safe for use.
+        /// number of semaphores that are safe for use. Transfers ownership.
         void getAvailableSemaphores( VkSemaphoreArray &semaphoreArray, size_t numSemaphores );
         VkSemaphore getAvailableSemaphore();
 

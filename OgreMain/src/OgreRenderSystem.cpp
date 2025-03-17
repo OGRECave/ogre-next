@@ -110,7 +110,9 @@ namespace Ogre
         mTexProjRelative( false ),
         mTexProjRelativeOrigin( Vector3::ZERO ),
         mReverseDepth( true ),
-        mInvertedClipSpaceY( false )
+        mInvertedClipSpaceY( false ),
+        mPsoRequestsTimeout( 0u ),
+        mIncompletePsoRequestsCounter( 0 )
     {
         mEventNames.push_back( "RenderSystemCapabilitiesCreated" );
     }
@@ -674,6 +676,9 @@ namespace Ogre
 
         if( !preferDepthTexture )
             textureFlags |= TextureFlags::NotTexture | TextureFlags::DiscardableContent;
+
+        if( colourTexture->getDepthBufferPoolId() == DepthBuffer::POOL_MEMORYLESS )
+            textureFlags |= TextureFlags::TilerMemoryless;
 
         char tmpBuffer[64];
         LwString depthBufferName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
@@ -1375,6 +1380,19 @@ namespace Ogre
     void RenderSystem::loadPipelineCache( DataStreamPtr stream ) {}
     //---------------------------------------------------------------------
     void RenderSystem::savePipelineCache( DataStreamPtr stream ) const {}
+    //---------------------------------------------------------------------
+    void RenderSystem::_notifyIncompletePsoRequests( uint64 count )
+    {
+        if( count > 0u )
+        {
+            LogManager::getSingleton().logMessage(
+                "Deferred to next frame " + StringConverter::toString( count ) +
+                " PSO creation requests after exceeding " +
+                StringConverter::toString( mPsoRequestsTimeout ) + "ms time budget" );
+        }
+
+        mIncompletePsoRequestsCounter += count;
+    }
     //---------------------------------------------------------------------
     bool RenderSystem::startGpuDebuggerFrameCapture( Window *window )
     {

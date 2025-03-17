@@ -184,7 +184,7 @@ namespace Ogre
     /** Up to 8 different HLMS generator types are allowed. The maximum values must be in sync
         with ShaderBits in RenderQueue.cpp (the higher 3 bits)
     */
-    enum HlmsTypes
+    enum HlmsTypes : uchar
     {
         HLMS_LOW_LEVEL,  ///< Proxy that redirects to a regular Material
         HLMS_PBS,        ///< Physically Based Shader Generator
@@ -201,18 +201,27 @@ namespace Ogre
         HLMS_COMPUTE,
     };
 
+    enum HlmsCacheFlags : uchar
+    {
+        HLMS_CACHE_FLAGS_NONE = 0,
+        HLMS_CACHE_FLAGS_COMPILATION_REQUIRED = 1,
+        HLMS_CACHE_FLAGS_COMPILATION_REQUESTED = 2,
+    };
+
     struct HlmsCache
     {
         uint32          hash;
         HlmsTypes       type;
+        HlmsCacheFlags  flags;
         HlmsPropertyVec setProperties;
 
         HlmsPso pso;
 
-        HlmsCache() : hash( 0 ), type( HLMS_MAX ) {}
-        HlmsCache( uint32 _hash, HlmsTypes _type, const HlmsPso &_pso ) :
+        HlmsCache() : hash( 0 ), type( HLMS_MAX ), flags( HLMS_CACHE_FLAGS_NONE ) {}
+        HlmsCache( uint32 _hash, HlmsTypes _type, HlmsCacheFlags _flags, const HlmsPso &_pso ) :
             hash( _hash ),
             type( _type ),
+            flags( _flags ),
             pso( _pso )
         {
         }

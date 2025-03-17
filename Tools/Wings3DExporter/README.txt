@@ -74,12 +74,12 @@ Anthony D'Agostino - IO Suide for Blender
 
 LINKS
 
-http://ogre.sf.net - OGRE homepage
+https://ogre.sf.net - OGRE homepage
 
-http://www.wings3d.org - Wings 3D homepage
+https://www.wings3d.com - Wings 3D homepage
 
-http://www.python.org - Python homepage
+https://www.python.org - Python homepage
 
-http://www.pythonware.com/products/pil/ - Python Imaging Library homepage
+https://www.pythonware.com/products/pil/ - Python Imaging Library homepage
 
 

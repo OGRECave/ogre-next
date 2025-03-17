@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 #include "VendorExtensions/OgreD3D11AmdExtension.h"
 
-#if !OGRE_NO_AMD_AGS
+#if !OGRE_NO_AMD_AGS && OGRE_CPU == OGRE_CPU_X86  // x86 or x64 only
 
 #    include "OgreLogManager.h"
 #    include "OgreLwString.h"
