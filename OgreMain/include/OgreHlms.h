@@ -396,13 +396,6 @@ namespace Ogre
 
         void dumpProperties( std::ofstream &outFile );
 
-        /** Modifies the PSO's macroblock if there are reasons to do that, and creates
-            a strong reference to the macroblock that the PSO will own.
-        @param pso [in/out]
-            PSO to (potentially) modify.
-        */
-        void applyStrongMacroblockRules( HlmsPso &pso );
-
         virtual void setupRootLayout( RootLayout &rootLayout ) = 0;
 
         HighLevelGpuProgramPtr compileShaderCode( const String &source,
@@ -497,6 +490,34 @@ namespace Ogre
         /// Returns the hash of the property Full32/Half16/Relaxed.
         /// See Hlms::getSupportedPrecisionMode
         int32 getSupportedPrecisionModeHash() const;
+
+        /// Apply rules for macroblock and blendblock stored in HlmsPso and create strong refs if needed.
+        void applyStrongBlockRules( HlmsPso &pso );
+
+        /// Modifies the PSO's macroblock if there are reasons to do that. The Hlms checks whether it was
+        /// modified and if yes, it creates a strong reference to the macroblock that the PSO will own.
+        /// The implementation can set a single property or multiple properties from preparePassHash
+        /// which are then interpreted by the applyStrongMacroblockRules. Note that the properties must
+        /// be consistently translated to macroblock modifications, otherwise there can be a problem with
+        /// loaded values through HlmsDiskCache. If this happens, the disk cache must be manually
+        /// deleted. If the implementation sets a single property which is translated to a single
+        /// macroblock modification, it is not probable, that the translation changes. E.g SetProperty(
+        /// "depthWriteEnabled", 1 ) is self-explanatory and it will be hardly interpreted different by
+        /// the implementation. However if the implementation sets SetProperty( "MacroblockMask", 1 <<
+        /// 5), the meaning of (1 << 5) can be updated during the development cycle. One must take
+        /// special care about the consistency between the set of properties, their cache values and how
+        /// they are interpreted.
+        ///
+        /// The implementation can set the HlmsPsoProp::StrongMacroblockBits property to any combination
+        /// of HlmsPassPso::StrongMacroblockBits values within preparePassHash and default implementation
+        /// interprets them to modify the macroblock.
+        virtual void applyStrongMacroblockRules( HlmsMacroblock &macroblock );
+        /// Similar to applyStrongMacroblockRules, but modifies PSO's blendblock if needed.
+        ///
+        /// The implementation can set the HlmsPsoProp::StrongBlendblockBits property to any combination
+        /// of HlmsPassPso::StrongBlendblockBits values within preparePassHash and default implementation
+        /// interprets them to modify the blendblock.
+        virtual void applyStrongBlendblockRules( HlmsBlendblock &blendblock );
 
     public:
         /**
@@ -1050,6 +1071,24 @@ namespace Ogre
         static const IdString Macroblock;
         static const IdString Blendblock;
         static const IdString InputLayoutId;
+
+        /// The property holds the bits from StrongMacroblockBits enum to indicate the override of the
+        /// HlmsPso's macroblock. This can be used to override all macroblocks from all renderables
+        /// rendered by current pass. Note that the implementation doesn't need to use this property. It
+        /// can introduce its own property or mechanism for the overrides. There are couple of details
+        /// necessary to keep in mind if implementing own mechanism:
+        /// * the values are cached are stored in HlmsDiskCache
+        /// * the implementation must be consistent between setting the flags and interpreting them
+        /// * if a value changed its meaning, the cache must be manually deleted as Ogre cannot detect
+        ///   such changes!
+        /// * It is not sufficient to just set HlmsPassPso::NeedStrongMacroblock in
+        ///   HlmsPassPso::strongBasicBlocks as it will lead to the same PassCache values. It is
+        ///   necessary to indicate the override fully and distinguish between 2 different overrides by
+        ///   setting a property with value describing the override (bit mask) or setting multiple
+        ///   properties (a property per specific override).
+        static const IdString StrongMacroblockBits;
+        /// Similar to StrongMacroblockBits but used for overrides of Blendblocks.
+        static const IdString StrongBlendblockBits;
     };
 
     struct _OgreExport HlmsBasePieces
