@@ -2238,12 +2238,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Hlms::applyStrongMacroblockRules( HlmsMacroblock &macroblock ) const
     {
-        const uint32 strongMacroblockBits = getProperty(HlmsPsoProp::StrongMacroblockBits);
-        if (strongMacroblockBits == 0)
+        const uint32 strongMacroblockBits = getProperty( HlmsPsoProp::StrongMacroblockBits );
+        if( strongMacroblockBits == 0 )
             return;
 
         // HlmsMacroblock::mScissorTestEnabled
-        if ((strongMacroblockBits & HlmsPassPso::InvertScissorTest) == HlmsPassPso::InvertScissorTest)
+        if( ( strongMacroblockBits & HlmsPassPso::InvertScissorTest ) == HlmsPassPso::InvertScissorTest )
             macroblock.mScissorTestEnabled = !macroblock.mScissorTestEnabled;
         else if( strongMacroblockBits & HlmsPassPso::ScissorTestEnabled )
             macroblock.mScissorTestEnabled = true;
@@ -2358,24 +2358,27 @@ namespace Ogre
         // HlmsBlendblock::mSourceBlendFactor
         const uint32 sourceBlendFactor = ( strongBlendblockBits & HlmsPassPso::SourceBlendFactorMask );
         if( sourceBlendFactor > 0 )
-            blendblock.mSourceBlendFactor = static_cast<SceneBlendFactor>( ( sourceBlendFactor >> 0u ) - 1 );
+            blendblock.mSourceBlendFactor =
+                static_cast<SceneBlendFactor>( ( sourceBlendFactor >> 0u ) - 1 );
 
         // HlmsBlendblock::mDestBlendFactor
         const uint32 destBlendFactor = ( strongBlendblockBits & HlmsPassPso::DestBlendFactorMask );
         if( destBlendFactor > 0 )
-            blendblock.mDestBlendFactor =
-                static_cast<SceneBlendFactor>( ( destBlendFactor >> 4u ) - 1 );
+            blendblock.mDestBlendFactor = static_cast<SceneBlendFactor>( ( destBlendFactor >> 4u ) - 1 );
 
         // HlmsBlendblock::mSourceBlendFactorAlpha
-        const uint32 sourceBlendFactorAplha = ( strongBlendblockBits & HlmsPassPso::SourceBlendFactorAlphaMask );
+        const uint32 sourceBlendFactorAplha =
+            ( strongBlendblockBits & HlmsPassPso::SourceBlendFactorAlphaMask );
         if( sourceBlendFactorAplha > 0 )
             blendblock.mSourceBlendFactorAlpha =
                 static_cast<SceneBlendFactor>( ( sourceBlendFactorAplha >> 8u ) - 1 );
 
         // HlmsBlendblock::mDestBlendFactorAlpha
-        const uint32 destBlendFactorAlpha = ( strongBlendblockBits & HlmsPassPso::DestBlendFactorAlphaMask );
+        const uint32 destBlendFactorAlpha =
+            ( strongBlendblockBits & HlmsPassPso::DestBlendFactorAlphaMask );
         if( destBlendFactorAlpha > 0 )
-            blendblock.mDestBlendFactorAlpha = static_cast<SceneBlendFactor>( ( destBlendFactorAlpha >> 12u ) - 1 );
+            blendblock.mDestBlendFactorAlpha =
+                static_cast<SceneBlendFactor>( ( destBlendFactorAlpha >> 12u ) - 1 );
 
         static_assert( ( HlmsPassPso::BlendOperation_ADD - 1 ) >> 16u == SBO_ADD,
                        "BlendOperation_ADD doesn't match the SBO_ADD." );
@@ -2390,14 +2393,14 @@ namespace Ogre
                        "BlendOperation_MAX doesn't match the SBO_MAX." );
 
         // HlmsBlendblock::mBlendOperation
-        const uint32 blendOperation =
-            ( strongBlendblockBits & HlmsPassPso::BlendOperationMask );
+        const uint32 blendOperation = ( strongBlendblockBits & HlmsPassPso::BlendOperationMask );
         if( blendOperation > 0 )
             blendblock.mBlendOperation =
                 static_cast<SceneBlendOperation>( ( blendOperation >> 16u ) - 1 );
 
         // HlmsBlendblock::mBlendOperationAlpha
-        const uint32 blendOperationAlpha = ( strongBlendblockBits & HlmsPassPso::BlendOperationAlphaMask );
+        const uint32 blendOperationAlpha =
+            ( strongBlendblockBits & HlmsPassPso::BlendOperationAlphaMask );
         if( blendOperationAlpha > 0 )
             blendblock.mBlendOperationAlpha =
                 static_cast<SceneBlendOperation>( ( blendOperationAlpha >> 20u ) - 1 );
@@ -3735,7 +3738,7 @@ namespace Ogre
 
         HlmsPassPso passPso;
 
-        uint32 strongMacroblockBits = getProperty(kNoTid, HlmsPsoProp::StrongMacroblockBits);
+        uint32 strongMacroblockBits = getProperty( kNoTid, HlmsPsoProp::StrongMacroblockBits );
 
         // Needed so that memcmp in HlmsPassPso::operator == works correctly
         silent_memset( &passPso, 0, sizeof( HlmsPassPso ) );
@@ -3790,7 +3793,7 @@ namespace Ogre
             strongMacroblockBits |= HlmsPassPso::InvertCullingMode;
         }
 
-        setProperty(kNoTid, HlmsPsoProp::StrongMacroblockBits, strongMacroblockBits);
+        setProperty( kNoTid, HlmsPsoProp::StrongMacroblockBits, strongMacroblockBits );
         return passPso;
     }
     //-----------------------------------------------------------------------------------

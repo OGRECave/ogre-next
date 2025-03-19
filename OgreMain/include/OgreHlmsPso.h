@@ -204,7 +204,7 @@ namespace Ogre
         bool          enablePrimitiveRestart;
         uint8         clipDistances;  // Bitmask. Only needed by GL.
 
-        uint8 strongBlocks; // @see StrongBlocks enum.
+        uint8                 strongBlocks;  // @see StrongBlocks enum.
         HlmsMacroblock const *macroblock;
         HlmsBlendblock const *blendblock;
         // No independent blenblocks for now
@@ -212,13 +212,13 @@ namespace Ogre
         //      bool                    independentBlend;
 
         /// The values for strongBasicBlocks member
+        // clang-format off
         enum StrongBlocks
         {
-            // clang-format off
             HasStrongMacroblock = 1u << 0u, ///< If set, the macroblock was overridden and the HlmsPso holds a strong ref.
             HasStrongBlendblock = 1u << 1u  ///< If set, the blendblock was overridden and the HlmsPso holds a strong ref.
-            // clang-format on
         };
+        // clang-format on
 
         // TODO: Stream Out.
         //-dark_sylinc update: Stream Out seems to be dying.
