@@ -2243,83 +2243,87 @@ namespace Ogre
             return;
 
         // HlmsMacroblock::mScissorTestEnabled
-        if( ( strongMacroblockBits & HlmsPassPso::InvertScissorTest ) == HlmsPassPso::InvertScissorTest )
+        if( ( strongMacroblockBits & HlmsMacroblock::InvertScissorTest ) ==
+            HlmsMacroblock::InvertScissorTest )
             macroblock.mScissorTestEnabled = !macroblock.mScissorTestEnabled;
-        else if( strongMacroblockBits & HlmsPassPso::ScissorTestEnabled )
+        else if( strongMacroblockBits & HlmsMacroblock::ScissorTestEnabled )
             macroblock.mScissorTestEnabled = true;
-        else if( strongMacroblockBits & HlmsPassPso::ScissorTestDisabled )
+        else if( strongMacroblockBits & HlmsMacroblock::ScissorTestDisabled )
             macroblock.mScissorTestEnabled = false;
 
         // HlmsMacroblock::mDepthClamp
-        if( ( strongMacroblockBits & HlmsPassPso::InvertDepthClamp ) == HlmsPassPso::InvertDepthClamp )
+        if( ( strongMacroblockBits & HlmsMacroblock::InvertDepthClamp ) ==
+            HlmsMacroblock::InvertDepthClamp )
             macroblock.mDepthClamp = !macroblock.mDepthClamp;
-        else if( strongMacroblockBits & HlmsPassPso::DepthClampEnabled )
+        else if( strongMacroblockBits & HlmsMacroblock::DepthClampEnabled )
             macroblock.mDepthClamp = true;
-        else if( strongMacroblockBits & HlmsPassPso::DepthClampDisabled )
+        else if( strongMacroblockBits & HlmsMacroblock::DepthClampDisabled )
             macroblock.mDepthClamp = false;
 
         // HlmsMacroblock::mDepthCheck
-        if( ( strongMacroblockBits & HlmsPassPso::InvertDepthCheck ) == HlmsPassPso::InvertDepthCheck )
+        if( ( strongMacroblockBits & HlmsMacroblock::InvertDepthCheck ) ==
+            HlmsMacroblock::InvertDepthCheck )
             macroblock.mDepthCheck = !macroblock.mDepthCheck;
-        else if( strongMacroblockBits & HlmsPassPso::DepthCheckEnabled )
+        else if( strongMacroblockBits & HlmsMacroblock::DepthCheckEnabled )
             macroblock.mDepthCheck = true;
-        else if( strongMacroblockBits & HlmsPassPso::DepthCheckDisabled )
+        else if( strongMacroblockBits & HlmsMacroblock::DepthCheckDisabled )
             macroblock.mDepthCheck = false;
 
         // HlmsMacroblock::mDepthWrite
-        if( ( strongMacroblockBits & HlmsPassPso::InvertDepthWrite ) == HlmsPassPso::InvertDepthWrite )
+        if( ( strongMacroblockBits & HlmsMacroblock::InvertDepthWrite ) ==
+            HlmsMacroblock::InvertDepthWrite )
             macroblock.mDepthWrite = !macroblock.mDepthWrite;
-        else if( strongMacroblockBits & HlmsPassPso::DepthWriteEnabled )
+        else if( strongMacroblockBits & HlmsMacroblock::DepthWriteEnabled )
             macroblock.mDepthWrite = true;
-        else if( strongMacroblockBits & HlmsPassPso::DepthWriteDisabled )
+        else if( strongMacroblockBits & HlmsMacroblock::DepthWriteDisabled )
             macroblock.mDepthWrite = false;
 
         // HlmsMacroblock::mDepthFunc
-        static_assert( ( HlmsPassPso::DepthFunc_ALWAYS_FAIL >> 8u ) - 1 == CMPF_ALWAYS_FAIL,
+        static_assert( ( HlmsMacroblock::DepthFunc_ALWAYS_FAIL >> 8u ) - 1 == CMPF_ALWAYS_FAIL,
                        "DepthFunc_ALWAYS_FAIL doesn't match the CMPF_ALWAYS_FAIL." );
-        static_assert( ( HlmsPassPso::DepthFunc_ALWAYS_PASS >> 8u ) - 1 == CMPF_ALWAYS_PASS,
+        static_assert( ( HlmsMacroblock::DepthFunc_ALWAYS_PASS >> 8u ) - 1 == CMPF_ALWAYS_PASS,
                        "DepthFunc_ALWAYS_PASS doesn't match the CMPF_ALWAYS_PASS." );
-        static_assert( ( HlmsPassPso::DepthFunc_LESS >> 8u ) - 1 == CMPF_LESS,
+        static_assert( ( HlmsMacroblock::DepthFunc_LESS >> 8u ) - 1 == CMPF_LESS,
                        "DepthFunc_LESS doesn't match the CMPF_LESS." );
-        static_assert( ( HlmsPassPso::DepthFunc_LESS_EQUAL >> 8u ) - 1 == CMPF_LESS_EQUAL,
+        static_assert( ( HlmsMacroblock::DepthFunc_LESS_EQUAL >> 8u ) - 1 == CMPF_LESS_EQUAL,
                        "DepthFunc_LESS_EQUAL doesn't match the CMPF_LESS_EQUAL." );
-        static_assert( ( HlmsPassPso::DepthFunc_EQUAL >> 8u ) - 1 == CMPF_EQUAL,
+        static_assert( ( HlmsMacroblock::DepthFunc_EQUAL >> 8u ) - 1 == CMPF_EQUAL,
                        "DepthFunc_EQUAL doesn't match the CMPF_EQUAL." );
-        static_assert( ( HlmsPassPso::DepthFunc_NOT_EQUAL >> 8u ) - 1 == CMPF_NOT_EQUAL,
+        static_assert( ( HlmsMacroblock::DepthFunc_NOT_EQUAL >> 8u ) - 1 == CMPF_NOT_EQUAL,
                        "DepthFunc_NOT_EQUAL doesn't match the CMPF_NOT_EQUAL." );
-        static_assert( ( HlmsPassPso::DepthFunc_GREATER_EQUAL >> 8u ) - 1 == CMPF_GREATER_EQUAL,
+        static_assert( ( HlmsMacroblock::DepthFunc_GREATER_EQUAL >> 8u ) - 1 == CMPF_GREATER_EQUAL,
                        "DepthFunc_GREATER_EQUAL doesn't match the CMPF_GREATER_EQUAL." );
-        static_assert( ( HlmsPassPso::DepthFunc_GREATER >> 8u ) - 1 == CMPF_GREATER,
+        static_assert( ( HlmsMacroblock::DepthFunc_GREATER >> 8u ) - 1 == CMPF_GREATER,
                        "DepthFunc_GREATER doesn't match the CMPF_GREATER." );
         static_assert( NUM_COMPARE_FUNCTIONS == 8,
                        "CompareFunction enum has been changed. Update the "
                        "Hlms::applyStrongMacroblockRules implementation." );
-        const uint32 depthFunc = ( strongMacroblockBits & HlmsPassPso::DepthFuncMask );
+        const uint32 depthFunc = ( strongMacroblockBits & HlmsMacroblock::DepthFuncMask );
         if( depthFunc > 0 )
             macroblock.mDepthFunc = static_cast<CompareFunction>( ( depthFunc >> 8u ) - 1 );
 
         // HlmsMacroblock::mCullMode
-        static_assert( ( HlmsPassPso::CullingMode_NONE >> 12u ) == CULL_NONE,
+        static_assert( ( HlmsMacroblock::CullingMode_NONE >> 12u ) == CULL_NONE,
                        "CullingMode_NONE doesn't match the CULL_NONE." );
-        static_assert( ( HlmsPassPso::CullingMode_CLOCKWISE >> 12u ) == CULL_CLOCKWISE,
+        static_assert( ( HlmsMacroblock::CullingMode_CLOCKWISE >> 12u ) == CULL_CLOCKWISE,
                        "CullingMode_CLOCKWISE doesn't match the CULL_CLOCKWISE." );
-        static_assert( ( HlmsPassPso::CullingMode_ANTICLOCKWISE >> 12u ) == CULL_ANTICLOCKWISE,
+        static_assert( ( HlmsMacroblock::CullingMode_ANTICLOCKWISE >> 12u ) == CULL_ANTICLOCKWISE,
                        "CullingMode_ANTICLOCKWISE doesn't match the CULL_ANTICLOCKWISE." );
-        const uint32 cullingMode = ( strongMacroblockBits & HlmsPassPso::CullingModeMask );
-        if( cullingMode == HlmsPassPso::InvertCullingMode )
+        const uint32 cullingMode = ( strongMacroblockBits & HlmsMacroblock::CullingModeMask );
+        if( cullingMode == HlmsMacroblock::InvertCullingMode )
             macroblock.mCullMode =
                 macroblock.mCullMode == CULL_CLOCKWISE ? CULL_ANTICLOCKWISE : CULL_CLOCKWISE;
         else if( cullingMode > 0 )
             macroblock.mCullMode = static_cast<CullingMode>( cullingMode >> 12u );
 
         // HlmsMacroblock::mPolygonMode
-        static_assert( ( HlmsPassPso::PolygonMode_POINTS >> 16u ) == PM_POINTS,
+        static_assert( ( HlmsMacroblock::PolygonMode_POINTS >> 16u ) == PM_POINTS,
                        "PolygonMode_POINTS doesn't match the PM_POINTS." );
-        static_assert( ( HlmsPassPso::PolygonMode_WIREFRAME >> 16u ) == PM_WIREFRAME,
+        static_assert( ( HlmsMacroblock::PolygonMode_WIREFRAME >> 16u ) == PM_WIREFRAME,
                        "PolygonMode_WIREFRAME doesn't match the PM_WIREFRAME." );
-        static_assert( ( HlmsPassPso::PolygonMode_SOLID >> 16u ) == PM_SOLID,
+        static_assert( ( HlmsMacroblock::PolygonMode_SOLID >> 16u ) == PM_SOLID,
                        "PolygonMode_SOLID doesn't match the PM_SOLID." );
-        const uint32 polygonMode = ( strongMacroblockBits & HlmsPassPso::PolygonModeMask );
+        const uint32 polygonMode = ( strongMacroblockBits & HlmsMacroblock::PolygonModeMask );
         if( polygonMode > 0 )
             macroblock.mPolygonMode = static_cast<PolygonMode>( polygonMode >> 16u );
     }
@@ -2330,77 +2334,78 @@ namespace Ogre
         if( strongBlendblockBits == 0 )
             return;
 
-        static_assert( HlmsPassPso::SourceBlendFactor_ONE - 1 == SBF_ONE,
+        static_assert( HlmsBlendblock::SourceBlendFactor_ONE - 1 == SBF_ONE,
                        "SourceBlendFactor_ONE doesn't match the SBF_ONE." );
-        static_assert( HlmsPassPso::SourceBlendFactor_ZERO - 1 == SBF_ZERO,
+        static_assert( HlmsBlendblock::SourceBlendFactor_ZERO - 1 == SBF_ZERO,
                        "SourceBlendFactor_ZERO doesn't match the SBF_ZERO." );
-        static_assert( HlmsPassPso::SourceBlendFactor_DEST_COLOUR - 1 == SBF_DEST_COLOUR,
+        static_assert( HlmsBlendblock::SourceBlendFactor_DEST_COLOUR - 1 == SBF_DEST_COLOUR,
                        "SourceBlendFactor_DEST_COLOUR doesn't match the SBF_DEST_COLOUR." );
-        static_assert( HlmsPassPso::SourceBlendFactor_SOURCE_COLOUR - 1 == SBF_SOURCE_COLOUR,
+        static_assert( HlmsBlendblock::SourceBlendFactor_SOURCE_COLOUR - 1 == SBF_SOURCE_COLOUR,
                        "SourceBlendFactor_SOURCE_COLOUR doesn't match the SBF_SOURCE_COLOUR." );
         static_assert(
-            HlmsPassPso::SourceBlendFactor_ONE_MINUS_DEST_COLOUR - 1 == SBF_ONE_MINUS_DEST_COLOUR,
+            HlmsBlendblock::SourceBlendFactor_ONE_MINUS_DEST_COLOUR - 1 == SBF_ONE_MINUS_DEST_COLOUR,
             "SourceBlendFactor_ONE_MINUS_DEST_COLOUR doesn't match the SBF_ONE_MINUS_DEST_COLOUR." );
         static_assert(
-            HlmsPassPso::SourceBlendFactor_ONE_MINUS_SOURCE_COLOUR - 1 == SBF_ONE_MINUS_SOURCE_COLOUR,
+            HlmsBlendblock::SourceBlendFactor_ONE_MINUS_SOURCE_COLOUR - 1 == SBF_ONE_MINUS_SOURCE_COLOUR,
             "SourceBlendFactor_ONE_MINUS_SOURCE_COLOUR doesn't match the SBF_ONE_MINUS_SOURCE_COLOUR." );
-        static_assert( HlmsPassPso::SourceBlendFactor_DEST_ALPHA - 1 == SBF_DEST_ALPHA,
+        static_assert( HlmsBlendblock::SourceBlendFactor_DEST_ALPHA - 1 == SBF_DEST_ALPHA,
                        "SourceBlendFactor_DEST_ALPHA doesn't match the SBF_DEST_ALPHA." );
-        static_assert( HlmsPassPso::SourceBlendFactor_SOURCE_ALPHA - 1 == SBF_SOURCE_ALPHA,
+        static_assert( HlmsBlendblock::SourceBlendFactor_SOURCE_ALPHA - 1 == SBF_SOURCE_ALPHA,
                        "SourceBlendFactor_SOURCE_ALPHA doesn't match the SBF_SOURCE_ALPHA." );
         static_assert(
-            HlmsPassPso::SourceBlendFactor_ONE_MINUS_DEST_ALPHA - 1 == SBF_ONE_MINUS_DEST_ALPHA,
+            HlmsBlendblock::SourceBlendFactor_ONE_MINUS_DEST_ALPHA - 1 == SBF_ONE_MINUS_DEST_ALPHA,
             "SourceBlendFactor_ONE_MINUS_DEST_ALPHA doesn't match the SBF_ONE_MINUS_DEST_ALPHA." );
         static_assert(
-            HlmsPassPso::SourceBlendFactor_ONE_MINUS_SOURCE_ALPHA - 1 == SBF_ONE_MINUS_SOURCE_ALPHA,
+            HlmsBlendblock::SourceBlendFactor_ONE_MINUS_SOURCE_ALPHA - 1 == SBF_ONE_MINUS_SOURCE_ALPHA,
             "SourceBlendFactor_ONE_MINUS_SOURCE_ALPHA doesn't match the SBF_ONE_MINUS_SOURCE_ALPHA." );
 
         // HlmsBlendblock::mSourceBlendFactor
-        const uint32 sourceBlendFactor = ( strongBlendblockBits & HlmsPassPso::SourceBlendFactorMask );
+        const uint32 sourceBlendFactor =
+            ( strongBlendblockBits & HlmsBlendblock::SourceBlendFactorMask );
         if( sourceBlendFactor > 0 )
             blendblock.mSourceBlendFactor =
                 static_cast<SceneBlendFactor>( ( sourceBlendFactor >> 0u ) - 1 );
 
         // HlmsBlendblock::mDestBlendFactor
-        const uint32 destBlendFactor = ( strongBlendblockBits & HlmsPassPso::DestBlendFactorMask );
+        const uint32 destBlendFactor = ( strongBlendblockBits & HlmsBlendblock::DestBlendFactorMask );
         if( destBlendFactor > 0 )
             blendblock.mDestBlendFactor = static_cast<SceneBlendFactor>( ( destBlendFactor >> 4u ) - 1 );
 
         // HlmsBlendblock::mSourceBlendFactorAlpha
         const uint32 sourceBlendFactorAplha =
-            ( strongBlendblockBits & HlmsPassPso::SourceBlendFactorAlphaMask );
+            ( strongBlendblockBits & HlmsBlendblock::SourceBlendFactorAlphaMask );
         if( sourceBlendFactorAplha > 0 )
             blendblock.mSourceBlendFactorAlpha =
                 static_cast<SceneBlendFactor>( ( sourceBlendFactorAplha >> 8u ) - 1 );
 
         // HlmsBlendblock::mDestBlendFactorAlpha
         const uint32 destBlendFactorAlpha =
-            ( strongBlendblockBits & HlmsPassPso::DestBlendFactorAlphaMask );
+            ( strongBlendblockBits & HlmsBlendblock::DestBlendFactorAlphaMask );
         if( destBlendFactorAlpha > 0 )
             blendblock.mDestBlendFactorAlpha =
                 static_cast<SceneBlendFactor>( ( destBlendFactorAlpha >> 12u ) - 1 );
 
-        static_assert( ( HlmsPassPso::BlendOperation_ADD - 1 ) >> 16u == SBO_ADD,
+        static_assert( ( HlmsBlendblock::BlendOperation_ADD - 1 ) >> 16u == SBO_ADD,
                        "BlendOperation_ADD doesn't match the SBO_ADD." );
-        static_assert( ( HlmsPassPso::BlendOperation_SUBTRACT - 1 ) >> 16u == SBO_SUBTRACT,
+        static_assert( ( HlmsBlendblock::BlendOperation_SUBTRACT - 1 ) >> 16u == SBO_SUBTRACT,
                        "BlendOperation_SUBTRACT doesn't match the SBO_SUBTRACT." );
         static_assert(
-            ( HlmsPassPso::BlendOperation_REVERSE_SUBTRACT - 1 ) >> 16u == SBO_REVERSE_SUBTRACT,
+            ( HlmsBlendblock::BlendOperation_REVERSE_SUBTRACT - 1 ) >> 16u == SBO_REVERSE_SUBTRACT,
             "BlendOperation_REVERSE_SUBTRACT doesn't match the SBO_REVERSE_SUBTRACT." );
-        static_assert( ( HlmsPassPso::BlendOperation_MIN - 1 ) >> 16u == SBO_MIN,
+        static_assert( ( HlmsBlendblock::BlendOperation_MIN - 1 ) >> 16u == SBO_MIN,
                        "BlendOperation_MIN doesn't match the SBO_MIN." );
-        static_assert( ( HlmsPassPso::BlendOperation_MAX - 1 ) >> 16u == SBO_MAX,
+        static_assert( ( HlmsBlendblock::BlendOperation_MAX - 1 ) >> 16u == SBO_MAX,
                        "BlendOperation_MAX doesn't match the SBO_MAX." );
 
         // HlmsBlendblock::mBlendOperation
-        const uint32 blendOperation = ( strongBlendblockBits & HlmsPassPso::BlendOperationMask );
+        const uint32 blendOperation = ( strongBlendblockBits & HlmsBlendblock::BlendOperationMask );
         if( blendOperation > 0 )
             blendblock.mBlendOperation =
                 static_cast<SceneBlendOperation>( ( blendOperation >> 16u ) - 1 );
 
         // HlmsBlendblock::mBlendOperationAlpha
         const uint32 blendOperationAlpha =
-            ( strongBlendblockBits & HlmsPassPso::BlendOperationAlphaMask );
+            ( strongBlendblockBits & HlmsBlendblock::BlendOperationAlphaMask );
         if( blendOperationAlpha > 0 )
             blendblock.mBlendOperationAlpha =
                 static_cast<SceneBlendOperation>( ( blendOperationAlpha >> 20u ) - 1 );
@@ -3771,26 +3776,26 @@ namespace Ogre
         }
         else
         {
-            strongMacroblockBits |= HlmsPassPso::DepthCheckDisabled;
+            strongMacroblockBits |= HlmsMacroblock::DepthCheckDisabled;
         }
 
         passPso.adapterId = 1;  // TODO: Ask RenderSystem current adapter ID.
 
         if( sceneManager->getCurrentPrePassMode() == PrePassUse )
-            strongMacroblockBits |= HlmsPassPso::DepthWriteDisabled;
+            strongMacroblockBits |= HlmsMacroblock::DepthWriteDisabled;
 
         if( sceneManager->getCamerasInProgress().renderingCamera->getNeedsDepthClamp() )
-            strongMacroblockBits |= HlmsPassPso::DepthClampEnabled;
+            strongMacroblockBits |= HlmsMacroblock::DepthClampEnabled;
 
         if( bForceCullNone )
-            strongMacroblockBits |= HlmsPassPso::CullingMode_NONE;
+            strongMacroblockBits |= HlmsMacroblock::CullingMode_NONE;
 
         const bool invertVertexWinding = mRenderSystem->getInvertVertexWinding();
 
         if( ( renderPassDesc->requiresTextureFlipping() && !invertVertexWinding ) ||
             ( !renderPassDesc->requiresTextureFlipping() && invertVertexWinding ) )
         {
-            strongMacroblockBits |= HlmsPassPso::InvertCullingMode;
+            strongMacroblockBits |= HlmsMacroblock::InvertCullingMode;
         }
 
         setProperty( kNoTid, HlmsPsoProp::StrongMacroblockBits, strongMacroblockBits );
