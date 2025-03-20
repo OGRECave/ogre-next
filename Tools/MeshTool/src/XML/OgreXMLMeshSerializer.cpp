@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 
 #include "XML/OgreXMLMeshSerializer.h"
+#include "OgreBitwise.h"
 #include "OgreSubMesh.h"
 #include "OgreLogManager.h"
 #include "OgreSkeleton.h"
@@ -474,6 +475,18 @@ namespace v1 {
                         case VET_UBYTE4: 
                             type = "ubyte4"; 
                             break;
+                        case VET_SHORT2_SNORM:
+                            type = "short2_snorm";
+                            break;
+                        case VET_SHORT4_SNORM:
+                            type = "short4_snorm";
+                            break;
+                        case VET_USHORT2_NORM:
+                            type = "ushort2_norm";
+                            break;
+                        case VET_USHORT4_NORM:
+                            type = "ushort4_norm";
+                            break;
                         }
                         vbNode->SetAttribute(
                             "texture_coord_dimensions_" + StringConverter::toString(numTextureCoords), type);
@@ -595,16 +608,42 @@ namespace v1 {
                             dataNode->SetAttribute("x", StringConverter::toString(*pFloat++));
                             break;
                         case VET_SHORT2:
+                        case VET_USHORT2_NORM:
                             elem.baseVertexPointerToElement(pVert, &pShort);
                             dataNode->SetAttribute("u", StringConverter::toString(*pShort++ / 65535.0f));
                             dataNode->SetAttribute("v", StringConverter::toString(*pShort++ / 65535.0f));
                             break;
                         case VET_SHORT4:
+                        case VET_USHORT4_NORM:
                             elem.baseVertexPointerToElement(pVert, &pShort);
                             dataNode->SetAttribute("u", StringConverter::toString(*pShort++ / 65535.0f));
                             dataNode->SetAttribute("v", StringConverter::toString(*pShort++ / 65535.0f));
                             dataNode->SetAttribute("w", StringConverter::toString(*pShort++ / 65535.0f));
                             dataNode->SetAttribute("x", StringConverter::toString(*pShort++ / 65535.0f));
+                            break;
+                        case VET_SHORT2_SNORM:
+                            elem.baseVertexPointerToElement( pVert, &pShort );
+                            dataNode->SetAttribute(
+                                "u", StringConverter::toString(
+                                         Bitwise::snorm16ToFloat( bit_cast<int16_t>( *pShort++ ) ) ) );
+                            dataNode->SetAttribute(
+                                "v", StringConverter::toString(
+                                         Bitwise::snorm16ToFloat( bit_cast<int16_t>( *pShort++ ) ) ) );
+                            break;
+                        case VET_SHORT4_SNORM:
+                            elem.baseVertexPointerToElement( pVert, &pShort );
+                            dataNode->SetAttribute(
+                                "u", StringConverter::toString(
+                                         Bitwise::snorm16ToFloat( bit_cast<int16_t>( *pShort++ ) ) ) );
+                            dataNode->SetAttribute(
+                                "v", StringConverter::toString(
+                                         Bitwise::snorm16ToFloat( bit_cast<int16_t>( *pShort++ ) ) ) );
+                            dataNode->SetAttribute(
+                                "w", StringConverter::toString(
+                                         Bitwise::snorm16ToFloat( bit_cast<int16_t>( *pShort++ ) ) ) );
+                            dataNode->SetAttribute(
+                                "x", StringConverter::toString(
+                                         Bitwise::snorm16ToFloat( bit_cast<int16_t>( *pShort++ ) ) ) );
                             break;
                         case VET_COLOUR: case VET_COLOUR_ARGB: case VET_COLOUR_ABGR:
                             elem.baseVertexPointerToElement(pVert, &pColour);
@@ -1001,6 +1040,14 @@ namespace v1 {
                             vtype = VET_UBYTE4;
                         else if (!::strcmp(attrib,"colour"))
                             vtype = VET_COLOUR;
+                        else if (!::strcmp(attrib,"short2_snorm"))
+                            vtype = VET_SHORT2_SNORM;
+                        else if (!::strcmp(attrib,"short4_snorm"))
+                            vtype = VET_SHORT4_SNORM;
+                        else if (!::strcmp(attrib,"ushort2_norm"))
+                            vtype = VET_USHORT2_NORM;
+                        else if (!::strcmp(attrib,"ushort4_norm"))
+                            vtype = VET_USHORT4_NORM;
                         else if (!::strcmp(attrib,"colour_argb"))
                             vtype = VET_COLOUR_ARGB;
                         else if (!::strcmp(attrib,"colour_abgr"))
@@ -1260,6 +1307,78 @@ namespace v1 {
                             *pShort++ = static_cast<uint16>(65535.0f * StringConverter::parseReal(xmlElem->Attribute("v")));
                             *pShort++ = static_cast<uint16>(65535.0f * StringConverter::parseReal(xmlElem->Attribute("w")));
                             *pShort++ = static_cast<uint16>(65535.0f * StringConverter::parseReal(xmlElem->Attribute("x")));
+                            break;
+
+                        case VET_SHORT2_SNORM:
+                            if( !xmlElem->Attribute( "v" ) )
+                                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                                             "Texcoord 'v' attribute not found.",
+                                             "XMLMeshSerializer::readGeometry" );
+                            elem.baseVertexPointerToElement( pVert, &pShort );
+                            *pShort++ = static_cast<uint16>( Bitwise::floatToSnorm16(
+                                StringConverter::parseReal( xmlElem->Attribute( "u" ) ) ) );
+                            *pShort++ = static_cast<uint16>( Bitwise::floatToSnorm16(
+                                StringConverter::parseReal( xmlElem->Attribute( "v" ) ) ) );
+                            break;
+
+                        case VET_SHORT4_SNORM:
+                            if( !xmlElem->Attribute( "v" ) )
+                                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                                             "Texcoord 'v' attribute not found.",
+                                             "XMLMeshSerializer::readGeometry" );
+                            if( !xmlElem->Attribute( "w" ) )
+                                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                                             "Texcoord 'w' attribute not found.",
+                                             "XMLMeshSerializer::readGeometry" );
+                            if( !xmlElem->Attribute( "x" ) )
+                                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                                             "Texcoord 'x' attribute not found.",
+                                             "XMLMeshSerializer::readGeometry" );
+                            elem.baseVertexPointerToElement( pVert, &pShort );
+                            *pShort++ = static_cast<uint16>( Bitwise::floatToSnorm16(
+                                StringConverter::parseReal( xmlElem->Attribute( "u" ) ) ) );
+                            *pShort++ = static_cast<uint16>( Bitwise::floatToSnorm16(
+                                StringConverter::parseReal( xmlElem->Attribute( "v" ) ) ) );
+                            *pShort++ = static_cast<uint16>( Bitwise::floatToSnorm16(
+                                StringConverter::parseReal( xmlElem->Attribute( "w" ) ) ) );
+                            *pShort++ = static_cast<uint16>( Bitwise::floatToSnorm16(
+                                StringConverter::parseReal( xmlElem->Attribute( "x" ) ) ) );
+                            break;
+
+                        case VET_USHORT2_NORM:
+                            if( !xmlElem->Attribute( "v" ) )
+                                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                                             "Texcoord 'v' attribute not found.",
+                                             "XMLMeshSerializer::readGeometry" );
+                            elem.baseVertexPointerToElement( pVert, &pShort );
+                            *pShort++ = static_cast<uint16>(
+                                65535.0f * StringConverter::parseReal( xmlElem->Attribute( "u" ) ) );
+                            *pShort++ = static_cast<uint16>(
+                                65535.0f * StringConverter::parseReal( xmlElem->Attribute( "v" ) ) );
+                            break;
+
+                        case VET_USHORT4_NORM:
+                            if( !xmlElem->Attribute( "v" ) )
+                                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                                             "Texcoord 'v' attribute not found.",
+                                             "XMLMeshSerializer::readGeometry" );
+                            if( !xmlElem->Attribute( "w" ) )
+                                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                                             "Texcoord 'w' attribute not found.",
+                                             "XMLMeshSerializer::readGeometry" );
+                            if( !xmlElem->Attribute( "x" ) )
+                                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                                             "Texcoord 'x' attribute not found.",
+                                             "XMLMeshSerializer::readGeometry" );
+                            elem.baseVertexPointerToElement( pVert, &pShort );
+                            *pShort++ = static_cast<uint16>(
+                                65535.0f * StringConverter::parseReal( xmlElem->Attribute( "u" ) ) );
+                            *pShort++ = static_cast<uint16>(
+                                65535.0f * StringConverter::parseReal( xmlElem->Attribute( "v" ) ) );
+                            *pShort++ = static_cast<uint16>(
+                                65535.0f * StringConverter::parseReal( xmlElem->Attribute( "w" ) ) );
+                            *pShort++ = static_cast<uint16>(
+                                65535.0f * StringConverter::parseReal( xmlElem->Attribute( "x" ) ) );
                             break;
 
                         case VET_UBYTE4:
