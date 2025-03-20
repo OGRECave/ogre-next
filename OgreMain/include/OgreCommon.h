@@ -1161,7 +1161,40 @@ namespace Ogre {
     {
         return (offset / alignment) * alignment;
     }
-}
+
+#if defined( __has_builtin )
+#    define OGRE_HAS_BUILTIN( x ) __has_builtin( x )
+#else
+#    define OGRE_HAS_BUILTIN( x ) 0
+#endif
+
+    /// Performs the same as std::bit_cast
+    /// i.e. the same as reinterpret_cast but without breaking strict aliasing rules
+    template <class Dest, class Source>
+#if OGRE_HAS_BUILTIN( __builtin_bit_cast ) || _MSC_VER >= 1928
+    constexpr
+#else
+    inline
+#endif
+        Dest
+        bit_cast( const Source &source )
+    {
+#if OGRE_HAS_BUILTIN( __builtin_bit_cast ) || _MSC_VER >= 1928
+        return __builtin_bit_cast( Dest, source );
+#else
+        static_assert( sizeof( Dest ) == sizeof( Source ),
+                       "bit_cast requires source and destination to be the same size" );
+        static_assert( std::is_trivially_copyable<Dest>::value,
+                       "bit_cast requires the destination type to be copyable" );
+        static_assert( std::is_trivially_copyable<Source>::value,
+                       "bit_cast requires the source type to be copyable" );
+        Dest dest;
+        memcpy( &dest, &source, sizeof( dest ) );
+        return dest;
+#endif
+    }
+}  // namespace Ogre
+
 
 #include "OgreHeaderSuffix.h"
 
