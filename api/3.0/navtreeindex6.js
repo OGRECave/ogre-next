@@ -1,5 +1,7 @@
 var NAVTREEINDEX6 =
 {
+"_ogre_stream_serialiser_8h.html":[8,0,2,0,260],
+"_ogre_string_8h.html":[8,0,2,0,261],
 "_ogre_string_converter_8h.html":[8,0,2,0,262],
 "_ogre_string_interface_8h.html":[8,0,2,0,263],
 "_ogre_string_vector_8h.html":[8,0,2,0,264],
@@ -247,7 +249,5 @@ var NAVTREEINDEX6 =
 "_ogre_unified_high_level_gpu_program_8h.html":[8,0,2,0,280],
 "_ogre_uniform_scalable_task_8h.html":[8,0,2,0,11,16],
 "_ogre_user_object_bindings_8h.html":[8,0,2,0,281],
-"_ogre_vao_manager_8h.html":[8,0,2,0,12,11],
-"_ogre_vao_manager_8h.html#a865c7fde0adea498fdf7d807dad60701":[8,0,2,0,12,11,2],
-"_ogre_vao_manager_8h.html#aea7ea843f79a0065e94935d522c00ee1":[8,0,2,0,12,11,3]
+"_ogre_vao_manager_8h.html":[8,0,2,0,12,11]
 };
