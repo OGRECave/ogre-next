@@ -1,5 +1,9 @@
 var struct_ogre_1_1_hlms_pso =
 [
+    [ "StrongBlocks", "struct_ogre_1_1_hlms_pso.html#a35e506592f35b36c39b83e90333aa754", [
+      [ "HasStrongMacroblock", "struct_ogre_1_1_hlms_pso.html#a35e506592f35b36c39b83e90333aa754a8ea506c088e4c9a8ebd70839550e91d8", null ],
+      [ "HasStrongBlendblock", "struct_ogre_1_1_hlms_pso.html#a35e506592f35b36c39b83e90333aa754aaac3149532551d289761a55c443e44c8", null ]
+    ] ],
     [ "HlmsPso", "struct_ogre_1_1_hlms_pso.html#ae3c4a072a6d27bbcf03326ff18179741", null ],
     [ "HlmsPso", "struct_ogre_1_1_hlms_pso.html#a52cdf4434222602ce1a7b90c9f7be51f", null ],
     [ "equalExcludePassData", "struct_ogre_1_1_hlms_pso.html#ab280462ceebbe20620eddd7f8371e629", null ],
@@ -18,6 +22,7 @@ var struct_ogre_1_1_hlms_pso =
     [ "pixelShader", "struct_ogre_1_1_hlms_pso.html#a046e7706148d71b100d97101bb602160", null ],
     [ "rsData", "struct_ogre_1_1_hlms_pso.html#a9239c7de65f013a164846fb2ebc18fe1", null ],
     [ "sampleMask", "struct_ogre_1_1_hlms_pso.html#ac604b5d0efc71adb1c8b9d50e7c9c3d5", null ],
+    [ "strongBlocks", "struct_ogre_1_1_hlms_pso.html#a95e8fabd58536bd56ed164b24570f01a", null ],
     [ "tesselationDomainShader", "struct_ogre_1_1_hlms_pso.html#a516c97b4cd1a313f491e521d1fa29324", null ],
     [ "tesselationHullShader", "struct_ogre_1_1_hlms_pso.html#ae24090d097a93388e6364a2ecdd539aa", null ],
     [ "vertexElements", "struct_ogre_1_1_hlms_pso.html#a78be487acd737a1ba860a793974b7095", null ],

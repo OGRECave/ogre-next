@@ -94,6 +94,7 @@ $(document).ready(function(){initNavTree('struct_ogre_1_1_hlms_macroblock.html',
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="struct_ogre_1_1_hlms_macroblock-members.html">List of all members</a>  </div>
@@ -113,6 +114,51 @@ $(document).ready(function(){initNavTree('struct_ogre_1_1_hlms_macroblock.html',
 <div class="center"><iframe scrolling="no" frameborder="0" src="struct_ogre_1_1_hlms_macroblock__inherit__graph.svg" width="182" height="110"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a4b9208c9dd4efb98a7d3e4508a9636af" id="r_a4b9208c9dd4efb98a7d3e4508a9636af"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636af">StrongMacroblockBits</a> { <br />
+&#160;&#160;<a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa1fa3d3cccfc771b487b8923624f09436">ScissorTestEnabled</a> = 1u &lt;&lt; 0u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa3d97671bc55350fba8787cab8119e6be">ScissorTestDisabled</a> = 1u &lt;&lt; 1u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa6050074cbd9bc8d17dd562a302923b92">InvertScissorTest</a> = (ScissorTestEnabled | ScissorTestDisabled)
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa4dfad6a8c6c1bf4b22c2587c75614520">DepthClampEnabled</a> = 1u &lt;&lt; 2u
+, <br />
+&#160;&#160;<a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afac46f262a7741a0ad344c36a82019ae08">DepthClampDisabled</a> = 1u &lt;&lt; 3u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afae762eaf23caf88c5ee3a37116ed8d7c5">InvertDepthClamp</a> = (DepthClampEnabled | DepthClampDisabled)
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa9d08f624041082bcabfb0af8ac26419d">DepthCheckEnabled</a> = 1u &lt;&lt; 4u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa55534a4f6dd2a6dea372659592758268">DepthCheckDisabled</a> = 1u &lt;&lt; 5u
+, <br />
+&#160;&#160;<a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa35d03f30e072c4d05624c4ffc41cc548">InvertDepthCheck</a> = (DepthCheckEnabled | DepthCheckDisabled)
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa84b0670454e3a4651896f692f24c9ba7">DepthWriteEnabled</a> = 1u &lt;&lt; 6u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afab782f53a48815658af439a170374ef13">DepthWriteDisabled</a> = 1u &lt;&lt; 7u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa2c5485718b48154c823549a0c50be6ac">InvertDepthWrite</a> = (DepthWriteEnabled | DepthWriteDisabled)
+, <br />
+&#160;&#160;<a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afac494c7f556551c96aeb8021c01089e63">DepthFuncMask</a> = 15u &lt;&lt; 8u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa2168f48d537f9143e088ba8229843fb2">DepthFunc_ALWAYS_FAIL</a> = 1u &lt;&lt; 8u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa7d5f193d48b3eb710b7bc4128c55ec99">DepthFunc_ALWAYS_PASS</a> = 2u &lt;&lt; 8u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afad6ce7edc41a7505342c92ffad5a15062">DepthFunc_LESS</a> = 3u &lt;&lt; 8u
+, <br />
+&#160;&#160;<a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa1b278050b6817e16fbcbc4a8a12f3a96">DepthFunc_LESS_EQUAL</a> = 4u &lt;&lt; 8u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa3c223e31e2feee8575975fc322d4ad95">DepthFunc_EQUAL</a> = 5u &lt;&lt; 8u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa8b3a5ff4baba52d50858f10ca59eeb43">DepthFunc_NOT_EQUAL</a> = 6u &lt;&lt; 8u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa5331f50448d87899c574304cd475b890">DepthFunc_GREATER_EQUAL</a> = 7u &lt;&lt; 8u
+, <br />
+&#160;&#160;<a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa2df101ad1bfef7a31d8b87500b43c49e">DepthFunc_GREATER</a> = 8u &lt;&lt; 8u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afad919e030880ed504872903c81f3047c2">CullingModeMask</a> = 3u &lt;&lt; 12u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa0e7a97aa4d7afbf214753253ac8d62e9">CullingMode_NONE</a> = 1u &lt;&lt; 12u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa9d11739308c590855133fa5a35f2c02b">CullingMode_CLOCKWISE</a> = 2u &lt;&lt; 12u
+, <br />
+&#160;&#160;<a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa19b0d18c7a0758ae7aded6a678113963">CullingMode_ANTICLOCKWISE</a> = 3u &lt;&lt; 12u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa71eee60d158fac3f335b77da9e2ac785">InvertCullingMode</a> = 1u &lt;&lt; 14u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afaa72a6e548b33cbcfa47c0f08d7ca674c">PolygonModeMask</a> = 3u &lt;&lt; 15u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa0a66b28d4d2d0adda92d5d70a9cc48f0">PolygonMode_POINTS</a> = 1u &lt;&lt; 15u
+, <br />
+&#160;&#160;<a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afaad8e44fe6992f49da2f30757cfbebf8c">PolygonMode_WIREFRAME</a> = 2u &lt;&lt; 15u
+, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa81f198c345236134ae615a5362d4b303">PolygonMode_SOLID</a> = 3u &lt;&lt; 15u
+<br />
+ }</td></tr>
+<tr class="memdesc:a4b9208c9dd4efb98a7d3e4508a9636af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Values stored in <a class="el" href="struct_ogre_1_1_hlms_pso_prop.html#afc7388e9753ceb3e072d2b38ea8c3e0a" title="The property holds the bits from StrongMacroblockBits enum to indicate the override of the HlmsPso&#39;s ...">HlmsPsoProp::StrongMacroblockBits</a> property.  <a href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636af">More...</a><br /></td></tr>
+<tr class="separator:a4b9208c9dd4efb98a7d3e4508a9636af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a59013785563e6a19b27a03943b85acdd" id="r_a59013785563e6a19b27a03943b85acdd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a59013785563e6a19b27a03943b85acdd">HlmsMacroblock</a> ()</td></tr>
@@ -169,7 +215,57 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A macro block contains settings that will rarely change, and thus are common to many materials. </p>
 <p>This is very analogous to D3D11_RASTERIZER_DESC. See <a class="el" href="class_ogre_1_1_hlms_datablock.html" title="An hlms datablock contains individual information about a specific material.">HlmsDatablock</a> Up to 32 different blocks are allowed! </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a4b9208c9dd4efb98a7d3e4508a9636af" name="a4b9208c9dd4efb98a7d3e4508a9636af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b9208c9dd4efb98a7d3e4508a9636af">&#9670;&#160;</a></span>StrongMacroblockBits</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636af">Ogre::HlmsMacroblock::StrongMacroblockBits</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Values stored in <a class="el" href="struct_ogre_1_1_hlms_pso_prop.html#afc7388e9753ceb3e072d2b38ea8c3e0a" title="The property holds the bits from StrongMacroblockBits enum to indicate the override of the HlmsPso&#39;s ...">HlmsPsoProp::StrongMacroblockBits</a> property. </p>
+<p>If a bit is set, it instructs the Hlms::applyStrongMacroblockRules to update a <a class="el" href="struct_ogre_1_1_hlms_macroblock.html" title="A macro block contains settings that will rarely change, and thus are common to many materials.">HlmsMacroblock</a> accordingly. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa1fa3d3cccfc771b487b8923624f09436" name="a4b9208c9dd4efb98a7d3e4508a9636afa1fa3d3cccfc771b487b8923624f09436"></a>ScissorTestEnabled&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa3d97671bc55350fba8787cab8119e6be" name="a4b9208c9dd4efb98a7d3e4508a9636afa3d97671bc55350fba8787cab8119e6be"></a>ScissorTestDisabled&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa6050074cbd9bc8d17dd562a302923b92" name="a4b9208c9dd4efb98a7d3e4508a9636afa6050074cbd9bc8d17dd562a302923b92"></a>InvertScissorTest&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa4dfad6a8c6c1bf4b22c2587c75614520" name="a4b9208c9dd4efb98a7d3e4508a9636afa4dfad6a8c6c1bf4b22c2587c75614520"></a>DepthClampEnabled&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afac46f262a7741a0ad344c36a82019ae08" name="a4b9208c9dd4efb98a7d3e4508a9636afac46f262a7741a0ad344c36a82019ae08"></a>DepthClampDisabled&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afae762eaf23caf88c5ee3a37116ed8d7c5" name="a4b9208c9dd4efb98a7d3e4508a9636afae762eaf23caf88c5ee3a37116ed8d7c5"></a>InvertDepthClamp&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa9d08f624041082bcabfb0af8ac26419d" name="a4b9208c9dd4efb98a7d3e4508a9636afa9d08f624041082bcabfb0af8ac26419d"></a>DepthCheckEnabled&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa55534a4f6dd2a6dea372659592758268" name="a4b9208c9dd4efb98a7d3e4508a9636afa55534a4f6dd2a6dea372659592758268"></a>DepthCheckDisabled&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa35d03f30e072c4d05624c4ffc41cc548" name="a4b9208c9dd4efb98a7d3e4508a9636afa35d03f30e072c4d05624c4ffc41cc548"></a>InvertDepthCheck&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa84b0670454e3a4651896f692f24c9ba7" name="a4b9208c9dd4efb98a7d3e4508a9636afa84b0670454e3a4651896f692f24c9ba7"></a>DepthWriteEnabled&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afab782f53a48815658af439a170374ef13" name="a4b9208c9dd4efb98a7d3e4508a9636afab782f53a48815658af439a170374ef13"></a>DepthWriteDisabled&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa2c5485718b48154c823549a0c50be6ac" name="a4b9208c9dd4efb98a7d3e4508a9636afa2c5485718b48154c823549a0c50be6ac"></a>InvertDepthWrite&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afac494c7f556551c96aeb8021c01089e63" name="a4b9208c9dd4efb98a7d3e4508a9636afac494c7f556551c96aeb8021c01089e63"></a>DepthFuncMask&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa2168f48d537f9143e088ba8229843fb2" name="a4b9208c9dd4efb98a7d3e4508a9636afa2168f48d537f9143e088ba8229843fb2"></a>DepthFunc_ALWAYS_FAIL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa7d5f193d48b3eb710b7bc4128c55ec99" name="a4b9208c9dd4efb98a7d3e4508a9636afa7d5f193d48b3eb710b7bc4128c55ec99"></a>DepthFunc_ALWAYS_PASS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afad6ce7edc41a7505342c92ffad5a15062" name="a4b9208c9dd4efb98a7d3e4508a9636afad6ce7edc41a7505342c92ffad5a15062"></a>DepthFunc_LESS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa1b278050b6817e16fbcbc4a8a12f3a96" name="a4b9208c9dd4efb98a7d3e4508a9636afa1b278050b6817e16fbcbc4a8a12f3a96"></a>DepthFunc_LESS_EQUAL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa3c223e31e2feee8575975fc322d4ad95" name="a4b9208c9dd4efb98a7d3e4508a9636afa3c223e31e2feee8575975fc322d4ad95"></a>DepthFunc_EQUAL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa8b3a5ff4baba52d50858f10ca59eeb43" name="a4b9208c9dd4efb98a7d3e4508a9636afa8b3a5ff4baba52d50858f10ca59eeb43"></a>DepthFunc_NOT_EQUAL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa5331f50448d87899c574304cd475b890" name="a4b9208c9dd4efb98a7d3e4508a9636afa5331f50448d87899c574304cd475b890"></a>DepthFunc_GREATER_EQUAL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa2df101ad1bfef7a31d8b87500b43c49e" name="a4b9208c9dd4efb98a7d3e4508a9636afa2df101ad1bfef7a31d8b87500b43c49e"></a>DepthFunc_GREATER&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afad919e030880ed504872903c81f3047c2" name="a4b9208c9dd4efb98a7d3e4508a9636afad919e030880ed504872903c81f3047c2"></a>CullingModeMask&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa0e7a97aa4d7afbf214753253ac8d62e9" name="a4b9208c9dd4efb98a7d3e4508a9636afa0e7a97aa4d7afbf214753253ac8d62e9"></a>CullingMode_NONE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa9d11739308c590855133fa5a35f2c02b" name="a4b9208c9dd4efb98a7d3e4508a9636afa9d11739308c590855133fa5a35f2c02b"></a>CullingMode_CLOCKWISE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa19b0d18c7a0758ae7aded6a678113963" name="a4b9208c9dd4efb98a7d3e4508a9636afa19b0d18c7a0758ae7aded6a678113963"></a>CullingMode_ANTICLOCKWISE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa71eee60d158fac3f335b77da9e2ac785" name="a4b9208c9dd4efb98a7d3e4508a9636afa71eee60d158fac3f335b77da9e2ac785"></a>InvertCullingMode&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afaa72a6e548b33cbcfa47c0f08d7ca674c" name="a4b9208c9dd4efb98a7d3e4508a9636afaa72a6e548b33cbcfa47c0f08d7ca674c"></a>PolygonModeMask&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa0a66b28d4d2d0adda92d5d70a9cc48f0" name="a4b9208c9dd4efb98a7d3e4508a9636afa0a66b28d4d2d0adda92d5d70a9cc48f0"></a>PolygonMode_POINTS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afaad8e44fe6992f49da2f30757cfbebf8c" name="a4b9208c9dd4efb98a7d3e4508a9636afaad8e44fe6992f49da2f30757cfbebf8c"></a>PolygonMode_WIREFRAME&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4b9208c9dd4efb98a7d3e4508a9636afa81f198c345236134ae615a5362d4b303" name="a4b9208c9dd4efb98a7d3e4508a9636afa81f198c345236134ae615a5362d4b303"></a>PolygonMode_SOLID&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a59013785563e6a19b27a03943b85acdd" name="a59013785563e6a19b27a03943b85acdd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a59013785563e6a19b27a03943b85acdd">&#9670;&#160;</a></span>HlmsMacroblock()</h2>
 

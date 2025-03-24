@@ -107,7 +107,7 @@ var searchData=
   ['colour5_104',['Colour5',['../class_ogre_1_1_render_pass_descriptor.html#ae003dc630410b352f3e14668b7938254a30819df0669b33bb02a60bedf05dad41',1,'Ogre::RenderPassDescriptor']]],
   ['colour6_105',['Colour6',['../class_ogre_1_1_render_pass_descriptor.html#ae003dc630410b352f3e14668b7938254a75ccf2fabf6d23fe96d3f35784617d2c',1,'Ogre::RenderPassDescriptor']]],
   ['colour7_106',['Colour7',['../class_ogre_1_1_render_pass_descriptor.html#ae003dc630410b352f3e14668b7938254afba5e22fa37308b78334aa94a8cf9da5',1,'Ogre::RenderPassDescriptor']]],
-  ['compositor_107',['compositor',['../class_ogre_1_1_process_resource_name_script_compiler_event.html#afd04c7f48ef0823ba70812b83fde1acca79d98608fb92fdd1ff492f56d86b2ba1',1,'Ogre::ProcessResourceNameScriptCompilerEvent::COMPOSITOR'],['../namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aa602ee38ea2347d313beab4dabced99fb',1,'Ogre::TextureSourceType::Compositor']]],
+  ['compositor_107',['compositor',['../namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aa602ee38ea2347d313beab4dabced99fb',1,'Ogre::TextureSourceType::Compositor'],['../class_ogre_1_1_process_resource_name_script_compiler_event.html#afd04c7f48ef0823ba70812b83fde1acca79d98608fb92fdd1ff492f56d86b2ba1',1,'Ogre::ProcessResourceNameScriptCompilerEvent::COMPOSITOR']]],
   ['compressedvertexformat_108',['CompressedVertexFormat',['../namespace_ogre_1_1_voxelizer_job_setting.html#a0704993dc80760ffa9afad8d5c1dac3cae7408b0d90558f90bafb2449aa1fb21f',1,'Ogre::VoxelizerJobSetting']]],
   ['compute_109',['compute',['../class_ogre_1_1_compositor_pass_mipmap_def.html#aa9fc749c877ef112faac9fd759d65eb4a09fff6dcecf1ac988c4674350847c2e8',1,'Ogre::CompositorPassMipmapDef::Compute'],['../class_ogre_1_1_vulkan_queue.html#a467d51923bda10ff87b144d4327da925a1189aa253ffb3db870cb4b43244f6dd6',1,'Ogre::VulkanQueue::Compute']]],
   ['computehq_110',['ComputeHQ',['../class_ogre_1_1_compositor_pass_mipmap_def.html#aa9fc749c877ef112faac9fd759d65eb4a8091aab9a83ab19f4c1d8c9127e3c31d',1,'Ogre::CompositorPassMipmapDef']]],
@@ -147,5 +147,9 @@ var searchData=
   ['cube_5fup_144',['CUBE_UP',['../class_ogre_1_1_texture_unit_state.html#a2584766311cf6d0eaada7be28c287cc3ab085d126cff272045a1e616adbd2d726',1,'Ogre::TextureUnitState']]],
   ['cull_5fanticlockwise_145',['CULL_ANTICLOCKWISE',['../group___general.html#ggac173244ed7d950d0acd726e4f323ecdba0803d6fedd04659fd6dc152d29434e4a',1,'Ogre']]],
   ['cull_5fclockwise_146',['CULL_CLOCKWISE',['../group___general.html#ggac173244ed7d950d0acd726e4f323ecdba50170ef4a0a12b9fc6bf0c53e582bdf0',1,'Ogre']]],
-  ['cull_5fnone_147',['CULL_NONE',['../group___general.html#ggac173244ed7d950d0acd726e4f323ecdba7868e61bf90df40d5e04e3a951729248',1,'Ogre']]]
+  ['cull_5fnone_147',['CULL_NONE',['../group___general.html#ggac173244ed7d950d0acd726e4f323ecdba7868e61bf90df40d5e04e3a951729248',1,'Ogre']]],
+  ['cullingmode_5fanticlockwise_148',['CullingMode_ANTICLOCKWISE',['../struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa19b0d18c7a0758ae7aded6a678113963',1,'Ogre::HlmsMacroblock']]],
+  ['cullingmode_5fclockwise_149',['CullingMode_CLOCKWISE',['../struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa9d11739308c590855133fa5a35f2c02b',1,'Ogre::HlmsMacroblock']]],
+  ['cullingmode_5fnone_150',['CullingMode_NONE',['../struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa0e7a97aa4d7afbf214753253ac8d62e9',1,'Ogre::HlmsMacroblock']]],
+  ['cullingmodemask_151',['CullingModeMask',['../struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afad919e030880ed504872903c81f3047c2',1,'Ogre::HlmsMacroblock']]]
 ];

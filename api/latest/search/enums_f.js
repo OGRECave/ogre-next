@@ -26,7 +26,9 @@ var searchData=
   ['stereomodetype_23',['StereoModeType',['../group___general.html#ga5ddaf464fe84b110f720b21a9a94b0cf',1,'Ogre']]],
   ['storeaction_24',['StoreAction',['../namespace_ogre_1_1_store_action.html#a1605e763b81f293b404de4a521f541ca',1,'Ogre::StoreAction']]],
   ['streamtype_25',['StreamType',['../class_ogre_1_1_deflate_stream.html#aa0d681e30262c74b6c1f2ecacc85908c',1,'Ogre::DeflateStream']]],
-  ['strongmacroblockbits_26',['StrongMacroblockBits',['../struct_ogre_1_1_hlms_pass_pso.html#af263ff6f0b338cd6c9e1bfa968a7214b',1,'Ogre::HlmsPassPso']]],
-  ['submissiontype_27',['SubmissionType',['../namespace_ogre_1_1_submission_type.html#a119342ed453a2c317a310c790104831e',1,'Ogre::SubmissionType']]],
-  ['swapchainstatus_28',['SwapchainStatus',['../class_ogre_1_1_vulkan_window_swap_chain_based.html#aadf0d4f9a81f5217c467f3306941d973',1,'Ogre::VulkanWindowSwapChainBased']]]
+  ['strongblendblockbits_26',['StrongBlendblockBits',['../struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3',1,'Ogre::HlmsBlendblock']]],
+  ['strongblocks_27',['StrongBlocks',['../struct_ogre_1_1_hlms_pso.html#a35e506592f35b36c39b83e90333aa754',1,'Ogre::HlmsPso']]],
+  ['strongmacroblockbits_28',['StrongMacroblockBits',['../struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636af',1,'Ogre::HlmsMacroblock']]],
+  ['submissiontype_29',['SubmissionType',['../namespace_ogre_1_1_submission_type.html#a119342ed453a2c317a310c790104831e',1,'Ogre::SubmissionType']]],
+  ['swapchainstatus_30',['SwapchainStatus',['../class_ogre_1_1_vulkan_window_swap_chain_based.html#aadf0d4f9a81f5217c467f3306941d973',1,'Ogre::VulkanWindowSwapChainBased']]]
 ];

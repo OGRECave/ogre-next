@@ -96,6 +96,7 @@ $(document).ready(function(){initNavTree('_ogre_hlms_datablock_8h.html',''); ini
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
 <a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle"><div class="title">OgreHlmsDatablock.h File Reference</div></div>
 </div><!--header-->
@@ -127,6 +128,13 @@ Namespaces</h2></td></tr>
 <tr class="memdesc:namespace_ogre"><td class="mdescLeft">&#160;</td><td class="mdescRight">bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt; <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a51c1eba10862dd0b7ceffc854e106015" id="r_a51c1eba10862dd0b7ceffc854e106015"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_hlms_datablock_8h.html#a51c1eba10862dd0b7ceffc854e106015">DECLARE_BLENDFACTORS</a>(Name,  offset)</td></tr>
+<tr class="separator:a51c1eba10862dd0b7ceffc854e106015"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef24ccfcbb194fe614b82fed37126222" id="r_aef24ccfcbb194fe614b82fed37126222"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_hlms_datablock_8h.html#aef24ccfcbb194fe614b82fed37126222">DECLARE_BLENDOPERATIONS</a>(Name,  offset)</td></tr>
+<tr class="separator:aef24ccfcbb194fe614b82fed37126222"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:gaf7c7c73e6a7e3dfb3e74484e3a971346" id="r_gaf7c7c73e6a7e3dfb3e74484e3a971346"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#gaf7c7c73e6a7e3dfb3e74484e3a971346">Ogre::HlmsBasicBlock</a> { <a class="el" href="group___resources.html#ggaf7c7c73e6a7e3dfb3e74484e3a971346a1a4fa9fb476e4d9098a50aaba8b969d4">Ogre::BLOCK_MACRO</a>
@@ -136,6 +144,80 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="separator:gaf7c7c73e6a7e3dfb3e74484e3a971346"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a51c1eba10862dd0b7ceffc854e106015" name="a51c1eba10862dd0b7ceffc854e106015"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51c1eba10862dd0b7ceffc854e106015">&#9670;&#160;</a></span>DECLARE_BLENDFACTORS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DECLARE_BLENDFACTORS</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">Name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">offset&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">        Name##Mask                     = 15u &lt;&lt; offset, \</div>
+<div class="line">        Name##_ONE                     = 1u &lt;&lt; offset,  \</div>
+<div class="line">        Name##_ZERO                    = 2u &lt;&lt; offset,  \</div>
+<div class="line">        Name##_DEST_COLOUR             = 3u &lt;&lt; offset,  \</div>
+<div class="line">        Name##_SOURCE_COLOUR           = 4u &lt;&lt; offset,  \</div>
+<div class="line">        Name##_ONE_MINUS_DEST_COLOUR   = 5u &lt;&lt; offset,  \</div>
+<div class="line">        Name##_ONE_MINUS_SOURCE_COLOUR = 6u &lt;&lt; offset,  \</div>
+<div class="line">        Name##_DEST_ALPHA              = 7u &lt;&lt; offset,  \</div>
+<div class="line">        Name##_SOURCE_ALPHA            = 8u &lt;&lt; offset,  \</div>
+<div class="line">        Name##_ONE_MINUS_DEST_ALPHA    = 9u &lt;&lt; offset,  \</div>
+<div class="line">        Name##_ONE_MINUS_SOURCE_ALPHA  = 10u &lt;&lt; offset</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="aef24ccfcbb194fe614b82fed37126222" name="aef24ccfcbb194fe614b82fed37126222"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef24ccfcbb194fe614b82fed37126222">&#9670;&#160;</a></span>DECLARE_BLENDOPERATIONS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DECLARE_BLENDOPERATIONS</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">Name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">offset&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">        Name##Mask                     = 15u &lt;&lt; offset, \</div>
+<div class="line">        Name##_ADD                     = 1u &lt;&lt; offset,  \</div>
+<div class="line">        Name##_SUBTRACT                = 2u &lt;&lt; offset,  \</div>
+<div class="line">        Name##_REVERSE_SUBTRACT        = 3u &lt;&lt; offset,  \</div>
+<div class="line">        Name##_MIN                     = 4u &lt;&lt; offset,  \</div>
+<div class="line">        Name##_MAX                     = 5u &lt;&lt; offset</div>
+</div><!-- fragment -->
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

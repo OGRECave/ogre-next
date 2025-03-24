@@ -13,6 +13,13 @@ var struct_ogre_1_1_hlms_blendblock =
       [ "BlendChannelAll", "struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1a89410fa1818738772d4b91cd088a21d9", null ],
       [ "BlendChannelForceDisabled", "struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1ac8d76a4ebf8091387f274324723e12d3", null ]
     ] ],
+    [ "StrongBlendblockBits", "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3", [
+      [ "DECLARE_BLENDFACTORS", "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3aad87522843a09304454eaa59b887f47c", null ],
+      [ "DECLARE_BLENDFACTORS", "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3aad87522843a09304454eaa59b887f47c", null ],
+      [ "DECLARE_BLENDFACTORS", "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3aad87522843a09304454eaa59b887f47c", null ],
+      [ "DECLARE_BLENDFACTORS", "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3aad87522843a09304454eaa59b887f47c", null ],
+      [ "DECLARE_BLENDOPERATIONS", "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3afea26bd06d76713afc7ef479d20b1320", null ]
+    ] ],
     [ "HlmsBlendblock", "struct_ogre_1_1_hlms_blendblock.html#a920ff67adb5aaa2238ce71994d7f9c7e", null ],
     [ "calculateSeparateBlendMode", "struct_ogre_1_1_hlms_blendblock.html#acaab72f26e7b41ab1082508d86a7ac0f", null ],
     [ "isAlphaToCoverage", "struct_ogre_1_1_hlms_blendblock.html#a60707e7fdeec21944b9b951481554613", null ],

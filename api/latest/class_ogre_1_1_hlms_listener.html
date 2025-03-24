@@ -107,6 +107,12 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_hlms_listener.html','')
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a037010d6c19ab004d954b51b2bdc0154" id="r_a037010d6c19ab004d954b51b2bdc0154"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_listener.html#a037010d6c19ab004d954b51b2bdc0154">applyStrongBlendblockRules</a> (<a class="el" href="struct_ogre_1_1_hlms_blendblock.html">HlmsBlendblock</a> &amp;blendblock, const <a class="el" href="group___resources.html#ga1d333e3b1280899cce855c563f200938">HlmsPropertyVec</a> &amp;properties) const</td></tr>
+<tr class="memdesc:a037010d6c19ab004d954b51b2bdc0154"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called from Hlms::createShaderCacheEntry after an <a class="el" href="struct_ogre_1_1_hlms_pso.html" title="Defines a PipelineStateObject as required by Vulkan, Metal &amp; DX12.">HlmsPso</a> is initialized.    <br /></td></tr>
+<tr class="separator:a037010d6c19ab004d954b51b2bdc0154"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26b3e93ebf93e2ba65112d1296635aa5" id="r_a26b3e93ebf93e2ba65112d1296635aa5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_listener.html#a26b3e93ebf93e2ba65112d1296635aa5">applyStrongMacroblockRules</a> (<a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> &amp;macroblock, const <a class="el" href="group___resources.html#ga1d333e3b1280899cce855c563f200938">HlmsPropertyVec</a> &amp;properties) const</td></tr>
+<tr class="memdesc:a26b3e93ebf93e2ba65112d1296635aa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called from Hlms::createShaderCacheEntry after an <a class="el" href="struct_ogre_1_1_hlms_pso.html" title="Defines a PipelineStateObject as required by Vulkan, Metal &amp; DX12.">HlmsPso</a> is initialized.  <br /></td></tr>
+<tr class="separator:a26b3e93ebf93e2ba65112d1296635aa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a516750b25e741d5260ed81d98e0521b9" id="r_a516750b25e741d5260ed81d98e0521b9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_listener.html#a516750b25e741d5260ed81d98e0521b9">getNumExtraPassTextures</a> (const <a class="el" href="group___resources.html#ga1d333e3b1280899cce855c563f200938">HlmsPropertyVec</a> &amp;properties, bool casterPass) const</td></tr>
 <tr class="memdesc:a516750b25e741d5260ed81d98e0521b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">If hlmsTypeChanged is going to be binding extra textures, override this function to tell us how many textures you will use, so that we don't use those slots.  <br /></td></tr>
 <tr class="separator:a516750b25e741d5260ed81d98e0521b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -136,6 +142,100 @@ Public Member Functions</h2></td></tr>
 <div class="textblock"><p>Listener that can be hooked to an <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> implementation for extending it with custom code. </p>
 <p>See "8.6.5 Customizing an existing implementation" of the 2.x manual on the different approaches to customizing <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> implementations. </p><dl class="section remark"><dt>Remarks</dt><dd>For performance reasons, the listener interface does not allow you to add customizations that work per <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement.">Renderable</a>, as that loop is performance sensitive. The only listener callback that works inside <a class="el" href="class_ogre_1_1_hlms.html#abd39fa103178d48aa78e8a1fd57e6e2b" title="Fills the constant buffers.">Hlms::fillBuffersFor</a> is hlmsTypeChanged which only gets evaluated when the previous <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement.">Renderable</a> used a different <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> implementation; which is rare, and since we sort the <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a>, it often branch predicts well. </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a037010d6c19ab004d954b51b2bdc0154" name="a037010d6c19ab004d954b51b2bdc0154"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a037010d6c19ab004d954b51b2bdc0154">&#9670;&#160;</a></span>applyStrongBlendblockRules()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::HlmsListener::applyStrongBlendblockRules </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html">HlmsBlendblock</a> &amp;&#160;</td>
+          <td class="paramname"><em>blendblock</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="group___resources.html#ga1d333e3b1280899cce855c563f200938">HlmsPropertyVec</a> &amp;&#160;</td>
+          <td class="paramname"><em>properties</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Called from Hlms::createShaderCacheEntry after an <a class="el" href="struct_ogre_1_1_hlms_pso.html" title="Defines a PipelineStateObject as required by Vulkan, Metal &amp; DX12.">HlmsPso</a> is initialized.   </p>
+<p>It allows to modify its currently assigned macroblock. This allows to override the macroblocks for all renderables within a pass. The listener can set a property or multiple properties in preparePassHash which can be accessed from this method to modify input macroblock. </p><dl class="section see"><dt>See also</dt><dd>Hlms::applyStrongMacroblockRules. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Given the same set of properties, the function must always return the same value. Otherwise caching (i.e. <a class="el" href="class_ogre_1_1_hlms_disk_cache.html" title="This class allows saving the current state of an Hlms to disk: both its compiled shaders with source ...">HlmsDiskCache</a>) won't work correctly. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">macroblock</td><td>[in/out] Current macroblock. You can modify it if needed. </td></tr>
+    <tr><td class="paramname">properties</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a26b3e93ebf93e2ba65112d1296635aa5" name="a26b3e93ebf93e2ba65112d1296635aa5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26b3e93ebf93e2ba65112d1296635aa5">&#9670;&#160;</a></span>applyStrongMacroblockRules()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::HlmsListener::applyStrongMacroblockRules </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> &amp;&#160;</td>
+          <td class="paramname"><em>macroblock</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="group___resources.html#ga1d333e3b1280899cce855c563f200938">HlmsPropertyVec</a> &amp;&#160;</td>
+          <td class="paramname"><em>properties</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Called from Hlms::createShaderCacheEntry after an <a class="el" href="struct_ogre_1_1_hlms_pso.html" title="Defines a PipelineStateObject as required by Vulkan, Metal &amp; DX12.">HlmsPso</a> is initialized. </p>
+<p>It allows to modify its currently assigned macroblock. This allows to override the macroblocks for all renderables within a pass. The listener can set a property or multiple properties in preparePassHash which can be accessed from this method to modify input macroblock. </p><dl class="section see"><dt>See also</dt><dd>Hlms::applyStrongMacroblockRules. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Given the same set of properties, the function must always return the same value. Otherwise caching (i.e. <a class="el" href="class_ogre_1_1_hlms_disk_cache.html" title="This class allows saving the current state of an Hlms to disk: both its compiled shaders with source ...">HlmsDiskCache</a>) won't work correctly. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">macroblock</td><td>[in/out] Current macroblock. You can modify it if needed. </td></tr>
+    <tr><td class="paramname">properties</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a516750b25e741d5260ed81d98e0521b9" name="a516750b25e741d5260ed81d98e0521b9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a516750b25e741d5260ed81d98e0521b9">&#9670;&#160;</a></span>getNumExtraPassTextures()</h2>
 

@@ -1017,6 +1017,13 @@ var group___resources =
         [ "BlendChannelAll", "struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1a89410fa1818738772d4b91cd088a21d9", null ],
         [ "BlendChannelForceDisabled", "struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1ac8d76a4ebf8091387f274324723e12d3", null ]
       ] ],
+      [ "StrongBlendblockBits", "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3", [
+        [ "DECLARE_BLENDFACTORS", "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3aad87522843a09304454eaa59b887f47c", null ],
+        [ "DECLARE_BLENDFACTORS", "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3aad87522843a09304454eaa59b887f47c", null ],
+        [ "DECLARE_BLENDFACTORS", "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3aad87522843a09304454eaa59b887f47c", null ],
+        [ "DECLARE_BLENDFACTORS", "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3aad87522843a09304454eaa59b887f47c", null ],
+        [ "DECLARE_BLENDOPERATIONS", "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3afea26bd06d76713afc7ef479d20b1320", null ]
+      ] ],
       [ "HlmsBlendblock", "struct_ogre_1_1_hlms_blendblock.html#a920ff67adb5aaa2238ce71994d7f9c7e", null ],
       [ "calculateSeparateBlendMode", "struct_ogre_1_1_hlms_blendblock.html#acaab72f26e7b41ab1082508d86a7ac0f", null ],
       [ "isAlphaToCoverage", "struct_ogre_1_1_hlms_blendblock.html#a60707e7fdeec21944b9b951481554613", null ],
@@ -1200,6 +1207,8 @@ var group___resources =
       [ "savingChangeTextureName", "class_ogre_1_1_hlms_json_listener.html#a2e0c85f8de336de4cb83b18962a5d852", null ]
     ] ],
     [ "Ogre::HlmsListener", "class_ogre_1_1_hlms_listener.html", [
+      [ "applyStrongBlendblockRules", "class_ogre_1_1_hlms_listener.html#a037010d6c19ab004d954b51b2bdc0154", null ],
+      [ "applyStrongMacroblockRules", "class_ogre_1_1_hlms_listener.html#a26b3e93ebf93e2ba65112d1296635aa5", null ],
       [ "getNumExtraPassTextures", "class_ogre_1_1_hlms_listener.html#a516750b25e741d5260ed81d98e0521b9", null ],
       [ "getPassBufferSize", "class_ogre_1_1_hlms_listener.html#ad6908edd7c16efc1ef1638a6a1e08bd9", null ],
       [ "hlmsTypeChanged", "class_ogre_1_1_hlms_listener.html#a10609ad741f2c3de7ce3715738cd0bea", null ],
@@ -1210,6 +1219,38 @@ var group___resources =
       [ "shaderCacheEntryCreated", "class_ogre_1_1_hlms_listener.html#aaf83dfe4a43ac3c7c444c90d759a7744", null ]
     ] ],
     [ "Ogre::HlmsMacroblock", "struct_ogre_1_1_hlms_macroblock.html", [
+      [ "StrongMacroblockBits", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636af", [
+        [ "ScissorTestEnabled", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa1fa3d3cccfc771b487b8923624f09436", null ],
+        [ "ScissorTestDisabled", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa3d97671bc55350fba8787cab8119e6be", null ],
+        [ "InvertScissorTest", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa6050074cbd9bc8d17dd562a302923b92", null ],
+        [ "DepthClampEnabled", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa4dfad6a8c6c1bf4b22c2587c75614520", null ],
+        [ "DepthClampDisabled", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afac46f262a7741a0ad344c36a82019ae08", null ],
+        [ "InvertDepthClamp", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afae762eaf23caf88c5ee3a37116ed8d7c5", null ],
+        [ "DepthCheckEnabled", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa9d08f624041082bcabfb0af8ac26419d", null ],
+        [ "DepthCheckDisabled", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa55534a4f6dd2a6dea372659592758268", null ],
+        [ "InvertDepthCheck", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa35d03f30e072c4d05624c4ffc41cc548", null ],
+        [ "DepthWriteEnabled", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa84b0670454e3a4651896f692f24c9ba7", null ],
+        [ "DepthWriteDisabled", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afab782f53a48815658af439a170374ef13", null ],
+        [ "InvertDepthWrite", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa2c5485718b48154c823549a0c50be6ac", null ],
+        [ "DepthFuncMask", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afac494c7f556551c96aeb8021c01089e63", null ],
+        [ "DepthFunc_ALWAYS_FAIL", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa2168f48d537f9143e088ba8229843fb2", null ],
+        [ "DepthFunc_ALWAYS_PASS", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa7d5f193d48b3eb710b7bc4128c55ec99", null ],
+        [ "DepthFunc_LESS", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afad6ce7edc41a7505342c92ffad5a15062", null ],
+        [ "DepthFunc_LESS_EQUAL", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa1b278050b6817e16fbcbc4a8a12f3a96", null ],
+        [ "DepthFunc_EQUAL", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa3c223e31e2feee8575975fc322d4ad95", null ],
+        [ "DepthFunc_NOT_EQUAL", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa8b3a5ff4baba52d50858f10ca59eeb43", null ],
+        [ "DepthFunc_GREATER_EQUAL", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa5331f50448d87899c574304cd475b890", null ],
+        [ "DepthFunc_GREATER", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa2df101ad1bfef7a31d8b87500b43c49e", null ],
+        [ "CullingModeMask", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afad919e030880ed504872903c81f3047c2", null ],
+        [ "CullingMode_NONE", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa0e7a97aa4d7afbf214753253ac8d62e9", null ],
+        [ "CullingMode_CLOCKWISE", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa9d11739308c590855133fa5a35f2c02b", null ],
+        [ "CullingMode_ANTICLOCKWISE", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa19b0d18c7a0758ae7aded6a678113963", null ],
+        [ "InvertCullingMode", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa71eee60d158fac3f335b77da9e2ac785", null ],
+        [ "PolygonModeMask", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afaa72a6e548b33cbcfa47c0f08d7ca674c", null ],
+        [ "PolygonMode_POINTS", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa0a66b28d4d2d0adda92d5d70a9cc48f0", null ],
+        [ "PolygonMode_WIREFRAME", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afaad8e44fe6992f49da2f30757cfbebf8c", null ],
+        [ "PolygonMode_SOLID", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa81f198c345236134ae615a5362d4b303", null ]
+      ] ],
       [ "HlmsMacroblock", "struct_ogre_1_1_hlms_macroblock.html#a59013785563e6a19b27a03943b85acdd", null ],
       [ "operator!=", "struct_ogre_1_1_hlms_macroblock.html#a40a3623c935d1a2e43f9676392fbeaff", null ],
       [ "operator==", "struct_ogre_1_1_hlms_macroblock.html#accab50d79b1fb2cbe0d02d0cd57160cf", null ],
@@ -1279,14 +1320,6 @@ var group___resources =
       [ "mJsonListener", "class_ogre_1_1_hlms_manager.html#a02e9f97ccafcf74884fdbdf3edb6e999", null ]
     ] ],
     [ "Ogre::HlmsPassPso", "struct_ogre_1_1_hlms_pass_pso.html", [
-      [ "StrongMacroblockBits", "struct_ogre_1_1_hlms_pass_pso.html#af263ff6f0b338cd6c9e1bfa968a7214b", [
-        [ "ForceDisableDepthWrites", "struct_ogre_1_1_hlms_pass_pso.html#af263ff6f0b338cd6c9e1bfa968a7214ba10f2c28724fb87cc59179dc26842cb4e", null ],
-        [ "InvertVertexWinding", "struct_ogre_1_1_hlms_pass_pso.html#af263ff6f0b338cd6c9e1bfa968a7214bae6f3010b1e71eccd877cad332ef9fc0f", null ],
-        [ "NoDepthBuffer", "struct_ogre_1_1_hlms_pass_pso.html#af263ff6f0b338cd6c9e1bfa968a7214ba1b3808a230b60328a8f173dab5038c91", null ],
-        [ "ForceDepthClamp", "struct_ogre_1_1_hlms_pass_pso.html#af263ff6f0b338cd6c9e1bfa968a7214bade67d3843f7d123fa303d129c1e79234", null ],
-        [ "ForceCullNone", "struct_ogre_1_1_hlms_pass_pso.html#af263ff6f0b338cd6c9e1bfa968a7214ba9fd1cc83935a3a82b3c4fee6f6109a04", null ]
-      ] ],
-      [ "hasStrongMacroblock", "struct_ogre_1_1_hlms_pass_pso.html#ab59f852b38aedc7730776079706d05a5", null ],
       [ "operator!=", "struct_ogre_1_1_hlms_pass_pso.html#ae1ae72c43d27ce38b055ec96a2f8b40f", null ],
       [ "operator<", "struct_ogre_1_1_hlms_pass_pso.html#ac0a8ef4ecbe4fe6014cde50d1e180057", null ],
       [ "operator==", "struct_ogre_1_1_hlms_pass_pso.html#afc4dc599d934e99703dc504c9afaee14", null ],
@@ -1295,8 +1328,7 @@ var group___resources =
       [ "depthFormat", "struct_ogre_1_1_hlms_pass_pso.html#a700f3b53a9344ae0d4089dc723a0e536", null ],
       [ "resolveColourFormat", "struct_ogre_1_1_hlms_pass_pso.html#a0eb4945bc9aa5f3a9b83bfcf1a758ae9", null ],
       [ "sampleDescription", "struct_ogre_1_1_hlms_pass_pso.html#a4ee0425ddb698aebcecada4f182565da", null ],
-      [ "stencilParams", "struct_ogre_1_1_hlms_pass_pso.html#a9a9b1b99d1cf98165d58ba99a6837549", null ],
-      [ "strongMacroblockBits", "struct_ogre_1_1_hlms_pass_pso.html#ac97312e889518a263ee5d7910225b876", null ]
+      [ "stencilParams", "struct_ogre_1_1_hlms_pass_pso.html#a9a9b1b99d1cf98165d58ba99a6837549", null ]
     ] ],
     [ "Ogre::HlmsPbsDatablock", "class_ogre_1_1_hlms_pbs_datablock.html", [
       [ "TransparencyModes", "class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382ceb", [
@@ -1392,6 +1424,10 @@ var group___resources =
       [ "value", "struct_ogre_1_1_hlms_property.html#aecab519ff1990e94966878e0f4ab864a", null ]
     ] ],
     [ "Ogre::HlmsPso", "struct_ogre_1_1_hlms_pso.html", [
+      [ "StrongBlocks", "struct_ogre_1_1_hlms_pso.html#a35e506592f35b36c39b83e90333aa754", [
+        [ "HasStrongMacroblock", "struct_ogre_1_1_hlms_pso.html#a35e506592f35b36c39b83e90333aa754a8ea506c088e4c9a8ebd70839550e91d8", null ],
+        [ "HasStrongBlendblock", "struct_ogre_1_1_hlms_pso.html#a35e506592f35b36c39b83e90333aa754aaac3149532551d289761a55c443e44c8", null ]
+      ] ],
       [ "HlmsPso", "struct_ogre_1_1_hlms_pso.html#ae3c4a072a6d27bbcf03326ff18179741", null ],
       [ "HlmsPso", "struct_ogre_1_1_hlms_pso.html#a52cdf4434222602ce1a7b90c9f7be51f", null ],
       [ "equalExcludePassData", "struct_ogre_1_1_hlms_pso.html#ab280462ceebbe20620eddd7f8371e629", null ],
@@ -1410,6 +1446,7 @@ var group___resources =
       [ "pixelShader", "struct_ogre_1_1_hlms_pso.html#a046e7706148d71b100d97101bb602160", null ],
       [ "rsData", "struct_ogre_1_1_hlms_pso.html#a9239c7de65f013a164846fb2ebc18fe1", null ],
       [ "sampleMask", "struct_ogre_1_1_hlms_pso.html#ac604b5d0efc71adb1c8b9d50e7c9c3d5", null ],
+      [ "strongBlocks", "struct_ogre_1_1_hlms_pso.html#a95e8fabd58536bd56ed164b24570f01a", null ],
       [ "tesselationDomainShader", "struct_ogre_1_1_hlms_pso.html#a516c97b4cd1a313f491e521d1fa29324", null ],
       [ "tesselationHullShader", "struct_ogre_1_1_hlms_pso.html#ae24090d097a93388e6364a2ecdd539aa", null ],
       [ "vertexElements", "struct_ogre_1_1_hlms_pso.html#a78be487acd737a1ba860a793974b7095", null ],
@@ -1418,7 +1455,9 @@ var group___resources =
     [ "Ogre::HlmsPsoProp", "struct_ogre_1_1_hlms_pso_prop.html", [
       [ "Blendblock", "struct_ogre_1_1_hlms_pso_prop.html#aa005aef3bcdd9f69618f3c5f2dd2d4ca", null ],
       [ "InputLayoutId", "struct_ogre_1_1_hlms_pso_prop.html#acd2bce229684b986c712c3e83b52db07", null ],
-      [ "Macroblock", "struct_ogre_1_1_hlms_pso_prop.html#a6f4d317d7353d8131c3e05149121c2d8", null ]
+      [ "Macroblock", "struct_ogre_1_1_hlms_pso_prop.html#a6f4d317d7353d8131c3e05149121c2d8", null ],
+      [ "StrongBlendblockBits", "struct_ogre_1_1_hlms_pso_prop.html#aefde4ecaf1c314728ea477afe3d7be6d", null ],
+      [ "StrongMacroblockBits", "struct_ogre_1_1_hlms_pso_prop.html#afc7388e9753ceb3e072d2b38ea8c3e0a", null ]
     ] ],
     [ "Ogre::HlmsSamplerblock", "struct_ogre_1_1_hlms_samplerblock.html", [
       [ "HlmsSamplerblock", "struct_ogre_1_1_hlms_samplerblock.html#aa5997a8cd5825b0daceb4d72b0afc858", null ],

@@ -94,6 +94,7 @@ $(document).ready(function(){initNavTree('struct_ogre_1_1_hlms_pso.html',''); in
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="struct_ogre_1_1_hlms_pso-members.html">List of all members</a>  </div>
@@ -106,6 +107,14 @@ $(document).ready(function(){initNavTree('struct_ogre_1_1_hlms_pso.html',''); in
 
 <p><code>#include &lt;OgreHlmsPso.h&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a35e506592f35b36c39b83e90333aa754" id="r_a35e506592f35b36c39b83e90333aa754"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#a35e506592f35b36c39b83e90333aa754">StrongBlocks</a> { <a class="el" href="struct_ogre_1_1_hlms_pso.html#a35e506592f35b36c39b83e90333aa754a8ea506c088e4c9a8ebd70839550e91d8">HasStrongMacroblock</a> = 1u &lt;&lt; 0u
+, <a class="el" href="struct_ogre_1_1_hlms_pso.html#a35e506592f35b36c39b83e90333aa754aaac3149532551d289761a55c443e44c8">HasStrongBlendblock</a> = 1u &lt;&lt; 1u
+ }</td></tr>
+<tr class="memdesc:a35e506592f35b36c39b83e90333aa754"><td class="mdescLeft">&#160;</td><td class="mdescRight">The values for strongBasicBlocks member.  <a href="struct_ogre_1_1_hlms_pso.html#a35e506592f35b36c39b83e90333aa754">More...</a><br /></td></tr>
+<tr class="separator:a35e506592f35b36c39b83e90333aa754"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae3c4a072a6d27bbcf03326ff18179741" id="r_ae3c4a072a6d27bbcf03326ff18179741"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#ae3c4a072a6d27bbcf03326ff18179741">HlmsPso</a> ()</td></tr>
@@ -151,6 +160,8 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:ac604b5d0efc71adb1c8b9d50e7c9c3d5" id="r_ac604b5d0efc71adb1c8b9d50e7c9c3d5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#ac604b5d0efc71adb1c8b9d50e7c9c3d5">sampleMask</a></td></tr>
 <tr class="memdesc:ac604b5d0efc71adb1c8b9d50e7c9c3d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fixed to 0xffffffff for now.  <br /></td></tr>
 <tr class="separator:ac604b5d0efc71adb1c8b9d50e7c9c3d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95e8fabd58536bd56ed164b24570f01a" id="r_a95e8fabd58536bd56ed164b24570f01a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#a95e8fabd58536bd56ed164b24570f01a">strongBlocks</a></td></tr>
+<tr class="separator:a95e8fabd58536bd56ed164b24570f01a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a516c97b4cd1a313f491e521d1fa29324" id="r_a516c97b4cd1a313f491e521d1fa29324"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a2c452533979dfdf73a296288e94d920b">GpuProgramPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#a516c97b4cd1a313f491e521d1fa29324">tesselationDomainShader</a></td></tr>
 <tr class="separator:a516c97b4cd1a313f491e521d1fa29324"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae24090d097a93388e6364a2ecdd539aa" id="r_ae24090d097a93388e6364a2ecdd539aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a2c452533979dfdf73a296288e94d920b">GpuProgramPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#ae24090d097a93388e6364a2ecdd539aa">tesselationHullShader</a></td></tr>
@@ -164,7 +175,30 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Defines a PipelineStateObject as required by Vulkan, Metal &amp; DX12. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>Some RenderSystem-specific quirks: In OpenGL, vertex-input data (vertexElements, operationType, enablePrimitiveRestart) is ignored, and controlled via the <a class="el" href="struct_ogre_1_1_vertex_array_object.html" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i...">VertexArrayObject</a> pointer.</dd></dl>
 <p>In the other APIs, vertex-input data is use, and <a class="el" href="struct_ogre_1_1_vertex_array_object.html" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i...">VertexArrayObject</a> pointers only control which vertex and index buffers are bound to the device. </p><dl class="section user"><dt></dt><dd>Padding bytes should be zeroed/copied for properly testing via memcmp. </dd></dl>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a35e506592f35b36c39b83e90333aa754" name="a35e506592f35b36c39b83e90333aa754"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35e506592f35b36c39b83e90333aa754">&#9670;&#160;</a></span>StrongBlocks</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="struct_ogre_1_1_hlms_pso.html#a35e506592f35b36c39b83e90333aa754">Ogre::HlmsPso::StrongBlocks</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The values for strongBasicBlocks member. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a35e506592f35b36c39b83e90333aa754a8ea506c088e4c9a8ebd70839550e91d8" name="a35e506592f35b36c39b83e90333aa754a8ea506c088e4c9a8ebd70839550e91d8"></a>HasStrongMacroblock&#160;</td><td class="fielddoc"><p>If set, the macroblock was overridden and the <a class="el" href="struct_ogre_1_1_hlms_pso.html" title="Defines a PipelineStateObject as required by Vulkan, Metal &amp; DX12.">HlmsPso</a> holds a strong ref. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a35e506592f35b36c39b83e90333aa754aaac3149532551d289761a55c443e44c8" name="a35e506592f35b36c39b83e90333aa754aaac3149532551d289761a55c443e44c8"></a>HasStrongBlendblock&#160;</td><td class="fielddoc"><p>If set, the blendblock was overridden and the <a class="el" href="struct_ogre_1_1_hlms_pso.html" title="Defines a PipelineStateObject as required by Vulkan, Metal &amp; DX12.">HlmsPso</a> holds a strong ref. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ae3c4a072a6d27bbcf03326ff18179741" name="ae3c4a072a6d27bbcf03326ff18179741"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae3c4a072a6d27bbcf03326ff18179741">&#9670;&#160;</a></span>HlmsPso() <span class="overload">[1/2]</span></h2>
 
@@ -466,6 +500,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="struct_ogre_1_1_hlms_pso.html#a35e506592f35b36c39b83e90333aa754" title="The values for strongBasicBlocks member.">StrongBlocks</a> enum. </dd></dl>
 
 </div>
 </div>
@@ -544,6 +579,20 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Fixed to 0xffffffff for now. </p>
+
+</div>
+</div>
+<a id="a95e8fabd58536bd56ed164b24570f01a" name="a95e8fabd58536bd56ed164b24570f01a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95e8fabd58536bd56ed164b24570f01a">&#9670;&#160;</a></span>strongBlocks</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> Ogre::HlmsPso::strongBlocks</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>

@@ -110,6 +110,12 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:acd2bce229684b986c712c3e83b52db07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f4d317d7353d8131c3e05149121c2d8" id="r_a6f4d317d7353d8131c3e05149121c2d8"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso_prop.html#a6f4d317d7353d8131c3e05149121c2d8">Macroblock</a></td></tr>
 <tr class="separator:a6f4d317d7353d8131c3e05149121c2d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefde4ecaf1c314728ea477afe3d7be6d" id="r_aefde4ecaf1c314728ea477afe3d7be6d"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso_prop.html#aefde4ecaf1c314728ea477afe3d7be6d">StrongBlendblockBits</a></td></tr>
+<tr class="memdesc:aefde4ecaf1c314728ea477afe3d7be6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Similar to StrongMacroblockBits but used for overrides of Blendblocks.  <br /></td></tr>
+<tr class="separator:aefde4ecaf1c314728ea477afe3d7be6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc7388e9753ceb3e072d2b38ea8c3e0a" id="r_afc7388e9753ceb3e072d2b38ea8c3e0a"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso_prop.html#afc7388e9753ceb3e072d2b38ea8c3e0a">StrongMacroblockBits</a></td></tr>
+<tr class="memdesc:afc7388e9753ceb3e072d2b38ea8c3e0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The property holds the bits from StrongMacroblockBits enum to indicate the override of the <a class="el" href="struct_ogre_1_1_hlms_pso.html" title="Defines a PipelineStateObject as required by Vulkan, Metal &amp; DX12.">HlmsPso</a>'s macroblock.  <br /></td></tr>
+<tr class="separator:afc7388e9753ceb3e072d2b38ea8c3e0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="aa005aef3bcdd9f69618f3c5f2dd2d4ca" name="aa005aef3bcdd9f69618f3c5f2dd2d4ca"></a>
@@ -175,6 +181,60 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="aefde4ecaf1c314728ea477afe3d7be6d" name="aefde4ecaf1c314728ea477afe3d7be6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefde4ecaf1c314728ea477afe3d7be6d">&#9670;&#160;</a></span>StrongBlendblockBits</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> Ogre::HlmsPsoProp::StrongBlendblockBits</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Similar to StrongMacroblockBits but used for overrides of Blendblocks. </p>
+
+</div>
+</div>
+<a id="afc7388e9753ceb3e072d2b38ea8c3e0a" name="afc7388e9753ceb3e072d2b38ea8c3e0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc7388e9753ceb3e072d2b38ea8c3e0a">&#9670;&#160;</a></span>StrongMacroblockBits</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> Ogre::HlmsPsoProp::StrongMacroblockBits</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The property holds the bits from StrongMacroblockBits enum to indicate the override of the <a class="el" href="struct_ogre_1_1_hlms_pso.html" title="Defines a PipelineStateObject as required by Vulkan, Metal &amp; DX12.">HlmsPso</a>'s macroblock. </p>
+<p>This can be used to override all macroblocks from all renderables rendered by current pass. Note that the implementation doesn't need to use this property. It can introduce its own property or mechanism for the overrides. There are couple of details necessary to keep in mind if implementing own mechanism:</p><ul>
+<li>the values are cached are stored in <a class="el" href="class_ogre_1_1_hlms_disk_cache.html" title="This class allows saving the current state of an Hlms to disk: both its compiled shaders with source ...">HlmsDiskCache</a></li>
+<li>the implementation must be consistent between setting the flags and interpreting them</li>
+<li>if a value changed its meaning, the cache must be manually deleted as <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> cannot detect such changes!</li>
+<li>It is not sufficient to just set HlmsPassPso::NeedStrongMacroblock in HlmsPassPso::strongBasicBlocks as it will lead to the same PassCache values. It is necessary to indicate the override fully and distinguish between 2 different overrides by setting a property with value describing the override (bit mask) or setting multiple properties (a property per specific override). </li>
+</ul>
 
 </div>
 </div>
