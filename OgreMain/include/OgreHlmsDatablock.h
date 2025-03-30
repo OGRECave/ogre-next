@@ -77,6 +77,51 @@ namespace Ogre
     */
     struct _OgreExport HlmsMacroblock : public BasicBlock
     {
+        /// Values stored in HlmsPsoProp::StrongMacroblockBits property. If a bit is set, it instructs
+        /// the Hlms::applyStrongMacroblockRules to update a HlmsMacroblock accordingly.
+        enum StrongMacroblockBits
+        {
+            // clang-format off
+            ScissorTestEnabled        = 1u << 0u,
+            ScissorTestDisabled       = 1u << 1u,
+            InvertScissorTest         = (ScissorTestEnabled | ScissorTestDisabled),
+
+            DepthClampEnabled         = 1u << 2u,
+            DepthClampDisabled        = 1u << 3u,
+            InvertDepthClamp          = (DepthClampEnabled | DepthClampDisabled),
+
+            DepthCheckEnabled         = 1u << 4u,
+            DepthCheckDisabled        = 1u << 5u,
+            InvertDepthCheck          = (DepthCheckEnabled | DepthCheckDisabled),
+
+            DepthWriteEnabled         = 1u << 6u,
+            DepthWriteDisabled        = 1u << 7u,
+            InvertDepthWrite          = (DepthWriteEnabled | DepthWriteDisabled),
+
+            DepthFuncMask             = 15u << 8u, // reserve 4 bits.
+            DepthFunc_ALWAYS_FAIL     = 1u << 8u,
+            DepthFunc_ALWAYS_PASS     = 2u << 8u,
+            DepthFunc_LESS            = 3u << 8u,
+            DepthFunc_LESS_EQUAL      = 4u << 8u,
+            DepthFunc_EQUAL           = 5u << 8u,
+            DepthFunc_NOT_EQUAL       = 6u << 8u,
+            DepthFunc_GREATER_EQUAL   = 7u << 8u,
+            DepthFunc_GREATER         = 8u << 8u,
+
+            CullingModeMask           = 3u << 12u, // reserve 2 bits.
+            CullingMode_NONE          = 1u << 12u,
+            CullingMode_CLOCKWISE     = 2u << 12u,
+            CullingMode_ANTICLOCKWISE = 3u << 12u,
+
+            InvertCullingMode         = 1u << 14u,
+
+            PolygonModeMask           = 3u << 15u, // reserve 2 bits.
+            PolygonMode_POINTS        = 1u << 15u,
+            PolygonMode_WIREFRAME     = 2u << 15u,
+            PolygonMode_SOLID         = 3u << 15u
+            // clang-format on
+        };
+
         bool            mScissorTestEnabled;
         bool            mDepthClamp;
         bool            mDepthCheck;
@@ -178,6 +223,42 @@ namespace Ogre
             /// Alpha to Coverage is enabled only if RenderTarget uses MSAA.
             A2cEnabledMsaaOnly
         };
+
+        // clang-format off
+#define DECLARE_BLENDFACTORS(Name, offset)              \
+        Name##Mask                     = 15u << offset, \
+        Name##_ONE                     = 1u << offset,  \
+        Name##_ZERO                    = 2u << offset,  \
+        Name##_DEST_COLOUR             = 3u << offset,  \
+        Name##_SOURCE_COLOUR           = 4u << offset,  \
+        Name##_ONE_MINUS_DEST_COLOUR   = 5u << offset,  \
+        Name##_ONE_MINUS_SOURCE_COLOUR = 6u << offset,  \
+        Name##_DEST_ALPHA              = 7u << offset,  \
+        Name##_SOURCE_ALPHA            = 8u << offset,  \
+        Name##_ONE_MINUS_DEST_ALPHA    = 9u << offset,  \
+        Name##_ONE_MINUS_SOURCE_ALPHA  = 10u << offset
+#define DECLARE_BLENDOPERATIONS(Name, offset)           \
+        Name##Mask                     = 15u << offset, \
+        Name##_ADD                     = 1u << offset,  \
+        Name##_SUBTRACT                = 2u << offset,  \
+        Name##_REVERSE_SUBTRACT        = 3u << offset,  \
+        Name##_MIN                     = 4u << offset,  \
+        Name##_MAX                     = 5u << offset
+        // clang-format on
+
+        /// Values stored in HlmsPsoProp::StrongBlendblockBits property. If a bit is set, it instructs
+        /// the Hlms::applyStrongBlendblockRules to update a HlmsBlendblock accordingly.
+        enum StrongBlendblockBits
+        {
+            DECLARE_BLENDFACTORS( SourceBlendFactor, 0 ),
+            DECLARE_BLENDFACTORS( DestBlendFactor, 4 ),
+            DECLARE_BLENDFACTORS( SourceBlendFactorAlpha, 8 ),
+            DECLARE_BLENDFACTORS( DestBlendFactorAlpha, 12 ),
+            DECLARE_BLENDOPERATIONS( BlendOperation, 16 ),
+            DECLARE_BLENDOPERATIONS( BlendOperationAlpha, 20 )
+        };
+#undef DECLARE_BLENDOPERATIONS
+#undef DECLARE_BLENDFACTORS
 
         uint8 mAlphaToCoverage;  /// See A2CSetting
 

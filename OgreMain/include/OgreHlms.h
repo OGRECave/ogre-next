@@ -460,13 +460,6 @@ namespace Ogre
 
         void dumpProperties( std::ofstream &outFile, size_t tid );
 
-        /** Modifies the PSO's macroblock if there are reasons to do that, and creates
-            a strong reference to the macroblock that the PSO will own.
-        @param pso [in/out]
-            PSO to (potentially) modify.
-        */
-        void applyStrongMacroblockRules( HlmsPso &pso );
-
         virtual void setupRootLayout( RootLayout &rootLayout, size_t tid ) = 0;
 
         HighLevelGpuProgramPtr compileShaderCode( const String &source,
@@ -588,6 +581,33 @@ namespace Ogre
         /// Returns the hash of the property Full32/Half16/Relaxed.
         /// See Hlms::getSupportedPrecisionMode
         int32 getSupportedPrecisionModeHash() const;
+
+        /// Apply rules for macroblock and blendblock stored in HlmsPso and create strong refs if needed.
+        void applyStrongBlockRules( HlmsPso &pso, const size_t tid );
+
+        /** Gets a chance to modify a PSO's macroblock. Caller will check if this function has modified
+            the macroblock, and if so, it creates a strong reference to the macroblock that the PSO will
+            own.
+
+            The implementation can set a single or multiple properties from preparePassHash which are
+            then interpreted by applyStrongMacroblockRules. Note that the properties MUST be consistently
+            translated to macroblock modifications. In other words, given the same set of properties,
+            the function must always return the same value. Otherwise caching (i.e. HlmsDiskCache) won't
+            work correctly.
+
+            The default implementation uses HlmsPsoProp::StrongMacroblockBits property to any combination
+            of HlmsMacroblock::StrongMacroblockBits values. Overrides can override this behavior, either
+            by ignoring the property completely, or changing its meaning. However they must be
+            deterministic and consistent otherwise caching will break.
+        @param macroblock [in/out]
+        @param tid
+        */
+
+        virtual void applyStrongMacroblockRules( HlmsMacroblock &macroblock, const size_t tid ) const;
+
+        /// See applyStrongMacroblockRules(). This affects the blendblock instead and uses
+        ///	HlmsBlendblock::StrongBlendblockBits.
+        virtual void applyStrongBlendblockRules( HlmsBlendblock &blendblock, const size_t tid ) const;
 
     public:
         /**
@@ -1311,6 +1331,24 @@ namespace Ogre
         static const IdString Macroblock;
         static const IdString Blendblock;
         static const IdString InputLayoutId;
+
+        /// The property holds the bits from StrongMacroblockBits enum to indicate the override of the
+        /// HlmsPso's macroblock. This can be used to override all macroblocks from all renderables
+        /// rendered by current pass. Note that the implementation doesn't need to use this property. It
+        /// can introduce its own property or mechanism for the overrides. There are couple of details
+        /// necessary to keep in mind if implementing own mechanism:
+        /// * the values are cached are stored in HlmsDiskCache
+        /// * the implementation must be consistent between setting the flags and interpreting them
+        /// * if a value changed its meaning, the cache must be manually deleted as Ogre cannot detect
+        ///   such changes!
+        /// * It is not sufficient to just set HlmsPassPso::NeedStrongMacroblock in
+        ///   HlmsPassPso::strongBasicBlocks as it will lead to the same PassCache values. It is
+        ///   necessary to indicate the override fully and distinguish between 2 different overrides by
+        ///   setting a property with value describing the override (bit mask) or setting multiple
+        ///   properties (a property per specific override).
+        static const IdString StrongMacroblockBits;
+        /// Similar to StrongMacroblockBits but used for overrides of Blendblocks.
+        static const IdString StrongBlendblockBits;
     };
 
     struct _OgreExport HlmsBasePieces

@@ -204,6 +204,29 @@ namespace Ogre
                                       const HlmsDatablock *datablock, size_t texUnit )
         {
         }
+
+        /** Called from Hlms::createShaderCacheEntry after an HlmsPso is initialized. It allows to modify
+            its currently assigned macroblock. This allows to override the macroblocks for all
+            renderables within a pass. The listener can set a property or multiple properties in
+            preparePassHash which can be accessed from this method to modify input macroblock.
+            @see Hlms::applyStrongMacroblockRules.
+        @remarks
+            Given the same set of properties, the function must always return the same
+            value. Otherwise caching (i.e. HlmsDiskCache) won't work correctly.
+        @param macroblock [in/out]
+            Current macroblock. You can modify it if needed.
+        @param properties
+        */
+        virtual void applyStrongMacroblockRules( HlmsMacroblock        &macroblock,
+                                                 const HlmsPropertyVec &properties ) const
+        {
+        }
+
+        /// @copydoc HlmsListener::applyStrongMacroblockRules()
+        virtual void applyStrongBlendblockRules( HlmsBlendblock        &blendblock,
+                                                 const HlmsPropertyVec &properties ) const
+        {
+        }
     };
 
     /** @} */
