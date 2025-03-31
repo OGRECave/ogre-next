@@ -235,8 +235,6 @@ namespace Ogre
         mInterruptedRenderCommandEncoder( false ),
         mValidationError( false )
     {
-        mPsoRequestsTimeout = 16;  // ms
-
         memset( &mGlobalTable, 0, sizeof( mGlobalTable ) );
         mGlobalTable.reset();
 
