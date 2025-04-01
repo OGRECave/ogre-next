@@ -1071,6 +1071,7 @@ namespace Ogre
         mComputeTable.setAllDirty();
         mTableDirty = true;
         mComputeTableDirty = true;
+        mPso = 0;
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::reinitialise()
@@ -2337,28 +2338,36 @@ namespace Ogre
         {
         case GPT_VERTEX_PROGRAM:
             mActiveVertexGpuProgramParameters = params;
-            shader = static_cast<VulkanProgram *>( mPso->vertexShader->_getBindingDelegate() );
+            if( mPso )
+                shader = static_cast<VulkanProgram *>( mPso->vertexShader->_getBindingDelegate() );
             break;
         case GPT_FRAGMENT_PROGRAM:
             mActiveFragmentGpuProgramParameters = params;
-            shader = static_cast<VulkanProgram *>( mPso->pixelShader->_getBindingDelegate() );
+            if( mPso )
+                shader = static_cast<VulkanProgram *>( mPso->pixelShader->_getBindingDelegate() );
             break;
         case GPT_GEOMETRY_PROGRAM:
             mActiveGeometryGpuProgramParameters = params;
-            shader = static_cast<VulkanProgram *>( mPso->geometryShader->_getBindingDelegate() );
+            if( mPso )
+                shader = static_cast<VulkanProgram *>( mPso->geometryShader->_getBindingDelegate() );
             break;
         case GPT_HULL_PROGRAM:
             mActiveTessellationHullGpuProgramParameters = params;
-            shader = static_cast<VulkanProgram *>( mPso->tesselationHullShader->_getBindingDelegate() );
+            if( mPso )
+                shader =
+                    static_cast<VulkanProgram *>( mPso->tesselationHullShader->_getBindingDelegate() );
             break;
         case GPT_DOMAIN_PROGRAM:
             mActiveTessellationDomainGpuProgramParameters = params;
-            shader =
-                static_cast<VulkanProgram *>( mPso->tesselationDomainShader->_getBindingDelegate() );
+            if( mPso )
+                shader =
+                    static_cast<VulkanProgram *>( mPso->tesselationDomainShader->_getBindingDelegate() );
             break;
         case GPT_COMPUTE_PROGRAM:
             mActiveComputeGpuProgramParameters = params;
-            shader = static_cast<VulkanProgram *>( mComputePso->computeShader->_getBindingDelegate() );
+            if( mComputePso )
+                shader =
+                    static_cast<VulkanProgram *>( mComputePso->computeShader->_getBindingDelegate() );
             break;
         }
 
