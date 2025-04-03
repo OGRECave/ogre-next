@@ -138,7 +138,10 @@ namespace Ogre
 
         mTexture = textureManager->createTextureGpuNullWindow();
         if( DepthBuffer::DefaultDepthBufferFormat != PFG_NULL )
-            mDepthBuffer = textureManager->createWindowDepthBuffer();
+        {
+            const bool bMemoryLess = requestedMemoryless( miscParams );
+            mDepthBuffer = textureManager->createWindowDepthBuffer( bMemoryLess );
+        }
         mStencilBuffer = 0;
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
