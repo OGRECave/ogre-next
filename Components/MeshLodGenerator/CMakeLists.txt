@@ -21,13 +21,14 @@ file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 add_definitions(-DOGRE_MESHLODGENERATOR_EXPORTS -D_MT -D_USRDLL)
 
 # include headers
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${OGRE_SOURCE_DIR}/OgreMain/include)
 
 # setup target
 ogre_add_library(${OGRE_NEXT}MeshLodGenerator ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADER_FILES} ${PLATFORM_SOURCE_FILES})
 set_target_properties(${OGRE_NEXT}MeshLodGenerator PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
 target_link_libraries(${OGRE_NEXT}MeshLodGenerator ${OGRE_NEXT}Main)
+target_include_directories(${OGRE_NEXT}MeshLodGenerator PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
 if (OGRE_CONFIG_THREADS)
   target_link_libraries(${OGRE_NEXT}MeshLodGenerator ${OGRE_THREAD_LIBRARIES})
 endif ()
