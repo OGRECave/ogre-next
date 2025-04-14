@@ -5,6 +5,8 @@
 #include "Vao/OgreAsyncTicket.h"
 #include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreUavBufferPacked.h"
+#include "Vao/OgreIndexBufferPacked.h"
+#include "Vao/OgreVaoManager.h"
 
 #include "OgreLwString.h"
 
