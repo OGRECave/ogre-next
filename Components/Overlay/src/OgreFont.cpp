@@ -72,6 +72,7 @@ namespace Ogre
         mTtfResolution( 0 ),
         mTtfMaxBearingY( 0 ),
         mHlmsDatablock( 0 ),
+        mTexture( 0 ),
         mTextureLoadingInProgress( false ),
         mAntialiasColour( false )
     {
