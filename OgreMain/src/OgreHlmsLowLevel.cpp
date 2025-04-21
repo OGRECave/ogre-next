@@ -100,6 +100,21 @@ namespace Ogre
 
         bool casterPass = getProperty( passCache.setProperties, HlmsBaseProp::ShadowCaster ) != 0;
 
+        // Set the properties from pass cache
+        mT[tid].setProperties.clear();
+        mT[tid].setProperties.reserve( passCache.setProperties.size() );
+        {
+            // Now copy the properties from the pass (one by one, since be must maintain the order)
+            HlmsPropertyVec::const_iterator itor = passCache.setProperties.begin();
+            HlmsPropertyVec::const_iterator endt = passCache.setProperties.end();
+
+            while( itor != endt )
+            {
+                setProperty( tid, itor->keyName, itor->value );
+                ++itor;
+            }
+        }
+
         const HlmsDatablock *datablock = queuedRenderable.renderable->getDatablock();
         pso.macroblock = datablock->getMacroblock( casterPass );
         pso.blendblock = datablock->getBlendblock( casterPass );
