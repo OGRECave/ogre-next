@@ -67,9 +67,10 @@ namespace Ogre
     }
 
     inline void setAlignMemoryCoherentAtom( VkMappedMemoryRange &outMemRange, const size_t offset,
-                                            const size_t sizeBytes, const VkDeviceSize alignment )
+                                            const size_t sizeBytes, const VkDeviceSize alignment,
+                                            const size_t vboSize )
     {
-        const VkDeviceSize endOffset = alignMemory( offset + sizeBytes, alignment );
+        const VkDeviceSize endOffset = std::min( alignMemory( offset + sizeBytes, alignment ), vboSize );
         outMemRange.offset = ( offset / alignment ) * alignment;
         outMemRange.size = endOffset - outMemRange.offset;
     }
