@@ -969,7 +969,7 @@ var NAVTREEINDEX =
 "group___optional.html#ga0a51b33ebdb559ee9b4a09db58a4e43a",
 "group___render_system.html#ggaafd4c573704bd74fac9ec9c02071ad08a9ed892a5327285f49d0bb2d6a0465207",
 "hlmsblendblockref.html#bbLinks",
-"namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9aa08ceed67b36cee74ed5b98f3864ab6d",
+"namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9a3c263c60e96eb7ef68ad8886e70c8969",
 "namespace_ogre_1_1_desc_binding_types.html#af97aae360aa16970ee0873372c96c6beab47a8e4d5684fcd9d3e6aea8884cf5e8",
 "namespace_ogre_1_1v1.html#a2348646dd6dc0d382222eb16955ece6e",
 "struct_ogre_1_1_billboard.html#a9126c29605e55b8bdb5f81adf267259a",
