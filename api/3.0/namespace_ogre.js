@@ -2515,7 +2515,7 @@ var namespace_ogre =
     [ "rawOffsetPointer", "group___math.html#ga851eb77e2ef235338b9f072977c14e99", null ],
     [ "rawOffsetPointer", "group___math.html#gaa14297743ced17d06a53ab9ea914e17f", null ],
     [ "removeDuplicates", "namespace_ogre.html#a78eec3072ad2dc8efe869c96f09fc5f9", null ],
-    [ "setAlignMemoryCoherentAtom", "namespace_ogre.html#ab72f85dc35c9af68fd5e394570c58e87", null ],
+    [ "setAlignMemoryCoherentAtom", "namespace_ogre.html#a09a9cd132c0dec21459ca02efb6d3ed6", null ],
     [ "setObjectName", "namespace_ogre.html#a9b895fae7e7ce5a60cbfe4bdfbe9e634", null ],
     [ "swap", "group___general.html#ga8f81fcfbc204edbd0f2f52519068fe96", null ],
     [ "testAbiCookie", "namespace_ogre.html#a68a622e648da10c53f0729f98dd6a5b3", null ],

@@ -5056,8 +5056,8 @@ Functions</h2></td></tr>
 <tr class="memitem:a78eec3072ad2dc8efe869c96f09fc5f9" id="r_a78eec3072ad2dc8efe869c96f09fc5f9"><td class="memTemplParams" colspan="2">template&lt;class C &gt; </td></tr>
 <tr class="memitem:a78eec3072ad2dc8efe869c96f09fc5f9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a78eec3072ad2dc8efe869c96f09fc5f9">removeDuplicates</a> (C &amp;c)</td></tr>
 <tr class="separator:a78eec3072ad2dc8efe869c96f09fc5f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab72f85dc35c9af68fd5e394570c58e87" id="r_ab72f85dc35c9af68fd5e394570c58e87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#ab72f85dc35c9af68fd5e394570c58e87">setAlignMemoryCoherentAtom</a> (VkMappedMemoryRange &amp;outMemRange, const size_t offset, const size_t sizeBytes, const VkDeviceSize alignment)</td></tr>
-<tr class="separator:ab72f85dc35c9af68fd5e394570c58e87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09a9cd132c0dec21459ca02efb6d3ed6" id="r_a09a9cd132c0dec21459ca02efb6d3ed6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a09a9cd132c0dec21459ca02efb6d3ed6">setAlignMemoryCoherentAtom</a> (VkMappedMemoryRange &amp;outMemRange, const size_t offset, const size_t sizeBytes, const VkDeviceSize alignment, const size_t vboSize)</td></tr>
+<tr class="separator:a09a9cd132c0dec21459ca02efb6d3ed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b895fae7e7ce5a60cbfe4bdfbe9e634" id="r_a9b895fae7e7ce5a60cbfe4bdfbe9e634"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a9b895fae7e7ce5a60cbfe4bdfbe9e634">setObjectName</a> (<a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a> device, uint64_t object, VkDebugReportObjectTypeEXT objectType, const char *name)</td></tr>
 <tr class="separator:a9b895fae7e7ce5a60cbfe4bdfbe9e634"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8f81fcfbc204edbd0f2f52519068fe96" id="r_ga8f81fcfbc204edbd0f2f52519068fe96"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
@@ -7099,7 +7099,7 @@ THE SOFTWARE.</h2>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="namespace_ogre.html#ab72f85dc35c9af68fd5e394570c58e87">setAlignMemoryCoherentAtom()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="namespace_ogre.html#a09a9cd132c0dec21459ca02efb6d3ed6">setAlignMemoryCoherentAtom()</a>.</p>
 
 </div>
 </div>
@@ -8118,8 +8118,8 @@ template&lt;class C &gt; </div>
 
 </div>
 </div>
-<a id="ab72f85dc35c9af68fd5e394570c58e87" name="ab72f85dc35c9af68fd5e394570c58e87"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab72f85dc35c9af68fd5e394570c58e87">&#9670;&#160;</a></span>setAlignMemoryCoherentAtom()</h2>
+<a id="a09a9cd132c0dec21459ca02efb6d3ed6" name="a09a9cd132c0dec21459ca02efb6d3ed6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09a9cd132c0dec21459ca02efb6d3ed6">&#9670;&#160;</a></span>setAlignMemoryCoherentAtom()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -8149,7 +8149,13 @@ template&lt;class C &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const VkDeviceSize&#160;</td>
-          <td class="paramname"><em>alignment</em>&#160;</td>
+          <td class="paramname"><em>alignment</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>vboSize</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
