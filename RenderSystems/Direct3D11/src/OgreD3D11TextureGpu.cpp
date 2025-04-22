@@ -156,6 +156,8 @@ namespace Ogre
             desc.Format = D3D11Mappings::getFamily( mPixelFormat );
         else
             desc.Format = D3D11Mappings::get( mPixelFormat );
+        OGRE_ASSERT_LOW( desc.Format != DXGI_FORMAT_UNKNOWN &&
+                         "Invalid PixelFormatGpu requested. Did you request a CPU-only format?" );
         if( isMultisample() && hasMsaaExplicitResolves() )
         {
             desc.SampleDesc.Count = mSampleDescription.getColourSamples();
