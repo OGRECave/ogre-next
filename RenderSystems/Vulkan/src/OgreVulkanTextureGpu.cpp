@@ -153,6 +153,8 @@ namespace Ogre
             imageInfo.format = VulkanMappings::get( PixelFormatGpuUtils::getFamily( finalPixelFormat ) );
             imageInfo.flags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
         }
+        OGRE_ASSERT_LOW( imageInfo.format != VK_FORMAT_UNDEFINED &&
+                         "Invalid PixelFormatGpu requested. Did you request a CPU-only format?" );
         imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
         imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
