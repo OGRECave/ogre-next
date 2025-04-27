@@ -413,7 +413,7 @@ var searchData=
   ['and_20tt_20textures_5foptimal_20tt_410',['Vulkan and &lt;tt&gt;TEXTURES_OPTIMAL&lt;/tt&gt;',['../_tuning_memory_resources.html#autotoc_md32',1,'']]],
   ['and_20v1_20objects_411',['V2 and v1 objects',['../azdo.html#V2AndV1Objects',1,'']]],
   ['and_20visibility_412',['Attachment and Visibility',['../_ogre20_changes.html#AttachmentAndVisibility',1,'']]],
-  ['andnot_413',['andnot',['../class_ogre_1_1_mathlib_c.html#a26b296fabde69592b7245a0fc63a5696',1,'Ogre::MathlibC::AndNot(ArrayInt a, ArrayInt b)'],['../class_ogre_1_1_mathlib_c.html#a335e8656a8adb9947c265099ec9719e5',1,'Ogre::MathlibC::AndNot(ArrayMaskI a, ArrayInt b)'],['../class_ogre_1_1_mathlib_c.html#aece951671fa819827d2e0f8237e44366',1,'Ogre::MathlibC::AndNot(ArrayMaskI a, ArrayMaskI b)'],['../class_ogre_1_1_mathlib_c.html#a344a0d285fdf96fe16acaa76d2aa1908',1,'Ogre::MathlibC::AndNot(ArrayInt a, ArrayMaskI b)']]],
+  ['andnot_413',['andnot',['../class_ogre_1_1_mathlib_c.html#aece951671fa819827d2e0f8237e44366',1,'Ogre::MathlibC::AndNot(ArrayMaskI a, ArrayMaskI b)'],['../class_ogre_1_1_mathlib_c.html#a26b296fabde69592b7245a0fc63a5696',1,'Ogre::MathlibC::AndNot(ArrayInt a, ArrayInt b)'],['../class_ogre_1_1_mathlib_c.html#a344a0d285fdf96fe16acaa76d2aa1908',1,'Ogre::MathlibC::AndNot(ArrayInt a, ArrayMaskI b)'],['../class_ogre_1_1_mathlib_c.html#a335e8656a8adb9947c265099ec9719e5',1,'Ogre::MathlibC::AndNot(ArrayMaskI a, ArrayInt b)']]],
   ['android_414',['Android',['../_setting_up_ogre_android.html',1,'SettingUpOgre']]],
   ['android_2fogreconfigdialogimp_2eh_415',['OgreConfigDialogImp.h',['../_android_2_ogre_config_dialog_imp_8h.html',1,'']]],
   ['android_2fogreerrordialogimp_2eh_416',['OgreErrorDialogImp.h',['../_android_2_ogre_error_dialog_imp_8h.html',1,'']]],
