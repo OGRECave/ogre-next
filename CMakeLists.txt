@@ -745,3 +745,4 @@ include(Packaging)
 # Show feature summary
 include(OgreFeatureSummary)
 
+add_subdirectory(Tools/MaterialEditor)
