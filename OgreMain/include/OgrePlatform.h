@@ -330,8 +330,10 @@ THE SOFTWARE.
 #        define OGRE_PLATFORM_LIB "libOgrePlatform.so"
 #    endif
 
-#    if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+#    if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS || \
+        OGRE_PLATFORM == OGRE_PLATFORM_ANDROID || defined _LIBCPP_VERSION && _LIBCPP_VERSION >= 190000
 // XCode 16.3 fails to compile our UTFString due undefined std::char_traits<ushort>
+// Same problem with Android NDK 28, actually problem caused by changes in Clang libc++ 19
 // TODO: migrate from Ogre::UTFString to C++11 std::u16string
 #        define OGRE_UNICODE_SUPPORT 0
 #    else
