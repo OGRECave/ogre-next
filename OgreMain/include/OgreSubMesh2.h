@@ -186,8 +186,8 @@ namespace Ogre
         */
         SubMesh *clone( Mesh *parentMesh = 0, int vertexBufferType = -1, int indexBufferType = -1 );
 
-        void   setMaterialName( const String &name ) { mMaterialName = name; }
-        String getMaterialName() const { return mMaterialName; }
+        void          setMaterialName( const String &name ) { mMaterialName = name; }
+        const String &getMaterialName() const { return mMaterialName; }
 
         /// Imports a v1 SubMesh @see Mesh::importV1. Automatically performs what arrangeEfficient does.
         void importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents,
