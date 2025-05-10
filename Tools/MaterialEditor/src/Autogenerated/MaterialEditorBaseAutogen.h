@@ -27,6 +27,8 @@
 #include <wx/slider.h>
 #include <wx/choice.h>
 #include <wx/panel.h>
+#include <wx/listbox.h>
+#include <wx/srchctrl.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -96,6 +98,33 @@ class PbsParametersPanelBase : public wxPanel
 		PbsParametersPanelBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,535 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PbsParametersPanelBase();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class DatablockListBase
+///////////////////////////////////////////////////////////////////////////////
+class DatablockListBase : public wxPanel
+{
+	private:
+
+	protected:
+		wxListBox* m_datablockList;
+		wxCheckBox* m_pbsCheckbox;
+		wxCheckBox* m_unlitCheckbox;
+		wxSearchCtrl* m_searchCtrl;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnDatablockSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCheckbox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSearchText( wxCommandEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		DatablockListBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
+		~DatablockListBase();
 
 };
 

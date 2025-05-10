@@ -3,6 +3,7 @@
 #include "MainWindow.h"
 
 #include "OgreColourValue.h"
+#include "OgreHlms.h"
 #include "OgreHlmsPbsDatablock.h"
 #include "OgrePixelFormatGpuUtils.h"
 
@@ -369,7 +370,7 @@ void PbsParametersPanel::refreshFromDatablock()
     EditingScope scope( m_editing );
 
     const Ogre::HlmsDatablock *datablock = m_mainWindow->getActiveDatablock();
-    if( !datablock )
+    if( !datablock || datablock->getCreator()->getType() != Ogre::HLMS_PBS )
     {
         this->Disable();
         return;
