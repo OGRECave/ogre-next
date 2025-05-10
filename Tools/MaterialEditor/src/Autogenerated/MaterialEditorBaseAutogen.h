@@ -87,11 +87,11 @@ class PbsParametersPanelBase : public wxPanel
 		virtual void OnColourText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnColourHtml( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnColourButton( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSlider( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSlider( wxScrollEvent& event ) { event.Skip(); }
 		virtual void OnSliderText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTransparencyMode( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCheckbox( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

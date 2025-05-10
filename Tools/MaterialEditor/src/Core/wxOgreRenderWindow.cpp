@@ -131,13 +131,12 @@ void wxOgreRenderWindow::OnSize( wxSizeEvent &evt )
     if( mRenderWindow )
     {
         // Setting new size;
-        int width;
-        int height;
-        wxSize size = evt.GetSize();
-        width = size.GetWidth();
-        height = size.GetHeight();
+        const wxSize size = evt.GetSize();
+        const int width = size.GetWidth();
+        const int height = size.GetHeight();
 
-        mRenderWindow->requestResolution( width, height );
+        mRenderWindow->requestResolution( uint32_t( std::max( width, 1 ) ),
+                                          uint32_t( std::max( height, 1 ) ) );
         // Letting Ogre know the window has been resized;
         mRenderWindow->windowMovedOrResized();
 
@@ -217,7 +216,7 @@ void wxOgreRenderWindow::CreateRenderWindow()
     // Create the render window
     mRenderWindow = msOgreRoot->createRenderWindow(
         Ogre::String( "OgreRenderWindow" ) + Ogre::StringConverter::toString( msNextRenderWindowId++ ),
-        width, height, false, &params );
+        uint32_t( std::max( width, 1 ) ), uint32_t( std::max( height, 1 ) ), false, &params );
 
     mRenderWindow->setFocused( true );
     mRenderWindow->setHidden( false );

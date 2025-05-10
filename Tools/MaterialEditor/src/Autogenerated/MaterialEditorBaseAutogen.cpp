@@ -149,7 +149,7 @@ PbsParametersPanelBase::PbsParametersPanelBase( wxWindow* parent, wxWindowID id,
 	wxStaticBoxSizer* rougnessSizer;
 	rougnessSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Roughness") ), wxHORIZONTAL );
 
-	m_roughnessSlider = new wxSlider( rougnessSizer->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_roughnessSlider = new wxSlider( rougnessSizer->GetStaticBox(), wxID_ANY, 50, 2, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	rougnessSizer->Add( m_roughnessSlider, 1, wxALL|wxEXPAND, 5 );
 
 	m_roughness = new wxTextCtrl( rougnessSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
@@ -217,7 +217,17 @@ PbsParametersPanelBase::PbsParametersPanelBase( wxWindow* parent, wxWindowID id,
 	m_fresnelA->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
 	m_fresnelRGBA->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourHtml ), NULL, this );
 	m_buttonFresnel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsParametersPanelBase::OnColourButton ), NULL, this );
-	m_fresnelColouredCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PbsParametersPanelBase::OnCheckBox ), NULL, this );
+	m_fresnelColouredCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PbsParametersPanelBase::OnCheckbox ), NULL, this );
+	m_fresnelSlider->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsParametersPanelBase::OnSlider ), NULL, this );
+	m_roughnessSlider->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( PbsParametersPanelBase::OnSlider ), NULL, this );
+	m_roughnessSlider->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( PbsParametersPanelBase::OnSlider ), NULL, this );
+	m_roughnessSlider->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( PbsParametersPanelBase::OnSlider ), NULL, this );
+	m_roughnessSlider->Connect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( PbsParametersPanelBase::OnSlider ), NULL, this );
+	m_roughnessSlider->Connect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( PbsParametersPanelBase::OnSlider ), NULL, this );
+	m_roughnessSlider->Connect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( PbsParametersPanelBase::OnSlider ), NULL, this );
+	m_roughnessSlider->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( PbsParametersPanelBase::OnSlider ), NULL, this );
+	m_roughnessSlider->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( PbsParametersPanelBase::OnSlider ), NULL, this );
+	m_roughnessSlider->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( PbsParametersPanelBase::OnSlider ), NULL, this );
 	m_roughnessSlider->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsParametersPanelBase::OnSlider ), NULL, this );
 	m_roughness->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnSliderText ), NULL, this );
 	m_transparencySlider->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsParametersPanelBase::OnSlider ), NULL, this );

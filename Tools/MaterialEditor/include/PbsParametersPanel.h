@@ -7,6 +7,8 @@
 
 OGRE_ASSUME_NONNULL_BEGIN
 
+class MainWindow;
+
 namespace ColourSection
 {
     enum ColourSection
@@ -15,6 +17,17 @@ namespace ColourSection
         Specular,
         Fresnel,
         NumColourSection
+    };
+}
+
+namespace PbsSliders
+{
+    enum PbsSliders
+    {
+        Fresnel,
+        Roughness,
+        Transparency,
+        NumPbsSliders
     };
 }
 
@@ -35,6 +48,15 @@ class PbsParametersPanel : public PbsParametersPanelBase
         void fromHtml();
     };
 
+    struct SliderTextWidget
+    {
+        wxSlider   *slider;
+        wxTextCtrl *text;
+
+        void fromSlider();
+        void fromText();
+    };
+
     struct EditingScope
     {
         bool &editing;
@@ -43,24 +65,33 @@ class PbsParametersPanel : public PbsParametersPanelBase
         ~EditingScope() { editing = false; }
     };
 
+    MainWindow *m_mainWindow;
+
     bool m_editing;
 
     /// Creates all linked widgets that form part of one ColourWidgets based on the requested section.
     ColourWidgets getColourWidgets( ColourSection::ColourSection section );
+
+    SliderTextWidget getSliderWidgets( PbsSliders::PbsSliders slider );
+
+    void syncFresnelCheckbox();
 
 protected:
     // Handlers for PbsParametersPanelBase events.
     void OnColourHtml( wxCommandEvent &event ) override;
     void OnColourButton( wxCommandEvent &event ) override;
     void OnColourText( wxCommandEvent &event ) override;
-    void OnCheckBox( wxCommandEvent &event ) override;
+    void OnCheckbox( wxCommandEvent &event ) override;
     void OnSlider( wxCommandEvent &event ) override;
     void OnSliderText( wxCommandEvent &event ) override;
     void OnTransparencyMode( wxCommandEvent &event ) override;
-    void OnCheckbox( wxCommandEvent &event ) override;
+
+    void syncDatablockFromUI();
 
 public:
-    PbsParametersPanel( wxWindow *parent );
+    PbsParametersPanel( MainWindow *parent );
+
+    void refreshFromDatablock();
 };
 
 OGRE_ASSUME_NONNULL_END

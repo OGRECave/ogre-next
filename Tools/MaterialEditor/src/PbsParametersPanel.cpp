@@ -1,6 +1,9 @@
 #include "PbsParametersPanel.h"
 
+#include "MainWindow.h"
+
 #include "OgreColourValue.h"
+#include "OgreHlmsPbsDatablock.h"
 #include "OgrePixelFormatGpuUtils.h"
 
 #include <wx/colordlg.h>
@@ -66,12 +69,29 @@ void PbsParametersPanel::ColourWidgets::fromHtml()
     }
 }
 //-----------------------------------------------------------------------------
+void PbsParametersPanel::SliderTextWidget::fromSlider()
+{
+    const double val = double( slider->GetValue() );
+    text->SetValue( wxString::Format( wxT( "%.05lf" ), val / 100.0 ) );
+}
+//-----------------------------------------------------------------------------
+void PbsParametersPanel::SliderTextWidget::fromText()
+{
+    double val = 0;
+    if( text->GetValue().ToDouble( &val ) )
+        slider->SetValue( int( std::round( val * 100.0 ) ) );
+}
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-PbsParametersPanel::PbsParametersPanel( wxWindow *parent ) :
+//-----------------------------------------------------------------------------
+PbsParametersPanel::PbsParametersPanel( MainWindow *parent ) :
     PbsParametersPanelBase( parent ),
+    m_mainWindow( parent ),
     m_editing( false )
 {
+    getColourWidgets( ColourSection::Specular ).rgbaText[3]->Disable();
+    getColourWidgets( ColourSection::Fresnel ).rgbaText[3]->Disable();
+    refreshFromDatablock();
 }
 //-----------------------------------------------------------------------------
 PbsParametersPanel::ColourWidgets PbsParametersPanel::getColourWidgets(
@@ -89,6 +109,31 @@ PbsParametersPanel::ColourWidgets PbsParametersPanel::getColourWidgets(
     case ColourSection::Fresnel:
         return { { m_fresnelR, m_fresnelG, m_fresnelB, m_fresnelA }, m_fresnelRGBA, m_buttonFresnel };
     }
+}
+//-----------------------------------------------------------------------------
+PbsParametersPanel::SliderTextWidget PbsParametersPanel::getSliderWidgets(
+    PbsSliders::PbsSliders slider )
+{
+    switch( slider )
+    {
+    case PbsSliders::Fresnel:
+    case PbsSliders::NumPbsSliders:
+        return { m_fresnelSlider, m_fresnelR };
+    case PbsSliders::Roughness:
+        return { m_roughnessSlider, m_roughness };
+    case PbsSliders::Transparency:
+        return { m_transparencySlider, m_transparency };
+    }
+}
+//-----------------------------------------------------------------------------
+void PbsParametersPanel::syncFresnelCheckbox()
+{
+    const bool bIsChecked = m_fresnelColouredCheckbox->IsChecked();
+    m_fresnelG->Enable( bIsChecked );
+    m_fresnelB->Enable( bIsChecked );
+    m_fresnelRGBA->Enable( bIsChecked );
+    m_buttonFresnel->Enable( bIsChecked );
+    m_fresnelSlider->Enable( !bIsChecked );
 }
 //-----------------------------------------------------------------------------
 void PbsParametersPanel::OnColourHtml( wxCommandEvent &event )
@@ -172,27 +217,214 @@ void PbsParametersPanel::OnColourText( wxCommandEvent &event )
     event.Skip();
 }
 //-----------------------------------------------------------------------------
-void PbsParametersPanel::OnCheckBox( wxCommandEvent &event )
+void PbsParametersPanel::OnCheckbox( wxCommandEvent &event )
 {
-    // TODO: Implement OnCheckBox
+    if( m_editing )
+        return;
+
+    EditingScope scope( m_editing );
+
+    const wxObject *obj = event.GetEventObject();
+    if( obj == m_fresnelColouredCheckbox )
+        syncFresnelCheckbox();
+    event.Skip();
 }
 //-----------------------------------------------------------------------------
 void PbsParametersPanel::OnSlider( wxCommandEvent &event )
 {
-    // TODO: Implement OnSlider
+    if( m_editing )
+        return;
+
+    EditingScope scope( m_editing );
+
+    const wxObject *obj = event.GetEventObject();
+
+    for( size_t i = 0u; i < PbsSliders::NumPbsSliders; ++i )
+    {
+        SliderTextWidget widgets = getSliderWidgets( PbsSliders::PbsSliders( i ) );
+        if( widgets.slider == obj )
+        {
+            widgets.fromSlider();
+
+            if( i == PbsSliders::Fresnel )
+                getColourWidgets( ColourSection::Fresnel ).fromRgbaText();
+
+            event.Skip( false );
+            return;
+        }
+    }
+
+    event.Skip();
 }
 //-----------------------------------------------------------------------------
 void PbsParametersPanel::OnSliderText( wxCommandEvent &event )
 {
-    // TODO: Implement OnSliderText
+    if( m_editing )
+        return;
+
+    EditingScope scope( m_editing );
+
+    const wxObject *obj = event.GetEventObject();
+
+    for( size_t i = 0u; i < PbsSliders::NumPbsSliders; ++i )
+    {
+        SliderTextWidget widgets = getSliderWidgets( PbsSliders::PbsSliders( i ) );
+        if( widgets.text == obj )
+        {
+            widgets.fromText();
+
+            if( i == PbsSliders::Fresnel )
+                getColourWidgets( ColourSection::Fresnel ).fromRgbaText();
+
+            event.Skip( false );
+            return;
+        }
+    }
+
+    event.Skip();
 }
 //-----------------------------------------------------------------------------
 void PbsParametersPanel::OnTransparencyMode( wxCommandEvent &event )
 {
-    // TODO: Implement OnTransparencyMode
 }
 //-----------------------------------------------------------------------------
-void PbsParametersPanel::OnCheckbox( wxCommandEvent &event )
+void PbsParametersPanel::syncDatablockFromUI()
 {
-    // TODO: Implement OnCheckbox
+    Ogre::HlmsDatablock *datablock = m_mainWindow->getActiveDatablock();
+    if( !datablock )
+        return;
+
+    OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbsDatablock *>( datablock ) );
+    Ogre::HlmsPbsDatablock *pbsDatablock = static_cast<Ogre::HlmsPbsDatablock *>( datablock );
+
+    ColourWidgets colourWidgets[ColourSection::NumColourSection] = {
+        getColourWidgets( ColourSection::Diffuse ),
+        getColourWidgets( ColourSection::Specular ),
+        getColourWidgets( ColourSection::Fresnel ),
+    };
+
+    {
+        Ogre::Vector3 col( pbsDatablock->getDiffuse() );
+        for( size_t i = 0u; i < 3u; ++i )
+        {
+            double val;
+            if( colourWidgets[ColourSection::Diffuse].rgbaText[i]->GetValue().ToDouble( &val ) )
+                col[i] = Ogre::Real( val );
+        }
+        pbsDatablock->setDiffuse( col );
+    }
+    {
+        Ogre::Vector3 col( pbsDatablock->getSpecular() );
+        for( size_t i = 0u; i < 3u; ++i )
+        {
+            double val;
+            if( colourWidgets[ColourSection::Specular].rgbaText[i]->GetValue().ToDouble( &val ) )
+                col[i] = Ogre::Real( val );
+        }
+        pbsDatablock->setSpecular( col );
+    }
+    {
+        Ogre::Vector3 col( pbsDatablock->getFresnel() );
+        for( size_t i = 0u; i < 3u; ++i )
+        {
+            double val;
+            if( colourWidgets[ColourSection::Fresnel].rgbaText[i]->GetValue().ToDouble( &val ) )
+                col[i] = Ogre::Real( val );
+        }
+        pbsDatablock->setFresnel( col, m_fresnelColouredCheckbox->IsChecked() );
+    }
+
+    wxTextCtrl *textCtrl[PbsSliders::NumPbsSliders] = {
+        getSliderWidgets( PbsSliders::Fresnel ).text,
+        getSliderWidgets( PbsSliders::Roughness ).text,
+        getSliderWidgets( PbsSliders::Transparency ).text,
+    };
+
+    double val;
+    if( textCtrl[PbsSliders::Roughness]->GetValue().ToDouble( &val ) )
+        pbsDatablock->setRoughness( float( val ) );
+    if( textCtrl[PbsSliders::Transparency]->GetValue().ToDouble( &val ) )
+    {
+        pbsDatablock->setTransparency( float( val ), pbsDatablock->getTransparencyMode(),
+                                       m_alphaFromTexCheckbox->IsChecked() );
+    }
+
+    pbsDatablock->setTransparency(
+        pbsDatablock->getTransparency(),
+        Ogre::HlmsPbsDatablock::TransparencyModes( m_transparencyModeChoice->GetSelection() ),
+        m_alphaFromTexCheckbox->IsChecked() );
+}
+//-----------------------------------------------------------------------------
+void PbsParametersPanel::refreshFromDatablock()
+{
+    OGRE_ASSERT_LOW( !m_editing );
+    EditingScope scope( m_editing );
+
+    const Ogre::HlmsDatablock *datablock = m_mainWindow->getActiveDatablock();
+    if( !datablock )
+    {
+        this->Disable();
+        return;
+    }
+
+    this->Enable();
+
+    OGRE_ASSERT_HIGH( dynamic_cast<const Ogre::HlmsPbsDatablock *>( datablock ) );
+    const Ogre::HlmsPbsDatablock *pbsDatablock =
+        static_cast<const Ogre::HlmsPbsDatablock *>( datablock );
+
+    ColourWidgets colourWidgets[ColourSection::NumColourSection] = {
+        getColourWidgets( ColourSection::Diffuse ),
+        getColourWidgets( ColourSection::Specular ),
+        getColourWidgets( ColourSection::Fresnel ),
+    };
+
+    {
+        const Ogre::Vector3 diffuseCol = pbsDatablock->getDiffuse();
+        for( size_t i = 0u; i < 3u; ++i )
+        {
+            colourWidgets[ColourSection::Diffuse].rgbaText[i]->SetValue(
+                wxString::Format( wxT( "%.05lf" ), diffuseCol.ptr()[i] ) );
+        }
+        colourWidgets[ColourSection::Diffuse].fromRgbaText();
+    }
+    {
+        const Ogre::Vector3 specularCol = pbsDatablock->getSpecular();
+        for( size_t i = 0u; i < 3u; ++i )
+        {
+            colourWidgets[ColourSection::Specular].rgbaText[i]->SetValue(
+                wxString::Format( wxT( "%.05lf" ), specularCol.ptr()[i] ) );
+        }
+        colourWidgets[ColourSection::Specular].fromRgbaText();
+    }
+    {
+        const Ogre::Vector3 fresnelCol = pbsDatablock->getFresnel();
+        for( size_t i = 0u; i < 3u; ++i )
+        {
+            colourWidgets[ColourSection::Fresnel].rgbaText[i]->SetValue(
+                wxString::Format( wxT( "%.05lf" ), fresnelCol.ptr()[i] ) );
+        }
+        colourWidgets[ColourSection::Fresnel].fromRgbaText();
+    }
+
+    m_fresnelColouredCheckbox->SetValue( pbsDatablock->hasSeparateFresnel() );
+    syncFresnelCheckbox();
+
+    SliderTextWidget sliderWidgets[PbsSliders::NumPbsSliders] = {
+        getSliderWidgets( PbsSliders::Fresnel ),
+        getSliderWidgets( PbsSliders::Roughness ),
+        getSliderWidgets( PbsSliders::Transparency ),
+    };
+
+    sliderWidgets[PbsSliders::Roughness].text->SetValue(
+        wxString::Format( wxT( "%.05lf" ), pbsDatablock->getRoughness() ) );
+    sliderWidgets[PbsSliders::Transparency].text->SetValue(
+        wxString::Format( wxT( "%.05lf" ), pbsDatablock->getTransparency() ) );
+
+    for( size_t i = 0u; i < PbsSliders::NumPbsSliders; ++i )
+        sliderWidgets[i].fromText();
+
+    m_alphaFromTexCheckbox->SetValue( pbsDatablock->getUseAlphaFromTextures() );
+    m_alphaHashCheckbox->SetValue( pbsDatablock->getAlphaHashing() );
+    m_transparencyModeChoice->SetSelection( pbsDatablock->getTransparencyMode() );
 }
