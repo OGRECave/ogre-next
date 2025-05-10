@@ -247,10 +247,6 @@ namespace Ogre
             /// Last parent transform.
             Matrix4 mLastParentXform;
 
-            /** Builds a list of SubEntities based on the SubMeshes contained in the Mesh. */
-            void buildSubEntityList( MeshPtr &mesh, SubEntityList *sublist,
-                                     vector<String>::type *materialsList = 0 );
-
             /// Ensures reevaluation of the vertex processing usage.
             void reevaluateVertexProcessing();
 
