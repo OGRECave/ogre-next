@@ -228,3 +228,47 @@ PbsParametersPanelBase::PbsParametersPanelBase( wxWindow* parent, wxWindowID id,
 PbsParametersPanelBase::~PbsParametersPanelBase()
 {
 }
+
+DatablockListBase::DatablockListBase( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+{
+	wxBoxSizer* rootLayout;
+	rootLayout = new wxBoxSizer( wxVERTICAL );
+
+	m_datablockList = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	rootLayout->Add( m_datablockList, 1, wxALL|wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer12;
+	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_pbsCheckbox = new wxCheckBox( this, wxID_ANY, _("PBS"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pbsCheckbox->SetValue(true);
+	bSizer12->Add( m_pbsCheckbox, 0, wxALL, 5 );
+
+	m_unlitCheckbox = new wxCheckBox( this, wxID_ANY, _("Unlit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unlitCheckbox->SetValue(true);
+	bSizer12->Add( m_unlitCheckbox, 0, wxALL, 5 );
+
+
+	rootLayout->Add( bSizer12, 0, wxEXPAND, 5 );
+
+	m_searchCtrl = new wxSearchCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	#ifndef __WXMAC__
+	m_searchCtrl->ShowSearchButton( true );
+	#endif
+	m_searchCtrl->ShowCancelButton( false );
+	rootLayout->Add( m_searchCtrl, 0, wxALL|wxEXPAND, 5 );
+
+
+	this->SetSizer( rootLayout );
+	this->Layout();
+
+	// Connect Events
+	m_datablockList->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DatablockListBase::OnDatablockSelect ), NULL, this );
+	m_pbsCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DatablockListBase::OnCheckbox ), NULL, this );
+	m_unlitCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DatablockListBase::OnCheckbox ), NULL, this );
+	m_searchCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DatablockListBase::OnSearchText ), NULL, this );
+}
+
+DatablockListBase::~DatablockListBase()
+{
+}

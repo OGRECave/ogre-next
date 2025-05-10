@@ -3,6 +3,7 @@
 #include "CmdSettings.h"
 #include "Constants.h"
 #include "Core/wxOgreRenderWindow.h"
+#include "DatablockList.h"
 #include "PbsParametersPanel.h"
 
 #include <wx/aui/aui.h>
@@ -31,6 +32,7 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     m_wxAuiManager( 0 ),
     m_mainNotebook( 0 ),
     m_pbsParametersPanel( 0 ),
+    m_datablockList( 0 ),
     m_activeDatablock( 0 ),
     m_useMicrocodeCache( true ),
     m_useHlmsDiskCache( true )
@@ -106,8 +108,10 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
                                         wxAUI_NB_BOTTOM | wxAUI_NB_TAB_SPLIT | wxAUI_NB_TAB_MOVE |
                                             wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TAB_EXTERNAL_MOVE );
     m_pbsParametersPanel = new PbsParametersPanel( this );
+    m_datablockList = new DatablockList( this );
 
     m_mainNotebook->AddPage( m_pbsParametersPanel, wxT( "PBS Settings" ) );
+    m_mainNotebook->AddPage( m_datablockList, wxT( "Materials" ) );
 
     m_wxAuiManager->AddPane( m_mainNotebook, wxAuiPaneInfo()
                                                  .Name( wxT( "TabsPane" ) )
@@ -124,10 +128,9 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     loadSettings();
 
     Ogre::HlmsManager *hlmsManager = m_root->getHlmsManager();
-    m_activeDatablock = hlmsManager->getHlms( Ogre::HLMS_PBS )
+    setActiveDatablock( hlmsManager->getHlms( Ogre::HLMS_PBS )
                             ->createDatablock( "Test", "Test", Ogre::HlmsMacroblock(),
-                                               Ogre::HlmsBlendblock(), Ogre::HlmsParamVec() );
-    m_pbsParametersPanel->refreshFromDatablock();
+                                               Ogre::HlmsBlendblock(), Ogre::HlmsParamVec() ) );
 }
 //-----------------------------------------------------------------------------
 MainWindow::~MainWindow()
@@ -538,4 +541,10 @@ void MainWindow::OnKeyDown( wxKeyEvent &evt )
 void MainWindow::OnKeyUp( wxKeyEvent &evt )
 {
     evt.Skip();
+}
+//-----------------------------------------------------------------------------
+void MainWindow::setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable datablock )
+{
+    m_activeDatablock = datablock;
+    m_pbsParametersPanel->refreshFromDatablock();
 }
