@@ -41,9 +41,6 @@ PbsParametersPanelBase::PbsParametersPanelBase( wxWindow* parent, wxWindowID id,
 	m_diffuseB = new wxTextCtrl( diffuseSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer6->Add( m_diffuseB, 1, wxALL, 5 );
 
-	m_diffuseA = new wxTextCtrl( diffuseSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
-	bSizer6->Add( m_diffuseA, 1, wxALL, 5 );
-
 
 	diffuseSizer->Add( bSizer6, 1, wxEXPAND, 5 );
 
@@ -77,9 +74,6 @@ PbsParametersPanelBase::PbsParametersPanelBase( wxWindow* parent, wxWindowID id,
 	m_specularB = new wxTextCtrl( specularSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer8->Add( m_specularB, 1, wxALL, 5 );
 
-	m_specularA = new wxTextCtrl( specularSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
-	bSizer8->Add( m_specularA, 1, wxALL, 5 );
-
 
 	specularSizer->Add( bSizer8, 1, wxEXPAND, 5 );
 
@@ -112,9 +106,6 @@ PbsParametersPanelBase::PbsParametersPanelBase( wxWindow* parent, wxWindowID id,
 
 	m_fresnelB = new wxTextCtrl( fresnelSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer2->Add( m_fresnelB, 1, wxALL, 5 );
-
-	m_fresnelA = new wxTextCtrl( fresnelSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
-	bSizer2->Add( m_fresnelA, 1, wxALL, 5 );
 
 
 	fresnelSizer->Add( bSizer2, 1, wxEXPAND, 0 );
@@ -202,19 +193,16 @@ PbsParametersPanelBase::PbsParametersPanelBase( wxWindow* parent, wxWindowID id,
 	m_diffuseR->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
 	m_diffuseG->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
 	m_diffuseB->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
-	m_diffuseA->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
 	m_diffuseRGBA->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourHtml ), NULL, this );
 	m_buttonDiffuse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsParametersPanelBase::OnColourButton ), NULL, this );
 	m_specularR->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
 	m_specularG->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
 	m_specularB->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
-	m_specularA->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
 	m_specularRGBA->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourHtml ), NULL, this );
 	m_buttonSpecular->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsParametersPanelBase::OnColourButton ), NULL, this );
 	m_fresnelR->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
 	m_fresnelG->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
 	m_fresnelB->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
-	m_fresnelA->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
 	m_fresnelRGBA->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourHtml ), NULL, this );
 	m_buttonFresnel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsParametersPanelBase::OnColourButton ), NULL, this );
 	m_fresnelColouredCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PbsParametersPanelBase::OnCheckbox ), NULL, this );
