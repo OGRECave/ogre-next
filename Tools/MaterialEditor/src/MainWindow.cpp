@@ -122,6 +122,12 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     m_wxAuiManager->Update();
 
     loadSettings();
+
+    Ogre::HlmsManager *hlmsManager = m_root->getHlmsManager();
+    m_activeDatablock = hlmsManager->getHlms( Ogre::HLMS_PBS )
+                            ->createDatablock( "Test", "Test", Ogre::HlmsMacroblock(),
+                                               Ogre::HlmsBlendblock(), Ogre::HlmsParamVec() );
+    m_pbsParametersPanel->refreshFromDatablock();
 }
 //-----------------------------------------------------------------------------
 MainWindow::~MainWindow()

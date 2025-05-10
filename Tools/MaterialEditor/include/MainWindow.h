@@ -70,6 +70,8 @@ public:
     void OnMouseEvents( wxMouseEvent &evt ) override;
     void OnKeyDown( wxKeyEvent &evt ) override;
     void OnKeyUp( wxKeyEvent &evt ) override;
+
+    Ogre::HlmsDatablock *ogre_nullable getActiveDatablock() const { return m_activeDatablock; }
 };
 
 OGRE_ASSUME_NONNULL_END
