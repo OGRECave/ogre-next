@@ -31,7 +31,7 @@ namespace PbsSliders
     };
 }
 
-class PbsParametersPanel : public PbsParametersPanelBase
+class PbsParametersPanel final : public PbsParametersPanelBase
 {
     /// Synchronizes all colour widgets so that when one changes, the others are changed immediately.
     struct ColourWidgets

@@ -25,10 +25,11 @@ void DatablockList::OnDatablockSelect( wxCommandEvent &event )
     Ogre::Root *root = m_mainWindow->getRoot();
     Ogre::HlmsManager *hlmsManager = root->getHlmsManager();
 
-    wxString materialName = m_datablockList->GetString( m_datablockList->GetSelection() );
+    wxString materialName = m_datablockList->GetString( (unsigned int)m_datablockList->GetSelection() );
 
     Ogre::HlmsDatablock *datablock = hlmsManager->getDatablockNoDefault( materialName.ToStdString() );
     m_mainWindow->setActiveDatablock( datablock );
+    event.Skip( false );
 }
 //-----------------------------------------------------------------------------
 void DatablockList::OnCheckbox( wxCommandEvent &event )
@@ -37,6 +38,7 @@ void DatablockList::OnCheckbox( wxCommandEvent &event )
         return;
     EditingScope scope( m_editing );
     populateFromDatabase();
+    event.Skip( false );
 }
 //-----------------------------------------------------------------------------
 void DatablockList::OnSearchText( wxCommandEvent &event )
@@ -45,6 +47,7 @@ void DatablockList::OnSearchText( wxCommandEvent &event )
         return;
     EditingScope scope( m_editing );
     populateFromDatabase();
+    event.Skip( false );
 }
 //-----------------------------------------------------------------------------
 void DatablockList::populateFromDatabase()

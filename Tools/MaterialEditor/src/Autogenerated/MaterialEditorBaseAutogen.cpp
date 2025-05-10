@@ -272,3 +272,31 @@ DatablockListBase::DatablockListBase( wxWindow* parent, wxWindowID id, const wxP
 DatablockListBase::~DatablockListBase()
 {
 }
+
+MeshListBase::MeshListBase( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+{
+	wxBoxSizer* rootLayout;
+	rootLayout = new wxBoxSizer( wxVERTICAL );
+
+	m_meshList = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	rootLayout->Add( m_meshList, 1, wxALL|wxEXPAND, 5 );
+
+	m_searchCtrl = new wxSearchCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	#ifndef __WXMAC__
+	m_searchCtrl->ShowSearchButton( true );
+	#endif
+	m_searchCtrl->ShowCancelButton( false );
+	rootLayout->Add( m_searchCtrl, 0, wxALL|wxEXPAND, 5 );
+
+
+	this->SetSizer( rootLayout );
+	this->Layout();
+
+	// Connect Events
+	m_meshList->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( MeshListBase::OnMeshSelect ), NULL, this );
+	m_searchCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MeshListBase::OnSearchText ), NULL, this );
+}
+
+MeshListBase::~MeshListBase()
+{
+}

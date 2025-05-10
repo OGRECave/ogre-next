@@ -128,3 +128,27 @@ class DatablockListBase : public wxPanel
 
 };
 
+///////////////////////////////////////////////////////////////////////////////
+/// Class MeshListBase
+///////////////////////////////////////////////////////////////////////////////
+class MeshListBase : public wxPanel
+{
+	private:
+
+	protected:
+		wxListBox* m_meshList;
+		wxSearchCtrl* m_searchCtrl;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnMeshSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSearchText( wxCommandEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		MeshListBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
+		~MeshListBase();
+
+};
+
