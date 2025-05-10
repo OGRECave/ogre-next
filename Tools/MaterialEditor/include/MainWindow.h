@@ -10,6 +10,7 @@
 
 struct CmdSettings;
 class DatablockList;
+class MeshList;
 class PbsParametersPanel;
 class wxAuiManager;
 class wxAuiNotebook;
@@ -27,6 +28,7 @@ class MainWindow final : public MainWindowBase,
     Ogre::Root                *m_root;
     Ogre::SceneManager        *m_sceneManager;
     Ogre::Camera              *m_camera;
+    Ogre::SceneNode           *m_cameraNode;
     Ogre::CompositorWorkspace *m_workspace;
 
     wxOgreRenderWindow *m_wxOgreRenderWindow;
@@ -36,8 +38,13 @@ class MainWindow final : public MainWindowBase,
     wxAuiNotebook      *m_mainNotebook;
     PbsParametersPanel *m_pbsParametersPanel;
     DatablockList      *m_datablockList;
+    MeshList           *m_meshList;
 
     Ogre::HlmsDatablock *ogre_nullable m_activeDatablock;
+
+    Ogre::Item *ogre_nullable       m_activeItem;
+    Ogre::v1::Entity *ogre_nullable m_activeEntity;
+    Ogre::SceneNode                *m_objSceneNode;
 
     bool m_useMicrocodeCache;
     bool m_useHlmsDiskCache;
@@ -63,8 +70,11 @@ class MainWindow final : public MainWindowBase,
     void loadHlmsDiskCache();
     void saveHlmsDiskCache();
 
+    bool loadMeshAsItem( const Ogre::String &meshName, const Ogre::String &resourceGroup );
+    bool loadMeshAsV1Entity( const Ogre::String &meshName, const Ogre::String &resourceGroup );
+
 public:
-    MainWindow( wxWindow *parent, const CmdSettings &cmdSettings );
+    MainWindow( wxWindow *ogre_nullable parent, const CmdSettings &cmdSettings );
     ~MainWindow() override;
 
     bool frameStarted( const Ogre::FrameEvent &evt ) override;
@@ -76,8 +86,11 @@ public:
     Ogre::Root *getRoot() { return m_root; }
 
     void setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable datablock );
+    void setActiveMesh( const Ogre::String &meshName, const Ogre::String &resourceGroup );
 
-    Ogre::HlmsDatablock *ogre_nullable getActiveDatablock() const { return m_activeDatablock; }
+    Ogre::MovableObject *ogre_nullable getActiveObject();
+
+    Ogre::HlmsDatablock *ogre_nullable getActiveDatablock() { return m_activeDatablock; }
 };
 
 OGRE_ASSUME_NONNULL_END

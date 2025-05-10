@@ -4,6 +4,7 @@
 #include "Constants.h"
 #include "Core/wxOgreRenderWindow.h"
 #include "DatablockList.h"
+#include "MeshList.h"
 #include "PbsParametersPanel.h"
 
 #include <wx/aui/aui.h>
@@ -16,6 +17,7 @@
 #include "OgreHlmsDiskCache.h"
 #include "OgreHlmsPbs.h"
 #include "OgreHlmsUnlit.h"
+#include "OgreItem.h"
 #include "OgrePlatformInformation.h"
 #include "OgreRoot.h"
 #include "OgreWindow.h"
@@ -27,13 +29,18 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     m_root( 0 ),
     m_sceneManager( 0 ),
     m_camera( 0 ),
+    m_cameraNode( 0 ),
     m_workspace( 0 ),
     m_wxOgreRenderWindow( 0 ),
     m_wxAuiManager( 0 ),
     m_mainNotebook( 0 ),
     m_pbsParametersPanel( 0 ),
     m_datablockList( 0 ),
+    m_meshList( 0 ),
     m_activeDatablock( 0 ),
+    m_activeItem( 0 ),
+    m_activeEntity( 0 ),
+    m_objSceneNode( 0 ),
     m_useMicrocodeCache( true ),
     m_useHlmsDiskCache( true )
 {
@@ -109,9 +116,11 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
                                             wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TAB_EXTERNAL_MOVE );
     m_pbsParametersPanel = new PbsParametersPanel( this );
     m_datablockList = new DatablockList( this );
+    m_meshList = new MeshList( this );
 
     m_mainNotebook->AddPage( m_pbsParametersPanel, wxT( "PBS Settings" ) );
     m_mainNotebook->AddPage( m_datablockList, wxT( "Materials" ) );
+    m_mainNotebook->AddPage( m_meshList, wxT( "Meshes" ) );
 
     m_wxAuiManager->AddPane( m_mainNotebook, wxAuiPaneInfo()
                                                  .Name( wxT( "TabsPane" ) )
@@ -225,8 +234,14 @@ void MainWindow::createSystems()
     m_camera->setPosition( Ogre::Vector3( 0.0f, 0.0f, 1.25f ) );
     m_camera->setOrientation( Ogre::Quaternion::IDENTITY );
     m_camera->setNearClipDistance( 0.02f );
-    m_camera->setFarClipDistance( 10.0f );
+    m_camera->setFarClipDistance( 1000.0f );
     m_camera->setAutoAspectRatio( true );
+
+    m_cameraNode = m_sceneManager->getRootSceneNode()->createChildSceneNode();
+    m_camera->detachFromParent();
+    m_cameraNode->attachObject( m_camera );
+
+    m_objSceneNode = m_sceneManager->getRootSceneNode()->createChildSceneNode();
 
     m_root->addFrameListener( this );
 
@@ -274,10 +289,10 @@ void MainWindow::addResourceLocation( const Ogre::String &archName, const Ogre::
 //-----------------------------------------------------------------------------
 void MainWindow::loadResources()
 {
-#if 0
+#if 1
     // Load resource paths from config file
     Ogre::ConfigFile cf;
-    cf.load( "../Data/resources2.cfg" );
+    cf.load( "./resources2.cfg" );
 
     // Go through all sections & settings in the file
     Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
@@ -547,4 +562,99 @@ void MainWindow::setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable databloc
 {
     m_activeDatablock = datablock;
     m_pbsParametersPanel->refreshFromDatablock();
+}
+//-----------------------------------------------------------------------------
+bool MainWindow::loadMeshAsItem( const Ogre::String &meshName, const Ogre::String &resourceGroup )
+{
+    Ogre::Item *item = 0;
+    try
+    {
+        item = m_sceneManager->createItem( meshName, resourceGroup );
+    }
+    catch( Ogre::Exception & )
+    {
+        return false;
+    }
+
+    if( m_activeItem )
+    {
+        m_sceneManager->destroyItem( m_activeItem );
+        m_activeItem = 0;
+    }
+    if( m_activeEntity )
+    {
+        m_sceneManager->destroyEntity( m_activeEntity );
+        m_activeEntity = 0;
+    }
+    m_objSceneNode->attachObject( item );
+    m_activeItem = item;
+
+    return true;
+}
+//-----------------------------------------------------------------------------
+bool MainWindow::loadMeshAsV1Entity( const Ogre::String &meshName, const Ogre::String &resourceGroup )
+{
+    Ogre::v1::Entity *entity = 0;
+    try
+    {
+        entity = m_sceneManager->createEntity( meshName, resourceGroup );
+    }
+    catch( Ogre::Exception & )
+    {
+        return false;
+    }
+
+    if( m_activeItem )
+    {
+        m_sceneManager->destroyItem( m_activeItem );
+        m_activeItem = 0;
+    }
+    if( m_activeEntity )
+    {
+        m_sceneManager->destroyEntity( m_activeEntity );
+        m_activeEntity = 0;
+    }
+    m_objSceneNode->attachObject( entity );
+    m_activeEntity = entity;
+
+    return true;
+}
+//-----------------------------------------------------------------------------
+void MainWindow::setActiveMesh( const Ogre::String &meshName, const Ogre::String &resourceGroup )
+{
+    Ogre::Vector3 objToCam = Ogre::Vector3( 0.0f, 1.0f, 1.0f ).normalisedCopy() * 2.0f;
+    {
+        Ogre::MovableObject *object = MainWindow::getActiveObject();
+        if( object )
+        {
+            const Ogre::Aabb aabb = object->getLocalAabb();
+            objToCam = m_camera->getPosition() / aabb.getRadius();
+        }
+    }
+
+    if( !loadMeshAsItem( meshName, resourceGroup ) )
+    {
+        if( !loadMeshAsV1Entity( meshName, resourceGroup ) )
+        {
+            wxMessageBox(
+                wxT( "Could not open mesh = " ) + meshName + wxT( " group = " ) + resourceGroup,
+                wxT( "Mesh Open Error" ), wxOK | wxICON_ERROR | wxCENTRE );
+            return;
+        }
+    }
+
+    Ogre::MovableObject *object = MainWindow::getActiveObject();
+    const Ogre::Aabb aabb = object->getLocalAabb();
+
+    m_cameraNode->setPosition( aabb.mCenter );
+    m_camera->setPosition( objToCam * aabb.getRadius() );
+
+    m_camera->lookAt( aabb.mCenter );
+}
+//-----------------------------------------------------------------------------
+Ogre::MovableObject *MainWindow::getActiveObject()
+{
+    if( m_activeItem )
+        return m_activeItem;
+    return m_activeEntity;
 }

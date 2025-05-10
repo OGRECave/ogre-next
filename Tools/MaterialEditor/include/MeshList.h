@@ -9,22 +9,29 @@ class MainWindow;
 
 OGRE_ASSUME_NONNULL_BEGIN
 
-class DatablockList final : public DatablockListBase
+class MeshList final : public MeshListBase
 {
+    struct MeshEntry
+    {
+        Ogre::String name;
+        Ogre::String resourceGroup;
+    };
+
     MainWindow *m_mainWindow;
+
+    std::vector<MeshEntry> m_meshes;
 
     bool m_editing;
 
 protected:
     void populateFromDatabase();
 
-    // Handlers for DatablockListBase events.
-    void OnDatablockSelect( wxCommandEvent &event ) override;
-    void OnCheckbox( wxCommandEvent &event ) override;
+    // Handlers for MeshListBase events.
+    void OnMeshSelect( wxCommandEvent &event ) override;
     void OnSearchText( wxCommandEvent &event ) override;
 
 public:
-    DatablockList( MainWindow *parent );
+    MeshList( MainWindow *parent );
 };
 
 OGRE_ASSUME_NONNULL_END
