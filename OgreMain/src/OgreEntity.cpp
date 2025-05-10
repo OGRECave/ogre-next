@@ -161,9 +161,14 @@ namespace Ogre
 
             mLodMesh = mMesh->_getLodValueArray();
 
-            // Build main subentity list
-            buildSubEntityList( mMesh, &mSubEntityList,
-                                prevMaterialsList.empty() ? 0 : &prevMaterialsList );
+            // Create SubEntities.
+            const unsigned int numSubMeshes = mMesh->getNumSubMeshes();
+            mSubEntityList.reserve( numSubMeshes );
+            for( unsigned int i = 0u; i < numSubMeshes; ++i )
+            {
+                SubMesh *subMesh = mMesh->getSubMesh( i );
+                mSubEntityList.push_back( SubEntity( this, subMesh ) );
+            }
 
             {
                 // Without filling the renderables list, the RenderQueue won't
@@ -207,6 +212,16 @@ namespace Ogre
             }
 
             reevaluateVertexProcessing();
+
+            // Assign materials to the subentities. This must be done AFTER skeletons have been loaded.
+            for( unsigned int i = 0u; i < numSubMeshes; ++i )
+            {
+                SubMesh *subMesh = mMesh->getSubMesh( i );
+                // Try first Hlms materials, then the low level ones.
+                mSubEntityList[i].setDatablockOrMaterialName(
+                    !prevMaterialsList.empty() ? prevMaterialsList[i] : subMesh->getMaterialName(),
+                    mMesh->getGroup() );
+            }
 
             Aabb aabb;
             if( mMesh->getBounds().isInfinite() )
