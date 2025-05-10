@@ -36,7 +36,7 @@ class PbsParametersPanel : public PbsParametersPanelBase
     /// Synchronizes all colour widgets so that when one changes, the others are changed immediately.
     struct ColourWidgets
     {
-        wxTextCtrl *ogre_nonnull rgbaText[4];
+        wxTextCtrl *ogre_nonnull rgbaText[3];
         wxTextCtrl              *rgbaHtml;
         wxButton                *buttonPicker;
 
@@ -68,6 +68,7 @@ class PbsParametersPanel : public PbsParametersPanelBase
     MainWindow *m_mainWindow;
 
     bool m_editing;
+    bool m_datablockDirty;
 
     /// Creates all linked widgets that form part of one ColourWidgets based on the requested section.
     ColourWidgets getColourWidgets( ColourSection::ColourSection section );
@@ -86,11 +87,10 @@ protected:
     void OnSliderText( wxCommandEvent &event ) override;
     void OnTransparencyMode( wxCommandEvent &event ) override;
 
-    void syncDatablockFromUI();
-
 public:
     PbsParametersPanel( MainWindow *parent );
 
+    void syncDatablockFromUI();
     void refreshFromDatablock();
 };
 

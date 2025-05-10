@@ -521,6 +521,7 @@ void MainWindow::saveHlmsDiskCache()
 //-----------------------------------------------------------------------------
 bool MainWindow::frameStarted( const Ogre::FrameEvent &evt )
 {
+    m_pbsParametersPanel->syncDatablockFromUI();
     return true;
 }
 //-----------------------------------------------------------------------------

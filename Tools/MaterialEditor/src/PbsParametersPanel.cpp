@@ -13,18 +13,18 @@ void PbsParametersPanel::ColourWidgets::fromRgbaText()
     Ogre::ColourValue c;
     Ogre::ColourValue srgb;
 
-    for( size_t i = 0u; i < 4u; ++i )
+    for( size_t i = 0u; i < 3u; ++i )
     {
         wxString value = rgbaText[i]->GetValue();
         double fValue = 0.0f;
         value.ToDouble( &fValue );
         c.ptr()[i] = float( fValue );
-        srgb.ptr()[i] = i == 3u ? srgb.ptr()[i] : Ogre::PixelFormatGpuUtils::toSRGB( c.ptr()[i] );
+        srgb.ptr()[i] = Ogre::PixelFormatGpuUtils::toSRGB( c.ptr()[i] );
     }
 
     wxColour wxCol( srgb.getAsABGR() );
 
-    rgbaHtml->SetValue( wxString::Format( wxT( "%08x" ), srgb.getAsRGBA() ) );
+    rgbaHtml->SetValue( wxString::Format( wxT( "%06x" ), srgb.getAsRGBA() >> 8u ) );
     buttonPicker->SetBackgroundColour( wxCol );
 }
 //-----------------------------------------------------------------------------
@@ -34,12 +34,11 @@ void PbsParametersPanel::ColourWidgets::fromButton( const uint32_t rgba )
     Ogre::ColourValue srgb;
     srgb.setAsABGR( rgba );
 
-    rgbaHtml->SetValue( wxString::Format( wxT( "%08x" ), srgb.getAsRGBA() ) );
+    rgbaHtml->SetValue( wxString::Format( wxT( "%06x" ), srgb.getAsRGBA() >> 8u ) );
 
-    for( size_t i = 0u; i < 4u; ++i )
+    for( size_t i = 0u; i < 3u; ++i )
     {
-        const float linearC =
-            i == 3u ? srgb.ptr()[i] : Ogre::PixelFormatGpuUtils::fromSRGB( srgb.ptr()[i] );
+        const float linearC = Ogre::PixelFormatGpuUtils::fromSRGB( srgb.ptr()[i] );
         rgbaText[i]->SetValue( wxString::Format( wxT( "%.05lf" ), linearC ) );
     }
 }
@@ -61,10 +60,9 @@ void PbsParametersPanel::ColourWidgets::fromHtml()
 
     buttonPicker->SetBackgroundColour( wxColour( srgb.getAsABGR() ) );
 
-    for( size_t i = 0u; i < 4u; ++i )
+    for( size_t i = 0u; i < 3u; ++i )
     {
-        const float linearC =
-            i == 3u ? srgb.ptr()[i] : Ogre::PixelFormatGpuUtils::fromSRGB( srgb.ptr()[i] );
+        const float linearC = Ogre::PixelFormatGpuUtils::fromSRGB( srgb.ptr()[i] );
         rgbaText[i]->SetValue( wxString::Format( wxT( "%.05lf" ), linearC ) );
     }
 }
@@ -87,10 +85,9 @@ void PbsParametersPanel::SliderTextWidget::fromText()
 PbsParametersPanel::PbsParametersPanel( MainWindow *parent ) :
     PbsParametersPanelBase( parent ),
     m_mainWindow( parent ),
-    m_editing( false )
+    m_editing( false ),
+    m_datablockDirty( false )
 {
-    getColourWidgets( ColourSection::Specular ).rgbaText[3]->Disable();
-    getColourWidgets( ColourSection::Fresnel ).rgbaText[3]->Disable();
     refreshFromDatablock();
 }
 //-----------------------------------------------------------------------------
@@ -101,13 +98,11 @@ PbsParametersPanel::ColourWidgets PbsParametersPanel::getColourWidgets(
     {
     case ColourSection::NumColourSection:
     case ColourSection::Diffuse:
-        return { { m_diffuseR, m_diffuseG, m_diffuseB, m_diffuseA }, m_diffuseRGBA, m_buttonDiffuse };
+        return { { m_diffuseR, m_diffuseG, m_diffuseB }, m_diffuseRGBA, m_buttonDiffuse };
     case ColourSection::Specular:
-        return { { m_specularR, m_specularG, m_specularB, m_specularA },
-                 m_specularRGBA,
-                 m_buttonSpecular };
+        return { { m_specularR, m_specularG, m_specularB }, m_specularRGBA, m_buttonSpecular };
     case ColourSection::Fresnel:
-        return { { m_fresnelR, m_fresnelG, m_fresnelB, m_fresnelA }, m_fresnelRGBA, m_buttonFresnel };
+        return { { m_fresnelR, m_fresnelG, m_fresnelB }, m_fresnelRGBA, m_buttonFresnel };
     }
 }
 //-----------------------------------------------------------------------------
@@ -151,6 +146,7 @@ void PbsParametersPanel::OnColourHtml( wxCommandEvent &event )
         if( widgets.rgbaHtml == textCtrl )
         {
             widgets.fromHtml();
+            m_datablockDirty = true;
             event.Skip( false );
             return;
         }
@@ -183,6 +179,7 @@ void PbsParametersPanel::OnColourButton( wxCommandEvent &event )
         {
             const uint32_t rgba = pickerDlg.GetColourData().GetColour().GetRGBA();
             widgets.fromButton( rgba );
+            m_datablockDirty = true;
             event.Skip( false );
             return;
         }
@@ -203,11 +200,12 @@ void PbsParametersPanel::OnColourText( wxCommandEvent &event )
     for( size_t i = 0u; i < ColourSection::NumColourSection; ++i )
     {
         ColourWidgets widgets = getColourWidgets( ColourSection::ColourSection( i ) );
-        for( size_t j = 0u; j < 4u; ++j )
+        for( size_t j = 0u; j < 3u; ++j )
         {
             if( widgets.rgbaText[j] == channelText )
             {
                 widgets.fromRgbaText();
+                m_datablockDirty = true;
                 event.Skip( false );
                 return;
             }
@@ -227,6 +225,8 @@ void PbsParametersPanel::OnCheckbox( wxCommandEvent &event )
     const wxObject *obj = event.GetEventObject();
     if( obj == m_fresnelColouredCheckbox )
         syncFresnelCheckbox();
+
+    m_datablockDirty = true;
     event.Skip();
 }
 //-----------------------------------------------------------------------------
@@ -249,6 +249,7 @@ void PbsParametersPanel::OnSlider( wxCommandEvent &event )
             if( i == PbsSliders::Fresnel )
                 getColourWidgets( ColourSection::Fresnel ).fromRgbaText();
 
+            m_datablockDirty = true;
             event.Skip( false );
             return;
         }
@@ -276,6 +277,7 @@ void PbsParametersPanel::OnSliderText( wxCommandEvent &event )
             if( i == PbsSliders::Fresnel )
                 getColourWidgets( ColourSection::Fresnel ).fromRgbaText();
 
+            m_datablockDirty = true;
             event.Skip( false );
             return;
         }
@@ -286,10 +288,14 @@ void PbsParametersPanel::OnSliderText( wxCommandEvent &event )
 //-----------------------------------------------------------------------------
 void PbsParametersPanel::OnTransparencyMode( wxCommandEvent &event )
 {
+    m_datablockDirty = true;
 }
 //-----------------------------------------------------------------------------
 void PbsParametersPanel::syncDatablockFromUI()
 {
+    if( !m_datablockDirty )
+        return;
+
     Ogre::HlmsDatablock *datablock = m_mainWindow->getActiveDatablock();
     if( !datablock )
         return;
@@ -353,6 +359,8 @@ void PbsParametersPanel::syncDatablockFromUI()
         pbsDatablock->getTransparency(),
         Ogre::HlmsPbsDatablock::TransparencyModes( m_transparencyModeChoice->GetSelection() ),
         m_alphaFromTexCheckbox->IsChecked() );
+
+    m_datablockDirty = false;
 }
 //-----------------------------------------------------------------------------
 void PbsParametersPanel::refreshFromDatablock()
@@ -427,4 +435,6 @@ void PbsParametersPanel::refreshFromDatablock()
     m_alphaFromTexCheckbox->SetValue( pbsDatablock->getUseAlphaFromTextures() );
     m_alphaHashCheckbox->SetValue( pbsDatablock->getAlphaHashing() );
     m_transparencyModeChoice->SetSelection( pbsDatablock->getTransparencyMode() );
+
+    m_datablockDirty = false;
 }
