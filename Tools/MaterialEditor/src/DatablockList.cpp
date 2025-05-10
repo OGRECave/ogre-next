@@ -55,7 +55,7 @@ void DatablockList::populateFromDatabase()
     Ogre::Root *root = m_mainWindow->getRoot();
     Ogre::HlmsManager *hlmsManager = root->getHlmsManager();
 
-    const wxString filterStr = m_searchCtrl->GetValue();
+    const wxString filterStr = m_searchCtrl->GetValue().Lower();
     wxStringTokenizer tokenizer( filterStr, " " );
 
     const bool bAllowPbs = m_pbsCheckbox->IsChecked();
@@ -80,13 +80,14 @@ void DatablockList::populateFromDatabase()
             const Ogre::Hlms::DatablockEntry &entry = keyVal.second;
             if( entry.visibleToManager )
             {
-                wxString materialName = entry.name;
+                const wxString materialName = entry.name;
+                const wxString needle = materialName.Lower();
 
                 bool bFound = true;
                 while( tokenizer.HasMoreTokens() )
                 {
                     wxString tokenStr = tokenizer.GetNextToken();
-                    bFound &= materialName.Find( tokenStr ) != wxNOT_FOUND;
+                    bFound &= needle.Find( tokenStr ) != wxNOT_FOUND;
                 }
                 tokenizer.Reinit( filterStr );
 
