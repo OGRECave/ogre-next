@@ -214,6 +214,7 @@ PbsParametersPanelBase::PbsParametersPanelBase( wxWindow* parent, wxWindowID id,
 
 	// Connect Events
 	m_workflowChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsParametersPanelBase::OnWorkflowChange ), NULL, this );
+	m_brdfChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsParametersPanelBase::OnSettingDirty ), NULL, this );
 	m_diffuseR->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
 	m_diffuseG->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
 	m_diffuseB->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
@@ -244,7 +245,7 @@ PbsParametersPanelBase::PbsParametersPanelBase( wxWindow* parent, wxWindowID id,
 	m_roughness->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnSliderText ), NULL, this );
 	m_transparencySlider->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsParametersPanelBase::OnSlider ), NULL, this );
 	m_transparency->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsParametersPanelBase::OnSliderText ), NULL, this );
-	m_transparencyModeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsParametersPanelBase::OnTransparencyMode ), NULL, this );
+	m_transparencyModeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsParametersPanelBase::OnSettingDirty ), NULL, this );
 	m_alphaFromTexCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PbsParametersPanelBase::OnCheckbox ), NULL, this );
 	m_alphaHashCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PbsParametersPanelBase::OnCheckbox ), NULL, this );
 }

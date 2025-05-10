@@ -78,7 +78,7 @@ protected:
     void OnSlider( wxCommandEvent &event ) override;
     void OnSliderText( wxCommandEvent &event ) override;
     void OnWorkflowChange( wxCommandEvent &event ) override;
-    void OnTransparencyMode( wxCommandEvent &event ) override;
+    void OnSettingDirty( wxCommandEvent &event ) override;
 
 public:
     PbsParametersPanel( MainWindow *parent );

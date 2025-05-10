@@ -87,6 +87,7 @@ class PbsParametersPanelBase : public wxPanel
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnWorkflowChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSettingDirty( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnColourText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnColourHtml( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnColourButton( wxCommandEvent& event ) { event.Skip(); }
@@ -94,7 +95,6 @@ class PbsParametersPanelBase : public wxPanel
 		virtual void OnSlider( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSlider( wxScrollEvent& event ) { event.Skip(); }
 		virtual void OnSliderText( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnTransparencyMode( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
