@@ -9,6 +9,21 @@
 
 #include <wx/colordlg.h>
 
+static const Ogre::PbsBrdf::PbsBrdf kBrdfList[] = { Ogre::PbsBrdf::Default,
+                                                    Ogre::PbsBrdf::CookTorrance,
+                                                    Ogre::PbsBrdf::BlinnPhong,
+                                                    Ogre::PbsBrdf::DefaultUncorrelated,
+                                                    Ogre::PbsBrdf::DefaultHasDiffuseFresnel,
+                                                    Ogre::PbsBrdf::DefaultSeparateDiffuseFresnel,
+                                                    Ogre::PbsBrdf::CookTorranceHasDiffuseFresnel,
+                                                    Ogre::PbsBrdf::CookTorranceSeparateDiffuseFresnel,
+                                                    Ogre::PbsBrdf::CookTorrance,
+                                                    Ogre::PbsBrdf::BlinnPhongHasDiffuseFresnel,
+                                                    Ogre::PbsBrdf::BlinnPhongSeparateDiffuseFresnel,
+                                                    Ogre::PbsBrdf::BlinnPhong,
+                                                    Ogre::PbsBrdf::BlinnPhongLegacyMath,
+                                                    Ogre::PbsBrdf::BlinnPhongFullLegacy };
+
 void PbsParametersPanel::ColourWidgets::fromRgbaText()
 {
     Ogre::ColourValue c;
@@ -89,6 +104,7 @@ PbsParametersPanel::PbsParametersPanel( MainWindow *parent ) :
     m_editing( false ),
     m_datablockDirty( false )
 {
+    OGRE_ASSERT_LOW( m_brdfChoice->GetCount() == sizeof( kBrdfList ) / sizeof( kBrdfList[0] ) );
     refreshFromDatablock();
 }
 //-----------------------------------------------------------------------------
@@ -303,7 +319,7 @@ void PbsParametersPanel::OnWorkflowChange( wxCommandEvent &event )
     event.Skip();
 }
 //-----------------------------------------------------------------------------
-void PbsParametersPanel::OnTransparencyMode( wxCommandEvent &event )
+void PbsParametersPanel::OnSettingDirty( wxCommandEvent &event )
 {
     m_datablockDirty = true;
     event.Skip();
@@ -322,6 +338,10 @@ void PbsParametersPanel::syncDatablockFromUI()
     Ogre::HlmsPbsDatablock *pbsDatablock = static_cast<Ogre::HlmsPbsDatablock *>( datablock );
 
     pbsDatablock->setWorkflow( Ogre::HlmsPbsDatablock::Workflows( m_workflowChoice->GetSelection() ) );
+
+    OGRE_ASSERT_LOW( (unsigned)m_brdfChoice->GetSelection() <
+                     sizeof( kBrdfList ) / sizeof( kBrdfList[0] ) );
+    pbsDatablock->setBrdf( kBrdfList[m_brdfChoice->GetSelection()] );
 
     ColourWidgets colourWidgets[ColourSection::NumColourSection] = {
         getColourWidgets( ColourSection::Diffuse ),
