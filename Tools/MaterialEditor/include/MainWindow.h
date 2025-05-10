@@ -34,7 +34,7 @@ class MainWindow final : public MainWindowBase,
     wxOgreRenderWindow *m_wxOgreRenderWindow;
 
     wxAuiManager *m_wxAuiManager;
-    
+
     wxAuiNotebook      *m_mainNotebook;
     wxAuiNotebook      *m_mainNotebook2;
     PbsParametersPanel *m_pbsParametersPanel;
@@ -90,6 +90,9 @@ public:
     void setActiveMesh( const Ogre::String &meshName, const Ogre::String &resourceGroup );
 
     Ogre::MovableObject *ogre_nullable getActiveObject();
+
+    const Ogre::String &getOriginalMaterialNameForActiveObject( const size_t submeshIdx ) const;
+    const Ogre::String &getActiveMeshResourceGroup() const;
 
     Ogre::HlmsDatablock *ogre_nullable getActiveDatablock() { return m_activeDatablock; }
 };

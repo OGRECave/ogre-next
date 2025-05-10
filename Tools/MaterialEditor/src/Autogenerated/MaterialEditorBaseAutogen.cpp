@@ -205,6 +205,11 @@ PbsParametersPanelBase::PbsParametersPanelBase( wxWindow* parent, wxWindowID id,
 
 	transparencySizer->Add( bSizer5, 1, wxEXPAND, 5 );
 
+	m_submeshListBox = new wxListBox( transparencySizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_MULTIPLE|wxLB_NEEDED_SB );
+	m_submeshListBox->SetMinSize( wxSize( -1,400 ) );
+
+	transparencySizer->Add( m_submeshListBox, 1, wxALL|wxEXPAND, 5 );
+
 
 	rootLayout->Add( transparencySizer, 0, wxEXPAND, 5 );
 
@@ -248,6 +253,7 @@ PbsParametersPanelBase::PbsParametersPanelBase( wxWindow* parent, wxWindowID id,
 	m_transparencyModeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsParametersPanelBase::OnSettingDirty ), NULL, this );
 	m_alphaFromTexCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PbsParametersPanelBase::OnCheckbox ), NULL, this );
 	m_alphaHashCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PbsParametersPanelBase::OnCheckbox ), NULL, this );
+	m_submeshListBox->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( PbsParametersPanelBase::OnSubMeshApply ), NULL, this );
 }
 
 PbsParametersPanelBase::~PbsParametersPanelBase()

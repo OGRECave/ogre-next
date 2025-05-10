@@ -5,7 +5,9 @@
 #include "OgreColourValue.h"
 #include "OgreHlms.h"
 #include "OgreHlmsPbsDatablock.h"
+#include "OgreMovableObject.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreRenderable.h"
 
 #include <wx/colordlg.h>
 
@@ -314,6 +316,11 @@ void PbsParametersPanel::OnSliderText( wxCommandEvent &event )
 //-----------------------------------------------------------------------------
 void PbsParametersPanel::OnWorkflowChange( wxCommandEvent &event )
 {
+    if( m_editing )
+        return;
+
+    EditingScope scope( m_editing );
+
     syncFresnelCheckbox();
     m_datablockDirty = true;
     event.Skip();
@@ -323,6 +330,43 @@ void PbsParametersPanel::OnSettingDirty( wxCommandEvent &event )
 {
     m_datablockDirty = true;
     event.Skip();
+}
+//-----------------------------------------------------------------------------
+void PbsParametersPanel::OnSubMeshApply( wxCommandEvent &event )
+{
+    if( m_editing )
+        return;
+
+    EditingScope scope( m_editing );
+
+    Ogre::MovableObject *movableObject = m_mainWindow->getActiveObject();
+    Ogre::HlmsDatablock *datablock = m_mainWindow->getActiveDatablock();
+    if( !movableObject || !datablock )
+        return;
+
+    const Ogre::String &resourceGroup = m_mainWindow->getActiveMeshResourceGroup();
+
+    int submeshIdx = 0;
+    for( Ogre::Renderable *renderable : movableObject->mRenderables )
+    {
+        if( m_submeshListBox->IsSelected( submeshIdx ) )
+        {
+            renderable->setDatablock( datablock );
+        }
+        else if( renderable->getDatablock() == datablock )
+        {
+            // Restore the original datablock the mesh says.
+            renderable->setDatablockOrMaterialName(
+                m_mainWindow->getOriginalMaterialNameForActiveObject( size_t( submeshIdx ) ),
+                resourceGroup );
+
+            // We ARE the original datablock. Cannot deselect.
+            if( renderable->getDatablock() == datablock )
+                m_submeshListBox->SetSelection( submeshIdx, true );
+        }
+
+        ++submeshIdx;
+    }
 }
 //-----------------------------------------------------------------------------
 void PbsParametersPanel::syncDatablockFromUI()
@@ -407,6 +451,19 @@ void PbsParametersPanel::syncDatablockFromUI()
         Ogre::HlmsPbsDatablock::TransparencyModes( m_transparencyModeChoice->GetSelection() ),
         m_alphaFromTexCheckbox->IsChecked() );
 
+    if( m_alphaHashCheckbox->IsChecked() )
+    {
+        // Make sure A2C is enabled if Alpha Hashing is being used.
+        const Ogre::HlmsBlendblock *blendblock = pbsDatablock->getBlendblock();
+        if( blendblock->mAlphaToCoverage == Ogre::HlmsBlendblock::A2cDisabled )
+        {
+            Ogre::HlmsBlendblock newBlendblock = *blendblock;
+            newBlendblock.mAlphaToCoverage = Ogre::HlmsBlendblock::A2cEnabledMsaaOnly;
+            pbsDatablock->setBlendblock( newBlendblock, false, false );
+        }
+    }
+    pbsDatablock->setAlphaHashing( m_alphaHashCheckbox->IsChecked() );
+
     m_datablockDirty = false;
 }
 //-----------------------------------------------------------------------------
@@ -486,4 +543,34 @@ void PbsParametersPanel::refreshFromDatablock()
     m_transparencyModeChoice->SetSelection( pbsDatablock->getTransparencyMode() );
 
     m_datablockDirty = false;
+}
+//-----------------------------------------------------------------------------
+void PbsParametersPanel::refreshSubMeshList()
+{
+    OGRE_ASSERT_LOW( !m_editing );
+    EditingScope scope( m_editing );
+
+    Ogre::MovableObject *movableObject = m_mainWindow->getActiveObject();
+    Ogre::HlmsDatablock *datablock = m_mainWindow->getActiveDatablock();
+
+    if( !movableObject || !datablock )
+    {
+        m_submeshListBox->Clear();
+        return;
+    }
+
+    const size_t numSubMeshes = movableObject->mRenderables.size();
+    if( numSubMeshes != size_t( m_submeshListBox->GetCount() ) )
+    {
+        m_submeshListBox->Clear();
+        wxArrayString entries;
+        entries.reserve( numSubMeshes );
+        for( size_t i = 0u; i < numSubMeshes; ++i )
+            entries.push_back( wxString::Format( "Submesh %zu", i ) );
+        m_submeshListBox->Set( entries );
+    }
+
+    int idx = 0;
+    for( const Ogre::Renderable *renderable : movableObject->mRenderables )
+        m_submeshListBox->SetSelection( idx++, renderable->getDatablock() == datablock );
 }

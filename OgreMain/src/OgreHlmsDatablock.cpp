@@ -392,7 +392,9 @@ namespace Ogre
                 ( !mBlendblock[0]->mSeparateBlend ||
                   ( mBlendblock[0]->mSourceBlendFactorAlpha == SBF_ONE &&
                     mBlendblock[0]->mDestBlendFactorAlpha == SBF_ZERO ) ) )
+            {
                 setBlendblock( mBlendblock[0], true );
+            }
             else
             {
                 HlmsBlendblock casterBlendblock = *mBlendblock[0];
