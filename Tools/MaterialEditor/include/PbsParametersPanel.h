@@ -77,6 +77,7 @@ protected:
     void OnCheckbox( wxCommandEvent &event ) override;
     void OnSlider( wxCommandEvent &event ) override;
     void OnSliderText( wxCommandEvent &event ) override;
+    void OnWorkflowChange( wxCommandEvent &event ) override;
     void OnTransparencyMode( wxCommandEvent &event ) override;
 
 public:

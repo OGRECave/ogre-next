@@ -34,8 +34,9 @@ class MainWindow final : public MainWindowBase,
     wxOgreRenderWindow *m_wxOgreRenderWindow;
 
     wxAuiManager *m_wxAuiManager;
-
+    
     wxAuiNotebook      *m_mainNotebook;
+    wxAuiNotebook      *m_mainNotebook2;
     PbsParametersPanel *m_pbsParametersPanel;
     DatablockList      *m_datablockList;
     MeshList           *m_meshList;

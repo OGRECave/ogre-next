@@ -124,7 +124,16 @@ PbsParametersPanel::SliderTextWidget PbsParametersPanel::getSliderWidgets(
 //-----------------------------------------------------------------------------
 void PbsParametersPanel::syncFresnelCheckbox()
 {
-    const bool bIsChecked = m_fresnelColouredCheckbox->IsChecked();
+    const bool bIsMetallic =
+        m_workflowChoice->GetSelection() == Ogre::HlmsPbsDatablock::MetallicWorkflow;
+    const bool bIsChecked = m_fresnelColouredCheckbox->IsChecked() && !bIsMetallic;
+
+    m_fresnelColouredCheckbox->Enable( !bIsMetallic );
+    if( bIsMetallic )
+        m_fresnelSizer->GetStaticBox()->SetLabel( _( "Metalness" ) );
+    else
+        m_fresnelSizer->GetStaticBox()->SetLabel( _( "Fresnel" ) );
+
     m_fresnelG->Enable( bIsChecked );
     m_fresnelB->Enable( bIsChecked );
     m_fresnelRGBA->Enable( bIsChecked );
@@ -287,9 +296,17 @@ void PbsParametersPanel::OnSliderText( wxCommandEvent &event )
     event.Skip();
 }
 //-----------------------------------------------------------------------------
+void PbsParametersPanel::OnWorkflowChange( wxCommandEvent &event )
+{
+    syncFresnelCheckbox();
+    m_datablockDirty = true;
+    event.Skip();
+}
+//-----------------------------------------------------------------------------
 void PbsParametersPanel::OnTransparencyMode( wxCommandEvent &event )
 {
     m_datablockDirty = true;
+    event.Skip();
 }
 //-----------------------------------------------------------------------------
 void PbsParametersPanel::syncDatablockFromUI()
@@ -303,6 +320,8 @@ void PbsParametersPanel::syncDatablockFromUI()
 
     OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbsDatablock *>( datablock ) );
     Ogre::HlmsPbsDatablock *pbsDatablock = static_cast<Ogre::HlmsPbsDatablock *>( datablock );
+
+    pbsDatablock->setWorkflow( Ogre::HlmsPbsDatablock::Workflows( m_workflowChoice->GetSelection() ) );
 
     ColourWidgets colourWidgets[ColourSection::NumColourSection] = {
         getColourWidgets( ColourSection::Diffuse ),
@@ -338,7 +357,14 @@ void PbsParametersPanel::syncDatablockFromUI()
             if( colourWidgets[ColourSection::Fresnel].rgbaText[i]->GetValue().ToDouble( &val ) )
                 col[i] = Ogre::Real( val );
         }
-        pbsDatablock->setFresnel( col, m_fresnelColouredCheckbox->IsChecked() );
+        if( pbsDatablock->getWorkflow() != Ogre::HlmsPbsDatablock::MetallicWorkflow )
+        {
+            pbsDatablock->setFresnel( col, m_fresnelColouredCheckbox->IsChecked() );
+        }
+        else
+        {
+            pbsDatablock->setMetalness( col.x );
+        }
     }
 
     wxTextCtrl *textCtrl[PbsSliders::NumPbsSliders] = {
@@ -381,6 +407,8 @@ void PbsParametersPanel::refreshFromDatablock()
     OGRE_ASSERT_HIGH( dynamic_cast<const Ogre::HlmsPbsDatablock *>( datablock ) );
     const Ogre::HlmsPbsDatablock *pbsDatablock =
         static_cast<const Ogre::HlmsPbsDatablock *>( datablock );
+
+    m_workflowChoice->SetSelection( pbsDatablock->getWorkflow() );
 
     ColourWidgets colourWidgets[ColourSection::NumColourSection] = {
         getColourWidgets( ColourSection::Diffuse ),

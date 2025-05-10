@@ -34,6 +34,7 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     m_wxOgreRenderWindow( 0 ),
     m_wxAuiManager( 0 ),
     m_mainNotebook( 0 ),
+    m_mainNotebook2( 0 ),
     m_pbsParametersPanel( 0 ),
     m_datablockList( 0 ),
     m_meshList( 0 ),
@@ -105,8 +106,7 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     //	SetIcon( wxIcon(wxT("Resources/OgreIcon.ico")) );
 
     // Create the Advanced UI system to handle dockable windows.
-    m_wxAuiManager = new wxAuiManager();
-    m_wxAuiManager->SetManagedWindow( this );
+    m_wxAuiManager = new wxAuiManager( this );
 
     // Initialize Ogre and the control that renders it.
     initOgre( cmdSettings.setupRenderSystems );
@@ -114,13 +114,16 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     m_mainNotebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                         wxAUI_NB_BOTTOM | wxAUI_NB_TAB_SPLIT | wxAUI_NB_TAB_MOVE |
                                             wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TAB_EXTERNAL_MOVE );
+    m_mainNotebook2 = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                         wxAUI_NB_BOTTOM | wxAUI_NB_TAB_SPLIT | wxAUI_NB_TAB_MOVE |
+                                             wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TAB_EXTERNAL_MOVE );
     m_pbsParametersPanel = new PbsParametersPanel( this );
     m_datablockList = new DatablockList( this );
     m_meshList = new MeshList( this );
 
     m_mainNotebook->AddPage( m_pbsParametersPanel, wxT( "PBS Settings" ) );
-    m_mainNotebook->AddPage( m_datablockList, wxT( "Materials" ) );
-    m_mainNotebook->AddPage( m_meshList, wxT( "Meshes" ) );
+    m_mainNotebook2->AddPage( m_datablockList, wxT( "Materials" ) );
+    m_mainNotebook2->AddPage( m_meshList, wxT( "Meshes" ) );
 
     m_wxAuiManager->AddPane( m_mainNotebook, wxAuiPaneInfo()
                                                  .Name( wxT( "TabsPane" ) )
@@ -130,9 +133,19 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
                                                  .Layer( 1 )
                                                  .CloseButton( false )
                                                  .PaneBorder( false ) );
+    m_wxAuiManager->AddPane( m_mainNotebook2, wxAuiPaneInfo()
+                                                  .Name( wxT( "TabsPane2" ) )
+                                                  .Caption( wxT( "Tabs2" ) )
+                                                  .MinSize( 300, -1 )
+                                                  .Right()
+                                                  .Layer( 1 )
+                                                  .CloseButton( false )
+                                                  .PaneBorder( false ) );
 
     // Commit changes made to the AUI manager.
     m_wxAuiManager->Update();
+
+    m_mainNotebook2->Split( 0, wxBOTTOM );
 
     loadSettings();
 
