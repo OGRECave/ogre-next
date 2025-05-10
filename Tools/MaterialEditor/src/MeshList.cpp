@@ -45,7 +45,7 @@ void MeshList::OnSearchText( wxCommandEvent &event )
 //-----------------------------------------------------------------------------
 void MeshList::populateFromDatabase()
 {
-    const wxString filterStr = m_searchCtrl->GetValue();
+    const wxString filterStr = m_searchCtrl->GetValue().Lower();
     wxStringTokenizer tokenizer( filterStr, " " );
 
     Ogre::ResourceGroupManager &resourceGroupMgr = Ogre::ResourceGroupManager::getSingleton();
@@ -61,13 +61,14 @@ void MeshList::populateFromDatabase()
 
         for( const Ogre::FileInfo &fileInfo : *fileInfoList )
         {
-            wxString meshName = groupName + "/" + fileInfo.filename;
+            const wxString meshName = groupName + "/" + fileInfo.filename;
+            const wxString needle = meshName.Lower();
 
             bool bFound = true;
             while( tokenizer.HasMoreTokens() )
             {
                 wxString tokenStr = tokenizer.GetNextToken();
-                bFound &= meshName.Find( tokenStr ) != wxNOT_FOUND;
+                bFound &= needle.Find( tokenStr ) != wxNOT_FOUND;
             }
             tokenizer.Reinit( filterStr );
 
