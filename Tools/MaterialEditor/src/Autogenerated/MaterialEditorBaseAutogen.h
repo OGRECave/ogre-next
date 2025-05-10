@@ -16,16 +16,16 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/textctrl.h>
+#include <wx/choice.h>
 #include <wx/sizer.h>
+#include <wx/statbox.h>
+#include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/statbox.h>
 #include <wx/checkbox.h>
 #include <wx/slider.h>
-#include <wx/choice.h>
 #include <wx/panel.h>
 #include <wx/listbox.h>
 #include <wx/srchctrl.h>
@@ -57,6 +57,8 @@ class PbsParametersPanelBase : public wxPanel
 	private:
 
 	protected:
+		wxChoice* m_workflowChoice;
+		wxChoice* m_brdfChoice;
 		wxTextCtrl* m_diffuseR;
 		wxTextCtrl* m_diffuseG;
 		wxTextCtrl* m_diffuseB;
@@ -67,6 +69,7 @@ class PbsParametersPanelBase : public wxPanel
 		wxTextCtrl* m_specularB;
 		wxTextCtrl* m_specularRGBA;
 		wxButton* m_buttonSpecular;
+		wxStaticBoxSizer* m_fresnelSizer;
 		wxTextCtrl* m_fresnelR;
 		wxTextCtrl* m_fresnelG;
 		wxTextCtrl* m_fresnelB;
@@ -83,6 +86,7 @@ class PbsParametersPanelBase : public wxPanel
 		wxCheckBox* m_alphaHashCheckbox;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void OnWorkflowChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnColourText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnColourHtml( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnColourButton( wxCommandEvent& event ) { event.Skip(); }
@@ -95,7 +99,7 @@ class PbsParametersPanelBase : public wxPanel
 
 	public:
 
-		PbsParametersPanelBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,535 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PbsParametersPanelBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,640 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PbsParametersPanelBase();
 

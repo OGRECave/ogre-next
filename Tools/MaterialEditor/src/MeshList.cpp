@@ -51,6 +51,7 @@ void MeshList::populateFromDatabase()
     Ogre::ResourceGroupManager &resourceGroupMgr = Ogre::ResourceGroupManager::getSingleton();
     const Ogre::StringVector groups = resourceGroupMgr.getResourceGroups();
 
+    m_meshes.clear();
     wxArrayString entriesInList;
 
     for( const Ogre::String &groupName : groups )
