@@ -205,6 +205,7 @@ void wxOgreRenderWindow::CreateRenderWindow()
 
     // Enforce vsync to avoid hogging the CPU unnecessarily
     params["vsync"] = "true";
+    params["FSAA"] = "4";
 #if OGRE_VERSION_MAJOR >= 2
     params["gamma"] = "true";
 #endif

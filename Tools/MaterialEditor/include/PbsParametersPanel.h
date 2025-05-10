@@ -79,12 +79,14 @@ protected:
     void OnSliderText( wxCommandEvent &event ) override;
     void OnWorkflowChange( wxCommandEvent &event ) override;
     void OnSettingDirty( wxCommandEvent &event ) override;
+    void OnSubMeshApply( wxCommandEvent &event ) override;
 
 public:
     PbsParametersPanel( MainWindow *parent );
 
     void syncDatablockFromUI();
     void refreshFromDatablock();
+    void refreshSubMeshList();
 };
 
 OGRE_ASSUME_NONNULL_END

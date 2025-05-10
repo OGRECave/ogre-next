@@ -26,8 +26,8 @@
 #include <wx/icon.h>
 #include <wx/checkbox.h>
 #include <wx/slider.h>
-#include <wx/panel.h>
 #include <wx/listbox.h>
+#include <wx/panel.h>
 #include <wx/srchctrl.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -84,6 +84,7 @@ class PbsParametersPanelBase : public wxPanel
 		wxChoice* m_transparencyModeChoice;
 		wxCheckBox* m_alphaFromTexCheckbox;
 		wxCheckBox* m_alphaHashCheckbox;
+		wxListBox* m_submeshListBox;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnWorkflowChange( wxCommandEvent& event ) { event.Skip(); }
@@ -95,11 +96,12 @@ class PbsParametersPanelBase : public wxPanel
 		virtual void OnSlider( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSlider( wxScrollEvent& event ) { event.Skip(); }
 		virtual void OnSliderText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSubMeshApply( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		PbsParametersPanelBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,640 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PbsParametersPanelBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,779 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PbsParametersPanelBase();
 

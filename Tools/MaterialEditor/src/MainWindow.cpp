@@ -18,8 +18,10 @@
 #include "OgreHlmsPbs.h"
 #include "OgreHlmsUnlit.h"
 #include "OgreItem.h"
+#include "OgreMesh2.h"
 #include "OgrePlatformInformation.h"
 #include "OgreRoot.h"
+#include "OgreSubMesh2.h"
 #include "OgreWindow.h"
 
 #include <fstream>
@@ -575,6 +577,7 @@ void MainWindow::setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable databloc
 {
     m_activeDatablock = datablock;
     m_pbsParametersPanel->refreshFromDatablock();
+    m_pbsParametersPanel->refreshSubMeshList();
 }
 //-----------------------------------------------------------------------------
 bool MainWindow::loadMeshAsItem( const Ogre::String &meshName, const Ogre::String &resourceGroup )
@@ -663,6 +666,8 @@ void MainWindow::setActiveMesh( const Ogre::String &meshName, const Ogre::String
     m_camera->setPosition( objToCam * aabb.getRadius() );
 
     m_camera->lookAt( aabb.mCenter );
+
+    m_pbsParametersPanel->refreshSubMeshList();
 }
 //-----------------------------------------------------------------------------
 Ogre::MovableObject *MainWindow::getActiveObject()
@@ -670,4 +675,27 @@ Ogre::MovableObject *MainWindow::getActiveObject()
     if( m_activeItem )
         return m_activeItem;
     return m_activeEntity;
+}
+
+//-----------------------------------------------------------------------------
+const Ogre::String &MainWindow::getOriginalMaterialNameForActiveObject( const size_t submeshIdx ) const
+{
+    if( m_activeItem )
+    {
+        return m_activeItem->getMesh()->getSubMesh( (unsigned int)submeshIdx )->getMaterialName();
+    }
+    else if( m_activeEntity )
+    {
+        return m_activeEntity->getMesh()->getSubMesh( (unsigned int)submeshIdx )->getMaterialName();
+    }
+    return Ogre::BLANKSTRING;
+}
+//-----------------------------------------------------------------------------
+const Ogre::String &MainWindow::getActiveMeshResourceGroup() const
+{
+    if( m_activeItem )
+        return m_activeItem->getMesh()->getGroup();
+    else if( m_activeEntity )
+        return m_activeEntity->getMesh()->getGroup();
+    return Ogre::BLANKSTRING;
 }
