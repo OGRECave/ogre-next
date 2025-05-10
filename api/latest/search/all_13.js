@@ -51,7 +51,7 @@ var searchData=
   ['lbx_5fsubtract_48',['LBX_SUBTRACT',['../group___materials.html#gga264ecab38a04d01e2c3158fa05ec1ee2ade0d61cb08a3a772470efeab17a1a60c',1,'Ogre']]],
   ['lcm_49',['lcm',['../class_ogre_1_1_math.html#ab70aba8782d7761e397e7c792a597ed4',1,'Ogre::Math']]],
   ['leavechannelr_50',['LeaveChannelR',['../class_ogre_1_1_texture_filter_1_1_leave_channel_r.html',1,'Ogre::TextureFilter']]],
-  ['left_51',['left',['../struct_ogre_1_1_t_rect.html#a7f8310e37638f8790a89f2dd64ff3fe1',1,'Ogre::TRect::left'],['../struct_ogre_1_1_box.html#a88fa61f841bc444d92075d8b6cb2b43b',1,'Ogre::Box::left'],['../class_ogre_1_1v1_1_1_text_area_overlay_element.html#ae892bffffe7a54b2a4c6368d0344ecd0ac32d1eda6697ee730b4c209ad0106909',1,'Ogre::v1::TextAreaOverlayElement::Left']]],
+  ['left_51',['left',['../class_ogre_1_1v1_1_1_text_area_overlay_element.html#ae892bffffe7a54b2a4c6368d0344ecd0ac32d1eda6697ee730b4c209ad0106909',1,'Ogre::v1::TextAreaOverlayElement::Left'],['../struct_ogre_1_1_t_rect.html#a7f8310e37638f8790a89f2dd64ff3fe1',1,'Ogre::TRect::left'],['../struct_ogre_1_1_box.html#a88fa61f841bc444d92075d8b6cb2b43b',1,'Ogre::Box::left']]],
   ['lefteyecenter_52',['leftEyeCenter',['../struct_ogre_1_1_hidden_area_vr_settings.html#a61eb37968fd8752cef5be018173a7ab6',1,'Ogre::HiddenAreaVrSettings']]],
   ['lefteyeradius_53',['leftEyeRadius',['../struct_ogre_1_1_hidden_area_vr_settings.html#afbda8be8da981a34199b3786bf1660a3',1,'Ogre::HiddenAreaVrSettings']]],
   ['leftnosecenter_54',['leftNoseCenter',['../struct_ogre_1_1_hidden_area_vr_settings.html#af6f880a9fb10883cfdcd0977de3345de',1,'Ogre::HiddenAreaVrSettings']]],
