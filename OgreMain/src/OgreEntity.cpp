@@ -161,9 +161,14 @@ namespace Ogre
 
             mLodMesh = mMesh->_getLodValueArray();
 
-            // Build main subentity list
-            buildSubEntityList( mMesh, &mSubEntityList,
-                                prevMaterialsList.empty() ? 0 : &prevMaterialsList );
+            // Create SubEntities.
+            const unsigned int numSubMeshes = mMesh->getNumSubMeshes();
+            mSubEntityList.reserve( numSubMeshes );
+            for( unsigned int i = 0u; i < numSubMeshes; ++i )
+            {
+                SubMesh *subMesh = mMesh->getSubMesh( i );
+                mSubEntityList.push_back( SubEntity( this, subMesh ) );
+            }
 
             {
                 // Without filling the renderables list, the RenderQueue won't
@@ -207,6 +212,16 @@ namespace Ogre
             }
 
             reevaluateVertexProcessing();
+
+            // Assign materials to the subentities. This must be done AFTER skeletons have been loaded.
+            for( unsigned int i = 0u; i < numSubMeshes; ++i )
+            {
+                SubMesh *subMesh = mMesh->getSubMesh( i );
+                // Try first Hlms materials, then the low level ones.
+                mSubEntityList[i].setDatablockOrMaterialName(
+                    !prevMaterialsList.empty() ? prevMaterialsList[i] : subMesh->getMaterialName(),
+                    mMesh->getGroup() );
+            }
 
             Aabb aabb;
             if( mMesh->getBounds().isInfinite() )
@@ -1156,26 +1171,6 @@ namespace Ogre
         }
         //-----------------------------------------------------------------------
         size_t Entity::getNumManualLodLevels() const { return mLodEntityList.size(); }
-        //-----------------------------------------------------------------------
-        void Entity::buildSubEntityList( MeshPtr &mesh, SubEntityList *sublist,
-                                         vector<String>::type *materialList )
-        {
-            // Create SubEntities
-            unsigned i, numSubMeshes;
-            SubMesh *subMesh;
-
-            numSubMeshes = mesh->getNumSubMeshes();
-            sublist->reserve( numSubMeshes );
-            for( i = 0; i < numSubMeshes; ++i )
-            {
-                subMesh = mesh->getSubMesh( i );
-                sublist->push_back( SubEntity( this, subMesh ) );
-
-                // Try first Hlms materials, then the low level ones.
-                sublist->back().setDatablockOrMaterialName(
-                    materialList ? ( *materialList )[i] : subMesh->getMaterialName(), mesh->getGroup() );
-            }
-        }
         //-----------------------------------------------------------------------
         void Entity::setPolygonModeOverrideable( bool overrideable )
         {
