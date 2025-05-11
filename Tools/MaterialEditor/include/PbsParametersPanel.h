@@ -48,15 +48,6 @@ class PbsParametersPanel final : public PbsParametersPanelBase
         void fromHtml();
     };
 
-    struct SliderTextWidget
-    {
-        wxSlider   *slider;
-        wxTextCtrl *text;
-
-        void fromSlider();
-        void fromText();
-    };
-
     MainWindow *m_mainWindow;
 
     bool m_editing;

@@ -12,6 +12,7 @@ struct CmdSettings;
 class DatablockList;
 class MeshList;
 class PbsParametersPanel;
+class PbsTexturePanel;
 class wxAuiManager;
 class wxAuiNotebook;
 class wxOgreRenderWindow;
@@ -38,6 +39,7 @@ class MainWindow final : public MainWindowBase,
     wxAuiNotebook      *m_mainNotebook;
     wxAuiNotebook      *m_mainNotebook2;
     PbsParametersPanel *m_pbsParametersPanel;
+    PbsTexturePanel    *m_pbsTexturePanel;
     DatablockList      *m_datablockList;
     MeshList           *m_meshList;
 
