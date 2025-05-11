@@ -6,6 +6,7 @@
 #include "DatablockList.h"
 #include "MeshList.h"
 #include "PbsParametersPanel.h"
+#include "PbsTexturePanel.h"
 
 #include <wx/aui/aui.h>
 #include <wx/wx.h>
@@ -38,6 +39,7 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     m_mainNotebook( 0 ),
     m_mainNotebook2( 0 ),
     m_pbsParametersPanel( 0 ),
+    m_pbsTexturePanel( 0 ),
     m_datablockList( 0 ),
     m_meshList( 0 ),
     m_activeDatablock( 0 ),
@@ -120,10 +122,12 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
                                          wxAUI_NB_BOTTOM | wxAUI_NB_TAB_SPLIT | wxAUI_NB_TAB_MOVE |
                                              wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TAB_EXTERNAL_MOVE );
     m_pbsParametersPanel = new PbsParametersPanel( this );
+    m_pbsTexturePanel = new PbsTexturePanel( this );
     m_datablockList = new DatablockList( this );
     m_meshList = new MeshList( this );
 
     m_mainNotebook->AddPage( m_pbsParametersPanel, wxT( "PBS Settings" ) );
+    m_mainNotebook->AddPage( m_pbsTexturePanel, wxT( "PBS Textures" ) );
     m_mainNotebook2->AddPage( m_datablockList, wxT( "Materials" ) );
     m_mainNotebook2->AddPage( m_meshList, wxT( "Meshes" ) );
 
@@ -578,6 +582,7 @@ void MainWindow::setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable databloc
     m_activeDatablock = datablock;
     m_pbsParametersPanel->refreshFromDatablock();
     m_pbsParametersPanel->refreshSubMeshList();
+    m_pbsTexturePanel->refreshFromDatablock();
 }
 //-----------------------------------------------------------------------------
 bool MainWindow::loadMeshAsItem( const Ogre::String &meshName, const Ogre::String &resourceGroup )

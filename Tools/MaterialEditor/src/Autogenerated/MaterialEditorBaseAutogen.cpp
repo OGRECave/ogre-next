@@ -260,6 +260,517 @@ PbsParametersPanelBase::~PbsParametersPanelBase()
 {
 }
 
+PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+{
+	wxBoxSizer* scrollRootLayout;
+	scrollRootLayout = new wxBoxSizer( wxVERTICAL );
+
+	m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	m_scrolledWindow->SetScrollRate( 5, 5 );
+	wxBoxSizer* rootLayout;
+	rootLayout = new wxBoxSizer( wxVERTICAL );
+
+	wxStaticBoxSizer* sbSizer7;
+	sbSizer7 = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Diffuse Map") ), wxHORIZONTAL );
+
+	m_diffuseMapBtn = new wxButton( sbSizer7->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer7->Add( m_diffuseMapBtn, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_diffuseMapSpin = new wxSpinCtrl( sbSizer7->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+	sbSizer7->Add( m_diffuseMapSpin, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	rootLayout->Add( sbSizer7, 0, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer71;
+	sbSizer71 = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Normal Map") ), wxVERTICAL );
+
+	wxBoxSizer* bSizer17;
+	bSizer17 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_normalMapBtn = new wxButton( sbSizer71->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer17->Add( m_normalMapBtn, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_normalMapSpin = new wxSpinCtrl( sbSizer71->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+	bSizer17->Add( m_normalMapSpin, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	sbSizer71->Add( bSizer17, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer18;
+	bSizer18 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_normalMapSlider = new wxSlider( sbSizer71->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer18->Add( m_normalMapSlider, 1, wxALL, 5 );
+
+	m_normalMapTextCtrl = new wxTextCtrl( sbSizer71->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_normalMapTextCtrl->SetMinSize( wxSize( 48,-1 ) );
+
+	bSizer18->Add( m_normalMapTextCtrl, 0, wxALL, 5 );
+
+
+	sbSizer71->Add( bSizer18, 1, wxEXPAND, 5 );
+
+
+	rootLayout->Add( sbSizer71, 0, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer72;
+	sbSizer72 = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Specular Map") ), wxHORIZONTAL );
+
+	m_specularMapBtn = new wxButton( sbSizer72->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer72->Add( m_specularMapBtn, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_specularMapSpin = new wxSpinCtrl( sbSizer72->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+	sbSizer72->Add( m_specularMapSpin, 0, wxALL, 5 );
+
+
+	rootLayout->Add( sbSizer72, 0, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer722;
+	sbSizer722 = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Roughness Map") ), wxHORIZONTAL );
+
+	m_roughnessMapBtn = new wxButton( sbSizer722->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer722->Add( m_roughnessMapBtn, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_roughnessMapSpin = new wxSpinCtrl( sbSizer722->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+	sbSizer722->Add( m_roughnessMapSpin, 0, wxALL, 5 );
+
+
+	rootLayout->Add( sbSizer722, 0, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer721;
+	sbSizer721 = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Detail Weight Map") ), wxHORIZONTAL );
+
+	m_detailWeightMapBtn = new wxButton( sbSizer721->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer721->Add( m_detailWeightMapBtn, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_detailWeightMapSpin = new wxSpinCtrl( sbSizer721->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+	sbSizer721->Add( m_detailWeightMapSpin, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	rootLayout->Add( sbSizer721, 0, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer711;
+	sbSizer711 = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Detail Map 0") ), wxVERTICAL );
+
+	wxBoxSizer* bSizer171;
+	bSizer171 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapBtn0 = new wxButton( sbSizer711->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer171->Add( m_detailMapBtn0, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_detailMapSpin0 = new wxSpinCtrl( sbSizer711->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+	bSizer171->Add( m_detailMapSpin0, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	sbSizer711->Add( bSizer171, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer181;
+	bSizer181 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapSlider0 = new wxSlider( sbSizer711->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer181->Add( m_detailMapSlider0, 1, wxALL, 5 );
+
+	m_detailMapTextCtrl0 = new wxTextCtrl( sbSizer711->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_detailMapTextCtrl0->SetMinSize( wxSize( 48,-1 ) );
+
+	bSizer181->Add( m_detailMapTextCtrl0, 0, wxALL, 5 );
+
+
+	sbSizer711->Add( bSizer181, 1, wxEXPAND, 5 );
+
+	wxGridSizer* gSizer1;
+	gSizer1 = new wxGridSizer( 2, 2, 0, 0 );
+
+	wxBoxSizer* bSizer29;
+	bSizer29 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapXSlider0 = new wxSlider( sbSizer711->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer29->Add( m_detailMapXSlider0, 1, wxALL, 5 );
+
+	m_detailMapXTextCtrl0 = new wxTextCtrl( sbSizer711->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	bSizer29->Add( m_detailMapXTextCtrl0, 0, wxALL, 5 );
+
+
+	gSizer1->Add( bSizer29, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer291;
+	bSizer291 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapYSlider0 = new wxSlider( sbSizer711->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer291->Add( m_detailMapYSlider0, 1, wxALL, 5 );
+
+	m_detailMapYTextCtrl0 = new wxTextCtrl( sbSizer711->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	bSizer291->Add( m_detailMapYTextCtrl0, 0, wxALL, 5 );
+
+
+	gSizer1->Add( bSizer291, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer292;
+	bSizer292 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapWSlider0 = new wxSlider( sbSizer711->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer292->Add( m_detailMapWSlider0, 1, wxALL, 5 );
+
+	m_detailMapWTextCtrl0 = new wxTextCtrl( sbSizer711->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	bSizer292->Add( m_detailMapWTextCtrl0, 0, wxALL, 5 );
+
+
+	gSizer1->Add( bSizer292, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer293;
+	bSizer293 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapHSlider0 = new wxSlider( sbSizer711->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer293->Add( m_detailMapHSlider0, 1, wxALL, 5 );
+
+	m_detailMapHTextCtrl0 = new wxTextCtrl( sbSizer711->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	bSizer293->Add( m_detailMapHTextCtrl0, 0, wxALL, 5 );
+
+
+	gSizer1->Add( bSizer293, 1, wxEXPAND, 5 );
+
+
+	sbSizer711->Add( gSizer1, 0, wxEXPAND, 5 );
+
+
+	rootLayout->Add( sbSizer711, 0, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer7111;
+	sbSizer7111 = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Detail Map 1") ), wxVERTICAL );
+
+	wxBoxSizer* bSizer1711;
+	bSizer1711 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapBtn1 = new wxButton( sbSizer7111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer1711->Add( m_detailMapBtn1, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_detailMapSpin1 = new wxSpinCtrl( sbSizer7111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+	bSizer1711->Add( m_detailMapSpin1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	sbSizer7111->Add( bSizer1711, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer1811;
+	bSizer1811 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapSlider1 = new wxSlider( sbSizer7111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer1811->Add( m_detailMapSlider1, 1, wxALL, 5 );
+
+	m_detailMapTextCtrl1 = new wxTextCtrl( sbSizer7111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_detailMapTextCtrl1->SetMinSize( wxSize( 48,-1 ) );
+
+	bSizer1811->Add( m_detailMapTextCtrl1, 0, wxALL, 5 );
+
+
+	sbSizer7111->Add( bSizer1811, 1, wxEXPAND, 5 );
+
+	wxGridSizer* gSizer11;
+	gSizer11 = new wxGridSizer( 2, 2, 0, 0 );
+
+	wxBoxSizer* bSizer294;
+	bSizer294 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapXSlider1 = new wxSlider( sbSizer7111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer294->Add( m_detailMapXSlider1, 1, wxALL, 5 );
+
+	m_detailMapXTextCtrl1 = new wxTextCtrl( sbSizer7111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	bSizer294->Add( m_detailMapXTextCtrl1, 0, wxALL, 5 );
+
+
+	gSizer11->Add( bSizer294, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer2911;
+	bSizer2911 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapYSlider1 = new wxSlider( sbSizer7111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer2911->Add( m_detailMapYSlider1, 1, wxALL, 5 );
+
+	m_detailMapYTextCtrl1 = new wxTextCtrl( sbSizer7111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	bSizer2911->Add( m_detailMapYTextCtrl1, 0, wxALL, 5 );
+
+
+	gSizer11->Add( bSizer2911, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer2921;
+	bSizer2921 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapWSlider1 = new wxSlider( sbSizer7111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer2921->Add( m_detailMapWSlider1, 1, wxALL, 5 );
+
+	m_detailMapWTextCtrl1 = new wxTextCtrl( sbSizer7111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	bSizer2921->Add( m_detailMapWTextCtrl1, 0, wxALL, 5 );
+
+
+	gSizer11->Add( bSizer2921, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer2931;
+	bSizer2931 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapHSlider1 = new wxSlider( sbSizer7111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer2931->Add( m_detailMapHSlider1, 1, wxALL, 5 );
+
+	m_detailMapHTextCtrl1 = new wxTextCtrl( sbSizer7111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	bSizer2931->Add( m_detailMapHTextCtrl1, 0, wxALL, 5 );
+
+
+	gSizer11->Add( bSizer2931, 1, wxEXPAND, 5 );
+
+
+	sbSizer7111->Add( gSizer11, 0, wxEXPAND, 5 );
+
+
+	rootLayout->Add( sbSizer7111, 0, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer71111;
+	sbSizer71111 = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Detail Map 2") ), wxVERTICAL );
+
+	wxBoxSizer* bSizer17111;
+	bSizer17111 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapBtn2 = new wxButton( sbSizer71111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer17111->Add( m_detailMapBtn2, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_detailMapSpin2 = new wxSpinCtrl( sbSizer71111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+	bSizer17111->Add( m_detailMapSpin2, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	sbSizer71111->Add( bSizer17111, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer18111;
+	bSizer18111 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapSlider2 = new wxSlider( sbSizer71111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer18111->Add( m_detailMapSlider2, 1, wxALL, 5 );
+
+	m_detailMapTextCtrl2 = new wxTextCtrl( sbSizer71111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_detailMapTextCtrl2->SetMinSize( wxSize( 48,-1 ) );
+
+	bSizer18111->Add( m_detailMapTextCtrl2, 0, wxALL, 5 );
+
+
+	sbSizer71111->Add( bSizer18111, 1, wxEXPAND, 5 );
+
+	wxGridSizer* gSizer111;
+	gSizer111 = new wxGridSizer( 2, 2, 0, 0 );
+
+	wxBoxSizer* bSizer2941;
+	bSizer2941 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapXSlider2 = new wxSlider( sbSizer71111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer2941->Add( m_detailMapXSlider2, 1, wxALL, 5 );
+
+	m_detailMapXTextCtrl2 = new wxTextCtrl( sbSizer71111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	bSizer2941->Add( m_detailMapXTextCtrl2, 0, wxALL, 5 );
+
+
+	gSizer111->Add( bSizer2941, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer29111;
+	bSizer29111 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapYSlider2 = new wxSlider( sbSizer71111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer29111->Add( m_detailMapYSlider2, 1, wxALL, 5 );
+
+	m_detailMapYTextCtrl2 = new wxTextCtrl( sbSizer71111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	bSizer29111->Add( m_detailMapYTextCtrl2, 0, wxALL, 5 );
+
+
+	gSizer111->Add( bSizer29111, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer29211;
+	bSizer29211 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapWSlider2 = new wxSlider( sbSizer71111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer29211->Add( m_detailMapWSlider2, 1, wxALL, 5 );
+
+	m_detailMapWTextCtrl2 = new wxTextCtrl( sbSizer71111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	bSizer29211->Add( m_detailMapWTextCtrl2, 0, wxALL, 5 );
+
+
+	gSizer111->Add( bSizer29211, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer29311;
+	bSizer29311 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapHSlider2 = new wxSlider( sbSizer71111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer29311->Add( m_detailMapHSlider2, 1, wxALL, 5 );
+
+	m_detailMapHTextCtrl2 = new wxTextCtrl( sbSizer71111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	bSizer29311->Add( m_detailMapHTextCtrl2, 0, wxALL, 5 );
+
+
+	gSizer111->Add( bSizer29311, 1, wxEXPAND, 5 );
+
+
+	sbSizer71111->Add( gSizer111, 0, wxEXPAND, 5 );
+
+
+	rootLayout->Add( sbSizer71111, 0, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer71112;
+	sbSizer71112 = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Detail Map 3") ), wxVERTICAL );
+
+	wxBoxSizer* bSizer17112;
+	bSizer17112 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapBtn3 = new wxButton( sbSizer71112->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer17112->Add( m_detailMapBtn3, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_detailMapSpin3 = new wxSpinCtrl( sbSizer71112->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+	bSizer17112->Add( m_detailMapSpin3, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	sbSizer71112->Add( bSizer17112, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer18112;
+	bSizer18112 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapSlider3 = new wxSlider( sbSizer71112->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer18112->Add( m_detailMapSlider3, 1, wxALL, 5 );
+
+	m_detailMapTextCtrl3 = new wxTextCtrl( sbSizer71112->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_detailMapTextCtrl3->SetMinSize( wxSize( 48,-1 ) );
+
+	bSizer18112->Add( m_detailMapTextCtrl3, 0, wxALL, 5 );
+
+
+	sbSizer71112->Add( bSizer18112, 1, wxEXPAND, 5 );
+
+	wxGridSizer* gSizer112;
+	gSizer112 = new wxGridSizer( 2, 2, 0, 0 );
+
+	wxBoxSizer* bSizer2942;
+	bSizer2942 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapXSlider3 = new wxSlider( sbSizer71112->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer2942->Add( m_detailMapXSlider3, 1, wxALL, 5 );
+
+	m_detailMapXTextCtrl3 = new wxTextCtrl( sbSizer71112->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	bSizer2942->Add( m_detailMapXTextCtrl3, 0, wxALL, 5 );
+
+
+	gSizer112->Add( bSizer2942, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer29112;
+	bSizer29112 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapYSlider3 = new wxSlider( sbSizer71112->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer29112->Add( m_detailMapYSlider3, 1, wxALL, 5 );
+
+	m_detailMapYTextCtrl3 = new wxTextCtrl( sbSizer71112->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	bSizer29112->Add( m_detailMapYTextCtrl3, 0, wxALL, 5 );
+
+
+	gSizer112->Add( bSizer29112, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer29212;
+	bSizer29212 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapWSlider3 = new wxSlider( sbSizer71112->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer29212->Add( m_detailMapWSlider3, 1, wxALL, 5 );
+
+	m_detailMapWTextCtrl3 = new wxTextCtrl( sbSizer71112->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	bSizer29212->Add( m_detailMapWTextCtrl3, 0, wxALL, 5 );
+
+
+	gSizer112->Add( bSizer29212, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer29312;
+	bSizer29312 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_detailMapHSlider3 = new wxSlider( sbSizer71112->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer29312->Add( m_detailMapHSlider3, 1, wxALL, 5 );
+
+	m_detailMapHTextCtrl3 = new wxTextCtrl( sbSizer71112->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	bSizer29312->Add( m_detailMapHTextCtrl3, 0, wxALL, 5 );
+
+
+	gSizer112->Add( bSizer29312, 1, wxEXPAND, 5 );
+
+
+	sbSizer71112->Add( gSizer112, 0, wxEXPAND, 5 );
+
+
+	rootLayout->Add( sbSizer71112, 0, wxEXPAND, 5 );
+
+
+	m_scrolledWindow->SetSizer( rootLayout );
+	m_scrolledWindow->Layout();
+	rootLayout->Fit( m_scrolledWindow );
+	scrollRootLayout->Add( m_scrolledWindow, 1, wxEXPAND | wxALL, 5 );
+
+
+	this->SetSizer( scrollRootLayout );
+	this->Layout();
+
+	// Connect Events
+	m_diffuseMapBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsTexturePanelBase::OnTextureChangeButton ), NULL, this );
+	m_diffuseMapSpin->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( PbsTexturePanelBase::OnSpinCtrl ), NULL, this );
+	m_normalMapBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsTexturePanelBase::OnTextureChangeButton ), NULL, this );
+	m_normalMapSpin->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( PbsTexturePanelBase::OnSpinCtrl ), NULL, this );
+	m_normalMapSlider->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_normalMapTextCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_specularMapBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsTexturePanelBase::OnTextureChangeButton ), NULL, this );
+	m_specularMapSpin->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( PbsTexturePanelBase::OnSpinCtrl ), NULL, this );
+	m_roughnessMapBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsTexturePanelBase::OnTextureChangeButton ), NULL, this );
+	m_roughnessMapSpin->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( PbsTexturePanelBase::OnSpinCtrl ), NULL, this );
+	m_detailWeightMapBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsTexturePanelBase::OnTextureChangeButton ), NULL, this );
+	m_detailWeightMapSpin->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( PbsTexturePanelBase::OnSpinCtrl ), NULL, this );
+	m_detailMapBtn0->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsTexturePanelBase::OnTextureChangeButton ), NULL, this );
+	m_detailMapSpin0->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( PbsTexturePanelBase::OnSpinCtrl ), NULL, this );
+	m_detailMapSlider0->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapTextCtrl0->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapXSlider0->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapXTextCtrl0->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapYSlider0->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapYTextCtrl0->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapWSlider0->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapWTextCtrl0->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapHSlider0->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapHTextCtrl0->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapBtn1->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsTexturePanelBase::OnTextureChangeButton ), NULL, this );
+	m_detailMapSpin1->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( PbsTexturePanelBase::OnSpinCtrl ), NULL, this );
+	m_detailMapSlider1->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapTextCtrl1->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapXSlider1->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapXTextCtrl1->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapYSlider1->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapYTextCtrl1->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapWSlider1->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapWTextCtrl1->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapHSlider1->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapHTextCtrl1->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapBtn2->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsTexturePanelBase::OnTextureChangeButton ), NULL, this );
+	m_detailMapSpin2->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( PbsTexturePanelBase::OnSpinCtrl ), NULL, this );
+	m_detailMapSlider2->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapTextCtrl2->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapXSlider2->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapXTextCtrl2->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapYSlider2->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapYTextCtrl2->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapWSlider2->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapWTextCtrl2->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapHSlider2->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapHTextCtrl2->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapBtn3->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsTexturePanelBase::OnTextureChangeButton ), NULL, this );
+	m_detailMapSpin3->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( PbsTexturePanelBase::OnSpinCtrl ), NULL, this );
+	m_detailMapSlider3->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapTextCtrl3->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapXSlider3->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapXTextCtrl3->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapYSlider3->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapYTextCtrl3->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapWSlider3->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapWTextCtrl3->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_detailMapHSlider3->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
+	m_detailMapHTextCtrl3->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+}
+
+PbsTexturePanelBase::~PbsTexturePanelBase()
+{
+}
+
 DatablockListBase::DatablockListBase( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* rootLayout;
@@ -329,5 +840,51 @@ MeshListBase::MeshListBase( wxWindow* parent, wxWindowID id, const wxPoint& pos,
 }
 
 MeshListBase::~MeshListBase()
+{
+}
+
+TextureSelectBase::TextureSelectBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+
+	wxBoxSizer* rootLayout;
+	rootLayout = new wxBoxSizer( wxVERTICAL );
+
+	m_textureList = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	rootLayout->Add( m_textureList, 1, wxALL|wxEXPAND, 5 );
+
+	m_searchCtrl = new wxSearchCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	#ifndef __WXMAC__
+	m_searchCtrl->ShowSearchButton( true );
+	#endif
+	m_searchCtrl->ShowCancelButton( false );
+	rootLayout->Add( m_searchCtrl, 0, wxALL|wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer44;
+	bSizer44 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_cancelButton = new wxButton( this, wxID_ANY, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer44->Add( m_cancelButton, 1, wxALL, 5 );
+
+	m_okButton = new wxButton( this, wxID_ANY, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer44->Add( m_okButton, 1, wxALL, 5 );
+
+
+	rootLayout->Add( bSizer44, 0, wxEXPAND, 5 );
+
+
+	this->SetSizer( rootLayout );
+	this->Layout();
+
+	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_textureList->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( TextureSelectBase::OnTextureSelect ), NULL, this );
+	m_searchCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( TextureSelectBase::OnSearchText ), NULL, this );
+	m_cancelButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TextureSelectBase::OnButtonClick ), NULL, this );
+	m_okButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TextureSelectBase::OnButtonClick ), NULL, this );
+}
+
+TextureSelectBase::~TextureSelectBase()
 {
 }

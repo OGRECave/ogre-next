@@ -28,7 +28,10 @@
 #include <wx/slider.h>
 #include <wx/listbox.h>
 #include <wx/panel.h>
+#include <wx/spinctrl.h>
+#include <wx/scrolwin.h>
 #include <wx/srchctrl.h>
+#include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -108,6 +111,91 @@ class PbsParametersPanelBase : public wxPanel
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+/// Class PbsTexturePanelBase
+///////////////////////////////////////////////////////////////////////////////
+class PbsTexturePanelBase : public wxPanel
+{
+	private:
+
+	protected:
+		wxScrolledWindow* m_scrolledWindow;
+		wxButton* m_diffuseMapBtn;
+		wxSpinCtrl* m_diffuseMapSpin;
+		wxButton* m_normalMapBtn;
+		wxSpinCtrl* m_normalMapSpin;
+		wxSlider* m_normalMapSlider;
+		wxTextCtrl* m_normalMapTextCtrl;
+		wxButton* m_specularMapBtn;
+		wxSpinCtrl* m_specularMapSpin;
+		wxButton* m_roughnessMapBtn;
+		wxSpinCtrl* m_roughnessMapSpin;
+		wxButton* m_detailWeightMapBtn;
+		wxSpinCtrl* m_detailWeightMapSpin;
+		wxButton* m_detailMapBtn0;
+		wxSpinCtrl* m_detailMapSpin0;
+		wxSlider* m_detailMapSlider0;
+		wxTextCtrl* m_detailMapTextCtrl0;
+		wxSlider* m_detailMapXSlider0;
+		wxTextCtrl* m_detailMapXTextCtrl0;
+		wxSlider* m_detailMapYSlider0;
+		wxTextCtrl* m_detailMapYTextCtrl0;
+		wxSlider* m_detailMapWSlider0;
+		wxTextCtrl* m_detailMapWTextCtrl0;
+		wxSlider* m_detailMapHSlider0;
+		wxTextCtrl* m_detailMapHTextCtrl0;
+		wxButton* m_detailMapBtn1;
+		wxSpinCtrl* m_detailMapSpin1;
+		wxSlider* m_detailMapSlider1;
+		wxTextCtrl* m_detailMapTextCtrl1;
+		wxSlider* m_detailMapXSlider1;
+		wxTextCtrl* m_detailMapXTextCtrl1;
+		wxSlider* m_detailMapYSlider1;
+		wxTextCtrl* m_detailMapYTextCtrl1;
+		wxSlider* m_detailMapWSlider1;
+		wxTextCtrl* m_detailMapWTextCtrl1;
+		wxSlider* m_detailMapHSlider1;
+		wxTextCtrl* m_detailMapHTextCtrl1;
+		wxButton* m_detailMapBtn2;
+		wxSpinCtrl* m_detailMapSpin2;
+		wxSlider* m_detailMapSlider2;
+		wxTextCtrl* m_detailMapTextCtrl2;
+		wxSlider* m_detailMapXSlider2;
+		wxTextCtrl* m_detailMapXTextCtrl2;
+		wxSlider* m_detailMapYSlider2;
+		wxTextCtrl* m_detailMapYTextCtrl2;
+		wxSlider* m_detailMapWSlider2;
+		wxTextCtrl* m_detailMapWTextCtrl2;
+		wxSlider* m_detailMapHSlider2;
+		wxTextCtrl* m_detailMapHTextCtrl2;
+		wxButton* m_detailMapBtn3;
+		wxSpinCtrl* m_detailMapSpin3;
+		wxSlider* m_detailMapSlider3;
+		wxTextCtrl* m_detailMapTextCtrl3;
+		wxSlider* m_detailMapXSlider3;
+		wxTextCtrl* m_detailMapXTextCtrl3;
+		wxSlider* m_detailMapYSlider3;
+		wxTextCtrl* m_detailMapYTextCtrl3;
+		wxSlider* m_detailMapWSlider3;
+		wxTextCtrl* m_detailMapWTextCtrl3;
+		wxSlider* m_detailMapHSlider3;
+		wxTextCtrl* m_detailMapHTextCtrl3;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnTextureChangeButton( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSpinCtrl( wxSpinEvent& event ) { event.Skip(); }
+		virtual void OnSlider( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnText( wxCommandEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		PbsTexturePanelBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,1200 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
+		~PbsTexturePanelBase();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
 /// Class DatablockListBase
 ///////////////////////////////////////////////////////////////////////////////
 class DatablockListBase : public wxPanel
@@ -155,6 +243,33 @@ class MeshListBase : public wxPanel
 		MeshListBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~MeshListBase();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class TextureSelectBase
+///////////////////////////////////////////////////////////////////////////////
+class TextureSelectBase : public wxDialog
+{
+	private:
+
+	protected:
+		wxListBox* m_textureList;
+		wxSearchCtrl* m_searchCtrl;
+		wxButton* m_cancelButton;
+		wxButton* m_okButton;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnTextureSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSearchText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonClick( wxCommandEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		TextureSelectBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select Texture"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 600,600 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
+
+		~TextureSelectBase();
 
 };
 

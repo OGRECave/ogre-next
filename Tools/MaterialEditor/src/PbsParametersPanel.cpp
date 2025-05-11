@@ -85,19 +85,6 @@ void PbsParametersPanel::ColourWidgets::fromHtml()
     }
 }
 //-----------------------------------------------------------------------------
-void PbsParametersPanel::SliderTextWidget::fromSlider()
-{
-    const double val = double( slider->GetValue() );
-    text->SetValue( wxString::Format( wxT( "%.05lf" ), val / 100.0 ) );
-}
-//-----------------------------------------------------------------------------
-void PbsParametersPanel::SliderTextWidget::fromText()
-{
-    double val = 0;
-    if( text->GetValue().ToDouble( &val ) )
-        slider->SetValue( int( std::round( val * 100.0 ) ) );
-}
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 PbsParametersPanel::PbsParametersPanel( MainWindow *parent ) :
@@ -125,8 +112,7 @@ PbsParametersPanel::ColourWidgets PbsParametersPanel::getColourWidgets(
     }
 }
 //-----------------------------------------------------------------------------
-PbsParametersPanel::SliderTextWidget PbsParametersPanel::getSliderWidgets(
-    PbsSliders::PbsSliders slider )
+SliderTextWidget PbsParametersPanel::getSliderWidgets( PbsSliders::PbsSliders slider )
 {
     switch( slider )
     {
