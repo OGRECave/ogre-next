@@ -35,6 +35,8 @@ class PbsTexturePanel final : public PbsTexturePanelBase
 
     Ogre::PbsTextureTypes findFrom( wxButton *button ) const;
 
+    wxChoice *ogre_nullable getBlendMode( const Ogre::PbsTextureTypes textureTypes );
+
     SliderTextWidget getStrengthSliderWidgets( const Ogre::PbsTextureTypes textureTypes );
 
     DetailMapOffsetScale getDetailMapOffsetScale( const Ogre::PbsTextureTypes textureTypes );
@@ -45,6 +47,7 @@ protected:
     void OnSpinCtrl( wxSpinEvent &event ) override;
     void OnSlider( wxCommandEvent &event ) override;
     void OnText( wxCommandEvent &event ) override;
+    void OnBlendModeChoice( wxCommandEvent &event ) override;
 
 public:
     PbsTexturePanel( MainWindow *parent );

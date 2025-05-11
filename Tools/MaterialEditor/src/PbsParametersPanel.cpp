@@ -93,7 +93,7 @@ PbsParametersPanel::PbsParametersPanel( MainWindow *parent ) :
     m_editing( false ),
     m_datablockDirty( false )
 {
-    OGRE_ASSERT_LOW( m_brdfChoice->GetCount() == sizeof( kBrdfList ) / sizeof( kBrdfList[0] ) );
+    OGRE_ASSERT( m_brdfChoice->GetCount() == sizeof( kBrdfList ) / sizeof( kBrdfList[0] ) );
     refreshFromDatablock();
 }
 //-----------------------------------------------------------------------------
