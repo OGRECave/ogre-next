@@ -6,7 +6,6 @@
 #include "OgreHlms.h"
 #include "OgreHlmsPbsDatablock.h"
 #include "OgreRenderSystem.h"
-#include "OgreTextureBox.h"
 #include "OgreTextureFilters.h"
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuManager.h"
@@ -39,8 +38,17 @@ PbsTexturePanel::PbsTexturePanel( MainWindow *parent ) :
     m_units[Ogre::PBSM_DETAIL1] = { m_detailMapBtn1, m_detailMapSpin1 };
     m_units[Ogre::PBSM_DETAIL2] = { m_detailMapBtn2, m_detailMapSpin2 };
     m_units[Ogre::PBSM_DETAIL3] = { m_detailMapBtn3, m_detailMapSpin3 };
-    for( size_t i = Ogre::PBSM_DETAIL3 + 1; i < Ogre::NUM_PBSM_TEXTURE_TYPES; ++i )
-        m_units[i] = {};
+    m_units[Ogre::PBSM_DETAIL0_NM] = { m_detailNmMapBtn0, m_detailNmMapSpin0 };
+    m_units[Ogre::PBSM_DETAIL1_NM] = { m_detailNmMapBtn1, m_detailNmMapSpin1 };
+    m_units[Ogre::PBSM_DETAIL2_NM] = { m_detailNmMapBtn2, m_detailNmMapSpin2 };
+    m_units[Ogre::PBSM_DETAIL3_NM] = { m_detailNmMapBtn3, m_detailNmMapSpin3 };
+    m_units[Ogre::PBSM_EMISSIVE] = { m_emissiveMapBtn, m_emissiveMapSpin };
+    m_units[Ogre::PBSM_REFLECTION] = {};
+
+    OGRE_ASSERT( m_detailMapBlendMode0->GetCount() == Ogre::NUM_PBSM_BLEND_MODES );
+    OGRE_ASSERT( m_detailMapBlendMode1->GetCount() == Ogre::NUM_PBSM_BLEND_MODES );
+    OGRE_ASSERT( m_detailMapBlendMode2->GetCount() == Ogre::NUM_PBSM_BLEND_MODES );
+    OGRE_ASSERT( m_detailMapBlendMode3->GetCount() == Ogre::NUM_PBSM_BLEND_MODES );
 
     refreshFromDatablock();
 }
@@ -55,7 +63,7 @@ Ogre::PbsTextureTypes PbsTexturePanel::findFrom( wxButton *button ) const
     return Ogre::NUM_PBSM_TEXTURE_TYPES;
 }
 //-----------------------------------------------------------------------------
-SliderTextWidget PbsTexturePanel::getStrengthSliderWidgets( const Ogre::PbsTextureTypes textureTypes )
+wxChoice *PbsTexturePanel::getBlendMode( const Ogre::PbsTextureTypes textureTypes )
 {
     switch( textureTypes )
     {
@@ -70,6 +78,30 @@ SliderTextWidget PbsTexturePanel::getStrengthSliderWidgets( const Ogre::PbsTextu
     case Ogre::PBSM_EMISSIVE:
     case Ogre::PBSM_REFLECTION:
     case Ogre::NUM_PBSM_TEXTURE_TYPES:
+    case Ogre::PBSM_NORMAL:
+        return 0;
+    case Ogre::PBSM_DETAIL0:
+        return m_detailMapBlendMode0;
+    case Ogre::PBSM_DETAIL1:
+        return m_detailMapBlendMode1;
+    case Ogre::PBSM_DETAIL2:
+        return m_detailMapBlendMode2;
+    case Ogre::PBSM_DETAIL3:
+        return m_detailMapBlendMode3;
+    }
+}
+//-----------------------------------------------------------------------------
+SliderTextWidget PbsTexturePanel::getStrengthSliderWidgets( const Ogre::PbsTextureTypes textureTypes )
+{
+    switch( textureTypes )
+    {
+    case Ogre::PBSM_DIFFUSE:
+    case Ogre::PBSM_SPECULAR:
+    case Ogre::PBSM_ROUGHNESS:
+    case Ogre::PBSM_DETAIL_WEIGHT:
+    case Ogre::PBSM_EMISSIVE:
+    case Ogre::PBSM_REFLECTION:
+    case Ogre::NUM_PBSM_TEXTURE_TYPES:
         return {};
     case Ogre::PBSM_NORMAL:
         return { m_normalMapSlider, m_normalMapTextCtrl };
@@ -81,6 +113,14 @@ SliderTextWidget PbsTexturePanel::getStrengthSliderWidgets( const Ogre::PbsTextu
         return { m_detailMapSlider2, m_detailMapTextCtrl2 };
     case Ogre::PBSM_DETAIL3:
         return { m_detailMapSlider3, m_detailMapTextCtrl3 };
+    case Ogre::PBSM_DETAIL0_NM:
+        return { m_detailNmMapSlider0, m_detailNmMapTextCtrl0 };
+    case Ogre::PBSM_DETAIL1_NM:
+        return { m_detailNmMapSlider1, m_detailNmMapTextCtrl1 };
+    case Ogre::PBSM_DETAIL2_NM:
+        return { m_detailNmMapSlider2, m_detailNmMapTextCtrl2 };
+    case Ogre::PBSM_DETAIL3_NM:
+        return { m_detailNmMapSlider3, m_detailNmMapTextCtrl3 };
     }
 }
 //-----------------------------------------------------------------------------
@@ -242,6 +282,8 @@ void PbsTexturePanel::OnSpinCtrl( wxSpinEvent &event )
     EditingScope scope( m_editing );
 
     event.Skip();
+
+    // TODO: Hook up UV sets without crashing the editor every time the mesh doesn't have the UV sets.
 }
 //-----------------------------------------------------------------------------
 void PbsTexturePanel::OnSlider( wxCommandEvent &event )
@@ -321,6 +363,29 @@ void PbsTexturePanel::OnText( wxCommandEvent &event )
 
             return;
         }
+    }
+}
+//-----------------------------------------------------------------------------
+void PbsTexturePanel::OnBlendModeChoice( wxCommandEvent &event )
+{
+    if( m_editing )
+        return;
+    EditingScope scope( m_editing );
+
+    event.Skip();
+
+    Ogre::HlmsDatablock *baseDatablock = m_mainWindow->getActiveDatablock();
+    if( !baseDatablock || baseDatablock->getCreator()->getType() != Ogre::HLMS_PBS )
+        return;
+
+    for( uint8_t i = Ogre::PBSM_DETAIL0; i <= Ogre::PBSM_DETAIL3; ++i )
+    {
+        OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbsDatablock *>( baseDatablock ) );
+        Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock *>( baseDatablock );
+
+        wxChoice *choice = getBlendMode( static_cast<Ogre::PbsTextureTypes>( i ) );
+        datablock->setDetailMapBlendMode( i - Ogre::PBSM_DETAIL0,
+                                          Ogre::PbsBlendModes( choice->GetSelection() ) );
     }
 }
 //-----------------------------------------------------------------------------
@@ -426,5 +491,11 @@ void PbsTexturePanel::refreshFromDatablock()
             offsetScale.w.fromText();
             offsetScale.h.fromText();
         }
+    }
+
+    for( uint8_t i = Ogre::PBSM_DETAIL0; i <= Ogre::PBSM_DETAIL3; ++i )
+    {
+        wxChoice *choice = getBlendMode( static_cast<Ogre::PbsTextureTypes>( i ) );
+        choice->SetSelection( datablock->getDetailMapBlendMode( i - Ogre::PBSM_DETAIL0 ) );
     }
 }

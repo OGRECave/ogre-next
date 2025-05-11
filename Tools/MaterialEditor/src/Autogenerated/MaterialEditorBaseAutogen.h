@@ -129,12 +129,19 @@ class PbsTexturePanelBase : public wxPanel
 		wxSpinCtrl* m_specularMapSpin;
 		wxButton* m_roughnessMapBtn;
 		wxSpinCtrl* m_roughnessMapSpin;
+		wxButton* m_emissiveMapBtn;
+		wxSpinCtrl* m_emissiveMapSpin;
 		wxButton* m_detailWeightMapBtn;
 		wxSpinCtrl* m_detailWeightMapSpin;
 		wxButton* m_detailMapBtn0;
 		wxSpinCtrl* m_detailMapSpin0;
+		wxChoice* m_detailMapBlendMode0;
 		wxSlider* m_detailMapSlider0;
 		wxTextCtrl* m_detailMapTextCtrl0;
+		wxButton* m_detailNmMapBtn0;
+		wxSpinCtrl* m_detailNmMapSpin0;
+		wxSlider* m_detailNmMapSlider0;
+		wxTextCtrl* m_detailNmMapTextCtrl0;
 		wxSlider* m_detailMapXSlider0;
 		wxTextCtrl* m_detailMapXTextCtrl0;
 		wxSlider* m_detailMapYSlider0;
@@ -145,8 +152,13 @@ class PbsTexturePanelBase : public wxPanel
 		wxTextCtrl* m_detailMapHTextCtrl0;
 		wxButton* m_detailMapBtn1;
 		wxSpinCtrl* m_detailMapSpin1;
+		wxChoice* m_detailMapBlendMode1;
 		wxSlider* m_detailMapSlider1;
 		wxTextCtrl* m_detailMapTextCtrl1;
+		wxButton* m_detailNmMapBtn1;
+		wxSpinCtrl* m_detailNmMapSpin1;
+		wxSlider* m_detailNmMapSlider1;
+		wxTextCtrl* m_detailNmMapTextCtrl1;
 		wxSlider* m_detailMapXSlider1;
 		wxTextCtrl* m_detailMapXTextCtrl1;
 		wxSlider* m_detailMapYSlider1;
@@ -157,8 +169,13 @@ class PbsTexturePanelBase : public wxPanel
 		wxTextCtrl* m_detailMapHTextCtrl1;
 		wxButton* m_detailMapBtn2;
 		wxSpinCtrl* m_detailMapSpin2;
+		wxChoice* m_detailMapBlendMode2;
 		wxSlider* m_detailMapSlider2;
 		wxTextCtrl* m_detailMapTextCtrl2;
+		wxButton* m_detailNmMapBtn2;
+		wxSpinCtrl* m_detailNmMapSpin2;
+		wxSlider* m_detailNmMapSlider2;
+		wxTextCtrl* m_detailNmMapTextCtrl2;
 		wxSlider* m_detailMapXSlider2;
 		wxTextCtrl* m_detailMapXTextCtrl2;
 		wxSlider* m_detailMapYSlider2;
@@ -169,8 +186,13 @@ class PbsTexturePanelBase : public wxPanel
 		wxTextCtrl* m_detailMapHTextCtrl2;
 		wxButton* m_detailMapBtn3;
 		wxSpinCtrl* m_detailMapSpin3;
+		wxChoice* m_detailMapBlendMode3;
 		wxSlider* m_detailMapSlider3;
 		wxTextCtrl* m_detailMapTextCtrl3;
+		wxButton* m_detailNmMapBtn3;
+		wxSpinCtrl* m_detailNmMapSpin3;
+		wxSlider* m_detailNmMapSlider3;
+		wxTextCtrl* m_detailNmMapTextCtrl3;
 		wxSlider* m_detailMapXSlider3;
 		wxTextCtrl* m_detailMapXTextCtrl3;
 		wxSlider* m_detailMapYSlider3;
@@ -185,11 +207,12 @@ class PbsTexturePanelBase : public wxPanel
 		virtual void OnSpinCtrl( wxSpinEvent& event ) { event.Skip(); }
 		virtual void OnSlider( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnBlendModeChoice( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		PbsTexturePanelBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,1200 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PbsTexturePanelBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,1700 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PbsTexturePanelBase();
 
