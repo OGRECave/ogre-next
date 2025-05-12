@@ -389,6 +389,12 @@ void PbsTexturePanel::OnBlendModeChoice( wxCommandEvent &event )
     }
 }
 //-----------------------------------------------------------------------------
+void PbsTexturePanel::OnCollapsiblePaneChanged( wxCollapsiblePaneEvent &event )
+{
+    this->Layout();
+    event.Skip();
+}
+//-----------------------------------------------------------------------------
 void PbsTexturePanel::refreshFromDatablock()
 {
     OGRE_ASSERT_LOW( !m_editing );

@@ -48,6 +48,7 @@ protected:
     void OnSlider( wxCommandEvent &event ) override;
     void OnText( wxCommandEvent &event ) override;
     void OnBlendModeChoice( wxCommandEvent &event ) override;
+    void OnCollapsiblePaneChanged( wxCollapsiblePaneEvent& event ) override;
 
 public:
     PbsTexturePanel( MainWindow *parent );
