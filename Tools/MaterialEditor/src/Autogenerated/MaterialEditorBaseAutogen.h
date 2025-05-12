@@ -11,27 +11,30 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include <wx/string.h>
-#include <wx/frame.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/menu.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/frame.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/textctrl.h>
 #include <wx/button.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
 #include <wx/checkbox.h>
 #include <wx/slider.h>
 #include <wx/listbox.h>
 #include <wx/panel.h>
 #include <wx/spinctrl.h>
+#include <wx/collpane.h>
 #include <wx/scrolwin.h>
 #include <wx/srchctrl.h>
 #include <wx/dialog.h>
+#include <wx/stattext.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -43,6 +46,7 @@ class MainWindowBase : public wxFrame
 	private:
 
 	protected:
+		wxMenuBar* m_menubar;
 
 	public:
 
@@ -207,12 +211,13 @@ class PbsTexturePanelBase : public wxPanel
 		virtual void OnSpinCtrl( wxSpinEvent& event ) { event.Skip(); }
 		virtual void OnSlider( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCollapsiblePaneChanged( wxCollapsiblePaneEvent& event ) { event.Skip(); }
 		virtual void OnBlendModeChoice( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		PbsTexturePanelBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,1700 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PbsTexturePanelBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,800 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PbsTexturePanelBase();
 
@@ -293,6 +298,34 @@ class TextureSelectBase : public wxDialog
 		TextureSelectBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select Texture"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 600,600 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
 
 		~TextureSelectBase();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class ProjectSettings
+///////////////////////////////////////////////////////////////////////////////
+class ProjectSettings : public wxDialog
+{
+	private:
+
+	protected:
+		wxListBox* m_listBox5;
+		wxButton* m_button23;
+		wxButton* m_button24;
+		wxTextCtrl* m_textCtrl40;
+		wxButton* m_button25;
+		wxStaticText* m_staticText2;
+		wxCheckBox* m_checkBox6;
+		wxTextCtrl* m_textCtrl401;
+		wxButton* m_button251;
+		wxButton* m_button28;
+		wxButton* m_button29;
+
+	public:
+
+		ProjectSettings( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Project Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,600 ), long style = wxDEFAULT_DIALOG_STYLE );
+
+		~ProjectSettings();
 
 };
 

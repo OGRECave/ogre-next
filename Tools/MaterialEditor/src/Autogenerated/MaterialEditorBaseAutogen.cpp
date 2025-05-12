@@ -13,6 +13,31 @@ MainWindowBase::MainWindowBase( wxWindow* parent, wxWindowID id, const wxString&
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
+	m_menubar = new wxMenuBar( 0 );
+	wxMenu* m_fileMenu;
+	m_fileMenu = new wxMenu();
+	wxMenuItem* m_menuItem6;
+	m_menuItem6 = new wxMenuItem( m_fileMenu, wxID_NEW, wxString( _("&New Project") ) + wxT('\t') + wxT("Ctrl+N"), wxEmptyString, wxITEM_NORMAL );
+	m_fileMenu->Append( m_menuItem6 );
+
+	wxMenuItem* m_menuItem3;
+	m_menuItem3 = new wxMenuItem( m_fileMenu, wxID_OPEN, wxString( _("&Open") ) + wxT('\t') + wxT("Ctrl+O"), wxEmptyString, wxITEM_NORMAL );
+	m_fileMenu->Append( m_menuItem3 );
+
+	wxMenuItem* m_menuItem2;
+	m_menuItem2 = new wxMenuItem( m_fileMenu, wxID_SAVE, wxString( _("&Save") ) + wxT('\t') + wxT("Ctrl+S"), wxEmptyString, wxITEM_NORMAL );
+	m_fileMenu->Append( m_menuItem2 );
+
+	m_fileMenu->AppendSeparator();
+
+	wxMenuItem* m_menuItem5;
+	m_menuItem5 = new wxMenuItem( m_fileMenu, wxID_PREFERENCES, wxString( _("&Project Settings") ) + wxT('\t') + wxT("Ctrl+,"), wxEmptyString, wxITEM_NORMAL );
+	m_fileMenu->Append( m_menuItem5 );
+
+	m_menubar->Append( m_fileMenu, _("File") );
+
+	this->SetMenuBar( m_menubar );
+
 
 	this->Centre( wxBOTH );
 }
@@ -362,11 +387,15 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 
 	rootLayout->Add( sbSizer721, 0, wxEXPAND, 5 );
 
-	wxStaticBoxSizer* sbSizer711;
-	sbSizer711 = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Detail Map 0") ), wxVERTICAL );
+	wxCollapsiblePane* m_collapsiblePane;
+	m_collapsiblePane = new wxCollapsiblePane( m_scrolledWindow, wxID_ANY, _("Detail Map 0"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE|wxCP_NO_TLW_RESIZE );
+	m_collapsiblePane->Collapse( true );
+
+	wxBoxSizer* bSizer65;
+	bSizer65 = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizer16;
-	sbSizer16 = new wxStaticBoxSizer( new wxStaticBox( sbSizer711->GetStaticBox(), wxID_ANY, _("Diffuse 0") ), wxVERTICAL );
+	sbSizer16 = new wxStaticBoxSizer( new wxStaticBox( m_collapsiblePane->GetPane(), wxID_ANY, _("Diffuse 0") ), wxVERTICAL );
 
 	wxBoxSizer* bSizer171;
 	bSizer171 = new wxBoxSizer( wxHORIZONTAL );
@@ -401,10 +430,10 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	sbSizer16->Add( bSizer181, 1, wxEXPAND, 5 );
 
 
-	sbSizer711->Add( sbSizer16, 0, wxEXPAND, 5 );
+	bSizer65->Add( sbSizer16, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer161;
-	sbSizer161 = new wxStaticBoxSizer( new wxStaticBox( sbSizer711->GetStaticBox(), wxID_ANY, _("Normal 0") ), wxVERTICAL );
+	sbSizer161 = new wxStaticBoxSizer( new wxStaticBox( m_collapsiblePane->GetPane(), wxID_ANY, _("Normal 0") ), wxVERTICAL );
 
 	wxBoxSizer* bSizer1712;
 	bSizer1712 = new wxBoxSizer( wxHORIZONTAL );
@@ -433,7 +462,7 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	sbSizer161->Add( bSizer1812, 1, wxEXPAND, 5 );
 
 
-	sbSizer711->Add( sbSizer161, 0, wxEXPAND, 5 );
+	bSizer65->Add( sbSizer161, 0, wxEXPAND, 5 );
 
 	wxGridSizer* gSizer1;
 	gSizer1 = new wxGridSizer( 2, 2, 0, 0 );
@@ -441,10 +470,10 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer29;
 	bSizer29 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_detailMapXSlider0 = new wxSlider( sbSizer711->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_detailMapXSlider0 = new wxSlider( m_collapsiblePane->GetPane(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer29->Add( m_detailMapXSlider0, 1, wxALL, 5 );
 
-	m_detailMapXTextCtrl0 = new wxTextCtrl( sbSizer711->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	m_detailMapXTextCtrl0 = new wxTextCtrl( m_collapsiblePane->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer29->Add( m_detailMapXTextCtrl0, 0, wxALL, 5 );
 
 
@@ -453,10 +482,10 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer291;
 	bSizer291 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_detailMapYSlider0 = new wxSlider( sbSizer711->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_detailMapYSlider0 = new wxSlider( m_collapsiblePane->GetPane(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer291->Add( m_detailMapYSlider0, 1, wxALL, 5 );
 
-	m_detailMapYTextCtrl0 = new wxTextCtrl( sbSizer711->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	m_detailMapYTextCtrl0 = new wxTextCtrl( m_collapsiblePane->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer291->Add( m_detailMapYTextCtrl0, 0, wxALL, 5 );
 
 
@@ -465,10 +494,10 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer292;
 	bSizer292 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_detailMapWSlider0 = new wxSlider( sbSizer711->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_detailMapWSlider0 = new wxSlider( m_collapsiblePane->GetPane(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer292->Add( m_detailMapWSlider0, 1, wxALL, 5 );
 
-	m_detailMapWTextCtrl0 = new wxTextCtrl( sbSizer711->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	m_detailMapWTextCtrl0 = new wxTextCtrl( m_collapsiblePane->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer292->Add( m_detailMapWTextCtrl0, 0, wxALL, 5 );
 
 
@@ -477,26 +506,33 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer293;
 	bSizer293 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_detailMapHSlider0 = new wxSlider( sbSizer711->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_detailMapHSlider0 = new wxSlider( m_collapsiblePane->GetPane(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer293->Add( m_detailMapHSlider0, 1, wxALL, 5 );
 
-	m_detailMapHTextCtrl0 = new wxTextCtrl( sbSizer711->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	m_detailMapHTextCtrl0 = new wxTextCtrl( m_collapsiblePane->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer293->Add( m_detailMapHTextCtrl0, 0, wxALL, 5 );
 
 
 	gSizer1->Add( bSizer293, 1, wxEXPAND, 5 );
 
 
-	sbSizer711->Add( gSizer1, 0, wxEXPAND, 5 );
+	bSizer65->Add( gSizer1, 0, wxEXPAND, 5 );
 
 
-	rootLayout->Add( sbSizer711, 0, wxEXPAND, 5 );
+	m_collapsiblePane->GetPane()->SetSizer( bSizer65 );
+	m_collapsiblePane->GetPane()->Layout();
+	bSizer65->Fit( m_collapsiblePane->GetPane() );
+	rootLayout->Add( m_collapsiblePane, 0, wxEXPAND | wxALL, 5 );
 
-	wxStaticBoxSizer* sbSizer7111;
-	sbSizer7111 = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Detail Map 1") ), wxVERTICAL );
+	wxCollapsiblePane* m_collapsiblePane1;
+	m_collapsiblePane1 = new wxCollapsiblePane( m_scrolledWindow, wxID_ANY, _("Detail Map 1"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE|wxCP_NO_TLW_RESIZE );
+	m_collapsiblePane1->Collapse( true );
+
+	wxBoxSizer* bSizer59;
+	bSizer59 = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizer162;
-	sbSizer162 = new wxStaticBoxSizer( new wxStaticBox( sbSizer7111->GetStaticBox(), wxID_ANY, _("Diffuse 1") ), wxVERTICAL );
+	sbSizer162 = new wxStaticBoxSizer( new wxStaticBox( m_collapsiblePane1->GetPane(), wxID_ANY, _("Diffuse 1") ), wxVERTICAL );
 
 	wxBoxSizer* bSizer1711;
 	bSizer1711 = new wxBoxSizer( wxHORIZONTAL );
@@ -531,10 +567,10 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	sbSizer162->Add( bSizer1811, 1, wxEXPAND, 5 );
 
 
-	sbSizer7111->Add( sbSizer162, 0, wxEXPAND, 5 );
+	bSizer59->Add( sbSizer162, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer1611;
-	sbSizer1611 = new wxStaticBoxSizer( new wxStaticBox( sbSizer7111->GetStaticBox(), wxID_ANY, _("Normal 1") ), wxVERTICAL );
+	sbSizer1611 = new wxStaticBoxSizer( new wxStaticBox( m_collapsiblePane1->GetPane(), wxID_ANY, _("Normal 1") ), wxVERTICAL );
 
 	wxBoxSizer* bSizer17121;
 	bSizer17121 = new wxBoxSizer( wxHORIZONTAL );
@@ -563,7 +599,7 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	sbSizer1611->Add( bSizer18121, 1, wxEXPAND, 5 );
 
 
-	sbSizer7111->Add( sbSizer1611, 0, wxEXPAND, 5 );
+	bSizer59->Add( sbSizer1611, 0, wxEXPAND, 5 );
 
 	wxGridSizer* gSizer11;
 	gSizer11 = new wxGridSizer( 2, 2, 0, 0 );
@@ -571,10 +607,10 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer294;
 	bSizer294 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_detailMapXSlider1 = new wxSlider( sbSizer7111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_detailMapXSlider1 = new wxSlider( m_collapsiblePane1->GetPane(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer294->Add( m_detailMapXSlider1, 1, wxALL, 5 );
 
-	m_detailMapXTextCtrl1 = new wxTextCtrl( sbSizer7111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	m_detailMapXTextCtrl1 = new wxTextCtrl( m_collapsiblePane1->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer294->Add( m_detailMapXTextCtrl1, 0, wxALL, 5 );
 
 
@@ -583,10 +619,10 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer2911;
 	bSizer2911 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_detailMapYSlider1 = new wxSlider( sbSizer7111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_detailMapYSlider1 = new wxSlider( m_collapsiblePane1->GetPane(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer2911->Add( m_detailMapYSlider1, 1, wxALL, 5 );
 
-	m_detailMapYTextCtrl1 = new wxTextCtrl( sbSizer7111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	m_detailMapYTextCtrl1 = new wxTextCtrl( m_collapsiblePane1->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer2911->Add( m_detailMapYTextCtrl1, 0, wxALL, 5 );
 
 
@@ -595,10 +631,10 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer2921;
 	bSizer2921 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_detailMapWSlider1 = new wxSlider( sbSizer7111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_detailMapWSlider1 = new wxSlider( m_collapsiblePane1->GetPane(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer2921->Add( m_detailMapWSlider1, 1, wxALL, 5 );
 
-	m_detailMapWTextCtrl1 = new wxTextCtrl( sbSizer7111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	m_detailMapWTextCtrl1 = new wxTextCtrl( m_collapsiblePane1->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer2921->Add( m_detailMapWTextCtrl1, 0, wxALL, 5 );
 
 
@@ -607,26 +643,33 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer2931;
 	bSizer2931 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_detailMapHSlider1 = new wxSlider( sbSizer7111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_detailMapHSlider1 = new wxSlider( m_collapsiblePane1->GetPane(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer2931->Add( m_detailMapHSlider1, 1, wxALL, 5 );
 
-	m_detailMapHTextCtrl1 = new wxTextCtrl( sbSizer7111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	m_detailMapHTextCtrl1 = new wxTextCtrl( m_collapsiblePane1->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer2931->Add( m_detailMapHTextCtrl1, 0, wxALL, 5 );
 
 
 	gSizer11->Add( bSizer2931, 1, wxEXPAND, 5 );
 
 
-	sbSizer7111->Add( gSizer11, 0, wxEXPAND, 5 );
+	bSizer59->Add( gSizer11, 0, wxEXPAND, 5 );
 
 
-	rootLayout->Add( sbSizer7111, 0, wxEXPAND, 5 );
+	m_collapsiblePane1->GetPane()->SetSizer( bSizer59 );
+	m_collapsiblePane1->GetPane()->Layout();
+	bSizer59->Fit( m_collapsiblePane1->GetPane() );
+	rootLayout->Add( m_collapsiblePane1, 0, wxALL|wxEXPAND, 5 );
 
-	wxStaticBoxSizer* sbSizer71111;
-	sbSizer71111 = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Detail Map 2") ), wxVERTICAL );
+	wxCollapsiblePane* m_collapsiblePane2;
+	m_collapsiblePane2 = new wxCollapsiblePane( m_scrolledWindow, wxID_ANY, _("Detail Map 2"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE|wxCP_NO_TLW_RESIZE );
+	m_collapsiblePane2->Collapse( true );
+
+	wxBoxSizer* bSizer60;
+	bSizer60 = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizer1621;
-	sbSizer1621 = new wxStaticBoxSizer( new wxStaticBox( sbSizer71111->GetStaticBox(), wxID_ANY, _("Diffuse 2") ), wxVERTICAL );
+	sbSizer1621 = new wxStaticBoxSizer( new wxStaticBox( m_collapsiblePane2->GetPane(), wxID_ANY, _("Diffuse 2") ), wxVERTICAL );
 
 	wxBoxSizer* bSizer17111;
 	bSizer17111 = new wxBoxSizer( wxHORIZONTAL );
@@ -661,10 +704,10 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	sbSizer1621->Add( bSizer18111, 1, wxEXPAND, 5 );
 
 
-	sbSizer71111->Add( sbSizer1621, 0, wxEXPAND, 5 );
+	bSizer60->Add( sbSizer1621, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer16111;
-	sbSizer16111 = new wxStaticBoxSizer( new wxStaticBox( sbSizer71111->GetStaticBox(), wxID_ANY, _("Normal 2") ), wxVERTICAL );
+	sbSizer16111 = new wxStaticBoxSizer( new wxStaticBox( m_collapsiblePane2->GetPane(), wxID_ANY, _("Normal 2") ), wxVERTICAL );
 
 	wxBoxSizer* bSizer171211;
 	bSizer171211 = new wxBoxSizer( wxHORIZONTAL );
@@ -693,7 +736,7 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	sbSizer16111->Add( bSizer181211, 1, wxEXPAND, 5 );
 
 
-	sbSizer71111->Add( sbSizer16111, 0, wxEXPAND, 5 );
+	bSizer60->Add( sbSizer16111, 0, wxEXPAND, 5 );
 
 	wxGridSizer* gSizer111;
 	gSizer111 = new wxGridSizer( 2, 2, 0, 0 );
@@ -701,10 +744,10 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer2941;
 	bSizer2941 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_detailMapXSlider2 = new wxSlider( sbSizer71111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_detailMapXSlider2 = new wxSlider( m_collapsiblePane2->GetPane(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer2941->Add( m_detailMapXSlider2, 1, wxALL, 5 );
 
-	m_detailMapXTextCtrl2 = new wxTextCtrl( sbSizer71111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	m_detailMapXTextCtrl2 = new wxTextCtrl( m_collapsiblePane2->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer2941->Add( m_detailMapXTextCtrl2, 0, wxALL, 5 );
 
 
@@ -713,10 +756,10 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer29111;
 	bSizer29111 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_detailMapYSlider2 = new wxSlider( sbSizer71111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_detailMapYSlider2 = new wxSlider( m_collapsiblePane2->GetPane(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer29111->Add( m_detailMapYSlider2, 1, wxALL, 5 );
 
-	m_detailMapYTextCtrl2 = new wxTextCtrl( sbSizer71111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	m_detailMapYTextCtrl2 = new wxTextCtrl( m_collapsiblePane2->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer29111->Add( m_detailMapYTextCtrl2, 0, wxALL, 5 );
 
 
@@ -725,10 +768,10 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer29211;
 	bSizer29211 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_detailMapWSlider2 = new wxSlider( sbSizer71111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_detailMapWSlider2 = new wxSlider( m_collapsiblePane2->GetPane(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer29211->Add( m_detailMapWSlider2, 1, wxALL, 5 );
 
-	m_detailMapWTextCtrl2 = new wxTextCtrl( sbSizer71111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	m_detailMapWTextCtrl2 = new wxTextCtrl( m_collapsiblePane2->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer29211->Add( m_detailMapWTextCtrl2, 0, wxALL, 5 );
 
 
@@ -737,26 +780,33 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer29311;
 	bSizer29311 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_detailMapHSlider2 = new wxSlider( sbSizer71111->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_detailMapHSlider2 = new wxSlider( m_collapsiblePane2->GetPane(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer29311->Add( m_detailMapHSlider2, 1, wxALL, 5 );
 
-	m_detailMapHTextCtrl2 = new wxTextCtrl( sbSizer71111->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	m_detailMapHTextCtrl2 = new wxTextCtrl( m_collapsiblePane2->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer29311->Add( m_detailMapHTextCtrl2, 0, wxALL, 5 );
 
 
 	gSizer111->Add( bSizer29311, 1, wxEXPAND, 5 );
 
 
-	sbSizer71111->Add( gSizer111, 0, wxEXPAND, 5 );
+	bSizer60->Add( gSizer111, 0, wxEXPAND, 5 );
 
 
-	rootLayout->Add( sbSizer71111, 0, wxEXPAND, 5 );
+	m_collapsiblePane2->GetPane()->SetSizer( bSizer60 );
+	m_collapsiblePane2->GetPane()->Layout();
+	bSizer60->Fit( m_collapsiblePane2->GetPane() );
+	rootLayout->Add( m_collapsiblePane2, 0, wxEXPAND | wxALL, 5 );
 
-	wxStaticBoxSizer* sbSizer71112;
-	sbSizer71112 = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Detail Map 3") ), wxVERTICAL );
+	wxCollapsiblePane* m_collapsiblePane3;
+	m_collapsiblePane3 = new wxCollapsiblePane( m_scrolledWindow, wxID_ANY, _("Detail Map 3"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE|wxCP_NO_TLW_RESIZE );
+	m_collapsiblePane3->Collapse( true );
+
+	wxBoxSizer* bSizer61;
+	bSizer61 = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizer16211;
-	sbSizer16211 = new wxStaticBoxSizer( new wxStaticBox( sbSizer71112->GetStaticBox(), wxID_ANY, _("Diffuse 3") ), wxVERTICAL );
+	sbSizer16211 = new wxStaticBoxSizer( new wxStaticBox( m_collapsiblePane3->GetPane(), wxID_ANY, _("Diffuse 3") ), wxVERTICAL );
 
 	wxBoxSizer* bSizer171111;
 	bSizer171111 = new wxBoxSizer( wxHORIZONTAL );
@@ -791,10 +841,10 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	sbSizer16211->Add( bSizer181111, 1, wxEXPAND, 5 );
 
 
-	sbSizer71112->Add( sbSizer16211, 0, wxEXPAND, 5 );
+	bSizer61->Add( sbSizer16211, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer161111;
-	sbSizer161111 = new wxStaticBoxSizer( new wxStaticBox( sbSizer71112->GetStaticBox(), wxID_ANY, _("Normal 3") ), wxVERTICAL );
+	sbSizer161111 = new wxStaticBoxSizer( new wxStaticBox( m_collapsiblePane3->GetPane(), wxID_ANY, _("Normal 3") ), wxVERTICAL );
 
 	wxBoxSizer* bSizer1712111;
 	bSizer1712111 = new wxBoxSizer( wxHORIZONTAL );
@@ -823,7 +873,7 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	sbSizer161111->Add( bSizer1812111, 1, wxEXPAND, 5 );
 
 
-	sbSizer71112->Add( sbSizer161111, 0, wxEXPAND, 5 );
+	bSizer61->Add( sbSizer161111, 0, wxEXPAND, 5 );
 
 	wxGridSizer* gSizer112;
 	gSizer112 = new wxGridSizer( 2, 2, 0, 0 );
@@ -831,10 +881,10 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer2942;
 	bSizer2942 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_detailMapXSlider3 = new wxSlider( sbSizer71112->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_detailMapXSlider3 = new wxSlider( m_collapsiblePane3->GetPane(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer2942->Add( m_detailMapXSlider3, 1, wxALL, 5 );
 
-	m_detailMapXTextCtrl3 = new wxTextCtrl( sbSizer71112->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	m_detailMapXTextCtrl3 = new wxTextCtrl( m_collapsiblePane3->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer2942->Add( m_detailMapXTextCtrl3, 0, wxALL, 5 );
 
 
@@ -843,10 +893,10 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer29112;
 	bSizer29112 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_detailMapYSlider3 = new wxSlider( sbSizer71112->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_detailMapYSlider3 = new wxSlider( m_collapsiblePane3->GetPane(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer29112->Add( m_detailMapYSlider3, 1, wxALL, 5 );
 
-	m_detailMapYTextCtrl3 = new wxTextCtrl( sbSizer71112->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	m_detailMapYTextCtrl3 = new wxTextCtrl( m_collapsiblePane3->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer29112->Add( m_detailMapYTextCtrl3, 0, wxALL, 5 );
 
 
@@ -855,10 +905,10 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer29212;
 	bSizer29212 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_detailMapWSlider3 = new wxSlider( sbSizer71112->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_detailMapWSlider3 = new wxSlider( m_collapsiblePane3->GetPane(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer29212->Add( m_detailMapWSlider3, 1, wxALL, 5 );
 
-	m_detailMapWTextCtrl3 = new wxTextCtrl( sbSizer71112->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	m_detailMapWTextCtrl3 = new wxTextCtrl( m_collapsiblePane3->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer29212->Add( m_detailMapWTextCtrl3, 0, wxALL, 5 );
 
 
@@ -867,20 +917,23 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer29312;
 	bSizer29312 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_detailMapHSlider3 = new wxSlider( sbSizer71112->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_detailMapHSlider3 = new wxSlider( m_collapsiblePane3->GetPane(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer29312->Add( m_detailMapHSlider3, 1, wxALL, 5 );
 
-	m_detailMapHTextCtrl3 = new wxTextCtrl( sbSizer71112->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
+	m_detailMapHTextCtrl3 = new wxTextCtrl( m_collapsiblePane3->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 48,-1 ), 0 );
 	bSizer29312->Add( m_detailMapHTextCtrl3, 0, wxALL, 5 );
 
 
 	gSizer112->Add( bSizer29312, 1, wxEXPAND, 5 );
 
 
-	sbSizer71112->Add( gSizer112, 0, wxEXPAND, 5 );
+	bSizer61->Add( gSizer112, 0, wxEXPAND, 5 );
 
 
-	rootLayout->Add( sbSizer71112, 0, wxEXPAND, 5 );
+	m_collapsiblePane3->GetPane()->SetSizer( bSizer61 );
+	m_collapsiblePane3->GetPane()->Layout();
+	bSizer61->Fit( m_collapsiblePane3->GetPane() );
+	rootLayout->Add( m_collapsiblePane3, 0, wxEXPAND | wxALL, 5 );
 
 
 	m_scrolledWindow->SetSizer( rootLayout );
@@ -907,6 +960,7 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	m_emissiveMapSpin->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( PbsTexturePanelBase::OnSpinCtrl ), NULL, this );
 	m_detailWeightMapBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsTexturePanelBase::OnTextureChangeButton ), NULL, this );
 	m_detailWeightMapSpin->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( PbsTexturePanelBase::OnSpinCtrl ), NULL, this );
+	m_collapsiblePane->Connect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( PbsTexturePanelBase::OnCollapsiblePaneChanged ), NULL, this );
 	m_detailMapBtn0->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsTexturePanelBase::OnTextureChangeButton ), NULL, this );
 	m_detailMapSpin0->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( PbsTexturePanelBase::OnSpinCtrl ), NULL, this );
 	m_detailMapBlendMode0->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnBlendModeChoice ), NULL, this );
@@ -924,6 +978,7 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	m_detailMapWTextCtrl0->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
 	m_detailMapHSlider0->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
 	m_detailMapHTextCtrl0->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_collapsiblePane1->Connect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( PbsTexturePanelBase::OnCollapsiblePaneChanged ), NULL, this );
 	m_detailMapBtn1->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsTexturePanelBase::OnTextureChangeButton ), NULL, this );
 	m_detailMapSpin1->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( PbsTexturePanelBase::OnSpinCtrl ), NULL, this );
 	m_detailMapBlendMode1->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnBlendModeChoice ), NULL, this );
@@ -941,6 +996,7 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	m_detailMapWTextCtrl1->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
 	m_detailMapHSlider1->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
 	m_detailMapHTextCtrl1->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_collapsiblePane2->Connect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( PbsTexturePanelBase::OnCollapsiblePaneChanged ), NULL, this );
 	m_detailMapBtn2->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsTexturePanelBase::OnTextureChangeButton ), NULL, this );
 	m_detailMapSpin2->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( PbsTexturePanelBase::OnSpinCtrl ), NULL, this );
 	m_detailMapBlendMode2->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnBlendModeChoice ), NULL, this );
@@ -958,6 +1014,7 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	m_detailMapWTextCtrl2->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
 	m_detailMapHSlider2->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
 	m_detailMapHTextCtrl2->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_collapsiblePane3->Connect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( PbsTexturePanelBase::OnCollapsiblePaneChanged ), NULL, this );
 	m_detailMapBtn3->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsTexturePanelBase::OnTextureChangeButton ), NULL, this );
 	m_detailMapSpin3->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( PbsTexturePanelBase::OnSpinCtrl ), NULL, this );
 	m_detailMapBlendMode3->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnBlendModeChoice ), NULL, this );
@@ -1073,10 +1130,10 @@ TextureSelectBase::TextureSelectBase( wxWindow* parent, wxWindowID id, const wxS
 	wxBoxSizer* bSizer44;
 	bSizer44 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_cancelButton = new wxButton( this, wxID_ANY, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cancelButton = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer44->Add( m_cancelButton, 1, wxALL, 5 );
 
-	m_okButton = new wxButton( this, wxID_ANY, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_okButton = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer44->Add( m_okButton, 1, wxALL, 5 );
 
 
@@ -1096,5 +1153,95 @@ TextureSelectBase::TextureSelectBase( wxWindow* parent, wxWindowID id, const wxS
 }
 
 TextureSelectBase::~TextureSelectBase()
+{
+}
+
+ProjectSettings::ProjectSettings( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+
+	wxBoxSizer* bSizer58;
+	bSizer58 = new wxBoxSizer( wxVERTICAL );
+
+	wxStaticBoxSizer* sbSizer29;
+	sbSizer29 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Resources") ), wxHORIZONTAL );
+
+	m_listBox5 = new wxListBox( sbSizer29->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	sbSizer29->Add( m_listBox5, 1, wxALL|wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer55;
+	bSizer55 = new wxBoxSizer( wxVERTICAL );
+
+	m_button23 = new wxButton( sbSizer29->GetStaticBox(), wxID_ANY, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer55->Add( m_button23, 0, wxALL, 5 );
+
+	m_button24 = new wxButton( sbSizer29->GetStaticBox(), wxID_ANY, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer55->Add( m_button24, 0, wxALL, 5 );
+
+
+	sbSizer29->Add( bSizer55, 0, wxEXPAND, 5 );
+
+
+	bSizer58->Add( sbSizer29, 1, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer25;
+	sbSizer25 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Material File Location") ), wxVERTICAL );
+
+	wxBoxSizer* bSizer64;
+	bSizer64 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_textCtrl40 = new wxTextCtrl( sbSizer25->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer64->Add( m_textCtrl40, 1, wxALL, 5 );
+
+	m_button25 = new wxButton( sbSizer25->GetStaticBox(), wxID_ANY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer64->Add( m_button25, 0, wxALL, 5 );
+
+
+	sbSizer25->Add( bSizer64, 1, wxEXPAND, 5 );
+
+	m_staticText2 = new wxStaticText( sbSizer25->GetStaticBox(), wxID_ANY, _("All materials will be joined & saved into a single JSON file.\nThis is a limitation of the Editor. You may have to remove the individual JSON files scattered through the Resource paths."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2->Wrap( -1 );
+	sbSizer25->Add( m_staticText2, 0, wxALL, 5 );
+
+	m_checkBox6 = new wxCheckBox( sbSizer25->GetStaticBox(), wxID_ANY, _("Delete all other *.material.json files on save"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBox6->SetForegroundColour( wxColour( 229, 23, 22 ) );
+
+	sbSizer25->Add( m_checkBox6, 0, wxALL|wxALIGN_RIGHT, 5 );
+
+
+	bSizer58->Add( sbSizer25, 0, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer251;
+	sbSizer251 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Project File Location") ), wxHORIZONTAL );
+
+	m_textCtrl401 = new wxTextCtrl( sbSizer251->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer251->Add( m_textCtrl401, 1, wxALL, 5 );
+
+	m_button251 = new wxButton( sbSizer251->GetStaticBox(), wxID_ANY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer251->Add( m_button251, 0, wxALL, 5 );
+
+
+	bSizer58->Add( sbSizer251, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer61;
+	bSizer61 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_button28 = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer61->Add( m_button28, 1, wxALL, 5 );
+
+	m_button29 = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer61->Add( m_button29, 1, wxALL, 5 );
+
+
+	bSizer58->Add( bSizer61, 0, wxEXPAND, 5 );
+
+
+	this->SetSizer( bSizer58 );
+	this->Layout();
+
+	this->Centre( wxBOTH );
+}
+
+ProjectSettings::~ProjectSettings()
 {
 }
