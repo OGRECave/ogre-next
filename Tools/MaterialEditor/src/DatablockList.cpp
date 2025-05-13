@@ -27,7 +27,7 @@ void DatablockList::OnDatablockSelect( wxCommandEvent &event )
 
     wxString materialName = m_datablockList->GetString( (unsigned int)m_datablockList->GetSelection() );
 
-    Ogre::HlmsDatablock *datablock = hlmsManager->getDatablockNoDefault( materialName.ToStdString() );
+    Ogre::HlmsDatablock *datablock = hlmsManager->getDatablockNoDefault( materialName.utf8_string() );
     m_mainWindow->setActiveDatablock( datablock );
     event.Skip( false );
 }

@@ -7,6 +7,7 @@
 #include "MeshList.h"
 #include "PbsParametersPanel.h"
 #include "PbsTexturePanel.h"
+#include "ProjectSettings.h"
 
 #include <wx/aui/aui.h>
 #include <wx/wx.h>
@@ -42,6 +43,7 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     m_pbsTexturePanel( 0 ),
     m_datablockList( 0 ),
     m_meshList( 0 ),
+    m_projectSettings( 0 ),
     m_activeDatablock( 0 ),
     m_activeItem( 0 ),
     m_activeEntity( 0 ),
@@ -125,6 +127,7 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     m_pbsTexturePanel = new PbsTexturePanel( this );
     m_datablockList = new DatablockList( this );
     m_meshList = new MeshList( this );
+    m_projectSettings = new ProjectSettings( this );
 
     m_mainNotebook->AddPage( m_pbsParametersPanel, wxT( "PBS Settings" ) );
     m_mainNotebook->AddPage( m_pbsTexturePanel, wxT( "PBS Textures" ) );
@@ -577,12 +580,53 @@ void MainWindow::OnKeyUp( wxKeyEvent &evt )
     evt.Skip();
 }
 //-----------------------------------------------------------------------------
+void MainWindow::OnMenuSelection( wxCommandEvent &event )
+{
+    switch( event.GetId() )
+    {
+    case wxID_NEW:
+        if( m_projectSettings->ShowModal() == wxID_OK )
+        {
+            unloadForNewProject();
+            m_projectSettings->newProject( m_root->getHlmsManager() );
+            m_datablockList->populateFromDatabase();
+            m_meshList->populateFromDatabase();
+        }
+        break;
+    case wxID_OPEN:
+        m_projectSettings->openProject( m_root->getHlmsManager() );
+        break;
+    case wxID_SAVE:
+        break;
+    case wxID_PREFERENCES:
+        m_projectSettings->ShowModal();
+        break;
+    }
+    event.Skip();
+}
+//-----------------------------------------------------------------------------
 void MainWindow::setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable datablock )
 {
     m_activeDatablock = datablock;
     m_pbsParametersPanel->refreshFromDatablock();
     m_pbsParametersPanel->refreshSubMeshList();
     m_pbsTexturePanel->refreshFromDatablock();
+}
+//-----------------------------------------------------------------------------
+void MainWindow::unloadForNewProject()
+{
+    if( m_activeItem )
+    {
+        m_sceneManager->destroyItem( m_activeItem );
+        m_activeItem = 0;
+    }
+    if( m_activeEntity )
+    {
+        m_sceneManager->destroyEntity( m_activeEntity );
+        m_activeEntity = 0;
+    }
+
+    setActiveDatablock( nullptr );
 }
 //-----------------------------------------------------------------------------
 bool MainWindow::loadMeshAsItem( const Ogre::String &meshName, const Ogre::String &resourceGroup )

@@ -40,6 +40,12 @@ MainWindowBase::MainWindowBase( wxWindow* parent, wxWindowID id, const wxString&
 
 
 	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuItem6->GetId());
+	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuItem3->GetId());
+	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuItem2->GetId());
+	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuItem5->GetId());
 }
 
 MainWindowBase::~MainWindowBase()
@@ -1156,7 +1162,7 @@ TextureSelectBase::~TextureSelectBase()
 {
 }
 
-ProjectSettings::ProjectSettings( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+ProjectSettingsBase::ProjectSettingsBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -1164,22 +1170,54 @@ ProjectSettings::ProjectSettings( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer58 = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizer29;
-	sbSizer29 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Resources") ), wxHORIZONTAL );
+	sbSizer29 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Resources") ), wxVERTICAL );
 
-	m_listBox5 = new wxListBox( sbSizer29->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	sbSizer29->Add( m_listBox5, 1, wxALL|wxEXPAND, 5 );
+	wxBoxSizer* bSizer611;
+	bSizer611 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_resourcesListBox = new wxListBox( sbSizer29->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	bSizer611->Add( m_resourcesListBox, 1, wxALL|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer55;
 	bSizer55 = new wxBoxSizer( wxVERTICAL );
 
-	m_button23 = new wxButton( sbSizer29->GetStaticBox(), wxID_ANY, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer55->Add( m_button23, 0, wxALL, 5 );
+	m_resourcesAddBtn = new wxButton( sbSizer29->GetStaticBox(), wxID_ANY, _("Add Resources.cfg"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer55->Add( m_resourcesAddBtn, 0, wxALL|wxEXPAND, 5 );
 
-	m_button24 = new wxButton( sbSizer29->GetStaticBox(), wxID_ANY, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer55->Add( m_button24, 0, wxALL, 5 );
+	m_resourcesFolderAddBtn = new wxButton( sbSizer29->GetStaticBox(), wxID_ANY, _("Add Folder"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer55->Add( m_resourcesFolderAddBtn, 0, wxALL|wxEXPAND, 5 );
+
+	m_resourcesRemoveBtn = new wxButton( sbSizer29->GetStaticBox(), wxID_ANY, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer55->Add( m_resourcesRemoveBtn, 0, wxALL|wxEXPAND, 5 );
 
 
-	sbSizer29->Add( bSizer55, 0, wxEXPAND, 5 );
+	bSizer611->Add( bSizer55, 0, wxEXPAND, 5 );
+
+
+	sbSizer29->Add( bSizer611, 1, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer24;
+	sbSizer24 = new wxStaticBoxSizer( new wxStaticBox( sbSizer29->GetStaticBox(), wxID_ANY, _("Relative Folder") ), wxVERTICAL );
+
+	wxStaticText* m_staticText21;
+	m_staticText21 = new wxStaticText( sbSizer24->GetStaticBox(), wxID_ANY, _("Set the relative path from which resources.cfg should be loaded."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText21->Wrap( -1 );
+	sbSizer24->Add( m_staticText21, 0, wxALL, 5 );
+
+	wxBoxSizer* bSizer63;
+	bSizer63 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_relativeFolderTextCtrl = new wxTextCtrl( sbSizer24->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer63->Add( m_relativeFolderTextCtrl, 1, wxALL, 5 );
+
+	m_relativeFolderBrowseBtn = new wxButton( sbSizer24->GetStaticBox(), wxID_ANY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer63->Add( m_relativeFolderBrowseBtn, 0, wxALL, 5 );
+
+
+	sbSizer24->Add( bSizer63, 1, wxEXPAND, 5 );
+
+
+	sbSizer29->Add( sbSizer24, 0, wxEXPAND, 5 );
 
 
 	bSizer58->Add( sbSizer29, 1, wxEXPAND, 5 );
@@ -1190,23 +1228,24 @@ ProjectSettings::ProjectSettings( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bSizer64;
 	bSizer64 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_textCtrl40 = new wxTextCtrl( sbSizer25->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer64->Add( m_textCtrl40, 1, wxALL, 5 );
+	m_materialFileLocationTextCtrl = new wxTextCtrl( sbSizer25->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer64->Add( m_materialFileLocationTextCtrl, 1, wxALL, 5 );
 
-	m_button25 = new wxButton( sbSizer25->GetStaticBox(), wxID_ANY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer64->Add( m_button25, 0, wxALL, 5 );
+	m_materialFileBrowseBtn = new wxButton( sbSizer25->GetStaticBox(), wxID_ANY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer64->Add( m_materialFileBrowseBtn, 0, wxALL, 5 );
 
 
 	sbSizer25->Add( bSizer64, 1, wxEXPAND, 5 );
 
+	wxStaticText* m_staticText2;
 	m_staticText2 = new wxStaticText( sbSizer25->GetStaticBox(), wxID_ANY, _("All materials will be joined & saved into a single JSON file.\nThis is a limitation of the Editor. You may have to remove the individual JSON files scattered through the Resource paths."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
 	sbSizer25->Add( m_staticText2, 0, wxALL, 5 );
 
-	m_checkBox6 = new wxCheckBox( sbSizer25->GetStaticBox(), wxID_ANY, _("Delete all other *.material.json files on save"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkBox6->SetForegroundColour( wxColour( 229, 23, 22 ) );
+	m_deleteAllOtherMaterials = new wxCheckBox( sbSizer25->GetStaticBox(), wxID_ANY, _("Delete all other *.material.json files on save"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_deleteAllOtherMaterials->SetForegroundColour( wxColour( 229, 23, 22 ) );
 
-	sbSizer25->Add( m_checkBox6, 0, wxALL|wxALIGN_RIGHT, 5 );
+	sbSizer25->Add( m_deleteAllOtherMaterials, 0, wxALL|wxALIGN_RIGHT, 5 );
 
 
 	bSizer58->Add( sbSizer25, 0, wxEXPAND, 5 );
@@ -1214,11 +1253,11 @@ ProjectSettings::ProjectSettings( wxWindow* parent, wxWindowID id, const wxStrin
 	wxStaticBoxSizer* sbSizer251;
 	sbSizer251 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Project File Location") ), wxHORIZONTAL );
 
-	m_textCtrl401 = new wxTextCtrl( sbSizer251->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer251->Add( m_textCtrl401, 1, wxALL, 5 );
+	m_projectFileLocationTextCtrl = new wxTextCtrl( sbSizer251->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer251->Add( m_projectFileLocationTextCtrl, 1, wxALL, 5 );
 
-	m_button251 = new wxButton( sbSizer251->GetStaticBox(), wxID_ANY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer251->Add( m_button251, 0, wxALL, 5 );
+	m_projectFileBrowseBtn = new wxButton( sbSizer251->GetStaticBox(), wxID_ANY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer251->Add( m_projectFileBrowseBtn, 0, wxALL, 5 );
 
 
 	bSizer58->Add( sbSizer251, 0, wxEXPAND, 5 );
@@ -1226,11 +1265,12 @@ ProjectSettings::ProjectSettings( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bSizer61;
 	bSizer61 = new wxBoxSizer( wxHORIZONTAL );
 
+	wxButton* m_button28;
 	m_button28 = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer61->Add( m_button28, 1, wxALL, 5 );
 
-	m_button29 = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer61->Add( m_button29, 1, wxALL, 5 );
+	m_okButton = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer61->Add( m_okButton, 1, wxALL, 5 );
 
 
 	bSizer58->Add( bSizer61, 0, wxEXPAND, 5 );
@@ -1240,8 +1280,20 @@ ProjectSettings::ProjectSettings( wxWindow* parent, wxWindowID id, const wxStrin
 	this->Layout();
 
 	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_resourcesAddBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectSettingsBase::OnResourcesAdd ), NULL, this );
+	m_resourcesFolderAddBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectSettingsBase::OnResourcesFolderAdd ), NULL, this );
+	m_resourcesRemoveBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectSettingsBase::OnResourcesRemove ), NULL, this );
+	m_relativeFolderTextCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( ProjectSettingsBase::OnText ), NULL, this );
+	m_relativeFolderBrowseBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectSettingsBase::OnBrowseFolder ), NULL, this );
+	m_materialFileLocationTextCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( ProjectSettingsBase::OnText ), NULL, this );
+	m_materialFileBrowseBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectSettingsBase::OnBrowse ), NULL, this );
+	m_projectFileLocationTextCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( ProjectSettingsBase::OnText ), NULL, this );
+	m_projectFileBrowseBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectSettingsBase::OnBrowse ), NULL, this );
+	m_okButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectSettingsBase::OnButtonClick ), NULL, this );
 }
 
-ProjectSettings::~ProjectSettings()
+ProjectSettingsBase::~ProjectSettingsBase()
 {
 }

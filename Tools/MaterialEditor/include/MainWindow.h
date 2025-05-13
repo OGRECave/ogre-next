@@ -13,6 +13,7 @@ class DatablockList;
 class MeshList;
 class PbsParametersPanel;
 class PbsTexturePanel;
+class ProjectSettings;
 class wxAuiManager;
 class wxAuiNotebook;
 class wxOgreRenderWindow;
@@ -42,6 +43,7 @@ class MainWindow final : public MainWindowBase,
     PbsTexturePanel    *m_pbsTexturePanel;
     DatablockList      *m_datablockList;
     MeshList           *m_meshList;
+    ProjectSettings    *m_projectSettings;
 
     Ogre::HlmsDatablock *ogre_nullable m_activeDatablock;
 
@@ -73,6 +75,8 @@ class MainWindow final : public MainWindowBase,
     void loadHlmsDiskCache();
     void saveHlmsDiskCache();
 
+    void unloadForNewProject();
+
     bool loadMeshAsItem( const Ogre::String &meshName, const Ogre::String &resourceGroup );
     bool loadMeshAsV1Entity( const Ogre::String &meshName, const Ogre::String &resourceGroup );
 
@@ -85,6 +89,8 @@ public:
     void OnMouseEvents( wxMouseEvent &evt ) override;
     void OnKeyDown( wxKeyEvent &evt ) override;
     void OnKeyUp( wxKeyEvent &evt ) override;
+
+    void OnMenuSelection( wxCommandEvent &event ) override;
 
     Ogre::Root *getRoot() { return m_root; }
 

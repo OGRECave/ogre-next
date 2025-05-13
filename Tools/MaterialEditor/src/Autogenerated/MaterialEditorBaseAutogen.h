@@ -48,6 +48,10 @@ class MainWindowBase : public wxFrame
 	protected:
 		wxMenuBar* m_menubar;
 
+		// Virtual event handlers, override them in your derived class
+		virtual void OnMenuSelection( wxCommandEvent& event ) { event.Skip(); }
+
+
 	public:
 
 		MainWindowBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("OgreNext Material Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1280,720 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
@@ -302,30 +306,41 @@ class TextureSelectBase : public wxDialog
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class ProjectSettings
+/// Class ProjectSettingsBase
 ///////////////////////////////////////////////////////////////////////////////
-class ProjectSettings : public wxDialog
+class ProjectSettingsBase : public wxDialog
 {
 	private:
 
 	protected:
-		wxListBox* m_listBox5;
-		wxButton* m_button23;
-		wxButton* m_button24;
-		wxTextCtrl* m_textCtrl40;
-		wxButton* m_button25;
-		wxStaticText* m_staticText2;
-		wxCheckBox* m_checkBox6;
-		wxTextCtrl* m_textCtrl401;
-		wxButton* m_button251;
-		wxButton* m_button28;
-		wxButton* m_button29;
+		wxListBox* m_resourcesListBox;
+		wxButton* m_resourcesAddBtn;
+		wxButton* m_resourcesFolderAddBtn;
+		wxButton* m_resourcesRemoveBtn;
+		wxTextCtrl* m_relativeFolderTextCtrl;
+		wxButton* m_relativeFolderBrowseBtn;
+		wxTextCtrl* m_materialFileLocationTextCtrl;
+		wxButton* m_materialFileBrowseBtn;
+		wxCheckBox* m_deleteAllOtherMaterials;
+		wxTextCtrl* m_projectFileLocationTextCtrl;
+		wxButton* m_projectFileBrowseBtn;
+		wxButton* m_okButton;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnResourcesAdd( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnResourcesFolderAdd( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnResourcesRemove( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnBrowseFolder( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnBrowse( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonClick( wxCommandEvent& event ) { event.Skip(); }
+
 
 	public:
 
-		ProjectSettings( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Project Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,600 ), long style = wxDEFAULT_DIALOG_STYLE );
+		ProjectSettingsBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Project Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,600 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
 
-		~ProjectSettings();
+		~ProjectSettingsBase();
 
 };
 
