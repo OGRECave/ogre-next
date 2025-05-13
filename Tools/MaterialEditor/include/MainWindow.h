@@ -20,6 +20,17 @@ class wxOgreRenderWindow;
 
 OGRE_ASSUME_NONNULL_BEGIN
 
+namespace CoordinateConvention
+{
+    enum CoordinateConvention
+    {
+        xUp,
+        yUp,
+        zUp,
+        NumCoordinateConventions
+    };
+}
+
 class MainWindow final : public MainWindowBase,
                          public wxOgreRenderWindowListener,
                          public Ogre::FrameListener
@@ -51,6 +62,13 @@ class MainWindow final : public MainWindowBase,
     Ogre::v1::Entity *ogre_nullable m_activeEntity;
     Ogre::SceneNode                *m_objSceneNode;
 
+    // Control camera movement through mouse.
+    CoordinateConvention::CoordinateConvention m_coordinateConvention;
+    int32_t m_mouseX;  // wxWidgets doesn't send us delta, so we have to save last
+    int32_t m_mouseY;  // event's data and calculate delta ourselves.
+    bool    m_wasLeftPressed;
+    bool    m_wasRightPressed;
+
     bool m_useMicrocodeCache;
     bool m_useHlmsDiskCache;
 
@@ -79,6 +97,55 @@ class MainWindow final : public MainWindowBase,
 
     bool loadMeshAsItem( const Ogre::String &meshName, const Ogre::String &resourceGroup );
     bool loadMeshAsV1Entity( const Ogre::String &meshName, const Ogre::String &resourceGroup );
+
+    /** Sets the new coordinate convention to all relevant nodes, and sets the GUI checked properly.
+    @param newConvention
+        New convention.
+    */
+    void setCoordinateConvention( CoordinateConvention::CoordinateConvention newConvention );
+
+    /// Defaults camera position to 0, centerY, 0, with the default angle, making it look to the model as
+    /// a whole. If no model is loaded, it redirects to originCamera().
+    void originCenterYCamera();
+
+    /// Defaults camera position to 0, 0, 0, with the default angle.
+    void originCamera();
+
+    /// Like defaultCamera(), but pointing at the center of the mesh. Does nothing if there's not mesh.
+    void centerMeshCamera();
+
+    /** Manipulates the yaw and pitch of the camera, around and relative to the center of the mesh,
+        when the mouse is moved.
+    @param x
+        X delta, in pixels.
+    @param y
+        Y delta, in pixels.
+    */
+    void rotateCamera( const int32_t x, const int32_t y );
+
+    /**
+    @param wheelDelta
+        Z delta.
+    */
+    void zoomInCamera( const Ogre::Real wheelDelta );
+
+    /** Moves the whole camera among the relative X and Y axis
+    @param x
+        X delta, in pixels.
+    @param y
+        Y delta, in pixels.
+    */
+    void moveCamera( const int32_t x, const int32_t y );
+
+    /** Moves the whole camera among the relative X and Z axis.
+    @remarks
+        slideCamera( x, 0 ) == moveCamera( x, 0 ).
+    @param x
+        X delta, in pixels.
+    @param z
+        Z delta, in pixels.
+    */
+    void slideCamera( const int32_t x, const int32_t z );
 
 public:
     MainWindow( wxWindow *ogre_nullable parent, const CmdSettings &cmdSettings );

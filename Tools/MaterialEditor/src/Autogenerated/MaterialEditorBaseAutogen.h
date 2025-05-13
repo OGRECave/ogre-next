@@ -46,7 +46,17 @@ class MainWindowBase : public wxFrame
 	private:
 
 	protected:
-		wxMenuBar* m_menubar;
+		enum
+		{
+			wxID_MENUCAMCENTERMESH = 6000,
+			wxID_MENUCAMERAORIGIN,
+			wxID_MENUCAMERAORIGINCENTERY,
+			wxID_MENUCOORDINATE_X_UP,
+			wxID_MENUCOORDINATE_Y_UP,
+			wxID_MENUCOORDINATE_Z_UP,
+		};
+
+		wxMenu* m_menuView;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnMenuSelection( wxCommandEvent& event ) { event.Skip(); }
