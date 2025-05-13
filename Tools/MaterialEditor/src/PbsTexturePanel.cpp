@@ -249,7 +249,7 @@ void PbsTexturePanel::OnTextureChangeButton( wxCommandEvent &event )
             GpuPageOutStrategy::Discard, textureFlags, internalTextureType, chosenEntry->resourceGroup,
             filters );
 
-        datablock->setTexture( textureType, texture );
+        datablock->setTexture( textureType, texture, datablock->getSamplerblock( textureType ) );
 
         // texture->scheduleTransitionTo( Ogre::GpuResidency::Resident );
         // texture->waitForData();
@@ -270,7 +270,8 @@ void PbsTexturePanel::OnTextureChangeButton( wxCommandEvent &event )
         OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbsDatablock *>( baseDatablock ) );
         Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock *>( baseDatablock );
 
-        datablock->setTexture( textureType, (TextureGpu *)nullptr );
+        datablock->setTexture( textureType, (TextureGpu *)nullptr,
+                               datablock->getSamplerblock( textureType ) );
         m_units[textureType].mapButton->SetLabel( wxString() );
     }
 }
