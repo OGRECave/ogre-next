@@ -50,8 +50,20 @@ void DatablockList::OnSearchText( wxCommandEvent &event )
     event.Skip( false );
 }
 //-----------------------------------------------------------------------------
-void DatablockList::populateFromDatabase()
+void DatablockList::populateFromDatabase( bool bReasonActiveMeshChanged )
 {
+    const bool activeMeshOnly = m_activeMeshOnlyCheckbox->IsChecked();
+    if( bReasonActiveMeshChanged && !activeMeshOnly )
+        return;
+
+    std::set<Ogre::HlmsDatablock *> meshDatablocks;
+    const Ogre::MovableObject *movableObject = m_mainWindow->getActiveObject();
+    if( movableObject && activeMeshOnly )
+    {
+        for( const Ogre::Renderable *renderable : movableObject->mRenderables )
+            meshDatablocks.insert( renderable->getDatablock() );
+    }
+
     Ogre::Root *root = m_mainWindow->getRoot();
     Ogre::HlmsManager *hlmsManager = root->getHlmsManager();
 
@@ -78,7 +90,8 @@ void DatablockList::populateFromDatabase()
         for( const auto &keyVal : datablockMap )
         {
             const Ogre::Hlms::DatablockEntry &entry = keyVal.second;
-            if( entry.visibleToManager )
+            if( entry.visibleToManager &&
+                ( !activeMeshOnly || meshDatablocks.find( entry.datablock ) != meshDatablocks.end() ) )
             {
                 const wxString materialName = entry.name;
                 const wxString needle = materialName.Lower();

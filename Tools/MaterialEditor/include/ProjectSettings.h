@@ -20,6 +20,14 @@ class ProjectSettings final : public ProjectSettingsBase
     wxString      m_materialDstPath;
     wxString      m_projectPath;
 
+    struct ResourceLocation
+    {
+        Ogre::String name;
+        Ogre::String group;
+    };
+
+    std::vector<ResourceLocation> m_resourceLocations;
+
 protected:
     // Handlers for ProjectSettingsBase events.
     void OnResourcesAdd( wxCommandEvent &event ) override;
@@ -30,7 +38,8 @@ protected:
     void OnBrowse( wxCommandEvent &event ) override;
     void OnButtonClick( wxCommandEvent &event ) override;
 
-    void validateSettings();
+    bool validateSettings();
+    void syncSettingsFromUI();
 
     void loadProject( Ogre::HlmsManager *hlmsManager );
 
@@ -43,7 +52,12 @@ public:
 
     void openProject( wxString projectPath, Ogre::HlmsManager *hlmsManager );
 
-    void openProject( Ogre::HlmsManager *hlmsManager );
+    wxString openProjectModal();
+
+    void saveProject( Ogre::HlmsManager *hlmsManager );
+
+    void loadInternalSettings( const std::string &rwFolder );
+    void saveInternalSettings( const std::string &rwFolder );
 };
 
 OGRE_ASSUME_NONNULL_END

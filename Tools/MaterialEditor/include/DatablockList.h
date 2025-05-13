@@ -24,7 +24,7 @@ protected:
 public:
     DatablockList( MainWindow *parent );
 
-    void populateFromDatabase();
+    void populateFromDatabase( bool bReasonActiveMeshChanged = false );
 };
 
 OGRE_ASSUME_NONNULL_END
