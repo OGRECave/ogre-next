@@ -238,6 +238,7 @@ class DatablockListBase : public wxPanel
 		wxListBox* m_datablockList;
 		wxCheckBox* m_pbsCheckbox;
 		wxCheckBox* m_unlitCheckbox;
+		wxCheckBox* m_activeMeshOnlyCheckbox;
 		wxSearchCtrl* m_searchCtrl;
 
 		// Virtual event handlers, override them in your derived class

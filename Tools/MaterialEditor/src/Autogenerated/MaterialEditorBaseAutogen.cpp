@@ -1063,6 +1063,10 @@ DatablockListBase::DatablockListBase( wxWindow* parent, wxWindowID id, const wxP
 	m_unlitCheckbox->SetValue(true);
 	bSizer12->Add( m_unlitCheckbox, 0, wxALL, 5 );
 
+	m_activeMeshOnlyCheckbox = new wxCheckBox( this, wxID_ANY, _("Active Mesh Only"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_activeMeshOnlyCheckbox->SetValue(true);
+	bSizer12->Add( m_activeMeshOnlyCheckbox, 0, wxALL, 5 );
+
 
 	rootLayout->Add( bSizer12, 0, wxEXPAND, 5 );
 
@@ -1081,6 +1085,7 @@ DatablockListBase::DatablockListBase( wxWindow* parent, wxWindowID id, const wxP
 	m_datablockList->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DatablockListBase::OnDatablockSelect ), NULL, this );
 	m_pbsCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DatablockListBase::OnCheckbox ), NULL, this );
 	m_unlitCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DatablockListBase::OnCheckbox ), NULL, this );
+	m_activeMeshOnlyCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DatablockListBase::OnCheckbox ), NULL, this );
 	m_searchCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DatablockListBase::OnSearchText ), NULL, this );
 }
 

@@ -23,20 +23,40 @@ ProjectSettings::ProjectSettings( wxWindow *parent ) : ProjectSettingsBase( pare
 //-----------------------------------------------------------------------------
 void ProjectSettings::OnResourcesAdd( wxCommandEvent &event )
 {
-    // TODO: Implement OnResourcesAdd
     event.Skip();
     if( m_editing )
         return;
     EditingScope scope( m_editing );
+
+    wxFileDialog openFileDialog( this, wxT( "Add resources.cfg" ), m_lastOpenDir, wxT( "" ),
+                                 wxT( "*.cfg" ), wxFD_OPEN | wxFD_FILE_MUST_EXIST, wxDefaultPosition );
+
+    if( openFileDialog.ShowModal() == wxID_OK )
+    {
+        const wxString fullpath = openFileDialog.GetPath();
+        m_lastOpenDir = fullpath.SubString( 0u, fullpath.find_last_of( "/" ) );
+        m_resourcesListBox->Append( fullpath );
+
+        if( m_relativeFolderTextCtrl->IsEmpty() )
+            m_relativeFolderTextCtrl->SetValue( m_lastOpenDir );
+    }
 }
 //-----------------------------------------------------------------------------
 void ProjectSettings::OnResourcesFolderAdd( wxCommandEvent &event )
 {
-    // TODO: Implement OnResourcesFolderAdd
     event.Skip();
     if( m_editing )
         return;
     EditingScope scope( m_editing );
+
+    wxDirDialog dirPicker( this, wxT( "Add folder" ), m_lastOpenDir );
+
+    if( dirPicker.ShowModal() == wxID_OK )
+    {
+        const wxString fullpath = dirPicker.GetPath();
+        m_lastOpenDir = fullpath.SubString( 0u, fullpath.find_last_of( "/" ) );
+        m_resourcesListBox->Append( fullpath );
+    }
 }
 //-----------------------------------------------------------------------------
 void ProjectSettings::OnResourcesRemove( wxCommandEvent &event )
@@ -121,11 +141,11 @@ void ProjectSettings::OnBrowse( wxCommandEvent &event )
 //-----------------------------------------------------------------------------
 void ProjectSettings::OnButtonClick( wxCommandEvent &event )
 {
-    // TODO: Implement OnButtonClick
     event.Skip();
+    syncSettingsFromUI();
 }
 //-----------------------------------------------------------------------------
-void ProjectSettings::validateSettings()
+bool ProjectSettings::validateSettings()
 {
     bool bValidSettings = true;
 
@@ -146,6 +166,25 @@ void ProjectSettings::validateSettings()
         m_materialFileLocationTextCtrl->SetBackgroundColour( wxNullColour );
 
     m_okButton->Enable( bValidSettings );
+    return bValidSettings;
+}
+//-----------------------------------------------------------------------------
+void ProjectSettings::syncSettingsFromUI()
+{
+    if( !validateSettings() )
+        return;
+
+    m_resources.clear();
+    const unsigned int numItems = m_resourcesListBox->GetCount();
+    m_resources.reserve( (size_t)numItems );
+    for( unsigned int i = 0u; i < numItems; ++i )
+        m_resources.push_back( m_resourcesListBox->GetString( i ) );
+
+    m_relativeFolder = m_relativeFolderTextCtrl->GetValue();
+    m_materialDstPath = m_materialFileLocationTextCtrl->GetValue();
+    if( m_materialDstPath.EndsWith( ".material.json" ) )
+        m_materialDstPath.resize( m_materialDstPath.size() - ( sizeof( ".material.json" ) - 1u ) );
+    m_projectPath = m_projectFileLocationTextCtrl->GetValue();
 }
 //-----------------------------------------------------------------------------
 void ProjectSettings::loadProject( Ogre::HlmsManager *hlmsManager )
@@ -181,6 +220,7 @@ void ProjectSettings::loadProject( Ogre::HlmsManager *hlmsManager )
 
                         Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
                             relativeFolder + archName, typeName, secName );
+                        m_resourceLocations.push_back( { relativeFolder + archName, secName } );
                     }
                 }
             }
@@ -190,29 +230,72 @@ void ProjectSettings::loadProject( Ogre::HlmsManager *hlmsManager )
             Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
                 resource.utf8_string(), "FileSystem",
                 Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+            m_resourceLocations.push_back(
+                { resource.utf8_string(), Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME } );
         }
     }
 
-    const Ogre::String materialFileLocation = m_materialDstPath.utf8_string();
-    std::ifstream matFile;
-    matFile.open( materialFileLocation, std::ios::in | std::ios::binary );
-
-    if( matFile.is_open() )
+    const char *suffix[] = { "_pbs.material.json", "_unlit.material.json" };
+    for( size_t i = 0u; i < 2u; ++i )
     {
-        std::vector<char> jsonString;
-        matFile.seekg( 0, std::ios_base::end );
-        const size_t fileSize = (size_t)matFile.tellg();
-        matFile.seekg( 0, std::ios_base::beg );
-        jsonString.resize( fileSize + 1u );
-        matFile.read( jsonString.data(), (std::streamsize)fileSize );
-        if( jsonString[fileSize] != '\0' )
-            jsonString[fileSize] = '\0';  // Make sure it's null-terminated.
+        const Ogre::String materialFileLocation = m_materialDstPath.utf8_string() + suffix[i];
+        std::ifstream matFile;
+        matFile.open( materialFileLocation, std::ios::binary | std::ios::in );
 
-        Ogre::HlmsJson hlmsJson( hlmsManager, nullptr );
-        hlmsJson.loadMaterials( materialFileLocation,
-                                Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                                jsonString.data(), "" );
+        if( matFile.is_open() )
+        {
+            std::vector<char> jsonString;
+            matFile.seekg( 0, std::ios_base::end );
+            const size_t fileSize = (size_t)matFile.tellg();
+            matFile.seekg( 0, std::ios_base::beg );
+            jsonString.resize( fileSize + 1u );
+            matFile.read( jsonString.data(), (std::streamsize)fileSize );
+            if( jsonString[fileSize] != '\0' )
+                jsonString[fileSize] = '\0';  // Make sure it's null-terminated.
+
+            Ogre::HlmsJson hlmsJson( hlmsManager, nullptr );
+            hlmsJson.loadMaterials( materialFileLocation,
+                                    Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                                    jsonString.data(), "" );
+        }
     }
+}
+//-----------------------------------------------------------------------------
+void ProjectSettings::saveProject( Ogre::HlmsManager *hlmsManager )
+{
+    Ogre::String jsonString;
+
+    jsonString += "{";
+    jsonString += "\n	\"relative_folder\" : \"" + m_relativeFolder;
+    jsonString += "\",\n	\"material_dst_path\" : \"" + m_materialDstPath;
+    jsonString +=
+        "\",\n	\"resources\" :"
+        "\n	[";
+    for( const wxString &resource : m_resources )
+    {
+        jsonString += "\n		\"" + resource.utf8_string();
+        jsonString += "\",";
+    }
+    if( !m_resources.empty() )
+        jsonString.pop_back();  // Remove last trailing comma.
+    jsonString += "\n	]\n}";
+
+    std::ofstream projFile;
+    projFile.open( m_projectPath.utf8_string(), std::ios::binary | std::ios::out );
+
+    if( !projFile.is_open() )
+    {
+        wxMessageBox( wxString::Format( wxT( "Failed to save to '%s'." ), m_projectPath ),
+                      wxT( "Error Saving File" ), wxOK | wxICON_ERROR | wxCENTRE );
+        return;
+    }
+
+    projFile.write( jsonString.data(), std::streamsize( jsonString.size() ) );
+
+    hlmsManager->saveMaterials(  //
+        Ogre::HLMS_PBS, m_materialDstPath.utf8_string() + "_pbs.material.json", nullptr, "", true );
+    hlmsManager->saveMaterials(
+        Ogre::HLMS_UNLIT, m_materialDstPath.utf8_string() + "_unlit.material.json", nullptr, "", true );
 }
 //-----------------------------------------------------------------------------
 int ProjectSettings::ShowModal()
@@ -228,10 +311,12 @@ int ProjectSettings::ShowModal()
 //-----------------------------------------------------------------------------
 void ProjectSettings::newProject( Ogre::HlmsManager *hlmsManager )
 {
+    Ogre::v1::MeshManager::getSingleton().removeAll();
+    Ogre::MeshManager::getSingleton().removeAll();
+
     Ogre::ResourceGroupManager &resourceGroupManager = Ogre::ResourceGroupManager::getSingleton();
-    const Ogre::StringVector resourceGroups = resourceGroupManager.getResourceGroups();
-    for( const Ogre::String &resourceGroup : resourceGroups )
-        resourceGroupManager.destroyResourceGroup( resourceGroup );
+    for( const ResourceLocation &location : m_resourceLocations )
+        resourceGroupManager.removeResourceLocation( location.name, location.group );
 
     for( size_t i = 0u; i < Ogre::HlmsTypes::HLMS_MAX; ++i )
     {
@@ -248,8 +333,7 @@ void ProjectSettings::newProject( Ogre::HlmsManager *hlmsManager )
         }
     }
 
-    Ogre::v1::MeshManager::getSingleton().removeAll();
-    Ogre::MeshManager::getSingleton().removeAll();
+    loadProject( hlmsManager );
 }
 //-----------------------------------------------------------------------------
 void ProjectSettings::openProject( wxString projectPath, Ogre::HlmsManager *hlmsManager )
@@ -259,12 +343,12 @@ void ProjectSettings::openProject( wxString projectPath, Ogre::HlmsManager *hlms
     m_lastOpenDir = projectPath.SubString( 0u, projectPath.find_last_of( "/" ) );
 
     std::ifstream projFile;
-    projFile.open( projectPath.utf8_string(), std::ios::in | std::ios::binary );
+    projFile.open( projectPath.utf8_string(), std::ios::binary | std::ios::in );
 
     if( !projFile.is_open() )
     {
         wxMessageBox( wxString::Format( wxT( "Failed to open '%s'." ), projectPath ),
-                      wxT( "Error Loading File" ) );
+                      wxT( "Error Loading File" ), wxOK | wxICON_ERROR | wxCENTRE );
         return;
     }
 
@@ -285,7 +369,7 @@ void ProjectSettings::openProject( wxString projectPath, Ogre::HlmsManager *hlms
         wxMessageBox( wxString::Format( wxT( "Error parsing '%s'.\nError: %s at line %i" ), projectPath,
                                         rapidjson::GetParseError_En( d.GetParseError() ),
                                         std::to_string( d.GetErrorOffset() ) ),
-                      wxT( "JSON Parse Error" ) );
+                      wxT( "JSON Parse Error" ), wxOK | wxICON_ERROR | wxCENTRE );
         return;
     }
 
@@ -325,17 +409,77 @@ void ProjectSettings::openProject( wxString projectPath, Ogre::HlmsManager *hlms
     if( itor != d.MemberEnd() && itor->value.IsString() )
         m_materialDstPath = itor->value.GetString();
 
-    loadProject( hlmsManager );
+    newProject( hlmsManager );
 }
 //-----------------------------------------------------------------------------
-void ProjectSettings::openProject( Ogre::HlmsManager *hlmsManager )
+wxString ProjectSettings::openProjectModal()
 {
-    validateSettings();
-
     wxFileDialog openFileDialog( this, wxT( "Open Project" ), m_lastOpenDir, wxT( "" ),
                                  wxT( "*.matproj.json" ), wxFD_OPEN | wxFD_FILE_MUST_EXIST,
                                  wxDefaultPosition );
 
     if( openFileDialog.ShowModal() == wxID_OK )
-        openProject( openFileDialog.GetPath(), hlmsManager );
+        return openFileDialog.GetPath();
+    return "";
+}
+//-----------------------------------------------------------------------------
+void ProjectSettings::loadInternalSettings( const std::string &rwFolder )
+{
+    const std::string fullpath = rwFolder + "ProjectSettings.json";
+    std::ifstream file;
+    file.open( fullpath, std::ios::binary | std::ios::in );
+
+    if( !file.is_open() )
+    {
+        fprintf( stderr, "Could not load settings from '%s'", fullpath.c_str() );
+        return;
+    }
+
+    std::vector<char> jsonString;
+    file.seekg( 0, std::ios_base::end );
+    const size_t fileSize = (size_t)file.tellg();
+    file.seekg( 0, std::ios_base::beg );
+    jsonString.resize( fileSize + 1u );
+    file.read( jsonString.data(), (std::streamsize)fileSize );
+    if( jsonString[fileSize] != '\0' )
+        jsonString[fileSize] = '\0';  // Make sure it's null-terminated.
+
+    rapidjson::Document d;
+    d.Parse( jsonString.data() );
+
+    if( d.HasParseError() )
+    {
+        wxMessageBox( wxString::Format( wxT( "Error parsing '%s'.\nError: %s at line %i" ), fullpath,
+                                        rapidjson::GetParseError_En( d.GetParseError() ),
+                                        std::to_string( d.GetErrorOffset() ) ),
+                      wxT( "JSON Parse Error" ), wxOK | wxICON_ERROR | wxCENTRE );
+        return;
+    }
+
+    rapidjson::Value::ConstMemberIterator itor;
+    itor = d.FindMember( "last_open_dir" );
+    if( itor != d.MemberEnd() && itor->value.IsString() )
+        m_lastOpenDir = wxString::FromUTF8( itor->value.GetString() );
+}
+//-----------------------------------------------------------------------------
+void ProjectSettings::saveInternalSettings( const std::string &rwFolder )
+{
+    Ogre::String jsonString;
+
+    jsonString += "{";
+    jsonString += "\n	\"last_open_dir\" : \"" + m_lastOpenDir;
+    jsonString += "\"\n}";
+
+    std::ofstream file;
+    file.open( rwFolder + "ProjectSettings.json", std::ios::binary | std::ios::out );
+
+    if( !file.is_open() )
+    {
+        wxMessageBox( wxString::Format( wxT( "Could not write internal settings to '%s'" ),
+                                        ( rwFolder + "ProjectSettings.json" ) ),
+                      wxT( "Internal Error" ), wxOK | wxICON_ERROR | wxCENTRE );
+        return;
+    }
+
+    file.write( jsonString.data(), std::streamsize( jsonString.size() ) );
 }

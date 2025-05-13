@@ -13,6 +13,7 @@
 #include <wx/wx.h>
 
 #include "Compositor/OgreCompositorManager2.h"
+#include "Compositor/Pass/OgreCompositorPassProvider.h"
 #include "OgreAbiUtils.h"
 #include "OgreHlms.h"
 #include "OgreHlmsCompute.h"
@@ -22,11 +23,33 @@
 #include "OgreItem.h"
 #include "OgreMesh2.h"
 #include "OgrePlatformInformation.h"
+
 #include "OgreRoot.h"
 #include "OgreSubMesh2.h"
 #include "OgreWindow.h"
 
 #include <fstream>
+
+namespace Ogre
+{
+    // Dummy class to prevent crashes when loading Compositor scripts.
+    class DummyCompositorPassProvider final : public CompositorPassProvider
+    {
+        CompositorPassDef *addPassDef( CompositorPassType passType, IdString customId,
+                                       CompositorTargetDef *parentTargetDef,
+                                       CompositorNodeDef *parentNodeDef )
+        {
+            return new CompositorPassDef( passType, parentTargetDef );
+        }
+
+        CompositorPass *addPass( const CompositorPassDef *definition, Camera *defaultCamera,
+                                 CompositorNode *parentNode, const RenderTargetViewDef *rtvDef,
+                                 SceneManager *sceneManager )
+        {
+            return nullptr;
+        }
+    };
+}  // namespace Ogre
 
 MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     MainWindowBase( parent ),
@@ -128,6 +151,7 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     m_datablockList = new DatablockList( this );
     m_meshList = new MeshList( this );
     m_projectSettings = new ProjectSettings( this );
+    m_projectSettings->loadInternalSettings( m_writeAccessFolder );
 
     m_mainNotebook->AddPage( m_pbsParametersPanel, wxT( "PBS Settings" ) );
     m_mainNotebook->AddPage( m_pbsTexturePanel, wxT( "PBS Textures" ) );
@@ -158,14 +182,15 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
 
     loadSettings();
 
-    Ogre::HlmsManager *hlmsManager = m_root->getHlmsManager();
-    setActiveDatablock( hlmsManager->getHlms( Ogre::HLMS_PBS )
-                            ->createDatablock( "Test", "Test", Ogre::HlmsMacroblock(),
-                                               Ogre::HlmsBlendblock(), Ogre::HlmsParamVec() ) );
+    // Ogre::HlmsManager *hlmsManager = m_root->getHlmsManager();
+    // setActiveDatablock( hlmsManager->getHlms( Ogre::HLMS_PBS )
+    //                         ->createDatablock( "Test", "Test", Ogre::HlmsMacroblock(),
+    //                                            Ogre::HlmsBlendblock(), Ogre::HlmsParamVec() ) );
 }
 //-----------------------------------------------------------------------------
 MainWindow::~MainWindow()
 {
+    m_projectSettings->saveInternalSettings( m_writeAccessFolder );
     saveHlmsDiskCache();
 
     if( m_wxOgreRenderWindow )
@@ -176,6 +201,10 @@ MainWindow::~MainWindow()
 
     if( m_root )
     {
+        Ogre::CompositorManager2 *compositorManager = m_root->getCompositorManager2();
+        delete compositorManager->getCompositorPassProvider();
+        compositorManager->setCompositorPassProvider( nullptr );
+
         delete m_root;
         m_root = 0;
     }
@@ -282,6 +311,7 @@ void MainWindow::createSystems()
     loadResources();
 
     Ogre::CompositorManager2 *compositorManager = m_root->getCompositorManager2();
+    compositorManager->setCompositorPassProvider( new Ogre::DummyCompositorPassProvider() );
 
     const Ogre::String workspaceName( "MaterialEditor Workspace" );
     if( !compositorManager->hasWorkspaceDefinition( workspaceName ) )
@@ -311,7 +341,7 @@ void MainWindow::addResourceLocation( const Ogre::String &archName, const Ogre::
 //-----------------------------------------------------------------------------
 void MainWindow::loadResources()
 {
-#if 1
+#if 0
     // Load resource paths from config file
     Ogre::ConfigFile cf;
     cf.load( "./resources2.cfg" );
@@ -589,14 +619,26 @@ void MainWindow::OnMenuSelection( wxCommandEvent &event )
         {
             unloadForNewProject();
             m_projectSettings->newProject( m_root->getHlmsManager() );
+            Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups( true );
             m_datablockList->populateFromDatabase();
             m_meshList->populateFromDatabase();
         }
         break;
     case wxID_OPEN:
-        m_projectSettings->openProject( m_root->getHlmsManager() );
+    {
+        const wxString projPath = m_projectSettings->openProjectModal();
+        if( !projPath.empty() )
+        {
+            unloadForNewProject();
+            m_projectSettings->openProject( projPath, m_root->getHlmsManager() );
+            Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups( true );
+            m_datablockList->populateFromDatabase();
+            m_meshList->populateFromDatabase();
+        }
         break;
+    }
     case wxID_SAVE:
+        m_projectSettings->saveProject( m_root->getHlmsManager() );
         break;
     case wxID_PREFERENCES:
         m_projectSettings->ShowModal();
@@ -717,6 +759,7 @@ void MainWindow::setActiveMesh( const Ogre::String &meshName, const Ogre::String
     m_camera->lookAt( aabb.mCenter );
 
     m_pbsParametersPanel->refreshSubMeshList();
+    m_datablockList->populateFromDatabase( true );
 }
 //-----------------------------------------------------------------------------
 Ogre::MovableObject *MainWindow::getActiveObject()
