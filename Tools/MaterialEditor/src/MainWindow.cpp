@@ -37,19 +37,25 @@ namespace Ogre
     {
         CompositorPassDef *addPassDef( CompositorPassType passType, IdString customId,
                                        CompositorTargetDef *parentTargetDef,
-                                       CompositorNodeDef *parentNodeDef )
+                                       CompositorNodeDef *parentNodeDef ) override
         {
             return new CompositorPassDef( passType, parentTargetDef );
         }
 
         CompositorPass *addPass( const CompositorPassDef *definition, Camera *defaultCamera,
                                  CompositorNode *parentNode, const RenderTargetViewDef *rtvDef,
-                                 SceneManager *sceneManager )
+                                 SceneManager *sceneManager ) override
         {
             return nullptr;
         }
     };
 }  // namespace Ogre
+
+static const Ogre::Quaternion kCoordConventions[CoordinateConvention::NumCoordinateConventions] = {
+    Ogre::Quaternion( Ogre::Degree( -90.0f ), Ogre::Vector3::UNIT_Z ),  //
+    Ogre::Quaternion::IDENTITY,                                         //
+    Ogre::Quaternion( Ogre::Degree( 90.0f ), Ogre::Vector3::UNIT_X )
+};
 
 MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     MainWindowBase( parent ),
@@ -71,6 +77,10 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     m_activeItem( 0 ),
     m_activeEntity( 0 ),
     m_objSceneNode( 0 ),
+    m_mouseX( 0 ),
+    m_mouseY( 0 ),
+    m_wasLeftPressed( false ),
+    m_wasRightPressed( false ),
     m_useMicrocodeCache( true ),
     m_useHlmsDiskCache( true )
 {
@@ -182,6 +192,8 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
 
     loadSettings();
 
+    setCoordinateConvention( CoordinateConvention::yUp );
+
     // Ogre::HlmsManager *hlmsManager = m_root->getHlmsManager();
     // setActiveDatablock( hlmsManager->getHlms( Ogre::HLMS_PBS )
     //                         ->createDatablock( "Test", "Test", Ogre::HlmsMacroblock(),
@@ -289,8 +301,10 @@ void MainWindow::createSystems()
     m_camera->setAutoAspectRatio( true );
 
     m_cameraNode = m_sceneManager->getRootSceneNode()->createChildSceneNode();
+    m_cameraNode = m_cameraNode->createChildSceneNode();
     m_camera->detachFromParent();
     m_cameraNode->attachObject( m_camera );
+    m_cameraNode->pitch( Ogre::Degree( -45.0f ) );
 
     m_objSceneNode = m_sceneManager->getRootSceneNode()->createChildSceneNode();
 
@@ -595,9 +609,142 @@ bool MainWindow::frameStarted( const Ogre::FrameEvent &evt )
     return true;
 }
 //-----------------------------------------------------------------------------
+void MainWindow::setCoordinateConvention( CoordinateConvention::CoordinateConvention newConvention )
+{
+    m_coordinateConvention = newConvention;
+    m_cameraNode->getParent()->setOrientation( kCoordConventions[m_coordinateConvention] );
+
+    m_menuView->Check( wxID_MENUCOORDINATE_X_UP, m_coordinateConvention == CoordinateConvention::xUp );
+    m_menuView->Check( wxID_MENUCOORDINATE_Y_UP, m_coordinateConvention == CoordinateConvention::yUp );
+    m_menuView->Check( wxID_MENUCOORDINATE_Z_UP, m_coordinateConvention == CoordinateConvention::zUp );
+}
+//-----------------------------------------------------------------------------
+void MainWindow::originCenterYCamera()
+{
+    const Ogre::MovableObject *object = getActiveObject();
+    if( object )
+    {
+        Ogre::Vector3 vCenter = Ogre::Vector3( 0.0f, object->getLocalAabb().mCenter.y, 0.0f );
+        m_camera->setPosition( Ogre::Vector3::UNIT_Z * object->getLocalRadius() * 1.8f );
+        m_cameraNode->setOrientation( Ogre::Quaternion::IDENTITY );
+        m_cameraNode->pitch( Ogre::Degree( -45.0f ) );
+        m_cameraNode->getParent()->setPosition( vCenter );
+        m_cameraNode->setPosition( Ogre::Vector3::ZERO );
+    }
+    else
+        originCamera();
+}
+//-----------------------------------------------------------------------------
+void MainWindow::originCamera()
+{
+    float factor = 10.0f;
+    const Ogre::MovableObject *object = getActiveObject();
+    if( object )
+        factor = object->getLocalRadius() * 1.8f;
+
+    m_camera->setPosition( Ogre::Vector3::UNIT_Z * factor );
+    m_cameraNode->setOrientation( Ogre::Quaternion::IDENTITY );
+    m_cameraNode->pitch( Ogre::Degree( -45.0f ) );
+    m_cameraNode->getParent()->setPosition( Ogre::Vector3::ZERO );
+    m_cameraNode->setPosition( Ogre::Vector3::ZERO );
+}
+//-----------------------------------------------------------------------------
+void MainWindow::centerMeshCamera()
+{
+    const Ogre::MovableObject *object = getActiveObject();
+    if( object )
+    {
+        const Ogre::Vector3 vCenter = object->getLocalAabb().mCenter;
+        m_camera->setPosition( Ogre::Vector3::UNIT_Z * object->getLocalRadius() * 1.8f );
+        m_cameraNode->setOrientation( Ogre::Quaternion::IDENTITY );
+        m_cameraNode->pitch( Ogre::Degree( -45.0f ) );
+        m_cameraNode->getParent()->setPosition( vCenter );
+        m_cameraNode->setPosition( Ogre::Vector3::ZERO );
+    }
+}
+//-----------------------------------------------------------------------------
+void MainWindow::rotateCamera( const int32_t x, const int32_t y )
+{
+    m_cameraNode->yaw( Ogre::Degree( Ogre::Real( -x ) * 0.4f ), Ogre::Node::TS_PARENT );
+    m_cameraNode->pitch( Ogre::Degree( Ogre::Real( -y ) * 0.4f ) );
+}
+//-----------------------------------------------------------------------------
+void MainWindow::zoomInCamera( Ogre::Real wheelDelta )
+{
+    float factor = 1.0f;
+    const Ogre::MovableObject *object = getActiveObject();
+    if( object )
+        factor = object->getLocalRadius() * 0.5f;
+
+    m_camera->move( Ogre::Vector3::UNIT_Z * wheelDelta * factor );
+
+    // Clamp max zoom in, to keep going use slideCamera
+    if( m_camera->getPosition().z < 0.0f )
+        m_camera->setPosition( Ogre::Vector3::ZERO );
+}
+//-----------------------------------------------------------------------------
+void MainWindow::moveCamera( int x, int y )
+{
+    const Ogre::MovableObject *object = getActiveObject();
+    if( object )
+    {
+        Ogre::Vector3 vTrans( Ogre::Real( -x ), Ogre::Real( y ), 0 );
+        vTrans *= object->getLocalRadius() * 0.005f;
+        m_cameraNode->translate( vTrans, Ogre::Node::TS_LOCAL );
+    }
+}
+//-----------------------------------------------------------------------------
+void MainWindow::slideCamera( int x, int z )
+{
+    const Ogre::MovableObject *object = getActiveObject();
+    if( object )
+    {
+        Ogre::Vector3 vTrans( Ogre::Real( -x ), 0, Ogre::Real( -z ) );
+        vTrans *= object->getLocalRadius() * 0.005f;
+        m_cameraNode->translate( vTrans, Ogre::Node::TS_LOCAL );
+    }
+}
+//-----------------------------------------------------------------------------
 void MainWindow::OnMouseEvents( wxMouseEvent &evt )
 {
     evt.Skip();
+
+    const int32_t oldX = m_mouseX;
+    const int32_t oldY = m_mouseY;
+
+    if( evt.LeftIsDown() )
+    {
+        evt.GetPosition( &m_mouseX, &m_mouseY );
+
+        if( m_wasLeftPressed )
+        {
+            if( !evt.ShiftDown() )
+                rotateCamera( m_mouseX - oldX, m_mouseY - oldY );
+            else
+                moveCamera( m_mouseX - oldX, m_mouseY - oldY );
+        }
+    }
+    else if( evt.RightIsDown() )
+    {
+        evt.GetPosition( &m_mouseX, &m_mouseY );
+
+        if( m_wasRightPressed )
+        {
+            if( !evt.ShiftDown() )
+                zoomInCamera( Ogre::Real( m_mouseY - oldY ) * 0.05f );
+            else
+                slideCamera( m_mouseX - oldX, m_mouseY - oldY );
+        }
+    }
+
+    // TODO: Wheel event seems being missed...
+    if( evt.GetWheelRotation() )
+        zoomInCamera( -Ogre::Real( evt.GetWheelRotation() ) / Ogre::Real( evt.GetWheelDelta() ) );
+
+    m_wasLeftPressed = evt.LeftIsDown();
+    m_wasRightPressed = evt.RightIsDown();
+
+    m_wxOgreRenderWindow->Update();
 }
 //-----------------------------------------------------------------------------
 void MainWindow::OnKeyDown( wxKeyEvent &evt )
@@ -642,6 +789,30 @@ void MainWindow::OnMenuSelection( wxCommandEvent &event )
         break;
     case wxID_PREFERENCES:
         m_projectSettings->ShowModal();
+        break;
+
+        // Submenu Camera
+    case wxID_MENUCAMERAORIGIN:
+        originCamera();
+        break;
+    case wxID_MENUCAMCENTERMESH:
+        centerMeshCamera();
+        break;
+    case wxID_MENUCAMERAORIGINCENTERY:
+        originCenterYCamera();
+        break;
+        // Submenu Coordinate Convention
+    case wxID_MENUCOORDINATE_X_UP:
+        setCoordinateConvention( CoordinateConvention::xUp );
+        centerMeshCamera();
+        break;
+    case wxID_MENUCOORDINATE_Y_UP:
+        setCoordinateConvention( CoordinateConvention::yUp );
+        centerMeshCamera();
+        break;
+    case wxID_MENUCOORDINATE_Z_UP:
+        setCoordinateConvention( CoordinateConvention::zUp );
+        centerMeshCamera();
         break;
     }
     event.Skip();
@@ -729,16 +900,6 @@ bool MainWindow::loadMeshAsV1Entity( const Ogre::String &meshName, const Ogre::S
 //-----------------------------------------------------------------------------
 void MainWindow::setActiveMesh( const Ogre::String &meshName, const Ogre::String &resourceGroup )
 {
-    Ogre::Vector3 objToCam = Ogre::Vector3( 0.0f, 1.0f, 1.0f ).normalisedCopy() * 2.0f;
-    {
-        Ogre::MovableObject *object = MainWindow::getActiveObject();
-        if( object )
-        {
-            const Ogre::Aabb aabb = object->getLocalAabb();
-            objToCam = m_camera->getPosition() / aabb.getRadius();
-        }
-    }
-
     if( !loadMeshAsItem( meshName, resourceGroup ) )
     {
         if( !loadMeshAsV1Entity( meshName, resourceGroup ) )
@@ -750,16 +911,10 @@ void MainWindow::setActiveMesh( const Ogre::String &meshName, const Ogre::String
         }
     }
 
-    Ogre::MovableObject *object = MainWindow::getActiveObject();
-    const Ogre::Aabb aabb = object->getLocalAabb();
-
-    m_cameraNode->setPosition( aabb.mCenter );
-    m_camera->setPosition( objToCam * aabb.getRadius() );
-
-    m_camera->lookAt( aabb.mCenter );
-
     m_pbsParametersPanel->refreshSubMeshList();
     m_datablockList->populateFromDatabase( true );
+
+    centerMeshCamera();
 }
 //-----------------------------------------------------------------------------
 Ogre::MovableObject *MainWindow::getActiveObject()
@@ -768,7 +923,6 @@ Ogre::MovableObject *MainWindow::getActiveObject()
         return m_activeItem;
     return m_activeEntity;
 }
-
 //-----------------------------------------------------------------------------
 const Ogre::String &MainWindow::getOriginalMaterialNameForActiveObject( const size_t submeshIdx ) const
 {

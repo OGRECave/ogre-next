@@ -13,28 +13,66 @@ MainWindowBase::MainWindowBase( wxWindow* parent, wxWindowID id, const wxString&
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
+	wxMenuBar* m_menubar;
 	m_menubar = new wxMenuBar( 0 );
-	wxMenu* m_fileMenu;
-	m_fileMenu = new wxMenu();
+	wxMenu* m_menuFile;
+	m_menuFile = new wxMenu();
 	wxMenuItem* m_menuItem6;
-	m_menuItem6 = new wxMenuItem( m_fileMenu, wxID_NEW, wxString( _("&New Project") ) + wxT('\t') + wxT("Ctrl+N"), wxEmptyString, wxITEM_NORMAL );
-	m_fileMenu->Append( m_menuItem6 );
+	m_menuItem6 = new wxMenuItem( m_menuFile, wxID_NEW, wxString( _("&New Project") ) + wxT('\t') + wxT("Ctrl+N"), wxEmptyString, wxITEM_NORMAL );
+	m_menuFile->Append( m_menuItem6 );
 
 	wxMenuItem* m_menuItem3;
-	m_menuItem3 = new wxMenuItem( m_fileMenu, wxID_OPEN, wxString( _("&Open") ) + wxT('\t') + wxT("Ctrl+O"), wxEmptyString, wxITEM_NORMAL );
-	m_fileMenu->Append( m_menuItem3 );
+	m_menuItem3 = new wxMenuItem( m_menuFile, wxID_OPEN, wxString( _("&Open") ) + wxT('\t') + wxT("Ctrl+O"), wxEmptyString, wxITEM_NORMAL );
+	m_menuFile->Append( m_menuItem3 );
 
 	wxMenuItem* m_menuItem2;
-	m_menuItem2 = new wxMenuItem( m_fileMenu, wxID_SAVE, wxString( _("&Save") ) + wxT('\t') + wxT("Ctrl+S"), wxEmptyString, wxITEM_NORMAL );
-	m_fileMenu->Append( m_menuItem2 );
+	m_menuItem2 = new wxMenuItem( m_menuFile, wxID_SAVE, wxString( _("&Save") ) + wxT('\t') + wxT("Ctrl+S"), wxEmptyString, wxITEM_NORMAL );
+	m_menuFile->Append( m_menuItem2 );
 
-	m_fileMenu->AppendSeparator();
+	m_menuFile->AppendSeparator();
 
 	wxMenuItem* m_menuItem5;
-	m_menuItem5 = new wxMenuItem( m_fileMenu, wxID_PREFERENCES, wxString( _("&Project Settings") ) + wxT('\t') + wxT("Ctrl+,"), wxEmptyString, wxITEM_NORMAL );
-	m_fileMenu->Append( m_menuItem5 );
+	m_menuItem5 = new wxMenuItem( m_menuFile, wxID_PREFERENCES, wxString( _("&Project Settings") ) + wxT('\t') + wxT("Ctrl+,"), wxEmptyString, wxITEM_NORMAL );
+	m_menuFile->Append( m_menuItem5 );
 
-	m_menubar->Append( m_fileMenu, _("File") );
+	m_menubar->Append( m_menuFile, _("&File") );
+
+	m_menuView = new wxMenu();
+	wxMenu* m_menu1;
+	m_menu1 = new wxMenu();
+	wxMenuItem* m_menu1Item = new wxMenuItem( m_menuView, wxID_ANY, _("&Camera"), wxEmptyString, wxITEM_NORMAL, m_menu1 );
+	wxMenuItem* m_menuCamCenterMesh;
+	m_menuCamCenterMesh = new wxMenuItem( m_menu1, wxID_MENUCAMCENTERMESH, wxString( _("Center Mesh") ) + wxT('\t') + wxT("Alt+0"), _("Makes the camera point to the center of the mesh"), wxITEM_CHECK );
+	m_menu1->Append( m_menuCamCenterMesh );
+
+	wxMenuItem* m_menuCamOrigin;
+	m_menuCamOrigin = new wxMenuItem( m_menu1, wxID_MENUCAMERAORIGIN, wxString( _("Center Origin") ) + wxT('\t') + wxT("Alt+1"), _("Makes the camera look to the origin (0, 0, 0)"), wxITEM_NORMAL );
+	m_menu1->Append( m_menuCamOrigin );
+
+	wxMenuItem* m_menuDefaultCamPos;
+	m_menuDefaultCamPos = new wxMenuItem( m_menu1, wxID_MENUCAMERAORIGINCENTERY, wxString( _("Origin - Center Y") ) + wxT('\t') + wxT("Alt+3"), _("Puts the camera back to it's default position (0, centerY, 0)"), wxITEM_NORMAL );
+	m_menu1->Append( m_menuDefaultCamPos );
+
+	m_menuView->Append( m_menu1Item );
+
+	wxMenu* m_menu11;
+	m_menu11 = new wxMenu();
+	wxMenuItem* m_menu11Item = new wxMenuItem( m_menuView, wxID_ANY, _("C&oordinate Convention"), wxEmptyString, wxITEM_NORMAL, m_menu11 );
+	wxMenuItem* m_menuCoordXup;
+	m_menuCoordXup = new wxMenuItem( m_menu11, wxID_MENUCOORDINATE_X_UP, wxString( _("X Up") ) , _("X axis is \"up\". Note width, height & depth still reported as \"Y up\" convention"), wxITEM_RADIO );
+	m_menu11->Append( m_menuCoordXup );
+
+	wxMenuItem* m_menuCoordYup;
+	m_menuCoordYup = new wxMenuItem( m_menu11, wxID_MENUCOORDINATE_Y_UP, wxString( _("Y Up") ) , _("Y axis is \"up\""), wxITEM_RADIO );
+	m_menu11->Append( m_menuCoordYup );
+
+	wxMenuItem* m_menuCoordZup;
+	m_menuCoordZup = new wxMenuItem( m_menu11, wxID_MENUCOORDINATE_Z_UP, wxString( _("Z Up") ) , _("Z axis is \"up\". Note width, height & depth still reported as \"Y up\" convention"), wxITEM_RADIO );
+	m_menu11->Append( m_menuCoordZup );
+
+	m_menuView->Append( m_menu11Item );
+
+	m_menubar->Append( m_menuView, _("&View") );
 
 	this->SetMenuBar( m_menubar );
 
@@ -42,10 +80,16 @@ MainWindowBase::MainWindowBase( wxWindow* parent, wxWindowID id, const wxString&
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuItem6->GetId());
-	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuItem3->GetId());
-	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuItem2->GetId());
-	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuItem5->GetId());
+	m_menuFile->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuItem6->GetId());
+	m_menuFile->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuItem3->GetId());
+	m_menuFile->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuItem2->GetId());
+	m_menuFile->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuItem5->GetId());
+	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuCamCenterMesh->GetId());
+	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuCamOrigin->GetId());
+	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuDefaultCamPos->GetId());
+	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuCoordXup->GetId());
+	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuCoordYup->GetId());
+	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuCoordZup->GetId());
 }
 
 MainWindowBase::~MainWindowBase()

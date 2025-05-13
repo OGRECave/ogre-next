@@ -73,7 +73,7 @@
         <property name="maximum_size"></property>
         <property name="minimum_size"></property>
         <property name="name">m_menubar</property>
-        <property name="permission">protected</property>
+        <property name="permission">none</property>
         <property name="pos"></property>
         <property name="size"></property>
         <property name="style"></property>
@@ -83,8 +83,8 @@
         <property name="window_name"></property>
         <property name="window_style"></property>
         <object class="wxMenu" expanded="false">
-          <property name="label">File</property>
-          <property name="name">m_fileMenu</property>
+          <property name="label">&amp;File</property>
+          <property name="name">m_menuFile</property>
           <property name="permission">none</property>
           <object class="wxMenuItem" expanded="false">
             <property name="bitmap"></property>
@@ -145,6 +145,107 @@
             <property name="shortcut">Ctrl+,</property>
             <property name="unchecked_bitmap"></property>
             <event name="OnMenuSelection">OnMenuSelection</event>
+          </object>
+        </object>
+        <object class="wxMenu" expanded="false">
+          <property name="label">&amp;View</property>
+          <property name="name">m_menuView</property>
+          <property name="permission">protected</property>
+          <object class="submenu" expanded="false">
+            <property name="bitmap"></property>
+            <property name="label">&amp;Camera</property>
+            <property name="name">m_menu1</property>
+            <property name="permission">none</property>
+            <object class="wxMenuItem" expanded="false">
+              <property name="bitmap"></property>
+              <property name="checked">0</property>
+              <property name="enabled">1</property>
+              <property name="help">Makes the camera point to the center of the mesh</property>
+              <property name="id">wxID_MENUCAMCENTERMESH</property>
+              <property name="kind">wxITEM_CHECK</property>
+              <property name="label">Center Mesh</property>
+              <property name="name">m_menuCamCenterMesh</property>
+              <property name="permission">none</property>
+              <property name="shortcut">Alt+0</property>
+              <property name="unchecked_bitmap"></property>
+              <event name="OnMenuSelection">OnMenuSelection</event>
+            </object>
+            <object class="wxMenuItem" expanded="false">
+              <property name="bitmap"></property>
+              <property name="checked">0</property>
+              <property name="enabled">1</property>
+              <property name="help">Makes the camera look to the origin (0, 0, 0)</property>
+              <property name="id">wxID_MENUCAMERAORIGIN</property>
+              <property name="kind">wxITEM_NORMAL</property>
+              <property name="label">Center Origin</property>
+              <property name="name">m_menuCamOrigin</property>
+              <property name="permission">none</property>
+              <property name="shortcut">Alt+1</property>
+              <property name="unchecked_bitmap"></property>
+              <event name="OnMenuSelection">OnMenuSelection</event>
+            </object>
+            <object class="wxMenuItem" expanded="false">
+              <property name="bitmap"></property>
+              <property name="checked">0</property>
+              <property name="enabled">1</property>
+              <property name="help">Puts the camera back to it&apos;s default position (0, centerY, 0)</property>
+              <property name="id">wxID_MENUCAMERAORIGINCENTERY</property>
+              <property name="kind">wxITEM_NORMAL</property>
+              <property name="label">Origin - Center Y</property>
+              <property name="name">m_menuDefaultCamPos</property>
+              <property name="permission">none</property>
+              <property name="shortcut">Alt+3</property>
+              <property name="unchecked_bitmap"></property>
+              <event name="OnMenuSelection">OnMenuSelection</event>
+            </object>
+          </object>
+          <object class="submenu" expanded="false">
+            <property name="bitmap"></property>
+            <property name="label">C&amp;oordinate Convention</property>
+            <property name="name">m_menu11</property>
+            <property name="permission">none</property>
+            <object class="wxMenuItem" expanded="false">
+              <property name="bitmap"></property>
+              <property name="checked">0</property>
+              <property name="enabled">1</property>
+              <property name="help">X axis is &quot;up&quot;. Note width, height &amp; depth still reported as &quot;Y up&quot; convention</property>
+              <property name="id">wxID_MENUCOORDINATE_X_UP</property>
+              <property name="kind">wxITEM_RADIO</property>
+              <property name="label">X Up</property>
+              <property name="name">m_menuCoordXup</property>
+              <property name="permission">none</property>
+              <property name="shortcut"></property>
+              <property name="unchecked_bitmap"></property>
+              <event name="OnMenuSelection">OnMenuSelection</event>
+            </object>
+            <object class="wxMenuItem" expanded="false">
+              <property name="bitmap"></property>
+              <property name="checked">0</property>
+              <property name="enabled">1</property>
+              <property name="help">Y axis is &quot;up&quot;</property>
+              <property name="id">wxID_MENUCOORDINATE_Y_UP</property>
+              <property name="kind">wxITEM_RADIO</property>
+              <property name="label">Y Up</property>
+              <property name="name">m_menuCoordYup</property>
+              <property name="permission">none</property>
+              <property name="shortcut"></property>
+              <property name="unchecked_bitmap"></property>
+              <event name="OnMenuSelection">OnMenuSelection</event>
+            </object>
+            <object class="wxMenuItem" expanded="false">
+              <property name="bitmap"></property>
+              <property name="checked">0</property>
+              <property name="enabled">1</property>
+              <property name="help">Z axis is &quot;up&quot;. Note width, height &amp; depth still reported as &quot;Y up&quot; convention</property>
+              <property name="id">wxID_MENUCOORDINATE_Z_UP</property>
+              <property name="kind">wxITEM_RADIO</property>
+              <property name="label">Z Up</property>
+              <property name="name">m_menuCoordZup</property>
+              <property name="permission">none</property>
+              <property name="shortcut"></property>
+              <property name="unchecked_bitmap"></property>
+              <event name="OnMenuSelection">OnMenuSelection</event>
+            </object>
           </object>
         </object>
       </object>
