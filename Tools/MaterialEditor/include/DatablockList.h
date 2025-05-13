@@ -16,8 +16,6 @@ class DatablockList final : public DatablockListBase
     bool m_editing;
 
 protected:
-    void populateFromDatabase();
-
     // Handlers for DatablockListBase events.
     void OnDatablockSelect( wxCommandEvent &event ) override;
     void OnCheckbox( wxCommandEvent &event ) override;
@@ -25,6 +23,8 @@ protected:
 
 public:
     DatablockList( MainWindow *parent );
+
+    void populateFromDatabase();
 };
 
 OGRE_ASSUME_NONNULL_END

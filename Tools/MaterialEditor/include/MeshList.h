@@ -24,14 +24,14 @@ class MeshList final : public MeshListBase
     bool m_editing;
 
 protected:
-    void populateFromDatabase();
-
     // Handlers for MeshListBase events.
     void OnMeshSelect( wxCommandEvent &event ) override;
     void OnSearchText( wxCommandEvent &event ) override;
 
 public:
     MeshList( MainWindow *parent );
+
+    void populateFromDatabase();
 };
 
 OGRE_ASSUME_NONNULL_END
