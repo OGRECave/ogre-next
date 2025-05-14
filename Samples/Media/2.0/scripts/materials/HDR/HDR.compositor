@@ -299,7 +299,7 @@ compositor_node HdrRenderUi
 			}
 			store
 			{
-				colour  store
+				colour  store_or_resolve
 				depth   dont_care
 				stencil dont_care
 			}
