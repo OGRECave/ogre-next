@@ -1088,6 +1088,79 @@ PbsTexturePanelBase::~PbsTexturePanelBase()
 {
 }
 
+LightPanelBase::LightPanelBase( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+{
+	wxBoxSizer* rootLayout;
+	rootLayout = new wxBoxSizer( wxVERTICAL );
+
+	wxStaticBoxSizer* Preset;
+	Preset = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Preset") ), wxVERTICAL );
+
+	wxArrayString m_presetChoiceChoices;
+	m_presetChoice = new wxChoice( Preset->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_presetChoiceChoices, 0 );
+	m_presetChoice->SetSelection( 0 );
+	Preset->Add( m_presetChoice, 0, wxALL|wxEXPAND, 5 );
+
+
+	rootLayout->Add( Preset, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer65;
+	bSizer65 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_cameraRelativeCheckbox = new wxCheckBox( this, wxID_ANY, _("Camera Relative"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer65->Add( m_cameraRelativeCheckbox, 0, wxALL, 5 );
+
+
+	bSizer65->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer26;
+	sbSizer26 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Euler") ), wxVERTICAL );
+
+	m_eulerX = new wxTextCtrl( sbSizer26->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer26->Add( m_eulerX, 0, wxALL|wxEXPAND, 5 );
+
+	m_eulerY = new wxTextCtrl( sbSizer26->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer26->Add( m_eulerY, 0, wxALL|wxEXPAND, 5 );
+
+	m_eulerZ = new wxTextCtrl( sbSizer26->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer26->Add( m_eulerZ, 0, wxALL|wxEXPAND, 5 );
+
+
+	bSizer65->Add( sbSizer26, 1, 0, 5 );
+
+
+	rootLayout->Add( bSizer65, 0, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer27;
+	sbSizer27 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Environment Strength") ), wxHORIZONTAL );
+
+	m_envStrengthSlider = new wxSlider( sbSizer27->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	sbSizer27->Add( m_envStrengthSlider, 1, wxALL, 5 );
+
+	m_envStrengthTextCtrl = new wxTextCtrl( sbSizer27->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer27->Add( m_envStrengthTextCtrl, 0, wxALL, 5 );
+
+
+	rootLayout->Add( sbSizer27, 0, wxEXPAND, 5 );
+
+
+	this->SetSizer( rootLayout );
+	this->Layout();
+
+	// Connect Events
+	m_presetChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( LightPanelBase::OnPresetChoice ), NULL, this );
+	m_cameraRelativeCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( LightPanelBase::OnCheckbox ), NULL, this );
+	m_eulerX->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( LightPanelBase::OnEulerText ), NULL, this );
+	m_eulerY->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( LightPanelBase::OnEulerText ), NULL, this );
+	m_eulerZ->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( LightPanelBase::OnEulerText ), NULL, this );
+	m_envStrengthSlider->Connect( wxEVT_SLIDER, wxCommandEventHandler( LightPanelBase::OnSlider ), NULL, this );
+	m_envStrengthTextCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( LightPanelBase::OnText ), NULL, this );
+}
+
+LightPanelBase::~LightPanelBase()
+{
+}
+
 DatablockListBase::DatablockListBase( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* rootLayout;

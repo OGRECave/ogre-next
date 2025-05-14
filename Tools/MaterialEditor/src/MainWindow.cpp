@@ -4,6 +4,7 @@
 #include "Constants.h"
 #include "Core/wxOgreRenderWindow.h"
 #include "DatablockList.h"
+#include "LightPanel.h"
 #include "MeshList.h"
 #include "PbsParametersPanel.h"
 #include "PbsTexturePanel.h"
@@ -22,6 +23,8 @@
 #include "OgreHlmsUnlit.h"
 #include "OgreItem.h"
 #include "OgreMesh2.h"
+#include "OgreMeshManager.h"
+#include "OgreMeshManager2.h"
 #include "OgrePlatformInformation.h"
 
 #include "OgreRoot.h"
@@ -51,7 +54,7 @@ namespace Ogre
     };
 }  // namespace Ogre
 
-static const Ogre::Quaternion kCoordConventions[CoordinateConvention::NumCoordinateConventions] = {
+const Ogre::Quaternion kCoordConventions[CoordinateConvention::NumCoordinateConventions] = {
     Ogre::Quaternion( Ogre::Degree( -90.0f ), Ogre::Vector3::UNIT_Z ),  //
     Ogre::Quaternion::IDENTITY,                                         //
     Ogre::Quaternion( Ogre::Degree( 90.0f ), Ogre::Vector3::UNIT_X )
@@ -70,6 +73,7 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     m_mainNotebook2( 0 ),
     m_pbsParametersPanel( 0 ),
     m_pbsTexturePanel( 0 ),
+    m_lightPanel( 0 ),
     m_datablockList( 0 ),
     m_meshList( 0 ),
     m_projectSettings( 0 ),
@@ -158,6 +162,7 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
                                              wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TAB_EXTERNAL_MOVE );
     m_pbsParametersPanel = new PbsParametersPanel( this );
     m_pbsTexturePanel = new PbsTexturePanel( this );
+    m_lightPanel = new LightPanel( this );
     m_datablockList = new DatablockList( this );
     m_meshList = new MeshList( this );
     m_projectSettings = new ProjectSettings( this );
@@ -165,6 +170,7 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
 
     m_mainNotebook->AddPage( m_pbsParametersPanel, wxT( "PBS Settings" ) );
     m_mainNotebook->AddPage( m_pbsTexturePanel, wxT( "PBS Textures" ) );
+    m_mainNotebook->AddPage( m_lightPanel, wxT( "Lights" ) );
     m_mainNotebook2->AddPage( m_datablockList, wxT( "Materials" ) );
     m_mainNotebook2->AddPage( m_meshList, wxT( "Meshes" ) );
 
@@ -315,24 +321,18 @@ void MainWindow::createSystems()
     m_sceneManager->setAmbientLight( Ogre::ColourValue( 0.2f, 0.2f, 0.2f ),
                                      Ogre::ColourValue( 0.1f, 0.1f, 0.1f ), Ogre::Vector3::UNIT_Y );
 
-    Ogre::Light *sunLight = m_sceneManager->createLight();
-    Ogre::SceneNode *lightNode = m_sceneManager->getRootSceneNode()->createChildSceneNode();
-    lightNode->attachObject( sunLight );
-    sunLight->setPowerScale( Ogre::Math::PI );
-    sunLight->setType( Ogre::Light::LT_DIRECTIONAL );
-    sunLight->setDirection( Ogre::Vector3( -1.0f, -1.2f, -0.1f ).normalisedCopy() );
-
     loadResources();
 
     Ogre::CompositorManager2 *compositorManager = m_root->getCompositorManager2();
     compositorManager->setCompositorPassProvider( new Ogre::DummyCompositorPassProvider() );
 
-    const Ogre::String workspaceName( "MaterialEditor Workspace" );
+    /*const Ogre::String workspaceName( "MaterialEditor Workspace" );
     if( !compositorManager->hasWorkspaceDefinition( workspaceName ) )
     {
         compositorManager->createBasicWorkspaceDef( workspaceName, Ogre::ColourValue( 0.2f, 0.4f, 0.6f ),
                                                     Ogre::IdString() );
-    }
+    }*/
+    const Ogre::String workspaceName( "HdrWorkspaceMsaa" );
 
     m_workspace = compositorManager->addWorkspace( m_sceneManager,
                                                    m_wxOgreRenderWindow->GetRenderWindow()->getTexture(),
@@ -355,6 +355,31 @@ void MainWindow::addResourceLocation( const Ogre::String &archName, const Ogre::
 //-----------------------------------------------------------------------------
 void MainWindow::loadResources()
 {
+    // Load resource paths from config file
+    Ogre::ConfigFile cf;
+    cf.load( "./resources2.cfg" );
+
+    Ogre::String originalDataFolder = cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
+    if( !originalDataFolder.empty() && *( originalDataFolder.end() - 1 ) != '/' )
+        originalDataFolder += "/";
+
+    const char *c_locations[] = {
+        "2.0/scripts/materials/Common",       "2.0/scripts/materials/Common/Any",
+        "2.0/scripts/materials/Common/GLSL",  "2.0/scripts/materials/Common/HLSL",
+        "2.0/scripts/materials/Common/Metal", "2.0/scripts/Compositors",
+        "2.0/scripts/materials/HDR",          "2.0/scripts/materials/HDR/GLSL",
+        "2.0/scripts/materials/HDR/HLSL",     "2.0/scripts/materials/HDR/Metal"
+    };
+
+    Ogre::ResourceGroupManager &resourceGroupManager = Ogre::ResourceGroupManager::getSingleton();
+
+    for( size_t i = 0u; i < sizeof( c_locations ) / sizeof( c_locations[0] ); ++i )
+    {
+        resourceGroupManager.addResourceLocation(
+            originalDataFolder + c_locations[i], "FileSystem",
+            Ogre::ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME );
+    }
+
 #if 0
     // Load resource paths from config file
     Ogre::ConfigFile cf;
@@ -612,7 +637,13 @@ bool MainWindow::frameStarted( const Ogre::FrameEvent &evt )
 void MainWindow::setCoordinateConvention( CoordinateConvention::CoordinateConvention newConvention )
 {
     m_coordinateConvention = newConvention;
-    m_cameraNode->getParent()->setOrientation( kCoordConventions[m_coordinateConvention] );
+    m_cameraNode->getParent()->setOrientation( kCoordConventions[newConvention] );
+    m_lightPanel->setCoordinateConvention( newConvention );
+
+    m_sceneManager->setAmbientLight(
+        m_sceneManager->getAmbientLightUpperHemisphere(),
+        m_sceneManager->getAmbientLightLowerHemisphere(), kCoordConventions[newConvention].yAxis(),
+        m_sceneManager->getAmbientLightUpperHemisphere().a, m_sceneManager->getEnvFeatures() );
 
     m_menuView->Check( wxID_MENUCOORDINATE_X_UP, m_coordinateConvention == CoordinateConvention::xUp );
     m_menuView->Check( wxID_MENUCOORDINATE_Y_UP, m_coordinateConvention == CoordinateConvention::yUp );
@@ -847,6 +878,20 @@ bool MainWindow::loadMeshAsItem( const Ogre::String &meshName, const Ogre::Strin
     Ogre::Item *item = 0;
     try
     {
+        // "Unoptimize" the mesh for shadow mapping: The user may toggle settings that require UVs
+        // (e.g. alpha testing or alpha hashing). They will crash if the mesh doesn't have UVs
+        // (which happens if the mesh was optimized for shadows).
+        //
+        // There's several solutions:
+        //  1. Just unoptimize all meshes (what we do).
+        //  2. Unoptimize the specific submesh, save the optimized copy in case the setting
+        //     is turned off again. (or don't).
+        //  3. Toggle shadow casting for the movable object.
+        //
+        // Since we don't know the user's intentions; just unoptimize everything (easiest path).
+        Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().load( meshName, resourceGroup );
+        mesh->prepareForShadowMapping( true );
+
         item = m_sceneManager->createItem( meshName, resourceGroup );
     }
     catch( Ogre::Exception & )
@@ -875,6 +920,9 @@ bool MainWindow::loadMeshAsV1Entity( const Ogre::String &meshName, const Ogre::S
     Ogre::v1::Entity *entity = 0;
     try
     {
+        Ogre::v1::MeshPtr mesh = Ogre::v1::MeshManager::getSingleton().load( meshName, resourceGroup );
+        mesh->prepareForShadowMapping( true );  // See loadMeshAsItem().
+
         entity = m_sceneManager->createEntity( meshName, resourceGroup );
     }
     catch( Ogre::Exception & )
@@ -913,6 +961,7 @@ void MainWindow::setActiveMesh( const Ogre::String &meshName, const Ogre::String
 
     m_pbsParametersPanel->refreshSubMeshList();
     m_datablockList->populateFromDatabase( true );
+    m_lightPanel->notifyMeshChanged();
 
     centerMeshCamera();
 }

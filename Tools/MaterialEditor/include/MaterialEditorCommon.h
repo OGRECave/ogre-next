@@ -26,4 +26,17 @@ struct SliderTextWidget
     void fromText();
 };
 
+namespace CoordinateConvention
+{
+    enum CoordinateConvention
+    {
+        xUp,
+        yUp,
+        zUp,
+        NumCoordinateConventions
+    };
+}
+
+extern const Ogre::Quaternion kCoordConventions[CoordinateConvention::NumCoordinateConventions];
+
 OGRE_ASSUME_NONNULL_END
