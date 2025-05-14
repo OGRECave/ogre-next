@@ -238,6 +238,38 @@ class PbsTexturePanelBase : public wxPanel
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+/// Class LightPanelBase
+///////////////////////////////////////////////////////////////////////////////
+class LightPanelBase : public wxPanel
+{
+	private:
+
+	protected:
+		wxChoice* m_presetChoice;
+		wxCheckBox* m_cameraRelativeCheckbox;
+		wxTextCtrl* m_eulerX;
+		wxTextCtrl* m_eulerY;
+		wxTextCtrl* m_eulerZ;
+		wxSlider* m_envStrengthSlider;
+		wxTextCtrl* m_envStrengthTextCtrl;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnPresetChoice( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCheckbox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnEulerText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSlider( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnText( wxCommandEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		LightPanelBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
+		~LightPanelBase();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
 /// Class DatablockListBase
 ///////////////////////////////////////////////////////////////////////////////
 class DatablockListBase : public wxPanel

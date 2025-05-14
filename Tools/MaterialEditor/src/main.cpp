@@ -9,6 +9,8 @@
 
 #include "CmdSettings.h"
 
+#include "OgreException.h"
+
 class wxWidgetsApp : public wxApp
 {
     CmdSettings parseCmdLine() const;
@@ -37,9 +39,19 @@ bool wxWidgetsApp::OnInit()
     const CmdSettings cmdSettings = parseCmdLine();
     setWorkingDirectory();
 
-    MainWindow *window = new MainWindow( 0, cmdSettings );
-    window->Show();
-    SetTopWindow( window );
+    try
+    {
+        MainWindow *window = new MainWindow( 0, cmdSettings );
+        window->Show();
+        SetTopWindow( window );
+    }
+    catch( Ogre::Exception &e )
+    {
+        wxMessageBox( wxString::FromUTF8( e.getFullDescription() ),
+                      wxT( "OgreNext Exception. See Ogre.log" ), wxOK | wxICON_ERROR | wxCENTRE );
+        throw;
+    }
+
     return true;
 }
 

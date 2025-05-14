@@ -10,6 +10,7 @@
 
 struct CmdSettings;
 class DatablockList;
+class LightPanel;
 class MeshList;
 class PbsParametersPanel;
 class PbsTexturePanel;
@@ -19,17 +20,6 @@ class wxAuiNotebook;
 class wxOgreRenderWindow;
 
 OGRE_ASSUME_NONNULL_BEGIN
-
-namespace CoordinateConvention
-{
-    enum CoordinateConvention
-    {
-        xUp,
-        yUp,
-        zUp,
-        NumCoordinateConventions
-    };
-}
 
 class MainWindow final : public MainWindowBase,
                          public wxOgreRenderWindowListener,
@@ -52,6 +42,7 @@ class MainWindow final : public MainWindowBase,
     wxAuiNotebook      *m_mainNotebook2;
     PbsParametersPanel *m_pbsParametersPanel;
     PbsTexturePanel    *m_pbsTexturePanel;
+    LightPanel         *m_lightPanel;
     DatablockList      *m_datablockList;
     MeshList           *m_meshList;
     ProjectSettings    *m_projectSettings;
@@ -159,7 +150,11 @@ public:
 
     void OnMenuSelection( wxCommandEvent &event ) override;
 
-    Ogre::Root *getRoot() { return m_root; }
+    Ogre::Root                *getRoot() { return m_root; }
+    Ogre::SceneManager        *getSceneManager() { return m_sceneManager; }
+    Ogre::CompositorWorkspace *getCompositorWorkspace() { return m_workspace; }
+
+    Ogre::SceneNode *getCameraNode() { return m_cameraNode; }
 
     void setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable datablock );
     void setActiveMesh( const Ogre::String &meshName, const Ogre::String &resourceGroup );
