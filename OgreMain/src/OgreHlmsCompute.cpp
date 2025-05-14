@@ -611,11 +611,21 @@ namespace Ogre
                                                    const String &sourceFilename,
                                                    const StringVector &includedPieceFiles )
     {
-        OGRE_ASSERT_MEDIUM( mComputeJobs.find( datablockName ) == mComputeJobs.end() );
+        HlmsComputeJob *retVal = 0;
 
-        HlmsComputeJob *retVal =
-            OGRE_NEW HlmsComputeJob( datablockName, this, sourceFilename, includedPieceFiles );
-        mComputeJobs[datablockName] = ComputeJobEntry( retVal, refName );
+        std::pair<HlmsComputeJobMap::iterator, bool> insertion =
+            mComputeJobs.insert( { datablockName, ComputeJobEntry( 0, refName ) } );
+        if( insertion.second )
+        {
+            retVal = OGRE_NEW HlmsComputeJob( datablockName, this, sourceFilename, includedPieceFiles );
+            insertion.first->second.computeJob = retVal;
+        }
+        else
+        {
+            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
+                         "Compute Job with name " + datablockName.getFriendlyText() + " already exists!",
+                         "HlmsCompute::createComputeJob" );
+        }
 
         return retVal;
     }

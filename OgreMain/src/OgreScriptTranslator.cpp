@@ -6987,7 +6987,14 @@ namespace Ogre{
         if(!processed)
         {
             CompositorManager2 *compositorMgr = Root::getSingleton().getCompositorManager2();
-            mWorkspaceDef = compositorMgr->addWorkspaceDefinition( obj->name );
+            try
+            {
+                mWorkspaceDef = compositorMgr->addWorkspaceDefinition( obj->name );
+            }
+            catch( Exception & )
+            {
+                mWorkspaceDef = 0;
+            }
         }
 
         if(mWorkspaceDef == 0)
@@ -7316,7 +7323,14 @@ namespace Ogre{
         if(!processed)
         {
             CompositorManager2 *compositorMgr = Root::getSingleton().getCompositorManager2();
-            mNodeDef = compositorMgr->addNodeDefinition( obj->name );
+            try
+            {
+                mNodeDef = compositorMgr->addNodeDefinition( obj->name );
+            }
+            catch( Exception & )
+            {
+                mNodeDef = 0;
+            }
         }
 
         if(mNodeDef == 0)
