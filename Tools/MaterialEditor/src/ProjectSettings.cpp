@@ -1,5 +1,7 @@
 #include "ProjectSettings.h"
 
+#include "LightPanel.h"
+
 #include "OgreConfigFile.h"
 #include "OgreHlms.h"
 #include "OgreHlmsJson.h"
@@ -261,7 +263,7 @@ void ProjectSettings::loadProject( Ogre::HlmsManager *hlmsManager )
     }
 }
 //-----------------------------------------------------------------------------
-void ProjectSettings::saveProject( Ogre::HlmsManager *hlmsManager )
+void ProjectSettings::saveProject( Ogre::HlmsManager *hlmsManager, LightPanel &lightPanel )
 {
     Ogre::String jsonString;
 
@@ -278,7 +280,11 @@ void ProjectSettings::saveProject( Ogre::HlmsManager *hlmsManager )
     }
     if( !m_resources.empty() )
         jsonString.pop_back();  // Remove last trailing comma.
-    jsonString += "\n	]\n}";
+    jsonString += "\n	]";
+
+    lightPanel.saveProject( jsonString );
+
+    jsonString += "\n}";
 
     std::ofstream projFile;
     projFile.open( m_projectPath.utf8_string(), std::ios::binary | std::ios::out );
@@ -336,7 +342,8 @@ void ProjectSettings::newProject( Ogre::HlmsManager *hlmsManager )
     loadProject( hlmsManager );
 }
 //-----------------------------------------------------------------------------
-void ProjectSettings::openProject( wxString projectPath, Ogre::HlmsManager *hlmsManager )
+void ProjectSettings::openProject( wxString projectPath, Ogre::HlmsManager *hlmsManager,
+                                   LightPanel &lightPanel )
 {
     projectPath.Replace( "\\", "/" );
     m_projectPath = projectPath;
@@ -408,6 +415,8 @@ void ProjectSettings::openProject( wxString projectPath, Ogre::HlmsManager *hlms
     itor = d.FindMember( "material_dst_path" );
     if( itor != d.MemberEnd() && itor->value.IsString() )
         m_materialDstPath = itor->value.GetString();
+
+    lightPanel.loadProject( d );
 
     newProject( hlmsManager );
 }

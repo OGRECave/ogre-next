@@ -800,6 +800,7 @@ void MainWindow::OnMenuSelection( wxCommandEvent &event )
             Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups( true );
             m_datablockList->populateFromDatabase();
             m_meshList->populateFromDatabase();
+            m_projectSettings->saveProject( m_root->getHlmsManager(), *m_lightPanel );
         }
         break;
     case wxID_OPEN:
@@ -808,7 +809,7 @@ void MainWindow::OnMenuSelection( wxCommandEvent &event )
         if( !projPath.empty() )
         {
             unloadForNewProject();
-            m_projectSettings->openProject( projPath, m_root->getHlmsManager() );
+            m_projectSettings->openProject( projPath, m_root->getHlmsManager(), *m_lightPanel );
             Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups( true );
             m_datablockList->populateFromDatabase();
             m_meshList->populateFromDatabase();
@@ -816,7 +817,7 @@ void MainWindow::OnMenuSelection( wxCommandEvent &event )
         break;
     }
     case wxID_SAVE:
-        m_projectSettings->saveProject( m_root->getHlmsManager() );
+        m_projectSettings->saveProject( m_root->getHlmsManager(), *m_lightPanel );
         break;
     case wxID_PREFERENCES:
         m_projectSettings->ShowModal();
