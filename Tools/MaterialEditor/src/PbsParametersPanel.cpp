@@ -334,6 +334,9 @@ void PbsParametersPanel::OnSubMeshApply( wxCommandEvent &event )
 
     const Ogre::String &resourceGroup = m_mainWindow->getActiveMeshResourceGroup();
 
+    m_mainWindow->getUndoSystem().pushUndoStateMaterialAssign( m_mainWindow->getActiveItem(),
+                                                               m_mainWindow->getActiveEntity() );
+
     int submeshIdx = 0;
     for( Ogre::Renderable *renderable : movableObject->mRenderables )
     {

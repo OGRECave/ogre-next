@@ -161,11 +161,16 @@ public:
 
     Ogre::SceneNode *getCameraNode() { return m_cameraNode; }
 
+    PbsParametersPanel *getPbsParametersPanel() { return m_pbsParametersPanel; }
+
     void setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable datablock,
                              const bool                         bUpdateDatablockListSelection = true );
     void setActiveMesh( const Ogre::String &meshName, const Ogre::String &resourceGroup );
 
     Ogre::MovableObject *ogre_nullable getActiveObject();
+
+    Ogre::Item *ogre_nullable       getActiveItem() { return m_activeItem; }
+    Ogre::v1::Entity *ogre_nullable getActiveEntity() { return m_activeEntity; }
 
     const Ogre::String &getOriginalMaterialNameForActiveObject( const size_t submeshIdx ) const;
     const Ogre::String &getActiveMeshResourceGroup() const;
