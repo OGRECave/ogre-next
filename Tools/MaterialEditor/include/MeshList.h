@@ -11,17 +11,15 @@ OGRE_ASSUME_NONNULL_BEGIN
 
 class MeshList final : public MeshListBase
 {
-    struct MeshEntry
-    {
-        Ogre::String name;
-        Ogre::String resourceGroup;
-    };
-
     MainWindow *m_mainWindow;
 
     std::vector<MeshEntry> m_meshes;
 
     bool m_editing;
+
+    /// If this is true, then the datablock is on the list because it's the active one.
+    /// If it weren't the active one, it would be filtered out.
+    bool m_activeWouldBeFiltered;
 
 protected:
     // Handlers for MeshListBase events.
@@ -32,6 +30,7 @@ public:
     MeshList( MainWindow *parent );
 
     void populateFromDatabase();
+    void notifyMeshSelectChanged();
 };
 
 OGRE_ASSUME_NONNULL_END

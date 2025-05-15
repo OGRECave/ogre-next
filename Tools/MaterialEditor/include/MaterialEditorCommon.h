@@ -57,4 +57,15 @@ namespace CoordinateConvention
 
 extern const Ogre::Quaternion kCoordConventions[CoordinateConvention::NumCoordinateConventions];
 
+struct MeshEntry
+{
+    Ogre::String name;
+    Ogre::String resourceGroup;
+
+    bool operator==( const MeshEntry &other ) const
+    {
+        return this->name == other.name && this->resourceGroup == other.resourceGroup;
+    }
+};
+
 OGRE_ASSUME_NONNULL_END

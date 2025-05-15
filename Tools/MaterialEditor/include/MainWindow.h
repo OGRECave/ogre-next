@@ -165,9 +165,12 @@ public:
 
     void setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable datablock,
                              const bool                         bUpdateDatablockListSelection = true );
-    void setActiveMesh( const Ogre::String &meshName, const Ogre::String &resourceGroup );
+    void setActiveMesh( const Ogre::String &meshName, const Ogre::String &resourceGroup,
+                        const bool bUpdateMeshListSelection = true );
 
     Ogre::MovableObject *ogre_nullable getActiveObject();
+
+    MeshEntry getActiveMeshName() const;
 
     Ogre::Item *ogre_nullable       getActiveItem() { return m_activeItem; }
     Ogre::v1::Entity *ogre_nullable getActiveEntity() { return m_activeEntity; }

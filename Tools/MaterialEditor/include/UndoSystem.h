@@ -17,6 +17,7 @@ namespace UndoType
         PbsMaterial,
         MaterialSelect,
         MaterialAssignment,
+        MeshSelect,
     };
 }
 
@@ -65,12 +66,13 @@ public:
     void pushUndoState( Ogre::HlmsDatablock *datablockBase, const bool bRedo = false,
                         const bool bClearRedoBuffer = true );
 
-    void pushUndoStateMaterialSelect( Ogre::HlmsDatablock *ogre_nullable datablock,
-                                      const bool bRedo = false, const bool bClearRedoBuffer = true );
+    void pushUndoStateMaterialSelect( const bool bRedo = false, const bool bClearRedoBuffer = true );
 
     void pushUndoStateMaterialAssign( const Ogre::Item *ogre_nullable       item,
                                       const Ogre::v1::Entity *ogre_nullable entity,
                                       const bool bRedo = false, const bool bClearRedoBuffer = true );
+
+    void pushUndoMeshSelect( const bool bRedo = false, const bool bClearRedoBuffer = true );
 
     void performUndo();
     void performRedo();

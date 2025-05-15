@@ -29,7 +29,7 @@ void DatablockList::OnDatablockSelect( wxCommandEvent &event )
     wxString materialName = m_datablockList->GetString( (unsigned int)m_datablockList->GetSelection() );
 
     Ogre::HlmsDatablock *datablock = hlmsManager->getDatablockNoDefault( materialName.utf8_string() );
-    m_mainWindow->getUndoSystem().pushUndoStateMaterialSelect( m_mainWindow->getActiveDatablock() );
+    m_mainWindow->getUndoSystem().pushUndoStateMaterialSelect();
     m_mainWindow->setActiveDatablock( datablock, false );
 
     if( m_activeWouldBeFiltered )
@@ -126,7 +126,7 @@ void DatablockList::populateFromDatabase( bool bReasonActiveMeshChanged )
 
                 if( entry.datablock == activeDatablock )
                 {
-                    // Active datablock must always be shown (and selected!) regardless of filters.As
+                    // Active datablock must always be shown (and selected!) regardless of filters.
                     activeDatablockIdx = int( entriesInList.size() );
                     if( !bFound || !bFilteredIn )
                         m_activeWouldBeFiltered = true;
