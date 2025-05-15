@@ -11,7 +11,8 @@
 DatablockList::DatablockList( MainWindow *parent ) :
     DatablockListBase( parent ),
     m_mainWindow( parent ),
-    m_editing( false )
+    m_editing( false ),
+    m_activeWouldBeFiltered( false )
 {
     populateFromDatabase();
 }
@@ -28,7 +29,12 @@ void DatablockList::OnDatablockSelect( wxCommandEvent &event )
     wxString materialName = m_datablockList->GetString( (unsigned int)m_datablockList->GetSelection() );
 
     Ogre::HlmsDatablock *datablock = hlmsManager->getDatablockNoDefault( materialName.utf8_string() );
-    m_mainWindow->setActiveDatablock( datablock );
+    m_mainWindow->getUndoSystem().pushUndoStateMaterialSelect( m_mainWindow->getActiveDatablock() );
+    m_mainWindow->setActiveDatablock( datablock, false );
+
+    if( m_activeWouldBeFiltered )
+        populateFromDatabase( false );
+
     event.Skip( false );
 }
 //-----------------------------------------------------------------------------
@@ -56,6 +62,11 @@ void DatablockList::populateFromDatabase( bool bReasonActiveMeshChanged )
     if( bReasonActiveMeshChanged && !activeMeshOnly )
         return;
 
+    m_activeWouldBeFiltered = false;
+
+    Ogre::HlmsDatablock *activeDatablock = m_mainWindow->getActiveDatablock();
+    int activeDatablockIdx = -1;
+
     std::set<Ogre::HlmsDatablock *> meshDatablocks;
     const Ogre::MovableObject *movableObject = m_mainWindow->getActiveObject();
     if( movableObject && activeMeshOnly )
@@ -79,10 +90,18 @@ void DatablockList::populateFromDatabase( bool bReasonActiveMeshChanged )
 
     for( size_t i = 0u; i < sizeof( hlmsTypes ) / sizeof( hlmsTypes[0] ); ++i )
     {
-        if( hlmsTypes[i] == Ogre::HLMS_PBS && !bAllowPbs )
+        if( ( hlmsTypes[i] == Ogre::HLMS_PBS && !bAllowPbs ) ||
+            ( hlmsTypes[i] == Ogre::HLMS_UNLIT && !bAllowUnlit ) )
+        {
+            if( activeDatablock && activeDatablock->getCreator()->getType() == hlmsTypes[i] )
+            {
+                // Active datablock must always be shown (and selected!) regardless of filters.
+                activeDatablockIdx = int( entriesInList.size() );
+                entriesInList.push_back( *activeDatablock->getNameStr() );
+                m_activeWouldBeFiltered = true;
+            }
             continue;
-        if( hlmsTypes[i] == Ogre::HLMS_UNLIT && !bAllowUnlit )
-            continue;
+        }
 
         const Ogre::Hlms::HlmsDatablockMap &datablockMap =
             hlmsManager->getHlms( hlmsTypes[i] )->getDatablockMap();
@@ -90,10 +109,11 @@ void DatablockList::populateFromDatabase( bool bReasonActiveMeshChanged )
         for( const auto &keyVal : datablockMap )
         {
             const Ogre::Hlms::DatablockEntry &entry = keyVal.second;
-            if( entry.visibleToManager &&
-                ( !activeMeshOnly || meshDatablocks.find( entry.datablock ) != meshDatablocks.end() ) )
+            const bool bFilteredIn =
+                !activeMeshOnly || meshDatablocks.find( entry.datablock ) != meshDatablocks.end();
+            if( entry.visibleToManager && ( bFilteredIn || entry.datablock == activeDatablock ) )
             {
-                const wxString materialName = entry.name;
+                const wxString materialName = wxString::FromUTF8( entry.name );
                 const wxString needle = materialName.Lower();
 
                 bool bFound = true;
@@ -104,6 +124,15 @@ void DatablockList::populateFromDatabase( bool bReasonActiveMeshChanged )
                 }
                 tokenizer.Reinit( filterStr );
 
+                if( entry.datablock == activeDatablock )
+                {
+                    // Active datablock must always be shown (and selected!) regardless of filters.As
+                    activeDatablockIdx = int( entriesInList.size() );
+                    if( !bFound || !bFilteredIn )
+                        m_activeWouldBeFiltered = true;
+                    bFound = true;
+                }
+
                 if( bFound )
                     entriesInList.push_back( materialName );
             }
@@ -111,4 +140,29 @@ void DatablockList::populateFromDatabase( bool bReasonActiveMeshChanged )
     }
     // TODO? Use wxTreeListCtrl / wxImageList to display preview thumbnails.
     m_datablockList->Set( entriesInList );
+    m_datablockList->SetSelection( activeDatablockIdx );
+}
+//-----------------------------------------------------------------------------
+void DatablockList::notifyDatablockSelectChanged()
+{
+    if( m_activeWouldBeFiltered )
+    {
+        // We need to rebuild the list (messes up scrolling though).
+        populateFromDatabase( false );
+    }
+    else
+    {
+        Ogre::HlmsDatablock *activeDatablock = m_mainWindow->getActiveDatablock();
+        if( !activeDatablock )
+            m_datablockList->SetSelection( -1 );
+        else
+        {
+            const int sel =
+                m_datablockList->FindString( wxString::FromUTF8( *activeDatablock->getNameStr() ) );
+            if( sel >= 0 )
+                m_datablockList->SetSelection( sel );
+            else
+                populateFromDatabase( false );
+        }
+    }
 }

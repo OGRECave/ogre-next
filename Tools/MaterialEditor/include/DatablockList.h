@@ -15,6 +15,10 @@ class DatablockList final : public DatablockListBase
 
     bool m_editing;
 
+    /// If this is true, then the datablock is on the list because it's the active one.
+    /// If it weren't the active one, it would be filtered out.
+    bool m_activeWouldBeFiltered;
+
 protected:
     // Handlers for DatablockListBase events.
     void OnDatablockSelect( wxCommandEvent &event ) override;
@@ -25,6 +29,8 @@ public:
     DatablockList( MainWindow *parent );
 
     void populateFromDatabase( bool bReasonActiveMeshChanged = false );
+
+    void notifyDatablockSelectChanged();
 };
 
 OGRE_ASSUME_NONNULL_END

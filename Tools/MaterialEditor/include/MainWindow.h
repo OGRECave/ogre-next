@@ -161,7 +161,8 @@ public:
 
     Ogre::SceneNode *getCameraNode() { return m_cameraNode; }
 
-    void setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable datablock );
+    void setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable datablock,
+                             const bool                         bUpdateDatablockListSelection = true );
     void setActiveMesh( const Ogre::String &meshName, const Ogre::String &resourceGroup );
 
     Ogre::MovableObject *ogre_nullable getActiveObject();

@@ -14,7 +14,8 @@ namespace UndoType
 {
     enum UndoType
     {
-        PbsMaterial
+        PbsMaterial,
+        MaterialSelect,
     };
 }
 
@@ -46,7 +47,6 @@ class UndoSystem
 {
     MainWindow *m_mainWindow;
 
-    // UndoEntry              m_currentState;
     std::vector<UndoEntry> m_undoBuffer;
     std::vector<UndoEntry> m_redoBuffer;
 
@@ -58,8 +58,13 @@ public:
     void pushUndoState( Ogre::HlmsDatablock *datablockBase, const bool bRedo = false,
                         const bool bClearRedoBuffer = true );
 
+    void pushUndoStateMaterialSelect( Ogre::HlmsDatablock *ogre_nullable datablock,
+                                      const bool bRedo = false, const bool bClearRedoBuffer = true );
+
     void performUndo();
     void performRedo();
+
+    void clearBuffers();
 };
 
 OGRE_ASSUME_NONNULL_END

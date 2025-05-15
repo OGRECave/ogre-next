@@ -54,6 +54,30 @@ void UndoSystem::pushUndoState( Ogre::HlmsDatablock *datablockBase, const bool b
     }
 }
 //-----------------------------------------------------------------------------
+void UndoSystem::pushUndoStateMaterialSelect( Ogre::HlmsDatablock *datablock, const bool bRedo,
+                                              const bool bClearRedoBuffer )
+{
+    Ogre::IdString datablockName;
+    if( datablock )
+        datablockName = datablock->getName();
+
+    UndoEntry entry( UndoType::MaterialSelect, datablockName, "", "" );
+    if( !bRedo )
+    {
+        if( m_undoBuffer.empty() || entry != m_undoBuffer.back() )
+        {
+            m_undoBuffer.push_back( entry );
+            if( bClearRedoBuffer )
+                m_redoBuffer.clear();
+        }
+    }
+    else
+    {
+        if( m_redoBuffer.empty() || entry != m_redoBuffer.back() )
+            m_redoBuffer.push_back( entry );
+    }
+}
+//-----------------------------------------------------------------------------
 void UndoSystem::performUndo( std::vector<UndoEntry> &undoBuffer, std::vector<UndoEntry> &redoBuffer )
 {
     if( undoBuffer.empty() )
@@ -105,6 +129,24 @@ void UndoSystem::performUndo( std::vector<UndoEntry> &undoBuffer, std::vector<Un
             m_mainWindow->setActiveDatablock( currDatablock );
         break;
     }
+    case UndoType::MaterialSelect:
+    {
+        Ogre::HlmsDatablock *datablock = m_mainWindow->getActiveDatablock();
+        pushUndoStateMaterialSelect( datablock, &m_redoBuffer == &redoBuffer, false );
+
+        if( entry.datablockName != Ogre::IdString() )
+        {
+            Ogre::HlmsManager *hlmsManager = m_mainWindow->getRoot()->getHlmsManager();
+            Ogre::HlmsDatablock *prevDatablock =
+                hlmsManager->getDatablockNoDefault( entry.datablockName );
+            m_mainWindow->setActiveDatablock( prevDatablock );
+        }
+        else
+        {
+            m_mainWindow->setActiveDatablock( nullptr );
+        }
+        break;
+    }
     }
 }
 //-----------------------------------------------------------------------------
@@ -116,4 +158,10 @@ void UndoSystem::performUndo()
 void UndoSystem::performRedo()
 {
     performUndo( m_redoBuffer, m_undoBuffer );
+}
+//-----------------------------------------------------------------------------
+void UndoSystem::clearBuffers()
+{
+    m_undoBuffer.clear();
+    m_redoBuffer.clear();
 }
