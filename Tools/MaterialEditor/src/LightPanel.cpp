@@ -125,6 +125,7 @@ LightPanel::LightPanel( MainWindow *parent ) :
     LightPanelBase( parent ),
     m_mainWindow( parent ),
     m_masterNode( 0 ),
+    m_secondaryNode( 0 ),
     m_lightNodes{},
     m_editing( false )
 {
@@ -144,11 +145,12 @@ LightPanel::LightPanel( MainWindow *parent ) :
 
     Ogre::SceneManager *sceneManager = m_mainWindow->getSceneManager();
     m_masterNode = sceneManager->getRootSceneNode()->createChildSceneNode();
+    m_secondaryNode = m_masterNode->createChildSceneNode();
 
     for( size_t i = 0u; i < 3u; ++i )
     {
         Ogre::Light *light = sceneManager->createLight();
-        m_lightNodes[i] = m_masterNode->createChildSceneNode();
+        m_lightNodes[i] = m_secondaryNode->createChildSceneNode();
         m_lightNodes[i]->attachObject( light );
 
         light->setType( i == 0u ? Ogre::Light::LT_DIRECTIONAL : Ogre::Light::LT_SPOTLIGHT );
@@ -160,10 +162,48 @@ LightPanel::LightPanel( MainWindow *parent ) :
         light->setSpecularColour( lightColours[i] );
     }
 
+    for( size_t i = 0u; i < 3u; ++i )
+    {
+        SliderTextWidgetAngle widgets = getEulerSliders( i );
+        widgets.text->SetValue( wxT( "0.0" ) );
+        widgets.fromText();
+    }
+
     m_presetChoice->SetSelection( 0 );
     setPreset( 0u );
 
     setCameraRelative( true );
+}
+//-----------------------------------------------------------------------------
+void LightPanel::reorientLights()
+{
+    double ex = 0.0, ey = 0.0, ez = 0.0;
+    m_eulerX->GetValue().ToDouble( &ex );
+    m_eulerY->GetValue().ToDouble( &ey );
+    m_eulerZ->GetValue().ToDouble( &ez );
+
+    const Ogre::Quaternion qx( Ogre::Degree( Ogre::Real( ex ) ), Ogre::Vector3::UNIT_X );
+    const Ogre::Quaternion qy( Ogre::Degree( Ogre::Real( ey ) ), Ogre::Vector3::UNIT_Y );
+    const Ogre::Quaternion qz( Ogre::Degree( Ogre::Real( ez ) ), Ogre::Vector3::UNIT_Z );
+
+    Ogre::Quaternion q = qx * qy * qz;
+    q.normalise();
+
+    m_secondaryNode->setOrientation( q );
+}
+//-----------------------------------------------------------------------------
+SliderTextWidgetAngle LightPanel::getEulerSliders( size_t idx )
+{
+    switch( idx )
+    {
+    default:
+    case 0:
+        return { m_eulerXSlider, m_eulerX };
+    case 1:
+        return { m_eulerYSlider, m_eulerY };
+    case 2:
+        return { m_eulerZSlider, m_eulerZ };
+    }
 }
 //-----------------------------------------------------------------------------
 void LightPanel::OnPresetChoice( wxCommandEvent &event )
@@ -184,14 +224,42 @@ void LightPanel::OnCheckbox( wxCommandEvent &event )
 //-----------------------------------------------------------------------------
 void LightPanel::OnEulerText( wxCommandEvent &event )
 {
-    // TODO: Implement OnEulerText
     event.Skip();
+
+    if( m_editing )
+        return;
+    EditingScope scope( m_editing );
+
+    for( size_t i = 0u; i < 3u; ++i )
+    {
+        SliderTextWidgetAngle widgets = getEulerSliders( i );
+        if( widgets.text == event.GetEventObject() )
+        {
+            widgets.fromText();
+            reorientLights();
+            return;
+        }
+    }
 }
 //-----------------------------------------------------------------------------
 void LightPanel::OnSlider( wxCommandEvent &event )
 {
-    // TODO: Implement OnSlider
     event.Skip();
+
+    if( m_editing )
+        return;
+    EditingScope scope( m_editing );
+
+    for( size_t i = 0u; i < 3u; ++i )
+    {
+        SliderTextWidgetAngle widgets = getEulerSliders( i );
+        if( widgets.slider == event.GetEventObject() )
+        {
+            widgets.fromSlider();
+            reorientLights();
+            return;
+        }
+    }
 }
 //-----------------------------------------------------------------------------
 void LightPanel::OnText( wxCommandEvent &event )
@@ -202,7 +270,7 @@ void LightPanel::OnText( wxCommandEvent &event )
 //-----------------------------------------------------------------------------
 void LightPanel::setCoordinateConvention( CoordinateConvention::CoordinateConvention newConvention )
 {
-    m_masterNode->getParent()->setOrientation( kCoordConventions[newConvention] );
+    m_masterNode->setOrientation( kCoordConventions[newConvention] );
 }
 //-----------------------------------------------------------------------------
 void LightPanel::setCameraRelative( const bool bCameraRelative )
@@ -211,8 +279,7 @@ void LightPanel::setCameraRelative( const bool bCameraRelative )
         return;
     EditingScope scope( m_editing );
 
-    for( size_t i = 0u; i < 3u; ++i )
-        m_lightNodes[i]->getParent()->removeChild( m_lightNodes[i] );
+    m_secondaryNode->getParent()->removeChild( m_secondaryNode );
 
     Ogre::SceneNode *parentNode = 0;
     if( bCameraRelative )
@@ -226,8 +293,7 @@ void LightPanel::setCameraRelative( const bool bCameraRelative )
 
     m_cameraRelativeCheckbox->SetValue( bCameraRelative );
 
-    for( size_t i = 0u; i < 3u; ++i )
-        parentNode->addChild( m_lightNodes[i] );
+    parentNode->addChild( m_secondaryNode );
 }
 //-----------------------------------------------------------------------------
 void LightPanel::notifyMeshChanged()

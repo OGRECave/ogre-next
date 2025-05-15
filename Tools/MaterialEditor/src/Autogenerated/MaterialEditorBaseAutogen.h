@@ -247,8 +247,11 @@ class LightPanelBase : public wxPanel
 	protected:
 		wxChoice* m_presetChoice;
 		wxCheckBox* m_cameraRelativeCheckbox;
+		wxSlider* m_eulerXSlider;
 		wxTextCtrl* m_eulerX;
+		wxSlider* m_eulerYSlider;
 		wxTextCtrl* m_eulerY;
+		wxSlider* m_eulerZSlider;
 		wxTextCtrl* m_eulerZ;
 		wxSlider* m_envStrengthSlider;
 		wxTextCtrl* m_envStrengthTextCtrl;
@@ -256,8 +259,8 @@ class LightPanelBase : public wxPanel
 		// Virtual event handlers, override them in your derived class
 		virtual void OnPresetChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckbox( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnEulerText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSlider( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnEulerText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnText( wxCommandEvent& event ) { event.Skip(); }
 
 

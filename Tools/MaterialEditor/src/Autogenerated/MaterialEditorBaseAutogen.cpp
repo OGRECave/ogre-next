@@ -1104,32 +1104,50 @@ LightPanelBase::LightPanelBase( wxWindow* parent, wxWindowID id, const wxPoint& 
 
 	rootLayout->Add( Preset, 0, wxEXPAND, 5 );
 
-	wxBoxSizer* bSizer65;
-	bSizer65 = new wxBoxSizer( wxHORIZONTAL );
-
 	m_cameraRelativeCheckbox = new wxCheckBox( this, wxID_ANY, _("Camera Relative"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer65->Add( m_cameraRelativeCheckbox, 0, wxALL, 5 );
-
-
-	bSizer65->Add( 0, 0, 1, wxEXPAND, 5 );
+	rootLayout->Add( m_cameraRelativeCheckbox, 0, wxALL, 5 );
 
 	wxStaticBoxSizer* sbSizer26;
 	sbSizer26 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Euler") ), wxVERTICAL );
 
+	wxBoxSizer* bSizer651;
+	bSizer651 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_eulerXSlider = new wxSlider( sbSizer26->GetStaticBox(), wxID_ANY, 50, 0, 360, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer651->Add( m_eulerXSlider, 1, wxALL|wxEXPAND, 5 );
+
 	m_eulerX = new wxTextCtrl( sbSizer26->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer26->Add( m_eulerX, 0, wxALL|wxEXPAND, 5 );
+	bSizer651->Add( m_eulerX, 0, wxALL|wxEXPAND, 5 );
+
+
+	sbSizer26->Add( bSizer651, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer66;
+	bSizer66 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_eulerYSlider = new wxSlider( sbSizer26->GetStaticBox(), wxID_ANY, 50, 0, 360, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer66->Add( m_eulerYSlider, 1, wxALL|wxEXPAND, 5 );
 
 	m_eulerY = new wxTextCtrl( sbSizer26->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer26->Add( m_eulerY, 0, wxALL|wxEXPAND, 5 );
+	bSizer66->Add( m_eulerY, 0, wxALL|wxEXPAND, 5 );
+
+
+	sbSizer26->Add( bSizer66, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer67;
+	bSizer67 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_eulerZSlider = new wxSlider( sbSizer26->GetStaticBox(), wxID_ANY, 50, 0, 360, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer67->Add( m_eulerZSlider, 1, wxALL|wxEXPAND, 5 );
 
 	m_eulerZ = new wxTextCtrl( sbSizer26->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer26->Add( m_eulerZ, 0, wxALL|wxEXPAND, 5 );
+	bSizer67->Add( m_eulerZ, 0, wxALL|wxEXPAND, 5 );
 
 
-	bSizer65->Add( sbSizer26, 1, 0, 5 );
+	sbSizer26->Add( bSizer67, 1, wxEXPAND, 5 );
 
 
-	rootLayout->Add( bSizer65, 0, wxEXPAND, 5 );
+	rootLayout->Add( sbSizer26, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer27;
 	sbSizer27 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Environment Strength") ), wxHORIZONTAL );
@@ -1150,8 +1168,11 @@ LightPanelBase::LightPanelBase( wxWindow* parent, wxWindowID id, const wxPoint& 
 	// Connect Events
 	m_presetChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( LightPanelBase::OnPresetChoice ), NULL, this );
 	m_cameraRelativeCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( LightPanelBase::OnCheckbox ), NULL, this );
+	m_eulerXSlider->Connect( wxEVT_SLIDER, wxCommandEventHandler( LightPanelBase::OnSlider ), NULL, this );
 	m_eulerX->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( LightPanelBase::OnEulerText ), NULL, this );
+	m_eulerYSlider->Connect( wxEVT_SLIDER, wxCommandEventHandler( LightPanelBase::OnSlider ), NULL, this );
 	m_eulerY->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( LightPanelBase::OnEulerText ), NULL, this );
+	m_eulerZSlider->Connect( wxEVT_SLIDER, wxCommandEventHandler( LightPanelBase::OnSlider ), NULL, this );
 	m_eulerZ->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( LightPanelBase::OnEulerText ), NULL, this );
 	m_envStrengthSlider->Connect( wxEVT_SLIDER, wxCommandEventHandler( LightPanelBase::OnSlider ), NULL, this );
 	m_envStrengthTextCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( LightPanelBase::OnText ), NULL, this );

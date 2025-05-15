@@ -14,9 +14,14 @@ class LightPanel final : public LightPanelBase
     MainWindow *m_mainWindow;
 
     Ogre::SceneNode              *m_masterNode;
+    Ogre::SceneNode              *m_secondaryNode;
     Ogre::SceneNode *ogre_nonnull m_lightNodes[3];
 
     bool m_editing;
+
+    void reorientLights();
+
+    SliderTextWidgetAngle getEulerSliders( size_t idx );
 
 protected:
     // Handlers for LightPanelBase events.
