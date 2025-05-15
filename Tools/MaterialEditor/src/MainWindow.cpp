@@ -965,9 +965,23 @@ bool MainWindow::loadMeshAsV1Entity( const Ogre::String &meshName, const Ogre::S
     return true;
 }
 //-----------------------------------------------------------------------------
-void MainWindow::setActiveMesh( const Ogre::String &meshName, const Ogre::String &resourceGroup )
+void MainWindow::setActiveMesh( const Ogre::String &meshName, const Ogre::String &resourceGroup,
+                                const bool bUpdateMeshListSelection )
 {
-    if( !loadMeshAsItem( meshName, resourceGroup ) )
+    if( meshName.empty() )
+    {
+        if( m_activeItem )
+        {
+            m_sceneManager->destroyItem( m_activeItem );
+            m_activeItem = 0;
+        }
+        if( m_activeEntity )
+        {
+            m_sceneManager->destroyEntity( m_activeEntity );
+            m_activeEntity = 0;
+        }
+    }
+    else if( !loadMeshAsItem( meshName, resourceGroup ) )
     {
         if( !loadMeshAsV1Entity( meshName, resourceGroup ) )
         {
@@ -983,6 +997,9 @@ void MainWindow::setActiveMesh( const Ogre::String &meshName, const Ogre::String
     m_datablockList->populateFromDatabase( true );
     m_lightPanel->notifyMeshChanged();
 
+    if( bUpdateMeshListSelection )
+        m_meshList->notifyMeshSelectChanged();
+
     centerMeshCamera();
 }
 //-----------------------------------------------------------------------------
@@ -991,6 +1008,22 @@ Ogre::MovableObject *MainWindow::getActiveObject()
     if( m_activeItem )
         return m_activeItem;
     return m_activeEntity;
+}
+//-----------------------------------------------------------------------------
+MeshEntry MainWindow::getActiveMeshName() const
+{
+    MeshEntry retVal;
+    if( m_activeItem )
+    {
+        retVal.name = m_activeItem->getMesh()->getName();
+        retVal.resourceGroup = m_activeItem->getMesh()->getGroup();
+    }
+    else if( m_activeEntity )
+    {
+        retVal.name = m_activeEntity->getMesh()->getName();
+        retVal.resourceGroup = m_activeEntity->getMesh()->getGroup();
+    }
+    return retVal;
 }
 //-----------------------------------------------------------------------------
 const Ogre::String &MainWindow::getOriginalMaterialNameForActiveObject( const size_t submeshIdx ) const

@@ -59,9 +59,9 @@ void UndoSystem::pushUndoState( Ogre::HlmsDatablock *datablockBase, const bool b
     }
 }
 //-----------------------------------------------------------------------------
-void UndoSystem::pushUndoStateMaterialSelect( Ogre::HlmsDatablock *datablock, const bool bRedo,
-                                              const bool bClearRedoBuffer )
+void UndoSystem::pushUndoStateMaterialSelect( const bool bRedo, const bool bClearRedoBuffer )
 {
+    const Ogre::HlmsDatablock *datablock = m_mainWindow->getActiveDatablock();
     Ogre::IdString datablockName;
     if( datablock )
         datablockName = datablock->getName();
@@ -112,6 +112,26 @@ void UndoSystem::pushUndoStateMaterialAssign( const Ogre::Item *item, const Ogre
 
     UndoEntry entry( UndoType::MaterialAssignment, Ogre::IdString(), meshName, resourceGroup,
                      submeshDatablockNames );
+    if( !bRedo )
+    {
+        if( m_undoBuffer.empty() || entry != m_undoBuffer.back() )
+        {
+            m_undoBuffer.push_back( entry );
+            if( bClearRedoBuffer )
+                m_redoBuffer.clear();
+        }
+    }
+    else
+    {
+        if( m_redoBuffer.empty() || entry != m_redoBuffer.back() )
+            m_redoBuffer.push_back( entry );
+    }
+}
+//-----------------------------------------------------------------------------
+void UndoSystem::pushUndoMeshSelect( const bool bRedo, const bool bClearRedoBuffer )
+{
+    const MeshEntry meshEntry = m_mainWindow->getActiveMeshName();
+    UndoEntry entry( UndoType::MeshSelect, Ogre::IdString(), meshEntry.name, meshEntry.resourceGroup );
     if( !bRedo )
     {
         if( m_undoBuffer.empty() || entry != m_undoBuffer.back() )
@@ -181,8 +201,7 @@ void UndoSystem::performUndo( std::vector<UndoEntry> &undoBuffer, std::vector<Un
     }
     case UndoType::MaterialSelect:
     {
-        Ogre::HlmsDatablock *datablock = m_mainWindow->getActiveDatablock();
-        pushUndoStateMaterialSelect( datablock, &m_redoBuffer == &redoBuffer, false );
+        pushUndoStateMaterialSelect( &m_redoBuffer == &redoBuffer, false );
 
         if( entry.datablockName != Ogre::IdString() )
         {
@@ -199,24 +218,13 @@ void UndoSystem::performUndo( std::vector<UndoEntry> &undoBuffer, std::vector<Un
     }
     case UndoType::MaterialAssignment:
     {
-        Ogre::Item *item = m_mainWindow->getActiveItem();
-        Ogre::v1::Entity *entity = m_mainWindow->getActiveEntity();
-        Ogre::String meshName;
-        Ogre::String resourceGroup;
-        if( item )
-        {
-            meshName = item->getMesh()->getName();
-            resourceGroup = item->getMesh()->getGroup();
-        }
-        else if( entity )
-        {
-            meshName = entity->getMesh()->getName();
-            resourceGroup = entity->getMesh()->getGroup();
-        }
+        const Ogre::Item *item = m_mainWindow->getActiveItem();
+        const Ogre::v1::Entity *entity = m_mainWindow->getActiveEntity();
+        const MeshEntry meshEntry = m_mainWindow->getActiveMeshName();
 
         pushUndoStateMaterialAssign( item, entity, &m_redoBuffer == &redoBuffer, false );
 
-        if( meshName == entry.json && resourceGroup == entry.resourceGroup )
+        if( meshEntry.name == entry.json && meshEntry.resourceGroup == entry.resourceGroup )
         {
             Ogre::MovableObject *object = m_mainWindow->getActiveObject();
             OGRE_ASSERT( object->mRenderables.size() == entry.submeshDatablockNames.size() );
@@ -238,6 +246,12 @@ void UndoSystem::performUndo( std::vector<UndoEntry> &undoBuffer, std::vector<Un
             // Why are we here? Is this even possible? Anyway, destroyed mesh. We can't restore it
             // (assignment is a preview, not permanent. We do not save meshes).
         }
+        break;
+    }
+    case UndoType::MeshSelect:
+    {
+        pushUndoMeshSelect( &m_redoBuffer == &redoBuffer, false );
+        m_mainWindow->setActiveMesh( entry.json, entry.resourceGroup );
         break;
     }
     }
