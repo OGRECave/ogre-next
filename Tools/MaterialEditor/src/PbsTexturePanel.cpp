@@ -4,8 +4,11 @@
 #include "TextureSelect.h"
 
 #include "OgreHlms.h"
+#include "OgreHlmsManager.h"
+#include "OgreHlmsPbs.h"
 #include "OgreHlmsPbsDatablock.h"
 #include "OgreRenderSystem.h"
+#include "OgreRoot.h"
 #include "OgreTextureFilters.h"
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuManager.h"
@@ -27,6 +30,7 @@ static const char *getAliasSuffix( const uint32_t textureFilters )
 PbsTexturePanel::PbsTexturePanel( MainWindow *parent ) :
     PbsTexturePanelBase( parent ),
     m_mainWindow( parent ),
+    m_reflectionMap( 0 ),
     m_editing( false )
 {
     m_units[Ogre::PBSM_DIFFUSE] = { m_diffuseMapBtn, m_diffuseMapSpin };
@@ -50,7 +54,15 @@ PbsTexturePanel::PbsTexturePanel( MainWindow *parent ) :
     OGRE_ASSERT( m_detailMapBlendMode2->GetCount() == Ogre::NUM_PBSM_BLEND_MODES );
     OGRE_ASSERT( m_detailMapBlendMode3->GetCount() == Ogre::NUM_PBSM_BLEND_MODES );
 
-    refreshFromDatablock();
+    Ogre::TextureGpuManager *textureManager =
+        parent->getRoot()->getRenderSystem()->getTextureGpuManager();
+    m_reflectionMap = textureManager->createOrRetrieveTexture(
+        "SaintPetersBasilica.dds", "## INTERNAL SaintPetersBasilica.dds",
+        Ogre::GpuPageOutStrategy::Discard, Ogre::CommonTextureTypes::EnvMap,
+        Ogre::ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME );
+    m_reflectionMap->scheduleTransitionTo( Ogre::GpuResidency::Resident );
+
+    refreshFromDatablockAndApplyEnvMap();
 }
 //-----------------------------------------------------------------------------
 Ogre::PbsTextureTypes PbsTexturePanel::findFrom( wxButton *button ) const
@@ -396,12 +408,12 @@ void PbsTexturePanel::OnCollapsiblePaneChanged( wxCollapsiblePaneEvent &event )
     event.Skip();
 }
 //-----------------------------------------------------------------------------
-void PbsTexturePanel::refreshFromDatablock()
+void PbsTexturePanel::refreshFromDatablockAndApplyEnvMap()
 {
     OGRE_ASSERT_LOW( !m_editing );
     EditingScope scope( m_editing );
 
-    const Ogre::HlmsDatablock *datablockBase = m_mainWindow->getActiveDatablock();
+    Ogre::HlmsDatablock *datablockBase = m_mainWindow->getActiveDatablock();
     if( !datablockBase || datablockBase->getCreator()->getType() != Ogre::HLMS_PBS )
     {
         this->Disable();
@@ -409,6 +421,8 @@ void PbsTexturePanel::refreshFromDatablock()
     }
 
     this->Enable();
+
+    applyEnvMapToDatablock( datablockBase );
 
     OGRE_ASSERT_HIGH( dynamic_cast<const Ogre::HlmsPbsDatablock *>( datablockBase ) );
     const Ogre::HlmsPbsDatablock *datablock =
@@ -504,5 +518,53 @@ void PbsTexturePanel::refreshFromDatablock()
     {
         wxChoice *choice = getBlendMode( static_cast<Ogre::PbsTextureTypes>( i ) );
         choice->SetSelection( datablock->getDetailMapBlendMode( i - Ogre::PBSM_DETAIL0 ) );
+    }
+}
+//-----------------------------------------------------------------------------
+void PbsTexturePanel::notifyMeshChanged()
+{
+    const Ogre::MovableObject *movableObject = m_mainWindow->getActiveObject();
+    if( !movableObject )
+        return;
+
+    for( const Ogre::Renderable *renderable : movableObject->mRenderables )
+        applyEnvMapToDatablock( renderable->getDatablock() );
+}
+//-----------------------------------------------------------------------------
+void PbsTexturePanel::applyEnvMapToDatablock( Ogre::HlmsDatablock *baseDatablock )
+{
+    if( !baseDatablock || baseDatablock->getCreator()->getType() != Ogre::HLMS_PBS )
+        return;
+
+    OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbsDatablock *>( baseDatablock ) );
+    Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock *>( baseDatablock );
+
+    if( !datablock->getTexture( Ogre::PBSM_REFLECTION ) )
+    {
+        datablock->setTexture( Ogre::PBSM_REFLECTION, m_reflectionMap,
+                               datablock->getSamplerblock( Ogre::PBSM_REFLECTION ) );
+
+        static_cast<Ogre::HlmsPbs *>( datablock->getCreator() )
+            ->_notifyIblSpecMipmap( m_reflectionMap->getNumMipmaps() );
+    }
+}
+//-----------------------------------------------------------------------------
+void PbsTexturePanel::unsetEnvMapFromAllDatablocks()
+{
+    Ogre::Hlms *hlms = m_mainWindow->getRoot()->getHlmsManager()->getHlms( Ogre::HLMS_PBS );
+
+    const Ogre::Hlms::HlmsDatablockMap &datablockMap = hlms->getDatablockMap();
+
+    for( const auto &keyVal : datablockMap )
+    {
+        const Ogre::Hlms::DatablockEntry &entry = keyVal.second;
+        OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbsDatablock *>( entry.datablock ) );
+        Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock *>( entry.datablock );
+
+        if( datablock->getTexture( Ogre::PBSM_REFLECTION ) == m_reflectionMap )
+        {
+            datablock->setTexture( Ogre::PBSM_REFLECTION, (Ogre::TextureGpu *)nullptr,
+                                   datablock->getSamplerblock( Ogre::PBSM_REFLECTION ) );
+        }
     }
 }

@@ -364,11 +364,12 @@ void MainWindow::loadResources()
         originalDataFolder += "/";
 
     const char *c_locations[] = {
-        "2.0/scripts/materials/Common",       "2.0/scripts/materials/Common/Any",
-        "2.0/scripts/materials/Common/GLSL",  "2.0/scripts/materials/Common/HLSL",
-        "2.0/scripts/materials/Common/Metal", "2.0/scripts/Compositors",
-        "2.0/scripts/materials/HDR",          "2.0/scripts/materials/HDR/GLSL",
-        "2.0/scripts/materials/HDR/HLSL",     "2.0/scripts/materials/HDR/Metal"
+        "materials/textures/Cubemaps",       "2.0/scripts/materials/Common",
+        "2.0/scripts/materials/Common/Any",  "2.0/scripts/materials/Common/GLSL",
+        "2.0/scripts/materials/Common/HLSL", "2.0/scripts/materials/Common/Metal",
+        "2.0/scripts/Compositors",           "2.0/scripts/materials/HDR",
+        "2.0/scripts/materials/HDR/GLSL",    "2.0/scripts/materials/HDR/HLSL",
+        "2.0/scripts/materials/HDR/Metal"
     };
 
     Ogre::ResourceGroupManager &resourceGroupManager = Ogre::ResourceGroupManager::getSingleton();
@@ -800,7 +801,10 @@ void MainWindow::OnMenuSelection( wxCommandEvent &event )
             Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups( true );
             m_datablockList->populateFromDatabase();
             m_meshList->populateFromDatabase();
+
+            m_pbsTexturePanel->unsetEnvMapFromAllDatablocks();
             m_projectSettings->saveProject( m_root->getHlmsManager(), *m_lightPanel );
+            m_pbsTexturePanel->notifyMeshChanged();
         }
         break;
     case wxID_OPEN:
@@ -817,7 +821,9 @@ void MainWindow::OnMenuSelection( wxCommandEvent &event )
         break;
     }
     case wxID_SAVE:
+        m_pbsTexturePanel->unsetEnvMapFromAllDatablocks();
         m_projectSettings->saveProject( m_root->getHlmsManager(), *m_lightPanel );
+        m_pbsTexturePanel->notifyMeshChanged();
         break;
     case wxID_PREFERENCES:
         m_projectSettings->ShowModal();
@@ -855,7 +861,7 @@ void MainWindow::setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable databloc
     m_activeDatablock = datablock;
     m_pbsParametersPanel->refreshFromDatablock();
     m_pbsParametersPanel->refreshSubMeshList();
-    m_pbsTexturePanel->refreshFromDatablock();
+    m_pbsTexturePanel->refreshFromDatablockAndApplyEnvMap();
 }
 //-----------------------------------------------------------------------------
 void MainWindow::unloadForNewProject()
@@ -961,6 +967,7 @@ void MainWindow::setActiveMesh( const Ogre::String &meshName, const Ogre::String
     }
 
     m_pbsParametersPanel->refreshSubMeshList();
+    m_pbsTexturePanel->notifyMeshChanged();
     m_datablockList->populateFromDatabase( true );
     m_lightPanel->notifyMeshChanged();
 
