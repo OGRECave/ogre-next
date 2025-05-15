@@ -437,7 +437,9 @@ void PbsTexturePanel::refreshFromDatablockAndApplyEnvMap()
 
         Ogre::TextureGpu *texture = datablock->getTexture( textureType );
         if( texture )
-            m_units[i].mapButton->SetLabel( texture->getNameStr() );
+            m_units[i].mapButton->SetLabel( wxString::FromUTF8( texture->getNameStr() ) );
+        else
+            m_units[i].mapButton->SetLabel( wxString() );
 
         m_units[i].mapSpin->SetValue( datablock->getTextureUvSource( textureType ) );
 

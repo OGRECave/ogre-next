@@ -91,7 +91,9 @@ PbsParametersPanel::PbsParametersPanel( MainWindow *parent ) :
     PbsParametersPanelBase( parent ),
     m_mainWindow( parent ),
     m_editing( false ),
-    m_datablockDirty( false )
+    m_datablockDirty( DirtyStateUpToDate ),
+    m_ignoreUndo( false ),
+    m_undoMouseUp( false )
 {
     OGRE_ASSERT( m_brdfChoice->GetCount() == sizeof( kBrdfList ) / sizeof( kBrdfList[0] ) );
     refreshFromDatablock();
@@ -160,7 +162,7 @@ void PbsParametersPanel::OnColourHtml( wxCommandEvent &event )
         if( widgets.rgbaHtml == textCtrl )
         {
             widgets.fromHtml();
-            m_datablockDirty = true;
+            m_datablockDirty = DirtyStateDirty;
             event.Skip( false );
             return;
         }
@@ -193,7 +195,7 @@ void PbsParametersPanel::OnColourButton( wxCommandEvent &event )
         {
             const uint32_t rgba = pickerDlg.GetColourData().GetColour().GetRGBA();
             widgets.fromButton( rgba );
-            m_datablockDirty = true;
+            m_datablockDirty = DirtyStateDirty;
             event.Skip( false );
             return;
         }
@@ -219,7 +221,7 @@ void PbsParametersPanel::OnColourText( wxCommandEvent &event )
             if( widgets.rgbaText[j] == channelText )
             {
                 widgets.fromRgbaText();
-                m_datablockDirty = true;
+                m_datablockDirty = DirtyStateDirty;
                 event.Skip( false );
                 return;
             }
@@ -240,7 +242,7 @@ void PbsParametersPanel::OnCheckbox( wxCommandEvent &event )
     if( obj == m_fresnelColouredCheckbox )
         syncFresnelCheckbox();
 
-    m_datablockDirty = true;
+    m_datablockDirty = DirtyStateDirty;
     event.Skip();
 }
 //-----------------------------------------------------------------------------
@@ -263,7 +265,7 @@ void PbsParametersPanel::OnSlider( wxCommandEvent &event )
             if( i == PbsSliders::Fresnel )
                 getColourWidgets( ColourSection::Fresnel ).fromRgbaText();
 
-            m_datablockDirty = true;
+            m_datablockDirty = DirtyStateDirtyFromSlider;
             event.Skip( false );
             return;
         }
@@ -291,7 +293,7 @@ void PbsParametersPanel::OnSliderText( wxCommandEvent &event )
             if( i == PbsSliders::Fresnel )
                 getColourWidgets( ColourSection::Fresnel ).fromRgbaText();
 
-            m_datablockDirty = true;
+            m_datablockDirty = DirtyStateDirty;
             event.Skip( false );
             return;
         }
@@ -308,13 +310,13 @@ void PbsParametersPanel::OnWorkflowChange( wxCommandEvent &event )
     EditingScope scope( m_editing );
 
     syncFresnelCheckbox();
-    m_datablockDirty = true;
+    m_datablockDirty = DirtyStateDirty;
     event.Skip();
 }
 //-----------------------------------------------------------------------------
 void PbsParametersPanel::OnSettingDirty( wxCommandEvent &event )
 {
-    m_datablockDirty = true;
+    m_datablockDirty = DirtyStateDirty;
     event.Skip();
 }
 //-----------------------------------------------------------------------------
@@ -355,6 +357,24 @@ void PbsParametersPanel::OnSubMeshApply( wxCommandEvent &event )
     }
 }
 //-----------------------------------------------------------------------------
+void PbsParametersPanel::UndoMouseUp( wxMouseEvent &event )
+{
+    event.Skip();
+    m_undoMouseUp = true;
+}
+//-----------------------------------------------------------------------------
+void PbsParametersPanel::UndoKeyUp( wxKeyEvent &event )
+{
+    event.Skip();
+    m_ignoreUndo = false;
+}
+//-----------------------------------------------------------------------------
+void PbsParametersPanel::UndoKillFocus( wxFocusEvent &event )
+{
+    event.Skip();
+    m_ignoreUndo = false;
+}
+//-----------------------------------------------------------------------------
 void PbsParametersPanel::syncDatablockFromUI()
 {
     if( !m_datablockDirty )
@@ -363,6 +383,18 @@ void PbsParametersPanel::syncDatablockFromUI()
     Ogre::HlmsDatablock *datablock = m_mainWindow->getActiveDatablock();
     if( !datablock )
         return;
+
+    if( !m_ignoreUndo || m_datablockDirty != DirtyStateDirtyFromSlider )
+    {
+        m_mainWindow->getUndoSystem().pushUndoState( datablock );
+        m_ignoreUndo = m_datablockDirty == DirtyStateDirtyFromSlider;
+    }
+
+    if( m_undoMouseUp )
+    {
+        m_ignoreUndo = false;
+        m_undoMouseUp = false;
+    }
 
     OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbsDatablock *>( datablock ) );
     Ogre::HlmsPbsDatablock *pbsDatablock = static_cast<Ogre::HlmsPbsDatablock *>( datablock );
@@ -450,7 +482,7 @@ void PbsParametersPanel::syncDatablockFromUI()
     }
     pbsDatablock->setAlphaHashing( m_alphaHashCheckbox->IsChecked() );
 
-    m_datablockDirty = false;
+    m_datablockDirty = DirtyStateUpToDate;
 }
 //-----------------------------------------------------------------------------
 void PbsParametersPanel::refreshFromDatablock()
@@ -472,6 +504,15 @@ void PbsParametersPanel::refreshFromDatablock()
         static_cast<const Ogre::HlmsPbsDatablock *>( datablock );
 
     m_workflowChoice->SetSelection( pbsDatablock->getWorkflow() );
+
+    for( size_t i = 0u; i < sizeof( kBrdfList ) / sizeof( kBrdfList[0] ); ++i )
+    {
+        if( pbsDatablock->getBrdf() == kBrdfList[i] )
+        {
+            m_brdfChoice->SetSelection( (int)i );
+            break;
+        }
+    }
 
     ColourWidgets colourWidgets[ColourSection::NumColourSection] = {
         getColourWidgets( ColourSection::Diffuse ),
@@ -528,7 +569,8 @@ void PbsParametersPanel::refreshFromDatablock()
     m_alphaHashCheckbox->SetValue( pbsDatablock->getAlphaHashing() );
     m_transparencyModeChoice->SetSelection( pbsDatablock->getTransparencyMode() );
 
-    m_datablockDirty = false;
+    m_datablockDirty = DirtyStateUpToDate;
+    m_ignoreUndo = false;
 }
 //-----------------------------------------------------------------------------
 void PbsParametersPanel::refreshSubMeshList()

@@ -148,6 +148,39 @@
           </object>
         </object>
         <object class="wxMenu" expanded="false">
+          <property name="label">&amp;Edit</property>
+          <property name="name">m_menuEdit</property>
+          <property name="permission">none</property>
+          <object class="wxMenuItem" expanded="false">
+            <property name="bitmap"></property>
+            <property name="checked">0</property>
+            <property name="enabled">1</property>
+            <property name="help"></property>
+            <property name="id">wxID_UNDO</property>
+            <property name="kind">wxITEM_NORMAL</property>
+            <property name="label">&amp;Undo</property>
+            <property name="name">m_menuItem61</property>
+            <property name="permission">none</property>
+            <property name="shortcut">Ctrl+Z</property>
+            <property name="unchecked_bitmap"></property>
+            <event name="OnMenuSelection">OnMenuSelection</event>
+          </object>
+          <object class="wxMenuItem" expanded="false">
+            <property name="bitmap"></property>
+            <property name="checked">0</property>
+            <property name="enabled">1</property>
+            <property name="help"></property>
+            <property name="id">wxID_REDO</property>
+            <property name="kind">wxITEM_NORMAL</property>
+            <property name="label">&amp;Redo</property>
+            <property name="name">m_menuItem31</property>
+            <property name="permission">none</property>
+            <property name="shortcut">Ctrl+Y</property>
+            <property name="unchecked_bitmap"></property>
+            <event name="OnMenuSelection">OnMenuSelection</event>
+          </object>
+        </object>
+        <object class="wxMenu" expanded="false">
           <property name="label">&amp;View</property>
           <property name="name">m_menuView</property>
           <property name="permission">protected</property>
@@ -1687,6 +1720,13 @@
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
+                    <event name="OnAux1Up">UndoMouseUp</event>
+                    <event name="OnAux2Up">UndoMouseUp</event>
+                    <event name="OnKeyUp">UndoKeyUp</event>
+                    <event name="OnKillFocus">UndoKillFocus</event>
+                    <event name="OnLeftUp">UndoMouseUp</event>
+                    <event name="OnMiddleUp">UndoMouseUp</event>
+                    <event name="OnRightUp">UndoMouseUp</event>
                     <event name="OnSlider">OnSlider</event>
                   </object>
                 </object>
@@ -1770,7 +1810,13 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style"></property>
-                <event name="OnScroll">OnSlider</event>
+                <event name="OnAux1Up">UndoMouseUp</event>
+                <event name="OnAux2Up">UndoMouseUp</event>
+                <event name="OnKeyUp">UndoKeyUp</event>
+                <event name="OnKillFocus">UndoKillFocus</event>
+                <event name="OnLeftUp">UndoMouseUp</event>
+                <event name="OnMiddleUp">UndoMouseUp</event>
+                <event name="OnRightUp">UndoMouseUp</event>
                 <event name="OnSlider">OnSlider</event>
               </object>
             </object>
@@ -1927,6 +1973,13 @@
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
+                    <event name="OnAux1Up">UndoMouseUp</event>
+                    <event name="OnAux2Up">UndoMouseUp</event>
+                    <event name="OnKeyUp">UndoKeyUp</event>
+                    <event name="OnKillFocus">UndoKillFocus</event>
+                    <event name="OnLeftUp">UndoMouseUp</event>
+                    <event name="OnMiddleUp">UndoMouseUp</event>
+                    <event name="OnRightUp">UndoMouseUp</event>
                     <event name="OnSlider">OnSlider</event>
                   </object>
                 </object>
@@ -2767,6 +2820,13 @@
                           <property name="window_extra_style"></property>
                           <property name="window_name"></property>
                           <property name="window_style"></property>
+                          <event name="OnAux1Up">UndoMouseUp</event>
+                          <event name="OnAux2Up">UndoMouseUp</event>
+                          <event name="OnKeyUp">UndoKeyUp</event>
+                          <event name="OnKillFocus">UndoKillFocus</event>
+                          <event name="OnLeftUp">UndoMouseUp</event>
+                          <event name="OnMiddleUp">UndoMouseUp</event>
+                          <event name="OnRightUp">UndoMouseUp</event>
                           <event name="OnSlider">OnSlider</event>
                         </object>
                       </object>
@@ -3822,6 +3882,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -4130,6 +4197,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -4288,6 +4362,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -4432,6 +4513,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -4576,6 +4664,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -4720,6 +4815,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -5166,6 +5268,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -5474,6 +5583,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -5632,6 +5748,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -5776,6 +5899,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -5920,6 +6050,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -6064,6 +6201,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -6510,6 +6654,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -6818,6 +6969,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -6976,6 +7134,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -7120,6 +7285,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -7264,6 +7436,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -7408,6 +7587,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -7854,6 +8040,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -8162,6 +8355,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -8320,6 +8520,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -8464,6 +8671,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -8608,6 +8822,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -8752,6 +8973,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnAux1Up">UndoMouseUp</event>
+                                <event name="OnAux2Up">UndoMouseUp</event>
+                                <event name="OnKeyUp">UndoKeyUp</event>
+                                <event name="OnKillFocus">UndoKillFocus</event>
+                                <event name="OnLeftUp">UndoMouseUp</event>
+                                <event name="OnMiddleUp">UndoMouseUp</event>
+                                <event name="OnRightUp">UndoMouseUp</event>
                                 <event name="OnSlider">OnSlider</event>
                               </object>
                             </object>
@@ -9093,6 +9321,13 @@
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
+                    <event name="OnAux1Up">UndoMouseUp</event>
+                    <event name="OnAux2Up">UndoMouseUp</event>
+                    <event name="OnKeyUp">UndoKeyUp</event>
+                    <event name="OnKillFocus">UndoKillFocus</event>
+                    <event name="OnLeftUp">UndoMouseUp</event>
+                    <event name="OnMiddleUp">UndoMouseUp</event>
+                    <event name="OnRightUp">UndoMouseUp</event>
                     <event name="OnSlider">OnSlider</event>
                   </object>
                 </object>
@@ -9237,6 +9472,13 @@
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
+                    <event name="OnAux1Up">UndoMouseUp</event>
+                    <event name="OnAux2Up">UndoMouseUp</event>
+                    <event name="OnKeyUp">UndoKeyUp</event>
+                    <event name="OnKillFocus">UndoKillFocus</event>
+                    <event name="OnLeftUp">UndoMouseUp</event>
+                    <event name="OnMiddleUp">UndoMouseUp</event>
+                    <event name="OnRightUp">UndoMouseUp</event>
                     <event name="OnSlider">OnSlider</event>
                   </object>
                 </object>
@@ -9381,6 +9623,13 @@
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
+                    <event name="OnAux1Up">UndoMouseUp</event>
+                    <event name="OnAux2Up">UndoMouseUp</event>
+                    <event name="OnKeyUp">UndoKeyUp</event>
+                    <event name="OnKillFocus">UndoKillFocus</event>
+                    <event name="OnLeftUp">UndoMouseUp</event>
+                    <event name="OnMiddleUp">UndoMouseUp</event>
+                    <event name="OnRightUp">UndoMouseUp</event>
                     <event name="OnSlider">OnSlider</event>
                   </object>
                 </object>
@@ -9530,6 +9779,13 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style"></property>
+                <event name="OnAux1Up">UndoMouseUp</event>
+                <event name="OnAux2Up">UndoMouseUp</event>
+                <event name="OnKeyUp">UndoKeyUp</event>
+                <event name="OnKillFocus">UndoKillFocus</event>
+                <event name="OnLeftUp">UndoMouseUp</event>
+                <event name="OnMiddleUp">UndoMouseUp</event>
+                <event name="OnRightUp">UndoMouseUp</event>
                 <event name="OnSlider">OnSlider</event>
               </object>
             </object>
