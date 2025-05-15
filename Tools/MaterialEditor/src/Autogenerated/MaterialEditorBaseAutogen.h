@@ -114,8 +114,10 @@ class PbsParametersPanelBase : public wxPanel
 		virtual void OnColourHtml( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnColourButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckbox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void UndoMouseUp( wxMouseEvent& event ) { event.Skip(); }
+		virtual void UndoKeyUp( wxKeyEvent& event ) { event.Skip(); }
+		virtual void UndoKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnSlider( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSlider( wxScrollEvent& event ) { event.Skip(); }
 		virtual void OnSliderText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSubMeshApply( wxCommandEvent& event ) { event.Skip(); }
 
@@ -223,6 +225,9 @@ class PbsTexturePanelBase : public wxPanel
 		// Virtual event handlers, override them in your derived class
 		virtual void OnTextureChangeButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSpinCtrl( wxSpinEvent& event ) { event.Skip(); }
+		virtual void UndoMouseUp( wxMouseEvent& event ) { event.Skip(); }
+		virtual void UndoKeyUp( wxKeyEvent& event ) { event.Skip(); }
+		virtual void UndoKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnSlider( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCollapsiblePaneChanged( wxCollapsiblePaneEvent& event ) { event.Skip(); }
@@ -259,6 +264,9 @@ class LightPanelBase : public wxPanel
 		// Virtual event handlers, override them in your derived class
 		virtual void OnPresetChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckbox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void UndoMouseUp( wxMouseEvent& event ) { event.Skip(); }
+		virtual void UndoKeyUp( wxKeyEvent& event ) { event.Skip(); }
+		virtual void UndoKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnSlider( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEulerText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnText( wxCommandEvent& event ) { event.Skip(); }

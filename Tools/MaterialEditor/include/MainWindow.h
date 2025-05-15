@@ -5,6 +5,7 @@
 #include "Core/wxOgreRenderWindowListener.h"
 
 #include "MaterialEditorCommon.h"
+#include "UndoSystem.h"
 
 #include "OgreFrameListener.h"
 
@@ -35,6 +36,8 @@ class MainWindow final : public MainWindowBase,
     Ogre::CompositorWorkspace *m_workspace;
 
     wxOgreRenderWindow *m_wxOgreRenderWindow;
+
+    UndoSystem m_undoSystem;
 
     wxAuiManager *m_wxAuiManager;
 
@@ -149,6 +152,8 @@ public:
     void OnKeyUp( wxKeyEvent &evt ) override;
 
     void OnMenuSelection( wxCommandEvent &event ) override;
+
+    UndoSystem &getUndoSystem() { return m_undoSystem; }
 
     Ogre::Root                *getRoot() { return m_root; }
     Ogre::SceneManager        *getSceneManager() { return m_sceneManager; }

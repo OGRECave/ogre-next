@@ -68,6 +68,7 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     m_cameraNode( 0 ),
     m_workspace( 0 ),
     m_wxOgreRenderWindow( 0 ),
+    m_undoSystem( this ),
     m_wxAuiManager( 0 ),
     m_mainNotebook( 0 ),
     m_mainNotebook2( 0 ),
@@ -827,6 +828,13 @@ void MainWindow::OnMenuSelection( wxCommandEvent &event )
         break;
     case wxID_PREFERENCES:
         m_projectSettings->ShowModal();
+        break;
+
+    case wxID_UNDO:
+        m_undoSystem.performUndo();
+        break;
+    case wxID_REDO:
+        m_undoSystem.performRedo();
         break;
 
         // Submenu Camera

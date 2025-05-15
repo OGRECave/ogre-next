@@ -50,8 +50,20 @@ class PbsParametersPanel final : public PbsParametersPanelBase
 
     MainWindow *m_mainWindow;
 
-    bool m_editing;
-    bool m_datablockDirty;
+    enum DirtyState : uint8_t
+    {
+        DirtyStateUpToDate,
+        DirtyStateDirty,
+        DirtyStateDirtyFromSlider,
+    };
+
+    bool       m_editing;
+    DirtyState m_datablockDirty;
+    bool       m_ignoreUndo;
+    /// wxWidgets emits UndoMouseUp() then OnSlider(). Thus if we set m_ignoreUndo = false in UndoMouseUp
+    /// we'll push the current datablock.
+    /// This doesn't happen with keyboard because it emits OnSlider() then UndoKeyUp().
+    bool m_undoMouseUp;
 
     /// Creates all linked widgets that form part of one ColourWidgets based on the requested section.
     ColourWidgets getColourWidgets( ColourSection::ColourSection section );
@@ -71,6 +83,10 @@ protected:
     void OnWorkflowChange( wxCommandEvent &event ) override;
     void OnSettingDirty( wxCommandEvent &event ) override;
     void OnSubMeshApply( wxCommandEvent &event ) override;
+
+    void UndoMouseUp( wxMouseEvent &event ) override;
+    void UndoKeyUp( wxKeyEvent &event ) override;
+    void UndoKillFocus( wxFocusEvent &event ) override;
 
 public:
     PbsParametersPanel( MainWindow *parent );
