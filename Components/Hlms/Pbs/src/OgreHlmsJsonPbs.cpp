@@ -760,9 +760,9 @@ namespace Ogre
                     if( finalTexName != finalAliasName )
                     {
                         outString += ",\n\t\t\t\t\"texture\" : [\"";
-                        outString += finalAliasName;
-                        outString += "\", \"";
                         outString += finalTexName;
+                        outString += "\", \"";
+                        outString += finalAliasName;
                         outString += "\"]";
                     }
                     else
