@@ -864,12 +864,15 @@ void MainWindow::OnMenuSelection( wxCommandEvent &event )
     event.Skip();
 }
 //-----------------------------------------------------------------------------
-void MainWindow::setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable datablock )
+void MainWindow::setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable datablock,
+                                     const bool bUpdateDatablockListSelection )
 {
     m_activeDatablock = datablock;
     m_pbsParametersPanel->refreshFromDatablock();
     m_pbsParametersPanel->refreshSubMeshList();
     m_pbsTexturePanel->refreshFromDatablockAndApplyEnvMap();
+    if( bUpdateDatablockListSelection )
+        m_datablockList->notifyDatablockSelectChanged();
 }
 //-----------------------------------------------------------------------------
 void MainWindow::unloadForNewProject()
@@ -885,7 +888,8 @@ void MainWindow::unloadForNewProject()
         m_activeEntity = 0;
     }
 
-    setActiveDatablock( nullptr );
+    setActiveDatablock( nullptr, false );
+    m_undoSystem.clearBuffers();
 }
 //-----------------------------------------------------------------------------
 bool MainWindow::loadMeshAsItem( const Ogre::String &meshName, const Ogre::String &resourceGroup )
