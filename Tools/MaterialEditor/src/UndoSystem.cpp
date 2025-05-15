@@ -13,7 +13,8 @@ UndoSystem::UndoSystem( MainWindow *mainWindow ) : m_mainWindow( mainWindow )
 {
 }
 //-----------------------------------------------------------------------------
-void UndoSystem::pushUndoState( Ogre::HlmsDatablock *datablockBase, const bool bRedo )
+void UndoSystem::pushUndoState( Ogre::HlmsDatablock *datablockBase, const bool bRedo,
+                                const bool bClearRedoBuffer )
 {
     if( datablockBase->getCreator()->getType() == Ogre::HLMS_PBS )
     {
@@ -39,7 +40,11 @@ void UndoSystem::pushUndoState( Ogre::HlmsDatablock *datablockBase, const bool b
         if( !bRedo )
         {
             if( m_undoBuffer.empty() || entry != m_undoBuffer.back() )
+            {
                 m_undoBuffer.push_back( entry );
+                if( bClearRedoBuffer )
+                    m_redoBuffer.clear();
+            }
         }
         else
         {
@@ -63,16 +68,19 @@ void UndoSystem::performUndo( std::vector<UndoEntry> &undoBuffer, std::vector<Un
     {
         Ogre::HlmsManager *hlmsManager = m_mainWindow->getRoot()->getHlmsManager();
         Ogre::HlmsDatablock *currDatablock = hlmsManager->getDatablock( entry.datablockName );
-        pushUndoState( currDatablock, &m_redoBuffer == &redoBuffer );
+        pushUndoState( currDatablock, &m_redoBuffer == &redoBuffer, false );
 
         const bool bWasActiveDatablock = m_mainWindow->getActiveDatablock() == currDatablock;
 
         // We'll be destroying a datablock which may be in use. Prevent crashes.
         Ogre::MovableObject *obj = m_mainWindow->getActiveObject();
-        for( Ogre::Renderable *renderable : obj->mRenderables )
+        if( obj )
         {
-            if( renderable->getDatablock() == currDatablock )
-                renderable->_setNullDatablock();
+            for( Ogre::Renderable *renderable : obj->mRenderables )
+            {
+                if( renderable->getDatablock() == currDatablock )
+                    renderable->_setNullDatablock();
+            }
         }
 
         Ogre::Hlms *hlms = hlmsManager->getHlms( Ogre::HLMS_PBS );
@@ -84,10 +92,13 @@ void UndoSystem::performUndo( std::vector<UndoEntry> &undoBuffer, std::vector<Un
         currDatablock = hlmsManager->getDatablock( entry.datablockName );
 
         // Restore the (new) datablock back.
-        for( Ogre::Renderable *renderable : obj->mRenderables )
+        if( obj )
         {
-            if( !renderable->getDatablock() )
-                renderable->setDatablock( currDatablock );
+            for( Ogre::Renderable *renderable : obj->mRenderables )
+            {
+                if( !renderable->getDatablock() )
+                    renderable->setDatablock( currDatablock );
+            }
         }
 
         if( bWasActiveDatablock )

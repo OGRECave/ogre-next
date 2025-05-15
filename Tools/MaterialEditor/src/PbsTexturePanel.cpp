@@ -31,7 +31,9 @@ PbsTexturePanel::PbsTexturePanel( MainWindow *parent ) :
     PbsTexturePanelBase( parent ),
     m_mainWindow( parent ),
     m_reflectionMap( 0 ),
-    m_editing( false )
+    m_editing( false ),
+    m_ignoreUndo( false ),
+    m_undoMouseUp( false )
 {
     m_units[Ogre::PBSM_DIFFUSE] = { m_diffuseMapBtn, m_diffuseMapSpin };
     m_units[Ogre::PBSM_NORMAL] = { m_normalMapBtn, m_normalMapSpin };
@@ -228,6 +230,8 @@ void PbsTexturePanel::OnTextureChangeButton( wxCommandEvent &event )
     const TextureSelect::ResourceEntry *chosenEntry = textureSelect.getChosenEntry();
     if( chosenEntry && !chosenEntry->name.empty() && !chosenEntry->resourceGroup.empty() )
     {
+        m_mainWindow->getUndoSystem().pushUndoState( baseDatablock );
+
         OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbsDatablock *>( baseDatablock ) );
         Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock *>( baseDatablock );
 
@@ -274,6 +278,8 @@ void PbsTexturePanel::OnTextureChangeButton( wxCommandEvent &event )
     }
     else if( chosenEntry )
     {
+        m_mainWindow->getUndoSystem().pushUndoState( baseDatablock );
+
         using namespace Ogre;
         OGRE_ASSERT_HIGH( dynamic_cast<wxButton *>( event.GetEventObject() ) );
         const PbsTextureTypes textureType =
@@ -313,7 +319,9 @@ void PbsTexturePanel::OnSlider( wxCommandEvent &event )
 
     for( size_t i = 0u; i < Ogre::NUM_PBSM_TEXTURE_TYPES; ++i )
     {
-        SliderTextWidget widget = getStrengthSliderWidgets( static_cast<Ogre::PbsTextureTypes>( i ) );
+        const Ogre::PbsTextureTypes textureType = static_cast<Ogre::PbsTextureTypes>( i );
+
+        SliderTextWidget widget = getStrengthSliderWidgets( textureType );
         if( widget.slider && widget.slider == event.GetEventObject() )
         {
             widget.fromSlider();
@@ -321,6 +329,17 @@ void PbsTexturePanel::OnSlider( wxCommandEvent &event )
             double val;
             if( widget.text->GetValue().ToDouble( &val ) )
             {
+                if( !m_ignoreUndo )
+                {
+                    m_mainWindow->getUndoSystem().pushUndoState( baseDatablock );
+                    m_ignoreUndo = true;
+                }
+                if( m_undoMouseUp )
+                {
+                    m_ignoreUndo = false;
+                    m_undoMouseUp = false;
+                }
+
                 OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbsDatablock *>( baseDatablock ) );
                 Ogre::HlmsPbsDatablock *datablock =
                     static_cast<Ogre::HlmsPbsDatablock *>( baseDatablock );
@@ -335,6 +354,51 @@ void PbsTexturePanel::OnSlider( wxCommandEvent &event )
             }
 
             return;
+        }
+
+        DetailMapOffsetScale offsetScale = getDetailMapOffsetScale( textureType );
+        if( offsetScale.x.slider )
+        {
+            if( offsetScale.x.slider == event.GetEventObject() ||
+                offsetScale.y.slider == event.GetEventObject() ||
+                offsetScale.w.slider == event.GetEventObject() ||
+                offsetScale.h.slider == event.GetEventObject() )
+            {
+                if( !m_ignoreUndo )
+                {
+                    m_mainWindow->getUndoSystem().pushUndoState( baseDatablock );
+                    m_ignoreUndo = true;
+                }
+                if( m_undoMouseUp )
+                {
+                    m_ignoreUndo = false;
+                    m_undoMouseUp = false;
+                }
+
+                offsetScale.x.fromSlider();
+                offsetScale.y.fromSlider();
+                offsetScale.w.fromSlider();
+                offsetScale.h.fromSlider();
+
+                OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbsDatablock *>( baseDatablock ) );
+                Ogre::HlmsPbsDatablock *datablock =
+                    static_cast<Ogre::HlmsPbsDatablock *>( baseDatablock );
+
+                Ogre::Vector4 value(
+                    datablock->getDetailMapOffsetScale( uint8_t( i - Ogre::PBSM_DETAIL0 ) ) );
+
+                double val;
+                if( offsetScale.x.text->GetValue().ToDouble( &val ) )
+                    value.x = Ogre::Real( val );
+                if( offsetScale.y.text->GetValue().ToDouble( &val ) )
+                    value.y = Ogre::Real( val );
+                if( offsetScale.w.text->GetValue().ToDouble( &val ) )
+                    value.z = Ogre::Real( val );
+                if( offsetScale.h.text->GetValue().ToDouble( &val ) )
+                    value.w = Ogre::Real( val );
+                datablock->setDetailMapOffsetScale( uint8_t( i - Ogre::PBSM_DETAIL0 ), value );
+                return;
+            }
         }
     }
 }
@@ -353,7 +417,9 @@ void PbsTexturePanel::OnText( wxCommandEvent &event )
 
     for( size_t i = 0u; i < Ogre::NUM_PBSM_TEXTURE_TYPES; ++i )
     {
-        SliderTextWidget widget = getStrengthSliderWidgets( static_cast<Ogre::PbsTextureTypes>( i ) );
+        const Ogre::PbsTextureTypes textureType = static_cast<Ogre::PbsTextureTypes>( i );
+
+        SliderTextWidget widget = getStrengthSliderWidgets( textureType );
         if( widget.text && widget.text == event.GetEventObject() )
         {
             widget.fromText();
@@ -361,6 +427,8 @@ void PbsTexturePanel::OnText( wxCommandEvent &event )
             double val;
             if( widget.text->GetValue().ToDouble( &val ) )
             {
+                m_mainWindow->getUndoSystem().pushUndoState( baseDatablock );
+
                 OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbsDatablock *>( baseDatablock ) );
                 Ogre::HlmsPbsDatablock *datablock =
                     static_cast<Ogre::HlmsPbsDatablock *>( baseDatablock );
@@ -375,6 +443,42 @@ void PbsTexturePanel::OnText( wxCommandEvent &event )
             }
 
             return;
+        }
+
+        DetailMapOffsetScale offsetScale = getDetailMapOffsetScale( textureType );
+        if( offsetScale.x.text )
+        {
+            if( offsetScale.x.text == event.GetEventObject() ||
+                offsetScale.y.text == event.GetEventObject() ||
+                offsetScale.w.text == event.GetEventObject() ||
+                offsetScale.h.text == event.GetEventObject() )
+            {
+                m_mainWindow->getUndoSystem().pushUndoState( baseDatablock );
+
+                offsetScale.x.fromText();
+                offsetScale.y.fromText();
+                offsetScale.w.fromText();
+                offsetScale.h.fromText();
+
+                OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbsDatablock *>( baseDatablock ) );
+                Ogre::HlmsPbsDatablock *datablock =
+                    static_cast<Ogre::HlmsPbsDatablock *>( baseDatablock );
+
+                Ogre::Vector4 value(
+                    datablock->getDetailMapOffsetScale( uint8_t( i - Ogre::PBSM_DETAIL0 ) ) );
+
+                double val;
+                if( offsetScale.x.text->GetValue().ToDouble( &val ) )
+                    value.x = Ogre::Real( val );
+                if( offsetScale.y.text->GetValue().ToDouble( &val ) )
+                    value.y = Ogre::Real( val );
+                if( offsetScale.w.text->GetValue().ToDouble( &val ) )
+                    value.z = Ogre::Real( val );
+                if( offsetScale.h.text->GetValue().ToDouble( &val ) )
+                    value.w = Ogre::Real( val );
+                datablock->setDetailMapOffsetScale( uint8_t( i - Ogre::PBSM_DETAIL0 ), value );
+                return;
+            }
         }
     }
 }
@@ -393,6 +497,8 @@ void PbsTexturePanel::OnBlendModeChoice( wxCommandEvent &event )
 
     for( uint8_t i = Ogre::PBSM_DETAIL0; i <= Ogre::PBSM_DETAIL3; ++i )
     {
+        m_mainWindow->getUndoSystem().pushUndoState( baseDatablock );
+
         OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbsDatablock *>( baseDatablock ) );
         Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock *>( baseDatablock );
 
@@ -406,6 +512,24 @@ void PbsTexturePanel::OnCollapsiblePaneChanged( wxCollapsiblePaneEvent &event )
 {
     this->Layout();
     event.Skip();
+}
+//-----------------------------------------------------------------------------
+void PbsTexturePanel::UndoMouseUp( wxMouseEvent &event )
+{
+    event.Skip();
+    m_undoMouseUp = true;
+}
+//-----------------------------------------------------------------------------
+void PbsTexturePanel::UndoKeyUp( wxKeyEvent &event )
+{
+    event.Skip();
+    m_ignoreUndo = false;
+}
+//-----------------------------------------------------------------------------
+void PbsTexturePanel::UndoKillFocus( wxFocusEvent &event )
+{
+    event.Skip();
+    m_ignoreUndo = false;
 }
 //-----------------------------------------------------------------------------
 void PbsTexturePanel::refreshFromDatablockAndApplyEnvMap()
