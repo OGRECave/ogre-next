@@ -9,6 +9,25 @@ class MainWindow;
 
 OGRE_ASSUME_NONNULL_BEGIN
 
+// Forward declaration for |Document|.
+namespace rapidjson
+{
+    class CrtAllocator;
+    template <typename>
+    class MemoryPoolAllocator;
+    template <typename>
+    struct UTF8;
+    template <typename, typename, typename>
+    class GenericDocument;
+    typedef GenericDocument<UTF8<char>, MemoryPoolAllocator<CrtAllocator>, CrtAllocator> Document;
+
+    template <typename BaseAllocator>
+    class MemoryPoolAllocator;
+    template <typename Encoding, typename>
+    class GenericValue;
+    typedef GenericValue<UTF8<char>, MemoryPoolAllocator<CrtAllocator> > Value;
+}  // namespace rapidjson
+
 class LightPanel final : public LightPanelBase
 {
     MainWindow *m_mainWindow;
@@ -39,6 +58,9 @@ public:
     void notifyMeshChanged();
 
     void setPreset( const uint32_t preset );
+
+    void loadProject( const rapidjson::Document &d );
+    void saveProject( Ogre::String &jsonString );
 };
 
 OGRE_ASSUME_NONNULL_END

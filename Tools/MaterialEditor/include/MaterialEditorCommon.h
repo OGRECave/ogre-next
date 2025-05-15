@@ -11,6 +11,8 @@ OGRE_ASSUME_NONNULL_BEGIN
 class wxSlider;
 class wxTextCtrl;
 
+class LightPanel;
+
 struct EditingScope
 {
     bool &editing;

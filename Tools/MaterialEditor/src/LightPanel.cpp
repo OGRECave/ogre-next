@@ -9,6 +9,8 @@
 #include "OgreSceneManager.h"
 #include "OgreSceneNode.h"
 
+#include "rapidjson/document.h"
+
 struct Preset
 {
     const char *name;
@@ -335,4 +337,59 @@ void LightPanel::setPreset( const uint32_t presetIdx )
 
     sceneManager->setAmbientLight( preset.ambLowerHemisphere, preset.ambUpperHemisphere,
                                    sceneManager->getAmbientLightHemisphereDir(), preset.envmapScale );
+}
+//-----------------------------------------------------------------------------
+void LightPanel::loadProject( const rapidjson::Document &d )
+{
+    rapidjson::Value::ConstMemberIterator itor = d.FindMember( "lights" );
+    if( itor == d.MemberEnd() || !itor->value.IsObject() )
+        return;
+
+    const rapidjson::Value &lightObj = itor->value;
+
+    lightObj.FindMember( "preset" );
+    if( itor != lightObj.MemberEnd() && itor->value.IsUint() &&
+        itor->value.GetUint() < m_presetChoice->GetCount() )
+    {
+        m_presetChoice->SetSelection( (int)itor->value.GetUint() );
+        setPreset( itor->value.GetUint() );
+    }
+
+    lightObj.FindMember( "camera_relative" );
+    if( itor != lightObj.MemberEnd() && itor->value.IsBool() )
+        setCameraRelative( itor->value.GetBool() );
+
+    lightObj.FindMember( "euler" );
+    if( itor != lightObj.MemberEnd() && itor->value.IsArray() && itor->value.Size() == 3u &&
+        itor->value[0].IsDouble() && itor->value[1].IsDouble() && itor->value[2].IsDouble() )
+    {
+        m_eulerX->SetValue( wxString::FromDouble( itor->value[0].GetDouble() ) );
+        m_eulerY->SetValue( wxString::FromDouble( itor->value[1].GetDouble() ) );
+        m_eulerZ->SetValue( wxString::FromDouble( itor->value[2].GetDouble() ) );
+
+        for( size_t i = 0u; i < 3u; ++i )
+        {
+            SliderTextWidgetAngle widgets = getEulerSliders( i );
+            widgets.fromText();
+        }
+        reorientLights();
+    }
+}
+//-----------------------------------------------------------------------------
+void LightPanel::saveProject( Ogre::String &jsonString )
+{
+    double ex = 0.0, ey = 0.0, ez = 0.0;
+    m_eulerX->GetValue().ToDouble( &ex );
+    m_eulerY->GetValue().ToDouble( &ey );
+    m_eulerZ->GetValue().ToDouble( &ez );
+
+    jsonString += ",\n	\"lights\" :\n	{";
+    jsonString += "\n		\"preset\" : ";
+    jsonString += std::to_string( m_presetChoice->GetSelection() );
+    jsonString += ",\n		\"camera_relative\" : ";
+    jsonString += m_cameraRelativeCheckbox->IsChecked() ? "true" : "false";
+    jsonString += ",\n		\"euler\" : [ ";
+    jsonString +=
+        std::to_string( ex ) + ", " + std::to_string( ey ) + ", " + std::to_string( ez ) + " ]";
+    jsonString += "\n	}";
 }
