@@ -55,7 +55,8 @@ class UndoSystem
 public:
     UndoSystem( MainWindow *mainWindow );
 
-    void pushUndoState( Ogre::HlmsDatablock *datablockBase, const bool bRedo = false );
+    void pushUndoState( Ogre::HlmsDatablock *datablockBase, const bool bRedo = false,
+                        const bool bClearRedoBuffer = true );
 
     void performUndo();
     void performRedo();

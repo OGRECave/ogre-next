@@ -18,6 +18,11 @@ class PbsTexturePanel final : public PbsTexturePanelBase
     Ogre::TextureGpu *m_reflectionMap;
 
     bool m_editing;
+    bool m_ignoreUndo;
+    /// wxWidgets emits UndoMouseUp() then OnSlider(). Thus if we set m_ignoreUndo = false in UndoMouseUp
+    /// we'll push the current datablock.
+    /// This doesn't happen with keyboard because it emits OnSlider() then UndoKeyUp().
+    bool m_undoMouseUp;
 
     struct TextureUnit
     {
@@ -51,6 +56,10 @@ protected:
     void OnText( wxCommandEvent &event ) override;
     void OnBlendModeChoice( wxCommandEvent &event ) override;
     void OnCollapsiblePaneChanged( wxCollapsiblePaneEvent &event ) override;
+
+    void UndoMouseUp( wxMouseEvent &event ) override;
+    void UndoKeyUp( wxKeyEvent &event ) override;
+    void UndoKillFocus( wxFocusEvent &event ) override;
 
 public:
     PbsTexturePanel( MainWindow *parent );
