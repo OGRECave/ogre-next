@@ -16,6 +16,7 @@ namespace UndoType
     {
         PbsMaterial,
         MaterialSelect,
+        MaterialAssignment,
     };
 }
 
@@ -27,19 +28,25 @@ struct UndoEntry
     std::string    json;
     Ogre::String   resourceGroup;
 
-    UndoEntry( UndoType::UndoType _undoType, const Ogre::IdString &_datablockName,
-               const std::string &_json, const Ogre::String &_resourceGroup ) :
+    std::vector<Ogre::IdString> submeshDatablockNames;
+
+    UndoEntry(
+        UndoType::UndoType _undoType, const Ogre::IdString &_datablockName, const std::string &_json,
+        const Ogre::String                &_resourceGroup,
+        const std::vector<Ogre::IdString> &_submeshDatablockNames = std::vector<Ogre::IdString>() ) :
         undoType( _undoType ),
         datablockName( _datablockName ),
         json( _json ),
-        resourceGroup( _resourceGroup )
+        resourceGroup( _resourceGroup ),
+        submeshDatablockNames( _submeshDatablockNames )
     {
     }
 
     bool operator!=( const UndoEntry &other ) const
     {
         return this->undoType != other.undoType || this->datablockName != other.datablockName ||
-               this->json != other.json || this->resourceGroup != other.resourceGroup;
+               this->json != other.json || this->resourceGroup != other.resourceGroup ||
+               this->submeshDatablockNames != other.submeshDatablockNames;
     }
 };
 
@@ -59,6 +66,10 @@ public:
                         const bool bClearRedoBuffer = true );
 
     void pushUndoStateMaterialSelect( Ogre::HlmsDatablock *ogre_nullable datablock,
+                                      const bool bRedo = false, const bool bClearRedoBuffer = true );
+
+    void pushUndoStateMaterialAssign( const Ogre::Item *ogre_nullable       item,
+                                      const Ogre::v1::Entity *ogre_nullable entity,
                                       const bool bRedo = false, const bool bClearRedoBuffer = true );
 
     void performUndo();

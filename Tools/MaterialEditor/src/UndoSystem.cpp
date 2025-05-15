@@ -2,11 +2,16 @@
 #include "UndoSystem.h"
 
 #include "MainWindow.h"
+#include "PbsParametersPanel.h"
 
+#include "OgreEntity.h"
 #include "OgreHlms.h"
 #include "OgreHlmsJson.h"
 #include "OgreHlmsManager.h"
 #include "OgreHlmsPbsDatablock.h"
+#include "OgreItem.h"
+#include "OgreMesh.h"
+#include "OgreMesh2.h"
 #include "OgreRoot.h"
 
 UndoSystem::UndoSystem( MainWindow *mainWindow ) : m_mainWindow( mainWindow )
@@ -62,6 +67,51 @@ void UndoSystem::pushUndoStateMaterialSelect( Ogre::HlmsDatablock *datablock, co
         datablockName = datablock->getName();
 
     UndoEntry entry( UndoType::MaterialSelect, datablockName, "", "" );
+    if( !bRedo )
+    {
+        if( m_undoBuffer.empty() || entry != m_undoBuffer.back() )
+        {
+            m_undoBuffer.push_back( entry );
+            if( bClearRedoBuffer )
+                m_redoBuffer.clear();
+        }
+    }
+    else
+    {
+        if( m_redoBuffer.empty() || entry != m_redoBuffer.back() )
+            m_redoBuffer.push_back( entry );
+    }
+}
+//-----------------------------------------------------------------------------
+void UndoSystem::pushUndoStateMaterialAssign( const Ogre::Item *item, const Ogre::v1::Entity *entity,
+                                              const bool bRedo, const bool bClearRedoBuffer )
+{
+    OGRE_ASSERT_LOW( ( entity && !item ) || ( !entity && item ) );
+
+    Ogre::String meshName;
+    Ogre::String resourceGroup;
+    if( item )
+    {
+        meshName = item->getMesh()->getName();
+        resourceGroup = item->getMesh()->getGroup();
+    }
+    else if( entity )
+    {
+        meshName = entity->getMesh()->getName();
+        resourceGroup = entity->getMesh()->getGroup();
+    }
+
+    Ogre::MovableObject const *object = item;
+    if( !item )
+        object = entity;
+
+    std::vector<Ogre::IdString> submeshDatablockNames;
+    submeshDatablockNames.reserve( object->mRenderables.size() );
+    for( const Ogre::Renderable *renderable : object->mRenderables )
+        submeshDatablockNames.push_back( renderable->getDatablock()->getName() );
+
+    UndoEntry entry( UndoType::MaterialAssignment, Ogre::IdString(), meshName, resourceGroup,
+                     submeshDatablockNames );
     if( !bRedo )
     {
         if( m_undoBuffer.empty() || entry != m_undoBuffer.back() )
@@ -144,6 +194,49 @@ void UndoSystem::performUndo( std::vector<UndoEntry> &undoBuffer, std::vector<Un
         else
         {
             m_mainWindow->setActiveDatablock( nullptr );
+        }
+        break;
+    }
+    case UndoType::MaterialAssignment:
+    {
+        Ogre::Item *item = m_mainWindow->getActiveItem();
+        Ogre::v1::Entity *entity = m_mainWindow->getActiveEntity();
+        Ogre::String meshName;
+        Ogre::String resourceGroup;
+        if( item )
+        {
+            meshName = item->getMesh()->getName();
+            resourceGroup = item->getMesh()->getGroup();
+        }
+        else if( entity )
+        {
+            meshName = entity->getMesh()->getName();
+            resourceGroup = entity->getMesh()->getGroup();
+        }
+
+        pushUndoStateMaterialAssign( item, entity, &m_redoBuffer == &redoBuffer, false );
+
+        if( meshName == entry.json && resourceGroup == entry.resourceGroup )
+        {
+            Ogre::MovableObject *object = m_mainWindow->getActiveObject();
+            OGRE_ASSERT( object->mRenderables.size() == entry.submeshDatablockNames.size() );
+
+            Ogre::HlmsManager *hlmsManager = m_mainWindow->getRoot()->getHlmsManager();
+
+            size_t idx = 0u;
+            for( Ogre::Renderable *renderable : object->mRenderables )
+            {
+                Ogre::HlmsDatablock *prevDatablock =
+                    hlmsManager->getDatablockNoDefault( entry.submeshDatablockNames[idx++] );
+                renderable->setDatablock( prevDatablock );
+            }
+
+            m_mainWindow->getPbsParametersPanel()->refreshSubMeshList();
+        }
+        else
+        {
+            // Why are we here? Is this even possible? Anyway, destroyed mesh. We can't restore it
+            // (assignment is a preview, not permanent. We do not save meshes).
         }
         break;
     }
