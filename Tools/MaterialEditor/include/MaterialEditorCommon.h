@@ -3,6 +3,9 @@
 
 #include "OgrePrerequisites.h"
 
+#include <wx/slider.h>
+#include <wx/textctrl.h>
+
 OGRE_ASSUME_NONNULL_BEGIN
 
 class wxSlider;
@@ -16,15 +19,28 @@ struct EditingScope
     ~EditingScope() { editing = false; }
 };
 
-struct SliderTextWidget
+template <int32_t MULTIPLIER>
+struct SliderTextWidgetTemplate
 {
     // If one is nullptr, then the other one also is.
     wxSlider *ogre_nullable   slider;
     wxTextCtrl *ogre_nullable text;
 
-    void fromSlider();
-    void fromText();
+    void fromSlider()
+    {
+        const double val = double( slider->GetValue() );
+        text->SetValue( wxString::Format( wxT( "%.05lf" ), val / ( double( MULTIPLIER ) / 100.0 ) ) );
+    }
+    void fromText()
+    {
+        double val = 0;
+        if( text->GetValue().ToDouble( &val ) )
+            slider->SetValue( int( std::round( val * ( double( MULTIPLIER ) / 100.0 ) ) ) );
+    }
 };
+
+typedef SliderTextWidgetTemplate<10000> SliderTextWidget;
+typedef SliderTextWidgetTemplate<100>   SliderTextWidgetAngle;
 
 namespace CoordinateConvention
 {
