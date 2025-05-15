@@ -15,6 +15,8 @@ class PbsTexturePanel final : public PbsTexturePanelBase
 {
     MainWindow *m_mainWindow;
 
+    Ogre::TextureGpu *m_reflectionMap;
+
     bool m_editing;
 
     struct TextureUnit
@@ -48,12 +50,17 @@ protected:
     void OnSlider( wxCommandEvent &event ) override;
     void OnText( wxCommandEvent &event ) override;
     void OnBlendModeChoice( wxCommandEvent &event ) override;
-    void OnCollapsiblePaneChanged( wxCollapsiblePaneEvent& event ) override;
+    void OnCollapsiblePaneChanged( wxCollapsiblePaneEvent &event ) override;
 
 public:
     PbsTexturePanel( MainWindow *parent );
 
-    void refreshFromDatablock();
+    void refreshFromDatablockAndApplyEnvMap();
+
+    void notifyMeshChanged();
+    void applyEnvMapToDatablock( Ogre::HlmsDatablock *baseDatablock );
+    /// Needed when saving.
+    void unsetEnvMapFromAllDatablocks();
 };
 
 OGRE_ASSUME_NONNULL_END
