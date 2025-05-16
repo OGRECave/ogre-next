@@ -1,6 +1,7 @@
 
 #include "UndoSystem.h"
 
+#include "LightPanel.h"
 #include "MainWindow.h"
 #include "PbsParametersPanel.h"
 
@@ -13,6 +14,8 @@
 #include "OgreMesh.h"
 #include "OgreMesh2.h"
 #include "OgreRoot.h"
+
+#include "rapidjson/document.h"
 
 UndoSystem::UndoSystem( MainWindow *mainWindow ) : m_mainWindow( mainWindow )
 {
@@ -148,6 +151,31 @@ void UndoSystem::pushUndoMeshSelect( const bool bRedo, const bool bClearRedoBuff
     }
 }
 //-----------------------------------------------------------------------------
+void UndoSystem::pushUndoLights( const bool bRedo, const bool bClearRedoBuffer )
+{
+    Ogre::String jsonString;
+    jsonString = "{\"u\":0";
+    m_mainWindow->getLightPanel()->saveProject( jsonString );
+    jsonString += "}";
+
+    const MeshEntry meshEntry = m_mainWindow->getActiveMeshName();
+    UndoEntry entry( UndoType::Lights, Ogre::IdString(), jsonString, "" );
+    if( !bRedo )
+    {
+        if( m_undoBuffer.empty() || entry != m_undoBuffer.back() )
+        {
+            m_undoBuffer.push_back( entry );
+            if( bClearRedoBuffer )
+                m_redoBuffer.clear();
+        }
+    }
+    else
+    {
+        if( m_redoBuffer.empty() || entry != m_redoBuffer.back() )
+            m_redoBuffer.push_back( entry );
+    }
+}
+//-----------------------------------------------------------------------------
 void UndoSystem::performUndo( std::vector<UndoEntry> &undoBuffer, std::vector<UndoEntry> &redoBuffer )
 {
     if( undoBuffer.empty() )
@@ -252,6 +280,15 @@ void UndoSystem::performUndo( std::vector<UndoEntry> &undoBuffer, std::vector<Un
     {
         pushUndoMeshSelect( &m_redoBuffer == &redoBuffer, false );
         m_mainWindow->setActiveMesh( entry.json, entry.resourceGroup );
+        break;
+    }
+    case UndoType::Lights:
+    {
+        pushUndoMeshSelect( &m_redoBuffer == &redoBuffer, false );
+        rapidjson::Document d;
+        d.Parse( entry.json.c_str() );
+        if( !d.HasParseError() )
+            m_mainWindow->getLightPanel()->loadProject( d );
         break;
     }
     }

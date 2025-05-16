@@ -36,7 +36,15 @@ class LightPanel final : public LightPanelBase
     Ogre::SceneNode              *m_secondaryNode;
     Ogre::SceneNode *ogre_nonnull m_lightNodes[3];
 
+    double   m_eulerAngles[3];
+    uint32_t m_currPresetIdx;
+
     bool m_editing;
+    bool m_ignoreUndo;
+    /// wxWidgets emits UndoMouseUp() then OnSlider(). Thus if we set m_ignoreUndo = false in UndoMouseUp
+    /// we'll push the current datablock.
+    /// This doesn't happen with keyboard because it emits OnSlider() then UndoKeyUp().
+    bool m_undoMouseUp;
 
     void reorientLights();
 
@@ -50,11 +58,16 @@ protected:
     void OnSlider( wxCommandEvent &event ) override;
     void OnText( wxCommandEvent &event ) override;
 
+    void UndoMouseUp( wxMouseEvent &event ) override;
+    void UndoKeyUp( wxKeyEvent &event ) override;
+    void UndoKillFocus( wxFocusEvent &event ) override;
+
 public:
     LightPanel( MainWindow *parent );
 
     void setCoordinateConvention( CoordinateConvention::CoordinateConvention newConvention );
     void setCameraRelative( const bool bCameraRelative );
+    bool isCameraRelative() const;
     void notifyMeshChanged();
 
     void setPreset( const uint32_t preset );

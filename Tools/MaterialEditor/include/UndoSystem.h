@@ -18,6 +18,7 @@ namespace UndoType
         MaterialSelect,
         MaterialAssignment,
         MeshSelect,
+        Lights,
     };
 }
 
@@ -73,6 +74,8 @@ public:
                                       const bool bRedo = false, const bool bClearRedoBuffer = true );
 
     void pushUndoMeshSelect( const bool bRedo = false, const bool bClearRedoBuffer = true );
+
+    void pushUndoLights( const bool bRedo = false, const bool bClearRedoBuffer = true );
 
     void performUndo();
     void performRedo();
