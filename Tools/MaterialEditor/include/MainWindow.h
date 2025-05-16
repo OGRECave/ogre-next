@@ -162,6 +162,7 @@ public:
     Ogre::SceneNode *getCameraNode() { return m_cameraNode; }
 
     PbsParametersPanel *getPbsParametersPanel() { return m_pbsParametersPanel; }
+    LightPanel         *getLightPanel() { return m_lightPanel; }
 
     void setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable datablock,
                              const bool                         bUpdateDatablockListSelection = true );
