@@ -156,8 +156,10 @@ namespace Ogre
         /** Actually performs present. Called by VulkanDevice::commitAndNextCommandBuffer
         @param queueFinishSemaphore
             Makes our present request wait until the Queue is done executing before we can present
+        @return
+            The swapchain index so that queueFinishSemaphore can be scheduled for recycling properly.
         */
-        void _swapBuffers( VkSemaphore queueFinishSemaphore );
+        uint32 _swapBuffers( VkSemaphore queueFinishSemaphore );
 
         void getCustomAttribute( IdString name, void *pData ) override;
     };

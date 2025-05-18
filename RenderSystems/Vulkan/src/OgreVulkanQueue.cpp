@@ -1279,8 +1279,8 @@ namespace Ogre
             for( size_t windowIdx = 0u; windowIdx < numWindowsPendingSwap; ++windowIdx )
             {
                 VkSemaphore semaphore = mGpuSignalSemaphForCurrCmdBuff[windowsSemaphStart + windowIdx];
-                mWindowsPendingSwap[windowIdx]->_swapBuffers( semaphore );
-                mVaoManager->notifyWaitSemaphoreSubmitted( semaphore );
+                const uint32 swapchainIdx = mWindowsPendingSwap[windowIdx]->_swapBuffers( semaphore );
+                mVaoManager->notifyPresentationWaitSemaphoreSubmitted( semaphore, swapchainIdx );
             }
         }
 

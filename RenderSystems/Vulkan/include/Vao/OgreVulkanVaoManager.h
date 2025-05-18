@@ -251,6 +251,7 @@ namespace Ogre
         };
 
         FastArray<UsedSemaphore> mUsedSemaphores;
+        FastArray<UsedSemaphore> mUsedPresentSemaphores;
 
         VkSemaphoreArray mAvailableSemaphores;
 
@@ -546,13 +547,34 @@ namespace Ogre
         VkSemaphore getAvailableSemaphore();
 
         /// Call this function after you've submitted to the GPU a VkSemaphore that will be waited on.
-        /// i.e. 'semaphore' is part of VkSubmitInfo::pWaitSemaphores or part of
-        /// VkPresentInfoKHR::pWaitSemaphores
+        /// i.e. 'semaphore' is part of VkSubmitInfo::pWaitSemaphores. But it must NOT be part of
+        /// VkPresentInfoKHR::pWaitSemaphores.
         ///
         /// After enough frames have passed, this semaphore goes
-        /// back to a pool for getAvailableSemaphores to use
+        /// back to a pool for getAvailableSemaphores to use.
+        ///
+        /// IMPORTANT: See notifyPresentationWaitSemaphoreSubmitted().
         void notifyWaitSemaphoreSubmitted( VkSemaphore semaphore );
         void notifyWaitSemaphoresSubmitted( const VkSemaphoreArray &semaphores );
+
+        /// After we call vkQueuePresentKHR(), the swapchain passed to VkPresentInfoKHR::pWaitSemaphores
+        /// must NOT be recycled via notifyWaitSemaphoreSubmitted().
+        ///
+        /// This is because there is no guarantee that this semaphore will become available after enough
+        /// frames. We must be specifically be informed of this fact via notifySwapchainIndexAcquired().
+        /// After that, it goes back to a pool for getAvailableSemaphores() to use.
+        ///
+        /// See https://www.reddit.com/r/vulkan/comments/1kpfyo5/comment/mt03b5z/
+        ///
+        /// WARNING: Failing to call notifySwapchainIndexAcquired() would cause semaphores to leak.
+        void notifyPresentationWaitSemaphoreSubmitted( VkSemaphore semaphore, uint32 swapchainIdx );
+
+        /// Notifies that all past semaphores scheduled for recycling via
+        /// notifyPresentationWaitSemaphoreSubmitted() for the given swapchainIdx have become
+        /// available again.
+        void notifySwapchainIndexAcquired( uint32 swapchainIdx );
+
+        /// This semaphore can no longer be used and should be destroyed.
         void notifySemaphoreUnused( VkSemaphore semaphore );
 
         /// Returns the current frame # (which wraps to 0 every mDynamicBufferMultiplier

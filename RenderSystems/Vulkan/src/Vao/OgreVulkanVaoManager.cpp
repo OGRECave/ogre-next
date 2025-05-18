@@ -226,6 +226,10 @@ namespace Ogre
             vkDestroySemaphore( mDevice->mDevice, sem.semaphore, 0 );
         mUsedSemaphores.clear();
 
+        for( UsedSemaphore &sem : mUsedPresentSemaphores )
+            vkDestroySemaphore( mDevice->mDevice, sem.semaphore, 0 );
+        mUsedPresentSemaphores.clear();
+
         deleteStagingBuffers();
 
         for( VulkanDelayedFuncBaseArray &fnFrame : mDelayedFuncs )
@@ -2227,6 +2231,32 @@ namespace Ogre
             mUsedSemaphores.push_back( UsedSemaphore( *itor++, mFrameCount ) );
     }
     //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::notifyPresentationWaitSemaphoreSubmitted( VkSemaphore semaphore,
+                                                                     uint32 swapchainIdx )
+    {
+        mUsedPresentSemaphores.push_back( UsedSemaphore( semaphore, swapchainIdx ) );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::notifySwapchainIndexAcquired( const uint32 swapchainIdx )
+    {
+        FastArray<UsedSemaphore>::iterator itor = mUsedPresentSemaphores.begin();
+        FastArray<UsedSemaphore>::iterator endt = mUsedPresentSemaphores.end();
+
+        while( itor != endt )
+        {
+            if( swapchainIdx == itor->frame )
+            {
+                mAvailableSemaphores.push_back( itor->semaphore );
+                itor = efficientVectorRemove( mUsedPresentSemaphores, itor );
+                endt = mUsedPresentSemaphores.end();
+            }
+            else
+            {
+                ++itor;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void VulkanVaoManager::notifySemaphoreUnused( VkSemaphore semaphore )
     {
         vkDestroySemaphore( mDevice->mDevice, semaphore, 0 );
@@ -2352,6 +2382,13 @@ namespace Ogre
         }
 
         deallocateEmptyVbos( true );
+
+        for( const UsedSemaphore &sem : mUsedSemaphores )
+            mAvailableSemaphores.push_back( sem.semaphore );
+        for( const UsedSemaphore &sem : mUsedPresentSemaphores )
+            mAvailableSemaphores.push_back( sem.semaphore );
+        mUsedSemaphores.clear();
+        mUsedPresentSemaphores.clear();
 
         // If this isn't empty, then some deallocation got delayed after our flushAllGpuDelayedBlocks
         // call even though it shouldn't!

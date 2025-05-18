@@ -612,6 +612,9 @@ namespace Ogre
         uint32 swapchainIdx = 0u;
         VkResult result = vkAcquireNextImageKHR( mDevice->mDevice, mSwapchain, UINT64_MAX,
                                                  mSwapchainSemaphore, VK_NULL_HANDLE, &swapchainIdx );
+        if( result == VK_SUCCESS || result == VK_SUBOPTIMAL_KHR )
+            vaoManager->notifySwapchainIndexAcquired( swapchainIdx );
+
         if( result != VK_SUCCESS || mSuboptimal )
         {
             // Recreate the swapchain if it's no longer compatible with the surface (OUT_OF_DATE)
@@ -730,7 +733,7 @@ namespace Ogre
         mSwapchainStatus = SwapchainPendingSwap;
     }
     //-------------------------------------------------------------------------
-    void VulkanWindowSwapChainBased::_swapBuffers( VkSemaphore queueFinishSemaphore )
+    uint32 VulkanWindowSwapChainBased::_swapBuffers( VkSemaphore queueFinishSemaphore )
     {
         OGRE_ASSERT_LOW( mSwapchainStatus == SwapchainPendingSwap );
 
@@ -789,6 +792,8 @@ namespace Ogre
             mSuboptimal = true;
 
         mSwapchainStatus = SwapchainReleased;
+
+        return currentSwapchainIdx;
     }
     //-------------------------------------------------------------------------
     void VulkanWindowSwapChainBased::getCustomAttribute( IdString name, void *pData )
