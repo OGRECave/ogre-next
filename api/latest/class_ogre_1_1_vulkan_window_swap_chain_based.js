@@ -11,7 +11,7 @@ var class_ogre_1_1_vulkan_window_swap_chain_based =
     ] ],
     [ "VulkanWindowSwapChainBased", "class_ogre_1_1_vulkan_window_swap_chain_based.html#ad2fb682ca82f8ea974a64cfef5c622b4", null ],
     [ "~VulkanWindowSwapChainBased", "class_ogre_1_1_vulkan_window_swap_chain_based.html#acc1f3768bdf583d8818aa6fe8c5453b2", null ],
-    [ "_swapBuffers", "class_ogre_1_1_vulkan_window_swap_chain_based.html#a319d7bba3d2a578b0c846f0b419692ff", null ],
+    [ "_swapBuffers", "class_ogre_1_1_vulkan_window_swap_chain_based.html#a292673987bc8401ba78a0f15055607f5", null ],
     [ "acquireNextSwapchain", "class_ogre_1_1_vulkan_window_swap_chain_based.html#ab48fc2ff56a29b65220b8c7a69eef8d4", null ],
     [ "canDownloadData", "class_ogre_1_1_vulkan_window_swap_chain_based.html#ad337e8d5f7a28e608259a18269694bf6", null ],
     [ "chooseSurfaceFormat", "class_ogre_1_1_vulkan_window_swap_chain_based.html#a8d6f1accac3551566dc3de3a44cfc9ac", null ],

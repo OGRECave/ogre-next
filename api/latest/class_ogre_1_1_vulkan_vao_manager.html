@@ -207,8 +207,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af84adcd5063ffc4c16f9735b26e07d3b" id="r_af84adcd5063ffc4c16f9735b26e07d3b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#af84adcd5063ffc4c16f9735b26e07d3b">isFrameFinished</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> frameCount) override</td></tr>
 <tr class="memdesc:af84adcd5063ffc4c16f9735b26e07d3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_vao_manager.html#a48589a1d12b10aa89082ebca7a9c524d" title="If this returns true, then waitForSpecificFrameToFinish is guaranteed to return immediately.">VaoManager::isFrameFinished</a>.  <br /></td></tr>
 <tr class="separator:af84adcd5063ffc4c16f9735b26e07d3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50e532c4ade57822e55573fd52c705c9" id="r_a50e532c4ade57822e55573fd52c705c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a50e532c4ade57822e55573fd52c705c9">notifyPresentationWaitSemaphoreSubmitted</a> (VkSemaphore semaphore, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> swapchainIdx)</td></tr>
+<tr class="memdesc:a50e532c4ade57822e55573fd52c705c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">After we call vkQueuePresentKHR(), the swapchain passed to VkPresentInfoKHR::pWaitSemaphores must NOT be recycled via <a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#aef811ea3cd677a89baea4b86577169ef" title="Call this function after you&#39;ve submitted to the GPU a VkSemaphore that will be waited on.">notifyWaitSemaphoreSubmitted()</a>.  <br /></td></tr>
+<tr class="separator:a50e532c4ade57822e55573fd52c705c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b461bb31c7f8e47a94a4725e1d49db1" id="r_a3b461bb31c7f8e47a94a4725e1d49db1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a3b461bb31c7f8e47a94a4725e1d49db1">notifySemaphoreUnused</a> (VkSemaphore semaphore)</td></tr>
+<tr class="memdesc:a3b461bb31c7f8e47a94a4725e1d49db1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This semaphore can no longer be used and should be destroyed.  <br /></td></tr>
 <tr class="separator:a3b461bb31c7f8e47a94a4725e1d49db1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc96fbecb4d7c5073a6c3d7a2157565c" id="r_adc96fbecb4d7c5073a6c3d7a2157565c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#adc96fbecb4d7c5073a6c3d7a2157565c">notifySwapchainIndexAcquired</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> swapchainIdx)</td></tr>
+<tr class="memdesc:adc96fbecb4d7c5073a6c3d7a2157565c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies that all past semaphores scheduled for recycling via <a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a50e532c4ade57822e55573fd52c705c9" title="After we call vkQueuePresentKHR(), the swapchain passed to VkPresentInfoKHR::pWaitSemaphores must NOT...">notifyPresentationWaitSemaphoreSubmitted()</a> for the given swapchainIdx have become available again.  <br /></td></tr>
+<tr class="separator:adc96fbecb4d7c5073a6c3d7a2157565c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ff2db20acf8a0942f25b2304e9056b8" id="r_a6ff2db20acf8a0942f25b2304e9056b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a6ff2db20acf8a0942f25b2304e9056b8">notifyWaitSemaphoresSubmitted</a> (const <a class="el" href="namespace_ogre.html#acae60aed4d41345db59648a2379e3559">VkSemaphoreArray</a> &amp;semaphores)</td></tr>
 <tr class="separator:a6ff2db20acf8a0942f25b2304e9056b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef811ea3cd677a89baea4b86577169ef" id="r_aef811ea3cd677a89baea4b86577169ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#aef811ea3cd677a89baea4b86577169ef">notifyWaitSemaphoreSubmitted</a> (VkSemaphore semaphore)</td></tr>
@@ -1269,6 +1276,39 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a50e532c4ade57822e55573fd52c705c9" name="a50e532c4ade57822e55573fd52c705c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50e532c4ade57822e55573fd52c705c9">&#9670;&#160;</a></span>notifyPresentationWaitSemaphoreSubmitted()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::VulkanVaoManager::notifyPresentationWaitSemaphoreSubmitted </td>
+          <td>(</td>
+          <td class="paramtype">VkSemaphore&#160;</td>
+          <td class="paramname"><em>semaphore</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td>
+          <td class="paramname"><em>swapchainIdx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>After we call vkQueuePresentKHR(), the swapchain passed to VkPresentInfoKHR::pWaitSemaphores must NOT be recycled via <a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#aef811ea3cd677a89baea4b86577169ef" title="Call this function after you&#39;ve submitted to the GPU a VkSemaphore that will be waited on.">notifyWaitSemaphoreSubmitted()</a>. </p>
+<p>This is because there is no guarantee that this semaphore will become available after enough frames. We must be specifically be informed of this fact via <a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#adc96fbecb4d7c5073a6c3d7a2157565c" title="Notifies that all past semaphores scheduled for recycling via notifyPresentationWaitSemaphoreSubmitte...">notifySwapchainIndexAcquired()</a>. After that, it goes back to a pool for <a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#affce885268f092b27677b1cbf551fad3" title="Insert into the end of semaphoreArray &#39;numSemaphores&#39; number of semaphores that are safe for use.">getAvailableSemaphores()</a> to use.</p>
+<p>See <a href="https://www.reddit.com/r/vulkan/comments/1kpfyo5/comment/mt03b5z/">https://www.reddit.com/r/vulkan/comments/1kpfyo5/comment/mt03b5z/</a></p>
+<p>WARNING: Failing to call <a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#adc96fbecb4d7c5073a6c3d7a2157565c" title="Notifies that all past semaphores scheduled for recycling via notifyPresentationWaitSemaphoreSubmitte...">notifySwapchainIndexAcquired()</a> would cause semaphores to leak. </p>
+
+</div>
+</div>
 <a id="a3b461bb31c7f8e47a94a4725e1d49db1" name="a3b461bb31c7f8e47a94a4725e1d49db1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3b461bb31c7f8e47a94a4725e1d49db1">&#9670;&#160;</a></span>notifySemaphoreUnused()</h2>
 
@@ -1284,6 +1324,28 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>This semaphore can no longer be used and should be destroyed. </p>
+
+</div>
+</div>
+<a id="adc96fbecb4d7c5073a6c3d7a2157565c" name="adc96fbecb4d7c5073a6c3d7a2157565c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc96fbecb4d7c5073a6c3d7a2157565c">&#9670;&#160;</a></span>notifySwapchainIndexAcquired()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::VulkanVaoManager::notifySwapchainIndexAcquired </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td>
+          <td class="paramname"><em>swapchainIdx</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Notifies that all past semaphores scheduled for recycling via <a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a50e532c4ade57822e55573fd52c705c9" title="After we call vkQueuePresentKHR(), the swapchain passed to VkPresentInfoKHR::pWaitSemaphores must NOT...">notifyPresentationWaitSemaphoreSubmitted()</a> for the given swapchainIdx have become available again. </p>
 
 </div>
 </div>
@@ -1322,8 +1384,9 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Call this function after you've submitted to the GPU a VkSemaphore that will be waited on. </p>
-<p>i.e. 'semaphore' is part of VkSubmitInfo::pWaitSemaphores or part of VkPresentInfoKHR::pWaitSemaphores</p>
-<p>After enough frames have passed, this semaphore goes back to a pool for getAvailableSemaphores to use </p>
+<p>i.e. 'semaphore' is part of VkSubmitInfo::pWaitSemaphores. But it must NOT be part of VkPresentInfoKHR::pWaitSemaphores.</p>
+<p>After enough frames have passed, this semaphore goes back to a pool for getAvailableSemaphores to use.</p>
+<p>IMPORTANT: See <a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a50e532c4ade57822e55573fd52c705c9" title="After we call vkQueuePresentKHR(), the swapchain passed to VkPresentInfoKHR::pWaitSemaphores must NOT...">notifyPresentationWaitSemaphoreSubmitted()</a>. </p>
 
 </div>
 </div>

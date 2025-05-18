@@ -674,7 +674,7 @@ var searchData=
   ['_5fsuppressrenderstatechanges_671',['_suppressRenderStateChanges',['../class_ogre_1_1_scene_manager.html#a6753ea2b52715774b7fdd59da232917a',1,'Ogre::SceneManager']]],
   ['_5fswapallfinaltargets_672',['_swapAllFinalTargets',['../class_ogre_1_1_compositor_manager2.html#afe58a3e1bb1aca6ccc34975bfb13a535',1,'Ogre::CompositorManager2']]],
   ['_5fswapboneweightsuniqueptr_673',['_swapBoneWeightsUniquePtr',['../class_ogre_1_1_skeleton_animation.html#ac8cf2d3fbf6147e93400ae5ea048ad45',1,'Ogre::SkeletonAnimation']]],
-  ['_5fswapbuffers_674',['_swapBuffers',['../class_ogre_1_1_vulkan_window_swap_chain_based.html#a319d7bba3d2a578b0c846f0b419692ff',1,'Ogre::VulkanWindowSwapChainBased']]],
+  ['_5fswapbuffers_674',['_swapBuffers',['../class_ogre_1_1_vulkan_window_swap_chain_based.html#a292673987bc8401ba78a0f15055607f5',1,'Ogre::VulkanWindowSwapChainBased']]],
   ['_5fswapfinaltarget_675',['_swapFinalTarget',['../class_ogre_1_1_compositor_workspace.html#ad857c10e7ed80a2b84c5dcc77b002c08',1,'Ogre::CompositorWorkspace']]],
   ['_5fswitchcontext_676',['_switchcontext',['../class_ogre_1_1_g_l3_plus_render_system.html#a4f64253cbc9da17ccac42e2214d90239',1,'Ogre::GL3PlusRenderSystem::_switchContext()'],['../class_ogre_1_1_g_l_e_s2_render_system.html#ab352827ac3c1322b9a27466f9a75ab8d',1,'Ogre::GLES2RenderSystem::_switchContext()']]],
   ['_5fsyncgpuresidenttosystemram_677',['_syncGpuResidentToSystemRam',['../class_ogre_1_1_texture_gpu.html#a40511da73ca4dc4bd8a3e8fc42c44147',1,'Ogre::TextureGpu']]],

@@ -79,7 +79,7 @@ var searchData=
   ['libraryvec_76',['LibraryVec',['../class_ogre_1_1_hlms.html#a6515668f13ae08887b8104c7133e5c29',1,'Ogre::Hlms']]],
   ['license_77',['License',['../index.html#autotoc_md10',1,'']]],
   ['licenseexpired_78',['licenseexpired',['../class_ogre_1_1v1_1_1_hardware_buffer_licensee.html#a79993f3120fffb36d8c97cafc84ea938',1,'Ogre::v1::HardwareBufferLicensee::licenseExpired()'],['../class_ogre_1_1v1_1_1_temp_blended_buffer_info.html#a9ffd53d61a6e44fa130e451a440f6a83',1,'Ogre::v1::TempBlendedBufferInfo::licenseExpired()']]],
-  ['light_79',['light',['../struct_ogre_1_1_light_closest.html#aa41b81d253b1af2e9951905238e0a7dc',1,'Ogre::LightClosest::light'],['../class_ogre_1_1_shadow_texture_definition.html#ac5fa1aa9cea5f1ef578cbd4b16196e42',1,'Ogre::ShadowTextureDefinition::light'],['../class_ogre_1_1_light.html#a2e562e3231d1ebdbebb009b5d4bc9af4',1,'Ogre::Light::Light()'],['../class_ogre_1_1_light.html',1,'Ogre::Light']]],
+  ['light_79',['light',['../class_ogre_1_1_light.html#a2e562e3231d1ebdbebb009b5d4bc9af4',1,'Ogre::Light::Light()'],['../struct_ogre_1_1_light_closest.html#aa41b81d253b1af2e9951905238e0a7dc',1,'Ogre::LightClosest::light'],['../class_ogre_1_1_shadow_texture_definition.html#ac5fa1aa9cea5f1ef578cbd4b16196e42',1,'Ogre::ShadowTextureDefinition::light'],['../class_ogre_1_1_light.html',1,'Ogre::Light']]],
   ['light_20approximation_80',['API Usage: Area Light Approximation',['../_samples.html#arealighapprox',1,'']]],
   ['light_5fvisibility_5fmask_81',['light_visibility_mask',['../compositor.html#CompositorNodesPassesRenderScene_light_visibility_mask',1,'']]],
   ['lightarray_82',['LightArray',['../group___general.html#ga7e63f6bb5f059998d0f3c695b6b3807f',1,'Ogre']]],
