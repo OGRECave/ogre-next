@@ -250,7 +250,7 @@ namespace Ogre
     protected:
         // disallow default construction
         Property() {}
-        ~Property() {}
+        ~Property() override {}
 
         getter_func mGetter;
         setter_func mSetter;
