@@ -31,10 +31,10 @@
 #include <wx/panel.h>
 #include <wx/spinctrl.h>
 #include <wx/collpane.h>
+#include <wx/stattext.h>
 #include <wx/scrolwin.h>
 #include <wx/srchctrl.h>
 #include <wx/dialog.h>
-#include <wx/stattext.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -221,6 +221,21 @@ class PbsTexturePanelBase : public wxPanel
 		wxTextCtrl* m_detailMapWTextCtrl3;
 		wxSlider* m_detailMapHSlider3;
 		wxTextCtrl* m_detailMapHTextCtrl3;
+		wxButton* m_samplerBulkChangeButton;
+		wxChoice* m_diffuseSamplerChoice;
+		wxChoice* m_normalSamplerChoice;
+		wxChoice* m_specularSamplerChoice;
+		wxChoice* m_roughnessSamplerChoice;
+		wxChoice* m_emissiveSamplerChoice;
+		wxChoice* m_detailWeightSamplerChoice;
+		wxChoice* m_detail0DifSamplerChoice;
+		wxChoice* m_detail0NmSamplerChoice;
+		wxChoice* m_detail1DifSamplerChoice;
+		wxChoice* m_detail1NmSamplerChoice;
+		wxChoice* m_detail2DifSamplerChoice;
+		wxChoice* m_detail2NmSamplerChoice;
+		wxChoice* m_detail3DifSamplerChoice;
+		wxChoice* m_detail3NmSamplerChoice;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnTextureChangeButton( wxCommandEvent& event ) { event.Skip(); }
@@ -232,6 +247,8 @@ class PbsTexturePanelBase : public wxPanel
 		virtual void OnText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCollapsiblePaneChanged( wxCollapsiblePaneEvent& event ) { event.Skip(); }
 		virtual void OnBlendModeChoice( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnBulkSamplerChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSamplerblockChoice( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
@@ -395,6 +412,88 @@ class ProjectSettingsBase : public wxDialog
 		ProjectSettingsBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Project Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,600 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
 
 		~ProjectSettingsBase();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class SamplerSettingsBase
+///////////////////////////////////////////////////////////////////////////////
+class SamplerSettingsBase : public wxDialog
+{
+	private:
+
+	protected:
+		wxChoice* m_presetsChoice;
+		wxTextCtrl* m_nameTextCtrl;
+		wxFlexGridSizer* fgSizer1;
+		wxChoice* m_filterMin;
+		wxChoice* m_filterMag;
+		wxChoice* m_filterMip;
+		wxTextCtrl* m_maxAnisotropyTextCtrl;
+		wxChoice* m_addressUChoice;
+		wxChoice* m_addressVChoice;
+		wxChoice* m_addressWChoice;
+		wxTextCtrl* m_mipLodBiasTextCtrl;
+		wxTextCtrl* m_minLodTextCtrl;
+		wxTextCtrl* m_maxLodTextCtrl;
+		wxChoice* m_compareFunctionChoice;
+		wxTextCtrl* m_borderTextCtrlR;
+		wxTextCtrl* m_borderTextCtrlG;
+		wxTextCtrl* m_borderTextCtrlB;
+		wxTextCtrl* m_borderTextCtrlA;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnPresetsChoice( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnFilterChoice( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddressingModeChoice( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCompareFunctionChoice( wxCommandEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		SamplerSettingsBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Sampler Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
+
+		~SamplerSettingsBase();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class SamplerSettingsBulkSelectBase
+///////////////////////////////////////////////////////////////////////////////
+class SamplerSettingsBulkSelectBase : public wxDialog
+{
+	private:
+
+	protected:
+		wxCheckBox* m_all;
+		wxCheckBox* m_allBase;
+		wxCheckBox* m_diffuse;
+		wxCheckBox* m_normal;
+		wxCheckBox* m_specular;
+		wxCheckBox* m_roughness;
+		wxCheckBox* m_emissive;
+		wxCheckBox* m_detailWeights;
+		wxCheckBox* m_allDetails;
+		wxCheckBox* m_detail0Diffuse;
+		wxCheckBox* m_detail0Nm;
+		wxCheckBox* m_detail1Diffuse;
+		wxCheckBox* m_detail1Nm;
+		wxCheckBox* m_detail2Diffuse;
+		wxCheckBox* m_detail2Nm;
+		wxCheckBox* m_detail3Diffuse;
+		wxCheckBox* m_detail3Nm;
+		wxButton* m_okButton;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnCheckbox( wxCommandEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		SamplerSettingsBulkSelectBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select slots to apply same samplerblock"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
+
+		~SamplerSettingsBulkSelectBase();
 
 };
 

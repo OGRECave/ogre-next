@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "OgrePrerequisites.h"
+#include "OgreHlmsSamplerblock.h"
 
 #include <wx/slider.h>
 #include <wx/textctrl.h>
@@ -66,6 +66,43 @@ struct MeshEntry
     {
         return this->name == other.name && this->resourceGroup == other.resourceGroup;
     }
+};
+
+struct NamedSampler;
+typedef std::vector<NamedSampler> NamedSamplerVec;
+
+struct NamedSampler
+{
+    wxString               name;
+    Ogre::HlmsSamplerblock samplerblock;
+
+    /// Performs Linear O(N) search.
+    static NamedSamplerVec::iterator find( NamedSamplerVec              &namedSamplers,
+                                           const Ogre::HlmsSamplerblock &samplerblock )
+    {
+        NamedSamplerVec::iterator itor = namedSamplers.begin();
+        NamedSamplerVec::iterator endt = namedSamplers.end();
+
+        while( itor != endt && itor->samplerblock != samplerblock )
+            ++itor;
+        return itor;
+    }
+
+    static NamedSamplerVec::const_iterator find( const NamedSamplerVec        &namedSamplers,
+                                                 const Ogre::HlmsSamplerblock &samplerblock )
+    {
+        NamedSamplerVec::const_iterator itor = namedSamplers.begin();
+        NamedSamplerVec::const_iterator endt = namedSamplers.end();
+
+        while( itor != endt && itor->samplerblock != samplerblock )
+            ++itor;
+        return itor;
+    }
+
+    static wxString autogenNameFrom( const Ogre::HlmsSamplerblock &samplerblock );
+
+    static void addTemplate( NamedSamplerVec              &namedSamplers,
+                             const Ogre::HlmsSamplerblock &samplerblock );
 };
 
 OGRE_ASSUME_NONNULL_END

@@ -1011,6 +1011,171 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	bSizer61->Fit( m_collapsiblePane3->GetPane() );
 	rootLayout->Add( m_collapsiblePane3, 0, wxEXPAND | wxALL, 5 );
 
+	wxCollapsiblePane* m_collapsiblePane5;
+	m_collapsiblePane5 = new wxCollapsiblePane( m_scrolledWindow, wxID_ANY, _("Samplers"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE|wxCP_NO_TLW_RESIZE );
+	m_collapsiblePane5->Collapse( true );
+
+	wxBoxSizer* bSizer72;
+	bSizer72 = new wxBoxSizer( wxVERTICAL );
+
+	m_samplerBulkChangeButton = new wxButton( m_collapsiblePane5->GetPane(), wxID_ANY, _("Bulk Change..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer72->Add( m_samplerBulkChangeButton, 0, wxALL|wxEXPAND, 5 );
+
+	wxFlexGridSizer* fgSizer6;
+	fgSizer6 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer6->AddGrowableCol( 1 );
+	fgSizer6->SetFlexibleDirection( wxBOTH );
+	fgSizer6->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxStaticText* m_staticText24;
+	m_staticText24 = new wxStaticText( m_collapsiblePane5->GetPane(), wxID_ANY, _("Diffuse"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText24->Wrap( -1 );
+	fgSizer6->Add( m_staticText24, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxArrayString m_diffuseSamplerChoiceChoices;
+	m_diffuseSamplerChoice = new wxChoice( m_collapsiblePane5->GetPane(), wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), m_diffuseSamplerChoiceChoices, 0 );
+	m_diffuseSamplerChoice->SetSelection( 0 );
+	fgSizer6->Add( m_diffuseSamplerChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText241;
+	m_staticText241 = new wxStaticText( m_collapsiblePane5->GetPane(), wxID_ANY, _("Normal"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText241->Wrap( -1 );
+	fgSizer6->Add( m_staticText241, 0, wxALL, 5 );
+
+	wxArrayString m_normalSamplerChoiceChoices;
+	m_normalSamplerChoice = new wxChoice( m_collapsiblePane5->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_normalSamplerChoiceChoices, 0 );
+	m_normalSamplerChoice->SetSelection( 0 );
+	fgSizer6->Add( m_normalSamplerChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText2411;
+	m_staticText2411 = new wxStaticText( m_collapsiblePane5->GetPane(), wxID_ANY, _("Specular"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2411->Wrap( -1 );
+	fgSizer6->Add( m_staticText2411, 0, wxALL, 5 );
+
+	wxArrayString m_specularSamplerChoiceChoices;
+	m_specularSamplerChoice = new wxChoice( m_collapsiblePane5->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_specularSamplerChoiceChoices, 0 );
+	m_specularSamplerChoice->SetSelection( 0 );
+	fgSizer6->Add( m_specularSamplerChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText24111;
+	m_staticText24111 = new wxStaticText( m_collapsiblePane5->GetPane(), wxID_ANY, _("Roughness"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText24111->Wrap( -1 );
+	fgSizer6->Add( m_staticText24111, 0, wxALL, 5 );
+
+	wxArrayString m_roughnessSamplerChoiceChoices;
+	m_roughnessSamplerChoice = new wxChoice( m_collapsiblePane5->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_roughnessSamplerChoiceChoices, 0 );
+	m_roughnessSamplerChoice->SetSelection( 0 );
+	fgSizer6->Add( m_roughnessSamplerChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText241111;
+	m_staticText241111 = new wxStaticText( m_collapsiblePane5->GetPane(), wxID_ANY, _("Emissive"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText241111->Wrap( -1 );
+	fgSizer6->Add( m_staticText241111, 0, wxALL, 5 );
+
+	wxArrayString m_emissiveSamplerChoiceChoices;
+	m_emissiveSamplerChoice = new wxChoice( m_collapsiblePane5->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_emissiveSamplerChoiceChoices, 0 );
+	m_emissiveSamplerChoice->SetSelection( 0 );
+	fgSizer6->Add( m_emissiveSamplerChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText2411111;
+	m_staticText2411111 = new wxStaticText( m_collapsiblePane5->GetPane(), wxID_ANY, _("Detail W."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2411111->Wrap( -1 );
+	fgSizer6->Add( m_staticText2411111, 0, wxALL, 5 );
+
+	wxArrayString m_detailWeightSamplerChoiceChoices;
+	m_detailWeightSamplerChoice = new wxChoice( m_collapsiblePane5->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_detailWeightSamplerChoiceChoices, 0 );
+	m_detailWeightSamplerChoice->SetSelection( 0 );
+	fgSizer6->Add( m_detailWeightSamplerChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText24111111;
+	m_staticText24111111 = new wxStaticText( m_collapsiblePane5->GetPane(), wxID_ANY, _("Detail 0 D"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText24111111->Wrap( -1 );
+	fgSizer6->Add( m_staticText24111111, 0, wxALL, 5 );
+
+	wxArrayString m_detail0DifSamplerChoiceChoices;
+	m_detail0DifSamplerChoice = new wxChoice( m_collapsiblePane5->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_detail0DifSamplerChoiceChoices, 0 );
+	m_detail0DifSamplerChoice->SetSelection( 0 );
+	fgSizer6->Add( m_detail0DifSamplerChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText241111111;
+	m_staticText241111111 = new wxStaticText( m_collapsiblePane5->GetPane(), wxID_ANY, _("Detail 0 NM"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText241111111->Wrap( -1 );
+	fgSizer6->Add( m_staticText241111111, 0, wxALL, 5 );
+
+	wxArrayString m_detail0NmSamplerChoiceChoices;
+	m_detail0NmSamplerChoice = new wxChoice( m_collapsiblePane5->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_detail0NmSamplerChoiceChoices, 0 );
+	m_detail0NmSamplerChoice->SetSelection( 0 );
+	fgSizer6->Add( m_detail0NmSamplerChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText2411111111;
+	m_staticText2411111111 = new wxStaticText( m_collapsiblePane5->GetPane(), wxID_ANY, _("Detail 1 D"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2411111111->Wrap( -1 );
+	fgSizer6->Add( m_staticText2411111111, 0, wxALL, 5 );
+
+	wxArrayString m_detail1DifSamplerChoiceChoices;
+	m_detail1DifSamplerChoice = new wxChoice( m_collapsiblePane5->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_detail1DifSamplerChoiceChoices, 0 );
+	m_detail1DifSamplerChoice->SetSelection( 0 );
+	fgSizer6->Add( m_detail1DifSamplerChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText25;
+	m_staticText25 = new wxStaticText( m_collapsiblePane5->GetPane(), wxID_ANY, _("Detail 1 NM"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText25->Wrap( -1 );
+	fgSizer6->Add( m_staticText25, 0, wxALL, 5 );
+
+	wxArrayString m_detail1NmSamplerChoiceChoices;
+	m_detail1NmSamplerChoice = new wxChoice( m_collapsiblePane5->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_detail1NmSamplerChoiceChoices, 0 );
+	m_detail1NmSamplerChoice->SetSelection( 0 );
+	fgSizer6->Add( m_detail1NmSamplerChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText251;
+	m_staticText251 = new wxStaticText( m_collapsiblePane5->GetPane(), wxID_ANY, _("Detail 2 D"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText251->Wrap( -1 );
+	fgSizer6->Add( m_staticText251, 0, wxALL, 5 );
+
+	wxArrayString m_detail2DifSamplerChoiceChoices;
+	m_detail2DifSamplerChoice = new wxChoice( m_collapsiblePane5->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_detail2DifSamplerChoiceChoices, 0 );
+	m_detail2DifSamplerChoice->SetSelection( 0 );
+	fgSizer6->Add( m_detail2DifSamplerChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText2511;
+	m_staticText2511 = new wxStaticText( m_collapsiblePane5->GetPane(), wxID_ANY, _("Detail 2 NM"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2511->Wrap( -1 );
+	fgSizer6->Add( m_staticText2511, 0, wxALL, 5 );
+
+	wxArrayString m_detail2NmSamplerChoiceChoices;
+	m_detail2NmSamplerChoice = new wxChoice( m_collapsiblePane5->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_detail2NmSamplerChoiceChoices, 0 );
+	m_detail2NmSamplerChoice->SetSelection( 0 );
+	fgSizer6->Add( m_detail2NmSamplerChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText2512;
+	m_staticText2512 = new wxStaticText( m_collapsiblePane5->GetPane(), wxID_ANY, _("Detail 3 D"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2512->Wrap( -1 );
+	fgSizer6->Add( m_staticText2512, 0, wxALL, 5 );
+
+	wxArrayString m_detail3DifSamplerChoiceChoices;
+	m_detail3DifSamplerChoice = new wxChoice( m_collapsiblePane5->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_detail3DifSamplerChoiceChoices, 0 );
+	m_detail3DifSamplerChoice->SetSelection( 0 );
+	fgSizer6->Add( m_detail3DifSamplerChoice, 0, wxALL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText25111;
+	m_staticText25111 = new wxStaticText( m_collapsiblePane5->GetPane(), wxID_ANY, _("Detail 3 NM"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText25111->Wrap( -1 );
+	fgSizer6->Add( m_staticText25111, 0, wxALL, 5 );
+
+	wxArrayString m_detail3NmSamplerChoiceChoices;
+	m_detail3NmSamplerChoice = new wxChoice( m_collapsiblePane5->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_detail3NmSamplerChoiceChoices, 0 );
+	m_detail3NmSamplerChoice->SetSelection( 0 );
+	fgSizer6->Add( m_detail3NmSamplerChoice, 0, wxALL|wxEXPAND, 5 );
+
+
+	bSizer72->Add( fgSizer6, 1, wxEXPAND, 5 );
+
+
+	m_collapsiblePane5->GetPane()->SetSizer( bSizer72 );
+	m_collapsiblePane5->GetPane()->Layout();
+	bSizer72->Fit( m_collapsiblePane5->GetPane() );
+	rootLayout->Add( m_collapsiblePane5, 0, wxEXPAND | wxALL, 5 );
+
 
 	m_scrolledWindow->SetSizer( rootLayout );
 	m_scrolledWindow->Layout();
@@ -1283,6 +1448,22 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow* parent, wxWindowID id, const
 	m_detailMapHSlider3->Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( PbsTexturePanelBase::UndoMouseUp ), NULL, this );
 	m_detailMapHSlider3->Connect( wxEVT_SLIDER, wxCommandEventHandler( PbsTexturePanelBase::OnSlider ), NULL, this );
 	m_detailMapHTextCtrl3->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PbsTexturePanelBase::OnText ), NULL, this );
+	m_collapsiblePane5->Connect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( PbsTexturePanelBase::OnCollapsiblePaneChanged ), NULL, this );
+	m_samplerBulkChangeButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PbsTexturePanelBase::OnBulkSamplerChange ), NULL, this );
+	m_diffuseSamplerChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnSamplerblockChoice ), NULL, this );
+	m_normalSamplerChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnSamplerblockChoice ), NULL, this );
+	m_specularSamplerChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnSamplerblockChoice ), NULL, this );
+	m_roughnessSamplerChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnSamplerblockChoice ), NULL, this );
+	m_emissiveSamplerChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnSamplerblockChoice ), NULL, this );
+	m_detailWeightSamplerChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnSamplerblockChoice ), NULL, this );
+	m_detail0DifSamplerChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnSamplerblockChoice ), NULL, this );
+	m_detail0NmSamplerChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnSamplerblockChoice ), NULL, this );
+	m_detail1DifSamplerChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnSamplerblockChoice ), NULL, this );
+	m_detail1NmSamplerChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnSamplerblockChoice ), NULL, this );
+	m_detail2DifSamplerChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnSamplerblockChoice ), NULL, this );
+	m_detail2NmSamplerChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnSamplerblockChoice ), NULL, this );
+	m_detail3DifSamplerChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnSamplerblockChoice ), NULL, this );
+	m_detail3NmSamplerChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PbsTexturePanelBase::OnSamplerblockChoice ), NULL, this );
 }
 
 PbsTexturePanelBase::~PbsTexturePanelBase()
@@ -1538,8 +1719,8 @@ ProjectSettingsBase::ProjectSettingsBase( wxWindow* parent, wxWindowID id, const
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
-	wxBoxSizer* bSizer58;
-	bSizer58 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* rootLayout;
+	rootLayout = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizer29;
 	sbSizer29 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Resources") ), wxVERTICAL );
@@ -1592,7 +1773,7 @@ ProjectSettingsBase::ProjectSettingsBase( wxWindow* parent, wxWindowID id, const
 	sbSizer29->Add( sbSizer24, 0, wxEXPAND, 5 );
 
 
-	bSizer58->Add( sbSizer29, 1, wxEXPAND, 5 );
+	rootLayout->Add( sbSizer29, 1, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer25;
 	sbSizer25 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Material File Location") ), wxVERTICAL );
@@ -1620,7 +1801,7 @@ ProjectSettingsBase::ProjectSettingsBase( wxWindow* parent, wxWindowID id, const
 	sbSizer25->Add( m_deleteAllOtherMaterials, 0, wxALL|wxALIGN_RIGHT, 5 );
 
 
-	bSizer58->Add( sbSizer25, 0, wxEXPAND, 5 );
+	rootLayout->Add( sbSizer25, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer251;
 	sbSizer251 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Project File Location") ), wxHORIZONTAL );
@@ -1632,7 +1813,7 @@ ProjectSettingsBase::ProjectSettingsBase( wxWindow* parent, wxWindowID id, const
 	sbSizer251->Add( m_projectFileBrowseBtn, 0, wxALL, 5 );
 
 
-	bSizer58->Add( sbSizer251, 0, wxEXPAND, 5 );
+	rootLayout->Add( sbSizer251, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer61;
 	bSizer61 = new wxBoxSizer( wxHORIZONTAL );
@@ -1645,10 +1826,10 @@ ProjectSettingsBase::ProjectSettingsBase( wxWindow* parent, wxWindowID id, const
 	bSizer61->Add( m_okButton, 1, wxALL, 5 );
 
 
-	bSizer58->Add( bSizer61, 0, wxEXPAND, 5 );
+	rootLayout->Add( bSizer61, 0, wxEXPAND, 5 );
 
 
-	this->SetSizer( bSizer58 );
+	this->SetSizer( rootLayout );
 	this->Layout();
 
 	this->Centre( wxBOTH );
@@ -1667,5 +1848,404 @@ ProjectSettingsBase::ProjectSettingsBase( wxWindow* parent, wxWindowID id, const
 }
 
 ProjectSettingsBase::~ProjectSettingsBase()
+{
+}
+
+SamplerSettingsBase::SamplerSettingsBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+
+	wxBoxSizer* rootLayout;
+	rootLayout = new wxBoxSizer( wxVERTICAL );
+
+	rootLayout->SetMinSize( wxSize( 400,-1 ) );
+	wxBoxSizer* bSizer74;
+	bSizer74 = new wxBoxSizer( wxHORIZONTAL );
+
+	wxStaticText* m_staticText30;
+	m_staticText30 = new wxStaticText( this, wxID_ANY, _("Presets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText30->Wrap( -1 );
+	bSizer74->Add( m_staticText30, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxArrayString m_presetsChoiceChoices;
+	m_presetsChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_presetsChoiceChoices, 0 );
+	m_presetsChoice->SetSelection( 0 );
+	bSizer74->Add( m_presetsChoice, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	rootLayout->Add( bSizer74, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer69;
+	bSizer69 = new wxBoxSizer( wxHORIZONTAL );
+
+	wxStaticText* m_staticText23;
+	m_staticText23 = new wxStaticText( this, wxID_ANY, _("Autogen. Name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText23->Wrap( -1 );
+	bSizer69->Add( m_staticText23, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_nameTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	bSizer69->Add( m_nameTextCtrl, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	rootLayout->Add( bSizer69, 1, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer28;
+	sbSizer28 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Filter") ), wxVERTICAL );
+
+	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer1->AddGrowableCol( 1 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxStaticText* m_staticText3;
+	m_staticText3 = new wxStaticText( sbSizer28->GetStaticBox(), wxID_ANY, _("Minification"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3->Wrap( -1 );
+	fgSizer1->Add( m_staticText3, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_filterMinChoices[] = { _("Point"), _("Linear"), _("Anisotropic") };
+	int m_filterMinNChoices = sizeof( m_filterMinChoices ) / sizeof( wxString );
+	m_filterMin = new wxChoice( sbSizer28->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_filterMinNChoices, m_filterMinChoices, 0 );
+	m_filterMin->SetSelection( 0 );
+	fgSizer1->Add( m_filterMin, 0, wxALL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText7;
+	m_staticText7 = new wxStaticText( sbSizer28->GetStaticBox(), wxID_ANY, _("Magnification"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText7->Wrap( -1 );
+	fgSizer1->Add( m_staticText7, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_filterMagChoices[] = { _("Point"), _("Linear"), _("Anisotropic") };
+	int m_filterMagNChoices = sizeof( m_filterMagChoices ) / sizeof( wxString );
+	m_filterMag = new wxChoice( sbSizer28->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_filterMagNChoices, m_filterMagChoices, 0 );
+	m_filterMag->SetSelection( 0 );
+	fgSizer1->Add( m_filterMag, 0, wxALL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText8;
+	m_staticText8 = new wxStaticText( sbSizer28->GetStaticBox(), wxID_ANY, _("Mipmap"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText8->Wrap( -1 );
+	fgSizer1->Add( m_staticText8, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_filterMipChoices[] = { _("Point"), _("Linear"), _("Anisotropic"), _("Off (no mipmapping)") };
+	int m_filterMipNChoices = sizeof( m_filterMipChoices ) / sizeof( wxString );
+	m_filterMip = new wxChoice( sbSizer28->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_filterMipNChoices, m_filterMipChoices, 0 );
+	m_filterMip->SetSelection( 0 );
+	fgSizer1->Add( m_filterMip, 0, wxALL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText32;
+	m_staticText32 = new wxStaticText( sbSizer28->GetStaticBox(), wxID_ANY, _("Max Anisotropy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText32->Wrap( -1 );
+	fgSizer1->Add( m_staticText32, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_maxAnisotropyTextCtrl = new wxTextCtrl( sbSizer28->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_maxAnisotropyTextCtrl, 0, wxALL|wxEXPAND, 5 );
+
+
+	sbSizer28->Add( fgSizer1, 0, wxEXPAND, 5 );
+
+
+	rootLayout->Add( sbSizer28, 0, wxALL|wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer281;
+	sbSizer281 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Addressing Mode") ), wxVERTICAL );
+
+	wxFlexGridSizer* fgSizer11;
+	fgSizer11 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer11->AddGrowableCol( 1 );
+	fgSizer11->SetFlexibleDirection( wxBOTH );
+	fgSizer11->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxStaticText* m_staticText31;
+	m_staticText31 = new wxStaticText( sbSizer281->GetStaticBox(), wxID_ANY, _("U"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText31->Wrap( -1 );
+	fgSizer11->Add( m_staticText31, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_addressUChoiceChoices[] = { _("Wrap"), _("Mirror"), _("Clamp"), _("Border") };
+	int m_addressUChoiceNChoices = sizeof( m_addressUChoiceChoices ) / sizeof( wxString );
+	m_addressUChoice = new wxChoice( sbSizer281->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_addressUChoiceNChoices, m_addressUChoiceChoices, 0 );
+	m_addressUChoice->SetSelection( 0 );
+	fgSizer11->Add( m_addressUChoice, 0, wxALL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText71;
+	m_staticText71 = new wxStaticText( sbSizer281->GetStaticBox(), wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText71->Wrap( -1 );
+	fgSizer11->Add( m_staticText71, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_addressVChoiceChoices[] = { _("Wrap"), _("Mirror"), _("Clamp"), _("Border") };
+	int m_addressVChoiceNChoices = sizeof( m_addressVChoiceChoices ) / sizeof( wxString );
+	m_addressVChoice = new wxChoice( sbSizer281->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_addressVChoiceNChoices, m_addressVChoiceChoices, 0 );
+	m_addressVChoice->SetSelection( 0 );
+	fgSizer11->Add( m_addressVChoice, 0, wxALL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText81;
+	m_staticText81 = new wxStaticText( sbSizer281->GetStaticBox(), wxID_ANY, _("W"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText81->Wrap( -1 );
+	fgSizer11->Add( m_staticText81, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_addressWChoiceChoices[] = { _("Wrap"), _("Mirror"), _("Clamp"), _("Border") };
+	int m_addressWChoiceNChoices = sizeof( m_addressWChoiceChoices ) / sizeof( wxString );
+	m_addressWChoice = new wxChoice( sbSizer281->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_addressWChoiceNChoices, m_addressWChoiceChoices, 0 );
+	m_addressWChoice->SetSelection( 0 );
+	fgSizer11->Add( m_addressWChoice, 0, wxALL|wxEXPAND, 5 );
+
+
+	sbSizer281->Add( fgSizer11, 0, wxEXPAND, 5 );
+
+
+	rootLayout->Add( sbSizer281, 0, wxALL|wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer32;
+	sbSizer32 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Mipmapping") ), wxVERTICAL );
+
+	wxFlexGridSizer* fgSizer4;
+	fgSizer4 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer4->AddGrowableCol( 1 );
+	fgSizer4->SetFlexibleDirection( wxBOTH );
+	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxStaticText* m_staticText18;
+	m_staticText18 = new wxStaticText( sbSizer32->GetStaticBox(), wxID_ANY, _("Mip LOD Bias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText18->Wrap( -1 );
+	fgSizer4->Add( m_staticText18, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_mipLodBiasTextCtrl = new wxTextCtrl( sbSizer32->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer4->Add( m_mipLodBiasTextCtrl, 0, wxALL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText19;
+	m_staticText19 = new wxStaticText( sbSizer32->GetStaticBox(), wxID_ANY, _("Min LOD"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText19->Wrap( -1 );
+	fgSizer4->Add( m_staticText19, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_minLodTextCtrl = new wxTextCtrl( sbSizer32->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer4->Add( m_minLodTextCtrl, 0, wxALL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText20;
+	m_staticText20 = new wxStaticText( sbSizer32->GetStaticBox(), wxID_ANY, _("Max LOD"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText20->Wrap( -1 );
+	fgSizer4->Add( m_staticText20, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_maxLodTextCtrl = new wxTextCtrl( sbSizer32->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer4->Add( m_maxLodTextCtrl, 0, wxALL|wxEXPAND, 5 );
+
+
+	sbSizer32->Add( fgSizer4, 0, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer33;
+	sbSizer33 = new wxStaticBoxSizer( new wxStaticBox( sbSizer32->GetStaticBox(), wxID_ANY, _("Misc") ), wxVERTICAL );
+
+	wxFlexGridSizer* fgSizer5;
+	fgSizer5 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer5->AddGrowableCol( 1 );
+	fgSizer5->SetFlexibleDirection( wxBOTH );
+	fgSizer5->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxStaticText* m_staticText21;
+	m_staticText21 = new wxStaticText( sbSizer33->GetStaticBox(), wxID_ANY, _("Compare Function"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText21->Wrap( -1 );
+	fgSizer5->Add( m_staticText21, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_compareFunctionChoiceChoices[] = { _("Disabled"), _("Always Fail"), _("Always Pass"), _("Less"), _("Less Equal"), _("Equal"), _("Not Equal"), _("Greater Equal"), _("Greater") };
+	int m_compareFunctionChoiceNChoices = sizeof( m_compareFunctionChoiceChoices ) / sizeof( wxString );
+	m_compareFunctionChoice = new wxChoice( sbSizer33->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_compareFunctionChoiceNChoices, m_compareFunctionChoiceChoices, 0 );
+	m_compareFunctionChoice->SetSelection( 0 );
+	fgSizer5->Add( m_compareFunctionChoice, 0, wxALL|wxEXPAND, 5 );
+
+	wxStaticText* m_staticText22;
+	m_staticText22 = new wxStaticText( sbSizer33->GetStaticBox(), wxID_ANY, _("Border Colour"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText22->Wrap( -1 );
+	fgSizer5->Add( m_staticText22, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxBoxSizer* bSizer73;
+	bSizer73 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_borderTextCtrlR = new wxTextCtrl( sbSizer33->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer73->Add( m_borderTextCtrlR, 1, wxALL, 5 );
+
+	m_borderTextCtrlG = new wxTextCtrl( sbSizer33->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer73->Add( m_borderTextCtrlG, 1, wxALL, 5 );
+
+	m_borderTextCtrlB = new wxTextCtrl( sbSizer33->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer73->Add( m_borderTextCtrlB, 1, wxALL, 5 );
+
+	m_borderTextCtrlA = new wxTextCtrl( sbSizer33->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer73->Add( m_borderTextCtrlA, 1, wxALL, 5 );
+
+
+	fgSizer5->Add( bSizer73, 1, wxEXPAND, 5 );
+
+
+	sbSizer33->Add( fgSizer5, 1, wxEXPAND, 5 );
+
+
+	sbSizer32->Add( sbSizer33, 1, wxEXPAND, 5 );
+
+
+	rootLayout->Add( sbSizer32, 0, wxALL|wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer68;
+	bSizer68 = new wxBoxSizer( wxHORIZONTAL );
+
+	wxButton* m_cancelButton;
+	m_cancelButton = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer68->Add( m_cancelButton, 1, wxALL, 5 );
+
+	wxButton* m_okButton;
+	m_okButton = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer68->Add( m_okButton, 1, wxALL, 5 );
+
+
+	rootLayout->Add( bSizer68, 1, wxALL|wxEXPAND, 5 );
+
+
+	this->SetSizer( rootLayout );
+	this->Layout();
+	rootLayout->Fit( this );
+
+	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_presetsChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( SamplerSettingsBase::OnPresetsChoice ), NULL, this );
+	m_filterMin->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( SamplerSettingsBase::OnFilterChoice ), NULL, this );
+	m_filterMag->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( SamplerSettingsBase::OnFilterChoice ), NULL, this );
+	m_filterMip->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( SamplerSettingsBase::OnFilterChoice ), NULL, this );
+	m_maxAnisotropyTextCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( SamplerSettingsBase::OnText ), NULL, this );
+	m_addressUChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( SamplerSettingsBase::OnAddressingModeChoice ), NULL, this );
+	m_addressVChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( SamplerSettingsBase::OnAddressingModeChoice ), NULL, this );
+	m_addressWChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( SamplerSettingsBase::OnAddressingModeChoice ), NULL, this );
+	m_mipLodBiasTextCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( SamplerSettingsBase::OnText ), NULL, this );
+	m_minLodTextCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( SamplerSettingsBase::OnText ), NULL, this );
+	m_maxLodTextCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( SamplerSettingsBase::OnText ), NULL, this );
+	m_compareFunctionChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( SamplerSettingsBase::OnCompareFunctionChoice ), NULL, this );
+	m_borderTextCtrlR->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( SamplerSettingsBase::OnText ), NULL, this );
+	m_borderTextCtrlG->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( SamplerSettingsBase::OnText ), NULL, this );
+	m_borderTextCtrlB->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( SamplerSettingsBase::OnText ), NULL, this );
+	m_borderTextCtrlA->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( SamplerSettingsBase::OnText ), NULL, this );
+}
+
+SamplerSettingsBase::~SamplerSettingsBase()
+{
+}
+
+SamplerSettingsBulkSelectBase::SamplerSettingsBulkSelectBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+
+	wxBoxSizer* rootLayout;
+	rootLayout = new wxBoxSizer( wxVERTICAL );
+
+	rootLayout->SetMinSize( wxSize( 325,-1 ) );
+	m_all = new wxCheckBox( this, wxID_ANY, _("All"), wxDefaultPosition, wxDefaultSize, 0 );
+	rootLayout->Add( m_all, 0, wxALL, 5 );
+
+	wxStaticBoxSizer* sbSizer32;
+	sbSizer32 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Base") ), wxVERTICAL );
+
+	m_allBase = new wxCheckBox( sbSizer32->GetStaticBox(), wxID_ANY, _("All"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer32->Add( m_allBase, 0, wxALL, 5 );
+
+	m_diffuse = new wxCheckBox( sbSizer32->GetStaticBox(), wxID_ANY, _("Diffuse"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer32->Add( m_diffuse, 0, wxALL, 5 );
+
+	m_normal = new wxCheckBox( sbSizer32->GetStaticBox(), wxID_ANY, _("Normal Map"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer32->Add( m_normal, 0, wxALL, 5 );
+
+	m_specular = new wxCheckBox( sbSizer32->GetStaticBox(), wxID_ANY, _("Specular / Metalness"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer32->Add( m_specular, 0, wxALL, 5 );
+
+	m_roughness = new wxCheckBox( sbSizer32->GetStaticBox(), wxID_ANY, _("Roughness"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer32->Add( m_roughness, 0, wxALL, 5 );
+
+	m_emissive = new wxCheckBox( sbSizer32->GetStaticBox(), wxID_ANY, _("Emissive"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer32->Add( m_emissive, 0, wxALL, 5 );
+
+
+	rootLayout->Add( sbSizer32, 0, wxEXPAND, 5 );
+
+	m_detailWeights = new wxCheckBox( this, wxID_ANY, _("Detail Weights"), wxDefaultPosition, wxDefaultSize, 0 );
+	rootLayout->Add( m_detailWeights, 0, wxALL, 5 );
+
+	wxStaticBoxSizer* sbSizer33;
+	sbSizer33 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Detail Maps") ), wxVERTICAL );
+
+
+	rootLayout->Add( sbSizer33, 0, wxEXPAND, 5 );
+
+	wxFlexGridSizer* fgSizer6;
+	fgSizer6 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer6->SetFlexibleDirection( wxBOTH );
+	fgSizer6->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_allDetails = new wxCheckBox( this, wxID_ANY, _("All"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer6->Add( m_allDetails, 0, wxALL, 5 );
+
+
+	fgSizer6->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_detail0Diffuse = new wxCheckBox( this, wxID_ANY, _("Detail 0 Diffuse"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer6->Add( m_detail0Diffuse, 0, wxALL, 5 );
+
+	m_detail0Nm = new wxCheckBox( this, wxID_ANY, _("Detail 0 NM"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer6->Add( m_detail0Nm, 0, wxALL, 5 );
+
+	m_detail1Diffuse = new wxCheckBox( this, wxID_ANY, _("Detail 1 Diffuse"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer6->Add( m_detail1Diffuse, 0, wxALL, 5 );
+
+	m_detail1Nm = new wxCheckBox( this, wxID_ANY, _("Detail 1 NM"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer6->Add( m_detail1Nm, 0, wxALL, 5 );
+
+	m_detail2Diffuse = new wxCheckBox( this, wxID_ANY, _("Detail 2 Diffuse"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer6->Add( m_detail2Diffuse, 0, wxALL, 5 );
+
+	m_detail2Nm = new wxCheckBox( this, wxID_ANY, _("Detail 2 NM"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer6->Add( m_detail2Nm, 0, wxALL, 5 );
+
+	m_detail3Diffuse = new wxCheckBox( this, wxID_ANY, _("Detail 3 Diffuse"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer6->Add( m_detail3Diffuse, 0, wxALL, 5 );
+
+	m_detail3Nm = new wxCheckBox( this, wxID_ANY, _("Detail 3 NM"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer6->Add( m_detail3Nm, 0, wxALL, 5 );
+
+
+	rootLayout->Add( fgSizer6, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer72;
+	bSizer72 = new wxBoxSizer( wxHORIZONTAL );
+
+	wxButton* m_cancelButton;
+	m_cancelButton = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer72->Add( m_cancelButton, 1, wxALL, 5 );
+
+	m_okButton = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer72->Add( m_okButton, 1, wxALL, 5 );
+
+
+	rootLayout->Add( bSizer72, 0, wxEXPAND, 5 );
+
+
+	this->SetSizer( rootLayout );
+	this->Layout();
+	rootLayout->Fit( this );
+
+	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_all->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+	m_allBase->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+	m_diffuse->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+	m_normal->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+	m_specular->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+	m_roughness->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+	m_emissive->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+	m_detailWeights->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+	m_allDetails->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+	m_detail0Diffuse->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+	m_detail0Nm->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+	m_detail1Diffuse->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+	m_detail1Nm->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+	m_detail2Diffuse->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+	m_detail2Nm->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+	m_detail3Diffuse->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+	m_detail3Nm->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( SamplerSettingsBulkSelectBase::OnCheckbox ), NULL, this );
+}
+
+SamplerSettingsBulkSelectBase::~SamplerSettingsBulkSelectBase()
 {
 }

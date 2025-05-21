@@ -9,6 +9,11 @@
 
 OGRE_ASSUME_NONNULL_BEGIN
 
+namespace Ogre
+{
+    class HlmsPbsDatablock;
+}
+
 class MainWindow;
 
 class PbsTexturePanel final : public PbsTexturePanelBase
@@ -42,11 +47,20 @@ class PbsTexturePanel final : public PbsTexturePanelBase
 
     Ogre::PbsTextureTypes findFrom( wxButton *button ) const;
 
+    wxChoice *ogre_nullable getSamplerblockChoiceCtrl( const Ogre::PbsTextureTypes textureTypes );
+
     wxChoice *ogre_nullable getBlendMode( const Ogre::PbsTextureTypes textureTypes );
 
     SliderTextWidget getStrengthSliderWidgets( const Ogre::PbsTextureTypes textureTypes );
 
     DetailMapOffsetScale getDetailMapOffsetScale( const Ogre::PbsTextureTypes textureTypes );
+
+    /// This datablock may have samplers that are not in the templates.
+    /// Add them so they can be displayed.
+    void addSamplerTemplates( const Ogre::HlmsPbsDatablock *datablock );
+
+    /// Refresh all samplers Ctrls to match current settings.
+    void refreshSamplers( const Ogre::HlmsPbsDatablock *datablock );
 
 protected:
     // Handlers for PbsTexturePanelBase events.
@@ -56,6 +70,8 @@ protected:
     void OnText( wxCommandEvent &event ) override;
     void OnBlendModeChoice( wxCommandEvent &event ) override;
     void OnCollapsiblePaneChanged( wxCollapsiblePaneEvent &event ) override;
+    void OnSamplerblockChoice( wxCommandEvent &event ) override;
+    void OnBulkSamplerChange( wxCommandEvent &event ) override;
 
     void UndoMouseUp( wxMouseEvent &event ) override;
     void UndoKeyUp( wxKeyEvent &event ) override;

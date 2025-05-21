@@ -23,6 +23,23 @@ ProjectSettings::ProjectSettings( wxWindow *parent ) : ProjectSettingsBase( pare
 {
 }
 //-----------------------------------------------------------------------------
+void ProjectSettings::generateDefaultSamplerTemplates()
+{
+    Ogre::HlmsSamplerblock samplerblock;
+    samplerblock.mMaxAnisotropy = 16.0f;
+
+    for( size_t i = Ogre::TFO_NONE; i <= Ogre::TFO_ANISOTROPIC; ++i )
+    {
+        samplerblock.setFiltering( Ogre::TextureFilterOptions( i ) );
+        for( size_t j = 0u; j < 2u; ++j )
+        {
+            samplerblock.setAddressingMode( j == 0u ? Ogre::TAM_WRAP : Ogre::TAM_CLAMP );
+            m_samplerTemplates.push_back(
+                { NamedSampler::autogenNameFrom( samplerblock ), samplerblock } );
+        }
+    }
+}
+//-----------------------------------------------------------------------------
 void ProjectSettings::OnResourcesAdd( wxCommandEvent &event )
 {
     event.Skip();
@@ -191,6 +208,9 @@ void ProjectSettings::syncSettingsFromUI()
 //-----------------------------------------------------------------------------
 void ProjectSettings::loadProject( Ogre::HlmsManager *hlmsManager )
 {
+    m_samplerTemplates.clear();
+    generateDefaultSamplerTemplates();
+
     const Ogre::String relativeFolder = m_relativeFolder.utf8_string();
 
     for( const wxString &resource : m_resources )

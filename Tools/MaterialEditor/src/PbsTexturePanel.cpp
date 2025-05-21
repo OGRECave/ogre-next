@@ -1,6 +1,9 @@
 #include "PbsTexturePanel.h"
 
 #include "MainWindow.h"
+#include "ProjectSettings.h"
+#include "SamplerSettings.h"
+#include "SamplerSettingsBulkSelect.h"
 #include "TextureSelect.h"
 
 #include "OgreHlms.h"
@@ -75,6 +78,44 @@ Ogre::PbsTextureTypes PbsTexturePanel::findFrom( wxButton *button ) const
             return static_cast<Ogre::PbsTextureTypes>( i );
     }
     return Ogre::NUM_PBSM_TEXTURE_TYPES;
+}
+//-----------------------------------------------------------------------------
+wxChoice *PbsTexturePanel::getSamplerblockChoiceCtrl( const Ogre::PbsTextureTypes textureTypes )
+{
+    switch( textureTypes )
+    {
+    case Ogre::PBSM_DIFFUSE:
+        return m_diffuseSamplerChoice;
+    case Ogre::PBSM_NORMAL:
+        return m_normalSamplerChoice;
+    case Ogre::PBSM_SPECULAR:
+        return m_specularSamplerChoice;
+    case Ogre::PBSM_ROUGHNESS:
+        return m_roughnessSamplerChoice;
+    case Ogre::PBSM_EMISSIVE:
+        return m_emissiveSamplerChoice;
+    case Ogre::PBSM_DETAIL_WEIGHT:
+        return m_detailWeightSamplerChoice;
+    case Ogre::PBSM_DETAIL0:
+        return m_detail0DifSamplerChoice;
+    case Ogre::PBSM_DETAIL1:
+        return m_detail1DifSamplerChoice;
+    case Ogre::PBSM_DETAIL2:
+        return m_detail2DifSamplerChoice;
+    case Ogre::PBSM_DETAIL3:
+        return m_detail3DifSamplerChoice;
+    case Ogre::PBSM_DETAIL0_NM:
+        return m_detail0NmSamplerChoice;
+    case Ogre::PBSM_DETAIL1_NM:
+        return m_detail1NmSamplerChoice;
+    case Ogre::PBSM_DETAIL2_NM:
+        return m_detail2NmSamplerChoice;
+    case Ogre::PBSM_DETAIL3_NM:
+        return m_detail3NmSamplerChoice;
+    case Ogre::PBSM_REFLECTION:
+    case Ogre::NUM_PBSM_TEXTURE_TYPES:
+        return nullptr;
+    }
 }
 //-----------------------------------------------------------------------------
 wxChoice *PbsTexturePanel::getBlendMode( const Ogre::PbsTextureTypes textureTypes )
@@ -514,6 +555,95 @@ void PbsTexturePanel::OnCollapsiblePaneChanged( wxCollapsiblePaneEvent &event )
     event.Skip();
 }
 //-----------------------------------------------------------------------------
+void PbsTexturePanel::OnSamplerblockChoice( wxCommandEvent &event )
+{
+    event.Skip();
+
+    if( m_editing )
+        return;
+    EditingScope scope( m_editing );
+
+    Ogre::HlmsDatablock *baseDatablock = m_mainWindow->getActiveDatablock();
+    if( !baseDatablock || baseDatablock->getCreator()->getType() != Ogre::HLMS_PBS )
+        return;
+
+    for( size_t i = 0u; i < Ogre::NUM_PBSM_TEXTURE_TYPES; ++i )
+    {
+        const Ogre::PbsTextureTypes textureType = static_cast<Ogre::PbsTextureTypes>( i );
+        wxChoice *choiceCtrl = getSamplerblockChoiceCtrl( textureType );
+        if( choiceCtrl && choiceCtrl == event.GetEventObject() )
+        {
+            const size_t presetIdx = size_t( choiceCtrl->GetSelection() );
+            ProjectSettings &projectSettings = m_mainWindow->getProjectSettings();
+
+            NamedSamplerVec &samplerTemplates = projectSettings.getSamplerTemplates();
+
+            OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbsDatablock *>( baseDatablock ) );
+            Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock *>( baseDatablock );
+
+            if( presetIdx < samplerTemplates.size() )
+            {
+                datablock->setSamplerblock( textureType, samplerTemplates[presetIdx].samplerblock );
+            }
+            else
+            {
+                const Ogre::HlmsSamplerblock *oldSamplerblock =
+                    datablock->getSamplerblock( textureType );
+                SamplerSettings s( m_mainWindow, projectSettings,
+                                   oldSamplerblock ? *oldSamplerblock : Ogre::HlmsSamplerblock() );
+                if( s.ShowModal() == wxID_OK )
+                {
+                    Ogre::HlmsSamplerblock samplerblock( s.getSamplerblockFromUI() );
+                    datablock->setSamplerblock( textureType, samplerblock );
+                    NamedSampler::addTemplate( samplerTemplates, samplerblock );
+                }
+
+                // We must refresh even if user cancelled, because we must revert the
+                // choice ctrl back to the real value, not the selected one.
+                refreshSamplers( datablock );
+            }
+        }
+    }
+}
+//-----------------------------------------------------------------------------
+void PbsTexturePanel::OnBulkSamplerChange( wxCommandEvent &event )
+{
+    event.Skip();
+
+    if( m_editing )
+        return;
+    EditingScope scope( m_editing );
+
+    Ogre::HlmsDatablock *baseDatablock = m_mainWindow->getActiveDatablock();
+    if( !baseDatablock || baseDatablock->getCreator()->getType() != Ogre::HLMS_PBS )
+        return;
+
+    SamplerSettingsBulkSelect bulkSelect( m_mainWindow );
+    if( bulkSelect.ShowModal() == wxID_OK )
+    {
+        ProjectSettings &projectSettings = m_mainWindow->getProjectSettings();
+
+        SamplerSettings s( m_mainWindow, projectSettings, Ogre::HlmsSamplerblock() );
+        if( s.ShowModal() == wxID_OK )
+        {
+            Ogre::HlmsSamplerblock samplerblock( s.getSamplerblockFromUI() );
+            NamedSampler::addTemplate( projectSettings.getSamplerTemplates(), samplerblock );
+
+            OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbsDatablock *>( baseDatablock ) );
+            Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock *>( baseDatablock );
+
+            for( size_t i = 0u; i < Ogre::NUM_PBSM_TEXTURE_TYPES; ++i )
+            {
+                const Ogre::PbsTextureTypes textureType = static_cast<Ogre::PbsTextureTypes>( i );
+                if( bulkSelect.isSelected( textureType ) )
+                    datablock->setSamplerblock( textureType, samplerblock );
+            }
+
+            refreshSamplers( datablock );
+        }
+    }
+}
+//-----------------------------------------------------------------------------
 void PbsTexturePanel::UndoMouseUp( wxMouseEvent &event )
 {
     event.Skip();
@@ -551,6 +681,9 @@ void PbsTexturePanel::refreshFromDatablockAndApplyEnvMap()
     OGRE_ASSERT_HIGH( dynamic_cast<const Ogre::HlmsPbsDatablock *>( datablockBase ) );
     const Ogre::HlmsPbsDatablock *datablock =
         static_cast<const Ogre::HlmsPbsDatablock *>( datablockBase );
+
+    addSamplerTemplates( datablock );
+    refreshSamplers( datablock );
 
     for( size_t i = 0u; i < Ogre::NUM_PBSM_TEXTURE_TYPES; ++i )
     {
@@ -655,6 +788,63 @@ void PbsTexturePanel::notifyMeshChanged()
 
     for( const Ogre::Renderable *renderable : movableObject->mRenderables )
         applyEnvMapToDatablock( renderable->getDatablock() );
+}
+//-----------------------------------------------------------------------------
+void PbsTexturePanel::addSamplerTemplates( const Ogre::HlmsPbsDatablock *datablock )
+{
+    ProjectSettings &projectSettings = m_mainWindow->getProjectSettings();
+    NamedSamplerVec &samplerTemplates = projectSettings.getSamplerTemplates();
+    for( size_t i = 0u; i < Ogre::NUM_PBSM_TEXTURE_TYPES; ++i )
+    {
+        const Ogre::PbsTextureTypes textureType = static_cast<Ogre::PbsTextureTypes>( i );
+
+        const Ogre::HlmsSamplerblock *currSamplerblock = datablock->getSamplerblock( textureType );
+        if( currSamplerblock )
+            NamedSampler::addTemplate( samplerTemplates, *currSamplerblock );
+    }
+}
+//-----------------------------------------------------------------------------
+void PbsTexturePanel::refreshSamplers( const Ogre::HlmsPbsDatablock *datablock )
+{
+    ProjectSettings &projectSettings = m_mainWindow->getProjectSettings();
+    const NamedSamplerVec &samplerTemplates = projectSettings.getSamplerTemplates();
+
+    wxArrayString templateArray;
+    templateArray.reserve( samplerTemplates.size() + 1u );
+    for( const NamedSampler &namedSampler : samplerTemplates )
+        templateArray.push_back( namedSampler.name );
+    templateArray.push_back( wxT( "Custom..." ) );
+
+    for( size_t i = 0u; i < Ogre::NUM_PBSM_TEXTURE_TYPES; ++i )
+    {
+        const Ogre::PbsTextureTypes textureType = static_cast<Ogre::PbsTextureTypes>( i );
+        wxChoice *choiceCtrl = getSamplerblockChoiceCtrl( textureType );
+
+        if( !choiceCtrl )
+            continue;
+
+        choiceCtrl->Set( templateArray );
+
+        const Ogre::HlmsSamplerblock *currSamplerblock = datablock->getSamplerblock( textureType );
+        if( currSamplerblock )
+        {
+            NamedSamplerVec::const_iterator itor =
+                NamedSampler::find( samplerTemplates, *currSamplerblock );
+            if( itor != samplerTemplates.end() )
+            {
+                const int idx = int( itor - samplerTemplates.begin() );
+                choiceCtrl->SetSelection( idx );
+            }
+            else
+            {
+                choiceCtrl->SetSelection( int( choiceCtrl->GetCount() ) - 1 );
+            }
+        }
+        else
+        {
+            choiceCtrl->SetSelection( -1 );
+        }
+    }
 }
 //-----------------------------------------------------------------------------
 void PbsTexturePanel::applyEnvMapToDatablock( Ogre::HlmsDatablock *baseDatablock )

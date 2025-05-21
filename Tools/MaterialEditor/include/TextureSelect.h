@@ -8,7 +8,7 @@
 OGRE_ASSUME_NONNULL_BEGIN
 
 /** Implementing TextureSelectBase */
-class TextureSelect : public TextureSelectBase
+class TextureSelect final : public TextureSelectBase
 {
 public:
     struct ResourceEntry
@@ -28,9 +28,9 @@ protected:
     void populateFromDatabase();
 
     // Handlers for TextureSelectBase events.
-    void OnTextureSelect( wxCommandEvent &event );
-    void OnSearchText( wxCommandEvent &event );
-    void OnButtonClick( wxCommandEvent &event );
+    void OnTextureSelect( wxCommandEvent &event ) override;
+    void OnSearchText( wxCommandEvent &event ) override;
+    void OnButtonClick( wxCommandEvent &event ) override;
 
 public:
     TextureSelect( wxWindow *parent );

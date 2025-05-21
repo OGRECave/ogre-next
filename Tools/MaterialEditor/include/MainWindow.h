@@ -163,6 +163,7 @@ public:
 
     PbsParametersPanel *getPbsParametersPanel() { return m_pbsParametersPanel; }
     LightPanel         *getLightPanel() { return m_lightPanel; }
+    ProjectSettings    &getProjectSettings() { return *m_projectSettings; }
 
     void setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable datablock,
                              const bool                         bUpdateDatablockListSelection = true );

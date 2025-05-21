@@ -28,6 +28,10 @@ class ProjectSettings final : public ProjectSettingsBase
 
     std::vector<ResourceLocation> m_resourceLocations;
 
+    NamedSamplerVec m_samplerTemplates;
+
+    void generateDefaultSamplerTemplates();
+
 protected:
     // Handlers for ProjectSettingsBase events.
     void OnResourcesAdd( wxCommandEvent &event ) override;
@@ -58,6 +62,8 @@ public:
 
     void loadInternalSettings( const std::string &rwFolder );
     void saveInternalSettings( const std::string &rwFolder );
+
+    NamedSamplerVec &getSamplerTemplates() { return m_samplerTemplates; }
 };
 
 OGRE_ASSUME_NONNULL_END
