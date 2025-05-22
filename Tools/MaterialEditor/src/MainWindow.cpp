@@ -364,14 +364,24 @@ void MainWindow::loadResources()
     if( !originalDataFolder.empty() && *( originalDataFolder.end() - 1 ) != '/' )
         originalDataFolder += "/";
 
-    const char *c_locations[] = {
-        "materials/textures/Cubemaps",       "2.0/scripts/materials/Common",
-        "2.0/scripts/materials/Common/Any",  "2.0/scripts/materials/Common/GLSL",
-        "2.0/scripts/materials/Common/HLSL", "2.0/scripts/materials/Common/Metal",
-        "2.0/scripts/Compositors",           "2.0/scripts/materials/HDR",
-        "2.0/scripts/materials/HDR/GLSL",    "2.0/scripts/materials/HDR/HLSL",
-        "2.0/scripts/materials/HDR/Metal"
-    };
+    const char *c_locations[] = { "Hlms/Common/Any",
+                                  "Hlms/Common/GLSL",
+                                  "Hlms/Common/HLSL",
+                                  "Hlms/Common/Metal",
+                                  "materials/textures/Cubemaps",
+                                  "2.0/scripts/materials/Common",
+                                  "2.0/scripts/materials/Common/Any",
+                                  "2.0/scripts/materials/Common/GLSL",
+                                  "2.0/scripts/materials/Common/HLSL",
+                                  "2.0/scripts/materials/Common/Metal",
+                                  "2.0/scripts/materials/MaterialEditor",
+                                  "2.0/scripts/Compositors",
+                                  "2.0/scripts/materials/HDR",
+                                  "2.0/scripts/materials/HDR/GLSL",
+                                  "2.0/scripts/materials/HDR/HLSL",
+                                  "2.0/scripts/materials/HDR/Metal",
+                                  "Compute/Tools/Any",
+                                  "Compute/Algorithms/IBL" };
 
     Ogre::ResourceGroupManager &resourceGroupManager = Ogre::ResourceGroupManager::getSingleton();
 
@@ -431,6 +441,34 @@ void MainWindow::loadResources()
     loadHlmsDiskCache();
 
     Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups( true );
+
+    try
+    {
+        m_root->getHlmsManager()->loadBlueNoise();
+    }
+    catch( Ogre::FileNotFoundException &e )
+    {
+        Ogre::LogManager::getSingleton().logMessage( e.getFullDescription(), Ogre::LML_CRITICAL );
+        Ogre::LogManager::getSingleton().logMessage( "WARNING: Blue Noise textures could not be loaded.",
+                                                     Ogre::LML_CRITICAL );
+    }
+
+    // Initialize resources for LTC area lights and accurate specular reflections (IBL)
+    Ogre::Hlms *hlms = m_root->getHlmsManager()->getHlms( Ogre::HLMS_PBS );
+    OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbs *>( hlms ) );
+    Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlms );
+    try
+    {
+        hlmsPbs->loadLtcMatrix();
+    }
+    catch( Ogre::FileNotFoundException &e )
+    {
+        Ogre::LogManager::getSingleton().logMessage( e.getFullDescription(), Ogre::LML_CRITICAL );
+        Ogre::LogManager::getSingleton().logMessage(
+            "WARNING: LTC matrix textures could not be loaded. Accurate specular IBL reflections "
+            "and LTC area lights won't be available or may not function properly!",
+            Ogre::LML_CRITICAL );
+    }
 }
 //-----------------------------------------------------------------------------
 void MainWindow::registerHlms()

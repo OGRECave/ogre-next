@@ -11311,6 +11311,22 @@ namespace Ogre{
                         }
                     }
                     break;
+                case ID_AUTOGEN_INPUT_MIPMAPS:
+                    if( prop->values.size() != 1u )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( !getBoolean( *it0, &passIbl->mAutogenInputMipmaps ) )
+                        {
+                            compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file,
+                                                prop->line, "Boolean expected" );
+                        }
+                    }
+                    break;
                 // case ID_VIEWPORT:
                 case ID_IDENTIFIER:
                 case ID_FLUSH_COMMAND_BUFFERS:

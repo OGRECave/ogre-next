@@ -159,6 +159,7 @@ public:
     Ogre::SceneManager        *getSceneManager() { return m_sceneManager; }
     Ogre::CompositorWorkspace *getCompositorWorkspace() { return m_workspace; }
 
+    Ogre::Camera    *_getCamera() { return m_camera; }
     Ogre::SceneNode *getCameraNode() { return m_cameraNode; }
 
     PbsParametersPanel *getPbsParametersPanel() { return m_pbsParametersPanel; }

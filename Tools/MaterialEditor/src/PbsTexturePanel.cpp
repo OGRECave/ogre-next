@@ -6,12 +6,16 @@
 #include "SamplerSettingsBulkSelect.h"
 #include "TextureSelect.h"
 
+#include "Compositor/OgreCompositorManager2.h"
+#include "Compositor/OgreCompositorWorkspace.h"
+#include "OgreDepthBuffer.h"
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
 #include "OgreHlmsPbs.h"
 #include "OgreHlmsPbsDatablock.h"
 #include "OgreRenderSystem.h"
 #include "OgreRoot.h"
+#include "OgreTextureBox.h"
 #include "OgreTextureFilters.h"
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuManager.h"
@@ -59,13 +63,19 @@ PbsTexturePanel::PbsTexturePanel( MainWindow *parent ) :
     OGRE_ASSERT( m_detailMapBlendMode2->GetCount() == Ogre::NUM_PBSM_BLEND_MODES );
     OGRE_ASSERT( m_detailMapBlendMode3->GetCount() == Ogre::NUM_PBSM_BLEND_MODES );
 
+    // We must create the IBL mipmaps for SaintPetersBasilica, so we don't use this
+    // texture directly. A listener will be notified once its loaded, and we'll generate the IBLs.
+    // Because the DDS texture is using BC compression, we force the IBL to not generate mipmaps
+    // on the input texture. Hopefully this works for most cubemaps (as long as the DDS contains
+    // pre-generated mipmaps).
     Ogre::TextureGpuManager *textureManager =
         parent->getRoot()->getRenderSystem()->getTextureGpuManager();
-    m_reflectionMap = textureManager->createOrRetrieveTexture(
+    Ogre::TextureGpu *reflectionMapFromDisk = textureManager->createOrRetrieveTexture(
         "SaintPetersBasilica.dds", "## INTERNAL SaintPetersBasilica.dds",
         Ogre::GpuPageOutStrategy::Discard, Ogre::CommonTextureTypes::EnvMap,
         Ogre::ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME );
-    m_reflectionMap->scheduleTransitionTo( Ogre::GpuResidency::Resident );
+    reflectionMapFromDisk->addListener( this );
+    reflectionMapFromDisk->scheduleTransitionTo( Ogre::GpuResidency::Resident );
 
     refreshFromDatablockAndApplyEnvMap();
 }
@@ -884,5 +894,65 @@ void PbsTexturePanel::unsetEnvMapFromAllDatablocks()
             datablock->setTexture( Ogre::PBSM_REFLECTION, (Ogre::TextureGpu *)nullptr,
                                    datablock->getSamplerblock( Ogre::PBSM_REFLECTION ) );
         }
+    }
+}
+//-----------------------------------------------------------------------------
+void PbsTexturePanel::notifyTextureChanged( Ogre::TextureGpu *texture,
+                                            Ogre::TextureGpuListener::Reason reason, void * )
+{
+    using namespace Ogre;
+    if( reason == TextureGpuListener::ReadyForRendering )
+    {
+        CompositorManager2 *compositorManager = m_mainWindow->getRoot()->getCompositorManager2();
+
+        SceneManager *sceneManager = m_mainWindow->getSceneManager();
+        TextureGpuManager *textureManager =
+            sceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+
+        TextureGpu *tempTexture0 = textureManager->createTexture(
+            "___tempIblTexture0",         //
+            GpuPageOutStrategy::Discard,  //
+            TextureFlags::RenderToTexture | TextureFlags::Uav | TextureFlags::DiscardableContent,
+            texture->getTextureType() );
+        tempTexture0->copyParametersFrom( texture );
+        tempTexture0->setTextureType( TextureTypes::TypeCube );
+        if( PixelFormatGpuUtils::isCompressed( tempTexture0->getPixelFormat() ) )
+            tempTexture0->setPixelFormat( Ogre::PFG_RGBA8_UNORM );
+        tempTexture0->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_UNKNOWN );
+        tempTexture0->scheduleTransitionTo( GpuResidency::Resident );
+
+        CompositorWorkspace *workspace = compositorManager->addWorkspace(
+            sceneManager, { texture, tempTexture0 }, m_mainWindow->_getCamera(), "MatEditorIblGenerator",
+            false );
+
+        workspace->_update();
+        compositorManager->removeWorkspace( workspace );
+        workspace = 0;
+
+        if( m_reflectionMap )
+        {
+            m_reflectionMap->scheduleTransitionTo( GpuResidency::OnStorage );
+        }
+        else
+        {
+            m_reflectionMap = textureManager->createTexture(
+                "## INTERNAL IBL SaintPetersBasilica.dds", GpuPageOutStrategy::Discard,
+                TextureFlags::ManualTexture, texture->getTextureType() );
+        }
+        m_reflectionMap->copyParametersFrom( tempTexture0 );
+        m_reflectionMap->scheduleTransitionTo( GpuResidency::Resident );
+
+        const uint8 numMipmaps = tempTexture0->getNumMipmaps();
+        for( uint8 i = 1u; i < numMipmaps; ++i )
+        {
+            TextureBox box = tempTexture0->getEmptyBox( i );
+            tempTexture0->copyTo( m_reflectionMap, box, i, box, i );
+        }
+
+        textureManager->destroyTexture( tempTexture0 );
+    }
+    else if( reason == TextureGpuListener::Deleted )
+    {
+        texture->removeListener( this );
     }
 }

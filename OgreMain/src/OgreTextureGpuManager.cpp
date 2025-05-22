@@ -316,6 +316,7 @@ namespace Ogre
         while( itor != endt )
         {
             const ResourceEntry &entry = itor->second;
+            entry.texture->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
             delete entry.texture;
             ++itor;
         }

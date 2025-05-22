@@ -6,6 +6,7 @@
 #include "MaterialEditorCommon.h"
 
 #include "OgreHlmsPbsPrerequisites.h"
+#include "OgreTextureGpuListener.h"
 
 OGRE_ASSUME_NONNULL_BEGIN
 
@@ -16,11 +17,11 @@ namespace Ogre
 
 class MainWindow;
 
-class PbsTexturePanel final : public PbsTexturePanelBase
+class PbsTexturePanel final : public PbsTexturePanelBase, public Ogre::TextureGpuListener
 {
     MainWindow *m_mainWindow;
 
-    Ogre::TextureGpu *m_reflectionMap;
+    Ogre::TextureGpu *ogre_nullable m_reflectionMap;
 
     bool m_editing;
     bool m_ignoreUndo;
@@ -86,6 +87,9 @@ public:
     void applyEnvMapToDatablock( Ogre::HlmsDatablock *baseDatablock );
     /// Needed when saving.
     void unsetEnvMapFromAllDatablocks();
+
+    void notifyTextureChanged( Ogre::TextureGpu *texture, Ogre::TextureGpuListener::Reason reason,
+                               void *extraData ) override;
 };
 
 OGRE_ASSUME_NONNULL_END
