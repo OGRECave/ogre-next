@@ -445,10 +445,10 @@ wxString NamedSampler::autogenNameFrom( const Ogre::HlmsSamplerblock &sampler )
     if( sampler.mMipLodBias != 0.0f )
         name += wxString::Format( "_lod=%f", sampler.mMipLodBias );
 
-    if( sampler.mMinLod != -FLT_MAX )
+    if( sampler.mMinLod > -FLT_MAX * 0.5f )
         name += wxString::Format( "_minlod=%f", sampler.mMinLod );
 
-    if( sampler.mMaxLod != FLT_MAX )
+    if( sampler.mMaxLod < FLT_MAX * 0.5f )
         name += wxString::Format( "_maxlod=%f", sampler.mMaxLod );
 
     if( sampler.mU == TAM_BORDER || sampler.mV == TAM_BORDER || sampler.mW == TAM_BORDER )

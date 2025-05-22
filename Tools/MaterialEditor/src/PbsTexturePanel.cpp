@@ -316,6 +316,7 @@ void PbsTexturePanel::OnTextureChangeButton( wxCommandEvent &event )
         /*wxImage img;
         converTo( texture, img );
         m_units[textureType].mapBmp->SetBitmap( wxBitmapBundle( img ) );*/
+        refreshSamplers( datablock );
     }
     else if( chosenEntry )
     {
@@ -332,6 +333,7 @@ void PbsTexturePanel::OnTextureChangeButton( wxCommandEvent &event )
         datablock->setTexture( textureType, (TextureGpu *)nullptr,
                                datablock->getSamplerblock( textureType ) );
         m_units[textureType].mapButton->SetLabel( wxString() );
+        refreshSamplers( datablock );
     }
 }
 //-----------------------------------------------------------------------------
