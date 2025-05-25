@@ -1088,6 +1088,7 @@ namespace Ogre
         outString += "{";
 
         const Hlms::HlmsDatablockMap &datablockMap = hlms->getDatablockMap();
+        const HlmsDatablock *defaultDatablock = hlms->getDefaultDatablock();
 
         set<const HlmsMacroblock *>::type macroblocks;
         set<const HlmsBlendblock *>::type blendblocks;
@@ -1101,20 +1102,23 @@ namespace Ogre
             {
                 const HlmsDatablock *datablock = itor->second.datablock;
 
-                const HlmsMacroblock *macroblock = datablock->getMacroblock( false );
-                macroblocks.insert( macroblock );
+                if( datablock != defaultDatablock && mListener->saveDatablock( datablock ) )
+                {
+                    const HlmsMacroblock *macroblock = datablock->getMacroblock( false );
+                    macroblocks.insert( macroblock );
 
-                if( datablock->hasCustomShadowMacroblock() )
-                    macroblocks.insert( datablock->getMacroblock( true ) );
+                    if( datablock->hasCustomShadowMacroblock() )
+                        macroblocks.insert( datablock->getMacroblock( true ) );
 
-                const HlmsBlendblock *blendblock = datablock->getBlendblock( false );
-                blendblocks.insert( blendblock );
+                    const HlmsBlendblock *blendblock = datablock->getBlendblock( false );
+                    blendblocks.insert( blendblock );
 
-                const HlmsBlendblock *blendblockCaster = datablock->getBlendblock( true );
-                if( blendblock != blendblockCaster )
-                    blendblocks.insert( blendblockCaster );
+                    const HlmsBlendblock *blendblockCaster = datablock->getBlendblock( true );
+                    if( blendblock != blendblockCaster )
+                        blendblocks.insert( blendblockCaster );
 
-                hlms->_collectSamplerblocks( samplerblocks, datablock );
+                    hlms->_collectSamplerblocks( samplerblocks, datablock );
+                }
 
                 ++itor;
             }
@@ -1180,8 +1184,6 @@ namespace Ogre
                 outString += "\" : \n\t{";
             }
 
-            const HlmsDatablock *defaultDatablock = hlms->getDefaultDatablock();
-
             Hlms::HlmsDatablockMap::const_iterator itor = datablockMap.begin();
             Hlms::HlmsDatablockMap::const_iterator endt = datablockMap.end();
 
@@ -1204,9 +1206,11 @@ namespace Ogre
                     {
                         const HlmsDatablock *datablock = itorFind->second.datablock;
 
-                        if( datablock != defaultDatablock )
+                        if( datablock != defaultDatablock && mListener->saveDatablock( datablock ) )
+                        {
                             saveDatablock( itorFind->second.name, datablock, outString,
                                            additionalTextureExtension );
+                        }
                     }
                     ++itor2;
                 }
@@ -1217,9 +1221,11 @@ namespace Ogre
                 {
                     const HlmsDatablock *datablock = itor->second.datablock;
 
-                    if( datablock != defaultDatablock )
+                    if( datablock != defaultDatablock && mListener->saveDatablock( datablock ) )
+                    {
                         saveDatablock( itor->second.name, datablock, outString,
                                        additionalTextureExtension );
+                    }
                     ++itor;
                 }
             }

@@ -70,6 +70,18 @@ namespace Ogre
     public:
         /// Gives you a chance to completely change the name of the texture when saving a material
         virtual void savingChangeTextureName( String &inOutAliasName, String &inOutTexName ) {}
+
+        /** Used by HlmsJson::saveMaterials. Not by HlmsJson::saveMaterial.
+        @remark
+            This function will be called multiple times for the same datablock.
+            All those calls must return a consistent value for the same input datablock.
+        @param datablock
+            Datablock to save or ignore.
+        @return
+            True if the datablock should be saved.
+            False if you wish to exclude it from the saving process.
+        */
+        virtual bool saveDatablock( const HlmsDatablock *datablock ) const { return true; }
     };
 
     /** HLMS stands for "High Level Material System". */
