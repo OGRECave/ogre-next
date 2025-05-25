@@ -2610,6 +2610,16 @@ namespace Ogre
                         dumpProperties( debugDumpFile, tid );
                 }
 
+                // Library piece files first
+                LibraryVec::const_iterator itor = mLibrary.begin();
+                LibraryVec::const_iterator endt = mLibrary.end();
+
+                while( itor != endt )
+                {
+                    processPieces( itor->dataFolder, itor->pieceFiles[i], tid );
+                    ++itor;
+                }
+
                 const int32 customPieceName =
                     getProperty( tid, HlmsBaseProp::_DatablockCustomPieceShaderName[i] );
                 if( customPieceName )
@@ -2632,16 +2642,6 @@ namespace Ogre
                     this->parseUndefPieces( inString, outString, tid );
                     this->collectPieces( outString, inString, tid );
                     this->parseCounter( inString, outString, tid );
-                }
-
-                // Library piece files first
-                LibraryVec::const_iterator itor = mLibrary.begin();
-                LibraryVec::const_iterator endt = mLibrary.end();
-
-                while( itor != endt )
-                {
-                    processPieces( itor->dataFolder, itor->pieceFiles[i], tid );
-                    ++itor;
                 }
 
                 // Main piece files
