@@ -1102,7 +1102,7 @@ namespace Ogre
             {
                 const HlmsDatablock *datablock = itor->second.datablock;
 
-                if( datablock != defaultDatablock && mListener->saveDatablock( datablock ) )
+                if( datablock != defaultDatablock && mListener->canSaveDatablock( datablock ) )
                 {
                     const HlmsMacroblock *macroblock = datablock->getMacroblock( false );
                     macroblocks.insert( macroblock );
@@ -1206,7 +1206,7 @@ namespace Ogre
                     {
                         const HlmsDatablock *datablock = itorFind->second.datablock;
 
-                        if( datablock != defaultDatablock && mListener->saveDatablock( datablock ) )
+                        if( datablock != defaultDatablock && mListener->canSaveDatablock( datablock ) )
                         {
                             saveDatablock( itorFind->second.name, datablock, outString,
                                            additionalTextureExtension );
@@ -1221,7 +1221,7 @@ namespace Ogre
                 {
                     const HlmsDatablock *datablock = itor->second.datablock;
 
-                    if( datablock != defaultDatablock && mListener->saveDatablock( datablock ) )
+                    if( datablock != defaultDatablock && mListener->canSaveDatablock( datablock ) )
                     {
                         saveDatablock( itor->second.name, datablock, outString,
                                        additionalTextureExtension );

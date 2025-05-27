@@ -5,11 +5,15 @@
 
 #include "MaterialEditorCommon.h"
 
+#include "OgreHlmsJson.h"
+
 OGRE_ASSUME_NONNULL_BEGIN
 
 class MainWindow;
 
-class ProjectSettings final : public ProjectSettingsBase
+typedef std::map<Ogre::String, std::set<Ogre::String>> GroupedDatablockMap;
+
+class ProjectSettings final : public ProjectSettingsBase, public Ogre::HlmsJsonListener
 {
     bool m_editing;
 
@@ -29,6 +33,9 @@ class ProjectSettings final : public ProjectSettingsBase
     std::vector<ResourceLocation> m_resourceLocations;
 
     NamedSamplerVec m_samplerTemplates;
+
+    Ogre::String        m_currentGroupSaving;
+    GroupedDatablockMap m_groupedDatablocks;
 
     void generateDefaultSamplerTemplates();
 
@@ -64,6 +71,15 @@ public:
     void saveInternalSettings( const std::string &rwFolder );
 
     NamedSamplerVec &getSamplerTemplates() { return m_samplerTemplates; }
+
+    GroupedDatablockMap &getGroupedDatablocks() { return m_groupedDatablocks; }
+
+    void addToCategoryGroup( const Ogre::String &groupName, const Ogre::String &datablockName );
+    void removeFromCategoryGroup( const Ogre::String &groupName, const Ogre::String &datablockName );
+
+    bool isDatablockGroupless( const Ogre::String &name ) const;
+
+    bool canSaveDatablock( const Ogre::HlmsDatablock *datablock ) const override;
 };
 
 OGRE_ASSUME_NONNULL_END

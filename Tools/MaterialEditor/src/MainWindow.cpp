@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 
+#include "CategoryGrouping.h"
 #include "CmdSettings.h"
 #include "Constants.h"
 #include "Core/wxOgreRenderWindow.h"
@@ -874,6 +875,12 @@ void MainWindow::OnMenuSelection( wxCommandEvent &event )
     case wxID_REDO:
         m_undoSystem.performRedo();
         break;
+    case wxID_EDIT_GROUPS:
+    {
+        CategoryGrouping categoryGrouping( this );
+        categoryGrouping.ShowModal();
+        break;
+    }
 
         // Submenu Camera
     case wxID_MENUCAMERAORIGIN:

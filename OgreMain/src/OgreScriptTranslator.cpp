@@ -9504,8 +9504,8 @@ namespace Ogre{
                         uint32 numMiplevels = 1u;
                         if( getUInt( *it0, &mipLevelStart ) && getUInt( *it1, &numMiplevels ) )
                         {
-                            passDepthCopy->mMipLevelStart = mipLevelStart;
-                            passDepthCopy->mNumMiplevels = numMiplevels;
+                            passDepthCopy->mMipLevelStart = uint8_t( mipLevelStart );
+                            passDepthCopy->mNumMiplevels = uint8_t( numMiplevels );
                         }
                         else
                         {

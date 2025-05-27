@@ -81,7 +81,7 @@ namespace Ogre
             True if the datablock should be saved.
             False if you wish to exclude it from the saving process.
         */
-        virtual bool saveDatablock( const HlmsDatablock *datablock ) const { return true; }
+        virtual bool canSaveDatablock( const HlmsDatablock *datablock ) const { return true; }
     };
 
     /** HLMS stands for "High Level Material System". */

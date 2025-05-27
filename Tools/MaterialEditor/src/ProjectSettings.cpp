@@ -21,6 +21,7 @@
 
 ProjectSettings::ProjectSettings( wxWindow *parent ) : ProjectSettingsBase( parent ), m_editing( false )
 {
+    m_groupedDatablocks.insert( { "EXCLUDED", {} } );
 }
 //-----------------------------------------------------------------------------
 void ProjectSettings::generateDefaultSamplerTemplates()
@@ -302,6 +303,30 @@ void ProjectSettings::saveProject( Ogre::HlmsManager *hlmsManager, LightPanel &l
         jsonString.pop_back();  // Remove last trailing comma.
     jsonString += "\n	]";
 
+    jsonString += ",\n	\"category_groups\" :\n	{";
+    for( const auto &groups : m_groupedDatablocks )
+    {
+        jsonString += "\n		\"";
+        jsonString += groups.first;
+        jsonString += "\" : [";
+        for( const Ogre::String &datablockName : groups.second )
+        {
+            jsonString += "\"";
+            jsonString += datablockName;
+            jsonString += "\", ";
+        }
+        if( !groups.second.empty() )
+        {
+            // Remove last trailing comma & space.
+            jsonString.pop_back();
+            jsonString.pop_back();
+        }
+        jsonString += "],";
+    }
+    if( !m_groupedDatablocks.empty() )
+        jsonString.pop_back();  // Remove last trailing comma.
+    jsonString += "\n	}";
+
     lightPanel.saveProject( jsonString );
 
     jsonString += "\n}";
@@ -319,9 +344,9 @@ void ProjectSettings::saveProject( Ogre::HlmsManager *hlmsManager, LightPanel &l
     projFile.write( jsonString.data(), std::streamsize( jsonString.size() ) );
 
     hlmsManager->saveMaterials(  //
-        Ogre::HLMS_PBS, m_materialDstPath.utf8_string() + "_pbs.material.json", nullptr, "", true );
+        Ogre::HLMS_PBS, m_materialDstPath.utf8_string() + "_pbs.material.json", this, "", true );
     hlmsManager->saveMaterials(
-        Ogre::HLMS_UNLIT, m_materialDstPath.utf8_string() + "_unlit.material.json", nullptr, "", true );
+        Ogre::HLMS_UNLIT, m_materialDstPath.utf8_string() + "_unlit.material.json", this, "", true );
 }
 //-----------------------------------------------------------------------------
 int ProjectSettings::ShowModal()
@@ -337,6 +362,8 @@ int ProjectSettings::ShowModal()
 //-----------------------------------------------------------------------------
 void ProjectSettings::newProject( Ogre::HlmsManager *hlmsManager )
 {
+    m_groupedDatablocks.insert( { "EXCLUDED", {} } );
+
     Ogre::v1::MeshManager::getSingleton().removeAll();
     Ogre::MeshManager::getSingleton().removeAll();
 
@@ -393,16 +420,17 @@ void ProjectSettings::openProject( wxString projectPath, Ogre::HlmsManager *hlms
 
     if( d.HasParseError() )
     {
-        wxMessageBox( wxString::Format( wxT( "Error parsing '%s'.\nError: %s at line %i" ), projectPath,
-                                        rapidjson::GetParseError_En( d.GetParseError() ),
-                                        std::to_string( d.GetErrorOffset() ) ),
-                      wxT( "JSON Parse Error" ), wxOK | wxICON_ERROR | wxCENTRE );
+        wxMessageBox(
+            wxString::Format( wxT( "Error parsing '%s'.\nError: %s at line %zu" ), projectPath,
+                              rapidjson::GetParseError_En( d.GetParseError() ), d.GetErrorOffset() ),
+            wxT( "JSON Parse Error" ), wxOK | wxICON_ERROR | wxCENTRE );
         return;
     }
 
     m_resources.Clear();
     m_relativeFolder.clear();
     m_materialDstPath.clear();
+    m_groupedDatablocks.clear();
 
     rapidjson::Value::ConstMemberIterator itor;
     itor = d.FindMember( "resources" );
@@ -435,6 +463,31 @@ void ProjectSettings::openProject( wxString projectPath, Ogre::HlmsManager *hlms
     itor = d.FindMember( "material_dst_path" );
     if( itor != d.MemberEnd() && itor->value.IsString() )
         m_materialDstPath = itor->value.GetString();
+
+    itor = d.FindMember( "category_groups" );
+    if( itor != d.MemberEnd() && itor->value.IsObject() )
+    {
+        const rapidjson::Value &groups = itor->value;
+
+        itor = groups.MemberBegin();
+        rapidjson::Value::ConstMemberIterator endt = groups.MemberEnd();
+
+        while( itor != endt )
+        {
+            if( itor->name.IsString() && itor->value.IsArray() )
+            {
+                std::set<Ogre::String> &datablocksInGroup =
+                    m_groupedDatablocks.insert( { itor->name.GetString(), {} } ).first->second;
+                const rapidjson::SizeType numEntries = itor->value.Size();
+                for( rapidjson::SizeType i = 0u; i < numEntries; ++i )
+                {
+                    if( itor->value[i].IsString() )
+                        datablocksInGroup.insert( itor->value[i].GetString() );
+                }
+            }
+            ++itor;
+        }
+    }
 
     lightPanel.loadProject( d );
 
@@ -511,4 +564,47 @@ void ProjectSettings::saveInternalSettings( const std::string &rwFolder )
     }
 
     file.write( jsonString.data(), std::streamsize( jsonString.size() ) );
+}
+//-----------------------------------------------------------------------------
+void ProjectSettings::addToCategoryGroup( const Ogre::String &groupName,
+                                          const Ogre::String &datablockName )
+{
+    m_groupedDatablocks[groupName].insert( datablockName );
+}
+//-----------------------------------------------------------------------------
+void ProjectSettings::removeFromCategoryGroup( const Ogre::String &groupName,
+                                               const Ogre::String &datablockName )
+{
+    m_groupedDatablocks[groupName].erase( datablockName );
+}
+//-----------------------------------------------------------------------------
+bool ProjectSettings::isDatablockGroupless( const Ogre::String &name ) const
+{
+    for( const auto &group : m_groupedDatablocks )
+    {
+        if( group.second.find( name ) != group.second.end() )
+            return false;
+    }
+    return true;
+}
+//-----------------------------------------------------------------------------
+bool ProjectSettings::canSaveDatablock( const Ogre::HlmsDatablock *datablock ) const
+{
+    const Ogre::String *name = datablock->getNameStr();
+
+    if( m_currentGroupSaving.empty() )
+    {
+        if( !name )
+            return true;
+        return isDatablockGroupless( *datablock->getNameStr() );
+    }
+
+    if( !name )
+        return false;
+
+    GroupedDatablockMap::const_iterator itor = m_groupedDatablocks.find( m_currentGroupSaving );
+    if( itor == m_groupedDatablocks.end() )
+        return false;
+
+    return itor->second.find( *name ) != itor->second.end();
 }

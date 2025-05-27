@@ -2071,7 +2071,7 @@ namespace Ogre
         mapSize += mListener->getPassBufferSize( shadowNode, casterPass, dualParaboloid, sceneManager );
 
         // Arbitrary 16kb (minimum supported by GL), should be enough.
-        const size_t maxBufferSizeRaw = 16 * 1024;
+        const size_t maxBufferSizeRaw = 64 * 1024;
         const size_t maxBufferSizeLight0 = ( 6 * 4 * 4 ) * 32;  // 32 forward lights should be enough
         const size_t maxBufferSizeLight1 = ( numAreaApproxFloat4Vars * 4 * 4 ) * 8;  // 8 area lights
         const size_t maxBufferSizeLight2 = ( numAreaLtcFloat4Vars * 4 * 4 ) * 8;     // 8 Ltc area lights

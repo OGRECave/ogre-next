@@ -48,7 +48,8 @@ class MainWindowBase : public wxFrame
 	protected:
 		enum
 		{
-			wxID_MENUCAMCENTERMESH = 6000,
+			wxID_EDIT_GROUPS = 6000,
+			wxID_MENUCAMCENTERMESH,
 			wxID_MENUCAMERAORIGIN,
 			wxID_MENUCAMERAORIGINCENTERY,
 			wxID_MENUCOORDINATE_X_UP,
@@ -494,6 +495,38 @@ class SamplerSettingsBulkSelectBase : public wxDialog
 		SamplerSettingsBulkSelectBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select slots to apply same samplerblock"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
 
 		~SamplerSettingsBulkSelectBase();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class CategoryGroupingBase
+///////////////////////////////////////////////////////////////////////////////
+class CategoryGroupingBase : public wxDialog
+{
+	private:
+
+	protected:
+		wxChoice* m_groupChoice;
+		wxButton* m_addGroupBtn;
+		wxListBox* m_grouplessList;
+		wxButton* m_addButton;
+		wxButton* m_removeButton;
+		wxListBox* m_groupList;
+		wxSearchCtrl* m_grouplessSearch;
+		wxSearchCtrl* m_groupSearch;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnGroupChoice( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnListBoxDClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSearchText( wxCommandEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		CategoryGroupingBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Edit Category Grouping"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 600,900 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER );
+
+		~CategoryGroupingBase();
 
 };
 

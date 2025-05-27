@@ -47,6 +47,12 @@ MainWindowBase::MainWindowBase( wxWindow* parent, wxWindowID id, const wxString&
 	m_menuItem31 = new wxMenuItem( m_menuEdit, wxID_REDO, wxString( _("&Redo") ) + wxT('\t') + wxT("Ctrl+Y"), wxEmptyString, wxITEM_NORMAL );
 	m_menuEdit->Append( m_menuItem31 );
 
+	m_menuEdit->AppendSeparator();
+
+	wxMenuItem* m_menuItem13;
+	m_menuItem13 = new wxMenuItem( m_menuEdit, wxID_EDIT_GROUPS, wxString( _("Edit &Groups") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuEdit->Append( m_menuItem13 );
+
 	m_menubar->Append( m_menuEdit, _("&Edit") );
 
 	m_menuView = new wxMenu();
@@ -98,6 +104,7 @@ MainWindowBase::MainWindowBase( wxWindow* parent, wxWindowID id, const wxString&
 	m_menuFile->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuItem5->GetId());
 	m_menuEdit->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuItem61->GetId());
 	m_menuEdit->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuItem31->GetId());
+	m_menuEdit->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuItem13->GetId());
 	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuCamCenterMesh->GetId());
 	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuCamOrigin->GetId());
 	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this, m_menuDefaultCamPos->GetId());
@@ -2247,5 +2254,97 @@ SamplerSettingsBulkSelectBase::SamplerSettingsBulkSelectBase( wxWindow* parent, 
 }
 
 SamplerSettingsBulkSelectBase::~SamplerSettingsBulkSelectBase()
+{
+}
+
+CategoryGroupingBase::CategoryGroupingBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+
+	wxBoxSizer* bSizer75;
+	bSizer75 = new wxBoxSizer( wxVERTICAL );
+
+	wxStaticText* m_staticText31;
+	m_staticText31 = new wxStaticText( this, wxID_ANY, _("Category Groups allow you to create multiple JSON material files\nor even exclude some materials from being saved.\n\nYou can add new groups, but you can only remove them by manually editing the JSON files."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText31->Wrap( -1 );
+	bSizer75->Add( m_staticText31, 0, wxALL, 5 );
+
+	wxBoxSizer* bSizer80;
+	bSizer80 = new wxBoxSizer( wxHORIZONTAL );
+
+	wxArrayString m_groupChoiceChoices;
+	m_groupChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_groupChoiceChoices, 0 );
+	m_groupChoice->SetSelection( 0 );
+	bSizer80->Add( m_groupChoice, 1, wxALL, 5 );
+
+	m_addGroupBtn = new wxButton( this, wxID_ANY, _("+"), wxDefaultPosition, wxSize( 50,-1 ), 0 );
+	bSizer80->Add( m_addGroupBtn, 0, wxALL, 5 );
+
+
+	bSizer75->Add( bSizer80, 0, wxEXPAND, 5 );
+
+	wxFlexGridSizer* fgSizer7;
+	fgSizer7 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer7->AddGrowableCol( 0 );
+	fgSizer7->AddGrowableCol( 2 );
+	fgSizer7->AddGrowableRow( 0 );
+	fgSizer7->SetFlexibleDirection( wxBOTH );
+	fgSizer7->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_grouplessList = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_MULTIPLE );
+	fgSizer7->Add( m_grouplessList, 1, wxALL|wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer79;
+	bSizer79 = new wxBoxSizer( wxVERTICAL );
+
+	m_addButton = new wxButton( this, wxID_ANY, _("Add >>>"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer79->Add( m_addButton, 1, wxALL|wxEXPAND, 5 );
+
+	m_removeButton = new wxButton( this, wxID_ANY, _("<<< Remove"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer79->Add( m_removeButton, 1, wxALL|wxEXPAND, 5 );
+
+
+	fgSizer7->Add( bSizer79, 1, wxEXPAND, 5 );
+
+	m_groupList = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_MULTIPLE );
+	fgSizer7->Add( m_groupList, 1, wxALL|wxEXPAND, 5 );
+
+	m_grouplessSearch = new wxSearchCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	#ifndef __WXMAC__
+	m_grouplessSearch->ShowSearchButton( true );
+	#endif
+	m_grouplessSearch->ShowCancelButton( false );
+	fgSizer7->Add( m_grouplessSearch, 0, wxALL|wxEXPAND, 5 );
+
+
+	fgSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_groupSearch = new wxSearchCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	#ifndef __WXMAC__
+	m_groupSearch->ShowSearchButton( true );
+	#endif
+	m_groupSearch->ShowCancelButton( false );
+	fgSizer7->Add( m_groupSearch, 0, wxALL|wxEXPAND, 5 );
+
+
+	bSizer75->Add( fgSizer7, 1, wxEXPAND, 5 );
+
+
+	this->SetSizer( bSizer75 );
+	this->Layout();
+
+	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_groupChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( CategoryGroupingBase::OnGroupChoice ), NULL, this );
+	m_addGroupBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CategoryGroupingBase::OnButtonClick ), NULL, this );
+	m_grouplessList->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( CategoryGroupingBase::OnListBoxDClick ), NULL, this );
+	m_addButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CategoryGroupingBase::OnButtonClick ), NULL, this );
+	m_groupList->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( CategoryGroupingBase::OnListBoxDClick ), NULL, this );
+	m_grouplessSearch->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( CategoryGroupingBase::OnSearchText ), NULL, this );
+	m_groupSearch->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( CategoryGroupingBase::OnSearchText ), NULL, this );
+}
+
+CategoryGroupingBase::~CategoryGroupingBase()
 {
 }
