@@ -1049,11 +1049,11 @@ namespace Ogre
                 {
                     outString += ",\n\t\t\t\"";
                     outString += c_customPieceKeyword[i];
-                    outString += "\" : [";
+                    outString += "\" : [\"";
                     outString += data->filename;
-                    outString += ", ";
+                    outString += "\", \"";
                     outString += data->resourceGroup;
-                    outString += "];";
+                    outString += "\"]";
                 }
             }
         }
@@ -1176,6 +1176,7 @@ namespace Ogre
         }
 
         {
+            bool bDatablocksWritten = false;
             const size_t numDatablocks = datablockMap.size();
             if( numDatablocks > 1u )
             {
@@ -1210,6 +1211,7 @@ namespace Ogre
                         {
                             saveDatablock( itorFind->second.name, datablock, outString,
                                            additionalTextureExtension );
+                            bDatablocksWritten = true;
                         }
                     }
                     ++itor2;
@@ -1225,6 +1227,7 @@ namespace Ogre
                     {
                         saveDatablock( itor->second.name, datablock, outString,
                                        additionalTextureExtension );
+                        bDatablocksWritten = true;
                     }
                     ++itor;
                 }
@@ -1232,7 +1235,8 @@ namespace Ogre
 
             if( numDatablocks > 1u )
             {
-                outString.erase( outString.size() - 1 );  // Remove an extra comma
+                if( bDatablocksWritten )
+                    outString.erase( outString.size() - 1 );  // Remove an extra comma
                 outString += "\n\t},";
             }
         }
