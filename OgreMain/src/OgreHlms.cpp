@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 #include "OgreBitset.inl"
 #include "OgreCamera.h"
+#include "OgreConfigFile.h"
 #include "OgreDepthBuffer.h"
 #include "OgreFileSystem.h"
 #include "OgreForward3D.h"
@@ -4232,6 +4233,39 @@ namespace Ogre
 
             if( !mDefaultDatablock )
                 mDefaultDatablock = createDefaultDatablock();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void Hlms::getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths,
+                                const ConfigFile &configFile )
+    {
+        getDefaultPaths( outDataFolderPath, outLibraryFoldersPaths, configFile, mTypeNameStr );
+    }
+    //-----------------------------------------------------------------------------------
+    void Hlms::getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths,
+                                const ConfigFile &configFile, const String &hlmsTypeName )
+    {
+        outLibraryFoldersPaths = configFile.getMultiSetting( "Library", hlmsTypeName );
+        outDataFolderPath = configFile.getSetting( "Main", hlmsTypeName );
+
+        // We need to know what RenderSystem is currently in use, as the
+        // name of the compatible shading language is part of the path
+        Ogre::RenderSystem *renderSystem = Ogre::Root::getSingleton().getRenderSystem();
+        Ogre::String shaderSyntax = "GLSL";
+        if( renderSystem->getName() == "Direct3D11 Rendering Subsystem" )
+            shaderSyntax = "HLSL";
+        else if( renderSystem->getName() == "Metal Rendering Subsystem" )
+            shaderSyntax = "Metal";
+        for( String &libraryPath : outLibraryFoldersPaths )
+        {
+            const size_t pos = libraryPath.find( "[SHADER_SYNTAX]" );
+            if( pos != String::npos )
+                libraryPath.replace( pos, sizeof( "[SHADER_SYNTAX]" ) - 1u, shaderSyntax );
+        }
+        {
+            const size_t pos = outDataFolderPath.find( "[SHADER_SYNTAX]" );
+            if( pos != String::npos )
+                outDataFolderPath.replace( pos, sizeof( "[SHADER_SYNTAX]" ) - 1u, shaderSyntax );
         }
     }
     //-----------------------------------------------------------------------------------
