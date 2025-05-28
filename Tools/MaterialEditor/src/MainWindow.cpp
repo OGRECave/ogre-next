@@ -154,7 +154,7 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     m_wxAuiManager = new wxAuiManager( this );
 
     // Initialize Ogre and the control that renders it.
-    initOgre( cmdSettings.setupRenderSystems );
+    initOgre( cmdSettings );
 
     m_mainNotebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                         wxAUI_NB_BOTTOM | wxAUI_NB_TAB_SPLIT | wxAUI_NB_TAB_MOVE |
@@ -253,7 +253,7 @@ void MainWindow::loadSettings()
     }
 }
 //-----------------------------------------------------------------------------
-void MainWindow::initOgre( bool bForceSetup )
+void MainWindow::initOgre( const CmdSettings &cmdSettings )
 {
 #ifndef __WXMSW__
     // Set config directory.
@@ -275,7 +275,7 @@ void MainWindow::initOgre( bool bForceSetup )
                                  m_writeAccessFolder + "ogre.cfg", m_writeAccessFolder + "Ogre.log" );
     }
 
-    if( bForceSetup || !m_root->restoreConfig() )
+    if( cmdSettings.setupRenderSystems || !m_root->restoreConfig() )
         m_root->showConfigDialog();
 
     m_root->initialise( false );
@@ -287,7 +287,7 @@ void MainWindow::initOgre( bool bForceSetup )
 
     m_wxOgreRenderWindow->SetFocus();
 
-    createSystems();
+    createSystems( cmdSettings );
 
     m_wxAuiManager->AddPane( m_wxOgreRenderWindow, wxAuiPaneInfo()
                                                        .Name( wxT( "RenderWindow" ) )
@@ -298,7 +298,7 @@ void MainWindow::initOgre( bool bForceSetup )
                                                        .CloseButton( false ) );
 }
 //-----------------------------------------------------------------------------
-void MainWindow::createSystems()
+void MainWindow::createSystems( const CmdSettings &cmdSettings )
 {
     m_sceneManager = m_root->createSceneManager( Ogre::ST_GENERIC, 1u );
     m_camera = m_sceneManager->createCamera( "Main Camera" );
@@ -323,7 +323,7 @@ void MainWindow::createSystems()
     m_sceneManager->setAmbientLight( Ogre::ColourValue( 0.2f, 0.2f, 0.2f ),
                                      Ogre::ColourValue( 0.1f, 0.1f, 0.1f ), Ogre::Vector3::UNIT_Y );
 
-    loadResources();
+    loadResources( cmdSettings );
 
     Ogre::CompositorManager2 *compositorManager = m_root->getCompositorManager2();
     compositorManager->setCompositorPassProvider( new Ogre::DummyCompositorPassProvider() );
@@ -355,7 +355,7 @@ void MainWindow::addResourceLocation( const Ogre::String &archName, const Ogre::
 #endif
 }
 //-----------------------------------------------------------------------------
-void MainWindow::loadResources()
+void MainWindow::loadResources( const CmdSettings &cmdSettings )
 {
     // Load resource paths from config file
     Ogre::ConfigFile cf;
@@ -420,7 +420,7 @@ void MainWindow::loadResources()
     }
 #endif
 
-    registerHlms();
+    registerHlms( cmdSettings );
 
 #ifndef DEBUG
     // Do NOT dump our shaders in the Release build. It's very unprofessional.
@@ -472,7 +472,7 @@ void MainWindow::loadResources()
     }
 }
 //-----------------------------------------------------------------------------
-void MainWindow::registerHlms()
+void MainWindow::registerHlms( const CmdSettings &cmdSettings )
 {
     Ogre::ConfigFile cf;
     cf.load( "./resources2.cfg" );
@@ -486,67 +486,74 @@ void MainWindow::registerHlms()
     Ogre::String rootHlmsFolder = resourcePath + cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
 #endif
 
+    if( !cmdSettings.rootHlms.empty() )
+        rootHlmsFolder = cmdSettings.rootHlms;
+
+    Ogre::ConfigFile hlmsCfg;
+    if( !cmdSettings.hlmsCfg.empty() )
+        hlmsCfg.load( cmdSettings.hlmsCfg );
+
     if( rootHlmsFolder.empty() )
         rootHlmsFolder = "./";
     else if( *( rootHlmsFolder.end() - 1 ) != '/' )
         rootHlmsFolder += "/";
 
-    // At this point rootHlmsFolder should be a valid path to the Hlms data folder
+    // At this point rootHlmsFolder should be a valid path to the Hlms data folder.
 
     Ogre::HlmsUnlit *hlmsUnlit = 0;
     Ogre::HlmsPbs *hlmsPbs = 0;
 
-    // For retrieval of the paths to the different folders needed
+    // For retrieval of the paths to the different folders needed.
     Ogre::String mainFolderPath;
     Ogre::StringVector libraryFoldersPaths;
-    Ogre::StringVector::const_iterator libraryFolderPathIt;
-    Ogre::StringVector::const_iterator libraryFolderPathEn;
 
     Ogre::ArchiveManager &archiveManager = Ogre::ArchiveManager::getSingleton();
     Ogre::HlmsManager *hlmsManager = m_root->getHlmsManager();
 
     {
-        // Create & Register HlmsUnlit
-        // Get the path to all the subdirectories used by HlmsUnlit
-        Ogre::HlmsUnlit::getDefaultPaths( mainFolderPath, libraryFoldersPaths );
+        // Create & Register HlmsUnlit.
+        // Get the path to all the subdirectories used by HlmsUnlit.
+        if( cmdSettings.hlmsCfg.empty() )
+            Ogre::HlmsUnlit::getDefaultPaths( mainFolderPath, libraryFoldersPaths );
+        else
+            Ogre::Hlms::getDefaultPaths( mainFolderPath, libraryFoldersPaths, hlmsCfg, "unlit" );
+
         Ogre::Archive *archiveUnlit =
             archiveManager.load( rootHlmsFolder + mainFolderPath, "FileSystem", true );
         Ogre::ArchiveVec archiveUnlitLibraryFolders;
-        libraryFolderPathIt = libraryFoldersPaths.begin();
-        libraryFolderPathEn = libraryFoldersPaths.end();
-        while( libraryFolderPathIt != libraryFolderPathEn )
+
+        for( const Ogre::String &libraryFoldersPath : libraryFoldersPaths )
         {
             Ogre::Archive *archiveLibrary =
-                archiveManager.load( rootHlmsFolder + *libraryFolderPathIt, "FileSystem", true );
+                archiveManager.load( rootHlmsFolder + libraryFoldersPath, "FileSystem", true );
             archiveUnlitLibraryFolders.push_back( archiveLibrary );
-            ++libraryFolderPathIt;
         }
 
-        // Create and register the unlit Hlms
+        // Create and register the unlit Hlms.
         hlmsUnlit = OGRE_NEW Ogre::HlmsUnlit( archiveUnlit, &archiveUnlitLibraryFolders );
         hlmsManager->registerHlms( hlmsUnlit );
     }
 
     {
-        // Create & Register HlmsPbs
+        // Create & Register HlmsPbs.
         // Do the same for HlmsPbs:
-        Ogre::HlmsPbs::getDefaultPaths( mainFolderPath, libraryFoldersPaths );
+        if( cmdSettings.hlmsCfg.empty() )
+            Ogre::HlmsPbs::getDefaultPaths( mainFolderPath, libraryFoldersPaths );
+        else
+            Ogre::Hlms::getDefaultPaths( mainFolderPath, libraryFoldersPaths, hlmsCfg, "pbs" );
         Ogre::Archive *archivePbs =
             archiveManager.load( rootHlmsFolder + mainFolderPath, "FileSystem", true );
 
-        // Get the library archive(s)
+        // Get the library archive(s).
         Ogre::ArchiveVec archivePbsLibraryFolders;
-        libraryFolderPathIt = libraryFoldersPaths.begin();
-        libraryFolderPathEn = libraryFoldersPaths.end();
-        while( libraryFolderPathIt != libraryFolderPathEn )
+        for( const Ogre::String &libraryFoldersPath : libraryFoldersPaths )
         {
             Ogre::Archive *archiveLibrary =
-                archiveManager.load( rootHlmsFolder + *libraryFolderPathIt, "FileSystem", true );
+                archiveManager.load( rootHlmsFolder + libraryFoldersPath, "FileSystem", true );
             archivePbsLibraryFolders.push_back( archiveLibrary );
-            ++libraryFolderPathIt;
         }
 
-        // Create and register
+        // Create and register.
         hlmsPbs = OGRE_NEW Ogre::HlmsPbs( archivePbs, &archivePbsLibraryFolders );
         hlmsManager->registerHlms( hlmsPbs );
     }

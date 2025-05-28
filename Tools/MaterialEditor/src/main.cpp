@@ -63,7 +63,7 @@ CmdSettings wxWidgetsApp::parseCmdLine() const
     retVal.setupRenderSystems = false;
 
     // argc, argv
-    wxCmdLineEntryDesc cmdLineDesc[3];
+    wxCmdLineEntryDesc cmdLineDesc[5];
     cmdLineDesc[0].kind = wxCMD_LINE_SWITCH;
     cmdLineDesc[0].shortName = "setup";
     cmdLineDesc[0].longName = NULL;
@@ -78,7 +78,21 @@ CmdSettings wxWidgetsApp::parseCmdLine() const
     cmdLineDesc[1].type = wxCMD_LINE_VAL_STRING;
     cmdLineDesc[1].flags = wxCMD_LINE_PARAM_OPTIONAL;
 
-    cmdLineDesc[2].kind = wxCMD_LINE_NONE;
+    cmdLineDesc[2].kind = wxCMD_LINE_OPTION;
+    cmdLineDesc[2].shortName = "h";
+    cmdLineDesc[2].longName = "root_hlms";
+    cmdLineDesc[2].description = "Specify a different root folder for Hlms.";
+    cmdLineDesc[2].type = wxCMD_LINE_VAL_STRING;
+    cmdLineDesc[2].flags = wxCMD_LINE_PARAM_OPTIONAL;
+
+    cmdLineDesc[3].kind = wxCMD_LINE_OPTION;
+    cmdLineDesc[3].shortName = "c";
+    cmdLineDesc[3].longName = "hlms_cfg";
+    cmdLineDesc[3].description = "Load Hlms from an hlms.cfg file.";
+    cmdLineDesc[3].type = wxCMD_LINE_VAL_STRING;
+    cmdLineDesc[3].flags = wxCMD_LINE_PARAM_OPTIONAL;
+
+    cmdLineDesc[4].kind = wxCMD_LINE_NONE;
 
     // gets the passed media files from cmd line
     wxCmdLineParser parser( cmdLineDesc, argc, argv );
@@ -92,6 +106,11 @@ CmdSettings wxWidgetsApp::parseCmdLine() const
 
         if( parser.Found( wxT( "resources" ), &value ) )
             retVal.resoucesCfgPath = value;
+
+        if( parser.Found( wxT( "root_hlms" ), &value ) )
+            retVal.rootHlms = value.utf8_string();
+        if( parser.Found( wxT( "hlms_cfg" ), &value ) )
+            retVal.hlmsCfg = value.utf8_string();
     }
 
     return retVal;

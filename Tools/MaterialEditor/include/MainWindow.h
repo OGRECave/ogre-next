@@ -71,19 +71,19 @@ class MainWindow final : public MainWindowBase,
     void loadSettings();
 
     /// Initializes Ogre and the control that renders it.
-    void initOgre( bool bForceSetup );
+    void initOgre( const CmdSettings &cmdSettings );
 
     /// Creates Ogre secondary stuff like cameras and scene managers.
-    void createSystems();
+    void createSystems( const CmdSettings &cmdSettings );
 
     void addResourceLocation( const Ogre::String &archName, const Ogre::String &typeName,
                               const Ogre::String &secName );
 
     /// Adds and initializes Ogre resource locations.
-    void loadResources();
+    void loadResources( const CmdSettings &cmdSettings );
 
     /// Registers Hlms.
-    void registerHlms();
+    void registerHlms( const CmdSettings &cmdSettings );
     void loadHlmsDiskCache();
     void saveHlmsDiskCache();
 

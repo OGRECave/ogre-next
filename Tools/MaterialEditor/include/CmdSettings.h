@@ -9,4 +9,7 @@ struct CmdSettings
 {
     wxString resoucesCfgPath;
     bool     setupRenderSystems;
+
+    std::string rootHlms;
+    std::string hlmsCfg;
 };
