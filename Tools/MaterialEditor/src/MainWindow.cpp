@@ -148,7 +148,7 @@ MainWindow::MainWindow( wxWindow *parent, const CmdSettings &cmdSettings ) :
     }
 #endif
 
-    //	SetIcon( wxIcon(wxT("Resources/OgreIcon.ico")) );
+    SetIcon( wxIcon( wxT( "./ogre-logo.png" ) ) );
 
     // Create the Advanced UI system to handle dockable windows.
     m_wxAuiManager = new wxAuiManager( this );

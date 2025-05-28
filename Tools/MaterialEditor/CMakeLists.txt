@@ -41,6 +41,8 @@ target_include_directories( ${PROJECT_NAME} PRIVATE "./include"
 	"${CMAKE_CURRENT_SOURCE_DIR}/../../Samples/2.0/Common/include"
 )
 
+file( COPY "${CMAKE_SOURCE_DIR}/Docs/ogre-logo.png" DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} )
+
 if( UNIX )
 	target_link_libraries( ${PROJECT_NAME} ${GTK3_LIBRARIES} )
 endif()
