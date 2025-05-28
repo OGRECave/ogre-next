@@ -411,11 +411,10 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbsDatablock::bakeTextures( bool hasSeparateSamplers )
+    void HlmsPbsDatablock::bakeTextures( bool hasSeparateSamplers )
     {
-        const bool retVal = HlmsPbsBaseTextureDatablock::bakeTextures( hasSeparateSamplers );
+        HlmsPbsBaseTextureDatablock::bakeTextures( hasSeparateSamplers );
         mCubemapIdxInDescSet = getIndexToDescriptorTexture( PBSM_REFLECTION );
-        return retVal;
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::scheduleConstBufferUpdate()
