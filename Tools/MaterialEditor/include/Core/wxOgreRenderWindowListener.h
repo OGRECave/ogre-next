@@ -8,9 +8,9 @@ class wxKeyEvent;
 class wxOgreRenderWindowListener
 {
 public:
-	virtual void OnMouseEvents( wxMouseEvent &evt ) = 0;
-	virtual void OnKeyDown( wxKeyEvent &evt ) = 0;
-	virtual void OnKeyUp( wxKeyEvent &evt ) = 0;
+    virtual void OnMouseEvents( wxMouseEvent &evt ) = 0;
+    virtual void OnKeyDown( wxKeyEvent &evt ) = 0;
+    virtual void OnKeyUp( wxKeyEvent &evt ) = 0;
 };
 
 #endif

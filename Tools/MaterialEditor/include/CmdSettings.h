@@ -7,6 +7,6 @@
 
 struct CmdSettings
 {
-	wxString resoucesCfgPath;
-	bool     setupRenderSystems;
+    wxString resoucesCfgPath;
+    bool     setupRenderSystems;
 };
