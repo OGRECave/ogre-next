@@ -514,6 +514,28 @@ namespace Ogre
             }
         }
 
+        itor = json.FindMember( "custom_properties" );
+        if( itor != json.MemberEnd() && itor->value.IsObject() )
+        {
+            const rapidjson::SizeType numProperties = itor->value.MemberCount();
+            HlmsDatablock::CustomPropertyArray properties;
+            properties.reserve( numProperties );
+
+            rapidjson::Value::ConstMemberIterator it = itor->value.MemberBegin();
+            rapidjson::Value::ConstMemberIterator en = itor->value.MemberEnd();
+            while( it != en )
+            {
+                if( it->name.IsString() && it->value.IsInt() )
+                {
+                    properties.push_back( HlmsDatablock::CustomProperty( it->name.GetString(),
+                                                                         int32( it->value.GetInt() ) ) );
+                }
+                ++it;
+            }
+
+            datablock->setCustomProperties( properties, true );
+        }
+
         itor = json.FindMember( "accurate_non_uniform_normal_scaling" );
         if( itor != json.MemberEnd() && itor->value.IsBool() )
             datablock->setAccurateNonUniformNormalScaling( itor->value.GetBool() );
@@ -1056,6 +1078,25 @@ namespace Ogre
                     outString += "\"]";
                 }
             }
+        }
+
+        const HlmsDatablock::CustomPropertyArray &customProperties = datablock->getCustomProperties();
+        if( !customProperties.empty() )
+        {
+            outString +=
+                ",\n\t\t\t\"custom_properties\" :"
+                "\n\t\t\t{";
+            for( const HlmsDatablock::CustomProperty &property : customProperties )
+            {
+                outString += "\n\t\t\t\t\"";
+                outString += property.keyStr;
+                outString += "\" : ";
+                outString += StringConverter::toString( property.value );
+                outString += ",";
+            }
+
+            outString.erase( outString.size() - 1 );  // Remove an extra comma
+            outString += "\n\t\t\t}";
         }
 
         if( datablock->getAccurateNonUniformNormalScaling() )

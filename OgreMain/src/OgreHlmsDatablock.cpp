@@ -232,6 +232,7 @@ namespace Ogre
         datablock->setBlendblock( const_cast<HlmsBlendblock *>( mBlendblock[0] ), false );
         datablock->setBlendblock( const_cast<HlmsBlendblock *>( mBlendblock[1] ), true );
 
+        datablock->mCustomProperties = mCustomProperties;
         datablock->mAlphaHashing = mAlphaHashing;
         datablock->mAlphaTestCmp = mAlphaTestCmp;
         datablock->mAlphaTestShadowCasterOnly = mAlphaTestShadowCasterOnly;
@@ -305,6 +306,15 @@ namespace Ogre
         if( !mCustomPieceFileIdHash[shaderType] )
             return BLANKSTRING;
         return mCreator->getDatablockCustomPieceFileNameStr( mCustomPieceFileIdHash[shaderType] );
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsDatablock::setCustomProperties( CustomPropertyArray &properties, bool bSwap )
+    {
+        if( bSwap )
+            mCustomProperties.swap( properties );
+        else
+            mCustomProperties = properties;
+        flushRenderables();
     }
     //-----------------------------------------------------------------------------------
     void HlmsDatablock::setMacroblock( const HlmsMacroblock &macroblock, const bool casterBlock,

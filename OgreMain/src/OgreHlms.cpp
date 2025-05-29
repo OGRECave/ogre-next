@@ -3058,6 +3058,13 @@ namespace Ogre
                 setProperty( kNoTid, HlmsBaseProp::_DatablockCustomPieceShaderName[i], filenameHashId );
         }
 
+        {
+            const HlmsDatablock::CustomPropertyArray &customProperties =
+                datablock->getCustomProperties();
+            for( const HlmsDatablock::CustomProperty &property : customProperties )
+                setProperty( kNoTid, property.keyName, property.value );
+        }
+
         setProperty( kNoTid, HlmsBaseProp::AlphaTest, datablock->getAlphaTest() != CMPF_ALWAYS_PASS );
         setProperty( kNoTid, HlmsBaseProp::AlphaTestShadowCasterOnly,
                      datablock->getAlphaTestShadowCasterOnly() );
