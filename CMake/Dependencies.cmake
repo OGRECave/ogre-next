@@ -117,14 +117,10 @@ macro_log_feature(RenderDoc_FOUND "RenderDoc" "RenderDoc Integration" "https://r
 #######################################################################
 
 # Find OpenGL
-if(NOT ANDROID AND NOT EMSCRIPTEN)
+if(NOT ANDROID AND NOT EMSCRIPTEN AND NOT APPLE)
   find_package(OpenGL)
-  macro_log_feature(OPENGL_FOUND "OpenGL" "Support for the OpenGL render system" "http://www.opengl.org/" FALSE "" "")
+  macro_log_feature(OPENGL_FOUND "OpenGL 3+" "Support for the OpenGL 3+ render system" "http://www.opengl.org/" FALSE "" "")
 endif()
-
-# Find OpenGL 3+
-find_package(OpenGL)
-macro_log_feature(OPENGL_FOUND "OpenGL 3+" "Support for the OpenGL 3+ render system" "http://www.opengl.org/" FALSE "" "")
 
 if(NOT OGRE_SKIP_GLES_SEARCHING)
 	# Find OpenGL ES 2.x
