@@ -1378,8 +1378,10 @@ namespace Ogre
                                             mCompilationDeadline, request.queuedRenderable,
                                             request.renderableHash, request.finalHash, threadIdx );
                     if( request.reservedStubEntry->flags == HLMS_CACHE_FLAGS_COMPILATION_REQUIRED )
+                    {
                         mCompilationIncompleteCounter.fetch_add(
                             1, std::memory_order::memory_order_relaxed );
+                    }
                 }
                 catch( Exception & )
                 {
