@@ -75,6 +75,24 @@ macro( isOgreNext RESULT_VARIABLE )
 		else()
 			set( ${RESULT_VARIABLE} FALSE )
 		endif()
+	elseif( APPLE )
+		if( APPLE_IOS )
+			set( APPLE_FOLDER "iphoneos" )
+		else()
+			set( APPLE_FOLDER "macosx" )
+		endif()
+		if( EXISTS "${OGRE_BINARIES}/lib/${APPLE_FOLDER}/Debug/libOgreNextMain.so" OR
+			EXISTS "${OGRE_BINARIES}/lib/${APPLE_FOLDER}/Release/libOgreNextMain.so" OR
+			EXISTS "${OGRE_BINARIES}/lib/${APPLE_FOLDER}/RelWithDebInfo/libOgreNextMain.so" OR
+			EXISTS "${OGRE_BINARIES}/lib/${APPLE_FOLDER}/MinSizeRel/libOgreNextMain.so" OR
+			EXISTS "${OGRE_BINARIES}/lib/${APPLE_FOLDER}/Debug/libOgreNextMainStatic.a" OR
+			EXISTS "${OGRE_BINARIES}/lib/${APPLE_FOLDER}/Release/libOgreNextMainStatic.a" OR
+			EXISTS "${OGRE_BINARIES}/lib/${APPLE_FOLDER}/RelWithDebInfo/libOgreNextMainStatic.a" OR
+			EXISTS "${OGRE_BINARIES}/lib/${APPLE_FOLDER}/MinSizeRel/libOgreNextMainStatic.a")
+			set( ${RESULT_VARIABLE} TRUE )
+		else()
+			set( ${RESULT_VARIABLE} FALSE )
+		endif()
 	else()
 		set( DEBUG_SUFFIX "" )
 		if( CMAKE_BUILD_TYPE )
@@ -423,6 +441,9 @@ macro( addStaticDependencies OGRE_SOURCE, OGRE_BINARIES, OGRE_BUILD_SETTINGS_STR
 	elseif( IOS )
 		set( OGRE_DEPENDENCIES "${OGRE_SOURCE}/iOSDependencies/lib/$(CONFIGURATION)" CACHE STRING
 			 "Path to OGRE-Next's dependencies folder. Only used in Static Builds" )
+	elseif( APPLE )
+		set( OGRE_DEPENDENCIES "${OGRE_SOURCE}/Dependencies/lib/$(CONFIGURATION)" CACHE STRING
+			 "Path to OGRE-Next's dependencies folder. Only used in Static Builds" )
 	elseif( ANDROID )
 		set( OGRE_DEPENDENCIES "${OGRE_SOURCE}/DependenciesAndroid/lib" CACHE STRING
 			"Path to OGRE-Next's dependencies folder. Only used in Static Builds" )
@@ -466,7 +487,7 @@ macro( addStaticDependencies OGRE_SOURCE, OGRE_BINARIES, OGRE_BUILD_SETTINGS_STR
 		debug freetype${OGRE_DEP_DEBUG_SUFFIX}
 		optimized freetype )
 
-	if( UNIX )
+	if( UNIX AND NOT APPLE )
 		set( TMP_DEPENDENCY_LIBS ${TMP_DEPENDENCY_LIBS} dl Xt Xrandr X11 xcb Xaw )
 	endif()
 
