@@ -362,9 +362,9 @@ namespace Ogre
         ArrayReal m10 = mChunkBase[4], m11 = mChunkBase[5], m12 = mChunkBase[6];
         ArrayReal m20 = mChunkBase[8], m21 = mChunkBase[9], m22 = mChunkBase[10];
 
-        ArrayReal t00 = _mm_nmsub_ps( m21, m12, vmulq_f32( m22, m11 ) ); //m22 * m11 - m21 * m12;
-        ArrayReal t10 = _mm_nmsub_ps( m22, m10, vmulq_f32( m20, m12 ) ); //m20 * m12 - m22 * m10;
-        ArrayReal t20 = _mm_nmsub_ps( m20, m11, vmulq_f32( m21, m10 ) ); //m21 * m10 - m20 * m11;
+        ArrayReal t00 = _ogre_mm_nmsub_ps( m21, m12, vmulq_f32( m22, m11 ) ); //m22 * m11 - m21 * m12;
+        ArrayReal t10 = _ogre_mm_nmsub_ps( m22, m10, vmulq_f32( m20, m12 ) ); //m20 * m12 - m22 * m10;
+        ArrayReal t20 = _ogre_mm_nmsub_ps( m20, m11, vmulq_f32( m21, m10 ) ); //m21 * m10 - m20 * m11;
 
         ArrayReal m00 = mChunkBase[0], m01 = mChunkBase[1], m02 = mChunkBase[2];
 
@@ -381,16 +381,16 @@ namespace Ogre
         m02 = vmulq_f32( m02, invDet );
 
         ArrayReal r00 = t00;
-        ArrayReal r01 = _mm_nmsub_ps( m01, m22, vmulq_f32( m02, m21 ) ); //m02 * m21 - m01 * m22;
-        ArrayReal r02 = _mm_nmsub_ps( m02, m11, vmulq_f32( m01, m12 ) ); //m01 * m12 - m02 * m11;
+        ArrayReal r01 = _ogre_mm_nmsub_ps( m01, m22, vmulq_f32( m02, m21 ) ); //m02 * m21 - m01 * m22;
+        ArrayReal r02 = _ogre_mm_nmsub_ps( m02, m11, vmulq_f32( m01, m12 ) ); //m01 * m12 - m02 * m11;
 
         ArrayReal r10 = t10;
-        ArrayReal r11 = _mm_nmsub_ps( m02, m20, vmulq_f32( m00, m22 ) ); //m00 * m22 - m02 * m20;
-        ArrayReal r12 = _mm_nmsub_ps( m00, m12, vmulq_f32( m02, m10 ) ); //m02 * m10 - m00 * m12;
+        ArrayReal r11 = _ogre_mm_nmsub_ps( m02, m20, vmulq_f32( m00, m22 ) ); //m00 * m22 - m02 * m20;
+        ArrayReal r12 = _ogre_mm_nmsub_ps( m00, m12, vmulq_f32( m02, m10 ) ); //m02 * m10 - m00 * m12;
 
         ArrayReal r20 = t20;
-        ArrayReal r21 = _mm_nmsub_ps( m00, m21, vmulq_f32( m01, m20 ) ); //m01 * m20 - m00 * m21;
-        ArrayReal r22 = _mm_nmsub_ps( m01, m10, vmulq_f32( m00, m11 ) ); //m00 * m11 - m01 * m10;
+        ArrayReal r21 = _ogre_mm_nmsub_ps( m00, m21, vmulq_f32( m01, m20 ) ); //m01 * m20 - m00 * m21;
+        ArrayReal r22 = _ogre_mm_nmsub_ps( m01, m10, vmulq_f32( m00, m11 ) ); //m00 * m11 - m01 * m10;
 
         ArrayReal m03 = mChunkBase[3], m13 = mChunkBase[7], m23 = mChunkBase[11];
 
@@ -426,9 +426,9 @@ namespace Ogre
         ArrayReal m10 = mChunkBase[4], m11 = mChunkBase[5], m12 = mChunkBase[6];
         ArrayReal m20 = mChunkBase[8], m21 = mChunkBase[9], m22 = mChunkBase[10];
 
-        ArrayReal t00 = _mm_nmsub_ps( m21, m12, vmulq_f32( m22, m11 ) ); //m22 * m11 - m21 * m12;
-        ArrayReal t10 = _mm_nmsub_ps( m22, m10, vmulq_f32( m20, m12 ) ); //m20 * m12 - m22 * m10;
-        ArrayReal t20 = _mm_nmsub_ps( m20, m11, vmulq_f32( m21, m10 ) ); //m21 * m10 - m20 * m11;
+        ArrayReal t00 = _ogre_mm_nmsub_ps( m21, m12, vmulq_f32( m22, m11 ) ); //m22 * m11 - m21 * m12;
+        ArrayReal t10 = _ogre_mm_nmsub_ps( m22, m10, vmulq_f32( m20, m12 ) ); //m20 * m12 - m22 * m10;
+        ArrayReal t20 = _ogre_mm_nmsub_ps( m20, m11, vmulq_f32( m21, m10 ) ); //m21 * m10 - m20 * m11;
 
         ArrayReal m00 = mChunkBase[0], m01 = mChunkBase[1], m02 = mChunkBase[2];
 
@@ -448,16 +448,16 @@ namespace Ogre
         m02 = vmulq_f32( m02, invDet );
 
         ArrayReal r00 = t00;
-        ArrayReal r01 = _mm_nmsub_ps( m01, m22, vmulq_f32( m02, m21 ) ); //m02 * m21 - m01 * m22;
-        ArrayReal r02 = _mm_nmsub_ps( m02, m11, vmulq_f32( m01, m12 ) ); //m01 * m12 - m02 * m11;
+        ArrayReal r01 = _ogre_mm_nmsub_ps( m01, m22, vmulq_f32( m02, m21 ) ); //m02 * m21 - m01 * m22;
+        ArrayReal r02 = _ogre_mm_nmsub_ps( m02, m11, vmulq_f32( m01, m12 ) ); //m01 * m12 - m02 * m11;
 
         ArrayReal r10 = t10;
-        ArrayReal r11 = _mm_nmsub_ps( m02, m20, vmulq_f32( m00, m22 ) ); //m00 * m22 - m02 * m20;
-        ArrayReal r12 = _mm_nmsub_ps( m00, m12, vmulq_f32( m02, m10 ) ); //m02 * m10 - m00 * m12;
+        ArrayReal r11 = _ogre_mm_nmsub_ps( m02, m20, vmulq_f32( m00, m22 ) ); //m00 * m22 - m02 * m20;
+        ArrayReal r12 = _ogre_mm_nmsub_ps( m00, m12, vmulq_f32( m02, m10 ) ); //m02 * m10 - m00 * m12;
 
         ArrayReal r20 = t20;
-        ArrayReal r21 = _mm_nmsub_ps( m00, m21, vmulq_f32( m01, m20 ) ); //m01 * m20 - m00 * m21;
-        ArrayReal r22 = _mm_nmsub_ps( m01, m10, vmulq_f32( m00, m11 ) ); //m00 * m11 - m01 * m10;
+        ArrayReal r21 = _ogre_mm_nmsub_ps( m00, m21, vmulq_f32( m01, m20 ) ); //m01 * m20 - m00 * m21;
+        ArrayReal r22 = _ogre_mm_nmsub_ps( m01, m10, vmulq_f32( m00, m11 ) ); //m00 * m11 - m01 * m10;
 
         ArrayReal m03 = mChunkBase[3], m13 = mChunkBase[7], m23 = mChunkBase[11];
 

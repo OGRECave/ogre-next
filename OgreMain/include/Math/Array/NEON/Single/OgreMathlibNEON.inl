@@ -218,8 +218,8 @@ namespace Ogre
         ArrayReal result = _mm_madd_ps( hi, xabs4, lo );
 
         // Adjust the result if x is negactive.
-        return Cmov4( _mm_nmsub_ps( t1, result, PI ),  // Negative
-                      vmulq_f32( t1, result ),         // Positive
+        return Cmov4( _ogre_mm_nmsub_ps( t1, result, PI ),  // Negative
+                      vmulq_f32( t1, result ),              // Positive
                       select );
     }
 
