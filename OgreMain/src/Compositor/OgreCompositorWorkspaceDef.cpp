@@ -144,8 +144,19 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorWorkspaceDef::connect( IdString outNode, IdString inNode )
     {
-        const CompositorNodeDef *outDef = mCompositorManager->getNodeDefinition( outNode );
-        const CompositorNodeDef *inDef = mCompositorManager->getNodeDefinition( inNode );
+        IdString aliasedOutNode = outNode;
+        IdString aliasedInNode = inNode;
+
+        NodeAliasMap::iterator aliasedOutNodeIt = mAliasedNodes.find( outNode );
+        if( aliasedOutNodeIt != mAliasedNodes.end() )
+            aliasedOutNode = aliasedOutNodeIt->second;
+
+        NodeAliasMap::iterator aliasedInNodeIt = mAliasedNodes.find( inNode );
+        if( aliasedInNodeIt != mAliasedNodes.end() )
+            aliasedInNode = aliasedInNodeIt->second;
+
+        const CompositorNodeDef *outDef = mCompositorManager->getNodeDefinition( aliasedOutNode );
+        const CompositorNodeDef *inDef = mCompositorManager->getNodeDefinition( aliasedInNode );
 
         size_t inputChannels = inDef->getNumInputChannels();
         size_t outputChannels = outDef->getNumOutputChannels();
