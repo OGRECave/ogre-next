@@ -115,6 +115,11 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
+    void GraphicsSystem::setRequiePersistentDepthBuf( bool require )
+    {
+        mRequirePersistentDepthBuf = require;
+    }
+    //-----------------------------------------------------------------------------------
     bool GraphicsSystem::isWriteAccessFolder( const Ogre::String &folderPath,
                                               const Ogre::String &fileToSave )
     {
@@ -323,7 +328,15 @@ namespace Demo
         params.insert( std::make_pair( "FSAA", cfgOpts["FSAA"].currentValue ) );
         params.insert( std::make_pair( "vsync", cfgOpts["VSync"].currentValue ) );
         params.insert( std::make_pair( "reverse_depth", "Yes" ) );
-        params.insert( std::make_pair( "memoryless_depth_buffer", "Yes" ) );
+
+        if( mRequirePersistentDepthBuf )
+        {
+            params.insert( std::make_pair( "memoryless_depth_buffer", "No" ) );
+        }
+        else
+        {
+            params.insert( std::make_pair( "memoryless_depth_buffer", "Yes" ) );
+        }
 
         initMiscParamsListener( params );
 
