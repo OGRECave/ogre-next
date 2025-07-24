@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "System/MainEntryPoints.h"
 
 #include "System/Desktop/UnitTesting.h"
+#include "TutorialGameState.h"
 
 #include "GameState.h"
 #include "GraphicsSystem.h"
@@ -71,7 +72,16 @@ int Demo::MainEntryPoints::mainAppSingleThreaded( int argc, const char *argv[] )
     LogicSystem *logicSystem = 0;
 
     MainEntryPoints::createSystems( &graphicsGameState, &graphicsSystem, &logicGameState, &logicSystem );
-
+#ifdef AUTO_TESTING
+    if( argv[1] )
+    {
+        graphicsSystem->setRendererParam( std::string( argv[1] ) );
+    }
+    if( TutorialGameState *tutorial = dynamic_cast<TutorialGameState *>( graphicsGameState ) )
+    {
+        tutorial->setSampleName( std::string( argv[0] ).substr( 2 ) );
+    }
+#endif
     try
     {
         graphicsSystem->initialize( getWindowTitle() );

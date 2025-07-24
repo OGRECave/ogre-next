@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "SdlInputHandler.h"
 
 #include "Threading/YieldTimer.h"
+#include "TutorialGameState.h"
 
 #include "OgreTimer.h"
 #include "OgreWindow.h"
@@ -75,6 +76,16 @@ int Demo::MainEntryPoints::mainAppMultiThreaded( int argc, const char *argv[] )
     Ogre::Barrier barrier( 2 );
 
     MainEntryPoints::createSystems( &graphicsGameState, &graphicsSystem, &logicGameState, &logicSystem );
+#ifdef AUTO_TESTING
+    if( TutorialGameState *tutorial = dynamic_cast<TutorialGameState *>( graphicsGameState ) )
+    {
+        tutorial->setSampleName( std::string( argv[0] ).substr( 2 ) );
+    }
+    if( argv[1] )
+    {
+        graphicsSystem->setRendererParam( std::string( argv[1] ) );
+    }
+#endif
 
     GameEntityManager gameEntityManager( graphicsSystem, logicSystem );
 

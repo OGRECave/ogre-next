@@ -94,6 +94,13 @@ endfunction(ogre_config_sample_pkg)
 
 add_definitions( -DUSE_JSON_UNIT_TESTING )
 
+option(ENABLE_AUTO_TESTING "Enable headless sample mode" OFF)
+
+if(ENABLE_AUTO_TESTING)
+    add_definitions(-DAUTO_TESTING)
+endif()
+
+
 if( OGRE_BUILD_SAMPLES2 AND NOT OGRE_BUILD_SAMPLES2_SKIP )
     add_subdirectory(Common)
 endif()

@@ -187,11 +187,28 @@ namespace Demo
 
         if( mAlwaysAskForConfig || !mRoot->restoreConfig() )
         {
+#ifdef AUTO_TESTING
+            Ogre::RenderSystem *rs;
+            if( !renderer.empty() )
+            {
+                rs = mRoot->getRenderSystemByName( renderer );
+            }
+            else
+            {
+                rs = mRoot->getRenderSystemByName( "OpenGL 3+ Rendering Subsystem" );
+            }
+
+            mRoot->setRenderSystem( rs );
+            rs->setConfigOption( "Full Screen", "Yes" );
+            rs->setConfigOption( "VSync", "Yes" );
+            mRoot->saveConfig();
+#else
             if( !mRoot->showConfigDialog() )
             {
                 mQuit = true;
                 return;
             }
+#endif
         }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
@@ -1122,4 +1139,10 @@ namespace Demo
             ++itor;
         }
     }
+#ifdef AUTO_TESTING
+    void GraphicsSystem::setRendererParam( std::string renderSubsystem )
+    {
+        this->renderer = renderSubsystem;
+    }
+#endif
 }  // namespace Demo
