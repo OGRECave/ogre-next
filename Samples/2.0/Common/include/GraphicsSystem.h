@@ -59,7 +59,9 @@ namespace Demo
         Ogre::v1::OverlaySystem *mOverlaySystem;
 
         StaticPluginLoader mStaticPluginLoader;
-
+        #ifdef AUTO_TESTING
+            std::string renderer;
+        #endif
         /// Tracks the amount of elapsed time since we last
         /// heard from the LogicSystem finishing a frame
         float                mAccumTimeSinceLastLogicFrame;
@@ -179,6 +181,9 @@ namespace Demo
 
         virtual void stopCompositor();
         virtual void restartCompositor();
+        #ifdef AUTO_TESTING
+            void setRendererParam(std::string renderSubsystem);
+        #endif
     };
 }  // namespace Demo
 
