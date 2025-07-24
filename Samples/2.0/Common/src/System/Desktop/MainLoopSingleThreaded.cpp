@@ -80,6 +80,10 @@ int Demo::MainEntryPoints::mainAppSingleThreaded( int argc, const char *argv[] )
     if( TutorialGameState *tutorial = dynamic_cast<TutorialGameState *>( graphicsGameState ) )
     {
         tutorial->setSampleName( std::string( argv[0] ).substr( 2 ) );
+        if( argv[2] )
+        {
+            tutorial->setFrameCount( std::string( argv[2] ) );
+        }
     }
 #endif
     try
