@@ -43,14 +43,14 @@ namespace Demo
         BaseSystem *mLogicSystem;
 
 #if OGRE_USE_SDL2
-        SDL_Window *     mSdlWindow;
+        SDL_Window      *mSdlWindow;
         SdlInputHandler *mInputHandler;
 #endif
 
-        Ogre::Root *               mRoot;
-        Ogre::Window *             mRenderWindow;
-        Ogre::SceneManager *       mSceneManager;
-        Ogre::Camera *             mCamera;
+        Ogre::Root                *mRoot;
+        Ogre::Window              *mRenderWindow;
+        Ogre::SceneManager        *mSceneManager;
+        Ogre::Camera              *mCamera;
         Ogre::CompositorWorkspace *mWorkspace;
         Ogre::String               mPluginsFolder;
         Ogre::String               mWriteAccessFolder;
@@ -68,11 +68,11 @@ namespace Demo
         GameEntityVec const *mThreadGameEntityToUpdate;
         float                mThreadWeight;
 
-        bool mQuit;
-        bool mAlwaysAskForConfig;
-        bool mUseHlmsDiskCache;
-        bool mUseMicrocodeCache;
-
+        bool              mQuit;
+        bool              mAlwaysAskForConfig;
+        bool              mUseHlmsDiskCache;
+        bool              mUseMicrocodeCache;
+        bool              mRequirePersistentDepthBuf;
         Ogre::ColourValue mBackgroundColour;
 
 #if OGRE_USE_SDL2
@@ -161,12 +161,12 @@ namespace Demo
 
         float getAccumTimeSinceLastLogicFrame() const { return mAccumTimeSinceLastLogicFrame; }
 
-        Ogre::Root *               getRoot() const { return mRoot; }
-        Ogre::Window *             getRenderWindow() const { return mRenderWindow; }
-        Ogre::SceneManager *       getSceneManager() const { return mSceneManager; }
-        Ogre::Camera *             getCamera() const { return mCamera; }
+        Ogre::Root                *getRoot() const { return mRoot; }
+        Ogre::Window              *getRenderWindow() const { return mRenderWindow; }
+        Ogre::SceneManager        *getSceneManager() const { return mSceneManager; }
+        Ogre::Camera              *getCamera() const { return mCamera; }
         Ogre::CompositorWorkspace *getCompositorWorkspace() const { return mWorkspace; }
-        Ogre::v1::OverlaySystem *  getOverlaySystem() const { return mOverlaySystem; }
+        Ogre::v1::OverlaySystem   *getOverlaySystem() const { return mOverlaySystem; }
 
         void setAlwaysAskForConfig( bool alwaysAskForConfig );
         bool getAlwaysAskForConfig() const { return mAlwaysAskForConfig; }
@@ -174,7 +174,8 @@ namespace Demo
         const Ogre::String &getPluginsFolder() const { return mPluginsFolder; }
         const Ogre::String &getWriteAccessFolder() const { return mWriteAccessFolder; }
         const Ogre::String &getResourcePath() const { return mResourcePath; }
-        const char *        getMediaReadArchiveType() const;
+        const char         *getMediaReadArchiveType() const;
+        void                setRequiePersistentDepthBuf( bool require );
 
         virtual void stopCompositor();
         virtual void restartCompositor();
