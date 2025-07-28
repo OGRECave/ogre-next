@@ -995,6 +995,15 @@ namespace Ogre
 #endif
             }
 
+            for( auto &barrier : mImageMemBarriers )
+            {
+                if( ( barrier.dstAccessMask & VK_ACCESS_SHADER_READ_BIT ) &&
+                    !( barrier.newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) )
+                {
+                    dstStage |= VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+                }
+            }
+
             // Wait until earlier render, compute and transfers are done
             // Block render, compute and transfers until we're done
             vkCmdPipelineBarrier( getCurrentCmdBuffer(), VK_PIPELINE_STAGE_TRANSFER_BIT,
