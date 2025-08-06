@@ -540,7 +540,7 @@ namespace Ogre
 
         acquireNextSwapchain();
 
-        if( mDepthBuffer )
+        if( mDepthBuffer && mDepthBuffer->getResidencyStatus() != GpuResidency::Resident )
             mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
         if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
             mStencilBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
