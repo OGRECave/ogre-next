@@ -141,8 +141,8 @@ namespace Ogre
 
         const BufferType bufferType = getBufferType();
 
-        float *vertexData = reinterpret_cast<float *>( OGRE_MALLOC_SIMD(
-            bytesPerVertex * numVertices, Ogre::MEMCATEGORY_GEOMETRY ) );
+        float *vertexData = reinterpret_cast<float *>(
+            OGRE_MALLOC_SIMD( bytesPerVertex * numVertices, Ogre::MEMCATEGORY_GEOMETRY ) );
         FreeOnDestructor dataPtr( vertexData );
         if( !isHollowFullscreenRect() )
             fillBuffer( vertexData, numVertices );
