@@ -189,7 +189,7 @@ namespace Ogre
                 const size_t blockSize = PixelFormatGpuUtils::getCompressedBlockSize( pixelFormat );
 
                 return ( bytesPerRow != blockSize * ( width + blockWidth - 1u ) / blockWidth ) ||
-                       bytesPerImage != bytesPerRow * ( height + blockHeight - 1u / blockHeight );
+                       ( bytesPerImage != bytesPerRow * ( height + blockHeight - 1u ) / blockHeight );
             }
         }
 
