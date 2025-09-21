@@ -8,4 +8,4 @@ Description: HLMS component for @OGRE_NEXT_PREFIX@
 Version: @OGRE_VERSION@
 Requires: @OGRE_NEXT_PREFIX@ = @OGRE_VERSION@
 Libs: -L${libdir} -l@OGRE_NEXT@HlmsPbs@OGRE_LIB_SUFFIX@ -l@OGRE_NEXT@HlmsUnlit@OGRE_LIB_SUFFIX@
-Cflags: -I${includedir}/@OGRE_NEXT_PREFIX@/Hlms @OGRE_CFLAGS@
+Cflags: -I${includedir}/@OGRE_NEXT_PREFIX@/Hlms/Common -I${includedir}/@OGRE_NEXT_PREFIX@/Hlms/Unlit -I${includedir}/@OGRE_NEXT_PREFIX@/Hlms/Pbs @OGRE_CFLAGS@
