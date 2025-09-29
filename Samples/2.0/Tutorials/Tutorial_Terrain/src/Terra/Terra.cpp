@@ -465,8 +465,8 @@ namespace Ogre
 
         const float fX = floorf( ( ( vPos.x - m_terrainOrigin.x ) * m_xzInvDimensions.x ) * fWidth );
         const float fZ = floorf( ( ( vPos.z - m_terrainOrigin.z ) * m_xzInvDimensions.y ) * fDepth );
-        retVal.x = fX >= 0.0f ? static_cast<int32>( fX ) : -1;
-        retVal.z = fZ >= 0.0f ? static_cast<int32>( fZ ) : -1;
+        retVal.x = static_cast<int32>( fX );
+        retVal.z = static_cast<int32>( fZ );
 
         return retVal;
     }
@@ -764,7 +764,7 @@ namespace Ogre
         const int32 iWidth = static_cast<int32>( m_width );
         const int32 iDepth = static_cast<int32>( m_depth );
 
-        if( pos2D.x < iWidth - 1 && pos2D.z < iDepth - 1 )
+        if( pos2D.x >= 0 && pos2D.x < iWidth - 1 && pos2D.z >= 0 && pos2D.z < iDepth - 1 )
         {
             const Vector2 vPos2D = gridToWorld( pos2D );
 
