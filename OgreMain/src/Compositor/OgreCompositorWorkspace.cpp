@@ -845,6 +845,17 @@ namespace Ogre
 
                 while( itor != endt )
                 {
+                    if( !( *itor )->getEnabled() )
+                    {
+                        endt = itor;
+                        break;
+                    }
+                    ++itor;
+                }
+
+                itor = mNodeSequence.begin();
+                while( itor != endt )
+                {
                     CompositorNode *node = *itor;
                     node->finalTargetResized01( finalTarget );
                     ++itor;
@@ -854,7 +865,7 @@ namespace Ogre
                 while( itor != endt )
                 {
                     CompositorNode *node = *itor;
-                    node->finalTargetResized02( finalTarget );
+                    node->finalTargetResized02( finalTarget, mNodeSequence );
                     ++itor;
                 }
             }
@@ -874,7 +885,7 @@ namespace Ogre
                 while( itor != endt )
                 {
                     CompositorShadowNode *node = *itor;
-                    node->finalTargetResized02( finalTarget );
+                    node->finalTargetResized02( finalTarget, mNodeSequence );
                     ++itor;
                 }
             }

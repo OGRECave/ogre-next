@@ -448,7 +448,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::recreateResizableTextures02( const TextureDefinitionVec &textureDefs,
                                                              CompositorChannelVec &inOutTexContainer,
-                                                             const CompositorNodeVec &connectedNodes,
+                                                             const CompositorNodeVec &notifyNodes,
                                                              const CompositorPassVec *passes )
     {
         TextureDefinitionVec::const_iterator itor = textureDefs.begin();
@@ -471,8 +471,8 @@ namespace Ogre
                     }
                 }
 
-                CompositorNodeVec::const_iterator itNodes = connectedNodes.begin();
-                CompositorNodeVec::const_iterator enNodes = connectedNodes.end();
+                CompositorNodeVec::const_iterator itNodes = notifyNodes.begin();
+                CompositorNodeVec::const_iterator enNodes = notifyNodes.end();
 
                 while( itNodes != enNodes )
                 {
@@ -646,7 +646,7 @@ namespace Ogre
                                                           CompositorNamedBufferVec &inOutBufContainer,
                                                           const TextureGpu *finalTarget,
                                                           RenderSystem *renderSys,
-                                                          const CompositorNodeVec &connectedNodes,
+                                                          const CompositorNodeVec &notifyNodes,
                                                           const CompositorPassVec *passes )
     {
         CompositorNamedBuffer cmp;
@@ -675,8 +675,8 @@ namespace Ogre
                     }
                 }
 
-                CompositorNodeVec::const_iterator itNodes = connectedNodes.begin();
-                CompositorNodeVec::const_iterator enNodes = connectedNodes.end();
+                CompositorNodeVec::const_iterator itNodes = notifyNodes.begin();
+                CompositorNodeVec::const_iterator enNodes = notifyNodes.end();
 
                 while( itNodes != enNodes )
                 {

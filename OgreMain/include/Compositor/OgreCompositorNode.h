@@ -308,9 +308,12 @@ namespace Ogre
         @param finalTarget
             The Final Target (i.e. RenderWindow) from which we'll base our local textures'
             resolution.
+        @param notifyNodes
+            Array of nodes that may be using our textures and need to be notified.
         */
         virtual void finalTargetResized01( const TextureGpu *finalTarget );
-        virtual void finalTargetResized02( const TextureGpu *finalTarget );
+        virtual void finalTargetResized02( const TextureGpu        *finalTarget,
+                                           const CompositorNodeVec &notifyNodes );
 
         /// @copydoc CompositorWorkspace::resetAllNumPassesLeft
         void resetAllNumPassesLeft();

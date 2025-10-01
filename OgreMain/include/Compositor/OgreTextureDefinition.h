@@ -413,7 +413,7 @@ namespace Ogre
                                                  const TextureGpu           *finalTarget );
         /** See recreateResizableTextures01
             Updates involved RenderPassDescriptors.
-        @param connectedNodes
+        @param notifyNodes
             Array of connected nodes that may be using our textures and need to be notified.
         @param passes
             Array of Compositor Passes which may contain the texture being recreated
@@ -421,7 +421,7 @@ namespace Ogre
         */
         static void recreateResizableTextures02( const TextureDefinitionVec &textureDefs,
                                                  CompositorChannelVec       &inOutTexContainer,
-                                                 const CompositorNodeVec    &connectedNodes,
+                                                 const CompositorNodeVec    &notifyNodes,
                                                  const CompositorPassVec    *passes );
 
         /////////////////////////////////////////////////////////////////////////////////
@@ -519,7 +519,7 @@ namespace Ogre
             (eg. when using auto width & height, or fsaa settings)
         @param renderSys
             The RenderSystem to use
-        @param connectedNodes
+        @param notifyNodes
             Array of connected nodes that may be using our buffers and need to be notified.
         @param passes
             Array of Compositor Passes which may contain the texture being recreated
@@ -528,7 +528,7 @@ namespace Ogre
         static void recreateResizableBuffers( const BufferDefinitionVec &bufferDefs,
                                               CompositorNamedBufferVec  &inOutBufContainer,
                                               const TextureGpu *finalTarget, RenderSystem *renderSys,
-                                              const CompositorNodeVec &connectedNodes,
+                                              const CompositorNodeVec &notifyNodes,
                                               const CompositorPassVec *passes );
     };
 

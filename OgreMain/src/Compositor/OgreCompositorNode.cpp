@@ -204,31 +204,6 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorNode::notifyRecreated( TextureGpu *channel )
     {
-        // Check if we need to notify nodes we're connected to.
-        bool bFoundOuts = false;
-        CompositorChannelVec::const_iterator texIt = mOutTextures.begin();
-        CompositorChannelVec::const_iterator texEn = mOutTextures.end();
-
-        while( texIt != texEn && !bFoundOuts )
-        {
-            if( *texIt == channel )
-                bFoundOuts = true;
-            ++texIt;
-        }
-
-        if( bFoundOuts )
-        {
-            // Our attachees may have that texture too.
-            CompositorNodeVec::const_iterator itor = mConnectedNodes.begin();
-            CompositorNodeVec::const_iterator endt = mConnectedNodes.end();
-
-            while( itor != endt )
-            {
-                ( *itor )->notifyRecreated( channel );
-                ++itor;
-            }
-        }
-
         CompositorPassVec::const_iterator passIt = mPasses.begin();
         CompositorPassVec::const_iterator passEn = mPasses.end();
         while( passIt != passEn )
@@ -244,42 +219,13 @@ namespace Ogre
         CompositorNamedBufferVec::iterator bufIt = mBuffers.begin();
         CompositorNamedBufferVec::iterator bufEn = mBuffers.end();
 
-        bool bFoundOuts = false;
-
         // We can't early out, it's possible to assign the same output to two different
         // input channels (though it would work very unintuitively...)
         while( bufIt != bufEn )
         {
             if( bufIt->buffer == oldBuffer )
-            {
                 bufIt->buffer = newBuffer;
-
-                // Check if we'll need to clear our outputs
-                IdStringVec::const_iterator itor = mDefinition->mOutBufferChannelMapping.begin();
-                IdStringVec::const_iterator endt = mDefinition->mOutBufferChannelMapping.end();
-
-                while( itor != endt && !bFoundOuts )
-                {
-                    if( *itor == bufIt->name )
-                        bFoundOuts = true;
-                    ++itor;
-                }
-            }
-
             ++bufIt;
-        }
-
-        if( bFoundOuts )
-        {
-            // Our attachees may be using that buffer too.
-            CompositorNodeVec::const_iterator itor = mConnectedNodes.begin();
-            CompositorNodeVec::const_iterator endt = mConnectedNodes.end();
-
-            while( itor != endt )
-            {
-                ( *itor )->notifyRecreated( oldBuffer, newBuffer );
-                ++itor;
-            }
         }
 
         CompositorPassVec::const_iterator passIt = mPasses.begin();
@@ -845,13 +791,13 @@ namespace Ogre
                                                             mLocalTextures, finalTarget );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorNode::finalTargetResized02( const TextureGpu *finalTarget )
+    void CompositorNode::finalTargetResized02( const TextureGpu *finalTarget,
+                                               const CompositorNodeVec &notifyNodes )
     {
         TextureDefinitionBase::recreateResizableTextures02( mDefinition->mLocalTextureDefs,
-                                                            mLocalTextures, mConnectedNodes, &mPasses );
-        TextureDefinitionBase::recreateResizableBuffers( mDefinition->mLocalBufferDefs, mBuffers,
-                                                         finalTarget, mRenderSystem, mConnectedNodes,
-                                                         &mPasses );
+                                                            mLocalTextures, notifyNodes, &mPasses );
+        TextureDefinitionBase::recreateResizableBuffers(
+            mDefinition->mLocalBufferDefs, mBuffers, finalTarget, mRenderSystem, notifyNodes, &mPasses );
 
         CompositorPassVec::const_iterator passIt = mPasses.begin();
         CompositorPassVec::const_iterator passEn = mPasses.end();
