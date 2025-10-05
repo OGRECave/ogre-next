@@ -517,7 +517,8 @@ namespace Ogre
         else
         {
             nodeB->mBuffers.insert( inBuf, 1, *outBuf );
-            ++mNumConnectedBufferInputs;
+            ++nodeB->mNumConnectedBufferInputs;
+            this->mConnectedNodes.push_back( nodeB );
         }
     }
     //-----------------------------------------------------------------------------------
