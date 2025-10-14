@@ -13,6 +13,11 @@ fragment_program SSR/ScreenSpaceReflectionsVectors_ps_GLSL glsl
 	}
 }
 
+fragment_program SSR/ScreenSpaceReflectionsVectors_ps_VK glslvk
+{
+	source ScreenSpaceReflectionsVectors_ps.glsl
+}
+
 fragment_program SSR/ScreenSpaceReflectionsVectors_ps_HLSL hlsl
 {
 	source ScreenSpaceReflectionsVectors_ps.hlsl
@@ -31,6 +36,7 @@ fragment_program SSR/ScreenSpaceReflectionsVectors_ps unified
 	delegate SSR/ScreenSpaceReflectionsVectors_ps_GLSL
 	delegate SSR/ScreenSpaceReflectionsVectors_ps_HLSL
 	delegate SSR/ScreenSpaceReflectionsVectors_ps_Metal
+	delegate SSR/ScreenSpaceReflectionsVectors_ps_VK
 }
 
 //---------------------------------------------------------------------------------------
@@ -51,6 +57,12 @@ fragment_program SSR/ScreenSpaceReflectionsCombine_ps_GLSL glsl
 	}
 }
 
+fragment_program SSR/ScreenSpaceReflectionsCombine_ps_VK glslvk
+{
+	source ScreenSpaceReflectionsCombine_ps.glsl
+}
+
+
 fragment_program SSR/ScreenSpaceReflectionsCombine_ps_HLSL hlsl
 {
 	source ScreenSpaceReflectionsCombine_ps.hlsl
@@ -69,6 +81,7 @@ fragment_program SSR/ScreenSpaceReflectionsCombine_ps unified
 	delegate SSR/ScreenSpaceReflectionsCombine_ps_GLSL
 	delegate SSR/ScreenSpaceReflectionsCombine_ps_HLSL
 	delegate SSR/ScreenSpaceReflectionsCombine_ps_Metal
+	delegate SSR/ScreenSpaceReflectionsCombine_ps_VK
 }
 
 material SSR/ScreenSpaceReflectionsVectors
@@ -214,6 +227,11 @@ fragment_program SSR/Quincunx_ps_GLSL glsl
 	}
 }
 
+fragment_program SSR/Quincunx_ps_VK glslvk
+{
+	source Quincunx_ps.glsl
+}
+
 fragment_program SSR/Quincunx_ps_HLSL hlsl
 {
 	source Quincunx_ps.hlsl
@@ -232,6 +250,7 @@ fragment_program SSR/Quincunx_ps unified
 	delegate SSR/Quincunx_ps_GLSL
 	delegate SSR/Quincunx_ps_HLSL
 	delegate SSR/Quincunx_ps_Metal
+	delegate SSR/Quincunx_ps_VK
 }
 
 material SSR/Quincunx
