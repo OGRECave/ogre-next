@@ -11,8 +11,6 @@ macro( add_recursive dir retVal )
 	file( GLOB_RECURSE ${retVal} ${dir}/*.h ${dir}/*.cpp ${dir}/*.c )
 endmacro()
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-
 if( OGRE_BUILD_COMPONENT_ATMOSPHERE )
 	ogre_add_component_include_dir(Atmosphere)
 endif()
