@@ -476,7 +476,10 @@ namespace Ogre
 
                 while( itNodes != enNodes )
                 {
-                    ( *itNodes )->notifyRecreated( *itorTex );
+                    // *itNodes can be nullptr if user defined an output
+                    // but never connected it to lead anywhere.
+                    if( *itNodes )
+                        ( *itNodes )->notifyRecreated( *itorTex );
                     ++itNodes;
                 }
             }
@@ -680,7 +683,10 @@ namespace Ogre
 
                 while( itNodes != enNodes )
                 {
-                    ( *itNodes )->notifyRecreated( itBuf->buffer, newUavBuffer );
+                    // *itNodes can be nullptr if user defined an output
+                    // but never connected it to lead anywhere.
+                    if( *itNodes )
+                        ( *itNodes )->notifyRecreated( itBuf->buffer, newUavBuffer );
                     ++itNodes;
                 }
 
