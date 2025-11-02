@@ -504,7 +504,7 @@ namespace Ogre
         {
             nodeB->mBuffers.insert( inBuf, 1, *outBuf );
             ++nodeB->mNumConnectedBufferInputs;
-            this->mConnectedNodes.push_back( nodeB );
+            this->mConnectedNodes[this->mDefinition->mOutChannelMapping.size() + outChannelA] = nodeB;
         }
     }
     //-----------------------------------------------------------------------------------
