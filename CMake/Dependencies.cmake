@@ -244,6 +244,9 @@ elseif (EXISTS "${OGRE_SOURCE_DIR}/ogredeps/CMakeLists.txt")
   add_subdirectory(ogredeps)
 endif ()
 
+include( CMake/Packages/wxWidgetsSetup.cmake )
+findWxWidgets()
+macro_log_feature( wxWidgets_FOUND "wxWidgets" "GUI library for some tools" "https://wxwidgets.org/" FALSE "3.2" "" )
 
 # Display results, terminate if anything required is missing
 MACRO_DISPLAY_FEATURE_LOG()

@@ -7,8 +7,6 @@ project( MaterialEditor )
 
 cmake_minimum_required(VERSION 3.10...4.0)
 
-include( CMake/Dependencies/wxWidgets.cmake )
-
 if( APPLE )
 	macro( add_recursive dir retVal )
 		file( GLOB_RECURSE ${retVal} ${dir}/*.h ${dir}/*.cpp ${dir}/*.c ${dir}/*.mm ${dir}/*.m )
@@ -19,7 +17,7 @@ else()
 	endmacro()
 endif()
 
-setupWxWidgets( wxWidgets_LIBRARIES )
+setupProjectForWxWidgets( wxWidgets_LIBRARIES )
 
 add_recursive( ./src SOURCES )
 add_recursive( ./include HEADERS )
