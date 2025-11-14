@@ -35,42 +35,44 @@ macro( findWxWidgets )
 endmacro()
 
 # Call this macro for every project that needs wxWidgets. Must have called findWxWidgets first.
+# Do not call this if wxWidgets_FOUND isn't true.
 macro( setupProjectForWxWidgets wxWidgets_LIBRARIES )
-	if( wxWidgets_FOUND )
-		if( WIN32 )
-			include_directories( "${wxWidgets_INCLUDE_DIRS}" )
-			    # Technically we should include mswu & mswud but we assume they're equal.
-				# (CMake can't do per target includes... grr....)
-				if( PLATFORM_X64 )
-					include_directories( "${wxWidgets_SOURCE}/lib/vc_x64_lib/mswu" )
-					link_directories( "${wxWidgets_SOURCE}/lib/vc_x64_lib" )
-				else()
-					include_directories( "${wxWidgets_SOURCE}/lib/vc_lib/mswu" )
-					link_directories( "${wxWidgets_SOURCE}/lib/vc_lib" )
-				endif()
+	if( WIN32 )
+		include_directories( "${wxWidgets_INCLUDE_DIRS}" )
+		    # Technically we should include mswu & mswud but we assume they're equal.
+			# (CMake can't do per target includes... grr....)
+			if( PLATFORM_X64 )
+				include_directories( "${wxWidgets_SOURCE}/lib/vc_x64_lib/mswu" )
+				link_directories( "${wxWidgets_SOURCE}/lib/vc_x64_lib" )
+			else()
+				include_directories( "${wxWidgets_SOURCE}/lib/vc_lib/mswu" )
+				link_directories( "${wxWidgets_SOURCE}/lib/vc_lib" )
+			endif()
 
-			set( wxWidgets_LIBRARIES
-				debug wxbase30ud
-				debug wxmsw30ud_core
-				debug wxmsw30ud_adv
-				debug wxmsw30ud_aui
-				debug wxpngd
-				debug wxzlibd
+		set( wxWidgets_LIBRARIES
+			debug wxbase30ud
+			debug wxmsw30ud_core
+			debug wxmsw30ud_adv
+			debug wxmsw30ud_aui
+			debug wxpngd
+			debug wxzlibd
 
-				optimized wxbase30u
-				optimized wxmsw30u_core
-				optimized wxmsw30u_adv
-				optimized wxmsw30u_aui
-				optimized wxpng
-				optimized wxzlib
+			optimized wxbase30u
+			optimized wxmsw30u_core
+			optimized wxmsw30u_adv
+			optimized wxmsw30u_aui
+			optimized wxpng
+			optimized wxzlib
 
-				comctl32 Rpcrt4
-			    )
-		else()
-			include( ${wxWidgets_USE_FILE} )
-			include_directories( ${wxWidgets_INCLUDE_DIRS} )
-			add_definitions( -DwxUSE_GUI=1 )
-			set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${wxWidgets_CXX_FLAGS}" )
-		endif()
+			comctl32 Rpcrt4
+		    )
+	else()
+		include( ${wxWidgets_USE_FILE} )
+		include_directories( ${wxWidgets_INCLUDE_DIRS} )
+		add_definitions( -DwxUSE_GUI=1 )
+		set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${wxWidgets_CXX_FLAGS}" )
+
+		include_directories( ${GTK3_INCLUDE_DIRS} )
+		add_definitions( ${GTK3_CFLAGS_OTHER} )
 	endif()
 endmacro()
