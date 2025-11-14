@@ -15,6 +15,6 @@ if (NOT OGRE_BUILD_PLATFORM_APPLE_IOS AND NOT (WINDOWS_STORE OR WINDOWS_PHONE) A
   add_subdirectory(MeshTool)
 
   if (wxWidgets_FOUND)
-    add_subdirectory(Tools/MaterialEditor)
+    add_subdirectory(MaterialEditor)
   endif()
 endif (NOT OGRE_BUILD_PLATFORM_APPLE_IOS AND NOT (WINDOWS_STORE OR WINDOWS_PHONE) AND OGRE_BUILD_COMPONENT_MESHLODGENERATOR)
