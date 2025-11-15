@@ -108,6 +108,9 @@ endif ()
 find_package(Rapidjson)
 macro_log_feature(Rapidjson_FOUND "rapidjson" "C++ JSON parser" "https://rapidjson.org/" FALSE "" "")
 
+find_package(DearImgui)
+macro_log_feature(DearImgui_FOUND "Dear Imgui" "Dear Imgui" "https://github.com/ocornut/imgui" FALSE "" "")
+
 find_package(RenderDoc)
 macro_log_feature(RenderDoc_FOUND "RenderDoc" "RenderDoc Integration" "https://renderdoc.org/" FALSE "" "")
 
