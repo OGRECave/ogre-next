@@ -695,6 +695,8 @@ void ImguiManager::drawIntoCompositor( RenderPassDescriptor *renderPassDesc,
     RenderSystem *renderSystem = sceneManager->getDestinationRenderSystem();
     mCommandBuffer->setCurrentRenderSystem( renderSystem );
 
+    const bool bWasReadyForPresent = renderPassDesc->mReadyWindowForPresent;
+
     const VaoManager *vaoManager = renderSystem->getVaoManager();
 
     int baseInstanceAndIndirectBuffers = 0;
@@ -749,6 +751,18 @@ void ImguiManager::drawIntoCompositor( RenderPassDescriptor *renderPassDesc,
             const float width = (float)( scRight - scLeft ) / (float)vpWidth;
             const float height = (float)( scBottom - scTop ) / (float)vpHeight;
 
+            if( bWasReadyForPresent )
+            {
+                const bool bShouldBeReadyForPresent =
+                    ( n + 1 ) == drawData->CmdListsCount && ( i + 1 ) == drawList->CmdBuffer.Size;
+                if( bShouldBeReadyForPresent != renderPassDesc->mReadyWindowForPresent )
+                {
+                    renderSystem->endRenderPassDescriptor();
+                    renderPassDesc->mReadyWindowForPresent = bShouldBeReadyForPresent;
+                    renderPassDesc->entriesModified( RenderPassDescriptor::Colour );
+                }
+            }
+
             const Vector4 scissors = Vector4( left, top, width, height );
             renderSystem->beginRenderPassDescriptor( renderPassDesc, anyTargetTexture, 0u, &viewportSize,
                                                      &scissors, 1u, false, false );
@@ -802,4 +816,13 @@ void ImguiManager::drawIntoCompositor( RenderPassDescriptor *renderPassDesc,
     }
 
     renderSystem->_addMetrics( stats );
+
+    // There was nothing for imgui to draw. We must still prepare the window for presenting.
+    if( bWasReadyForPresent && !stats.mDrawCount )
+    {
+        Vector4 scissors( 0, 0, 1, 1 );
+        renderSystem->beginRenderPassDescriptor( renderPassDesc, anyTargetTexture, 0u, &viewportSize,
+                                                 &scissors, 1u, false, false );
+        renderSystem->executeRenderPassDescriptorDelayedActions();
+    }
 }
