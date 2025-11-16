@@ -84,6 +84,7 @@ var hierarchy =
     [ "Ogre::FastArray< const char * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< const Ogre::HlmsSamplerblock * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< const Ogre::TextureGpu * >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< CustomProperty >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< DescriptorSetTexture2::Slot >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< DescriptorSetUav::Slot >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< DEVMODE >", "class_ogre_1_1_fast_array.html", null ],
@@ -632,6 +633,7 @@ var hierarchy =
     [ "Ogre::HlmsBits", "struct_ogre_1_1_hlms_bits.html", null ],
     [ "Ogre::HlmsCache", "struct_ogre_1_1_hlms_cache.html", null ],
     [ "Ogre::HlmsComputePso", "struct_ogre_1_1_hlms_compute_pso.html", null ],
+    [ "Ogre::HlmsDatablock::CustomProperty", "struct_ogre_1_1_hlms_datablock_1_1_custom_property.html", null ],
     [ "Ogre::HlmsDiskCache::Cache", "struct_ogre_1_1_hlms_disk_cache_1_1_cache.html", null ],
     [ "Ogre::HlmsDiskCache::DatablockCustomPiecesCache", "struct_ogre_1_1_hlms_disk_cache_1_1_datablock_custom_pieces_cache.html", null ],
     [ "Ogre::HlmsDiskCache::Pso", "struct_ogre_1_1_hlms_disk_cache_1_1_pso.html", null ],
@@ -679,6 +681,7 @@ var hierarchy =
       [ "Ogre::VoxelizedMeshCache", "class_ogre_1_1_voxelized_mesh_cache.html", null ]
     ] ],
     [ "Ogre::IdString", "struct_ogre_1_1_id_string.html", null ],
+    [ "Ogre::ImguiManager", "class_ogre_1_1_imgui_manager.html", null ],
     [ "Ogre::InstantRadiosity", "class_ogre_1_1_instant_radiosity.html", null ],
     [ "Ogre::InstantRadiosity::AreaOfInterest", "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html", null ],
     [ "Ogre::IntersectionSceneQueryListener", "class_ogre_1_1_intersection_scene_query_listener.html", [
@@ -873,6 +876,7 @@ var hierarchy =
         [ "Ogre::CompositorPassCompute", "class_ogre_1_1_compositor_pass_compute.html", null ],
         [ "Ogre::CompositorPassDepthCopy", "class_ogre_1_1_compositor_pass_depth_copy.html", null ],
         [ "Ogre::CompositorPassIblSpecular", "class_ogre_1_1_compositor_pass_ibl_specular.html", null ],
+        [ "Ogre::CompositorPassImgui", "class_ogre_1_1_compositor_pass_imgui.html", null ],
         [ "Ogre::CompositorPassMipmap", "class_ogre_1_1_compositor_pass_mipmap.html", null ],
         [ "Ogre::CompositorPassQuad", "class_ogre_1_1_compositor_pass_quad.html", null ],
         [ "Ogre::CompositorPassScene", "class_ogre_1_1_compositor_pass_scene.html", null ],
@@ -887,6 +891,7 @@ var hierarchy =
         [ "Ogre::CompositorPassComputeDef", "class_ogre_1_1_compositor_pass_compute_def.html", null ],
         [ "Ogre::CompositorPassDepthCopyDef", "class_ogre_1_1_compositor_pass_depth_copy_def.html", null ],
         [ "Ogre::CompositorPassIblSpecularDef", "class_ogre_1_1_compositor_pass_ibl_specular_def.html", null ],
+        [ "Ogre::CompositorPassImguiDef", "class_ogre_1_1_compositor_pass_imgui_def.html", null ],
         [ "Ogre::CompositorPassMipmapDef", "class_ogre_1_1_compositor_pass_mipmap_def.html", null ],
         [ "Ogre::CompositorPassQuadDef", "class_ogre_1_1_compositor_pass_quad_def.html", null ],
         [ "Ogre::CompositorPassSceneDef", "class_ogre_1_1_compositor_pass_scene_def.html", null ],
@@ -896,7 +901,9 @@ var hierarchy =
         [ "Ogre::CompositorPassUavDef", "class_ogre_1_1_compositor_pass_uav_def.html", null ],
         [ "Ogre::CompositorPassWarmUpDef", "class_ogre_1_1_compositor_pass_warm_up_def.html", null ]
       ] ],
-      [ "Ogre::CompositorPassProvider", "class_ogre_1_1_compositor_pass_provider.html", null ],
+      [ "Ogre::CompositorPassProvider", "class_ogre_1_1_compositor_pass_provider.html", [
+        [ "Ogre::CompositorPassImguiProvider", "class_ogre_1_1_compositor_pass_imgui_provider.html", null ]
+      ] ],
       [ "Ogre::CompositorTargetDef", "class_ogre_1_1_compositor_target_def.html", null ],
       [ "Ogre::CompositorWorkspace", "class_ogre_1_1_compositor_workspace.html", null ],
       [ "Ogre::ConcreteNode", "struct_ogre_1_1_concrete_node.html", null ],
@@ -1684,6 +1691,7 @@ var hierarchy =
     [ "Ogre::Renderable", "class_ogre_1_1_renderable.html", [
       [ "Ogre::Frustum", "class_ogre_1_1_frustum.html", null ],
       [ "Ogre::IfdProbeVisualizer", "class_ogre_1_1_ifd_probe_visualizer.html", null ],
+      [ "Ogre::ImguiRenderable", "class_ogre_1_1_imgui_renderable.html", null ],
       [ "Ogre::ManualObject::ManualObjectSection", "class_ogre_1_1_manual_object_1_1_manual_object_section.html", null ],
       [ "Ogre::ParticleSystemDef", "class_ogre_1_1_particle_system_def.html", null ],
       [ "Ogre::Rectangle2D", "class_ogre_1_1_rectangle2_d.html", null ],

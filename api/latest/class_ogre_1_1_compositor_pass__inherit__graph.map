@@ -1,29 +1,31 @@
 <map id="Ogre::CompositorPass" name="Ogre::CompositorPass">
-<area shape="rect" id="Node000001" title="Abstract class for compositor passes." alt="" coords="228,277,393,303"/>
+<area shape="rect" id="Node000001" title="Abstract class for compositor passes." alt="" coords="228,301,393,327"/>
 <area shape="rect" id="Node000003" href="$class_ogre_1_1_compositor_pass_clear.html" title="Implementation of CompositorPass This implementation will clear the RenderTarget using the parameters..." alt="" coords="461,5,659,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="315,263,329,215,354,154,390,92,413,64,440,40,460,28,462,33,443,44,417,68,394,95,358,156,334,217,320,265"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="314,287,327,234,350,167,367,132,387,98,411,67,440,40,459,28,461,33,443,44,415,70,391,101,371,135,355,169,332,236,319,288"/>
 <area shape="rect" id="Node000004" href="$class_ogre_1_1_compositor_pass_compute.html" title="Implementation of CompositorPass This implementation will render a fullscreen triangle/quad to the Re..." alt="" coords="448,55,672,80"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="319,263,335,224,361,177,396,129,417,108,440,89,461,78,464,83,443,94,420,111,400,132,366,179,340,227,323,266"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="317,287,332,243,357,189,393,135,415,110,440,89,460,78,463,82,443,94,419,114,397,138,362,192,337,245,322,289"/>
 <area shape="rect" id="Node000005" href="$class_ogre_1_1_compositor_pass_depth_copy.html" title="Implementation of CompositorPass This implementation will copy one DepthBuffer to another DepthBuffer..." alt="" coords="441,104,679,129"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="324,264,370,200,402,166,440,138,465,127,467,132,443,143,406,170,374,204,328,267"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="321,287,339,253,366,212,399,172,440,138,463,127,466,132,443,143,403,176,370,215,344,256,326,290"/>
 <area shape="rect" id="Node000006" href="$class_ogre_1_1_compositor_pass_ibl_specular.html" title="Implementation of CompositorPass This implementation will generate IblSpeculars for the specified tex..." alt="" coords="441,153,679,179"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="332,266,379,225,409,205,440,188,472,176,474,181,442,192,412,209,383,230,336,270"/>
-<area shape="rect" id="Node000007" href="$class_ogre_1_1_compositor_pass_mipmap.html" title="Implementation of CompositorPass This implementation will generate mipmaps for the specified texture." alt="" coords="451,203,669,228"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="352,269,441,237,486,226,487,231,442,242,354,275"/>
-<area shape="rect" id="Node000008" href="$class_ogre_1_1_compositor_pass_quad.html" title="Implementation of CompositorPass This implementation will render a fullscreen triangle/quad to the Re..." alt="" coords="461,252,659,277"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="406,278,460,272,461,277,407,283"/>
-<area shape="rect" id="Node000009" href="$class_ogre_1_1_compositor_pass_scene.html" title="Implementation of CompositorPass This implementation will perform main rendering, selecting several p..." alt="" coords="458,301,662,327"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="407,297,458,302,458,307,407,302"/>
-<area shape="rect" id="Node000010" href="$class_ogre_1_1_compositor_pass_shadows.html" title="CompositorPassShadows This class enables force&#45;updating multiple shadow nodes in batch in its own pas..." alt="" coords="449,351,671,376"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="355,305,442,337,487,348,486,353,441,342,353,310"/>
-<area shape="rect" id="Node000011" href="$class_ogre_1_1_compositor_pass_stencil.html" title="Implementation of CompositorPass This implementation will clear the RenderTarget using the parameters..." alt="" coords="455,400,665,425"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="336,310,383,350,412,370,442,386,474,397,472,402,440,391,409,374,380,354,333,314"/>
-<area shape="rect" id="Node000012" href="$class_ogre_1_1_compositor_pass_target_barrier.html" title=" " alt="" coords="457,450,663,490"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="329,313,375,375,407,408,443,436,466,448,464,452,440,440,403,412,371,378,325,316"/>
-<area shape="rect" id="Node000013" href="$class_ogre_1_1_compositor_pass_uav.html" title="Implementation of CompositorPass This implementation will set UAVs." alt="" coords="465,515,655,540"/>
-<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="323,315,339,356,364,407,399,458,419,480,443,500,466,512,463,517,440,504,416,484,394,461,359,410,334,359,318,317"/>
-<area shape="rect" id="Node000014" href="$class_ogre_1_1_compositor_pass_warm_up.html" title="Implementation of CompositorPass." alt="" coords="449,564,671,589"/>
-<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="319,315,333,366,356,430,392,496,416,525,443,551,462,562,459,566,440,555,412,529,388,499,351,433,328,368,314,317"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,277,180,303"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,287,228,287,228,293,194,293"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="328,289,374,237,406,210,440,188,468,176,470,181,443,192,409,214,378,241,332,292"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_compositor_pass_imgui.html" title=" " alt="" coords="459,203,661,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="340,291,386,263,440,237,478,226,480,231,442,242,388,268,343,296"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_compositor_pass_mipmap.html" title="Implementation of CompositorPass This implementation will generate mipmaps for the specified texture." alt="" coords="451,252,669,277"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="388,296,494,275,495,280,389,301"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_compositor_pass_quad.html" title="Implementation of CompositorPass This implementation will render a fullscreen triangle/quad to the Re..." alt="" coords="461,301,659,327"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="407,311,461,311,461,317,407,317"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_compositor_pass_scene.html" title="Implementation of CompositorPass This implementation will perform main rendering, selecting several p..." alt="" coords="458,351,662,376"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="389,327,495,348,494,353,388,332"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_compositor_pass_shadows.html" title="CompositorPassShadows This class enables force&#45;updating multiple shadow nodes in batch in its own pas..." alt="" coords="449,400,671,425"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="343,332,388,360,442,386,480,397,478,402,440,391,386,365,340,337"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_compositor_pass_stencil.html" title="Implementation of CompositorPass This implementation will clear the RenderTarget using the parameters..." alt="" coords="455,449,665,475"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="332,336,378,387,409,414,443,436,470,447,468,452,440,440,406,418,374,391,328,339"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_compositor_pass_target_barrier.html" title=" " alt="" coords="457,499,663,539"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="326,338,345,371,371,411,404,451,443,485,465,497,462,502,440,490,400,455,366,415,340,374,321,340"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1_compositor_pass_uav.html" title="Implementation of CompositorPass This implementation will set UAVs." alt="" coords="465,564,655,589"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="321,339,336,385,360,443,396,501,418,527,443,549,466,562,463,566,440,554,414,531,391,504,355,445,331,387,316,341"/>
+<area shape="rect" id="Node000015" href="$class_ogre_1_1_compositor_pass_warm_up.html" title="Implementation of CompositorPass." alt="" coords="449,613,671,639"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="318,340,330,395,353,466,369,503,389,539,414,572,443,600,461,611,458,615,440,604,410,575,385,542,364,505,348,468,325,396,313,341"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,301,180,327"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,311,228,311,228,317,194,317"/>
 </map>

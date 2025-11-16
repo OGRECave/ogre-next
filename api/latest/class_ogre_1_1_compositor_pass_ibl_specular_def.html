@@ -114,8 +114,8 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_compositor_pass_ibl_spe
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a19d4bd88e211650df13db9ffd314e680" id="r_a19d4bd88e211650df13db9ffd314e680"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_ibl_specular_def.html#a19d4bd88e211650df13db9ffd314e680">CompositorPassIblSpecularDef</a> (<a class="el" href="class_ogre_1_1_compositor_node_def.html">CompositorNodeDef</a> *parentNodeDef, <a class="el" href="class_ogre_1_1_compositor_target_def.html">CompositorTargetDef</a> *parentTargetDef)</td></tr>
 <tr class="separator:a19d4bd88e211650df13db9ffd314e680"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc9d52b81b0189a18ee6535767eb3762" id="r_abc9d52b81b0189a18ee6535767eb3762"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_ibl_specular_def.html#abc9d52b81b0189a18ee6535767eb3762">~CompositorPassIblSpecularDef</a> ()</td></tr>
-<tr class="separator:abc9d52b81b0189a18ee6535767eb3762"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab013262a52695668b7b9317e980c63e2" id="r_ab013262a52695668b7b9317e980c63e2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_ibl_specular_def.html#ab013262a52695668b7b9317e980c63e2">~CompositorPassIblSpecularDef</a> () override</td></tr>
+<tr class="separator:ab013262a52695668b7b9317e980c63e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5c5faf8e727db006dd3ab2e283ac8ae" id="r_af5c5faf8e727db006dd3ab2e283ac8ae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_ibl_specular_def.html#af5c5faf8e727db006dd3ab2e283ac8ae">getInputTextureName</a> () const</td></tr>
 <tr class="separator:af5c5faf8e727db006dd3ab2e283ac8ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acaa0d41dcf831802ab800432caf5551d" id="r_acaa0d41dcf831802ab800432caf5551d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_ibl_specular_def.html#acaa0d41dcf831802ab800432caf5551d">getOutputTextureName</a> () const</td></tr>
@@ -144,6 +144,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:ab8cbd96d06ec7b0f7e2f84e7e4c2089e" id="r_ab8cbd96d06ec7b0f7e2f84e7e4c2089e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_ibl_specular_def.html#ab8cbd96d06ec7b0f7e2f84e7e4c2089e">mAutogenInputMipmaps</a></td></tr>
+<tr class="memdesc:ab8cbd96d06ec7b0f7e2f84e7e4c2089e"><td class="mdescLeft">&#160;</td><td class="mdescRight">IBL via Compute requires mipmaps to be up to date.  <br /></td></tr>
+<tr class="separator:ab8cbd96d06ec7b0f7e2f84e7e4c2089e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4e21e3c81d93761312c1d6b94cf353f" id="r_aa4e21e3c81d93761312c1d6b94cf353f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_ibl_specular_def.html#aa4e21e3c81d93761312c1d6b94cf353f">mForceMipmapFallback</a></td></tr>
 <tr class="memdesc:aa4e21e3c81d93761312c1d6b94cf353f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Force this pass to behave like GENERATE_MIPMAPS, regardless of compute shader support.  <br /></td></tr>
 <tr class="separator:aa4e21e3c81d93761312c1d6b94cf353f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -268,11 +271,14 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="abc9d52b81b0189a18ee6535767eb3762" name="abc9d52b81b0189a18ee6535767eb3762"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc9d52b81b0189a18ee6535767eb3762">&#9670;&#160;</a></span>~CompositorPassIblSpecularDef()</h2>
+<a id="ab013262a52695668b7b9317e980c63e2" name="ab013262a52695668b7b9317e980c63e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab013262a52695668b7b9317e980c63e2">&#9670;&#160;</a></span>~CompositorPassIblSpecularDef()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">Ogre::CompositorPassIblSpecularDef::~CompositorPassIblSpecularDef </td>
@@ -281,6 +287,11 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -379,6 +390,23 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="ab8cbd96d06ec7b0f7e2f84e7e4c2089e" name="ab8cbd96d06ec7b0f7e2f84e7e4c2089e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8cbd96d06ec7b0f7e2f84e7e4c2089e">&#9670;&#160;</a></span>mAutogenInputMipmaps</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::CompositorPassIblSpecularDef::mAutogenInputMipmaps</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>IBL via Compute requires mipmaps to be up to date. </p>
+<p>This being true forces the input cubemap to autogenerate the mipmaps every frame. Otherwise we won't do it and assume it's already been done. Ignored if mForceMipmapFallback = true. </p>
+
+</div>
+</div>
 <a id="aa4e21e3c81d93761312c1d6b94cf353f" name="aa4e21e3c81d93761312c1d6b94cf353f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa4e21e3c81d93761312c1d6b94cf353f">&#9670;&#160;</a></span>mForceMipmapFallback</h2>
 

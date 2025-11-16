@@ -61,6 +61,8 @@ var class_ogre_1_1_hlms =
     [ "getDatablockMap", "class_ogre_1_1_hlms.html#a73d2cdcc6f6434e6998eb1c240fc8759", null ],
     [ "getDataFolder", "class_ogre_1_1_hlms.html#a6576e38225d9205b428bb909d93c5bfb", null ],
     [ "getDefaultDatablock", "class_ogre_1_1_hlms.html#a9df1057f374a54432b012c5e0309107a", null ],
+    [ "getDefaultPaths", "class_ogre_1_1_hlms.html#a16cb7a1925140a038342fdd79cb9cfe1", null ],
+    [ "getDefaultPaths", "class_ogre_1_1_hlms.html#a38964d793fc96af144a64ac09154439a", null ],
     [ "getFastShaderBuildHack", "class_ogre_1_1_hlms.html#a124fd6d17116915b6c407d8743b436cb", null ],
     [ "getFilenameAndResourceGroup", "class_ogre_1_1_hlms.html#ad004bde573064ae48aba462dfcaa536e", null ],
     [ "getHlmsManager", "class_ogre_1_1_hlms.html#af316fb5991958874cbdd34323c57fc91", null ],

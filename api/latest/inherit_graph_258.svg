@@ -14,7 +14,7 @@
 <g id="a_Node000000"><a xlink:href="class_ogre_1_1_fast_array.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="146,-30 0,-30 0,0 146,0 146,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::FastArray&lt; VkImage</text>
-<text text-anchor="middle" x="73" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">View &gt;</text>
+<text text-anchor="middle" x="73" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">MemoryBarrier &gt;</text>
 </a>
 </g>
 </g>

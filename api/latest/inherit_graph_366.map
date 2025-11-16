@@ -1,3 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$struct_ogre_1_1_light_list_info.html" title="Holds all lights in SoA after being culled over all frustums." alt="" coords="5,5,147,31"/>
+<area shape="rect" id="Node000000" href="$struct_ogre_1_1_kf_transform.html" title="Holds the transform of a KeyFrame (which is part of an animation)" alt="" coords="5,5,145,31"/>
 </map>

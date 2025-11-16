@@ -480,6 +480,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a524a4df6708122fe619811e8f81afced"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the horizontal texel offset value required for mapping texel origins to pixel origins in this rendersystem.  <br /></td></tr>
 <tr class="separator:a524a4df6708122fe619811e8f81afced"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90af952bd348e0d592a2e2ceadef1e8e" id="r_a90af952bd348e0d592a2e2ceadef1e8e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a90af952bd348e0d592a2e2ceadef1e8e">getIncompletePsoRequestsCounter</a> () const</td></tr>
+<tr class="memdesc:a90af952bd348e0d592a2e2ceadef1e8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The amount of PSOs that remain uncompiled because they've exceeded the time budget.  <br /></td></tr>
 <tr class="separator:a90af952bd348e0d592a2e2ceadef1e8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d4d8022d696854c4bb41a7d378fb0ca" id="r_a3d4d8022d696854c4bb41a7d378fb0ca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a3d4d8022d696854c4bb41a7d378fb0ca">getInvertedClipSpaceY</a> () const</td></tr>
 <tr class="memdesc:a3d4d8022d696854c4bb41a7d378fb0ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">+Y is downwards in NDC (Normalized Device Coordinates). Only Vulkan has this problem.  <br /></td></tr>
@@ -5428,6 +5429,9 @@ that the shininess value is still taken from shininess)</a> and TVC_EMISSIVE. TV
 </table>
 </div><div class="memdoc">
 
+<p>The amount of PSOs that remain uncompiled because they've exceeded the time budget. </p>
+<p>See <a class="el" href="class_ogre_1_1_render_system.html#ac1ad2fb75204276cca505a255f62081d" title="PSO creation on Vulkan could be skipped after exhausting per-frame time budget.">setPsoRequestsTimeout()</a>. </p>
+
 </div>
 </div>
 <a id="a3d4d8022d696854c4bb41a7d378fb0ca" name="a3d4d8022d696854c4bb41a7d378fb0ca"></a>
@@ -6984,6 +6988,17 @@ Once this init sequence is completed the threads are independent but this startu
 </div><div class="memdoc">
 
 <p>PSO creation on Vulkan could be skipped after exhausting per-frame time budget. </p>
+<p>Every frame we have a time budget for compiling PSOs. For example, 8ms. If we spend more than 8ms compiling shaders and PSOs, we abort those and will attempt to compile them on the next frame. <a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Any</a> object that uses such uncompiled PSO will not appear on screen.</p>
+<p>Example: if each PSO takes 1ms to compile and we have 10 PSOs left, then we'll compile 8 PSOs, and the other 2 will be compiled on the next frame. If a single PSO takes 20ms, then only that PSO will be compiled (we can't stop mid-compile). If each PSO takes 1.2ms, we'll compile 7 PSOs. Because at the 6th PSO we will have taken 7.2ms, which is below the deadline, and after the 7th PSO we will have taken 8.4ms. This happens because we can't actually predict how long a PSO will take.</p>
+<p>This feature reduces stutter by allocating an aproximate maximum time we spend compiling. But it trades off in visual glitches/artifacts until all PSOs are done. This feature is important on Android to reduce the number of ANRs. </p><dl class="section remark"><dt>Remarks</dt><dd>IMPORTANT: Techniques that rely on running a shader once (e.g. to fill a texture) may end up uninitialized if the PSO doesn't compile on time. It's best to disable this feature when doing such tasks or to monitor <a class="el" href="class_ogre_1_1_render_system.html#a90af952bd348e0d592a2e2ceadef1e8e" title="The amount of PSOs that remain uncompiled because they&#39;ve exceeded the time budget.">getIncompletePsoRequestsCounter()</a> and retry. </dd>
+<dd>
+When PSOs are deferred due to this feature, it will be logged. Keep an eye on Ogre.log. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ms</td><td>Time deadline in milliseconds. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

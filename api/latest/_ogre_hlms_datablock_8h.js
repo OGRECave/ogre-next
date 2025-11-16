@@ -1,5 +1,6 @@
 var _ogre_hlms_datablock_8h =
 [
+    [ "Ogre::HlmsDatablock::CustomProperty", "struct_ogre_1_1_hlms_datablock_1_1_custom_property.html", "struct_ogre_1_1_hlms_datablock_1_1_custom_property" ],
     [ "DECLARE_BLENDFACTORS", "_ogre_hlms_datablock_8h.html#a51c1eba10862dd0b7ceffc854e106015", null ],
     [ "DECLARE_BLENDOPERATIONS", "_ogre_hlms_datablock_8h.html#aef24ccfcbb194fe614b82fed37126222", null ],
     [ "HlmsBasicBlock", "_ogre_hlms_datablock_8h.html#gaf7c7c73e6a7e3dfb3e74484e3a971346", [

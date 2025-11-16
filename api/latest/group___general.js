@@ -1899,6 +1899,7 @@ var group___general =
       [ "Ogre::ID_SAMPLES_PER_ITERATION", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca4d85f85ee5e384690e1f1324e91e6b1e", null ],
       [ "Ogre::ID_SAMPLES_SINGLE_ITERATION_FALLBACK", "group___general.html#gga30d5439896c2a2362024ec689b1e181caa8c82eab51d1ea6632f2406bbedd3c88", null ],
       [ "Ogre::ID_FORCE_MIPMAP_FALLBACK", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca34ceaa287216aa89af50af30a3118781", null ],
+      [ "Ogre::ID_AUTOGEN_INPUT_MIPMAPS", "group___general.html#gga30d5439896c2a2362024ec689b1e181caaf62886c6b9634000a46884429268cd2", null ],
       [ "Ogre::ID_MODE", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca6364b183ab4866caf745f4aab260510d", null ],
       [ "Ogre::ID_READ_BACK_AS_TEXTURE", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca7cd861a63432b75d04469766dc7fed1b", null ],
       [ "Ogre::ID_SHADOW_NODE", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca52b8050298e35924a2f7482eeb370068", null ],

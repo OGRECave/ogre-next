@@ -1,29 +1,31 @@
 <map id="Ogre::CompositorPassDef" name="Ogre::CompositorPassDef">
-<area shape="rect" id="Node000001" title="Interface to abstract all types of pass definitions (see CompositorPassType):" alt="" coords="228,293,416,319"/>
+<area shape="rect" id="Node000001" title="Interface to abstract all types of pass definitions (see CompositorPassType):" alt="" coords="228,317,416,343"/>
 <area shape="rect" id="Node000003" href="$class_ogre_1_1_compositor_pass_clear_def.html" title=" " alt="" coords="483,5,705,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="327,279,342,227,368,162,408,95,433,65,462,40,482,28,485,33,466,44,437,69,412,99,373,164,347,229,332,280"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="325,303,339,247,365,175,383,138,405,102,431,68,462,40,481,29,484,33,466,44,435,72,409,105,388,140,370,177,344,249,331,304"/>
 <area shape="rect" id="Node000004" href="$class_ogre_1_1_compositor_pass_compute_def.html" title=" " alt="" coords="471,55,717,80"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="330,279,349,237,377,185,415,133,437,110,463,90,487,78,490,83,465,95,441,114,419,137,381,188,353,239,335,281"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="328,303,345,257,373,199,411,140,435,113,463,90,486,78,489,82,465,95,439,117,416,143,377,201,350,259,333,305"/>
 <area shape="rect" id="Node000005" href="$class_ogre_1_1_compositor_pass_depth_copy_def.html" title=" " alt="" coords="492,105,696,145"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="337,280,388,217,423,183,463,154,491,141,493,146,465,159,426,187,392,221,341,284"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="334,304,355,270,384,229,420,189,463,154,490,141,493,145,465,159,424,193,388,233,359,273,339,307"/>
 <area shape="rect" id="Node000006" href="$class_ogre_1_1_compositor_pass_ibl_specular_def.html" title=" " alt="" coords="464,169,724,195"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="345,282,397,241,429,221,463,204,497,192,499,197,465,208,432,225,400,246,349,286"/>
-<area shape="rect" id="Node000007" href="$class_ogre_1_1_compositor_pass_mipmap_def.html" title=" " alt="" coords="473,219,715,244"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="366,286,463,253,513,241,514,247,465,258,368,291"/>
-<area shape="rect" id="Node000008" href="$class_ogre_1_1_compositor_pass_quad_def.html" title=" " alt="" coords="483,268,705,293"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="430,293,482,288,483,294,430,299"/>
-<area shape="rect" id="Node000009" href="$class_ogre_1_1_compositor_pass_scene_def.html" title=" " alt="" coords="481,317,707,343"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="430,313,481,317,480,323,430,318"/>
-<area shape="rect" id="Node000010" href="$class_ogre_1_1_compositor_pass_shadows_def.html" title=" " alt="" coords="471,367,717,392"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="369,321,465,353,515,364,513,369,463,358,367,326"/>
-<area shape="rect" id="Node000011" href="$class_ogre_1_1_compositor_pass_stencil_def.html" title=" " alt="" coords="478,416,710,441"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="349,326,400,366,432,386,465,402,499,413,498,418,463,407,429,390,397,370,346,330"/>
-<area shape="rect" id="Node000012" href="$class_ogre_1_1_compositor_pass_target_barrier_def.html" title=" " alt="" coords="491,466,697,506"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="342,329,392,391,427,424,465,452,492,464,490,469,463,456,423,428,388,395,338,332"/>
-<area shape="rect" id="Node000013" href="$class_ogre_1_1_compositor_pass_uav_def.html" title=" " alt="" coords="487,531,701,556"/>
-<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="335,331,353,373,381,423,419,474,441,497,465,516,490,528,487,533,463,520,437,501,415,477,377,426,349,375,330,333"/>
-<area shape="rect" id="Node000014" href="$class_ogre_1_1_compositor_pass_warm_up_def.html" title=" " alt="" coords="493,581,695,621"/>
-<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="332,331,348,382,374,446,413,511,438,541,466,567,494,582,491,587,462,571,434,545,409,514,370,448,343,383,327,333"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,293,180,319"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,303,228,303,228,309,194,309"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="341,305,392,253,426,226,463,204,493,192,495,197,465,208,429,230,395,257,344,309"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_compositor_pass_imgui_def.html" title=" " alt="" coords="481,219,707,244"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="353,308,404,279,463,253,504,241,506,247,465,258,406,284,356,312"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_compositor_pass_mipmap_def.html" title=" " alt="" coords="473,268,715,293"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="406,312,523,291,524,296,407,317"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_compositor_pass_quad_def.html" title=" " alt="" coords="483,317,705,343"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="430,327,483,327,483,333,430,333"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_compositor_pass_scene_def.html" title=" " alt="" coords="481,367,707,392"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="407,343,524,364,523,369,406,348"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_compositor_pass_shadows_def.html" title=" " alt="" coords="471,416,717,441"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="356,348,406,376,465,402,506,413,504,419,463,407,404,381,353,352"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_compositor_pass_stencil_def.html" title=" " alt="" coords="478,465,710,491"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="344,351,395,403,429,430,465,452,495,463,493,468,463,456,426,434,392,407,341,355"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_compositor_pass_target_barrier_def.html" title=" " alt="" coords="491,515,697,555"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="339,353,359,387,388,427,424,467,465,501,492,514,490,519,463,506,420,471,384,431,355,390,334,356"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1_compositor_pass_uav_def.html" title=" " alt="" coords="487,580,701,605"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="333,355,350,401,377,459,416,517,439,543,465,565,489,578,486,582,463,570,435,547,411,520,373,461,345,403,328,357"/>
+<area shape="rect" id="Node000015" href="$class_ogre_1_1_compositor_pass_warm_up_def.html" title=" " alt="" coords="493,630,695,670"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="331,355,345,410,371,481,389,518,410,554,436,587,466,616,494,632,491,637,462,620,432,591,406,557,384,521,366,483,340,412,326,357"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,317,180,343"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,327,228,327,228,333,194,333"/>
 </map>

@@ -1,5 +1,7 @@
 <map id="Ogre::CompositorPassProvider" name="Ogre::CompositorPassProvider">
 <area shape="rect" id="Node000001" title="Base class that users can derive from in order to implement custom passes for the compositor." alt="" coords="5,79,224,104"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_compositor_pass_imgui_provider.html" title="Generates the CompositorPassImgui pass needed to render imgui UI Also ensures the compositor scripts ..." alt="" coords="13,152,216,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="117,118,117,152,112,152,112,118"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="27,5,202,31"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,44,117,79,112,79,112,44"/>
 </map>

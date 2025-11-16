@@ -1233,8 +1233,11 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="gga880ab7a167290fb308acb6e7ce39c87ea3222cbf74d91fb62108240379d0dad0c" name="gga880ab7a167290fb308acb6e7ce39c87ea3222cbf74d91fb62108240379d0dad0c"></a>HLMS_CACHE_FLAGS_NONE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="gga880ab7a167290fb308acb6e7ce39c87eaadebd486a056953fee9744972857a276" name="gga880ab7a167290fb308acb6e7ce39c87eaadebd486a056953fee9744972857a276"></a>HLMS_CACHE_FLAGS_COMPILATION_REQUIRED&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="gga880ab7a167290fb308acb6e7ce39c87eaeeb98a102a556a313961fc1779e3993e" name="gga880ab7a167290fb308acb6e7ce39c87eaeeb98a102a556a313961fc1779e3993e"></a>HLMS_CACHE_FLAGS_COMPILATION_REQUESTED&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="gga880ab7a167290fb308acb6e7ce39c87eaadebd486a056953fee9744972857a276" name="gga880ab7a167290fb308acb6e7ce39c87eaadebd486a056953fee9744972857a276"></a>HLMS_CACHE_FLAGS_COMPILATION_REQUIRED&#160;</td><td class="fielddoc"><p>For internal use. </p>
+<p>This entry is a stub entry and cannot be used. Objects using this PSO will not appear on screen. This can happen if we ran out of time (we spent more than 'deadline' milliseconds compiling shaders and PSOs, combined, during a single frame). This entry will be resubmitted on the next frame for compiling. See <a class="el" href="class_ogre_1_1_render_system.html#ac1ad2fb75204276cca505a255f62081d" title="PSO creation on Vulkan could be skipped after exhausting per-frame time budget.">RenderSystem::setPsoRequestsTimeout</a>. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga880ab7a167290fb308acb6e7ce39c87eaeeb98a102a556a313961fc1779e3993e" name="gga880ab7a167290fb308acb6e7ce39c87eaeeb98a102a556a313961fc1779e3993e"></a>HLMS_CACHE_FLAGS_COMPILATION_REQUESTED&#160;</td><td class="fielddoc"><p>For internal use. This entry has been submitted to <a class="el" href="class_ogre_1_1_parallel_hlms_compile_queue.html">ParallelHlmsCompileQueue</a> for compilation. </p>
+</td></tr>
 </table>
 
 </div>

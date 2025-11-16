@@ -128,14 +128,14 @@ $(document).ready(function(){initNavTree('hlms.html',''); initResizable(); });
 <li class="level2"><a href="#HlmsCreationOfShadersConventions">Common conventions</a></li>
 <li class="level2"><a href="#HlmsCreationOfShadersHotReloading">Hot reloading</a></li>
 <li class="level2"><a href="#HlmsCreationOfShadersDisablingStage">Disabling a stage</a></li>
-<li class="level2"><a href="#HlmsCreationOfShadersCustomizing">Customizing an existing implementation</a><ul><li class="level3"><a href="#autotoc_md109">Examples:</a></li>
+<li class="level2"><a href="#HlmsCreationOfShadersCustomizing">Customizing an existing implementation</a><ul><li class="level3"><a href="#autotoc_md110">Examples:</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="level1"><a href="#HlmsRuntimeRendering">Run-time rendering</a><ul><li class="level2"><a href="#HlmsRuntimeRenderingPreparePassHash">preparePassHash</a></li>
 <li class="level2"><a href="#HlmsRuntimeRenderingFillBuffersFor">fillBuffersFor</a></li>
-<li class="level2"><a href="#autotoc_md110">Multithreaded Shader Compilation</a></li>
+<li class="level2"><a href="#autotoc_md111">Multithreaded Shader Compilation</a></li>
 </ul>
 </li>
 <li class="level1"><a href="#UsingHlmsImplementation">Using the HLMS implementations</a><ul><li class="level2"><a href="#UsingHlmsImplementationInitialization">Initialization</a></li>
@@ -158,7 +158,7 @@ $(document).ready(function(){initNavTree('hlms.html',''); initResizable(); });
 <li class="level1"><a href="#HlmsTroubleshooting">Troubleshooting</a><ul><li class="level2"><a href="#HlmsTroubleshootingShadow">My shadows don&#39;t show up or are very glitchy</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md111">Precision / Quality</a></li>
+<li class="level1"><a href="#autotoc_md112">Precision / Quality</a></li>
 </ul>
 </div>
 <div class="textblock"><p>The HLMS (often stylized Hlms) is the new material system used in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.0. It's more user friendly and performs faster.</p>
@@ -640,7 +640,7 @@ Customizing an existing implementation</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">custom_ps_output_types   </td><td class="markdownTableBodyNone">Declare additional outputs for MRT (Multiple Render Targets). The variable rtv_target can be used to continue where standard Hlms left off (almost always 1). You don't have to use it if you are certain you aren't using features that required rtv_target to go &gt; 1.   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md109"></a>
+<h3><a class="anchor" id="autotoc_md110"></a>
 Examples:</h3>
 <div class="fragment"><div class="line">// Add an extra float output (e.g. to be used with PFG_R32_FLOAT).</div>
 <div class="line">@piece( custom_ps_output_types )</div>
@@ -681,7 +681,7 @@ preparePassHash</h2>
 <h2><a class="anchor" id="HlmsRuntimeRenderingFillBuffersFor"></a>
 fillBuffersFor</h2>
 <p>This function gets executed for every Renderable that is going to be rendered. Implementations are meant to read the Renderable's data and fill their GPU data structures, like world matrix, bone matrices (if skeletally animated), set the textures. They can rely on parameters like <code>lastCache</code> and <code>lastTextureHash</code> to obtain information about the previously rendered object and avoid setting again many shared paremeters.</p>
-<h2><a class="anchor" id="autotoc_md110"></a>
+<h2><a class="anchor" id="autotoc_md111"></a>
 Multithreaded Shader Compilation</h2>
 <p>For details see the dedicated section <a class="el" href="_hlms_threading.html">Multithreaded Shader Compilation</a>.</p>
 <h1><a class="anchor" id="UsingHlmsImplementation"></a>
@@ -990,7 +990,7 @@ My shadows don't show up or are very glitchy</h2>
 <li>Checkout the <code>Sample_ShadowMapDebugging</code> sample on how to debug shadows. Those techniques may give you useful hints about what's going on.</li>
 </ol>
 <p>[^12]: GL3+ and GLES3: extension ARB_sampler_objects. D3D11: ID3D11SamplerState</p>
-<h1><a class="anchor" id="autotoc_md111"></a>
+<h1><a class="anchor" id="autotoc_md112"></a>
 Precision / Quality</h1>
 <p><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.4 added <code>Hlms::setPrecisionMode</code> with the following options:</p>
 <ul>

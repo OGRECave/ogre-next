@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"_ogre_billboard_8h.html":[9,0,2,0,34],
 "_ogre_billboard_chain_8h.html":[9,0,2,0,35],
 "_ogre_billboard_particle_renderer_8h.html":[9,0,2,0,36],
 "_ogre_billboard_set2_8h.html":[9,0,2,0,11,1],
@@ -16,7 +17,7 @@ var NAVTREEINDEX1 =
 "_ogre_boolean_mask_c_8h.html":[9,0,2,0,9,0,0,8],
 "_ogre_boolean_mask_n_e_o_n_8h.html":[9,0,2,0,9,0,1,0,8],
 "_ogre_boolean_mask_s_s_e2_8h.html":[9,0,2,0,9,0,2,0,8],
-"_ogre_border_panel_overlay_element_8h.html":[9,0,0,3,0,0],
+"_ogre_border_panel_overlay_element_8h.html":[9,0,0,4,0,0],
 "_ogre_box_emitter2_8h.html":[9,0,3,2,0,1],
 "_ogre_box_emitter_8h.html":[9,0,3,1,0,1],
 "_ogre_box_emitter_factory_8h.html":[9,0,3,1,0,2],
@@ -155,6 +156,9 @@ var NAVTREEINDEX1 =
 "_ogre_compositor_pass_depth_copy_def_8h.html":[9,0,2,0,3,0,2,1],
 "_ogre_compositor_pass_ibl_specular_8h.html":[9,0,2,0,3,0,3,0],
 "_ogre_compositor_pass_ibl_specular_def_8h.html":[9,0,2,0,3,0,3,1],
+"_ogre_compositor_pass_imgui_8h.html":[9,0,0,2,0,0],
+"_ogre_compositor_pass_imgui_def_8h.html":[9,0,0,2,0,1],
+"_ogre_compositor_pass_imgui_provider_8h.html":[9,0,0,2,0,2],
 "_ogre_compositor_pass_mipmap_8h.html":[9,0,2,0,3,0,4,0],
 "_ogre_compositor_pass_mipmap_def_8h.html":[9,0,2,0,3,0,4,1],
 "_ogre_compositor_pass_provider_8h.html":[9,0,2,0,3,0,14],
@@ -245,9 +249,5 @@ var NAVTREEINDEX1 =
 "_ogre_d3_d11_hardware_occlusion_query_8h.html":[9,0,4,0,0,12],
 "_ogre_d3_d11_hardware_vertex_buffer_8h.html":[9,0,4,0,0,13],
 "_ogre_d3_d11_hlms_pso_8h.html":[9,0,4,0,0,14],
-"_ogre_d3_d11_legacy_s_d_k_emulation_8h.html":[9,0,4,0,0,17],
-"_ogre_d3_d11_legacy_s_d_k_emulation_8h.html#a174e77e1fbc5bfb2840e9020d1e43e05":[9,0,4,0,0,17,12],
-"_ogre_d3_d11_legacy_s_d_k_emulation_8h.html#a1b91409ee211c5c4b62b7b4e045e00e0":[9,0,4,0,0,17,6],
-"_ogre_d3_d11_legacy_s_d_k_emulation_8h.html#a2985255107678d4aa2cca72c3f40e5d7":[9,0,4,0,0,17,18],
-"_ogre_d3_d11_legacy_s_d_k_emulation_8h.html#a31a200354d1371f22bbfd017bcd1b836":[9,0,4,0,0,17,11]
+"_ogre_d3_d11_legacy_s_d_k_emulation_8h.html":[9,0,4,0,0,17]
 };

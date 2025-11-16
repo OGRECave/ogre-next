@@ -819,6 +819,8 @@ var group___resources =
       [ "getDatablockMap", "class_ogre_1_1_hlms.html#a73d2cdcc6f6434e6998eb1c240fc8759", null ],
       [ "getDataFolder", "class_ogre_1_1_hlms.html#a6576e38225d9205b428bb909d93c5bfb", null ],
       [ "getDefaultDatablock", "class_ogre_1_1_hlms.html#a9df1057f374a54432b012c5e0309107a", null ],
+      [ "getDefaultPaths", "class_ogre_1_1_hlms.html#a16cb7a1925140a038342fdd79cb9cfe1", null ],
+      [ "getDefaultPaths", "class_ogre_1_1_hlms.html#a38964d793fc96af144a64ac09154439a", null ],
       [ "getFastShaderBuildHack", "class_ogre_1_1_hlms.html#a124fd6d17116915b6c407d8743b436cb", null ],
       [ "getFilenameAndResourceGroup", "class_ogre_1_1_hlms.html#ad004bde573064ae48aba462dfcaa536e", null ],
       [ "getHlmsManager", "class_ogre_1_1_hlms.html#af316fb5991958874cbdd34323c57fc91", null ],
@@ -1063,6 +1065,13 @@ var group___resources =
       [ "rsData", "struct_ogre_1_1_hlms_compute_pso.html#af57863851806d10ff62f1bf154b5e7bd", null ]
     ] ],
     [ "Ogre::HlmsDatablock", "class_ogre_1_1_hlms_datablock.html", [
+      [ "CustomProperty", "struct_ogre_1_1_hlms_datablock_1_1_custom_property.html", [
+        [ "CustomProperty", "struct_ogre_1_1_hlms_datablock_1_1_custom_property.html#ab97c221f22789da2cbe8cf13c0d9271c", null ],
+        [ "keyName", "struct_ogre_1_1_hlms_datablock_1_1_custom_property.html#af67a3f3b7c99966fee667bdea2ea2c57", null ],
+        [ "keyStr", "struct_ogre_1_1_hlms_datablock_1_1_custom_property.html#a853c60bad2ef3bf311517a7a8ea20d04", null ],
+        [ "value", "struct_ogre_1_1_hlms_datablock_1_1_custom_property.html#a9747ad6d6ac7dc9241fb569d45a58189", null ]
+      ] ],
+      [ "CustomPropertyArray", "class_ogre_1_1_hlms_datablock.html#a0ae6b881e036c10a5bd0a8284418c699", null ],
       [ "HlmsDatablock", "class_ogre_1_1_hlms_datablock.html#a2e445901fc23c28ce598be2fb57e16ab", null ],
       [ "~HlmsDatablock", "class_ogre_1_1_hlms_datablock.html#a0504bd5084c504735f10879fd3f26b96", null ],
       [ "_linkRenderable", "class_ogre_1_1_hlms_datablock.html#ae8f09ce4391c44bdde8bc4c26acc19af", null ],
@@ -1079,6 +1088,7 @@ var group___resources =
       [ "getCreator", "class_ogre_1_1_hlms_datablock.html#aefd220e3e669819154ce530ce8073a49", null ],
       [ "getCustomPieceFileIdHash", "class_ogre_1_1_hlms_datablock.html#a0a6d5fd55847327ae3bde49fddc43147", null ],
       [ "getCustomPieceFileStr", "class_ogre_1_1_hlms_datablock.html#ad7cd8f5a47b9a1f02b954e9603b16f12", null ],
+      [ "getCustomProperties", "class_ogre_1_1_hlms_datablock.html#ac86d196e742fac452860fcfe8ed0fa7f", null ],
       [ "getDiffuseColour", "class_ogre_1_1_hlms_datablock.html#ab0a175ab0ffb2f3c552592f5b39df102", null ],
       [ "getDiffuseTexture", "class_ogre_1_1_hlms_datablock.html#a8a78dee492f17cfbf4014c1b9688ba7f", null ],
       [ "getEmissiveColour", "class_ogre_1_1_hlms_datablock.html#a03046c121275f5aca15725cdef10ae3e", null ],
@@ -1099,6 +1109,7 @@ var group___resources =
       [ "setBlendblock", "class_ogre_1_1_hlms_datablock.html#aaad336cbf8515bd27744dda113d68dd4", null ],
       [ "setCustomPieceCodeFromMemory", "class_ogre_1_1_hlms_datablock.html#ad5d6a40c19c3cf34fd7d538d397723df", null ],
       [ "setCustomPieceFile", "class_ogre_1_1_hlms_datablock.html#ae8e2bd9a26e0aa0a6b133b4c063ceeda", null ],
+      [ "setCustomProperties", "class_ogre_1_1_hlms_datablock.html#ac26a7b847bacb3dfb5667d50c6bc6c76", null ],
       [ "setMacroblock", "class_ogre_1_1_hlms_datablock.html#ad160318463071adea8366af4ebf29348", null ],
       [ "setMacroblock", "class_ogre_1_1_hlms_datablock.html#a5400ed568a9921f988bbcd5c1ac19f22", null ],
       [ "RenderQueue", "class_ogre_1_1_hlms_datablock.html#a68e318c4a7793b7195ffd7ba8b6afba9", null ],
@@ -1204,6 +1215,7 @@ var group___resources =
       [ "saveJob", "class_ogre_1_1_hlms_json_compute.html#a28252d17247446bd0ccc595bfcb80563", null ]
     ] ],
     [ "Ogre::HlmsJsonListener", "class_ogre_1_1_hlms_json_listener.html", [
+      [ "canSaveDatablock", "class_ogre_1_1_hlms_json_listener.html#a2f110d84ecc492c740429e560472c5a2", null ],
       [ "savingChangeTextureName", "class_ogre_1_1_hlms_json_listener.html#a2e0c85f8de336de4cb83b18962a5d852", null ]
     ] ],
     [ "Ogre::HlmsListener", "class_ogre_1_1_hlms_listener.html", [
@@ -2262,7 +2274,7 @@ var group___resources =
       [ "dearrangeToInefficient", "class_ogre_1_1_sub_mesh.html#ad9a1df1d48380050d18941b182304909", null ],
       [ "destroyVaos", "class_ogre_1_1_sub_mesh.html#aaa37dfcd68b3707d91f4f71588f61efd", null ],
       [ "getBoneAssignments", "class_ogre_1_1_sub_mesh.html#ac26fd24799be0297fe0974d3247eb130", null ],
-      [ "getMaterialName", "class_ogre_1_1_sub_mesh.html#ad447a5dd135dbb8b205c51eb26e91c91", null ],
+      [ "getMaterialName", "class_ogre_1_1_sub_mesh.html#a21533e724a8617c7cd3df3df6f943939", null ],
       [ "getNumPoses", "class_ogre_1_1_sub_mesh.html#a44703fb108188ae7730ef1b59c2f3298", null ],
       [ "getPoseHalfPrecision", "class_ogre_1_1_sub_mesh.html#a0b2fc091a23858497511f163c61ce310", null ],
       [ "getPoseIndex", "class_ogre_1_1_sub_mesh.html#a25f6ffc0c0d5eec55f0ed8f0a6f00f1b", null ],

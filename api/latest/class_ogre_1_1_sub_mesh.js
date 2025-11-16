@@ -22,7 +22,7 @@ var class_ogre_1_1_sub_mesh =
     [ "dearrangeToInefficient", "class_ogre_1_1_sub_mesh.html#ad9a1df1d48380050d18941b182304909", null ],
     [ "destroyVaos", "class_ogre_1_1_sub_mesh.html#aaa37dfcd68b3707d91f4f71588f61efd", null ],
     [ "getBoneAssignments", "class_ogre_1_1_sub_mesh.html#ac26fd24799be0297fe0974d3247eb130", null ],
-    [ "getMaterialName", "class_ogre_1_1_sub_mesh.html#ad447a5dd135dbb8b205c51eb26e91c91", null ],
+    [ "getMaterialName", "class_ogre_1_1_sub_mesh.html#a21533e724a8617c7cd3df3df6f943939", null ],
     [ "getNumPoses", "class_ogre_1_1_sub_mesh.html#a44703fb108188ae7730ef1b59c2f3298", null ],
     [ "getPoseHalfPrecision", "class_ogre_1_1_sub_mesh.html#a0b2fc091a23858497511f163c61ce310", null ],
     [ "getPoseIndex", "class_ogre_1_1_sub_mesh.html#a25f6ffc0c0d5eec55f0ed8f0a6f00f1b", null ],

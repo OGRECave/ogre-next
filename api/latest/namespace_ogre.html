@@ -514,6 +514,13 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_ibl_specular_def.html">CompositorPassIblSpecularDef</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_imgui.html">CompositorPassImgui</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_imgui_def.html">CompositorPassImguiDef</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_imgui_provider.html">CompositorPassImguiProvider</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates the <a class="el" href="class_ogre_1_1_compositor_pass_imgui.html">CompositorPassImgui</a> pass needed to render imgui UI Also ensures the compositor scripts recognize the pass type "dear_imgui" i.e.  <a href="class_ogre_1_1_compositor_pass_imgui_provider.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_mipmap.html">CompositorPassMipmap</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of <a class="el" href="class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes.">CompositorPass</a> This implementation will generate mipmaps for the specified texture.  <a href="class_ogre_1_1_compositor_pass_mipmap.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1456,6 +1463,10 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_image_codec2.html">ImageCodec2</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_ogre_1_1_codec.html" title="Abstract class that defines a &#39;codec&#39;.">Codec</a> specialized in images.  <a href="class_ogre_1_1_image_codec2.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_imgui_manager.html">ImguiManager</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_imgui_renderable.html">ImguiRenderable</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_import_abstract_node.html">ImportAbstractNode</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This abstract node represents an import statement.  <a href="class_ogre_1_1_import_abstract_node.html#details">More...</a><br /></td></tr>
@@ -3776,45 +3787,47 @@ Enumerations</h2></td></tr>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181caa8c82eab51d1ea6632f2406bbedd3c88">ID_SAMPLES_SINGLE_ITERATION_FALLBACK</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca34ceaa287216aa89af50af30a3118781">ID_FORCE_MIPMAP_FALLBACK</a>
 , <br />
-&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca6364b183ab4866caf745f4aab260510d">ID_MODE</a>
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181caaf62886c6b9634000a46884429268cd2">ID_AUTOGEN_INPUT_MIPMAPS</a>
+, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca6364b183ab4866caf745f4aab260510d">ID_MODE</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca7cd861a63432b75d04469766dc7fed1b">ID_READ_BACK_AS_TEXTURE</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca52b8050298e35924a2f7482eeb370068">ID_SHADOW_NODE</a>
-, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca1526ee526526c370eaa8609edcd211c6">ID_NUM_SPLITS</a>
 , <br />
-&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cac049e1221eecfc65a41bcdc6dcc04fde">ID_NUM_STABLE_SPLITS</a>
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca1526ee526526c370eaa8609edcd211c6">ID_NUM_SPLITS</a>
+, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cac049e1221eecfc65a41bcdc6dcc04fde">ID_NUM_STABLE_SPLITS</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca01cab4ae171255fea3acb69f6af303ab">ID_NORMAL_OFFSET_BIAS</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca4b5406872612558ed6538c4525ed4a37">ID_CONSTANT_BIAS_SCALE</a>
-, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cab2248cdf337cd0f38241de0ec80e6a49">ID_PSSM_SPLIT_PADDING</a>
 , <br />
-&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cafa13ce4bb1eac5cad2e91d0ecd2ef64a">ID_PSSM_SPLIT_BLEND</a>
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cab2248cdf337cd0f38241de0ec80e6a49">ID_PSSM_SPLIT_PADDING</a>
+, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cafa13ce4bb1eac5cad2e91d0ecd2ef64a">ID_PSSM_SPLIT_BLEND</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca3ee7785eedf41eb57c76ff8f77db6d6d">ID_PSSM_SPLIT_FADE</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca8dd1a0e09c79afa1818de42aa26e7624">ID_PSSM_LAMBDA</a>
-, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca47d48e51e74026d78ad19d31f83dc415">ID_SHADOW_MAP_TARGET_TYPE</a>
 , <br />
-&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181caad47abc04c9d9c97cce20fa145b11901">ID_SHADOW_MAP_REPEAT</a>
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca47d48e51e74026d78ad19d31f83dc415">ID_SHADOW_MAP_TARGET_TYPE</a>
+, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181caad47abc04c9d9c97cce20fa145b11901">ID_SHADOW_MAP_REPEAT</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca152907bc201f5e3e1c40245117c0bedc">ID_SHADOW_MAP</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca78e88cb1ff5664c7f71b83cd0193e200">ID_UV</a>
-, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca3c3213a4174892559198604bc0e15f99">ID_ARRAY_INDEX</a>
 , <br />
-&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca4d2780ec80e9c4cba88724d6fae8a210">ID_FSAA</a>
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca3c3213a4174892559198604bc0e15f99">ID_ARRAY_INDEX</a>
+, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca4d2780ec80e9c4cba88724d6fae8a210">ID_FSAA</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca3fe9608609faf64f4832aec057798fc4">ID_LIGHT</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cad1cd27fad6157664510498a3871dd93f">ID_SPLIT</a>
-, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181caf7fb8a4831adf494ba7e07d1533de5ce">ID_HLMS</a>
 , <br />
-&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cab792b34394a82267b90bfb95e58e7c2a">ID_TESSELLATION_HULL_PROGRAM</a>
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181caf7fb8a4831adf494ba7e07d1533de5ce">ID_HLMS</a>
+, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cab792b34394a82267b90bfb95e58e7c2a">ID_TESSELLATION_HULL_PROGRAM</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca5edb94857707b8497ea03a302fb54d77">ID_TESSELLATION_DOMAIN_PROGRAM</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca0636a88417a574ecb76a76afd1400bdd">ID_COMPUTE_PROGRAM</a>
-, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca08c86b2cb636adea0f2d2aab02d05c9d">ID_TESSELLATION_HULL_PROGRAM_REF</a>
 , <br />
-&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cadd7a14a59d6d2a7f5b12bbe25c921a2c">ID_TESSELLATION_DOMAIN_PROGRAM_REF</a>
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca08c86b2cb636adea0f2d2aab02d05c9d">ID_TESSELLATION_HULL_PROGRAM_REF</a>
+, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cadd7a14a59d6d2a7f5b12bbe25c921a2c">ID_TESSELLATION_DOMAIN_PROGRAM_REF</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca6d18dc722a1fb444e68fae16db582676">ID_COMPUTE_PROGRAM_REF</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca6e961b61c5a6975da7aa4586b9bed93d">ID_GEOMETRY</a>
-, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca4a1a42db5112a846698a55f320c037f0">ID_TESSELLATION_HULL</a>
 , <br />
-&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cadb52b83cde1fdaad88ace2fed1e1729b">ID_TESSELLATION_DOMAIN</a>
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca4a1a42db5112a846698a55f320c037f0">ID_TESSELLATION_HULL</a>
+, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cadb52b83cde1fdaad88ace2fed1e1729b">ID_TESSELLATION_DOMAIN</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca37361d582dd6509e66a17001acf654c2">ID_COMPUTE</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181caf2ce862d2188961440cdb462c5978967">ID_SUBROUTINE</a>
-, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cadf89bd427d0fe983ab7007919f4615a0">ID_END_BUILTIN_IDS</a>
+, <br />
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cadf89bd427d0fe983ab7007919f4615a0">ID_END_BUILTIN_IDS</a>
 <br />
  }</td></tr>
 <tr class="memdesc:ga30d5439896c2a2362024ec689b1e181c"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines the integer ids for keywords this compiler handles.  <a href="group___general.html#ga30d5439896c2a2362024ec689b1e181c">More...</a><br /></td></tr>

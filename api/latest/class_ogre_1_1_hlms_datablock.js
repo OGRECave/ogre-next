@@ -1,5 +1,7 @@
 var class_ogre_1_1_hlms_datablock =
 [
+    [ "CustomProperty", "struct_ogre_1_1_hlms_datablock_1_1_custom_property.html", "struct_ogre_1_1_hlms_datablock_1_1_custom_property" ],
+    [ "CustomPropertyArray", "class_ogre_1_1_hlms_datablock.html#a0ae6b881e036c10a5bd0a8284418c699", null ],
     [ "HlmsDatablock", "class_ogre_1_1_hlms_datablock.html#a2e445901fc23c28ce598be2fb57e16ab", null ],
     [ "~HlmsDatablock", "class_ogre_1_1_hlms_datablock.html#a0504bd5084c504735f10879fd3f26b96", null ],
     [ "_linkRenderable", "class_ogre_1_1_hlms_datablock.html#ae8f09ce4391c44bdde8bc4c26acc19af", null ],
@@ -16,6 +18,7 @@ var class_ogre_1_1_hlms_datablock =
     [ "getCreator", "class_ogre_1_1_hlms_datablock.html#aefd220e3e669819154ce530ce8073a49", null ],
     [ "getCustomPieceFileIdHash", "class_ogre_1_1_hlms_datablock.html#a0a6d5fd55847327ae3bde49fddc43147", null ],
     [ "getCustomPieceFileStr", "class_ogre_1_1_hlms_datablock.html#ad7cd8f5a47b9a1f02b954e9603b16f12", null ],
+    [ "getCustomProperties", "class_ogre_1_1_hlms_datablock.html#ac86d196e742fac452860fcfe8ed0fa7f", null ],
     [ "getDiffuseColour", "class_ogre_1_1_hlms_datablock.html#ab0a175ab0ffb2f3c552592f5b39df102", null ],
     [ "getDiffuseTexture", "class_ogre_1_1_hlms_datablock.html#a8a78dee492f17cfbf4014c1b9688ba7f", null ],
     [ "getEmissiveColour", "class_ogre_1_1_hlms_datablock.html#a03046c121275f5aca15725cdef10ae3e", null ],
@@ -36,6 +39,7 @@ var class_ogre_1_1_hlms_datablock =
     [ "setBlendblock", "class_ogre_1_1_hlms_datablock.html#aaad336cbf8515bd27744dda113d68dd4", null ],
     [ "setCustomPieceCodeFromMemory", "class_ogre_1_1_hlms_datablock.html#ad5d6a40c19c3cf34fd7d538d397723df", null ],
     [ "setCustomPieceFile", "class_ogre_1_1_hlms_datablock.html#ae8e2bd9a26e0aa0a6b133b4c063ceeda", null ],
+    [ "setCustomProperties", "class_ogre_1_1_hlms_datablock.html#ac26a7b847bacb3dfb5667d50c6bc6c76", null ],
     [ "setMacroblock", "class_ogre_1_1_hlms_datablock.html#ad160318463071adea8366af4ebf29348", null ],
     [ "setMacroblock", "class_ogre_1_1_hlms_datablock.html#a5400ed568a9921f988bbcd5c1ac19f22", null ],
     [ "RenderQueue", "class_ogre_1_1_hlms_datablock.html#a68e318c4a7793b7195ffd7ba8b6afba9", null ],

@@ -1,3 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$struct_ogre_1_1_g_l_uniform_reference.html" title="Structure used to keep track of named uniforms in the linked program object." alt="" coords="5,5,203,31"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_g_l_s_l_program_manager.html" title="Ogre assumes that there are separate programs to deal with but GLSL has one program object that repre..." alt="" coords="21,5,227,31"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_g_l_s_l_monolithic_program_manager.html" title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL has one progr..." alt="" coords="291,27,507,67"/>
+<area shape="poly" id="edge892_Node000000_Node000001" title=" " alt="" coords="241,28,291,33,290,38,240,33"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,55,243,95"/>
+<area shape="poly" id="edge893_Node000002_Node000001" title=" " alt="" coords="256,59,290,56,291,61,257,64"/>
 </map>

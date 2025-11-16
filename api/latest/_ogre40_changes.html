@@ -101,10 +101,11 @@ $(document).ready(function(){initNavTree('_ogre40_changes.html',''); initResizab
 <li class="level1"><a href="#autotoc_md58">Hlms implementations and listeners</a><ul><li class="level2"><a href="#Ogre40Changes_PortingTips">Porting tips (from &lt;= 3.0)</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md59">Compositor Script changes</a></li>
-<li class="level1"><a href="#autotoc_md60">New initialization step</a></li>
-<li class="level1"><a href="#autotoc_md61">HlmsUnlit changes</a></li>
-<li class="level1"><a href="#autotoc_md62">Header renames</a></li>
+<li class="level1"><a href="#autotoc_md59">Trivial Hlms changes</a></li>
+<li class="level1"><a href="#autotoc_md60">Compositor Script changes</a></li>
+<li class="level1"><a href="#autotoc_md61">New initialization step</a></li>
+<li class="level1"><a href="#autotoc_md62">HlmsUnlit changes</a></li>
+<li class="level1"><a href="#autotoc_md63">Header renames</a></li>
 </ul>
 </div>
 <div class="textblock"><h1><a class="anchor" id="autotoc_md57"></a>
@@ -138,6 +139,49 @@ Porting tips (from &lt;= 3.0)</h2>
 <p>You should Find &amp; Replace in that order. If you first find all <code>setProperty(</code> and replace them with <code>setProperty( kNoTid,</code>; you will end up with code that compiles but introduces race conditions and no way to identify them.</p>
 <p>However if you first find all <code>setProperty(</code> and replace them with <code>setProperty( tid,</code>, you will end up with code that does not compile wherever <code>kNoTid</code> should be used (still exercise care when replacing <code>tid</code> with <code>kNoTid</code>, make sure to be conscious of it. See <a class="el" href="_hlms_threading.html#HlmsThreading_tidArgument">The tid (Thread ID) argument</a> for details).</p>
 <h1><a class="anchor" id="autotoc_md59"></a>
+Trivial Hlms changes</h1>
+<p>There are changes that will prevent compilation but can be easily fixed by adding a default value and ignoring them, as their behavior doesn't fundamentally change:</p>
+<p><b>Trivial Change:</b> <code>HlmsCache</code> now requires a new argument.</p>
+<div class="fragment"><div class="line"><span class="comment">// Old:</span></div>
+<div class="line">HlmsCache retVal( hash, mType, HlmsPso() );</div>
+<div class="line"><span class="comment">// New:</span></div>
+<div class="line">HlmsCache retVal( hash, mType, HLMS_CACHE_FLAGS_NONE, HlmsPso() );</div>
+</div><!-- fragment --><p><b>Trivial Change:</b> Signature change in <code>notifyPropertiesMergedPreGenerationStep</code>.</p>
+<div class="fragment"><div class="line"><span class="comment">// Before (version A):</span></div>
+<div class="line"><span class="keywordtype">void</span> notifyPropertiesMergedPreGenerationStep()<span class="keyword"> override</span></div>
+<div class="line"><span class="keyword"></span>{</div>
+<div class="line">    <span class="comment">// ..</span></div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// After (version A):</span></div>
+<div class="line">PropertiesMergeStatus notifyPropertiesMergedPreGenerationStep( <span class="keywordtype">size_t</span> tid, PiecesMap *inOutPieces )<span class="keyword"> override</span></div>
+<div class="line"><span class="keyword"></span>{</div>
+<div class="line">    <span class="comment">// ..</span></div>
+<div class="line">    <span class="keywordflow">return</span> PropertiesMergeStatusOk;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Before (version B):</span></div>
+<div class="line"><span class="keywordtype">void</span> notifyPropertiesMergedPreGenerationStep()<span class="keyword"> override</span></div>
+<div class="line"><span class="keyword"></span>{</div>
+<div class="line">    HlmsPbs::notifyPropertiesMergedPreGenerationStep();</div>
+<div class="line">    <span class="comment">// ... your code ...</span></div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// After (version B):</span></div>
+<div class="line">PropertiesMergeStatus notifyPropertiesMergedPreGenerationStep( <span class="keywordtype">size_t</span> tid, PiecesMap *inOutPieces )<span class="keyword"> override</span></div>
+<div class="line"><span class="keyword"></span>{</div>
+<div class="line">    PropertiesMergeStatus status =</div>
+<div class="line">        HlmsPbs::notifyPropertiesMergedPreGenerationStep( tid, inOutPieces );</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// It&#39;s not strictly necessary to return early. But on error</span></div>
+<div class="line">    <span class="comment">// we know for certain this Hlms cannot be compiled.</span></div>
+<div class="line">    <span class="keywordflow">if</span>( status == PropertiesMergeStatusError )</div>
+<div class="line">        <span class="keywordflow">return</span> status;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// ... your code ...</span></div>
+<div class="line">    <span class="keywordflow">return</span> status; <span class="comment">// Important, because status may be PropertiesMergeStatusWarning.</span></div>
+<div class="line">}</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md60"></a>
 Compositor Script changes</h1>
 <p>Added the <code>not_texture</code> keyword. This can improve performance in scenarios where you don't intend to sample from this texture i.e. usually in conjuntion with either the <code>uav</code> or <code>explicit_resolve</code> keywords:</p>
 <div class="fragment"><div class="line">compositor_node RenderingNodeMsaa</div>
@@ -160,17 +204,17 @@ Compositor Script changes</h1>
 <div class="line"> </div>
 <div class="line">    out 0 rt_renderwindow</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md60"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md61"></a>
 New initialization step</h1>
 <p>If you plan on using Alpha Hashing, we provide both blue and white noise.</p>
 <p>But blue noise requires you to call <code>mRoot-&gt;getHlmsManager()-&gt;loadBlueNoise()</code> during start up. <a class="el" href="_particle_system2.html#AlphaHashingBlueNoiseSetup">See its new section in the manual</a> for more information.</p>
-<h1><a class="anchor" id="autotoc_md61"></a>
+<h1><a class="anchor" id="autotoc_md62"></a>
 HlmsUnlit changes</h1>
 <p><a href="https://github.com/OGRECave/ogre-next/commit/9ee6dd793481b5378e9a68fd445a34435b802e1b">HlmsUnlit now behaves like HlmsPbs</a> when it comes to the use of mReservedTexBufferSlots &amp; mReservedTexSlots.</p>
 <p>The variable <code>HlmsUnlit::mSamplerUnitSlotStart</code> was removed and <code>HlmsUnlit::mTexUnitSlotStart</code> is now autocalculated every pass, which means users must not rely on overriding this value.</p>
 <p>Users deriving from HlmsUnlit must set mReservedTexBufferSlots &amp; mReservedTexSlots instead, like it is done for HlmsPbs.</p>
 <p>See <a href="https://github.com/darksylinc/colibrigui/commit/87e74824973007ee9f7f3f46719d2a6ba4948678">Colibri project's commit</a> for an example of how the change was ported.</p>
-<h1><a class="anchor" id="autotoc_md62"></a>
+<h1><a class="anchor" id="autotoc_md63"></a>
 Header renames</h1>
 <p>Due to issues with different IDEs and build systems, renamed several headers so that all header files have a unique name, even if they live in a different folder.</p>
 <p>For example <code>Animation/OgreTagPoint.h</code> is now <code><a class="el" href="_ogre_tag_point2_8h.html">Animation/OgreTagPoint2.h</a></code> because <code><a class="el" href="_ogre_tag_point_8h.html">OgreTagPoint.h</a></code> already existed. This can cause build errors when upgrading to 4.0 that are easily fix by switching to their new names.</p>
