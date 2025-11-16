@@ -6987,7 +6987,14 @@ namespace Ogre{
         if(!processed)
         {
             CompositorManager2 *compositorMgr = Root::getSingleton().getCompositorManager2();
-            mWorkspaceDef = compositorMgr->addWorkspaceDefinition( obj->name );
+            try
+            {
+                mWorkspaceDef = compositorMgr->addWorkspaceDefinition( obj->name );
+            }
+            catch( Exception & )
+            {
+                mWorkspaceDef = 0;
+            }
         }
 
         if(mWorkspaceDef == 0)
@@ -7316,7 +7323,14 @@ namespace Ogre{
         if(!processed)
         {
             CompositorManager2 *compositorMgr = Root::getSingleton().getCompositorManager2();
-            mNodeDef = compositorMgr->addNodeDefinition( obj->name );
+            try
+            {
+                mNodeDef = compositorMgr->addNodeDefinition( obj->name );
+            }
+            catch( Exception & )
+            {
+                mNodeDef = 0;
+            }
         }
 
         if(mNodeDef == 0)
@@ -9490,8 +9504,8 @@ namespace Ogre{
                         uint32 numMiplevels = 1u;
                         if( getUInt( *it0, &mipLevelStart ) && getUInt( *it1, &numMiplevels ) )
                         {
-                            passDepthCopy->mMipLevelStart = mipLevelStart;
-                            passDepthCopy->mNumMiplevels = numMiplevels;
+                            passDepthCopy->mMipLevelStart = uint8_t( mipLevelStart );
+                            passDepthCopy->mNumMiplevels = uint8_t( numMiplevels );
                         }
                         else
                         {
@@ -11291,6 +11305,22 @@ namespace Ogre{
                     {
                         AbstractNodeList::const_iterator it0 = prop->values.begin();
                         if( !getBoolean( *it0, &passIbl->mForceMipmapFallback ) )
+                        {
+                            compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file,
+                                                prop->line, "Boolean expected" );
+                        }
+                    }
+                    break;
+                case ID_AUTOGEN_INPUT_MIPMAPS:
+                    if( prop->values.size() != 1u )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( !getBoolean( *it0, &passIbl->mAutogenInputMipmaps ) )
                         {
                             compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file,
                                                 prop->line, "Boolean expected" );

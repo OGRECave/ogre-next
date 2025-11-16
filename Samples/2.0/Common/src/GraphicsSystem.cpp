@@ -449,6 +449,7 @@ namespace Demo
             }
 
             mInputHandler->_handleSdlEvents( evt );
+            handleRawSdlEvent( evt );
         }
 #endif
 

@@ -72,6 +72,8 @@ including invalid combinations (i.e. having a Metallic texture and a Specular te
             "custom_piece_file_hs" : [ "filename.hlsl", "resourceGroup" ],
             "custom_piece_file_ds" : [ "filename.metal", "resourceGroup" ],
 
+            "custom_properties" : { "property_name0" : 5, "property_name2" : -2 },
+
             "workflow" : "specular_ogre" "specular_fresnel" "metallic",
 
             "transparency" :

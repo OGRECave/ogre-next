@@ -43,6 +43,7 @@ g_folders = [
     'PlugIns/ParticleFX',
     'PlugIns/ParticleFX2',
     'Samples/2.0',
+    'Tools/MaterialEditor',
 ]
 
 g_exceptions = {'stb_image_write.h', 'stb_image.h',

@@ -905,10 +905,37 @@ namespace Ogre
 
         virtual void executeResourceTransition( const ResourceTransitionArray &rstCollection ) {}
 
-        /// PSO creation on Vulkan could be skipped after exhausting per-frame time budget
+        /** PSO creation on Vulkan could be skipped after exhausting per-frame time budget.
+
+            Every frame we have a time budget for compiling PSOs. For example, 8ms.
+            If we spend more than 8ms compiling shaders and PSOs, we abort those and will attempt to
+            compile them on the next frame. Any object that uses such uncompiled PSO will not appear
+            on screen.
+
+            Example: if each PSO takes 1ms to compile and we have 10 PSOs left, then we'll
+            compile 8 PSOs, and the other 2 will be compiled on the next frame.
+            If a single PSO takes 20ms, then only that PSO will be compiled (we can't stop mid-compile).
+            If each PSO takes 1.2ms, we'll compile 7 PSOs. Because at the 6th PSO we will have taken
+            7.2ms, which is below the deadline, and after the 7th PSO we will have taken 8.4ms.
+            This happens because we can't actually predict how long a PSO will take.
+
+            This feature reduces stutter by allocating an aproximate maximum time we spend compiling. But
+            it trades off in visual glitches/artifacts until all PSOs are done.
+            This feature is important on Android to reduce the number of ANRs.
+        @remark
+            IMPORTANT: Techniques that rely on running a shader once (e.g. to fill a texture) may end
+            up uninitialized if the PSO doesn't compile on time. It's best to disable this feature
+            when doing such tasks or to monitor getIncompletePsoRequestsCounter() and retry.
+        @remark
+            When PSOs are deferred due to this feature, it will be logged. Keep an eye on Ogre.log.
+        @param ms
+            Time deadline in milliseconds.
+        */
         void   setPsoRequestsTimeout( uint32 ms ) { mPsoRequestsTimeout = ms; }
         uint32 getPsoRequestsTimeout() const { return mPsoRequestsTimeout; }
 
+        /// The amount of PSOs that remain uncompiled because they've exceeded the time budget.
+        /// See setPsoRequestsTimeout().
         uint64 getIncompletePsoRequestsCounter() const { return mIncompletePsoRequestsCounter; }
         void   _notifyIncompletePsoRequests( uint64 count );
 

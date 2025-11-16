@@ -51,3 +51,7 @@ endif ()
 if (OGRE_BUILD_COMPONENT_OVERLAY)
 	add_subdirectory(Overlay)
 endif ()
+
+if (OGRE_BUILD_COMPONENT_DEAR_IMGUI)
+    add_subdirectory(Imgui)
+endif ()

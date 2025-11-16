@@ -395,6 +395,24 @@ namespace Ogre
     {
         friend class RenderQueue;
 
+    public:
+        struct CustomProperty
+        {
+            /// We must keep keyStr for proper serialization (e.g. saving to JSON).
+            String   keyStr;
+            IdString keyName;
+            int32    value;
+
+            CustomProperty( const String &_keyStr, int32 _value ) :
+                keyStr( _keyStr ),
+                keyName( _keyStr ),
+                value( _value )
+            {
+            }
+        };
+
+        typedef FastArray<CustomProperty> CustomPropertyArray;
+
     protected:
         // Non-hot variables first (can't put them last as HlmsDatablock may be derived and
         // it's better if mShadowConstantBias is together with the derived type's variables
@@ -432,6 +450,8 @@ namespace Ogre
     protected:
         HlmsMacroblock const *mMacroblock[2];
         HlmsBlendblock const *mBlendblock[2];
+
+        CustomPropertyArray mCustomProperties;
 
     public:
         /// When false, we won't try to have Textures become resident
@@ -504,6 +524,22 @@ namespace Ogre
 
         /// Returns the filename argument set to setCustomPieceFile() and setCustomPieceCodeFromMemory().
         const String &getCustomPieceFileStr( ShaderType shaderType ) const;
+
+        /** Sets properties to be used by this datablock. This is useful when you want to activate
+            custom shader code for specific materials (i.e. via setCustomPieceFile() or customized Hlms
+            implementations).
+            If you set a property whose name conflicts with an internal name used by the Hlms
+            implementation, shader generation will likely be invalid.
+        @remarks
+            Calling this function triggers HlmsDatablock::flushRenderables.
+        @param properties
+            Properties to set. Order does not matter.
+        @param bSwap
+            True if we should swap the contents of properties with out container.
+        */
+        void setCustomProperties( CustomPropertyArray &properties, bool bSwap );
+
+        const CustomPropertyArray &getCustomProperties() const { return mCustomProperties; }
 
         /** Sets a new macroblock that matches the same parameter as the input.
             Decreases the reference count of the previously set one.

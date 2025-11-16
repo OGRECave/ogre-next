@@ -514,6 +514,28 @@ namespace Ogre
             }
         }
 
+        itor = json.FindMember( "custom_properties" );
+        if( itor != json.MemberEnd() && itor->value.IsObject() )
+        {
+            const rapidjson::SizeType numProperties = itor->value.MemberCount();
+            HlmsDatablock::CustomPropertyArray properties;
+            properties.reserve( numProperties );
+
+            rapidjson::Value::ConstMemberIterator it = itor->value.MemberBegin();
+            rapidjson::Value::ConstMemberIterator en = itor->value.MemberEnd();
+            while( it != en )
+            {
+                if( it->name.IsString() && it->value.IsInt() )
+                {
+                    properties.push_back( HlmsDatablock::CustomProperty( it->name.GetString(),
+                                                                         int32( it->value.GetInt() ) ) );
+                }
+                ++it;
+            }
+
+            datablock->setCustomProperties( properties, true );
+        }
+
         itor = json.FindMember( "accurate_non_uniform_normal_scaling" );
         if( itor != json.MemberEnd() && itor->value.IsBool() )
             datablock->setAccurateNonUniformNormalScaling( itor->value.GetBool() );
@@ -1049,13 +1071,32 @@ namespace Ogre
                 {
                     outString += ",\n\t\t\t\"";
                     outString += c_customPieceKeyword[i];
-                    outString += "\" : [";
+                    outString += "\" : [\"";
                     outString += data->filename;
-                    outString += ", ";
+                    outString += "\", \"";
                     outString += data->resourceGroup;
-                    outString += "];";
+                    outString += "\"]";
                 }
             }
+        }
+
+        const HlmsDatablock::CustomPropertyArray &customProperties = datablock->getCustomProperties();
+        if( !customProperties.empty() )
+        {
+            outString +=
+                ",\n\t\t\t\"custom_properties\" :"
+                "\n\t\t\t{";
+            for( const HlmsDatablock::CustomProperty &property : customProperties )
+            {
+                outString += "\n\t\t\t\t\"";
+                outString += property.keyStr;
+                outString += "\" : ";
+                outString += StringConverter::toString( property.value );
+                outString += ",";
+            }
+
+            outString.erase( outString.size() - 1 );  // Remove an extra comma
+            outString += "\n\t\t\t}";
         }
 
         if( datablock->getAccurateNonUniformNormalScaling() )
@@ -1088,6 +1129,7 @@ namespace Ogre
         outString += "{";
 
         const Hlms::HlmsDatablockMap &datablockMap = hlms->getDatablockMap();
+        const HlmsDatablock *defaultDatablock = hlms->getDefaultDatablock();
 
         set<const HlmsMacroblock *>::type macroblocks;
         set<const HlmsBlendblock *>::type blendblocks;
@@ -1101,20 +1143,23 @@ namespace Ogre
             {
                 const HlmsDatablock *datablock = itor->second.datablock;
 
-                const HlmsMacroblock *macroblock = datablock->getMacroblock( false );
-                macroblocks.insert( macroblock );
+                if( datablock != defaultDatablock && mListener->canSaveDatablock( datablock ) )
+                {
+                    const HlmsMacroblock *macroblock = datablock->getMacroblock( false );
+                    macroblocks.insert( macroblock );
 
-                if( datablock->hasCustomShadowMacroblock() )
-                    macroblocks.insert( datablock->getMacroblock( true ) );
+                    if( datablock->hasCustomShadowMacroblock() )
+                        macroblocks.insert( datablock->getMacroblock( true ) );
 
-                const HlmsBlendblock *blendblock = datablock->getBlendblock( false );
-                blendblocks.insert( blendblock );
+                    const HlmsBlendblock *blendblock = datablock->getBlendblock( false );
+                    blendblocks.insert( blendblock );
 
-                const HlmsBlendblock *blendblockCaster = datablock->getBlendblock( true );
-                if( blendblock != blendblockCaster )
-                    blendblocks.insert( blendblockCaster );
+                    const HlmsBlendblock *blendblockCaster = datablock->getBlendblock( true );
+                    if( blendblock != blendblockCaster )
+                        blendblocks.insert( blendblockCaster );
 
-                hlms->_collectSamplerblocks( samplerblocks, datablock );
+                    hlms->_collectSamplerblocks( samplerblocks, datablock );
+                }
 
                 ++itor;
             }
@@ -1172,6 +1217,7 @@ namespace Ogre
         }
 
         {
+            bool bDatablocksWritten = false;
             const size_t numDatablocks = datablockMap.size();
             if( numDatablocks > 1u )
             {
@@ -1179,8 +1225,6 @@ namespace Ogre
                 outString += hlms->getTypeNameStr();
                 outString += "\" : \n\t{";
             }
-
-            const HlmsDatablock *defaultDatablock = hlms->getDefaultDatablock();
 
             Hlms::HlmsDatablockMap::const_iterator itor = datablockMap.begin();
             Hlms::HlmsDatablockMap::const_iterator endt = datablockMap.end();
@@ -1204,9 +1248,12 @@ namespace Ogre
                     {
                         const HlmsDatablock *datablock = itorFind->second.datablock;
 
-                        if( datablock != defaultDatablock )
+                        if( datablock != defaultDatablock && mListener->canSaveDatablock( datablock ) )
+                        {
                             saveDatablock( itorFind->second.name, datablock, outString,
                                            additionalTextureExtension );
+                            bDatablocksWritten = true;
+                        }
                     }
                     ++itor2;
                 }
@@ -1217,16 +1264,20 @@ namespace Ogre
                 {
                     const HlmsDatablock *datablock = itor->second.datablock;
 
-                    if( datablock != defaultDatablock )
+                    if( datablock != defaultDatablock && mListener->canSaveDatablock( datablock ) )
+                    {
                         saveDatablock( itor->second.name, datablock, outString,
                                        additionalTextureExtension );
+                        bDatablocksWritten = true;
+                    }
                     ++itor;
                 }
             }
 
             if( numDatablocks > 1u )
             {
-                outString.erase( outString.size() - 1 );  // Remove an extra comma
+                if( bDatablocksWritten )
+                    outString.erase( outString.size() - 1 );  // Remove an extra comma
                 outString += "\n\t},";
             }
         }

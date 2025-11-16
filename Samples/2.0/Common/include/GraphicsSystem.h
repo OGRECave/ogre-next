@@ -149,6 +149,10 @@ namespace Demo
 
 #if OGRE_USE_SDL2
         SdlInputHandler *getInputHandler() { return mInputHandler; }
+
+        virtual bool getGrabMousePointerOnStartup() const { return true; }
+
+        virtual void handleRawSdlEvent( const SDL_Event &evt ) {}
 #endif
 
         /// Creates an atmosphere and binds it to the SceneManager

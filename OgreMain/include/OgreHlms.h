@@ -43,6 +43,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     class CompositorShadowNode;
+    class ConfigFile;
     struct QueuedRenderable;
     typedef vector<Archive *>::type ArchiveVec;
 
@@ -1144,6 +1145,31 @@ namespace Ogre
         getDatablockCustomPieceData( int32 filenameHashId ) const;
 
         virtual void _changeRenderSystem( RenderSystem *newRs );
+
+        /// Same as the other getDefaultPaths() overload but it automatically fills
+        /// the hlmsTypeName param.
+        void getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths,
+                              const ConfigFile &configFile );
+
+        /** Same as HlmsPbs::getDefaultPaths but retrieves the files & folders from cfg file.
+            The syntax is as follows:
+            @code
+                [pbs]
+                Library=Hlms/Common/[SHADER_SYNTAX]
+                Library=Hlms/Common/Any
+                Library=Hlms/Pbs/Any
+                Library=Hlms/Pbs/Any/Atmosphere
+                Library=Hlms/Pbs/Any/Main
+                Main=Hlms/Pbs/[SHADER_SYNTAX]
+            @endcode
+        @param outDataFolderPath
+        @param outLibraryFoldersPaths
+        @param configFile
+        @param hlmsTypeName
+            Name of the Hlms. e.g. "pbs", "unlit". See getTypeNameStr().
+        */
+        static void getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths,
+                                     const ConfigFile &configFile, const String &hlmsTypeName );
 
         RenderSystem *getRenderSystem() const { return mRenderSystem; }
 
