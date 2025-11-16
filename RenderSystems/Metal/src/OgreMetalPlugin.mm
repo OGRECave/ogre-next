@@ -68,4 +68,4 @@ namespace Ogre
     }
     //---------------------------------------------------------------------
     void MetalPlugin::getAbiCookie( AbiCookie &outAbiCookie ) { outAbiCookie = generateAbiCookie(); }
-}
+}  // namespace Ogre

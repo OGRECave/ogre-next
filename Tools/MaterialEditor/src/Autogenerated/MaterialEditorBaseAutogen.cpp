@@ -166,9 +166,7 @@ MainWindowBase::MainWindowBase( wxWindow *parent, wxWindowID id, const wxString 
                     m_menuCoordZup->GetId() );
 }
 
-MainWindowBase::~MainWindowBase()
-{
-}
+MainWindowBase::~MainWindowBase() {}
 
 PbsParametersPanelBase::PbsParametersPanelBase( wxWindow *parent, wxWindowID id, const wxPoint &pos,
                                                 const wxSize &size, long style, const wxString &name ) :
@@ -511,9 +509,7 @@ PbsParametersPanelBase::PbsParametersPanelBase( wxWindow *parent, wxWindowID id,
                                this );
 }
 
-PbsParametersPanelBase::~PbsParametersPanelBase()
-{
-}
+PbsParametersPanelBase::~PbsParametersPanelBase() {}
 
 PbsTexturePanelBase::PbsTexturePanelBase( wxWindow *parent, wxWindowID id, const wxPoint &pos,
                                           const wxSize &size, long style, const wxString &name ) :
@@ -2036,9 +2032,7 @@ PbsTexturePanelBase::PbsTexturePanelBase( wxWindow *parent, wxWindowID id, const
         wxCommandEventHandler( PbsTexturePanelBase::OnSamplerblockChoice ), NULL, this );
 }
 
-PbsTexturePanelBase::~PbsTexturePanelBase()
-{
-}
+PbsTexturePanelBase::~PbsTexturePanelBase() {}
 
 LightPanelBase::LightPanelBase( wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size,
                                 long style, const wxString &name ) :
@@ -2199,9 +2193,7 @@ LightPanelBase::LightPanelBase( wxWindow *parent, wxWindowID id, const wxPoint &
                                     wxCommandEventHandler( LightPanelBase::OnText ), NULL, this );
 }
 
-LightPanelBase::~LightPanelBase()
-{
-}
+LightPanelBase::~LightPanelBase() {}
 
 DatablockListBase::DatablockListBase( wxWindow *parent, wxWindowID id, const wxPoint &pos,
                                       const wxSize &size, long style, const wxString &name ) :
@@ -2258,9 +2250,7 @@ DatablockListBase::DatablockListBase( wxWindow *parent, wxWindowID id, const wxP
                            wxCommandEventHandler( DatablockListBase::OnSearchText ), NULL, this );
 }
 
-DatablockListBase::~DatablockListBase()
-{
-}
+DatablockListBase::~DatablockListBase() {}
 
 MeshListBase::MeshListBase( wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size,
                             long style, const wxString &name ) :
@@ -2290,9 +2280,7 @@ MeshListBase::MeshListBase( wxWindow *parent, wxWindowID id, const wxPoint &pos,
                            wxCommandEventHandler( MeshListBase::OnSearchText ), NULL, this );
 }
 
-MeshListBase::~MeshListBase()
-{
-}
+MeshListBase::~MeshListBase() {}
 
 TextureSelectBase::TextureSelectBase( wxWindow *parent, wxWindowID id, const wxString &title,
                                       const wxPoint &pos, const wxSize &size, long style ) :
@@ -2342,9 +2330,7 @@ TextureSelectBase::TextureSelectBase( wxWindow *parent, wxWindowID id, const wxS
                          wxCommandEventHandler( TextureSelectBase::OnButtonClick ), NULL, this );
 }
 
-TextureSelectBase::~TextureSelectBase()
-{
-}
+TextureSelectBase::~TextureSelectBase() {}
 
 ProjectSettingsBase::ProjectSettingsBase( wxWindow *parent, wxWindowID id, const wxString &title,
                                           const wxPoint &pos, const wxSize &size, long style ) :
@@ -2509,9 +2495,7 @@ ProjectSettingsBase::ProjectSettingsBase( wxWindow *parent, wxWindowID id, const
                          wxCommandEventHandler( ProjectSettingsBase::OnButtonClick ), NULL, this );
 }
 
-ProjectSettingsBase::~ProjectSettingsBase()
-{
-}
+ProjectSettingsBase::~ProjectSettingsBase() {}
 
 SamplerSettingsBase::SamplerSettingsBase( wxWindow *parent, wxWindowID id, const wxString &title,
                                           const wxPoint &pos, const wxSize &size, long style ) :
@@ -2834,9 +2818,7 @@ SamplerSettingsBase::SamplerSettingsBase( wxWindow *parent, wxWindowID id, const
                                 wxCommandEventHandler( SamplerSettingsBase::OnText ), NULL, this );
 }
 
-SamplerSettingsBase::~SamplerSettingsBase()
-{
-}
+SamplerSettingsBase::~SamplerSettingsBase() {}
 
 SamplerSettingsBulkSelectBase::SamplerSettingsBulkSelectBase( wxWindow *parent, wxWindowID id,
                                                               const wxString &title, const wxPoint &pos,
@@ -3004,9 +2986,7 @@ SamplerSettingsBulkSelectBase::SamplerSettingsBulkSelectBase( wxWindow *parent, 
                           this );
 }
 
-SamplerSettingsBulkSelectBase::~SamplerSettingsBulkSelectBase()
-{
-}
+SamplerSettingsBulkSelectBase::~SamplerSettingsBulkSelectBase() {}
 
 CategoryGroupingBase::CategoryGroupingBase( wxWindow *parent, wxWindowID id, const wxString &title,
                                             const wxPoint &pos, const wxSize &size, long style ) :
@@ -3113,6 +3093,4 @@ CategoryGroupingBase::CategoryGroupingBase( wxWindow *parent, wxWindowID id, con
                             wxCommandEventHandler( CategoryGroupingBase::OnSearchText ), NULL, this );
 }
 
-CategoryGroupingBase::~CategoryGroupingBase()
-{
-}
+CategoryGroupingBase::~CategoryGroupingBase() {}

@@ -60,7 +60,7 @@ namespace Ogre
 #            define NOMINMAX  // required to stop windows.h messing up std::min
 #        endif
 #    endif
-//#   define WGL_WGLEXT_PROTOTYPES
+// #   define WGL_WGLEXT_PROTOTYPES
 #    include <GL/gl3w.h>
 #    include <GL/glext.h>
 #    include <GL/wglext.h>
@@ -173,4 +173,4 @@ namespace Ogre
     extern void ogreGlObjectLabel( GLenum identifier, GLuint name, const String &label );
 }  // namespace Ogre
 
-#endif  //#ifndef __GL3PlusPrerequisites_H__
+#endif  // #ifndef __GL3PlusPrerequisites_H__

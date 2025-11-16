@@ -26,13 +26,9 @@ public:
 DECLARE_APP( wxWidgetsApp )
 IMPLEMENT_APP( wxWidgetsApp )
 
-wxWidgetsApp::wxWidgetsApp()
-{
-}
+wxWidgetsApp::wxWidgetsApp() {}
 
-wxWidgetsApp::~wxWidgetsApp()
-{
-}
+wxWidgetsApp::~wxWidgetsApp() {}
 
 bool wxWidgetsApp::OnInit()
 {

@@ -181,10 +181,7 @@ void ImguiGameState::keyEvent( const SDL_KeyboardEvent &arg, bool keyPressed )
 #endif
 }
 //-----------------------------------------------------------------------------
-void ImguiGameState::keyPressed( const SDL_KeyboardEvent &arg )
-{
-    keyEvent( arg, true );
-}
+void ImguiGameState::keyPressed( const SDL_KeyboardEvent &arg ) { keyEvent( arg, true ); }
 //-----------------------------------------------------------------------------
 void ImguiGameState::keyReleased( const SDL_KeyboardEvent &arg )
 {

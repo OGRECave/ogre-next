@@ -60,4 +60,4 @@ namespace Ogre
     NSOpenGLContext *CocoaContext::getContext() { return mNSGLContext; }
 
     NSOpenGLPixelFormat *CocoaContext::getPixelFormat() { return mNSGLPixelFormat; }
-}
+}  // namespace Ogre

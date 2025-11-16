@@ -53,8 +53,7 @@ namespace Ogre
                     << "In " << data->mMeshName
                     << " never used vertex found with ID: " << data->mCollapseCostHeap.size() << ". "
                     << "Vertex position: (" << it->position.x << ", " << it->position.y << ", "
-                    << it->position.z << ") "
-                    << "It will be excluded from Lod level calculations.";
+                    << it->position.z << ") " << "It will be excluded from Lod level calculations.";
 #endif
             }
         }

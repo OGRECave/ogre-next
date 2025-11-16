@@ -279,7 +279,7 @@ namespace Ogre
         // TODO: Account for skeletal animation in any of the hashes (preferently on the material side)
         // TODO: Account for auto instancing animation in any of the hashes
 
-#define OGRE_RQ_HASH( x, bits, shift ) ( uint64( (x)&OGRE_RQ_MAKE_MASK( ( bits ) ) ) << ( shift ) )
+#define OGRE_RQ_HASH( x, bits, shift ) ( uint64( ( x ) & OGRE_RQ_MAKE_MASK( ( bits ) ) ) << ( shift ) )
 
         uint64 hash;
         if( !transparent )

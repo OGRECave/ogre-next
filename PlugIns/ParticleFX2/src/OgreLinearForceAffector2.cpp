@@ -80,30 +80,18 @@ void LinearForceAffector2::run( ParticleCpuData cpuData, const size_t numParticl
     }
 }
 //-----------------------------------------------------------------------------
-void LinearForceAffector2::setForceVector( const Vector3 &force )
-{
-    mForceVector = force;
-}
+void LinearForceAffector2::setForceVector( const Vector3 &force ) { mForceVector = force; }
 //-----------------------------------------------------------------------------
-void LinearForceAffector2::setForceApplication( ForceApplication fa )
-{
-    mForceApplication = fa;
-}
+void LinearForceAffector2::setForceApplication( ForceApplication fa ) { mForceApplication = fa; }
 //-----------------------------------------------------------------------------
-Vector3 LinearForceAffector2::getForceVector() const
-{
-    return mForceVector;
-}
+Vector3 LinearForceAffector2::getForceVector() const { return mForceVector; }
 //-----------------------------------------------------------------------------
 LinearForceAffector2::ForceApplication LinearForceAffector2::getForceApplication() const
 {
     return mForceApplication;
 }
 //-----------------------------------------------------------------------------
-String LinearForceAffector2::getType() const
-{
-    return "LinearForce";
-}
+String LinearForceAffector2::getType() const { return "LinearForce"; }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

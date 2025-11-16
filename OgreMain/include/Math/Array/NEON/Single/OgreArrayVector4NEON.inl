@@ -61,7 +61,7 @@ namespace Ogre
         generate this file with macros replaced as actual code (very handy!)
     */
     // Arithmetic operations
-// clang-format off
+    // clang-format off
 #define DEFINE_OPERATION( leftClass, rightClass, op, op_func )\
     inline ArrayVector4 operator op ( const leftClass &lhs, const rightClass &rhs )\
     {\

@@ -121,8 +121,8 @@ namespace Demo
             std::ofstream out( filename.c_str(), std::ios::app );
             if( out.is_open() )
             {
-                out << "\"" << sampleName << "\","
-                    << "\"" << rsName << "\"," << avgFps << "," << avgMs << "\n";
+                out << "\"" << sampleName << "\"," << "\"" << rsName << "\"," << avgFps << "," << avgMs
+                    << "\n";
                 out.close();
                 std::cout << "Logged benchmark: " << sampleName << " [" << rsName << "] - " << avgFps
                           << " FPS, " << avgMs << " ms" << std::endl;

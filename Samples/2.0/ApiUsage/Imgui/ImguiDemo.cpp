@@ -129,7 +129,4 @@ void MainEntryPoints::destroySystems( GameState *graphicsGameState, GraphicsSyst
     delete graphicsGameState;
 }
 //-----------------------------------------------------------------------------
-const char *MainEntryPoints::getWindowTitle()
-{
-    return "Dear Imgui integration Sample";
-}
+const char *MainEntryPoints::getWindowTitle() { return "Dear Imgui integration Sample"; }

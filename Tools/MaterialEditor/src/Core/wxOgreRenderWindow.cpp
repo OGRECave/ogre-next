@@ -36,10 +36,7 @@ wxOgreRenderWindow::wxOgreRenderWindow( wxWindow *parent, wxWindowID id, const w
     Create( parent, id, pos, size, style, validator );
 }
 //------------------------------------------------------------------------------
-wxOgreRenderWindow::wxOgreRenderWindow()
-{
-    Init();
-}
+wxOgreRenderWindow::wxOgreRenderWindow() { Init(); }
 //------------------------------------------------------------------------------
 bool wxOgreRenderWindow::Create( wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size,
                                  long style, const wxValidator &validator )
@@ -81,20 +78,11 @@ inline wxSize wxOgreRenderWindow::DoGetBestSize() const
     return wxSize( 512, 512 );
 }
 //------------------------------------------------------------------------------
-Ogre::Root *wxOgreRenderWindow::GetOgreRoot()
-{
-    return msOgreRoot;
-}
+Ogre::Root *wxOgreRenderWindow::GetOgreRoot() { return msOgreRoot; }
 //------------------------------------------------------------------------------
-void wxOgreRenderWindow::SetOgreRoot( Ogre::Root *root )
-{
-    msOgreRoot = root;
-}
+void wxOgreRenderWindow::SetOgreRoot( Ogre::Root *root ) { msOgreRoot = root; }
 //------------------------------------------------------------------------------
-Ogre::Window *wxOgreRenderWindow::GetRenderWindow() const
-{
-    return mRenderWindow;
-}
+Ogre::Window *wxOgreRenderWindow::GetRenderWindow() const { return mRenderWindow; }
 //------------------------------------------------------------------------------
 void wxOgreRenderWindow::Update()
 {
@@ -111,10 +99,7 @@ void wxOgreRenderWindow::setRenderWindowListener( wxOgreRenderWindowListener *li
     mRenderWindowListener = listener;
 }
 //------------------------------------------------------------------------------
-void wxOgreRenderWindow::OnPaint( wxPaintEvent &evt )
-{
-    Update();
-}
+void wxOgreRenderWindow::OnPaint( wxPaintEvent &evt ) { Update(); }
 //------------------------------------------------------------------------------
 void wxOgreRenderWindow::OnInternalIdle()
 {

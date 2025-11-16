@@ -637,4 +637,4 @@ namespace Ogre
         }
         // clang-format on
     }
-}
+}  // namespace Ogre

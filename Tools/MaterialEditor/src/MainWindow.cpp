@@ -826,15 +826,9 @@ void MainWindow::OnMouseEvents( wxMouseEvent &evt )
     m_wxOgreRenderWindow->Update();
 }
 //-----------------------------------------------------------------------------
-void MainWindow::OnKeyDown( wxKeyEvent &evt )
-{
-    evt.Skip();
-}
+void MainWindow::OnKeyDown( wxKeyEvent &evt ) { evt.Skip(); }
 //-----------------------------------------------------------------------------
-void MainWindow::OnKeyUp( wxKeyEvent &evt )
-{
-    evt.Skip();
-}
+void MainWindow::OnKeyUp( wxKeyEvent &evt ) { evt.Skip(); }
 //-----------------------------------------------------------------------------
 void MainWindow::OnMenuSelection( wxCommandEvent &event )
 {

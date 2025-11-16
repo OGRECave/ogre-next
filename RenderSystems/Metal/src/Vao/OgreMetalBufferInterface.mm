@@ -211,4 +211,4 @@ namespace Ogre
                                    size:sizeBytes];
         }
     }
-}
+}  // namespace Ogre

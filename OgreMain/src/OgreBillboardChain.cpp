@@ -597,7 +597,7 @@ namespace Ogre
                         laste = e;
 
                     }  // element
-                }      // segment valid?
+                }  // segment valid?
 
             }  // each segment
 

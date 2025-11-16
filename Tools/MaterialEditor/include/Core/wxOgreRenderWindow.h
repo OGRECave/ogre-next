@@ -3,12 +3,12 @@
 #define WXOGRERENDERWINDOW_H
 
 #include "Ogre.h"
-//#include "OgreNoMemoryMacros.h"
+// #include "OgreNoMemoryMacros.h"
 #include "wx/wx.h"
 
 class wxOgreRenderWindowListener;
 
-//#include "OgreMemoryMacros.h"
+// #include "OgreMemoryMacros.h"
 
 /** wxWidgets Ogre render window widget.
     Strongly based on the existing wxOgre widget implementation, this one

@@ -283,13 +283,9 @@ namespace Ogre
 #    if defined( _WIN32_WINNT_WIN8 )
             D3D_FEATURE_LEVEL_11_1,
 #    endif
-            D3D_FEATURE_LEVEL_11_0,
-            D3D_FEATURE_LEVEL_10_1,
-            D3D_FEATURE_LEVEL_10_0,
+            D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_1, D3D_FEATURE_LEVEL_10_0,
 #endif  // !__OGRE_WINRT_PHONE
-            D3D_FEATURE_LEVEL_9_3,
-            D3D_FEATURE_LEVEL_9_2,
-            D3D_FEATURE_LEVEL_9_1
+            D3D_FEATURE_LEVEL_9_3,  D3D_FEATURE_LEVEL_9_2,  D3D_FEATURE_LEVEL_9_1
         };
 
         D3D_FEATURE_LEVEL *pFirstFL = requestedLevels;

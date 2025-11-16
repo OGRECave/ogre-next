@@ -17,9 +17,7 @@
 
 #include "rapidjson/document.h"
 
-UndoSystem::UndoSystem( MainWindow *mainWindow ) : m_mainWindow( mainWindow )
-{
-}
+UndoSystem::UndoSystem( MainWindow *mainWindow ) : m_mainWindow( mainWindow ) {}
 //-----------------------------------------------------------------------------
 void UndoSystem::pushUndoState( Ogre::HlmsDatablock *datablockBase, const bool bRedo,
                                 const bool bClearRedoBuffer )
@@ -294,15 +292,9 @@ void UndoSystem::performUndo( std::vector<UndoEntry> &undoBuffer, std::vector<Un
     }
 }
 //-----------------------------------------------------------------------------
-void UndoSystem::performUndo()
-{
-    performUndo( m_undoBuffer, m_redoBuffer );
-}
+void UndoSystem::performUndo() { performUndo( m_undoBuffer, m_redoBuffer ); }
 //-----------------------------------------------------------------------------
-void UndoSystem::performRedo()
-{
-    performUndo( m_redoBuffer, m_undoBuffer );
-}
+void UndoSystem::performRedo() { performUndo( m_redoBuffer, m_undoBuffer ); }
 //-----------------------------------------------------------------------------
 void UndoSystem::clearBuffers()
 {

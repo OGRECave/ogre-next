@@ -33,10 +33,7 @@ THE SOFTWARE.
 using namespace Ogre;
 
 //-----------------------------------------------------------------------------
-BoxEmitter2::BoxEmitter2()
-{
-    initDefaults();
-}
+BoxEmitter2::BoxEmitter2() { initDefaults(); }
 //-----------------------------------------------------------------------------
 void BoxEmitter2::initEmittedParticles( ParticleCpuData cpuData, const EmittedParticle *newHandles,
                                         const size_t numParticles )
@@ -82,19 +79,10 @@ void BoxEmitter2::initEmittedParticles( ParticleCpuData cpuData, const EmittedPa
 }
 //-----------------------------------------------------------------------------------
 static const String kBoxEmitterFactoryName = "Box";
-const String &BoxEmitter2::getType() const
-{
-    return kBoxEmitterFactoryName;
-}
+const String &BoxEmitter2::getType() const { return kBoxEmitterFactoryName; }
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
-const String &BoxEmitterFactory2::getName() const
-{
-    return kBoxEmitterFactoryName;
-}
+const String &BoxEmitterFactory2::getName() const { return kBoxEmitterFactoryName; }
 //-----------------------------------------------------------------------------------
-EmitterDefData *BoxEmitterFactory2::createEmitter()
-{
-    return new BoxEmitter2();
-}
+EmitterDefData *BoxEmitterFactory2::createEmitter() { return new BoxEmitter2(); }

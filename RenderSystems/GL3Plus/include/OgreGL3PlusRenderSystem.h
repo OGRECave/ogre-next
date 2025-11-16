@@ -369,7 +369,7 @@ namespace Ogre
         /** See
             RenderSystem
         */
-        void _setTextureMatrix( size_t stage, const Matrix4 &xform ) override{};  // Not supported
+        void _setTextureMatrix( size_t stage, const Matrix4 &xform ) override {};  // Not supported
 
         void flushUAVs();
 

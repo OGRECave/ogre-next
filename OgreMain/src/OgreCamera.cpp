@@ -982,8 +982,8 @@ namespace Ogre
                         }
                     }
                 }  // end if we need to add an intersection point to the list
-            }      // end if infinite point needs to be considered
-        }          // end loop over frustun corners
+            }  // end if infinite point needs to be considered
+        }  // end loop over frustun corners
 
         // we end up with either 0, 3, 4, or 5 intersection points
 

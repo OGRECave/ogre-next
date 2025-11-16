@@ -108,4 +108,4 @@ namespace Ogre
                               device )
     {
     }
-}
+}  // namespace Ogre

@@ -134,4 +134,4 @@ namespace Ogre
                       destinationOrigin:MTLOriginMake( xPos, yPos, zPos )];
         }
     }
-}
+}  // namespace Ogre

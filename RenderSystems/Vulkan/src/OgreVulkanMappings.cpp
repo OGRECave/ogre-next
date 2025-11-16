@@ -277,7 +277,7 @@ namespace Ogre
     {
         switch( textureType )
         {
-        // clang-format off
+            // clang-format off
         case TextureTypes::Unknown:         return VK_IMAGE_VIEW_TYPE_2D;
         case TextureTypes::Type1D:          return VK_IMAGE_VIEW_TYPE_1D;
         case TextureTypes::Type1DArray:     return VK_IMAGE_VIEW_TYPE_1D_ARRAY;

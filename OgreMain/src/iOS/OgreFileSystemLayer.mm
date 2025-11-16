@@ -77,4 +77,4 @@ namespace Ogre
     {
         return false;
     }
-}
+}  // namespace Ogre

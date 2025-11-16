@@ -25,8 +25,8 @@ THE SOFTWARE
 -------------------------------------------------------------------------*/
 // ATTENTION: No header guard as this header is meant to be included
 // multiple times.
-//#ifndef __OgreHeaderPrefix_H__
-//#define __OgreHeaderPrefix_H__
+// #ifndef __OgreHeaderPrefix_H__
+// #define __OgreHeaderPrefix_H__
 
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
 
@@ -76,4 +76,4 @@ THE SOFTWARE
 
 #endif
 
-//#endif
+// #endif

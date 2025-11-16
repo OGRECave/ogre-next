@@ -30,9 +30,7 @@ THE SOFTWARE.
 
 using namespace Ogre;
 
-ErrorDialog::ErrorDialog()
-{
-}
+ErrorDialog::ErrorDialog() {}
 
 void ErrorDialog::display( const String &errorMessage, String logName )
 {

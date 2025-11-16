@@ -1279,7 +1279,7 @@ namespace Ogre
                         applyPoseToVertexData( pose, data, influence );
                     }
                 }  // key 2 iteration
-            }      // morph or pose animation
+            }  // morph or pose animation
         }
         //-----------------------------------------------------------------------------
         void VertexAnimationTrack::applyPoseToVertexData( const Pose *pose, VertexData *data,

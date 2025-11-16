@@ -610,4 +610,4 @@ namespace Ogre
             Window::getCustomAttribute( name, pData );
         }
     }
-}
+}  // namespace Ogre
