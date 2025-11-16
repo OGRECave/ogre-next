@@ -77,13 +77,17 @@ int Demo::MainEntryPoints::mainAppMultiThreaded( int argc, const char *argv[] )
 
     MainEntryPoints::createSystems( &graphicsGameState, &graphicsSystem, &logicGameState, &logicSystem );
 #ifdef AUTO_TESTING
-    if( TutorialGameState *tutorial = dynamic_cast<TutorialGameState *>( graphicsGameState ) )
-    {
-        tutorial->setSampleName( std::string( argv[0] ).substr( 2 ) );
-    }
     if( argv[1] )
     {
         graphicsSystem->setRendererParam( std::string( argv[1] ) );
+    }
+    if( TutorialGameState *tutorial = dynamic_cast<TutorialGameState *>( graphicsGameState ) )
+    {
+        tutorial->setSampleName( std::string( argv[0] ).substr( 2 ) );
+        if( argv[2] )
+        {
+            tutorial->setFrameCount( std::string( argv[2] ) );
+        }
     }
 #endif
 

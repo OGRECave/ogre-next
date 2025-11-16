@@ -41,6 +41,7 @@ namespace Demo
 #ifdef AUTO_TESTING
         int         frameCount = 0;
         std::string sampleName;
+        int         maxFrames = 500;
 #endif
     public:
         TutorialGameState( const Ogre::String &helpDescription );
@@ -51,6 +52,7 @@ namespace Demo
         void createScene01() override;
 #ifdef AUTO_TESTING
         void setSampleName( std::string newSampleName );
+        void setFrameCount( std::string frames );
 #endif
         void update( float timeSinceLast ) override;
 

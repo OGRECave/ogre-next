@@ -22,6 +22,8 @@
 #    include <fstream>
 #    include <iostream>
 #    include <sstream>
+#    include <stdexcept>
+#    include <string>
 #endif
 
 using namespace Demo;
@@ -108,7 +110,7 @@ namespace Demo
         finalText += "\n\nPress F1 to toggle help";
 #ifdef AUTO_TESTING
         frameCount++;
-        if( frameCount > 500 )
+        if( frameCount > maxFrames )
         {
             std::string filename = "benchmark_" + sampleName + +".csv";
 
@@ -157,6 +159,23 @@ namespace Demo
 //-----------------------------------------------------------------------------------
 #ifdef AUTO_TESTING
     void TutorialGameState::setSampleName( std::string newSampleName ) { sampleName = newSampleName; }
+
+    void TutorialGameState::setFrameCount( std::string frames )
+    {
+        try
+        {
+            int parsedFrames = std::stoi( frames );
+            maxFrames = parsedFrames;
+        }
+        catch( const std::invalid_argument &e )
+        {
+            throw std::runtime_error( "Invalid input: '" + frames + "' is not a valid integer." );
+        }
+        catch( const std::out_of_range &e )
+        {
+            throw std::runtime_error( "Input out of range: '" + frames + "' cannot fit into an int." );
+        }
+    }
 #endif
     //-----------------------------------------------------------------------------------
     void TutorialGameState::keyPressed( const SDL_KeyboardEvent &arg )
