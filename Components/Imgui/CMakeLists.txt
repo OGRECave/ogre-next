@@ -23,13 +23,15 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${DearImgui_INCLUDE_DIRS})
 
 file(GLOB IMGUI_SOURCES
-	"${DearImgui_INCLUDE_DIRS}/*.cpp"
-	"${DearImgui_INCLUDE_DIRS}/backends/imgui_impl_sdl2.cpp"
+	"${DearImgui_INCLUDE_DIRS}*.cpp"
+	"${DearImgui_INCLUDE_DIRS}backends/imgui_impl_sdl2.cpp"
 )
 
 list( APPEND IMGUI_SOURCES
-	"${DearImgui_INCLUDE_DIRS}/backends/imgui_impl_sdl2.cpp"
+	"${DearImgui_INCLUDE_DIRS}backends/imgui_impl_sdl2.cpp"
 )
+
+set( BROKEN_FILES_IN_UNITY_BUILD "${DearImgui_INCLUDE_DIRS}backends/imgui_impl_sdl2.cpp" )
 
 add_definitions( -DOgreImgui_EXPORTS )
 if( WIN32 )
@@ -38,7 +40,8 @@ else()
 	add_definitions( "-DIMGUI_API=__attribute__( ( visibility( \"default\" ) ) )" )
 endif()
 
-ogre_add_library(${OGRE_NEXT}Imgui ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES} ${IMGUI_SOURCES})
+ogre_add_library(${OGRE_NEXT}Imgui ${OGRE_COMP_LIB_TYPE} ${IMGUI_SOURCES} ${HEADER_FILES} ${SOURCE_FILES}
+	SEPARATE ${BROKEN_FILES_IN_UNITY_BUILD})
 set_target_properties(${OGRE_NEXT}Imgui PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
 target_link_libraries(${OGRE_NEXT}Imgui ${OGRE_NEXT}Main)
 

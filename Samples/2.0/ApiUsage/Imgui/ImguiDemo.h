@@ -1,3 +1,5 @@
+#ifndef Demo_Imgui_H
+#define Demo_Imgui_H
 
 #include "GraphicsSystem.h"
 
@@ -32,3 +34,5 @@ namespace Demo
         void deinitialize() override;
     };
 }  // namespace Demo
+
+#endif
