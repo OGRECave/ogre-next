@@ -23,7 +23,7 @@ environment:
       BUILD_SCRIPT: build_ci_windows.bat
 
 cache:
-  - ..\ogre-next-deps
+  #- ..\ogre-next-deps
 
 build_script:
   - cmd: Scripts\BuildScripts\%BUILD_SCRIPT%
