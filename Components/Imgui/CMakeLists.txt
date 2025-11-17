@@ -24,7 +24,6 @@ include_directories(${DearImgui_INCLUDE_DIRS})
 
 file(GLOB IMGUI_SOURCES
 	"${DearImgui_INCLUDE_DIRS}*.cpp"
-	"${DearImgui_INCLUDE_DIRS}backends/imgui_impl_sdl2.cpp"
 )
 
 if( NOT ANDROID AND NOT APPLE_IOS AND SDL2_FOUND )
