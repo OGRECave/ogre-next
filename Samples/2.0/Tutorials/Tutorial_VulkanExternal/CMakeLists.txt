@@ -11,8 +11,6 @@ macro( add_recursive dir retVal )
 	file( GLOB_RECURSE ${retVal} ${dir}/*.h ${dir}/*.cpp ${dir}/*.c )
 endmacro()
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-
 include_directories(${CMAKE_SOURCE_DIR}/RenderSystems/Vulkan/include)
 
 add_recursive( ./ SOURCE_FILES )
