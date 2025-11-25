@@ -210,11 +210,15 @@ namespace Ogre
     const IdString HlmsBaseProp::ScreenSpaceRefractions = IdString( "hlms_screen_space_refractions" );
     // We use a different convention because it's a really private property that ideally
     // shouldn't be exposed to users.
-    const IdString HlmsBaseProp::_DatablockCustomPieceShaderName[NumShaderTypes] = {
-        IdString( "_DatablockCustomPieceShaderNameVS" ), IdString( "_DatablockCustomPieceShaderNamePS" ),
-        IdString( "_DatablockCustomPieceShaderNameGS" ), IdString( "_DatablockCustomPieceShaderNameHS" ),
-        IdString( "_DatablockCustomPieceShaderNameDS" )
-    };
+    const IdString
+        HlmsBaseProp::_DatablockCustomPieceShaderName[CustomPieceStage::NumCustomPieceStages] = {
+            IdString( "_DatablockCustomPieceShaderNamePRE" ),
+            IdString( "_DatablockCustomPieceShaderNameVS" ),
+            IdString( "_DatablockCustomPieceShaderNamePS" ),
+            IdString( "_DatablockCustomPieceShaderNameGS" ),
+            IdString( "_DatablockCustomPieceShaderNameHS" ),
+            IdString( "_DatablockCustomPieceShaderNameDS" ),
+        };
 
     const IdString HlmsBaseProp::NoReverseDepth = IdString( "hlms_no_reverse_depth" );
     const IdString HlmsBaseProp::ReadOnlyIsTex = IdString( "hlms_readonly_is_tex" );
@@ -2540,6 +2544,28 @@ namespace Ogre
         mShaderCodeCacheDirty = true;
     }
     //-----------------------------------------------------------------------------------
+    void Hlms::parseCustomPiece( const int32 customPieceName, const size_t tid )
+    {
+        // Parse custom arbitrary shader piece specified by the datablock.
+        DatablockCustomPieceFileMap::const_iterator it =
+            mDatablockCustomPieceFiles.find( customPieceName );
+        OGRE_ASSERT_LOW( it != mDatablockCustomPieceFiles.end() );
+
+        String inString = it->second.sourceCode;
+        String outString;
+
+        this->parseMath( inString, outString, tid );
+        while( outString.find( "@foreach" ) != String::npos )
+        {
+            this->parseForEach( outString, inString, tid );
+            inString.swap( outString );
+        }
+        this->parseProperties( outString, inString, tid );
+        this->parseUndefPieces( inString, outString, tid );
+        this->collectPieces( outString, inString, tid );
+        this->parseCounter( inString, outString, tid );
+    }
+    //-----------------------------------------------------------------------------------
     void Hlms::compileShaderCode( ShaderCodeCache &codeCache, const uint32 shaderCounter,
                                   const size_t tid )
     {
@@ -2611,7 +2637,16 @@ namespace Ogre
                         dumpProperties( debugDumpFile, tid );
                 }
 
-                // Library piece files first
+                if( i == VertexShader )
+                {
+                    const int32 customPieceName =
+                        getProperty( tid, HlmsBaseProp::_DatablockCustomPieceShaderName
+                                              [CustomPieceStage::PreVertexShader] );
+                    if( customPieceName )
+                        parseCustomPiece( customPieceName, tid );
+                }
+
+                // Library piece files first.
                 LibraryVec::const_iterator itor = mLibrary.begin();
                 LibraryVec::const_iterator endt = mLibrary.end();
 
@@ -2621,29 +2656,12 @@ namespace Ogre
                     ++itor;
                 }
 
+                const CustomPieceStage::CustomPieceStage customPieceStage =
+                    CustomPieceStage::from( ShaderType( i ) );
                 const int32 customPieceName =
-                    getProperty( tid, HlmsBaseProp::_DatablockCustomPieceShaderName[i] );
+                    getProperty( tid, HlmsBaseProp::_DatablockCustomPieceShaderName[customPieceStage] );
                 if( customPieceName )
-                {
-                    // Parse custom arbitrary shader piece specified by the datablock.
-                    DatablockCustomPieceFileMap::const_iterator it =
-                        mDatablockCustomPieceFiles.find( customPieceName );
-                    OGRE_ASSERT_LOW( it != mDatablockCustomPieceFiles.end() );
-
-                    String inString = it->second.sourceCode;
-                    String outString;
-
-                    this->parseMath( inString, outString, tid );
-                    while( outString.find( "@foreach" ) != String::npos )
-                    {
-                        this->parseForEach( outString, inString, tid );
-                        inString.swap( outString );
-                    }
-                    this->parseProperties( outString, inString, tid );
-                    this->parseUndefPieces( inString, outString, tid );
-                    this->collectPieces( outString, inString, tid );
-                    this->parseCounter( inString, outString, tid );
-                }
+                    parseCustomPiece( customPieceName, tid );
 
                 // Main piece files
                 processPieces( mDataFolder, mPieceFiles[i], tid );
@@ -3050,10 +3068,10 @@ namespace Ogre
     {
         HlmsDatablock *datablock = renderable->getDatablock();
 
-        for( size_t i = 0u; i < NumShaderTypes; ++i )
+        for( size_t i = 0u; i < CustomPieceStage::NumCustomPieceStages; ++i )
         {
-            const int32 filenameHashId =
-                datablock->getCustomPieceFileIdHash( static_cast<ShaderType>( i ) );
+            const int32 filenameHashId = datablock->getCustomPieceFileIdHash(
+                static_cast<CustomPieceStage::CustomPieceStage>( i ) );
             if( filenameHashId )
                 setProperty( kNoTid, HlmsBaseProp::_DatablockCustomPieceShaderName[i], filenameHashId );
         }

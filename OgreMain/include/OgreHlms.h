@@ -467,6 +467,8 @@ namespace Ogre
                                                   const String &debugFilenameOutput, uint32 finalHash,
                                                   ShaderType shaderType, size_t tid );
 
+        void parseCustomPiece( const int32 customPieceName, const size_t tid );
+
     public:
         void _compileShaderFromPreprocessedSource( const RenderableCache &mergedCache,
                                                    const String           source[NumShaderTypes],
@@ -1321,8 +1323,8 @@ namespace Ogre
         static const IdString AccurateNonUniformNormalScaling;
         // Per material. Related with SsRefractionsAvailable
         static const IdString ScreenSpaceRefractions;
-        static const IdString
-            _DatablockCustomPieceShaderName[NumShaderTypes];  // Do not set/get directly.
+        // Do not set/get directly.
+        static const IdString _DatablockCustomPieceShaderName[CustomPieceStage::NumCustomPieceStages];
 
         // Standard depth range is being used instead of reverse Z.
         static const IdString NoReverseDepth;

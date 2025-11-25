@@ -133,8 +133,9 @@ namespace Ogre
         "max"
     };
 
-    static const char *c_customPieceKeyword[NumShaderTypes] =
+    static const char *c_customPieceKeyword[CustomPieceStage::NumCustomPieceStages] =
     {
+        "custom_piece_file_pre",
         "custom_piece_file_vs",
         "custom_piece_file_ps",
         "custom_piece_file_gs",
@@ -503,14 +504,14 @@ namespace Ogre
             }
         }
 
-        for( size_t i = 0u; i < NumShaderTypes; ++i )
+        for( size_t i = 0u; i < CustomPieceStage::NumCustomPieceStages; ++i )
         {
             itor = json.FindMember( c_customPieceKeyword[i] );
             if( itor != json.MemberEnd() && itor->value.IsArray() && itor->value.Size() == 2u &&
                 itor->value[0].IsString() && itor->value[1].IsString() )
             {
                 datablock->setCustomPieceFile( itor->value[0].GetString(), itor->value[1].GetString(),
-                                               static_cast<ShaderType>( i ) );
+                                               static_cast<CustomPieceStage::CustomPieceStage>( i ) );
             }
         }
 
@@ -1059,9 +1060,10 @@ namespace Ogre
             outString += getName( datablock->getBlendblock() );
         }
 
-        for( size_t i = 0u; i < NumShaderTypes; ++i )
+        for( size_t i = 0u; i < CustomPieceStage::NumCustomPieceStages; ++i )
         {
-            const int32 hashId = datablock->getCustomPieceFileIdHash( static_cast<ShaderType>( i ) );
+            const int32 hashId = datablock->getCustomPieceFileIdHash(
+                static_cast<CustomPieceStage::CustomPieceStage>( i ) );
             if( hashId )
             {
                 const Hlms *hlms = datablock->getCreator();
