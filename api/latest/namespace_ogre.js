@@ -48,6 +48,18 @@ var namespace_ogre =
         [ "NZ", "namespace_ogre_1_1_cubemap_side.html#aa05717bddc9101a336507b0a167cde29a06c1fca711a92e8edd99bb6b4dede813", null ]
       ] ]
     ] ],
+    [ "CustomPieceStage", "namespace_ogre_1_1_custom_piece_stage.html", [
+      [ "CustomPieceStage", "namespace_ogre_1_1_custom_piece_stage.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2", [
+        [ "PreVertexShader", "namespace_ogre_1_1_custom_piece_stage.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2a0659fd37adbe169a34bdeb26ad2ac499", null ],
+        [ "VertexShader", "namespace_ogre_1_1_custom_piece_stage.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2aa12f7ba6da5d137f2d467a969d99a067", null ],
+        [ "GeometryShader", "namespace_ogre_1_1_custom_piece_stage.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2ac0cbd5d14013adadb2b51737f9b6e2c4", null ],
+        [ "HullShader", "namespace_ogre_1_1_custom_piece_stage.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2a9deac1af05aeedfb3f804fa829b65ad2", null ],
+        [ "DomainShader", "namespace_ogre_1_1_custom_piece_stage.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2a4d0cd53c1f975de3328233821810ab0f", null ],
+        [ "PixelShader", "namespace_ogre_1_1_custom_piece_stage.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2a8a28a29c459c8ff066361423f5827fa2", null ],
+        [ "NumCustomPieceStages", "namespace_ogre_1_1_custom_piece_stage.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2ac1d5c9984c071f1e546f8628fa88ed80", null ]
+      ] ],
+      [ "from", "namespace_ogre_1_1_custom_piece_stage.html#a0d21302ca536b24bc0b18c861c6ad360", null ]
+    ] ],
     [ "DefaultMipmapGen", "namespace_ogre_1_1_default_mipmap_gen.html", [
       [ "DefaultMipmapGen", "namespace_ogre_1_1_default_mipmap_gen.html#a3eb99f91a07b98f3713bf8c23069e9fb", [
         [ "NoMipmaps", "namespace_ogre_1_1_default_mipmap_gen.html#a3eb99f91a07b98f3713bf8c23069e9fba0354783c0d7fb0f06013bf2339131329", null ],

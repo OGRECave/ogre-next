@@ -17,5 +17,6 @@ var searchData=
   ['cpufeatures_14',['CpuFeatures',['../class_ogre_1_1_platform_information.html#af7f9306631264031789d89af0642a807',1,'Ogre::PlatformInformation']]],
   ['cubemapside_15',['CubemapSide',['../namespace_ogre_1_1_cubemap_side.html#aa05717bddc9101a336507b0a167cde29',1,'Ogre::CubemapSide']]],
   ['cullingmode_16',['CullingMode',['../group___general.html#gac173244ed7d950d0acd726e4f323ecdb',1,'Ogre']]],
-  ['customparameterbits_17',['CustomParameterBits',['../class_ogre_1_1_planar_reflections.html#aef23063b9860dc2511f94643d68a5144',1,'Ogre::PlanarReflections']]]
+  ['customparameterbits_17',['CustomParameterBits',['../class_ogre_1_1_planar_reflections.html#aef23063b9860dc2511f94643d68a5144',1,'Ogre::PlanarReflections']]],
+  ['custompiecestage_18',['CustomPieceStage',['../namespace_ogre_1_1_custom_piece_stage.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2',1,'Ogre::CustomPieceStage']]]
 ];

@@ -33,6 +33,6 @@ var searchData=
   ['hlms_5fuser2_30',['HLMS_USER2',['../group___resources.html#gga11d7536f610632f563befe49447d8107a95e5031bb8c4ed1a3f33a102e42f260b',1,'Ogre']]],
   ['hlms_5fuser3_31',['HLMS_USER3',['../group___resources.html#gga11d7536f610632f563befe49447d8107abf86a8c0504a6f063ac15e87309269e2',1,'Ogre']]],
   ['hlsl_32',['HLSL',['../namespace_ogre.html#abaf0024024f080806957a6d18c1665c3a28fe1ef7d56232ecd3dc5ea137b43b35',1,'Ogre']]],
-  ['hullshader_33',['HullShader',['../group___general.html#gga7049ce296bb4883feab25251d3865035a6548d1c95c89305763dafbd8c58c9df0',1,'Ogre']]],
+  ['hullshader_33',['hullshader',['../group___general.html#gga7049ce296bb4883feab25251d3865035a6548d1c95c89305763dafbd8c58c9df0',1,'Ogre::HullShader'],['../namespace_ogre_1_1_custom_piece_stage.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2a9deac1af05aeedfb3f804fa829b65ad2',1,'Ogre::CustomPieceStage::HullShader']]],
   ['hwmode_34',['HwMode',['../namespace_ogre_1_1_default_mipmap_gen.html#a3eb99f91a07b98f3713bf8c23069e9fba6bbf774bdf59ec30eb5b084728226550',1,'Ogre::DefaultMipmapGen']]]
 ];

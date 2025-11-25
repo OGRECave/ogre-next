@@ -63,7 +63,7 @@ var searchData=
   ['geometryflagquad_60',['GeometryFlagQuad',['../class_ogre_1_1_rectangle2_d.html#a1f2d22260fd3d023244826221ee60990aabe6d7a670f7487f341077682aa59f86',1,'Ogre::Rectangle2D']]],
   ['geometryflagreserved0_61',['GeometryFlagReserved0',['../class_ogre_1_1_rectangle2_d.html#a1f2d22260fd3d023244826221ee60990af66ce8618ba8c94e74f28fd7a5a3198c',1,'Ogre::Rectangle2D']]],
   ['geometryflagstereo_62',['GeometryFlagStereo',['../class_ogre_1_1_rectangle2_d.html#a1f2d22260fd3d023244826221ee60990adcef3af85b27225ebffd9e685fc88b82',1,'Ogre::Rectangle2D']]],
-  ['geometryshader_63',['GeometryShader',['../group___general.html#gga7049ce296bb4883feab25251d3865035a63dd081c4d08bece8b71016780453737',1,'Ogre']]],
+  ['geometryshader_63',['geometryshader',['../group___general.html#gga7049ce296bb4883feab25251d3865035a63dd081c4d08bece8b71016780453737',1,'Ogre::GeometryShader'],['../namespace_ogre_1_1_custom_piece_stage.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2ac0cbd5d14013adadb2b51737f9b6e2c4',1,'Ogre::CustomPieceStage::GeometryShader']]],
   ['gha_5fcenter_64',['GHA_CENTER',['../group___overlays.html#ggaf00dd954640209bdaf41c561803c337ca4321f070cebb60c6cbc0e986dc368f99',1,'Ogre::v1']]],
   ['gha_5fleft_65',['GHA_LEFT',['../group___overlays.html#ggaf00dd954640209bdaf41c561803c337caf857d25b34f9cac63a6f80a7fd98e57c',1,'Ogre::v1']]],
   ['gha_5fright_66',['GHA_RIGHT',['../group___overlays.html#ggaf00dd954640209bdaf41c561803c337cacf63e7efa224817351582a18a5b85c9f',1,'Ogre::v1']]],
