@@ -40,6 +40,7 @@ Based on the implementation in https://github.com/edherbert/ogre-next-imgui
 #include "CommandBuffer/OgreCbPipelineStateObject.h"
 #include "CommandBuffer/OgreCbShaderBuffer.h"
 #include "CommandBuffer/OgreCommandBuffer.h"
+#include "OgreCamera.h"
 #include "OgreHighLevelGpuProgramManager.h"
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
