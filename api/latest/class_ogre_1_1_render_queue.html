@@ -176,8 +176,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af8a1ce899163064e71e176bb7be8b87c" id="r_af8a1ce899163064e71e176bb7be8b87c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_queue.html#af8a1ce899163064e71e176bb7be8b87c">warmUpShadersCollect</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> firstRq, <a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> lastRq, bool casterPass)</td></tr>
 <tr class="memdesc:af8a1ce899163064e71e176bb7be8b87c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simulates what <a class="el" href="class_ogre_1_1_render_queue.html#a4556b635533a3b9cc3aee165442e2a4d">render()</a> would do.  <br /></td></tr>
 <tr class="separator:af8a1ce899163064e71e176bb7be8b87c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae2a7ef1b3b7b9f936ed6e97be9bab31a" id="r_ae2a7ef1b3b7b9f936ed6e97be9bab31a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_queue.html#ae2a7ef1b3b7b9f936ed6e97be9bab31a">warmUpShadersTrigger</a> (<a class="el" href="class_ogre_1_1_render_system.html">RenderSystem</a> *rs)</td></tr>
-<tr class="separator:ae2a7ef1b3b7b9f936ed6e97be9bab31a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dd785ee3b4b4fd37ee4e35b235cfd37" id="r_a6dd785ee3b4b4fd37ee4e35b235cfd37"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_queue.html#a6dd785ee3b4b4fd37ee4e35b235cfd37">warmUpShadersTrigger</a> (<a class="el" href="class_ogre_1_1_render_system.html">RenderSystem</a> *rs, bool casterPass)</td></tr>
+<tr class="separator:a6dd785ee3b4b4fd37ee4e35b235cfd37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class to manage the scene object rendering queue. </p>
@@ -811,8 +811,8 @@ By default, the render queues have the following mode set: <br  />
 
 </div>
 </div>
-<a id="ae2a7ef1b3b7b9f936ed6e97be9bab31a" name="ae2a7ef1b3b7b9f936ed6e97be9bab31a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae2a7ef1b3b7b9f936ed6e97be9bab31a">&#9670;&#160;</a></span>warmUpShadersTrigger()</h2>
+<a id="a6dd785ee3b4b4fd37ee4e35b235cfd37" name="a6dd785ee3b4b4fd37ee4e35b235cfd37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6dd785ee3b4b4fd37ee4e35b235cfd37">&#9670;&#160;</a></span>warmUpShadersTrigger()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -821,8 +821,18 @@ By default, the render queues have the following mode set: <br  />
           <td class="memname">void Ogre::RenderQueue::warmUpShadersTrigger </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1_render_system.html">RenderSystem</a> *&#160;</td>
-          <td class="paramname"><em>rs</em></td><td>)</td>
+          <td class="paramname"><em>rs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>casterPass</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

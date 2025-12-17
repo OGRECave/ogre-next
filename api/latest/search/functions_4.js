@@ -260,7 +260,7 @@ var searchData=
   ['detachfromparent_257',['detachFromParent',['../class_ogre_1_1_movable_object.html#aa2bf67d4ae27cdbe44ab73d09c4797b2',1,'Ogre::MovableObject']]],
   ['detachfromprogramobject_258',['detachfromprogramobject',['../class_ogre_1_1_g_l_s_l_e_s_shader.html#ae914a3266d8e56a74efb30eb757ca81a',1,'Ogre::GLSLESShader::detachFromProgramObject()'],['../class_ogre_1_1_g_l_s_l_shader.html#abd9602c70e3f5c681d37229b2fedcc77',1,'Ogre::GLSLShader::detachFromProgramObject()']]],
   ['detachobject_259',['detachObject',['../class_ogre_1_1_scene_node.html#a6570162d0d2c6d20abba8155f884987a',1,'Ogre::SceneNode']]],
-  ['determinant_260',['determinant',['../class_ogre_1_1_matrix4.html#a7f3a2741a5da4236d53d025bc52bdcee',1,'Ogre::Matrix4::determinant()'],['../class_ogre_1_1_matrix3.html#a14cdac95b9c0c688bbeacdf63128fa90',1,'Ogre::Matrix3::Determinant()']]],
+  ['determinant_260',['determinant',['../class_ogre_1_1_matrix3.html#a14cdac95b9c0c688bbeacdf63128fa90',1,'Ogre::Matrix3::Determinant()'],['../class_ogre_1_1_matrix4.html#a7f3a2741a5da4236d53d025bc52bdcee',1,'Ogre::Matrix4::determinant()']]],
   ['determinegridlocation_261',['determinegridlocation',['../group___optional.html#gabb6b2b57c3c42596d13206727bb66d97',1,'Ogre::Grid3DPageStrategyData::determineGridLocation()'],['../class_ogre_1_1_grid2_d_page_strategy_data.html#a0ca722266d38706ce99241f5f84130d1',1,'Ogre::Grid2DPageStrategyData::determineGridLocation()']]],
   ['devicedata_262',['DeviceData',['../struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html#a8ba62d285b73672d884482d3afe4ce6e',1,'Ogre::EglPBufferSupport::DeviceData']]],
   ['directionequals_263',['directionEquals',['../class_ogre_1_1_vector3.html#a1818c9740f43005be86f9c9c78316ae1',1,'Ogre::Vector3']]],

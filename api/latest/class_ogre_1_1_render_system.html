@@ -217,8 +217,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a37208fe7f2e29b71a2972defdf9d04b2" id="r_a37208fe7f2e29b71a2972defdf9d04b2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a37208fe7f2e29b71a2972defdf9d04b2">_makeRsProjectionMatrix</a> (const <a class="el" href="class_ogre_1_1_matrix4.html">Matrix4</a> &amp;matrix, <a class="el" href="class_ogre_1_1_matrix4.html">Matrix4</a> &amp;dest, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> nearPlane, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> farPlane, <a class="el" href="group___math.html#gaf5dd9a3d1fd373b17108baa16065b1ce">ProjectionType</a> projectionType)</td></tr>
 <tr class="memdesc:a37208fe7f2e29b71a2972defdf9d04b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes a regular source projection matrix in range [-1; 1] and converts it to a projection matrix in 'dest' with reverse Z range [1; 0].  <br /></td></tr>
 <tr class="separator:a37208fe7f2e29b71a2972defdf9d04b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38a086ccaac52dc9c9dbbb7aa473a7d1" id="r_a38a086ccaac52dc9c9dbbb7aa473a7d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a38a086ccaac52dc9c9dbbb7aa473a7d1">_notifyIncompletePsoRequests</a> (<a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a> count)</td></tr>
-<tr class="separator:a38a086ccaac52dc9c9dbbb7aa473a7d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d5661b12d1f186c22eb49767902cf59" id="r_a8d5661b12d1f186c22eb49767902cf59"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a8d5661b12d1f186c22eb49767902cf59">_notifyIncompletePsoRequests</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> count)</td></tr>
+<tr class="separator:a8d5661b12d1f186c22eb49767902cf59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad47a85bcc637f332100756b7a48b3f53" id="r_ad47a85bcc637f332100756b7a48b3f53"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="struct_ogre_1_1_render_system_1_1_render_system_context.html">RenderSystemContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#ad47a85bcc637f332100756b7a48b3f53">_pauseFrame</a> ()</td></tr>
 <tr class="memdesc:ad47a85bcc637f332100756b7a48b3f53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pause rendering for a frame.  <br /></td></tr>
 <tr class="separator:ad47a85bcc637f332100756b7a48b3f53"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -479,9 +479,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a524a4df6708122fe619811e8f81afced" id="r_a524a4df6708122fe619811e8f81afced"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a524a4df6708122fe619811e8f81afced">getHorizontalTexelOffset</a> ()=0</td></tr>
 <tr class="memdesc:a524a4df6708122fe619811e8f81afced"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the horizontal texel offset value required for mapping texel origins to pixel origins in this rendersystem.  <br /></td></tr>
 <tr class="separator:a524a4df6708122fe619811e8f81afced"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90af952bd348e0d592a2e2ceadef1e8e" id="r_a90af952bd348e0d592a2e2ceadef1e8e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a90af952bd348e0d592a2e2ceadef1e8e">getIncompletePsoRequestsCounter</a> () const</td></tr>
-<tr class="memdesc:a90af952bd348e0d592a2e2ceadef1e8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The amount of PSOs that remain uncompiled because they've exceeded the time budget.  <br /></td></tr>
-<tr class="separator:a90af952bd348e0d592a2e2ceadef1e8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5b32de976623553b74dbce9a63fd0d8" id="r_ae5b32de976623553b74dbce9a63fd0d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#ae5b32de976623553b74dbce9a63fd0d8">getIncompletePsoRequestsCounter</a> () const</td></tr>
+<tr class="memdesc:ae5b32de976623553b74dbce9a63fd0d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The amount of PSOs that remain uncompiled because they've exceeded the time budget.  <br /></td></tr>
+<tr class="separator:ae5b32de976623553b74dbce9a63fd0d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d4d8022d696854c4bb41a7d378fb0ca" id="r_a3d4d8022d696854c4bb41a7d378fb0ca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a3d4d8022d696854c4bb41a7d378fb0ca">getInvertedClipSpaceY</a> () const</td></tr>
 <tr class="memdesc:a3d4d8022d696854c4bb41a7d378fb0ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">+Y is downwards in NDC (Normalized Device Coordinates). Only Vulkan has this problem.  <br /></td></tr>
 <tr class="separator:a3d4d8022d696854c4bb41a7d378fb0ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1931,8 +1931,8 @@ See _createRenderWindow for details about each member. </td></tr>
 
 </div>
 </div>
-<a id="a38a086ccaac52dc9c9dbbb7aa473a7d1" name="a38a086ccaac52dc9c9dbbb7aa473a7d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a38a086ccaac52dc9c9dbbb7aa473a7d1">&#9670;&#160;</a></span>_notifyIncompletePsoRequests()</h2>
+<a id="a8d5661b12d1f186c22eb49767902cf59" name="a8d5661b12d1f186c22eb49767902cf59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d5661b12d1f186c22eb49767902cf59">&#9670;&#160;</a></span>_notifyIncompletePsoRequests()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1940,7 +1940,7 @@ See _createRenderWindow for details about each member. </td></tr>
         <tr>
           <td class="memname">void Ogre::RenderSystem::_notifyIncompletePsoRequests </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td>
           <td class="paramname"><em>count</em></td><td>)</td>
           <td></td>
         </tr>
@@ -5406,8 +5406,8 @@ that the shininess value is still taken from shininess)</a> and TVC_EMISSIVE. TV
 
 </div>
 </div>
-<a id="a90af952bd348e0d592a2e2ceadef1e8e" name="a90af952bd348e0d592a2e2ceadef1e8e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90af952bd348e0d592a2e2ceadef1e8e">&#9670;&#160;</a></span>getIncompletePsoRequestsCounter()</h2>
+<a id="ae5b32de976623553b74dbce9a63fd0d8" name="ae5b32de976623553b74dbce9a63fd0d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5b32de976623553b74dbce9a63fd0d8">&#9670;&#160;</a></span>getIncompletePsoRequestsCounter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -5416,7 +5416,7 @@ that the shininess value is still taken from shininess)</a> and TVC_EMISSIVE. TV
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a> Ogre::RenderSystem::getIncompletePsoRequestsCounter </td>
+          <td class="memname"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> Ogre::RenderSystem::getIncompletePsoRequestsCounter </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -5430,7 +5430,7 @@ that the shininess value is still taken from shininess)</a> and TVC_EMISSIVE. TV
 </div><div class="memdoc">
 
 <p>The amount of PSOs that remain uncompiled because they've exceeded the time budget. </p>
-<p>See <a class="el" href="class_ogre_1_1_render_system.html#ac1ad2fb75204276cca505a255f62081d" title="PSO creation on Vulkan could be skipped after exhausting per-frame time budget.">setPsoRequestsTimeout()</a>. </p>
+<p>See <a class="el" href="class_ogre_1_1_render_system.html#ac1ad2fb75204276cca505a255f62081d" title="PSO creation on Vulkan could be skipped after exhausting per-frame time budget.">setPsoRequestsTimeout()</a>. This value gets reset to 0 at the beginning of every frame. </p>
 
 </div>
 </div>
@@ -6990,7 +6990,7 @@ Once this init sequence is completed the threads are independent but this startu
 <p>PSO creation on Vulkan could be skipped after exhausting per-frame time budget. </p>
 <p>Every frame we have a time budget for compiling PSOs. For example, 8ms. If we spend more than 8ms compiling shaders and PSOs, we abort those and will attempt to compile them on the next frame. <a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Any</a> object that uses such uncompiled PSO will not appear on screen.</p>
 <p>Example: if each PSO takes 1ms to compile and we have 10 PSOs left, then we'll compile 8 PSOs, and the other 2 will be compiled on the next frame. If a single PSO takes 20ms, then only that PSO will be compiled (we can't stop mid-compile). If each PSO takes 1.2ms, we'll compile 7 PSOs. Because at the 6th PSO we will have taken 7.2ms, which is below the deadline, and after the 7th PSO we will have taken 8.4ms. This happens because we can't actually predict how long a PSO will take.</p>
-<p>This feature reduces stutter by allocating an aproximate maximum time we spend compiling. But it trades off in visual glitches/artifacts until all PSOs are done. This feature is important on Android to reduce the number of ANRs. </p><dl class="section remark"><dt>Remarks</dt><dd>IMPORTANT: Techniques that rely on running a shader once (e.g. to fill a texture) may end up uninitialized if the PSO doesn't compile on time. It's best to disable this feature when doing such tasks or to monitor <a class="el" href="class_ogre_1_1_render_system.html#a90af952bd348e0d592a2e2ceadef1e8e" title="The amount of PSOs that remain uncompiled because they&#39;ve exceeded the time budget.">getIncompletePsoRequestsCounter()</a> and retry. </dd>
+<p>This feature reduces stutter by allocating an aproximate maximum time we spend compiling. But it trades off in visual glitches/artifacts until all PSOs are done. This feature is important on Android to reduce the number of ANRs. </p><dl class="section remark"><dt>Remarks</dt><dd>IMPORTANT: Techniques that rely on running a shader once (e.g. to fill a texture) may end up uninitialized if the PSO doesn't compile on time. It's best to disable this feature when doing such tasks or to monitor <a class="el" href="class_ogre_1_1_render_system.html#ae5b32de976623553b74dbce9a63fd0d8" title="The amount of PSOs that remain uncompiled because they&#39;ve exceeded the time budget.">getIncompletePsoRequestsCounter()</a> and retry. </dd>
 <dd>
 When PSOs are deferred due to this feature, it will be logged. Keep an eye on Ogre.log. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>

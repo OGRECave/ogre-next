@@ -1,5 +1,6 @@
 var NAVTREEINDEX110 =
 {
+"compositor.html#CompositorShadowNodesTypesPlaneOptimal":[4,2,4,1,4,3],
 "compositor.html#CompositorShadowNodesTypesPssm":[4,2,4,1,4,2],
 "compositor.html#CompositorShadowNodesTypesUniform":[4,2,4,1,4,0],
 "compositor.html#CompositorTarget_target_level_barrier":[4,2,4,0,1,0,0],
@@ -168,8 +169,8 @@ var NAVTREEINDEX110 =
 "functions_d.html":[8,3,0,4],
 "functions_e.html":[8,3,0,5],
 "functions_enum.html":[8,3,4],
-"functions_eval.html":[8,3,5,0],
 "functions_eval.html":[8,3,5],
+"functions_eval.html":[8,3,5,0],
 "functions_eval_b.html":[8,3,5,1],
 "functions_eval_c.html":[8,3,5,2],
 "functions_eval_d.html":[8,3,5,3],
@@ -195,8 +196,8 @@ var NAVTREEINDEX110 =
 "functions_eval_y.html":[8,3,5,23],
 "functions_eval_z.html":[8,3,5,24],
 "functions_f.html":[8,3,0,6],
-"functions_func.html":[8,3,1,0],
 "functions_func.html":[8,3,1],
+"functions_func.html":[8,3,1,0],
 "functions_func_a.html":[8,3,1,1],
 "functions_func_b.html":[8,3,1,2],
 "functions_func_c.html":[8,3,1,3],
@@ -242,12 +243,11 @@ var NAVTREEINDEX110 =
 "functions_rela_o.html":[8,3,7,2],
 "functions_s.html":[8,3,0,19],
 "functions_t.html":[8,3,0,20],
-"functions_type.html":[8,3,3,0],
 "functions_type.html":[8,3,3],
+"functions_type.html":[8,3,3,0],
 "functions_type_b.html":[8,3,3,1],
 "functions_type_c.html":[8,3,3,2],
 "functions_type_d.html":[8,3,3,3],
 "functions_type_e.html":[8,3,3,4],
-"functions_type_f.html":[8,3,3,5],
-"functions_type_g.html":[8,3,3,6]
+"functions_type_f.html":[8,3,3,5]
 };

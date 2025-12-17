@@ -918,7 +918,7 @@ var group___scene =
       [ "_suppressRenderStateChanges", "class_ogre_1_1_scene_manager.html#a6753ea2b52715774b7fdd59da232917a", null ],
       [ "_updateWorkerThread", "class_ogre_1_1_scene_manager.html#a9959c0abe638bebd7ad2a30abc23ca2e", null ],
       [ "_warmUpShadersCollect", "class_ogre_1_1_scene_manager.html#ae0a1c8d37797160bd73901046b721536", null ],
-      [ "_warmUpShadersTrigger", "class_ogre_1_1_scene_manager.html#a991c83721994fc07c9e2493e91e539f8", null ],
+      [ "_warmUpShadersTrigger", "class_ogre_1_1_scene_manager.html#ad12b90d284c3ed40e086408d4875e482", null ],
       [ "addListener", "class_ogre_1_1_scene_manager.html#a6b54e34b6a8e72d4c1456bda016731ad", null ],
       [ "addLodListener", "class_ogre_1_1_scene_manager.html#a2ac761cb112de51be26c54609de3c83a", null ],
       [ "addRenderObjectListener", "class_ogre_1_1_scene_manager.html#ab73819442f7f3540f52431064e6b1a97", null ],

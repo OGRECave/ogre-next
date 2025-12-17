@@ -52,10 +52,11 @@ var group___render_system =
         [ "reservedStubEntry", "struct_ogre_1_1_parallel_hlms_compile_queue_1_1_request.html#af0c1f1afd367cca41f1875a760aa4b78", null ]
       ] ],
       [ "ParallelHlmsCompileQueue", "class_ogre_1_1_parallel_hlms_compile_queue.html#ae38048ebb76edabb33f61e0745d796d0", null ],
-      [ "fireWarmUpParallel", "class_ogre_1_1_parallel_hlms_compile_queue.html#a392eb4d02e34df8841097ac7be82b852", null ],
+      [ "fireWarmUpParallel", "class_ogre_1_1_parallel_hlms_compile_queue.html#a24b24579f8d4d7a032d73b6e0376713a", null ],
+      [ "frameEnded", "class_ogre_1_1_parallel_hlms_compile_queue.html#a83ae1ae14a95e346dd7029380997d3d5", null ],
       [ "pushRequest", "class_ogre_1_1_parallel_hlms_compile_queue.html#aaf595df16ab16cb9459154049bdd86d1", null ],
       [ "pushWarmUpRequest", "class_ogre_1_1_parallel_hlms_compile_queue.html#aac24523f28c40d659b84f80d2a43fd95", null ],
-      [ "start", "class_ogre_1_1_parallel_hlms_compile_queue.html#a5f58298ed8a892fdf0bc4dfa0a936281", null ],
+      [ "start", "class_ogre_1_1_parallel_hlms_compile_queue.html#ab5ba8fac1eee4f5740ad3e77ca69af8f", null ],
       [ "stopAndWait", "class_ogre_1_1_parallel_hlms_compile_queue.html#ab6f85d23748cecb3d025f464a928bf2a", null ],
       [ "updateThread", "class_ogre_1_1_parallel_hlms_compile_queue.html#a7a6de65b48a5b5fd42858fd2459b2680", null ],
       [ "updateWarmUpThread", "class_ogre_1_1_parallel_hlms_compile_queue.html#a03a265cea3e505ec77e302b9fbae9bdb", null ],
@@ -99,7 +100,7 @@ var group___render_system =
       [ "setRenderQueueMode", "class_ogre_1_1_render_queue.html#a70f6d85d6cde43a1b4badf25ed09fca5", null ],
       [ "setSortRenderQueue", "class_ogre_1_1_render_queue.html#aeb41ed3f50a9e7e270d81d045e8a23e6", null ],
       [ "warmUpShadersCollect", "class_ogre_1_1_render_queue.html#af8a1ce899163064e71e176bb7be8b87c", null ],
-      [ "warmUpShadersTrigger", "class_ogre_1_1_render_queue.html#ae2a7ef1b3b7b9f936ed6e97be9bab31a", null ]
+      [ "warmUpShadersTrigger", "class_ogre_1_1_render_queue.html#a6dd785ee3b4b4fd37ee4e35b235cfd37", null ]
     ] ],
     [ "Ogre::RenderQueueListener", "class_ogre_1_1_render_queue_listener.html", [
       [ "~RenderQueueListener", "class_ogre_1_1_render_queue_listener.html#aca4ab8444c09caeeff186213a98beb89", null ],
@@ -160,7 +161,7 @@ var group___render_system =
       [ "_hlmsSamplerblockDestroyed", "class_ogre_1_1_render_system.html#ab4c5501448cb75312320baac3fb05d1d", null ],
       [ "_initialise", "class_ogre_1_1_render_system.html#a09fdd814e1b729593686cdbd2a3e3bd7", null ],
       [ "_makeRsProjectionMatrix", "class_ogre_1_1_render_system.html#a37208fe7f2e29b71a2972defdf9d04b2", null ],
-      [ "_notifyIncompletePsoRequests", "class_ogre_1_1_render_system.html#a38a086ccaac52dc9c9dbbb7aa473a7d1", null ],
+      [ "_notifyIncompletePsoRequests", "class_ogre_1_1_render_system.html#a8d5661b12d1f186c22eb49767902cf59", null ],
       [ "_pauseFrame", "class_ogre_1_1_render_system.html#ad47a85bcc637f332100756b7a48b3f53", null ],
       [ "_render", "class_ogre_1_1_render_system.html#a05164d117632c60852cbcc6c21fd957b", null ],
       [ "_render", "class_ogre_1_1_render_system.html#a1224b23cee7a4967f75cb947ba185b99", null ],
@@ -262,7 +263,7 @@ var group___render_system =
       [ "getGlobalInstanceVertexBufferVertexDeclaration", "class_ogre_1_1_render_system.html#ad1a30f09bb15daac26e8e10901525214", null ],
       [ "getGlobalNumberOfInstances", "class_ogre_1_1_render_system.html#af41e08cc1bc54e34d0314f4c9ffa58f6", null ],
       [ "getHorizontalTexelOffset", "class_ogre_1_1_render_system.html#a524a4df6708122fe619811e8f81afced", null ],
-      [ "getIncompletePsoRequestsCounter", "class_ogre_1_1_render_system.html#a90af952bd348e0d592a2e2ceadef1e8e", null ],
+      [ "getIncompletePsoRequestsCounter", "class_ogre_1_1_render_system.html#ae5b32de976623553b74dbce9a63fd0d8", null ],
       [ "getInvertedClipSpaceY", "class_ogre_1_1_render_system.html#a3d4d8022d696854c4bb41a7d378fb0ca", null ],
       [ "getInvertVertexWinding", "class_ogre_1_1_render_system.html#ae1b32cd216d85a89fa172b34e14eedb6", null ],
       [ "getMaxBoundViewports", "class_ogre_1_1_render_system.html#ad241af863ce36e8f1827f2da967ba057", null ],

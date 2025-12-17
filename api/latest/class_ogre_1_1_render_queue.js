@@ -29,5 +29,5 @@ var class_ogre_1_1_render_queue =
     [ "setRenderQueueMode", "class_ogre_1_1_render_queue.html#a70f6d85d6cde43a1b4badf25ed09fca5", null ],
     [ "setSortRenderQueue", "class_ogre_1_1_render_queue.html#aeb41ed3f50a9e7e270d81d045e8a23e6", null ],
     [ "warmUpShadersCollect", "class_ogre_1_1_render_queue.html#af8a1ce899163064e71e176bb7be8b87c", null ],
-    [ "warmUpShadersTrigger", "class_ogre_1_1_render_queue.html#ae2a7ef1b3b7b9f936ed6e97be9bab31a", null ]
+    [ "warmUpShadersTrigger", "class_ogre_1_1_render_queue.html#a6dd785ee3b4b4fd37ee4e35b235cfd37", null ]
 ];
