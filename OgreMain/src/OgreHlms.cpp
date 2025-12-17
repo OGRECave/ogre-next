@@ -4019,6 +4019,15 @@ namespace Ogre
                           queuedRenderable, hash[0], finalHash } );
                 }
             }
+            else if( shaderCache->flags == HLMS_CACHE_FLAGS_COMPILATION_REQUIRED )
+            {
+                // Stub entry was created for previous frame, but compilation was skipped
+                // due to exhausted time budget, and attempt should be repeated.
+                HlmsCache *stubEntry = const_cast<HlmsCache *>( shaderCache );
+
+                parallelQueue.pushWarmUpRequest( { reinterpret_cast<const HlmsCache *>( passCacheIdx ),
+                                                   stubEntry, queuedRenderable, hash[0], finalHash } );
+            }
         }
 
         lastReturnedValue = finalHash;

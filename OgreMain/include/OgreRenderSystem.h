@@ -935,9 +935,9 @@ namespace Ogre
         uint32 getPsoRequestsTimeout() const { return mPsoRequestsTimeout; }
 
         /// The amount of PSOs that remain uncompiled because they've exceeded the time budget.
-        /// See setPsoRequestsTimeout().
-        uint64 getIncompletePsoRequestsCounter() const { return mIncompletePsoRequestsCounter; }
-        void   _notifyIncompletePsoRequests( uint64 count );
+        /// See setPsoRequestsTimeout(). This value gets reset to 0 at the beginning of every frame.
+        uint32 getIncompletePsoRequestsCounter() const { return mIncompletePsoRequestsCounterFrame; }
+        void   _notifyIncompletePsoRequests( uint32 count );
 
         /// return false for recoverable errors, for example for exhausted per-frame time budget
         virtual bool _hlmsPipelineStateObjectCreated( HlmsPso *newPso, uint64 deadline = UINT64_MAX )
@@ -1748,7 +1748,8 @@ namespace Ogre
         bool mInvertedClipSpaceY;
 
         uint32 mPsoRequestsTimeout;  // ms, per frame, or 0 to disable
-        uint64 mIncompletePsoRequestsCounter;
+        /// Amount of PSO incomplete requests during this frame.
+        uint32 mIncompletePsoRequestsCounterFrame;
     };
     /** @} */
     /** @} */
