@@ -33,7 +33,9 @@ if( NOT ANDROID AND NOT OGRE_BUILD_PLATFORM_APPLE_IOS AND SDL2_FOUND )
 
 	set( BROKEN_FILES_IN_UNITY_BUILD "${DearImgui_INCLUDE_DIRS}backends/imgui_impl_sdl2.cpp" )
 
-	include_directories( ${SDL2_INCLUDE_DIR} )
+	# OgreNext uses #include <SDL.h> while imgui_impl_sdl2.cpp uses #include <SDL2/SDL.h>
+	# Just include both SDL2_INCLUDE_DIR and its parent to make it work.
+	include_directories( ${SDL2_INCLUDE_DIR} ${SDL2_INCLUDE_DIR}/../ )
 else()
 	set( BROKEN_FILES_IN_UNITY_BUILD "" )
 endif()
