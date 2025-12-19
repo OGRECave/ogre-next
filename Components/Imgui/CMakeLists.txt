@@ -32,6 +32,8 @@ if( NOT ANDROID AND NOT OGRE_BUILD_PLATFORM_APPLE_IOS AND SDL2_FOUND )
 	)
 
 	set( BROKEN_FILES_IN_UNITY_BUILD "${DearImgui_INCLUDE_DIRS}backends/imgui_impl_sdl2.cpp" )
+
+	include_directories( ${SDL2_INCLUDE_DIR} )
 else()
 	set( BROKEN_FILES_IN_UNITY_BUILD "" )
 endif()
@@ -48,7 +50,7 @@ ogre_add_library(${OGRE_NEXT}Imgui ${OGRE_COMP_LIB_TYPE} ${IMGUI_SOURCES} ${HEAD
 set_target_properties(${OGRE_NEXT}Imgui PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
 target_link_libraries(${OGRE_NEXT}Imgui ${OGRE_NEXT}Main)
 
-if( NOT ANDROID AND NOT APPLE_IOS AND SDL2_FOUND )
+if( NOT ANDROID AND NOT OGRE_BUILD_PLATFORM_APPLE_IOS AND SDL2_FOUND )
 	target_link_libraries(${OGRE_NEXT}Imgui ${SDL2_LIBRARY})
 endif()
 
