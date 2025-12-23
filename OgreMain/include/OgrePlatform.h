@@ -60,6 +60,7 @@ THE SOFTWARE.
 #define OGRE_CPU_PPC 2
 #define OGRE_CPU_ARM 3
 #define OGRE_CPU_MIPS 4
+#define OGRE_CPU_LOONGARCH 5
 
 /* Find CPU type */
 #if defined( __i386__ ) || defined( __x86_64__ ) || defined( _M_IX86 ) || defined( _M_X64 ) || \
@@ -73,6 +74,8 @@ THE SOFTWARE.
 #    define OGRE_CPU OGRE_CPU_ARM
 #elif defined( __mips__ ) || defined( __mips64 ) || defined( __mips64_ ) || defined( _M_MIPS )
 #    define OGRE_CPU OGRE_CPU_MIPS
+#elif defined( __loongarch64 )
+#    define OGRE_CPU OGRE_CPU_LOONGARCH
 #else
 #    define OGRE_CPU OGRE_CPU_UNKNOWN
 #endif
@@ -82,7 +85,7 @@ THE SOFTWARE.
     defined( __ppc64__ ) || defined( __PPC64__ ) || defined( __arm64__ ) || defined( __aarch64__ ) || \
     defined( _M_ARM64 ) || defined( __mips64 ) || defined( __mips64_ ) || defined( __alpha__ ) || \
     defined( __ia64__ ) || defined( __e2k__ ) || defined( __s390__ ) || defined( __s390x__ ) || \
-    ( defined( __riscv ) && __riscv_xlen == 64 )
+    ( defined( __riscv ) && __riscv_xlen == 64 ) || defined( __loongarch64 )
 #    define OGRE_ARCH_TYPE OGRE_ARCHITECTURE_64
 #else
 #    define OGRE_ARCH_TYPE OGRE_ARCHITECTURE_32
