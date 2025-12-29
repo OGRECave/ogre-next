@@ -61,6 +61,9 @@ THE SOFTWARE.
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
 #    include "iOS/macUtils.h"
 #endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+#    include <winrt/Windows.Storage.h>
+#endif
 
 #include "Hash/MurmurHash3.h"
 
@@ -349,10 +352,12 @@ namespace Ogre
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         mOutputPath = macCachePath() + '/';
-#endif
-#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT && defined( __cplusplus_winrt )
         mOutputPath = fileSystemPathToString(
             Windows::Storage::ApplicationData::Current->TemporaryFolder->Path->Data() );
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+        mOutputPath = fileSystemPathToString(
+            winrt::Windows::Storage::ApplicationData::Current().TemporaryFolder().Path().c_str() );
 #endif
     }
     //-----------------------------------------------------------------------------------

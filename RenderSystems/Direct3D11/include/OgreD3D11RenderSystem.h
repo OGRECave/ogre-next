@@ -37,6 +37,9 @@ THE SOFTWARE.
 #include "OgreD3D11Driver.h"
 #include "OgreD3D11PixelFormatToShaderType.h"
 #include "OgreD3D11RenderPassDescriptor.h"
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+#    include <winrt/base.h>
+#endif
 
 namespace Ogre
 {
@@ -161,8 +164,10 @@ namespace Ogre
         D3D11StereoDriverBridge *mStereoDriver;
 #endif
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && defined( __cplusplus_winrt )
         Windows::Foundation::EventRegistrationToken suspendingToken, surfaceContentLostToken;
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+        winrt::event_token suspendingToken, surfaceContentLostToken;
 #endif
 
     protected:
