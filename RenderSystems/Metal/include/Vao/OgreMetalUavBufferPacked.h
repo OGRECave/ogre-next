@@ -62,6 +62,6 @@ namespace Ogre
         void bindBufferForDescriptor( __unsafe_unretained id<MTLBuffer> *buffers, NSUInteger *offsets,
                                       size_t offset );
     };
-}
+}  // namespace Ogre
 
 #endif

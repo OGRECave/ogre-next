@@ -527,7 +527,7 @@ namespace Ogre
                 // anyway, individual indexes are only needed for lookup from
                 // user params
             }  // end if
-        }      // end for
+        }  // end for
     }
 
     void GLSLProgramManager::extractUniformsFromGLSL( const String &src, GpuNamedConstants &defs,

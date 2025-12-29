@@ -560,20 +560,18 @@ namespace Ogre
 
         if( mOwnsGLContext )
         {
-            int attribList[] = {
-                WGL_CONTEXT_MAJOR_VERSION_ARB,
-                contextMajor,
-                WGL_CONTEXT_MINOR_VERSION_ARB,
-                contextMinor,
+            int attribList[] = { WGL_CONTEXT_MAJOR_VERSION_ARB,
+                                 contextMajor,
+                                 WGL_CONTEXT_MINOR_VERSION_ARB,
+                                 contextMinor,
 #if OGRE_DEBUG_MODE
-                WGL_CONTEXT_FLAGS_ARB,
-                WGL_CONTEXT_DEBUG_BIT_ARB,
+                                 WGL_CONTEXT_FLAGS_ARB,
+                                 WGL_CONTEXT_DEBUG_BIT_ARB,
 #endif
-                WGL_CONTEXT_PROFILE_MASK_ARB,
-                WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
-                0,
-                0
-            };
+                                 WGL_CONTEXT_PROFILE_MASK_ARB,
+                                 WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
+                                 0,
+                                 0 };
 
             while( !mGlrc && ( attribList[1] > 3 || ( attribList[1] == 3 && attribList[3] >= 3 ) ) )
             {

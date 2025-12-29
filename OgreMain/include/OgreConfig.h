@@ -100,7 +100,7 @@ THE SOFTWARE.
 #endif
 
 // if you want to make Ogre::String use the custom memory allocator then set:
-//#define OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR 1
+// #define OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR 1
 // Doing this will mean Ogre's strings will not be compatible with std::string however
 #ifndef OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR
 #    define OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR 0

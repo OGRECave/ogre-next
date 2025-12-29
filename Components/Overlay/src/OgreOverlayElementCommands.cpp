@@ -229,5 +229,5 @@ namespace Ogre
             }
             //-----------------------------------------------------------------------
         }  // namespace OverlayElementCommands
-    }      // namespace v1
+    }  // namespace v1
 }  // namespace Ogre

@@ -38,6 +38,11 @@ namespace Demo
         virtual void createDebugTextOverlay();
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
+#ifdef AUTO_TESTING
+        int         frameCount = 0;
+        std::string sampleName;
+        int         maxFrames = 500;
+#endif
     public:
         TutorialGameState( const Ogre::String &helpDescription );
         ~TutorialGameState() override;
@@ -45,7 +50,10 @@ namespace Demo
         void _notifyGraphicsSystem( GraphicsSystem *graphicsSystem );
 
         void createScene01() override;
-
+#ifdef AUTO_TESTING
+        void setSampleName( std::string newSampleName );
+        void setFrameCount( std::string frames );
+#endif
         void update( float timeSinceLast ) override;
 
         void keyPressed( const SDL_KeyboardEvent &arg ) override;

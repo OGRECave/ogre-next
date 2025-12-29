@@ -33,10 +33,7 @@ THE SOFTWARE.
 using namespace Ogre;
 
 //-----------------------------------------------------------------------
-CylinderEmitter2::CylinderEmitter2() : AreaEmitter2()
-{
-    initDefaults();
-}
+CylinderEmitter2::CylinderEmitter2() : AreaEmitter2() { initDefaults(); }
 //-----------------------------------------------------------------------
 void CylinderEmitter2::initEmittedParticles( ParticleCpuData cpuData, const EmittedParticle *newHandles,
                                              const size_t numParticles )
@@ -105,19 +102,10 @@ void CylinderEmitter2::initEmittedParticles( ParticleCpuData cpuData, const Emit
 }
 //-----------------------------------------------------------------------------------
 static const String kCylinderEmitterFactoryName = "Cylinder";
-const String &CylinderEmitter2::getType() const
-{
-    return kCylinderEmitterFactoryName;
-}
+const String &CylinderEmitter2::getType() const { return kCylinderEmitterFactoryName; }
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
-const String &CylinderEmitterFactory2::getName() const
-{
-    return kCylinderEmitterFactoryName;
-}
+const String &CylinderEmitterFactory2::getName() const { return kCylinderEmitterFactoryName; }
 //-----------------------------------------------------------------------------------
-EmitterDefData *CylinderEmitterFactory2::createEmitter()
-{
-    return new CylinderEmitter2();
-}
+EmitterDefData *CylinderEmitterFactory2::createEmitter() { return new CylinderEmitter2(); }

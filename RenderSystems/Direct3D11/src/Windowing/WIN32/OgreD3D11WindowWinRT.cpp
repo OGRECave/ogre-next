@@ -43,6 +43,9 @@ THE SOFTWARE.
 #        include <windows.ui.xaml.media.dxinterop.h>  // for ISwapChainPanelNative
 #    endif
 #endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+#    include <winrt/Windows.Graphics.Display.h>
+#endif
 
 namespace Ogre
 {
@@ -58,18 +61,33 @@ namespace Ogre
     {
         mUseFlipMode = true;
 
+#    if defined( __cplusplus_winrt )
         Windows::UI::Core::CoreWindow ^ externalHandle = nullptr;
+#    else
+        winrt::Windows::UI::Core::CoreWindow externalHandle = nullptr;
+#    endif
         if( miscParams )
         {
             NameValuePairList::const_iterator opt = miscParams->find( "externalWindowHandle" );
             if( opt != miscParams->end() )
+            {
+#    if defined( __cplusplus_winrt )
                 externalHandle = reinterpret_cast<Windows::UI::Core::CoreWindow ^>(
                     (void *)StringConverter::parseSizeT( opt->second ) );
-            else
-                externalHandle = Windows::UI::Core::CoreWindow::GetForCurrentThread();
+#    else
+                winrt::copy_from_abi( externalHandle,
+                                      (void *)StringConverter::parseSizeT( opt->second ) );
+#    endif
+            }
         }
-        else
+        if( !externalHandle )
+        {
+#    if defined( __cplusplus_winrt )
             externalHandle = Windows::UI::Core::CoreWindow::GetForCurrentThread();
+#    else
+            externalHandle = winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread();
+#    endif
+        }
 
         if( !externalHandle )
         {
@@ -83,7 +101,11 @@ namespace Ogre
         }
 
         float scale = getViewPointToPixelScale();
+#    if defined( __cplusplus_winrt )
         Windows::Foundation::Rect rc = mCoreWindow->Bounds;
+#    else
+        winrt::Windows::Foundation::Rect rc = mCoreWindow.get().Bounds();
+#    endif
         mLeft = (int)floorf( rc.X * scale + 0.5f );
         mTop = (int)floorf( rc.Y * scale + 0.5f );
         mRequestedWidth = (int)floorf( rc.Width + 0.5f );
@@ -96,7 +118,11 @@ namespace Ogre
     {
         D3D11WindowSwapChainBased::destroy();
 
+#    if defined( __cplusplus_winrt )
         if( mCoreWindow.Get() && !mIsExternal )
+#    else
+        if( mCoreWindow.get() && !mIsExternal )
+#    endif
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Only external window handles are supported.",
                          "D3D11RenderWindow::destroy" );
@@ -108,9 +134,18 @@ namespace Ogre
     float D3D11WindowCoreWindow::getViewPointToPixelScale() const
     {
 #    if defined( _WIN32_WINNT_WINBLUE ) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
+#        if defined( __cplusplus_winrt )
         return Windows::Graphics::Display::DisplayInformation::GetForCurrentView()->LogicalDpi / 96;
+#        else
+        return winrt::Windows::Graphics::Display::DisplayInformation::GetForCurrentView().LogicalDpi() /
+               96;
+#        endif
 #    else
+#        if defined( __cplusplus_winrt )
         return Windows::Graphics::Display::DisplayProperties::LogicalDpi / 96;
+#        else
+        return winrt::Windows::Graphics::Display::DisplayProperties::LogicalDpi() / 96;
+#        endif
 #    endif
     }
     //---------------------------------------------------------------------
@@ -146,9 +181,15 @@ namespace Ogre
         desc.Flags = _getSwapChainFlags();
 
         // Create swap chain
+#    if defined( __cplusplus_winrt )
         HRESULT hr = mDevice.GetDXGIFactory()->CreateSwapChainForCoreWindow(
             mDevice.get(), reinterpret_cast<IUnknown *>( mCoreWindow.Get() ), &desc, NULL,
             mSwapChain1.ReleaseAndGetAddressOf() );
+#    else
+        HRESULT hr = mDevice.GetDXGIFactory()->CreateSwapChainForCoreWindow(
+            mDevice.get(), *reinterpret_cast<IUnknown **>( &mCoreWindow.get() ), &desc, NULL,
+            mSwapChain1.ReleaseAndGetAddressOf() );
+#    endif
         if( FAILED( hr ) )
             return hr;
 
@@ -173,7 +214,11 @@ namespace Ogre
     void D3D11WindowCoreWindow::windowMovedOrResized()
     {
         float scale = getViewPointToPixelScale();
+#    if defined( __cplusplus_winrt )
         Windows::Foundation::Rect rc = mCoreWindow->Bounds;
+#    else
+        winrt::Windows::Foundation::Rect rc = mCoreWindow.get().Bounds();
+#    endif
         mLeft = (int)floorf( rc.X * scale + 0.5f );
         mTop = (int)floorf( rc.Y * scale + 0.5f );
         mRequestedWidth = (int)floorf( rc.Width + 0.5f );
@@ -184,8 +229,13 @@ namespace Ogre
     //---------------------------------------------------------------------
     bool D3D11WindowCoreWindow::isVisible() const
     {
+#    if defined( __cplusplus_winrt )
         return ( mCoreWindow.Get() &&
                  Windows::UI::Core::CoreWindow::GetForCurrentThread() == mCoreWindow.Get() );
+#    else
+        return ( mCoreWindow.get() &&
+                 winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread() == mCoreWindow.get() );
+#    endif
     }
 
 #endif
@@ -207,13 +257,24 @@ namespace Ogre
     {
         mUseFlipMode = true;
 
+#    if defined( __cplusplus_winrt )
         Windows::UI::Xaml::Controls::SwapChainPanel ^ externalHandle = nullptr;
+#    else
+        winrt::Windows::UI::Xaml::Controls::SwapChainPanel externalHandle = nullptr;
+#    endif
         if( miscParams )
         {
             NameValuePairList::const_iterator opt = miscParams->find( "externalWindowHandle" );
             if( opt != miscParams->end() )
+            {
+#    if defined( __cplusplus_winrt )
                 externalHandle = reinterpret_cast<Windows::UI::Xaml::Controls::SwapChainPanel ^>(
                     (void *)StringConverter::parseSizeT( opt->second ) );
+#    else
+                winrt::copy_from_abi( externalHandle,
+                                      (void *)StringConverter::parseSizeT( opt->second ) );
+#    endif
+            }
         }
 
         if( !externalHandle )
@@ -227,6 +288,7 @@ namespace Ogre
             mIsExternal = true;
 
             // subscribe to important notifications
+#    if defined( __cplusplus_winrt )
             compositionScaleChangedToken =
                 ( mSwapChainPanel->CompositionScaleChanged +=
                   ref new Windows::Foundation::TypedEventHandler<
@@ -238,13 +300,25 @@ namespace Ogre
                       [this]( Platform::Object ^ sender, Windows::UI::Xaml::SizeChangedEventArgs ^ e ) {
                           windowMovedOrResized();
                       } ) );
+#    else
+            compositionScaleChangedToken = mSwapChainPanel.CompositionScaleChanged(
+                [this]( auto const &, auto const & ) { windowMovedOrResized(); } );
+            sizeChangedToken = mSwapChainPanel.SizeChanged(
+                [this]( auto const &, auto const & ) { windowMovedOrResized(); } );
+#    endif
         }
 
-        Windows::Foundation::Size sz =
-            Windows::Foundation::Size( static_cast<float>( mSwapChainPanel->ActualWidth ),
-                                       static_cast<float>( mSwapChainPanel->ActualHeight ) );
+#    if defined( __cplusplus_winrt )
+        Windows::Foundation::Size sz{ static_cast<float>( mSwapChainPanel->ActualWidth ),
+                                      static_cast<float>( mSwapChainPanel->ActualHeight ) };
         mCompositionScale = Windows::Foundation::Size( mSwapChainPanel->CompositionScaleX,
                                                        mSwapChainPanel->CompositionScaleY );
+#    else
+        winrt::Windows::Foundation::Size sz{ static_cast<float>( mSwapChainPanel.ActualWidth() ),
+                                             static_cast<float>( mSwapChainPanel.ActualHeight() ) };
+        mCompositionScale = winrt::Windows::Foundation::Size( mSwapChainPanel.CompositionScaleX(),
+                                                              mSwapChainPanel.CompositionScaleY() );
+#    endif
         mRequestedWidth = (int)floorf( sz.Width + 0.5f );
         mRequestedHeight = (int)floorf( sz.Height + 0.5f );
     }
@@ -260,10 +334,17 @@ namespace Ogre
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Only external window handles are supported.",
                          "D3D11RenderWindow::destroy" );
         }
+#    if defined( __cplusplus_winrt )
         mSwapChainPanel->CompositionScaleChanged -= compositionScaleChangedToken;
         compositionScaleChangedToken.Value = 0;
         mSwapChainPanel->SizeChanged -= sizeChangedToken;
         sizeChangedToken.Value = 0;
+#    else
+        mSwapChainPanel.CompositionScaleChanged( compositionScaleChangedToken );
+        compositionScaleChangedToken.value = 0;
+        mSwapChainPanel.SizeChanged( sizeChangedToken );
+        sizeChangedToken.value = 0;
+#    endif
         mSwapChainPanel = nullptr;
     }
     //-----------------------------------------------------------------------------------
@@ -310,8 +391,13 @@ namespace Ogre
         // Associate swap chain with SwapChainPanel
         // Get backing native interface for SwapChainPanel
         ComPtr<ISwapChainPanelNative> panelNative;
+#    if defined( __cplusplus_winrt )
         hr = reinterpret_cast<IUnknown *>( mSwapChainPanel )
                  ->QueryInterface( IID_PPV_ARGS( panelNative.ReleaseAndGetAddressOf() ) );
+#    else
+        hr = reinterpret_cast<IUnknown *>( winrt::get_abi( mSwapChainPanel ) )
+                 ->QueryInterface( IID_PPV_ARGS( panelNative.ReleaseAndGetAddressOf() ) );
+#    endif
         if( FAILED( hr ) )
             return hr;
         hr = panelNative->SetSwapChain( mSwapChain1.Get() );
@@ -334,8 +420,13 @@ namespace Ogre
         // Broke association between SwapChainPanel and swap chain to avoid reporting it as leaked on
         // device lost event
         ComPtr<ISwapChainPanelNative> panelNative;
+#    if defined( __cplusplus_winrt )
         if( SUCCEEDED( reinterpret_cast<IUnknown *>( mSwapChainPanel )
                            ->QueryInterface( IID_PPV_ARGS( panelNative.ReleaseAndGetAddressOf() ) ) ) )
+#    else
+        if( SUCCEEDED( reinterpret_cast<IUnknown *>( winrt::get_abi( mSwapChainPanel ) )
+                           ->QueryInterface( IID_PPV_ARGS( panelNative.ReleaseAndGetAddressOf() ) ) ) )
+#    endif
             panelNative->SetSwapChain( 0 );
 
         D3D11WindowSwapChainBased::_destroySwapChain();
@@ -358,11 +449,17 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11WindowSwapChainPanel::windowMovedOrResized()
     {
-        Windows::Foundation::Size sz =
-            Windows::Foundation::Size( static_cast<float>( mSwapChainPanel->ActualWidth ),
-                                       static_cast<float>( mSwapChainPanel->ActualHeight ) );
+#    if defined( __cplusplus_winrt )
+        Windows::Foundation::Size sz{ static_cast<float>( mSwapChainPanel->ActualWidth ),
+                                      static_cast<float>( mSwapChainPanel->ActualHeight ) };
         mCompositionScale = Windows::Foundation::Size( mSwapChainPanel->CompositionScaleX,
                                                        mSwapChainPanel->CompositionScaleY );
+#    else
+        winrt::Windows::Foundation::Size sz{ static_cast<float>( mSwapChainPanel.ActualWidth() ),
+                                             static_cast<float>( mSwapChainPanel.ActualHeight() ) };
+        mCompositionScale = winrt::Windows::Foundation::Size( mSwapChainPanel.CompositionScaleX(),
+                                                              mSwapChainPanel.CompositionScaleY() );
+#    endif
         mRequestedWidth = (int)floorf( sz.Width + 0.5f );
         mRequestedHeight = (int)floorf( sz.Height + 0.5f );
 
@@ -376,8 +473,13 @@ namespace Ogre
     //---------------------------------------------------------------------
     bool D3D11WindowSwapChainPanel::isVisible() const
     {
+#    if defined( __cplusplus_winrt )
         return ( mSwapChainPanel &&
                  mSwapChainPanel->Visibility == Windows::UI::Xaml::Visibility::Visible );
+#    else
+        return ( mSwapChainPanel &&
+                 mSwapChainPanel.Visibility() == winrt::Windows::UI::Xaml::Visibility::Visible );
+#    endif
     }
 #endif
 #pragma endregion

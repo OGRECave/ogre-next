@@ -34,9 +34,7 @@ THE SOFTWARE.
 
 using namespace Ogre;
 
-EmitterDefData::EmitterDefData() : ParticleEmitter( nullptr ), mDimensions( 1.0f )
-{
-}
+EmitterDefData::EmitterDefData() : ParticleEmitter( nullptr ), mDimensions( 1.0f ) {}
 //-----------------------------------------------------------------------------
 uint32 EmitterDefData::genEmissionCount( Real timeSinceLast, EmitterInstanceData &instanceData ) const
 {
@@ -113,10 +111,7 @@ void EmitterInstanceData::setEnabled( bool bEnabled, const EmitterDefData &emitt
     }
 }
 //-----------------------------------------------------------------------------
-void EmitterDefData::setInitialDimensions( const Vector2 &dim )
-{
-    mDimensions = dim;
-}
+void EmitterDefData::setInitialDimensions( const Vector2 &dim ) { mDimensions = dim; }
 //-----------------------------------------------------------------------------
 unsigned short EmitterDefData::_getEmissionCount( Real )
 {

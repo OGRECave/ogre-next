@@ -137,7 +137,7 @@ namespace Ogre
             {
                 bool bCacheable = true;
 
-                for( size_t i = 0u; i < NumShaderTypes; ++i )
+                for( size_t i = 0u; i < CustomPieceStage::NumCustomPieceStages; ++i )
                 {
                     const int32 customPieceName =
                         hlms->getProperty( itor->mergedCache.setProperties,
@@ -177,7 +177,7 @@ namespace Ogre
 
                 bool bCacheable = true;
 
-                for( size_t i = 0u; i < NumShaderTypes; ++i )
+                for( size_t i = 0u; i < CustomPieceStage::NumCustomPieceStages; ++i )
                 {
                     const int32 customPieceName =
                         hlms->getProperty( hlms->mRenderableCache[renderableIdx].setProperties,

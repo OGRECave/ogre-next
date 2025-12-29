@@ -35,10 +35,10 @@
 		// const uint particleId = vertexId / 6u;
 		const uint particleId = vertexId / 4u;
 		uint4 tmp;
-		tmp = readOnlyFetch( particleSystemGpuData, particleId * 2u );
+		tmp = readOnlyFetch( particleSystemGpuData, int( particleId * 2u ) );
 		retVal.dim.xy = uintBitsToFloat( tmp.xy );
 		retVal.pos.xy = uintBitsToFloat( tmp.zw );
-		tmp = readOnlyFetch( particleSystemGpuData, particleId * 2u + 1u );
+		tmp = readOnlyFetch( particleSystemGpuData, int( particleId * 2u + 1u ) );
 		retVal.pos.z = uintBitsToFloat( tmp.x );
 		float4 tmp2 = unpackSnorm4x8( tmp.y );
 		retVal.dir.xyz = tmp2.xyz;

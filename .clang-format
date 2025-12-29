@@ -4,7 +4,7 @@ AlignAfterOpenBracket: Align
 #AlignConsecutiveAssignments: 'true'
 AlignEscapedNewlines: DontAlign
 AllowAllConstructorInitializersOnNextLine: false
-AllowShortFunctionsOnASingleLine: InlineOnly
+AllowShortFunctionsOnASingleLine: All
 AllowShortIfStatementsOnASingleLine: 'false'
 AllowShortLoopsOnASingleLine: 'false'
 BinPackParameters: 'true'

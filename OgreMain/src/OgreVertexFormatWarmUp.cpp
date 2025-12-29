@@ -68,14 +68,9 @@ namespace Ogre
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-VertexFormatWarmUpStorage::VertexFormatWarmUpStorage() : mNeedsSkeleton( false ), mSkeleton( 0 )
-{
-}
+VertexFormatWarmUpStorage::VertexFormatWarmUpStorage() : mNeedsSkeleton( false ), mSkeleton( 0 ) {}
 //-----------------------------------------------------------------------------
-VertexFormatWarmUpStorage::~VertexFormatWarmUpStorage()
-{
-    destroyWarmUp();
-}
+VertexFormatWarmUpStorage::~VertexFormatWarmUpStorage() { destroyWarmUp(); }
 //-----------------------------------------------------------------------------
 void VertexFormatWarmUpStorage::createSkeleton( SceneManager *sceneManager )
 {
@@ -525,10 +520,7 @@ void WarmUpRenderable::setupSkeleton( SkeletonInstance *instance,
     mBlendIndexToBoneIndexMap = blendIndexToBoneIndexMap;
 }
 //-----------------------------------------------------------------------------------
-const String &WarmUpRenderable::getMovableType() const
-{
-    return BLANKSTRING;
-}
+const String &WarmUpRenderable::getMovableType() const { return BLANKSTRING; }
 //-----------------------------------------------------------------------------------
 const LightList &WarmUpRenderable::getLights() const
 {

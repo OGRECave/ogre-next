@@ -157,7 +157,10 @@ namespace Ogre
                                                  mDefinition->mFirstRQ, mDefinition->mLastRQ );
         }
         if( mDefinition->mMode & CompositorPassWarmUpDef::Trigger )
-            sceneManager->_warmUpShadersTrigger();
+        {
+            sceneManager->_warmUpShadersTrigger( mDefinition->mShadowNodeRecalculation ==
+                                                 SHADOW_NODE_CASTER_PASS );
+        }
 
         sceneManager->_setCurrentCompositorPass( 0 );
 

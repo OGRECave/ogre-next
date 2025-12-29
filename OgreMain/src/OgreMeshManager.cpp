@@ -570,7 +570,7 @@ namespace Ogre
                     }
 
                 }  // x
-            }      // y
+            }  // y
 
             // Unlock
             vbufLock.unlock();
@@ -730,7 +730,7 @@ namespace Ogre
                     }
 
                 }  // x
-            }      // y
+            }  // y
             vbufLock.unlock();
 
             // Generate face list
@@ -918,7 +918,7 @@ namespace Ogre
                     }
 
                 }  // x
-            }      // y
+            }  // y
 
             // Unlock
             vbufLock.unlock();

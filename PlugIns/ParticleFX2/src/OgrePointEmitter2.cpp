@@ -76,19 +76,10 @@ void PointEmitter2::initEmittedParticles( ParticleCpuData cpuData, const Emitted
 }
 //-----------------------------------------------------------------------------
 static const String kPointEmitter2FactoryName = "Point";
-const String &PointEmitter2::getType() const
-{
-    return kPointEmitter2FactoryName;
-}
+const String &PointEmitter2::getType() const { return kPointEmitter2FactoryName; }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-const String &PointEmitterFactory2::getName() const
-{
-    return kPointEmitter2FactoryName;
-}
+const String &PointEmitterFactory2::getName() const { return kPointEmitter2FactoryName; }
 //-----------------------------------------------------------------------------
-EmitterDefData *PointEmitterFactory2::createEmitter()
-{
-    return new PointEmitter2();
-}
+EmitterDefData *PointEmitterFactory2::createEmitter() { return new PointEmitter2(); }

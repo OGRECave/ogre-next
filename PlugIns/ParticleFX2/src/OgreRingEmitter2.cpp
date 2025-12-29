@@ -138,21 +138,12 @@ void RingEmitter2::setInnerSizeY( Real y )
     mInnerSizey = y;
 }
 //-----------------------------------------------------------------------------
-Real RingEmitter2::getInnerSizeX() const
-{
-    return mInnerSizex;
-}
+Real RingEmitter2::getInnerSizeX() const { return mInnerSizex; }
 //-----------------------------------------------------------------------------
-Real RingEmitter2::getInnerSizeY() const
-{
-    return mInnerSizey;
-}
+Real RingEmitter2::getInnerSizeY() const { return mInnerSizey; }
 //-----------------------------------------------------------------------------
 static const String kRingEmitterFactoryName = "Ring";
-const String &RingEmitter2::getType() const
-{
-    return kRingEmitterFactoryName;
-}
+const String &RingEmitter2::getType() const { return kRingEmitterFactoryName; }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -179,12 +170,6 @@ void RingEmitter2::CmdInnerY::doSet( void *target, const String &val )
 //-----------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------
-const String &RingEmitterFactory2::getName() const
-{
-    return kRingEmitterFactoryName;
-}
+const String &RingEmitterFactory2::getName() const { return kRingEmitterFactoryName; }
 //-----------------------------------------------------------------------------------------
-EmitterDefData *RingEmitterFactory2::createEmitter()
-{
-    return new RingEmitter2();
-}
+EmitterDefData *RingEmitterFactory2::createEmitter() { return new RingEmitter2(); }

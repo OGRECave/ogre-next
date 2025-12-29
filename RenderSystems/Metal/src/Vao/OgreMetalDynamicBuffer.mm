@@ -77,10 +77,10 @@ namespace Ogre
     void MetalDynamicBuffer::flush( size_t ticket, size_t start, size_t count )
     {
         assert( start <= mMappedRanges[ticket].count && start + count <= mMappedRanges[ticket].count );
-        //#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        //        NSRange range = NSMakeRange( mMappedRanges[ticket].start + start, count );
-        //        [mVboName didModifyRange:range];
-        //#endif
+        // #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        //         NSRange range = NSMakeRange( mMappedRanges[ticket].start + start, count );
+        //         [mVboName didModifyRange:range];
+        // #endif
     }
     //-----------------------------------------------------------------------------------
     void MetalDynamicBuffer::unmap( size_t ticket )
@@ -96,4 +96,4 @@ namespace Ogre
             mMappedPtr = 0;
         }
     }
-}
+}  // namespace Ogre

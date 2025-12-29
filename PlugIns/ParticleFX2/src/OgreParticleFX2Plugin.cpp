@@ -52,10 +52,7 @@ using namespace Ogre;
 
 static const String sPluginName = "ParticleFX2";
 //-----------------------------------------------------------------------------
-const String &ParticleFX2Plugin::getName() const
-{
-    return sPluginName;
-}
+const String &ParticleFX2Plugin::getName() const { return sPluginName; }
 //-----------------------------------------------------------------------------
 void ParticleFX2Plugin::install( const NameValuePairList * )
 {
@@ -147,7 +144,4 @@ void ParticleFX2Plugin::uninstall()
     Hlms::_setHasParticleFX2Plugin( false );
 }
 //-----------------------------------------------------------------------------
-void ParticleFX2Plugin::getAbiCookie( AbiCookie &outAbiCookie )
-{
-    outAbiCookie = generateAbiCookie();
-}
+void ParticleFX2Plugin::getAbiCookie( AbiCookie &outAbiCookie ) { outAbiCookie = generateAbiCookie(); }

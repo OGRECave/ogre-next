@@ -39,4 +39,4 @@ namespace Demo
 
         return Ogre::Vector2( screenRect.size.width, screenRect.size.height );
     }
-}
+}  // namespace Demo

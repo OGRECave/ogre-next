@@ -52,4 +52,4 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------
     void MetalProgramFactory::destroy( HighLevelGpuProgram *prog ) { OGRE_DELETE prog; }
-}
+}  // namespace Ogre

@@ -117,15 +117,9 @@ void ColourImageAffector2::setImageAdjust( const String &name )
     mColourImageName = name;
 }
 //-----------------------------------------------------------------------
-const String &ColourImageAffector2::getImageAdjust() const
-{
-    return mColourImageName;
-}
+const String &ColourImageAffector2::getImageAdjust() const { return mColourImageName; }
 //-----------------------------------------------------------------------------------
-String ColourImageAffector2::getType() const
-{
-    return "ColourImage";
-}
+String ColourImageAffector2::getType() const { return "ColourImage"; }
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------

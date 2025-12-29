@@ -52,7 +52,7 @@ THE SOFTWARE.
 #include "Vao/OgreD3D11VertexArrayObject.h"
 #include "Vao/OgreIndirectBufferPacked.h"
 #ifdef _OGRE_MULTISOURCE_VBO
-//#include "Vao/OgreD3D11MultiSourceVertexBufferPool.h"
+// #include "Vao/OgreD3D11MultiSourceVertexBufferPool.h"
 #endif
 
 namespace Ogre

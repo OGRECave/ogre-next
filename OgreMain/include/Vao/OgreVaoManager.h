@@ -610,7 +610,7 @@ namespace Ogre
         slow: switches current command buffer and notify everyone with _notifyDeviceStalled() call. So
         _waitUntilCommitedCommandBufferCompleted() is more lightweight aspecially for Metal render system
         */
-        virtual void _waitUntilCommitedCommandBufferCompleted(){};
+        virtual void _waitUntilCommitedCommandBufferCompleted() {};
     };
 }  // namespace Ogre
 

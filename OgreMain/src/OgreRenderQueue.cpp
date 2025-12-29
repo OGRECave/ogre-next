@@ -279,7 +279,7 @@ namespace Ogre
         // TODO: Account for skeletal animation in any of the hashes (preferently on the material side)
         // TODO: Account for auto instancing animation in any of the hashes
 
-#define OGRE_RQ_HASH( x, bits, shift ) ( uint64( (x)&OGRE_RQ_MAKE_MASK( ( bits ) ) ) << ( shift ) )
+#define OGRE_RQ_HASH( x, bits, shift ) ( uint64( ( x ) & OGRE_RQ_MAKE_MASK( ( bits ) ) ) << ( shift ) )
 
         uint64 hash;
         if( !transparent )
@@ -388,7 +388,7 @@ namespace Ogre
         if( rs->supportsMultithreadedShaderCompilation() && mSceneManager->getNumWorkerThreads() > 1u )
         {
             parallelCompileQueue = &mParallelHlmsCompileQueue;
-            mParallelHlmsCompileQueue.start( mSceneManager, casterPass );
+            mParallelHlmsCompileQueue.start( mRoot, mSceneManager, casterPass );
         }
 
         bool supportsIndirectBuffers = mVaoManager->supportsIndirectBuffers();
@@ -581,12 +581,12 @@ namespace Ogre
         OgreProfileEndGroup( "RenderQueue::warmUpShadersCollect", OGREPROF_RENDERING );
     }
     //-----------------------------------------------------------------------
-    void RenderQueue::warmUpShadersTrigger( RenderSystem *rs )
+    void RenderQueue::warmUpShadersTrigger( RenderSystem *rs, bool casterPass )
     {
         OgreProfileBeginGroup( "RenderQueue::warmUpShadersTrigger", OGREPROF_RENDERING );
 
         if( rs->supportsMultithreadedShaderCompilation() && mSceneManager->getNumWorkerThreads() > 1u )
-            mParallelHlmsCompileQueue.fireWarmUpParallel( mSceneManager );
+            mParallelHlmsCompileQueue.fireWarmUpParallel( mRoot, mSceneManager, casterPass );
         else
             mParallelHlmsCompileQueue.warmUpSerial( mHlmsManager, mPendingPassCaches.data() );
 
@@ -1192,15 +1192,37 @@ namespace Ogre
         mParallelHlmsCompileQueue.updateThread( threadIdx, mHlmsManager );
     }
     //-----------------------------------------------------------------------
-    void ParallelHlmsCompileQueue::start( SceneManager *sceneManager, bool casterPass )
+    void ParallelHlmsCompileQueue::setupDeadline( Root &root, SceneManager &sceneManager,
+                                                  bool casterPass )
+    {
+        // Single threaded has no deadline support. This is because pending shaders
+        // are resent into the parallel queue, which does not exist.
+        // In theory, single threaded could support them, but it's not implemented.
+        const bool bUseDeadlines = root.getRenderSystem()->supportsMultithreadedShaderCompilation() &&
+                                   sceneManager.getNumWorkerThreads() > 1u && !casterPass;
+
+        if( !mDeadlineSet && bUseDeadlines )
+        {
+            const uint32 timeout = root.getRenderSystem()->getPsoRequestsTimeout();
+            if( timeout == 0u )
+                mMasterDeadline = UINT64_MAX;
+            else
+                mMasterDeadline = root.getTimer()->getMilliseconds() + timeout;
+            mDeadlineSet = true;
+        }
+        if( !bUseDeadlines )
+            mCompilationDeadline = UINT64_MAX;
+        else
+            mCompilationDeadline = mMasterDeadline;
+        mCompilationIncompleteCounter = 0;
+    }
+    //-----------------------------------------------------------------------
+    void ParallelHlmsCompileQueue::frameEnded() { mDeadlineSet = false; }
+    //-----------------------------------------------------------------------
+    void ParallelHlmsCompileQueue::start( Root *root, SceneManager *sceneManager, bool casterPass )
     {
         mKeepCompiling = true;
-        uint32 timeout =
-            casterPass ? 0u : Root::getSingleton().getRenderSystem()->getPsoRequestsTimeout();
-        mCompilationDeadline = timeout == 0u
-                                   ? UINT64_MAX
-                                   : ( Root::getSingleton().getTimer()->getMilliseconds() + timeout );
-        mCompilationIncompleteCounter = 0;
+        setupDeadline( *root, *sceneManager, casterPass );
         sceneManager->_fireParallelHlmsCompile();
     }
     //-----------------------------------------------------------------------
@@ -1232,10 +1254,10 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
-    void ParallelHlmsCompileQueue::fireWarmUpParallel( SceneManager *sceneManager )
+    void ParallelHlmsCompileQueue::fireWarmUpParallel( Root *root, SceneManager *sceneManager,
+                                                       bool casterPass )
     {
-        mCompilationDeadline = UINT64_MAX;
-        mCompilationIncompleteCounter = 0;
+        setupDeadline( *root, *sceneManager, casterPass );
         sceneManager->_fireWarmUpShadersCompile();
         OGRE_ASSERT_LOW( mRequests.empty() );  // Should be empty, whether we found an exception or not.
         // See comments in ParallelHlmsCompileQueue::stopAndWait implementation.
@@ -1274,9 +1296,15 @@ namespace Ogre
             try
             {
                 hlms->compileStubEntry( passCaches[reinterpret_cast<size_t>( request.passCache )],
-                                        request.reservedStubEntry, UINT64_MAX, request.queuedRenderable,
-                                        request.renderableHash, request.finalHash, threadIdx );
-                OGRE_ASSERT_LOW( request.reservedStubEntry->flags == HLMS_CACHE_FLAGS_NONE );
+                                        request.reservedStubEntry, mCompilationDeadline,
+                                        request.queuedRenderable, request.renderableHash,
+                                        request.finalHash, threadIdx );
+
+                if( request.reservedStubEntry->flags == HLMS_CACHE_FLAGS_COMPILATION_REQUIRED )
+                {
+                    mCompilationIncompleteCounter.fetch_add( 1,
+                                                             std::memory_order::memory_order_relaxed );
+                }
             }
             catch( Exception & )
             {
@@ -1294,15 +1322,20 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void ParallelHlmsCompileQueue::warmUpSerial( HlmsManager *hlmsManager, const HlmsCache *passCaches )
     {
+        // Single threaded has no deadline support. This is because pending shaders
+        // are resent into the parallel queue, which does not exist.
+        // In theory, single threaded could support them, but it's not implemented.
         mCompilationDeadline = UINT64_MAX;
         mCompilationIncompleteCounter = 0;
+
         for( const Request &request : mRequests )
         {
             const HlmsDatablock *datablock = request.queuedRenderable.renderable->getDatablock();
             Hlms *hlms = hlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
             hlms->compileStubEntry( passCaches[reinterpret_cast<size_t>( request.passCache )],
-                                    request.reservedStubEntry, UINT64_MAX, request.queuedRenderable,
-                                    request.renderableHash, request.finalHash, 0u );
+                                    request.reservedStubEntry, mCompilationDeadline,
+                                    request.queuedRenderable, request.renderableHash, request.finalHash,
+                                    0u );
             OGRE_ASSERT_LOW( request.reservedStubEntry->flags == HLMS_CACHE_FLAGS_NONE );
         }
 
@@ -1378,8 +1411,10 @@ namespace Ogre
                                             mCompilationDeadline, request.queuedRenderable,
                                             request.renderableHash, request.finalHash, threadIdx );
                     if( request.reservedStubEntry->flags == HLMS_CACHE_FLAGS_COMPILATION_REQUIRED )
+                    {
                         mCompilationIncompleteCounter.fetch_add(
                             1, std::memory_order::memory_order_relaxed );
+                    }
                 }
                 catch( Exception & )
                 {
@@ -1466,6 +1501,8 @@ namespace Ogre
         mFreeIndirectBuffers.insert( mFreeIndirectBuffers.end(), mUsedIndirectBuffers.begin(),
                                      mUsedIndirectBuffers.end() );
         mUsedIndirectBuffers.clear();
+
+        mParallelHlmsCompileQueue.frameEnded();
     }
     //-----------------------------------------------------------------------
     void RenderQueue::setRenderQueueMode( uint8 rqId, Modes newMode )
@@ -1493,8 +1530,10 @@ namespace Ogre
     ParallelHlmsCompileQueue::ParallelHlmsCompileQueue() :
         mSemaphore( 0u ),
         mKeepCompiling( false ),
-        mCompilationDeadline( 0 ),
-        mCompilationIncompleteCounter( 0 ),
+        mCompilationIncompleteCounter( 0u ),
+        mCompilationDeadline( 0u ),
+        mMasterDeadline( 0u ),
+        mDeadlineSet( false ),
         mExceptionFound( false )
     {
     }

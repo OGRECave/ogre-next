@@ -283,7 +283,7 @@ namespace Ogre
 
 /// Free the memory allocated with OGRE_MALLOC or OGRE_ALLOC_T. Category is required to be restated to
 /// ensure the matching policy is used
-#    define OGRE_FREE( ptr, category ) delete[]( char * ) ptr
+#    define OGRE_FREE( ptr, category ) delete[](char *)ptr
 
 #else
 

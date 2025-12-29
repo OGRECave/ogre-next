@@ -166,7 +166,7 @@ namespace Ogre
 
         mSupportsPersistentMapping = true;
         mSupportsIndirectBuffers = mDevice->mDeviceFeatures.multiDrawIndirect &&
-                                   mDevice->mDeviceFeatures.drawIndirectFirstInstance;
+                                   mDevice->mDeviceFeatures.drawIndirectFirstInstance && false;
 
 #ifdef OGRE_VK_WORKAROUND_ADRENO_618_0VERTEX_INDIRECT
         if( Workarounds::mAdreno618_0VertexIndirect )

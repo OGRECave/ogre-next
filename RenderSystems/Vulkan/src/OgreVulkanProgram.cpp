@@ -153,7 +153,7 @@ namespace Ogre
     {
         switch( mType )
         {
-        // clang-format off
+            // clang-format off
         case GPT_VERTEX_PROGRAM:    return EShLangVertex;
         case GPT_FRAGMENT_PROGRAM:  return EShLangFragment;
         case GPT_GEOMETRY_PROGRAM:  return EShLangGeometry;
@@ -1367,7 +1367,7 @@ namespace Ogre
     {
         switch( programType )
         {
-        // clang-format off
+            // clang-format off
         case GPT_VERTEX_PROGRAM:    return VK_SHADER_STAGE_VERTEX_BIT;
         case GPT_FRAGMENT_PROGRAM:  return VK_SHADER_STAGE_FRAGMENT_BIT;
         case GPT_GEOMETRY_PROGRAM:  return VK_SHADER_STAGE_GEOMETRY_BIT;

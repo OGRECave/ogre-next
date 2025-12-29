@@ -115,6 +115,11 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
+    void GraphicsSystem::setRequiePersistentDepthBuf( bool require )
+    {
+        mRequirePersistentDepthBuf = require;
+    }
+    //-----------------------------------------------------------------------------------
     bool GraphicsSystem::isWriteAccessFolder( const Ogre::String &folderPath,
                                               const Ogre::String &fileToSave )
     {
@@ -182,11 +187,28 @@ namespace Demo
 
         if( mAlwaysAskForConfig || !mRoot->restoreConfig() )
         {
+#ifdef AUTO_TESTING
+            Ogre::RenderSystem *rs;
+            if( !renderer.empty() )
+            {
+                rs = mRoot->getRenderSystemByName( renderer );
+            }
+            else
+            {
+                rs = mRoot->getRenderSystemByName( "OpenGL 3+ Rendering Subsystem" );
+            }
+
+            mRoot->setRenderSystem( rs );
+            rs->setConfigOption( "Full Screen", "Yes" );
+            rs->setConfigOption( "VSync", "Yes" );
+            mRoot->saveConfig();
+#else
             if( !mRoot->showConfigDialog() )
             {
                 mQuit = true;
                 return;
             }
+#endif
         }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
@@ -323,7 +345,15 @@ namespace Demo
         params.insert( std::make_pair( "FSAA", cfgOpts["FSAA"].currentValue ) );
         params.insert( std::make_pair( "vsync", cfgOpts["VSync"].currentValue ) );
         params.insert( std::make_pair( "reverse_depth", "Yes" ) );
-        params.insert( std::make_pair( "memoryless_depth_buffer", "Yes" ) );
+
+        if( mRequirePersistentDepthBuf )
+        {
+            params.insert( std::make_pair( "memoryless_depth_buffer", "No" ) );
+        }
+        else
+        {
+            params.insert( std::make_pair( "memoryless_depth_buffer", "Yes" ) );
+        }
 
         initMiscParamsListener( params );
 
@@ -419,6 +449,7 @@ namespace Demo
             }
 
             mInputHandler->_handleSdlEvents( evt );
+            handleRawSdlEvent( evt );
         }
 #endif
 
@@ -1109,4 +1140,10 @@ namespace Demo
             ++itor;
         }
     }
+#ifdef AUTO_TESTING
+    void GraphicsSystem::setRendererParam( std::string renderSubsystem )
+    {
+        this->renderer = renderSubsystem;
+    }
+#endif
 }  // namespace Demo

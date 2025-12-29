@@ -108,5 +108,5 @@ namespace Ogre
             }
             return HardwareIndexBufferSharedPtr( buf );
         }
-    }
-}
+    }  // namespace v1
+}  // namespace Ogre

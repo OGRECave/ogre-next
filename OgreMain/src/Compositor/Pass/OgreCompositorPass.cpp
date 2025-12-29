@@ -331,13 +331,13 @@ namespace Ogre
         {
             renderPassDesc->entriesModified( RenderPassDescriptor::All );
         }
-        catch( Exception & )
+        catch( Exception &e )
         {
             LogManager::getSingleton().logMessage(
                 "The compositor pass '" + mDefinition->mProfilingId + "' from Node: '" +
                     mParentNode->getDefinition()->getNameStr() + "' in Workspace: '" +
                     mParentNode->getWorkspace()->getDefinition()->getNameStr() +
-                    "' threw the following Exception:",
+                    "' threw the following Exception: " + e.getFullDescription(),
                 LML_CRITICAL );
             throw;
         }

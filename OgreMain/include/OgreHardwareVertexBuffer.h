@@ -103,7 +103,7 @@ namespace Ogre
         /** Locking helper. */
         typedef HardwareBufferLockGuard
             HardwareVertexBufferLockGuard;  // deprecated, use HardwareBufferLockGuard directly
-    }                                       // namespace v1
+    }  // namespace v1
 
     namespace v1
     {
