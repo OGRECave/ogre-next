@@ -96,6 +96,10 @@ THE SOFTWARE.
     _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
 #    include <dxgi1_3.h>  // for IDXGIDevice3::Trim
 #endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+#    include <winrt/Windows.ApplicationModel.Core.h>
+#    include <winrt/Windows.Graphics.Display.h>
+#endif
 
 namespace Ogre
 {
@@ -145,7 +149,7 @@ namespace Ogre
         mEventNames.push_back( "DeviceLost" );
         mEventNames.push_back( "DeviceRestored" );
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && defined( __cplusplus_winrt )
 #    if defined( _WIN32_WINNT_WINBLUE ) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
         suspendingToken =
             ( Windows::ApplicationModel::Core::CoreApplication::Suspending +=
@@ -179,12 +183,37 @@ namespace Ogre
                       validateDevice( true );
                   } ) );
 #    endif
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+#    if defined( _WIN32_WINNT_WINBLUE ) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
+        suspendingToken = winrt::Windows::ApplicationModel::Core::CoreApplication::Suspending(
+            [this]( auto const &, auto const & ) {
+                // Hints to the driver that the app is entering an idle state and that its memory
+                // can be used temporarily for other apps.
+                ComPtr<IDXGIDevice3> pDXGIDevice;
+                if( mDevice.get() && SUCCEEDED( mDevice->QueryInterface( pDXGIDevice.GetAddressOf() ) ) )
+                    pDXGIDevice->Trim();
+            } );
+
+        surfaceContentLostToken =
+            winrt::Windows::Graphics::Display::DisplayInformation::DisplayContentsInvalidated(
+                [this]( auto const &, auto const & ) {
+                    LogManager::getSingleton().logMessage( "D3D11: DisplayContentsInvalidated." );
+                    validateDevice( true );
+                } );
+#    else  // Win 8.0
+        surfaceContentLostToken =
+            winrt::Windows::Graphics::Display::DisplayProperties::DisplayContentsInvalidated(
+                [this]( auto const & ) {
+                    LogManager::getSingleton().logMessage( "D3D11: DisplayContentsInvalidated." );
+                    validateDevice( true );
+                } );
+#    endif
 #endif
     }
     //---------------------------------------------------------------------
     D3D11RenderSystem::~D3D11RenderSystem()
     {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && defined( __cplusplus_winrt )
 #    if defined( _WIN32_WINNT_WINBLUE ) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
         Windows::ApplicationModel::Core::CoreApplication::Suspending -= suspendingToken;
         Windows::Graphics::Display::DisplayInformation::DisplayContentsInvalidated -=
@@ -192,6 +221,15 @@ namespace Ogre
 #    else  // Win 8.0
         Windows::Graphics::Display::DisplayProperties::DisplayContentsInvalidated -=
             surfaceContentLostToken;
+#    endif
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+#    if defined( _WIN32_WINNT_WINBLUE ) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
+        winrt::Windows::ApplicationModel::Core::CoreApplication::Suspending( suspendingToken );
+        winrt::Windows::Graphics::Display::DisplayInformation::DisplayContentsInvalidated(
+            surfaceContentLostToken );
+#    else  // Win 8.0
+        winrt::Windows::Graphics::Display::DisplayProperties::DisplayContentsInvalidated(
+            surfaceContentLostToken );
 #    endif
 #endif
 
@@ -283,13 +321,9 @@ namespace Ogre
 #    if defined( _WIN32_WINNT_WIN8 )
             D3D_FEATURE_LEVEL_11_1,
 #    endif
-            D3D_FEATURE_LEVEL_11_0,
-            D3D_FEATURE_LEVEL_10_1,
-            D3D_FEATURE_LEVEL_10_0,
+            D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_1, D3D_FEATURE_LEVEL_10_0,
 #endif  // !__OGRE_WINRT_PHONE
-            D3D_FEATURE_LEVEL_9_3,
-            D3D_FEATURE_LEVEL_9_2,
-            D3D_FEATURE_LEVEL_9_1
+            D3D_FEATURE_LEVEL_9_3,  D3D_FEATURE_LEVEL_9_2,  D3D_FEATURE_LEVEL_9_1
         };
 
         D3D_FEATURE_LEVEL *pFirstFL = requestedLevels;

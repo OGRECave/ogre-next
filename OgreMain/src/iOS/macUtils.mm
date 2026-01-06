@@ -112,4 +112,4 @@ namespace Ogre
         return String( [tempFilePath fileSystemRepresentation] );
     }
 
-}
+}  // namespace Ogre

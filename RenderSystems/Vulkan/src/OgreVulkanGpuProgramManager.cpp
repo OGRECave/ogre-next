@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "OgreVulkanUtils.h"
 
 #include "OgreLogManager.h"
-//#include "OgreVulkanProgram.h"
+// #include "OgreVulkanProgram.h"
 
 namespace Ogre
 {

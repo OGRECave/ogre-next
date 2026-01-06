@@ -43,8 +43,8 @@ THE SOFTWARE.
 
 #include <sstream>
 
-//#define _OGRE_USE_OLD_RAY_TRIANGLE_INTERSECTION // new Moller-Trumbore implementation is 3x faster but
-// less mature
+// #define _OGRE_USE_OLD_RAY_TRIANGLE_INTERSECTION // new Moller-Trumbore implementation is 3x faster but
+//  less mature
 
 namespace Ogre
 {

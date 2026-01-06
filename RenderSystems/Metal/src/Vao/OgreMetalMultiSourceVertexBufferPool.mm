@@ -127,6 +127,6 @@ namespace Ogre
                            mSourceOffset[vertexBuffer->_getSourceIndex()],
                        numVertices );
     }
-}
+}  // namespace Ogre
 
 #endif

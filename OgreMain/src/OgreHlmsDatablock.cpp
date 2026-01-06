@@ -232,6 +232,7 @@ namespace Ogre
         datablock->setBlendblock( const_cast<HlmsBlendblock *>( mBlendblock[0] ), false );
         datablock->setBlendblock( const_cast<HlmsBlendblock *>( mBlendblock[1] ), true );
 
+        datablock->mCustomProperties = mCustomProperties;
         datablock->mAlphaHashing = mAlphaHashing;
         datablock->mAlphaTestCmp = mAlphaTestCmp;
         datablock->mAlphaTestShadowCasterOnly = mAlphaTestShadowCasterOnly;
@@ -239,7 +240,7 @@ namespace Ogre
 
         datablock->mShadowConstantBias = mShadowConstantBias;
 
-        for( size_t i = 0u; i < NumShaderTypes; ++i )
+        for( size_t i = 0u; i < CustomPieceStage::NumCustomPieceStages; ++i )
             datablock->mCustomPieceFileIdHash[i] = mCustomPieceFileIdHash[i];
 
         cloneImpl( datablock );
@@ -250,14 +251,14 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsDatablock::setCustomPieceCodeFromMemory( const String &filename, const String &shaderCode,
-                                                      ShaderType shaderType )
+                                                      CustomPieceStage::CustomPieceStage stage )
     {
         if( filename.empty() )
         {
             OGRE_ASSERT_LOW( shaderCode.empty() && "Providing shader code but the filename is empty!" );
-            if( mCustomPieceFileIdHash[shaderType] )
+            if( mCustomPieceFileIdHash[stage] )
             {
-                mCustomPieceFileIdHash[shaderType] = 0;
+                mCustomPieceFileIdHash[stage] = 0;
                 flushRenderables();
             }
         }
@@ -265,46 +266,55 @@ namespace Ogre
         {
             mCreator->_addDatablockCustomPieceFileFromMemory( filename, shaderCode );
             const int32 hashNameId = static_cast<int32>( IdString( filename ).getU32Value() );
-            mCustomPieceFileIdHash[shaderType] = hashNameId;
+            mCustomPieceFileIdHash[stage] = hashNameId;
             flushRenderables();
         }
     }
     //-----------------------------------------------------------------------------------
     void HlmsDatablock::setCustomPieceFile( const String &filename, const String &resourceGroup,
-                                            ShaderType shaderType )
+                                            CustomPieceStage::CustomPieceStage stage )
     {
         if( filename.empty() )
         {
-            if( mCustomPieceFileIdHash[shaderType] )
+            if( mCustomPieceFileIdHash[stage] )
             {
-                mCustomPieceFileIdHash[shaderType] = 0;
+                mCustomPieceFileIdHash[stage] = 0;
                 flushRenderables();
             }
         }
         else
         {
             const int32 hashNameId = static_cast<int32>( IdString( filename ).getU32Value() );
-            if( mCustomPieceFileIdHash[shaderType] != hashNameId )
+            if( mCustomPieceFileIdHash[stage] != hashNameId )
             {
                 mCreator->_addDatablockCustomPieceFile( filename, resourceGroup );
-                mCustomPieceFileIdHash[shaderType] = hashNameId;
+                mCustomPieceFileIdHash[stage] = hashNameId;
                 flushRenderables();
             }
         }
     }
     //-----------------------------------------------------------------------------------
-    int32 HlmsDatablock::getCustomPieceFileIdHash( ShaderType shaderType ) const
+    int32 HlmsDatablock::getCustomPieceFileIdHash( CustomPieceStage::CustomPieceStage stage ) const
     {
-        OGRE_ASSERT_LOW( shaderType < NumShaderTypes );
-        return mCustomPieceFileIdHash[shaderType];
+        OGRE_ASSERT_LOW( stage < CustomPieceStage::NumCustomPieceStages );
+        return mCustomPieceFileIdHash[stage];
     }
     //-----------------------------------------------------------------------------------
-    const String &HlmsDatablock::getCustomPieceFileStr( ShaderType shaderType ) const
+    const String &HlmsDatablock::getCustomPieceFileStr( CustomPieceStage::CustomPieceStage stage ) const
     {
-        OGRE_ASSERT_LOW( shaderType < NumShaderTypes );
-        if( !mCustomPieceFileIdHash[shaderType] )
+        OGRE_ASSERT_LOW( stage < CustomPieceStage::NumCustomPieceStages );
+        if( !mCustomPieceFileIdHash[stage] )
             return BLANKSTRING;
-        return mCreator->getDatablockCustomPieceFileNameStr( mCustomPieceFileIdHash[shaderType] );
+        return mCreator->getDatablockCustomPieceFileNameStr( mCustomPieceFileIdHash[stage] );
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsDatablock::setCustomProperties( CustomPropertyArray &properties, bool bSwap )
+    {
+        if( bSwap )
+            mCustomProperties.swap( properties );
+        else
+            mCustomProperties = properties;
+        flushRenderables();
     }
     //-----------------------------------------------------------------------------------
     void HlmsDatablock::setMacroblock( const HlmsMacroblock &macroblock, const bool casterBlock,
@@ -392,7 +402,9 @@ namespace Ogre
                 ( !mBlendblock[0]->mSeparateBlend ||
                   ( mBlendblock[0]->mSourceBlendFactorAlpha == SBF_ONE &&
                     mBlendblock[0]->mDestBlendFactorAlpha == SBF_ZERO ) ) )
+            {
                 setBlendblock( mBlendblock[0], true );
+            }
             else
             {
                 HlmsBlendblock casterBlendblock = *mBlendblock[0];

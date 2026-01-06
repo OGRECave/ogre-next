@@ -34,6 +34,10 @@
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #    include <shlobj.h>
 #endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+#    include <winrt/Windows.ApplicationModel.h>
+#    include <winrt/Windows.Storage.h>
+#endif
 #include <direct.h>
 #include <errno.h>
 #include <io.h>
@@ -115,10 +119,21 @@ namespace Ogre
             appPath = ".";
         }
 
-#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT && defined( __cplusplus_winrt )
         Ogre::String appPath;
         if( !widePathToOgreString(
                 appPath, Windows::ApplicationModel::Package::Current->InstalledLocation->Path->Data() ) )
+        {
+            // fallback to current working dir
+            appPath = ".";
+        }
+
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+        Ogre::String appPath;
+        if( !widePathToOgreString( appPath, winrt::Windows::ApplicationModel::Package::Current()
+                                                .InstalledLocation()
+                                                .Path()
+                                                .c_str() ) )
         {
             // fallback to current working dir
             appPath = ".";
@@ -136,9 +151,13 @@ namespace Ogre
         WCHAR wpath[MAX_PATH];
         if( SUCCEEDED( SHGetFolderPathW( NULL, CSIDL_PERSONAL | CSIDL_FLAG_CREATE, NULL, 0, wpath ) ) )
             widePathToOgreString( mHomePath, wpath );
-#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT && defined( __cplusplus_winrt )
         widePathToOgreString( mHomePath,
                               Windows::Storage::ApplicationData::Current->LocalFolder->Path->Data() );
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+        widePathToOgreString(
+            mHomePath,
+            winrt::Windows::Storage::ApplicationData::Current().LocalFolder().Path().c_str() );
 #endif
 
         if( !mHomePath.empty() )

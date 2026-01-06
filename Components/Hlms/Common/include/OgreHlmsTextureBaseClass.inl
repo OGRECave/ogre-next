@@ -143,13 +143,13 @@ namespace Ogre
         const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
         const bool hasSeparateSamplers = caps->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
 
-        bool needsRecalculateHash = false;
+        const bool needsRecalculateHash = textureSetDirty | samplerSetDirty;
 
         if( textureSetDirty || ( samplerSetDirty && !hasSeparateSamplers ) )
-            needsRecalculateHash |= bakeTextures( hasSeparateSamplers );
+            bakeTextures( hasSeparateSamplers );
 
         if( samplerSetDirty && hasSeparateSamplers )
-            needsRecalculateHash |= bakeSamplers();
+            bakeSamplers();
 
         if( needsRecalculateHash )
             calculateHash();
@@ -162,7 +162,7 @@ namespace Ogre
         flushRenderables( onlyNullHashes );
     }
     //-----------------------------------------------------------------------------------
-    bool OGRE_HLMS_TEXTURE_BASE_CLASS::bakeTextures( bool hasSeparateSamplers )
+    void OGRE_HLMS_TEXTURE_BASE_CLASS::bakeTextures( bool hasSeparateSamplers )
     {
         DescriptorSetTexture baseSet;
         DescriptorSetSampler baseSampler;
@@ -212,14 +212,11 @@ namespace Ogre
         baseSampler.mShaderTypeSamplerCount[PixelShader] =
             static_cast<uint16>( baseSampler.mSamplers.size() );
 
-        bool needsRecalculateHash = false;
-
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
         if( mTexturesDescSet && baseSet.mTextures.empty() )
         {
             hlmsManager->destroyDescriptorSetTexture( mTexturesDescSet );
             mTexturesDescSet = 0;
-            needsRecalculateHash = true;
             if( !hasSeparateSamplers )
             {
                 hlmsManager->destroyDescriptorSetSampler( mSamplersDescSet );
@@ -236,7 +233,6 @@ namespace Ogre
             if( !baseSet.mTextures.empty() )
             {
                 mTexturesDescSet = hlmsManager->getDescriptorSetTexture( baseSet );
-                needsRecalculateHash = true;
             }
             if( !hasSeparateSamplers )
             {
@@ -249,15 +245,13 @@ namespace Ogre
                     mSamplersDescSet = hlmsManager->getDescriptorSetSampler( baseSampler );
             }
         }
-
-        return needsRecalculateHash;
     }
     //-----------------------------------------------------------------------------------
     static bool OrderBlockById( const BasicBlock *_a, const BasicBlock *_b )
     {
         return _a->mId < _b->mId;
     }
-    bool OGRE_HLMS_TEXTURE_BASE_CLASS::bakeSamplers()
+    void OGRE_HLMS_TEXTURE_BASE_CLASS::bakeSamplers()
     {
         assert( mCreator->getRenderSystem()->getCapabilities()->hasCapability(
             RSC_SEPARATE_SAMPLERS_FROM_TEXTURES ) );
@@ -279,14 +273,11 @@ namespace Ogre
         baseSampler.mShaderTypeSamplerCount[PixelShader] =
             static_cast<uint16>( baseSampler.mSamplers.size() );
 
-        bool needsRecalculateHash = false;
-
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
         if( mSamplersDescSet && baseSampler.mSamplers.empty() )
         {
             hlmsManager->destroyDescriptorSetSampler( mSamplersDescSet );
             mSamplersDescSet = 0;
-            needsRecalculateHash = true;
         }
         else if( !mSamplersDescSet || *mSamplersDescSet != baseSampler )
         {
@@ -298,11 +289,8 @@ namespace Ogre
             if( !baseSampler.mSamplers.empty() )
             {
                 mSamplersDescSet = hlmsManager->getDescriptorSetSampler( baseSampler );
-                needsRecalculateHash = true;
             }
         }
-
-        return needsRecalculateHash;
     }
     //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::setTexture( uint8 texType, TextureGpu *texture,

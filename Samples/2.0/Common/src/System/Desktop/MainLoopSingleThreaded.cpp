@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "System/MainEntryPoints.h"
 
 #include "System/Desktop/UnitTesting.h"
+#include "TutorialGameState.h"
 
 #include "GameState.h"
 #include "GraphicsSystem.h"
@@ -71,7 +72,20 @@ int Demo::MainEntryPoints::mainAppSingleThreaded( int argc, const char *argv[] )
     LogicSystem *logicSystem = 0;
 
     MainEntryPoints::createSystems( &graphicsGameState, &graphicsSystem, &logicGameState, &logicSystem );
-
+#ifdef AUTO_TESTING
+    if( argv[1] )
+    {
+        graphicsSystem->setRendererParam( std::string( argv[1] ) );
+    }
+    if( TutorialGameState *tutorial = dynamic_cast<TutorialGameState *>( graphicsGameState ) )
+    {
+        tutorial->setSampleName( std::string( argv[0] ).substr( 2 ) );
+        if( argv[2] )
+        {
+            tutorial->setFrameCount( std::string( argv[2] ) );
+        }
+    }
+#endif
     try
     {
         graphicsSystem->initialize( getWindowTitle() );
@@ -104,11 +118,14 @@ int Demo::MainEntryPoints::mainAppSingleThreaded( int argc, const char *argv[] )
             logicSystem->createScene02();
 
 #if OGRE_USE_SDL2
-        // Do this after creating the scene for easier the debugging (the mouse doesn't hide itself)
-        SdlInputHandler *inputHandler = graphicsSystem->getInputHandler();
-        inputHandler->setGrabMousePointer( true );
-        inputHandler->setMouseVisible( false );
-        inputHandler->setMouseRelative( true );
+        if( graphicsSystem->getGrabMousePointerOnStartup() )
+        {
+            // Do this after creating the scene for easier the debugging (the mouse doesn't hide itself).
+            SdlInputHandler *inputHandler = graphicsSystem->getInputHandler();
+            inputHandler->setGrabMousePointer( true );
+            inputHandler->setMouseVisible( false );
+            inputHandler->setMouseRelative( true );
+        }
 #endif
 
         Ogre::Timer timer;

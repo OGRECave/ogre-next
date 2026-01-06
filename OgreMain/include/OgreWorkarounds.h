@@ -164,7 +164,18 @@ namespace Ogre
 /// First seen: Unknown
 /// Last seen: 2022-05-13
 #        define OGRE_VK_WORKAROUND_PVR_ALIGNMENT
-		static uint32 mPowerVRAlignment;
+        static uint32 mPowerVRAlignment;
+
+/// PowerVR 8xxx will crash the entire OS when using VkPipelineCache
+/// and has a cache hit.
+///
+/// As of Driver 1.386.1368, API version 1.1.131 (Android 11),
+/// this bug is still present.
+///
+/// First seen: Unknown
+/// Last seen: 2025-12-18
+#        define OGRE_VK_WORKAROUND_BROKEN_VKPIPELINECACHE
+        static bool mBrokenVkPipelineCache;
 #    endif
 #endif
     };

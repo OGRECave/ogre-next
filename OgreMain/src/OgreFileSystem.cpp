@@ -57,8 +57,9 @@ THE SOFTWARE.
 #    include <direct.h>
 #    include <io.h>
 #    include <windows.h>
-//#  define _OGRE_FILESYSTEM_ARCHIVE_UNICODE // base path and resources subpathes expected to be in UTF-8
-// and wchar_t file IO routines are used
+// #  define _OGRE_FILESYSTEM_ARCHIVE_UNICODE // base path and resources subpathes expected to be in
+// UTF-8
+//  and wchar_t file IO routines are used
 #endif
 
 namespace Ogre

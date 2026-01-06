@@ -347,19 +347,17 @@ namespace Ogre
         // eglBindAPI( EGL_OPENGL_ES_API );
         eglBindAPI( EGL_OPENGL_API );
 
-        EGLint contextAttrs[] = {
-            EGL_CONTEXT_MAJOR_VERSION,
-            4,
-            EGL_CONTEXT_MINOR_VERSION,
-            5,
-            EGL_CONTEXT_OPENGL_PROFILE_MASK,
-            EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR,
+        EGLint contextAttrs[] = { EGL_CONTEXT_MAJOR_VERSION,
+                                  4,
+                                  EGL_CONTEXT_MINOR_VERSION,
+                                  5,
+                                  EGL_CONTEXT_OPENGL_PROFILE_MASK,
+                                  EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR,
 #if OGRE_DEBUG_MODE
-            EGL_CONTEXT_FLAGS_KHR,
-            EGL_CONTEXT_OPENGL_DEBUG_BIT_KHR,
+                                  EGL_CONTEXT_FLAGS_KHR,
+                                  EGL_CONTEXT_OPENGL_DEBUG_BIT_KHR,
 #endif
-            EGL_NONE
-        };
+                                  EGL_NONE };
 
         while( !deviceData.eglCtx && ( contextAttrs[1] >= 3 ) )
         {

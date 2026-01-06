@@ -120,4 +120,4 @@ namespace Ogre
                      "You cannot call setTextureType if isRenderWindowSpecific is true",
                      "MetalTextureGpuWindow::setTextureType" );
     }
-}
+}  // namespace Ogre

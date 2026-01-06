@@ -58,6 +58,6 @@ namespace Ogre
 
         void destroy( HighLevelGpuProgram *prog ) override;
     };
-}
+}  // namespace Ogre
 
 #endif  // __MetalProgramFactory_H__

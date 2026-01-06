@@ -275,7 +275,7 @@ namespace Ogre
 
         void cloneImpl( HlmsDatablock *datablock ) const override;
 
-        bool bakeTextures( bool hasSeparateSamplers ) override;
+        void bakeTextures( bool hasSeparateSamplers ) override;
         void scheduleConstBufferUpdate();
         void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags ) override;
         void notifyOptimizationStrategyChanged() override;

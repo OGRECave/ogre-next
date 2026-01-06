@@ -18,6 +18,14 @@
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsManager.h"
 
+#ifdef AUTO_TESTING
+#    include <fstream>
+#    include <iostream>
+#    include <sstream>
+#    include <stdexcept>
+#    include <string>
+#endif
+
 using namespace Demo;
 
 namespace Demo
@@ -100,7 +108,34 @@ namespace Demo
         finalText += "Avg FPS:\t";
         finalText += Ogre::StringConverter::toString( frameStats->getRollingAverageFps() );
         finalText += "\n\nPress F1 to toggle help";
+#ifdef AUTO_TESTING
+        frameCount++;
+        if( frameCount > maxFrames )
+        {
+            std::string filename = "benchmark_" + sampleName + +".csv";
 
+            Ogre::String rsName = mGraphicsSystem->getRoot()->getRenderSystem()->getName();
+            float avgFps = frameStats->getRollingAverageFps();
+            float avgMs = frameStats->getRollingAverage() * 1000.0f;
+
+            std::ofstream out( filename.c_str(), std::ios::app );
+            if( out.is_open() )
+            {
+                out << "\"" << sampleName << "\"," << "\"" << rsName << "\"," << avgFps << "," << avgMs
+                    << "\n";
+                out.close();
+                std::cout << "Logged benchmark: " << sampleName << " [" << rsName << "] - " << avgFps
+                          << " FPS, " << avgMs << " ms" << std::endl;
+            }
+            else
+            {
+                std::cerr << "Could not open benchmark results file: " << filename << std::endl;
+            }
+
+            mGraphicsSystem->deinitialize();
+            exit( 0 );
+        }
+#endif
         outText.swap( finalText );
 
         mDebugText->setCaption( finalText );
@@ -121,6 +156,27 @@ namespace Demo
         if( mCameraController )
             mCameraController->update( timeSinceLast );
     }
+//-----------------------------------------------------------------------------------
+#ifdef AUTO_TESTING
+    void TutorialGameState::setSampleName( std::string newSampleName ) { sampleName = newSampleName; }
+
+    void TutorialGameState::setFrameCount( std::string frames )
+    {
+        try
+        {
+            int parsedFrames = std::stoi( frames );
+            maxFrames = parsedFrames;
+        }
+        catch( const std::invalid_argument &e )
+        {
+            throw std::runtime_error( "Invalid input: '" + frames + "' is not a valid integer." );
+        }
+        catch( const std::out_of_range &e )
+        {
+            throw std::runtime_error( "Input out of range: '" + frames + "' cannot fit into an int." );
+        }
+    }
+#endif
     //-----------------------------------------------------------------------------------
     void TutorialGameState::keyPressed( const SDL_KeyboardEvent &arg )
     {

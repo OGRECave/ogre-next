@@ -42,10 +42,7 @@ extern "C" {
 
 #    if defined( __i386__ ) || defined( __x86_64__ )
 #        define DEBUG_BREAK_IMPL DEBUG_BREAK_USE_TRAP_INSTRUCTION
-__inline__ static void trap_instruction( void )
-{
-    __asm__ volatile( "int $0x03" );
-}
+__inline__ static void trap_instruction( void ) { __asm__ volatile( "int $0x03" ); }
 #    elif defined( __thumb__ )
 #        define DEBUG_BREAK_IMPL DEBUG_BREAK_USE_TRAP_INSTRUCTION
 /* FIXME: handle __THUMB_INTERWORK__ */
@@ -131,26 +128,14 @@ __attribute__( ( always_inline ) ) __inline__ static void trap_instruction( void
 #    ifndef DEBUG_BREAK_IMPL
 #        error "debugbreak.h is not supported on this target"
 #    elif DEBUG_BREAK_IMPL == DEBUG_BREAK_USE_TRAP_INSTRUCTION
-__attribute__( ( always_inline ) ) __inline__ static void debug_break( void )
-{
-    trap_instruction();
-}
+__attribute__( ( always_inline ) ) __inline__ static void debug_break( void ) { trap_instruction(); }
 #    elif DEBUG_BREAK_IMPL == DEBUG_BREAK_USE_BULTIN_DEBUGTRAP
-__attribute__( ( always_inline ) ) __inline__ static void debug_break( void )
-{
-    __builtin_debugtrap();
-}
+__attribute__( ( always_inline ) ) __inline__ static void debug_break( void ) { __builtin_debugtrap(); }
 #    elif DEBUG_BREAK_IMPL == DEBUG_BREAK_USE_BULTIN_TRAP
-__attribute__( ( always_inline ) ) __inline__ static void debug_break( void )
-{
-    __builtin_trap();
-}
+__attribute__( ( always_inline ) ) __inline__ static void debug_break( void ) { __builtin_trap(); }
 #    elif DEBUG_BREAK_IMPL == DEBUG_BREAK_USE_SIGTRAP
 #        include <signal.h>
-__attribute__( ( always_inline ) ) __inline__ static void debug_break( void )
-{
-    raise( SIGTRAP );
-}
+__attribute__( ( always_inline ) ) __inline__ static void debug_break( void ) { raise( SIGTRAP ); }
 #    else
 #        error "invalid DEBUG_BREAK_IMPL value"
 #    endif

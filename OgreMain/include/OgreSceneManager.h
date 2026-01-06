@@ -1982,7 +1982,7 @@ namespace Ogre
 
         void _warmUpShadersCollect( Camera *camera, uint32_t visibilityMask, uint8 firstRq,
                                     uint8 lastRq );
-        void _warmUpShadersTrigger();
+        void _warmUpShadersTrigger( bool casterPass );
 
         void _fireWarmUpShadersCompile();
 

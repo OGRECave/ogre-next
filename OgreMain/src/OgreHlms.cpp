@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 #include "OgreBitset.inl"
 #include "OgreCamera.h"
+#include "OgreConfigFile.h"
 #include "OgreDepthBuffer.h"
 #include "OgreFileSystem.h"
 #include "OgreForward3D.h"
@@ -59,6 +60,9 @@ THE SOFTWARE.
 #endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
 #    include "iOS/macUtils.h"
+#endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+#    include <winrt/Windows.Storage.h>
 #endif
 
 #include "Hash/MurmurHash3.h"
@@ -209,11 +213,15 @@ namespace Ogre
     const IdString HlmsBaseProp::ScreenSpaceRefractions = IdString( "hlms_screen_space_refractions" );
     // We use a different convention because it's a really private property that ideally
     // shouldn't be exposed to users.
-    const IdString HlmsBaseProp::_DatablockCustomPieceShaderName[NumShaderTypes] = {
-        IdString( "_DatablockCustomPieceShaderNameVS" ), IdString( "_DatablockCustomPieceShaderNamePS" ),
-        IdString( "_DatablockCustomPieceShaderNameGS" ), IdString( "_DatablockCustomPieceShaderNameHS" ),
-        IdString( "_DatablockCustomPieceShaderNameDS" )
-    };
+    const IdString
+        HlmsBaseProp::_DatablockCustomPieceShaderName[CustomPieceStage::NumCustomPieceStages] = {
+            IdString( "_DatablockCustomPieceShaderNamePRE" ),
+            IdString( "_DatablockCustomPieceShaderNameVS" ),
+            IdString( "_DatablockCustomPieceShaderNamePS" ),
+            IdString( "_DatablockCustomPieceShaderNameGS" ),
+            IdString( "_DatablockCustomPieceShaderNameHS" ),
+            IdString( "_DatablockCustomPieceShaderNameDS" ),
+        };
 
     const IdString HlmsBaseProp::NoReverseDepth = IdString( "hlms_no_reverse_depth" );
     const IdString HlmsBaseProp::ReadOnlyIsTex = IdString( "hlms_readonly_is_tex" );
@@ -344,10 +352,12 @@ namespace Ogre
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         mOutputPath = macCachePath() + '/';
-#endif
-#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT && defined( __cplusplus_winrt )
         mOutputPath = fileSystemPathToString(
             Windows::Storage::ApplicationData::Current->TemporaryFolder->Path->Data() );
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+        mOutputPath = fileSystemPathToString(
+            winrt::Windows::Storage::ApplicationData::Current().TemporaryFolder().Path().c_str() );
 #endif
     }
     //-----------------------------------------------------------------------------------
@@ -2539,6 +2549,28 @@ namespace Ogre
         mShaderCodeCacheDirty = true;
     }
     //-----------------------------------------------------------------------------------
+    void Hlms::parseCustomPiece( const int32 customPieceName, const size_t tid )
+    {
+        // Parse custom arbitrary shader piece specified by the datablock.
+        DatablockCustomPieceFileMap::const_iterator it =
+            mDatablockCustomPieceFiles.find( customPieceName );
+        OGRE_ASSERT_LOW( it != mDatablockCustomPieceFiles.end() );
+
+        String inString = it->second.sourceCode;
+        String outString;
+
+        this->parseMath( inString, outString, tid );
+        while( outString.find( "@foreach" ) != String::npos )
+        {
+            this->parseForEach( outString, inString, tid );
+            inString.swap( outString );
+        }
+        this->parseProperties( outString, inString, tid );
+        this->parseUndefPieces( inString, outString, tid );
+        this->collectPieces( outString, inString, tid );
+        this->parseCounter( inString, outString, tid );
+    }
+    //-----------------------------------------------------------------------------------
     void Hlms::compileShaderCode( ShaderCodeCache &codeCache, const uint32 shaderCounter,
                                   const size_t tid )
     {
@@ -2610,31 +2642,16 @@ namespace Ogre
                         dumpProperties( debugDumpFile, tid );
                 }
 
-                const int32 customPieceName =
-                    getProperty( tid, HlmsBaseProp::_DatablockCustomPieceShaderName[i] );
-                if( customPieceName )
+                if( i == VertexShader )
                 {
-                    // Parse custom arbitrary shader piece specified by the datablock.
-                    DatablockCustomPieceFileMap::const_iterator it =
-                        mDatablockCustomPieceFiles.find( customPieceName );
-                    OGRE_ASSERT_LOW( it != mDatablockCustomPieceFiles.end() );
-
-                    String inString = it->second.sourceCode;
-                    String outString;
-
-                    this->parseMath( inString, outString, tid );
-                    while( outString.find( "@foreach" ) != String::npos )
-                    {
-                        this->parseForEach( outString, inString, tid );
-                        inString.swap( outString );
-                    }
-                    this->parseProperties( outString, inString, tid );
-                    this->parseUndefPieces( inString, outString, tid );
-                    this->collectPieces( outString, inString, tid );
-                    this->parseCounter( inString, outString, tid );
+                    const int32 customPieceName =
+                        getProperty( tid, HlmsBaseProp::_DatablockCustomPieceShaderName
+                                              [CustomPieceStage::PreVertexShader] );
+                    if( customPieceName )
+                        parseCustomPiece( customPieceName, tid );
                 }
 
-                // Library piece files first
+                // Library piece files first.
                 LibraryVec::const_iterator itor = mLibrary.begin();
                 LibraryVec::const_iterator endt = mLibrary.end();
 
@@ -2643,6 +2660,13 @@ namespace Ogre
                     processPieces( itor->dataFolder, itor->pieceFiles[i], tid );
                     ++itor;
                 }
+
+                const CustomPieceStage::CustomPieceStage customPieceStage =
+                    CustomPieceStage::from( ShaderType( i ) );
+                const int32 customPieceName =
+                    getProperty( tid, HlmsBaseProp::_DatablockCustomPieceShaderName[customPieceStage] );
+                if( customPieceName )
+                    parseCustomPiece( customPieceName, tid );
 
                 // Main piece files
                 processPieces( mDataFolder, mPieceFiles[i], tid );
@@ -3049,12 +3073,19 @@ namespace Ogre
     {
         HlmsDatablock *datablock = renderable->getDatablock();
 
-        for( size_t i = 0u; i < NumShaderTypes; ++i )
+        for( size_t i = 0u; i < CustomPieceStage::NumCustomPieceStages; ++i )
         {
-            const int32 filenameHashId =
-                datablock->getCustomPieceFileIdHash( static_cast<ShaderType>( i ) );
+            const int32 filenameHashId = datablock->getCustomPieceFileIdHash(
+                static_cast<CustomPieceStage::CustomPieceStage>( i ) );
             if( filenameHashId )
                 setProperty( kNoTid, HlmsBaseProp::_DatablockCustomPieceShaderName[i], filenameHashId );
+        }
+
+        {
+            const HlmsDatablock::CustomPropertyArray &customProperties =
+                datablock->getCustomProperties();
+            for( const HlmsDatablock::CustomProperty &property : customProperties )
+                setProperty( kNoTid, property.keyName, property.value );
         }
 
         setProperty( kNoTid, HlmsBaseProp::AlphaTest, datablock->getAlphaTest() != CMPF_ALWAYS_PASS );
@@ -3993,6 +4024,15 @@ namespace Ogre
                           queuedRenderable, hash[0], finalHash } );
                 }
             }
+            else if( shaderCache->flags == HLMS_CACHE_FLAGS_COMPILATION_REQUIRED )
+            {
+                // Stub entry was created for previous frame, but compilation was skipped
+                // due to exhausted time budget, and attempt should be repeated.
+                HlmsCache *stubEntry = const_cast<HlmsCache *>( shaderCache );
+
+                parallelQueue.pushWarmUpRequest( { reinterpret_cast<const HlmsCache *>( passCacheIdx ),
+                                                   stubEntry, queuedRenderable, hash[0], finalHash } );
+            }
         }
 
         lastReturnedValue = finalHash;
@@ -4232,6 +4272,39 @@ namespace Ogre
 
             if( !mDefaultDatablock )
                 mDefaultDatablock = createDefaultDatablock();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void Hlms::getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths,
+                                const ConfigFile &configFile )
+    {
+        getDefaultPaths( outDataFolderPath, outLibraryFoldersPaths, configFile, mTypeNameStr );
+    }
+    //-----------------------------------------------------------------------------------
+    void Hlms::getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths,
+                                const ConfigFile &configFile, const String &hlmsTypeName )
+    {
+        outLibraryFoldersPaths = configFile.getMultiSetting( "Library", hlmsTypeName );
+        outDataFolderPath = configFile.getSetting( "Main", hlmsTypeName );
+
+        // We need to know what RenderSystem is currently in use, as the
+        // name of the compatible shading language is part of the path
+        Ogre::RenderSystem *renderSystem = Ogre::Root::getSingleton().getRenderSystem();
+        Ogre::String shaderSyntax = "GLSL";
+        if( renderSystem->getName() == "Direct3D11 Rendering Subsystem" )
+            shaderSyntax = "HLSL";
+        else if( renderSystem->getName() == "Metal Rendering Subsystem" )
+            shaderSyntax = "Metal";
+        for( String &libraryPath : outLibraryFoldersPaths )
+        {
+            const size_t pos = libraryPath.find( "[SHADER_SYNTAX]" );
+            if( pos != String::npos )
+                libraryPath.replace( pos, sizeof( "[SHADER_SYNTAX]" ) - 1u, shaderSyntax );
+        }
+        {
+            const size_t pos = outDataFolderPath.find( "[SHADER_SYNTAX]" );
+            if( pos != String::npos )
+                outDataFolderPath.replace( pos, sizeof( "[SHADER_SYNTAX]" ) - 1u, shaderSyntax );
         }
     }
     //-----------------------------------------------------------------------------------

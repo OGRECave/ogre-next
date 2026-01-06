@@ -60,20 +60,18 @@ namespace Ogre
 
     GL3PlusContext *Win32Context::clone() const
     {
-        const int attribList[] = {
-            WGL_CONTEXT_MAJOR_VERSION_ARB,
-            static_cast<int>( mContexMajorVersion ),
-            WGL_CONTEXT_MINOR_VERSION_ARB,
-            static_cast<int>( mContexMinorVersion ),
+        const int attribList[] = { WGL_CONTEXT_MAJOR_VERSION_ARB,
+                                   static_cast<int>( mContexMajorVersion ),
+                                   WGL_CONTEXT_MINOR_VERSION_ARB,
+                                   static_cast<int>( mContexMinorVersion ),
 #if OGRE_DEBUG_MODE
-            WGL_CONTEXT_FLAGS_ARB,
-            WGL_CONTEXT_DEBUG_BIT_ARB,
+                                   WGL_CONTEXT_FLAGS_ARB,
+                                   WGL_CONTEXT_DEBUG_BIT_ARB,
 #endif
-            WGL_CONTEXT_PROFILE_MASK_ARB,
-            WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
-            0,
-            0
-        };
+                                   WGL_CONTEXT_PROFILE_MASK_ARB,
+                                   WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
+                                   0,
+                                   0 };
 
         // Create new context based on own HDC (shared with ours)
         HGLRC newCtx = wglCreateContextAttribsARB( mHDC, mGlrc, attribList );

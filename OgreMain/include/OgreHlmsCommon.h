@@ -204,7 +204,12 @@ namespace Ogre
     enum HlmsCacheFlags : uchar
     {
         HLMS_CACHE_FLAGS_NONE = 0,
+        /// For internal use. This entry is a stub entry and cannot be used. Objects using this PSO will
+        /// not appear on screen. This can happen if we ran out of time (we spent more than 'deadline'
+        /// milliseconds compiling shaders and PSOs, combined, during a single frame). This entry will
+        /// be resubmitted on the next frame for compiling. See RenderSystem::setPsoRequestsTimeout.
         HLMS_CACHE_FLAGS_COMPILATION_REQUIRED = 1,
+        /// For internal use. This entry has been submitted to ParallelHlmsCompileQueue for compilation.
         HLMS_CACHE_FLAGS_COMPILATION_REQUESTED = 2,
     };
 

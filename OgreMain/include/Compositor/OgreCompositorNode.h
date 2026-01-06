@@ -113,7 +113,8 @@ namespace Ogre
 
         CompositorPassVec mPasses;
 
-        /// Nodes we're connected to. If we destroy our local textures, we need to inform them
+        /// Nodes we're connected to. If we destroy our local textures, we need to inform them.
+        /// Note that some entries may be nullptr!
         CompositorNodeVec mConnectedNodes;
 
         CompositorWorkspace *mWorkspace;

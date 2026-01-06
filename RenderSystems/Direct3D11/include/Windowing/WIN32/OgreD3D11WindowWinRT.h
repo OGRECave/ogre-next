@@ -31,8 +31,11 @@ THE SOFTWARE.
 
 #include "OgreD3D11Window.h"
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && defined( __cplusplus_winrt )
 #    include <agile.h>
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+#    include <winrt/Windows.UI.Core.h>
+#    include <winrt/Windows.UI.Xaml.Controls.h>
 #endif
 
 namespace Ogre
@@ -41,7 +44,11 @@ namespace Ogre
     class D3D11WindowCoreWindow : public D3D11WindowSwapChainBased
     {
     protected:
+#    if defined( __cplusplus_winrt )
         Platform::Agile<Windows::UI::Core::CoreWindow> mCoreWindow;
+#    else
+        winrt::agile_ref<winrt::Windows::UI::Core::CoreWindow> mCoreWindow;
+#    endif
 
     protected:
         virtual HRESULT _createSwapChainImpl();
@@ -53,7 +60,11 @@ namespace Ogre
         virtual ~D3D11WindowCoreWindow();
         virtual void destroy();
 
+#    if defined( __cplusplus_winrt )
         Windows::UI::Core::CoreWindow ^ getCoreWindow() const { return mCoreWindow.Get(); }
+#    else
+        winrt::Windows::UI::Core::CoreWindow getCoreWindow() const { return mCoreWindow.get(); }
+#    endif
 
         virtual float getViewPointToPixelScale() const;
         virtual void  windowMovedOrResized();
@@ -66,9 +77,15 @@ namespace Ogre
     class D3D11WindowSwapChainPanel : public D3D11WindowSwapChainBased
     {
     protected:
+#    if defined( __cplusplus_winrt )
         Windows::UI::Xaml::Controls::SwapChainPanel ^ mSwapChainPanel;
         Windows::Foundation::Size                   mCompositionScale;
         Windows::Foundation::EventRegistrationToken sizeChangedToken, compositionScaleChangedToken;
+#    else
+        winrt::Windows::UI::Xaml::Controls::SwapChainPanel mSwapChainPanel{ nullptr };
+        winrt::Windows::Foundation::Size                   mCompositionScale;
+        winrt::event_token sizeChangedToken, compositionScaleChangedToken;
+#    endif
 
     protected:
         virtual HRESULT _createSwapChainImpl();
@@ -83,7 +100,11 @@ namespace Ogre
         virtual ~D3D11WindowSwapChainPanel();
         virtual void destroy();
 
+#    if defined( __cplusplus_winrt )
         Windows::UI::Xaml::Controls::SwapChainPanel ^ getSwapChainPanel() const
+#    else
+        winrt::Windows::UI::Xaml::Controls::SwapChainPanel getSwapChainPanel() const
+#    endif
         {
             return mSwapChainPanel;
         }

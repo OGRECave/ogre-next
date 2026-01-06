@@ -85,6 +85,7 @@ namespace Demo
             "\n" );
 
         GraphicsSystem *graphicsSystem = new ScreenSpaceReflectionsGraphicsSystem( gfxGameState );
+        graphicsSystem->setRequiePersistentDepthBuf( true );
 
         gfxGameState->_notifyGraphicsSystem( graphicsSystem );
 

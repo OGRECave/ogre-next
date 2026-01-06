@@ -572,6 +572,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::loadPipelineCache( DataStreamPtr stream )
     {
+#ifdef OGRE_VK_WORKAROUND_BROKEN_VKPIPELINECACHE
+        if( Workarounds::mBrokenVkPipelineCache )
+            return;
+#endif
         if( stream && stream->size() > sizeof( PipelineCachePrefixHeader ) )
         {
             std::vector<unsigned char> buf;  // PipelineCachePrefixHeader + payload
@@ -631,6 +635,11 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::savePipelineCache( DataStreamPtr stream ) const
     {
+#ifdef OGRE_VK_WORKAROUND_BROKEN_VKPIPELINECACHE
+        if( Workarounds::mBrokenVkPipelineCache )
+            return;
+#endif
+
         OGRE_STATIC_ASSERT( sizeof( PipelineCachePrefixHeader ) == 48 );
         if( mDevice->mPipelineCache )
         {

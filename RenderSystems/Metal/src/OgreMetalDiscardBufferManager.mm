@@ -353,10 +353,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalDiscardBuffer::unmap()
     {
-        //#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        //        NSRange range = NSMakeRange( mBufferOffset, mBufferSize );
-        //        [mBuffer didModifyRange:range];
-        //#endif
+        // #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        //         NSRange range = NSMakeRange( mBufferOffset, mBufferSize );
+        //         [mBuffer didModifyRange:range];
+        // #endif
     }
     //-------------------------------------------------------------------------
     id<MTLBuffer> MetalDiscardBuffer::getBufferName( size_t &outOffset )
@@ -365,4 +365,4 @@ namespace Ogre
         outOffset = mBufferOffset;
         return mBuffer;
     }
-}
+}  // namespace Ogre

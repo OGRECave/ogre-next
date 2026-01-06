@@ -1076,6 +1076,7 @@ namespace Ogre
                     ID_SAMPLES_PER_ITERATION,
                     ID_SAMPLES_SINGLE_ITERATION_FALLBACK,
                     ID_FORCE_MIPMAP_FALLBACK,
+                    ID_AUTOGEN_INPUT_MIPMAPS,
 
                     //Used by WARM_UP
                     ID_MODE,

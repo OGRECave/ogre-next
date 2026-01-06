@@ -76,6 +76,8 @@ namespace Ogre
     {
         mInTextures.resize( mDefinition->getNumInputChannels(), CompositorChannel() );
         mOutTextures.resize( mDefinition->mOutChannelMapping.size() );
+        mConnectedNodes.resize( mDefinition->mOutChannelMapping.size() +
+                                mDefinition->mOutBufferChannelMapping.size() );
 
         // Create local textures
         TextureDefinitionBase::createTextures( definition->mLocalTextureDefs, mLocalTextures, id,
@@ -144,34 +146,36 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorNode::disconnectOutput()
     {
-        CompositorNodeVec::const_iterator itor = mConnectedNodes.begin();
-        CompositorNodeVec::const_iterator endt = mConnectedNodes.end();
+        CompositorNodeVec::iterator itor = mConnectedNodes.begin();
+        CompositorNodeVec::iterator endt = mConnectedNodes.end();
 
         while( itor != endt )
         {
-            CompositorChannelVec::const_iterator texIt = mLocalTextures.begin();
-            CompositorChannelVec::const_iterator texEn = mLocalTextures.end();
-
-            while( texIt != texEn )
-                ( *itor )->notifyDestroyed( *texIt++ );
-
-            CompositorNodeDef::BufferDefinitionVec::const_iterator bufIt =
-                mDefinition->mLocalBufferDefs.begin();
-            CompositorNodeDef::BufferDefinitionVec::const_iterator bufEn =
-                mDefinition->mLocalBufferDefs.end();
-
-            while( bufIt != bufEn )
+            if( *itor )
             {
-                UavBufferPacked *uavBuffer = this->getDefinedBufferNoThrow( bufIt->name );
-                if( uavBuffer )
-                    ( *itor )->notifyDestroyed( uavBuffer );
-                ++bufIt;
+                CompositorChannelVec::const_iterator texIt = mLocalTextures.begin();
+                CompositorChannelVec::const_iterator texEn = mLocalTextures.end();
+
+                while( texIt != texEn )
+                    ( *itor )->notifyDestroyed( *texIt++ );
+
+                CompositorNodeDef::BufferDefinitionVec::const_iterator bufIt =
+                    mDefinition->mLocalBufferDefs.begin();
+                CompositorNodeDef::BufferDefinitionVec::const_iterator bufEn =
+                    mDefinition->mLocalBufferDefs.end();
+
+                while( bufIt != bufEn )
+                {
+                    UavBufferPacked *uavBuffer = this->getDefinedBufferNoThrow( bufIt->name );
+                    if( uavBuffer )
+                        ( *itor )->notifyDestroyed( uavBuffer );
+                    ++bufIt;
+                }
             }
 
+            *itor = 0;
             ++itor;
         }
-
-        mConnectedNodes.clear();
     }
     //-----------------------------------------------------------------------------------
     void CompositorNode::populateGlobalBuffers()
@@ -204,29 +208,24 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorNode::notifyRecreated( TextureGpu *channel )
     {
-        // Check if we need to notify nodes we're connected to.
-        bool bFoundOuts = false;
+        // Notify nodes we're connected to that have that texture too.
+        CompositorNodeVec::const_iterator nodeIt = mConnectedNodes.begin();
         CompositorChannelVec::const_iterator texIt = mOutTextures.begin();
         CompositorChannelVec::const_iterator texEn = mOutTextures.end();
 
-        while( texIt != texEn && !bFoundOuts )
+        while( texIt != texEn )
         {
             if( *texIt == channel )
-                bFoundOuts = true;
-            ++texIt;
-        }
-
-        if( bFoundOuts )
-        {
-            // Our attachees may have that texture too.
-            CompositorNodeVec::const_iterator itor = mConnectedNodes.begin();
-            CompositorNodeVec::const_iterator endt = mConnectedNodes.end();
-
-            while( itor != endt )
             {
-                ( *itor )->notifyRecreated( channel );
-                ++itor;
+                if( *nodeIt )
+                {
+                    // *nodeIt can be nullptr if user defined an output
+                    // but never connected it to lead anywhere.
+                    ( *nodeIt )->notifyRecreated( channel );
+                }
             }
+            ++nodeIt;
+            ++texIt;
         }
 
         CompositorPassVec::const_iterator passIt = mPasses.begin();
@@ -240,11 +239,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorNode::notifyRecreated( const UavBufferPacked *oldBuffer, UavBufferPacked *newBuffer )
     {
-        // Clear our inputs
+        // Reset our inputs and notify nodes that we're connected to that also use that buffer.
         CompositorNamedBufferVec::iterator bufIt = mBuffers.begin();
         CompositorNamedBufferVec::iterator bufEn = mBuffers.end();
-
-        bool bFoundOuts = false;
 
         // We can't early out, it's possible to assign the same output to two different
         // input channels (though it would work very unintuitively...)
@@ -255,31 +252,28 @@ namespace Ogre
                 bufIt->buffer = newBuffer;
 
                 // Check if we'll need to clear our outputs
+                CompositorNodeVec::const_iterator nodeIt =
+                    mConnectedNodes.begin() + ptrdiff_t( mDefinition->mOutChannelMapping.size() );
                 IdStringVec::const_iterator itor = mDefinition->mOutBufferChannelMapping.begin();
                 IdStringVec::const_iterator endt = mDefinition->mOutBufferChannelMapping.end();
 
-                while( itor != endt && !bFoundOuts )
+                while( itor != endt )
                 {
                     if( *itor == bufIt->name )
-                        bFoundOuts = true;
+                    {
+                        if( *nodeIt )
+                        {
+                            // *nodeIt can be nullptr if user defined an output
+                            // but never connected it to lead anywhere.
+                            ( *nodeIt )->notifyRecreated( oldBuffer, newBuffer );
+                        }
+                    }
+                    ++nodeIt;
                     ++itor;
                 }
             }
 
             ++bufIt;
-        }
-
-        if( bFoundOuts )
-        {
-            // Our attachees may be using that buffer too.
-            CompositorNodeVec::const_iterator itor = mConnectedNodes.begin();
-            CompositorNodeVec::const_iterator endt = mConnectedNodes.end();
-
-            while( itor != endt )
-            {
-                ( *itor )->notifyRecreated( oldBuffer, newBuffer );
-                ++itor;
-            }
         }
 
         CompositorPassVec::const_iterator passIt = mPasses.begin();
@@ -310,7 +304,7 @@ namespace Ogre
         }
 
         // Clear our outputs
-        bool bFoundOuts = false;
+        CompositorNodeVec::iterator nodeIt = mConnectedNodes.begin();
         texIt = mOutTextures.begin();
         texEn = mOutTextures.end();
 
@@ -318,24 +312,19 @@ namespace Ogre
         {
             if( *texIt == channel )
             {
-                bFoundOuts = true;
+                // Our attachees may have that texture too.
+                if( *nodeIt )
+                {
+                    // *nodeIt can be nullptr if user defined an output
+                    // but never connected it to lead anywhere.
+                    ( *nodeIt )->notifyDestroyed( channel );
+                }
+                *nodeIt = 0;
                 *texIt = CompositorChannel();
                 --mNumConnectedInputs;
             }
+            ++nodeIt;
             ++texIt;
-        }
-
-        if( bFoundOuts )
-        {
-            // Our attachees may have that texture too.
-            CompositorNodeVec::const_iterator itor = mConnectedNodes.begin();
-            CompositorNodeVec::const_iterator endt = mConnectedNodes.end();
-
-            while( itor != endt )
-            {
-                ( *itor )->notifyDestroyed( channel );
-                ++itor;
-            }
         }
 
         CompositorPassVec::const_iterator passIt = mPasses.begin();
@@ -353,8 +342,6 @@ namespace Ogre
         CompositorNamedBufferVec::iterator bufIt = mBuffers.begin();
         CompositorNamedBufferVec::iterator bufEn = mBuffers.end();
 
-        bool bFoundOuts = false;
-
         // We can't early out, it's possible to assign the same output to two different
         // input channels (though it would work very unintuitively...)
         while( bufIt != bufEn )
@@ -362,13 +349,21 @@ namespace Ogre
             if( bufIt->buffer == buffer )
             {
                 // Check if we'll need to clear our outputs
+                CompositorNodeVec::iterator nodeIt =
+                    mConnectedNodes.begin() + ptrdiff_t( mDefinition->mOutChannelMapping.size() );
                 IdStringVec::const_iterator itor = mDefinition->mOutBufferChannelMapping.begin();
                 IdStringVec::const_iterator endt = mDefinition->mOutBufferChannelMapping.end();
 
-                while( itor != endt && !bFoundOuts )
+                while( itor != endt )
                 {
-                    if( *itor == bufIt->name )
-                        bFoundOuts = true;
+                    if( *nodeIt )
+                    {
+                        // *nodeIt can be nullptr if user defined an output
+                        // but never connected it to lead anywhere.
+                        ( *nodeIt )->notifyDestroyed( buffer );
+                        *nodeIt = 0;
+                    }
+                    ++nodeIt;
                     ++itor;
                 }
 
@@ -380,19 +375,6 @@ namespace Ogre
             else
             {
                 ++bufIt;
-            }
-        }
-
-        if( bFoundOuts )
-        {
-            // Our attachees may be using that buffer too.
-            CompositorNodeVec::const_iterator itor = mConnectedNodes.begin();
-            CompositorNodeVec::const_iterator endt = mConnectedNodes.end();
-
-            while( itor != endt )
-            {
-                ( *itor )->notifyDestroyed( buffer );
-                ++itor;
             }
         }
 
@@ -440,7 +422,11 @@ namespace Ogre
             OGRE_DELETE *passIt++;
 
         mPasses.clear();
-        mConnectedNodes.clear();
+
+        CompositorNodeVec::iterator nodeIt = mConnectedNodes.begin();
+        CompositorNodeVec::iterator nodeEn = mConnectedNodes.end();
+        while( nodeIt != nodeEn )
+            *nodeIt++ = 0;
     }
     //-----------------------------------------------------------------------------------
     void CompositorNode::setEnabled( bool bEnabled )
@@ -517,7 +503,8 @@ namespace Ogre
         else
         {
             nodeB->mBuffers.insert( inBuf, 1, *outBuf );
-            ++mNumConnectedBufferInputs;
+            ++nodeB->mNumConnectedBufferInputs;
+            this->mConnectedNodes[this->mDefinition->mOutChannelMapping.size() + outChannelA] = nodeB;
         }
     }
     //-----------------------------------------------------------------------------------
@@ -557,7 +544,7 @@ namespace Ogre
         if( nodeB->mNumConnectedInputs >= nodeB->mInTextures.size() )
             nodeB->routeOutputs();
 
-        this->mConnectedNodes.push_back( nodeB );
+        this->mConnectedNodes[outChannelA] = nodeB;
     }
     //-----------------------------------------------------------------------------------
     void CompositorNode::connectExternalRT( TextureGpu *externalTexture, size_t inChannelA )

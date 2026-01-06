@@ -1684,9 +1684,9 @@ namespace Ogre
         mRenderQueue->warmUpShadersCollect( realFirstRq, realLastRq, casterPass );
     }
     //-----------------------------------------------------------------------
-    void SceneManager::_warmUpShadersTrigger()
+    void SceneManager::_warmUpShadersTrigger( bool casterPass )
     {
-        mRenderQueue->warmUpShadersTrigger( mDestRenderSystem );
+        mRenderQueue->warmUpShadersTrigger( mDestRenderSystem, casterPass );
     }
     //-----------------------------------------------------------------------
     void SceneManager::_fireWarmUpShadersCompile()

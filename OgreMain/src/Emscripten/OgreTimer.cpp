@@ -32,15 +32,10 @@ THE SOFTWARE.
 using namespace Ogre;
 
 //--------------------------------------------------------------------------------//
-Timer::Timer()
-{
-    reset();
-}
+Timer::Timer() { reset(); }
 
 //--------------------------------------------------------------------------------//
-Timer::~Timer()
-{
-}
+Timer::~Timer() {}
 
 //--------------------------------------------------------------------------------//
 void Timer::reset()
@@ -50,16 +45,10 @@ void Timer::reset()
 }
 
 //--------------------------------------------------------------------------------//
-uint64 Timer::getMilliseconds()
-{
-    return emscripten_get_now() - start;
-}
+uint64 Timer::getMilliseconds() { return emscripten_get_now() - start; }
 
 //--------------------------------------------------------------------------------//
-uint64 Timer::getMicroseconds()
-{
-    return ( emscripten_get_now() - start ) * 1000.0;
-}
+uint64 Timer::getMicroseconds() { return ( emscripten_get_now() - start ) * 1000.0; }
 
 //-- Common Across All Timers ----------------------------------------------------//
 uint64 Timer::getMillisecondsCPU()

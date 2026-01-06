@@ -61,6 +61,11 @@ namespace Ogre
         /// Force this pass to behave like GENERATE_MIPMAPS, regardless of compute shader support
         bool mForceMipmapFallback;
 
+        /// IBL via Compute requires mipmaps to be up to date. This being true forces the input cubemap
+        /// to autogenerate the mipmaps every frame. Otherwise we won't do it and assume it's already
+        /// been done. Ignored if mForceMipmapFallback = true.
+        bool mAutogenInputMipmaps;
+
         CompositorNodeDef *mParentNodeDef;
 
     public:
@@ -71,11 +76,12 @@ namespace Ogre
             mSamplesSingleIterationFallback( 128.0 ),
             mIblCorrectionVSH( 0, 1.0f, 0, 0 ),
             mForceMipmapFallback( false ),
+            mAutogenInputMipmaps( true ),
             mParentNodeDef( parentNodeDef )
         {
         }
 
-        ~CompositorPassIblSpecularDef();
+        ~CompositorPassIblSpecularDef() override;
 
         /**
         @param textureName
