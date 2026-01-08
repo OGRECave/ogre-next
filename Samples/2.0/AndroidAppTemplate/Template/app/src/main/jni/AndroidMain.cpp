@@ -324,7 +324,7 @@ void android_main( struct android_app *app )
         {
             if( source != NULL )
                 source->process( app, source );
-            ALooper_pollOnce( 0, nullptr, &events, (void **)&source );
+            ident = ALooper_pollOnce( 0, nullptr, &events, (void **)&source );
         }
 
         // render if vulkan is ready
