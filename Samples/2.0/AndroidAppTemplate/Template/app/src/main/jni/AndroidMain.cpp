@@ -318,11 +318,13 @@ void android_main( struct android_app *app )
     // Main loop
     do
     {
-        if( ALooper_pollAll( Demo::AndroidSystems::getNativeWindow() ? 0 : -1, nullptr, &events,
-                             (void **)&source ) >= 0 )
+        int ident = ALooper_pollOnce( Demo::AndroidSystems::getNativeWindow() ? 0 : -1, nullptr, &events,
+                                      (void **)&source );
+        while( ident >= 0 )
         {
             if( source != NULL )
                 source->process( app, source );
+            ALooper_pollOnce( 0, nullptr, &events, (void **)&source );
         }
 
         // render if vulkan is ready
