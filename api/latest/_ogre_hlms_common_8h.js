@@ -5,6 +5,15 @@ var _ogre_hlms_common_8h =
     [ "HlmsParamVec", "_ogre_hlms_common_8h.html#ga26539e1c24ff9cadeb6f54139ad7dc54", null ],
     [ "HlmsPropertyVec", "_ogre_hlms_common_8h.html#ga1d333e3b1280899cce855c563f200938", null ],
     [ "PiecesMap", "_ogre_hlms_common_8h.html#ga8d0386169199086cbe23f19967f934af", null ],
+    [ "CustomPieceStage", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2", [
+      [ "PreVertexShader", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2a0659fd37adbe169a34bdeb26ad2ac499", null ],
+      [ "VertexShader", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2aa12f7ba6da5d137f2d467a969d99a067", null ],
+      [ "GeometryShader", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2ac0cbd5d14013adadb2b51737f9b6e2c4", null ],
+      [ "HullShader", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2a9deac1af05aeedfb3f804fa829b65ad2", null ],
+      [ "DomainShader", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2a4d0cd53c1f975de3328233821810ab0f", null ],
+      [ "PixelShader", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2a8a28a29c459c8ff066361423f5827fa2", null ],
+      [ "NumCustomPieceStages", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2ac1d5c9984c071f1e546f8628fa88ed80", null ]
+    ] ],
     [ "HlmsCacheFlags", "_ogre_hlms_common_8h.html#ga880ab7a167290fb308acb6e7ce39c87e", [
       [ "HLMS_CACHE_FLAGS_NONE", "_ogre_hlms_common_8h.html#gga880ab7a167290fb308acb6e7ce39c87ea3222cbf74d91fb62108240379d0dad0c", null ],
       [ "HLMS_CACHE_FLAGS_COMPILATION_REQUIRED", "_ogre_hlms_common_8h.html#gga880ab7a167290fb308acb6e7ce39c87eaadebd486a056953fee9744972857a276", null ],
@@ -22,6 +31,7 @@ var _ogre_hlms_common_8h =
       [ "HLMS_MAX", "_ogre_hlms_common_8h.html#gga11d7536f610632f563befe49447d8107a2663e41fffee06c02083239f15c43b38", null ],
       [ "HLMS_COMPUTE", "_ogre_hlms_common_8h.html#gga11d7536f610632f563befe49447d8107aa5f92a03fa65d90791a0c02f63f06b23", null ]
     ] ],
+    [ "from", "_ogre_hlms_common_8h.html#a0d21302ca536b24bc0b18c861c6ad360", null ],
     [ "OrderCacheByHash", "_ogre_hlms_common_8h.html#ga2383862bb5afe60b81e97732356f1980", null ],
     [ "OrderParamVecByKey", "_ogre_hlms_common_8h.html#ga1e2990ce935b8c9d1c892227f416d461", null ],
     [ "OrderPropertyByIdString", "_ogre_hlms_common_8h.html#gad7efc30646f8ceddb7949a0fc17ad380", null ]
