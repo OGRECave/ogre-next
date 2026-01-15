@@ -241,6 +241,24 @@ namespace Ogre
         return _left->hash < _right->hash;
     }
 
+    namespace CustomPieceStage
+    {
+        enum CustomPieceStage
+        {
+            PreVertexShader,  // For pieces parsed before the default Vertex Shader pieces are parses.
+            VertexShader,
+            GeometryShader,
+            HullShader,
+            DomainShader,
+            PixelShader,
+            NumCustomPieceStages
+        };
+
+        inline CustomPieceStage from( ShaderType shaderType )
+        {
+            return CustomPieceStage( shaderType + 1u );
+        }
+    }  // namespace CustomPieceStage
     /** @} */
     /** @} */
 
