@@ -370,13 +370,6 @@ static unsigned long main_graphics_thread( Ogre::ThreadHandle *threadHandle )
             Ogre::ScopedLock lock( g_appController.mCmdMutex );
             g_appController.cmds[0].swap( g_appController.cmds[1] );
         }
-        {
-            Ogre::ScopedCvLock lock( g_appController.mWindowMutex );
-            if( g_appController.mNativeWindowChangeRequested )
-            {
-                Ogre::Threads::Sleep( 2000 );
-            }
-        }
 
         bool notifyFullSyncThreads = false;
         {
