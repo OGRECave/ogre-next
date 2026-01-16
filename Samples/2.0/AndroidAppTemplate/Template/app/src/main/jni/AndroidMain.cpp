@@ -117,7 +117,9 @@ namespace Demo
             mLogicSystem( 0 ),
             mStartTime( 0 ),
             mAccumulator( 0 ),
-            mCriticalFailure( false )
+            mCriticalFailure( false ),
+            destroyRequested( false ),
+            mNativeWindowChangeRequested( false )
         {
         }
 
