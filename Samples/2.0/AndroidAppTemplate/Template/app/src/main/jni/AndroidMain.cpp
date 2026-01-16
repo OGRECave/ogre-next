@@ -119,7 +119,8 @@ namespace Demo
             mAccumulator( 0 ),
             mCriticalFailure( false ),
             destroyRequested( false ),
-            mNativeWindowChangeRequested( false )
+            mNativeWindowChangeRequested( false ),
+            mRequestedNativeWindow( 0 )
         {
         }
 
