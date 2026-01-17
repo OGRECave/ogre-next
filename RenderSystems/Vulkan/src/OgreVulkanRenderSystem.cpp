@@ -648,12 +648,60 @@ namespace Ogre
                 vkGetPipelineCacheData( mDevice->mDevice, mDevice->mPipelineCache, &size, nullptr );
             if( result == VK_SUCCESS && size > 0 && size <= 0x7FFFFFFF )
             {
+                int attempts = 0;
                 std::vector<unsigned char> buf;  // PipelineCachePrefixHeader + payload
                 do
                 {
                     buf.resize( sizeof( PipelineCachePrefixHeader ) + size );
                     result = vkGetPipelineCacheData( mDevice->mDevice, mDevice->mPipelineCache, &size,
                                                      buf.data() + sizeof( PipelineCachePrefixHeader ) );
+
+                    if( result == VK_INCOMPLETE )
+                    {
+                        // We can end up here if we (or the driver?) were still compiling in parallel.
+                        // "size" contains the data that was just written. We need to know how much
+                        // data to write instead or else we'll get stuck in an infinite loop.
+                        result = vkGetPipelineCacheData( mDevice->mDevice, mDevice->mPipelineCache,
+                                                         &size, nullptr );
+                        if( result == VK_SUCCESS && size > 0u )
+                        {
+                            // Set to VK_INCOMPLETE so we can loop again.
+                            result = VK_INCOMPLETE;
+                            LogManager::getSingleton().logMessage(
+                                "VulkanRenderSystem::savePipelineCache: Driver returned unexpected "
+                                "VK_INCOMPLETE. Retrying...",
+                                LML_CRITICAL );
+
+                            ++attempts;
+                            if( attempts > 5 )
+                            {
+                                // Give up. Consider the driver to either be broken or stuck.
+                                result = VK_ERROR_UNKNOWN;
+                                LogManager::getSingleton().logMessage(
+                                    "VulkanRenderSystem::savePipelineCache: Driver returned unexpected "
+                                    "VK_INCOMPLETE too many times. Aborting.",
+                                    LML_CRITICAL );
+                            }
+                            else if( attempts > 1 )
+                            {
+                                // After the 2nd attempt, give some time for threads to catch up.
+                                // Not too much time or else we'll get ANRs on Android.
+                                Threads::Sleep( 5 );
+                            }
+                        }
+                        else
+                        {
+                            LogManager::getSingleton().logMessage(
+                                "VulkanRenderSystem::savePipelineCache: Driver returned unexpected "
+                                "VK_INCOMPLETE and then failure. Aborting.",
+                                LML_CRITICAL );
+
+                            // Failure? That's weird. Make sure we get out of the
+                            // loop AND we don't save this weird cache to disk.
+                            if( result == VK_INCOMPLETE || size == 0u )
+                                result = VK_ERROR_UNKNOWN;
+                        }
+                    }
                 } while( result == VK_INCOMPLETE );
 
                 if( result == VK_SUCCESS && size > 0 && size <= 0x7FFFFFFF )
@@ -683,8 +731,10 @@ namespace Ogre
                 }
             }
             if( result != VK_SUCCESS )
+            {
                 LogManager::getSingleton().logMessage( "Vulkan: Pipeline cache not saved. VkResult = " +
                                                        vkResultToString( result ) );
+            }
         }
     }
     //-------------------------------------------------------------------------
