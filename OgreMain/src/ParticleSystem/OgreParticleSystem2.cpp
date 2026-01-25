@@ -567,11 +567,11 @@ void ParticleSystemDef::deallocParticle( uint32 handle )
             if( firstSet == mActiveParticles.capacity() )
             {
                 // No active particles in [mFirstParticleIdx; capacity)
-                // We need to shrink mLastParticleIdx by searching [0; mLastParticleIdx)
+                // We need to shrink mLastParticleIdx by searching [0; lastParticleIdxWrapped)
                 OGRE_ASSERT_HIGH( mActiveParticles.empty() );
                 mFirstParticleIdx = 0u;
-                mLastParticleIdx =
-                    static_cast<uint32>( mActiveParticles.findLastBitSetPlusOne( mLastParticleIdx ) );
+                mLastParticleIdx = static_cast<uint32>(
+                    mActiveParticles.findLastBitSetPlusOne( lastParticleIdxWrapped ) );
                 OGRE_ASSERT_MEDIUM( mLastParticleIdx != 0u || mActiveParticles.empty() );
             }
             else
