@@ -67,11 +67,26 @@ void testEarlyVulkanWorkarounds()
             VkPhysicalDeviceProperties deviceProps;
             vkGetPhysicalDeviceProperties( pd[i], &deviceProps );
 
-            // Qualcomm.
             if( deviceProps.vendorID == 0x5143 )
             {
+                // Qualcomm.
                 const uint32_t knownGoodQualcommVersion = VK_MAKE_API_VERSION( 0, 512, 502, 0 );
                 if( deviceProps.driverVersion < knownGoodQualcommVersion )
+                    Ogre::Workarounds::mVkSyncWindowInit = true;
+            }
+            else if( deviceProps.vendorID == 0x13B5 )
+            {
+                // ARM / Mali. We know at least version 20.0.0 is bad.
+                const uint32_t knownBadArmVersion = VK_MAKE_API_VERSION( 0, 20, 0, 0 );
+                if( deviceProps.driverVersion <= knownBadArmVersion )
+                    Ogre::Workarounds::mVkSyncWindowInit = true;
+            }
+            else if( deviceProps.vendorID == 0x1010 )
+            {
+                // IMGTEC / PowerVR. We strongly suspect at least version 1.300.2589.0 is bad.
+                // Version 1.386.1368 is good and is the most popular one.
+                const uint32_t knownGoodVersion = VK_MAKE_API_VERSION( 0, 1, 386, 1368 );
+                if( deviceProps.driverVersion < knownGoodVersion )
                     Ogre::Workarounds::mVkSyncWindowInit = true;
             }
         }
