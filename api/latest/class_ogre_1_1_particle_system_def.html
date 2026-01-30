@@ -193,9 +193,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adf09554ee678bfb19592f924c58f42b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b09db2c4feb775be2ec9e9b69ce9a43" id="r_a6b09db2c4feb775be2ec9e9b69ce9a43"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_def.html#a6b09db2c4feb775be2ec9e9b69ce9a43">isInitialized</a> () const</td></tr>
 <tr class="separator:a6b09db2c4feb775be2ec9e9b69ce9a43"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a723bcfd28d236d6c0d6e405cdcccf760" id="r_a723bcfd28d236d6c0d6e405cdcccf760"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_def.html#a723bcfd28d236d6c0d6e405cdcccf760">isParticleSystemDef</a> () const override</td></tr>
-<tr class="memdesc:a723bcfd28d236d6c0d6e405cdcccf760"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if 'this' is actually a <a class="el" href="class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene.">ParticleSystemDef</a>, as some behaviors are different while we try to maintain both systems isolated.  <br /></td></tr>
-<tr class="separator:a723bcfd28d236d6c0d6e405cdcccf760"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a41393fe93998bc272892db60e68bc6" id="r_a1a41393fe93998bc272892db60e68bc6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_def.html#a1a41393fe93998bc272892db60e68bc6">reserveNumAffectors</a> (size_t numAffectors)</td></tr>
 <tr class="memdesc:a1a41393fe93998bc272892db60e68bc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">If you know in advance how many times you will call <a class="el" href="class_ogre_1_1_particle_system_def.html#acd2357986a1557e49f12faf898464ff2">addAffector()</a> call this function to achieve optimum memory use.  <br /></td></tr>
 <tr class="separator:a1a41393fe93998bc272892db60e68bc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -216,6 +213,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6bc1238ebd43095edb51dd4a301753a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8428070bbf641d32438ae64ecb225348" id="r_a8428070bbf641d32438ae64ecb225348"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_def.html#a8428070bbf641d32438ae64ecb225348">setParticleType</a> (<a class="el" href="namespace_ogre_1_1_particle_type.html#aec723ad77b60eaee6cf3122e2e3cc44e">ParticleType::ParticleType</a> particleType)</td></tr>
 <tr class="separator:a8428070bbf641d32438ae64ecb225348"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbf0ec39ad3f391f399b8a71e5445af2" id="r_acbf0ec39ad3f391f399b8a71e5445af2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_def.html#acbf0ec39ad3f391f399b8a71e5445af2">setRenderer</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;typeName) override</td></tr>
+<tr class="memdesc:acbf0ec39ad3f391f399b8a71e5445af2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the ParticleRenderer to be used to render this particle system.  <br /></td></tr>
+<tr class="separator:acbf0ec39ad3f391f399b8a71e5445af2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a583f61f746b456bc23b43d905d332edf" id="r_a583f61f746b456bc23b43d905d332edf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_def.html#a583f61f746b456bc23b43d905d332edf">setRotationType</a> (<a class="el" href="namespace_ogre_1_1_particle_rotation_type.html#a8dc71a0e7995e681a2b4096adbb12b5d">ParticleRotationType::ParticleRotationType</a> rotationType)</td></tr>
 <tr class="separator:a583f61f746b456bc23b43d905d332edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_ogre_1_1_particle_system"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_particle_system')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_particle_system.html">Ogre::ParticleSystem</a></td></tr>
@@ -392,9 +392,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a750fd44ce67ba960a9dc9bfb4e3d3524 inherit pub_methods_class_ogre_1_1_particle_system" id="r_a750fd44ce67ba960a9dc9bfb4e3d3524"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system.html#a750fd44ce67ba960a9dc9bfb4e3d3524">setParticleEmitterRootNode</a> (<a class="el" href="class_ogre_1_1_scene_node.html">SceneNode</a> *sceneNode)</td></tr>
 <tr class="memdesc:a750fd44ce67ba960a9dc9bfb4e3d3524 inherit pub_methods_class_ogre_1_1_particle_system"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is used to attach the particle Emmiters to an own node independent from the Scenenode the Particlesystem is attached to.  <br /></td></tr>
 <tr class="separator:a750fd44ce67ba960a9dc9bfb4e3d3524 inherit pub_methods_class_ogre_1_1_particle_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3aa26ab67c0ef0c38512f22f3a9c089f inherit pub_methods_class_ogre_1_1_particle_system" id="r_a3aa26ab67c0ef0c38512f22f3a9c089f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system.html#a3aa26ab67c0ef0c38512f22f3a9c089f">setRenderer</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;typeName)</td></tr>
-<tr class="memdesc:a3aa26ab67c0ef0c38512f22f3a9c089f inherit pub_methods_class_ogre_1_1_particle_system"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the ParticleRenderer to be used to render this particle system.  <br /></td></tr>
-<tr class="separator:a3aa26ab67c0ef0c38512f22f3a9c089f inherit pub_methods_class_ogre_1_1_particle_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22cc682d26dc6a3502632829323464d8 inherit pub_methods_class_ogre_1_1_particle_system" id="r_a22cc682d26dc6a3502632829323464d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system.html#a22cc682d26dc6a3502632829323464d8">setRenderQueueGroup</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> queueID) override</td></tr>
 <tr class="memdesc:a22cc682d26dc6a3502632829323464d8 inherit pub_methods_class_ogre_1_1_particle_system"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the render queue group this entity will be rendered through.    <br /></td></tr>
 <tr class="separator:a22cc682d26dc6a3502632829323464d8 inherit pub_methods_class_ogre_1_1_particle_system"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1575,36 +1572,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a723bcfd28d236d6c0d6e405cdcccf760" name="a723bcfd28d236d6c0d6e405cdcccf760"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a723bcfd28d236d6c0d6e405cdcccf760">&#9670;&#160;</a></span>isParticleSystemDef()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::ParticleSystemDef::isParticleSystemDef </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns true if 'this' is actually a <a class="el" href="class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene.">ParticleSystemDef</a>, as some behaviors are different while we try to maintain both systems isolated. </p>
-<p><a class="el" href="class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene.">ParticleSystemDef</a> was only built on top of <a class="el" href="class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects.">ParticleSystem</a> to maintain a lot of backwards compatibility. </p>
-
-<p>Reimplemented from <a class="el" href="class_ogre_1_1_particle_system.html#a3338e0a222c6c184dc6f66a6596d9554">Ogre::ParticleSystem</a>.</p>
-
-</div>
-</div>
 <a id="a1a41393fe93998bc272892db60e68bc6" name="a1a41393fe93998bc272892db60e68bc6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1a41393fe93998bc272892db60e68bc6">&#9670;&#160;</a></span>reserveNumAffectors()</h2>
 
@@ -1794,6 +1761,43 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="acbf0ec39ad3f391f399b8a71e5445af2" name="acbf0ec39ad3f391f399b8a71e5445af2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbf0ec39ad3f391f399b8a71e5445af2">&#9670;&#160;</a></span>setRenderer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::ParticleSystemDef::setRenderer </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>typeName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the ParticleRenderer to be used to render this particle system. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>The main <a class="el" href="class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects.">ParticleSystem</a> just manages the creation and movement of particles; they are rendered using functions in ParticleRenderer and the ParticleVisual instances they create. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">typeName</td><td>String identifying the type of renderer to use; a new instance of this type will be created; a factory must have been registered with <a class="el" href="class_ogre_1_1_particle_system_manager.html" title="Manages particle systems, particle system scripts (templates) and the available emitter &amp; affector fa...">ParticleSystemManager</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_particle_system.html#a5b296b5f49990c1b486b08507a00e447">Ogre::ParticleSystem</a>.</p>
 
 </div>
 </div>

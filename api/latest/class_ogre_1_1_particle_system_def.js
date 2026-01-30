@@ -33,7 +33,6 @@ var class_ogre_1_1_particle_system_def =
     [ "getWorldTransforms", "class_ogre_1_1_particle_system_def.html#a26965502923d720c28c5f9fc9c13c56f", null ],
     [ "init", "class_ogre_1_1_particle_system_def.html#adf09554ee678bfb19592f924c58f42b6", null ],
     [ "isInitialized", "class_ogre_1_1_particle_system_def.html#a6b09db2c4feb775be2ec9e9b69ce9a43", null ],
-    [ "isParticleSystemDef", "class_ogre_1_1_particle_system_def.html#a723bcfd28d236d6c0d6e405cdcccf760", null ],
     [ "reserveNumAffectors", "class_ogre_1_1_particle_system_def.html#a1a41393fe93998bc272892db60e68bc6", null ],
     [ "reserveNumEmitters", "class_ogre_1_1_particle_system_def.html#aba64b562da5875123fb70ee2c714fbe8", null ],
     [ "setCommonDirection", "class_ogre_1_1_particle_system_def.html#ab1e6a8ddd4774f8f5895c74e05efc064", null ],
@@ -41,6 +40,7 @@ var class_ogre_1_1_particle_system_def =
     [ "setCommonVectors", "class_ogre_1_1_particle_system_def.html#a50af7e30e992fe20de282ebc0251b4ea", null ],
     [ "setParticleQuota", "class_ogre_1_1_particle_system_def.html#a6bc1238ebd43095edb51dd4a301753a2", null ],
     [ "setParticleType", "class_ogre_1_1_particle_system_def.html#a8428070bbf641d32438ae64ecb225348", null ],
+    [ "setRenderer", "class_ogre_1_1_particle_system_def.html#acbf0ec39ad3f391f399b8a71e5445af2", null ],
     [ "setRotationType", "class_ogre_1_1_particle_system_def.html#a583f61f746b456bc23b43d905d332edf", null ],
     [ "ParticleSystemManager2", "class_ogre_1_1_particle_system_def.html#abc514ea93b58a0e586b1fdd2d799c526", null ],
     [ "InvalidHandle", "class_ogre_1_1_particle_system_def.html#a041781544d68551de83f14bba5a9eb3a", null ]

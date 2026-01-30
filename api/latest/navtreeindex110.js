@@ -1,6 +1,5 @@
 var NAVTREEINDEX110 =
 {
-"compositor.html#CompositorShadowNodesSetup":[4,2,4,1,0],
 "compositor.html#CompositorShadowNodesTypes":[4,2,4,1,4],
 "compositor.html#CompositorShadowNodesTypesFocused":[4,2,4,1,4,1],
 "compositor.html#CompositorShadowNodesTypesPlaneOptimal":[4,2,4,1,4,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX110 =
 "functions_type.html":[8,3,3,0],
 "functions_type.html":[8,3,3],
 "functions_type_b.html":[8,3,3,1],
-"functions_type_c.html":[8,3,3,2]
+"functions_type_c.html":[8,3,3,2],
+"functions_type_d.html":[8,3,3,3]
 };

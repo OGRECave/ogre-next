@@ -1,6 +1,5 @@
 var NAVTREEINDEX133 =
 {
-"struct_ogre_1_1_unlit_property.html#a910dd22a0d99a10dce876ea1b3fd9d3e":[7,0,0,982,52],
 "struct_ogre_1_1_unlit_property.html#a910dd22a0d99a10dce876ea1b3fd9d3e":[8,0,0,952,52],
 "struct_ogre_1_1_unlit_property.html#a92a6f00127166a1ecef2f5c4568c10b2":[8,0,0,952,22],
 "struct_ogre_1_1_unlit_property.html#a92a6f00127166a1ecef2f5c4568c10b2":[7,0,0,982,22],
@@ -249,5 +248,6 @@ var NAVTREEINDEX133 =
 "struct_ogre_1_1_vertex_array_object_1_1_read_requests.html#aba7576468ddceca740a397fd0d23b6dd":[8,0,0,971,0,2],
 "struct_ogre_1_1_vertex_array_object_1_1_read_requests.html#aba7576468ddceca740a397fd0d23b6dd":[7,0,0,1001,0,2],
 "struct_ogre_1_1_vertex_bone_assignment.html":[6,2,0,33],
-"struct_ogre_1_1_vertex_bone_assignment.html#a1e16bd8b152ee8849edc690cefaba22f":[6,2,0,33,2]
+"struct_ogre_1_1_vertex_bone_assignment.html#a1e16bd8b152ee8849edc690cefaba22f":[6,2,0,33,2],
+"struct_ogre_1_1_vertex_bone_assignment.html#a28656362101fb4efed98e40b5b78aa79":[6,2,0,33,0]
 };

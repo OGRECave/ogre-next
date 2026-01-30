@@ -1,6 +1,5 @@
 var NAVTREEINDEX134 =
 {
-"struct_ogre_1_1_vertex_bone_assignment.html#a28656362101fb4efed98e40b5b78aa79":[6,2,0,33,0],
 "struct_ogre_1_1_vertex_bone_assignment.html#a9329a872bd7a4e3adff08eb95d6bc584":[6,2,0,33,6],
 "struct_ogre_1_1_vertex_bone_assignment.html#aa3928595e373d5b072b2927cac841d71":[6,2,0,33,5],
 "struct_ogre_1_1_vertex_bone_assignment.html#ac6643ba097ca1fee74868d58a225c97d":[6,2,0,33,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX134 =
 "struct_ogre_1_1_vulkan_descriptor_set_texture.html#a3db8e141fdcb1884063a2180ac583940":[8,0,0,1005,4],
 "struct_ogre_1_1_vulkan_descriptor_set_texture.html#a3db8e141fdcb1884063a2180ac583940":[7,0,0,1035,4],
 "struct_ogre_1_1_vulkan_descriptor_set_texture.html#a78fe2b034d40771b0e4e2af7dc1ef214":[7,0,0,1035,3],
-"struct_ogre_1_1_vulkan_descriptor_set_texture.html#a78fe2b034d40771b0e4e2af7dc1ef214":[8,0,0,1005,3]
+"struct_ogre_1_1_vulkan_descriptor_set_texture.html#a78fe2b034d40771b0e4e2af7dc1ef214":[8,0,0,1005,3],
+"struct_ogre_1_1_vulkan_descriptor_set_texture.html#ae2f45d798032c887d157273ac88460cb":[7,0,0,1035,1]
 };

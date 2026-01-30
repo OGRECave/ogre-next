@@ -1,6 +1,5 @@
 var NAVTREEINDEX124 =
 {
-"struct_ogre_1_1_d3_d11_vertex_array_object.html#adb4133433f419e4c54325f660bd1b8ba":[7,0,0,272,0],
 "struct_ogre_1_1_d3_d11_vertex_array_object_shared.html":[7,0,0,273],
 "struct_ogre_1_1_d3_d11_vertex_array_object_shared.html":[8,0,0,243],
 "struct_ogre_1_1_d3_d11_vertex_array_object_shared.html#a47362d4cc21f34bdc2cd63fccd715d70":[8,0,0,243,2],
@@ -249,5 +248,6 @@ var NAVTREEINDEX124 =
 "struct_ogre_1_1_filter_separable_kernel.html#a603f05fafdab69b79a159789c5859e88":[6,2,3,4,2],
 "struct_ogre_1_1_filter_separable_kernel.html#aaaacfb4a8f2e3d76a2a699c865afe5b0":[6,2,3,4,0],
 "struct_ogre_1_1_font_1_1_glyph_info.html":[6,2,10,40,0],
-"struct_ogre_1_1_font_1_1_glyph_info.html#a46b20f8f199e3d2f698aa44a6553ab50":[6,2,10,40,0,3]
+"struct_ogre_1_1_font_1_1_glyph_info.html#a46b20f8f199e3d2f698aa44a6553ab50":[6,2,10,40,0,3],
+"struct_ogre_1_1_font_1_1_glyph_info.html#a4eec8222d9985bb3b15d886120fd1ae6":[6,2,10,40,0,1]
 };

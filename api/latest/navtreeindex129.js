@@ -1,6 +1,5 @@
 var NAVTREEINDEX129 =
 {
-"struct_ogre_1_1_material_script_program_definition.html#a7d0607b541edd5abfc19a1e933eed431":[6,2,5,16,5],
 "struct_ogre_1_1_material_script_program_definition.html#a8392666564161eed2e77efed86ead9fd":[6,2,5,16,8],
 "struct_ogre_1_1_material_script_program_definition.html#abf09687c02c29949b5d8dcc57cd5d700":[6,2,5,16,0],
 "struct_ogre_1_1_material_script_program_definition.html#acb6cf4f2d3a5fdaff51d6ca169ad0fc0":[6,2,5,16,4],
@@ -249,5 +248,6 @@ var NAVTREEINDEX129 =
 "struct_ogre_1_1_pbs_property.html#a2bc062dee15d6b508a252ec35b9866d0":[6,0,0,16,63],
 "struct_ogre_1_1_pbs_property.html#a2c6bc51ef3eb2a2ea293544efe06f48a":[6,0,0,16,71],
 "struct_ogre_1_1_pbs_property.html#a2fbb8d6eea1abe16699d53a5dc830e5f":[6,0,0,16,27],
-"struct_ogre_1_1_pbs_property.html#a3316a6e95bed9036eb42c29bdd11d11d":[6,0,0,16,87]
+"struct_ogre_1_1_pbs_property.html#a3316a6e95bed9036eb42c29bdd11d11d":[6,0,0,16,87],
+"struct_ogre_1_1_pbs_property.html#a36edaac4ed84336253dcf00ca19ef165":[6,0,0,16,110]
 };
