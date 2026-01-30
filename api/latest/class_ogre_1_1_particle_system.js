@@ -54,6 +54,7 @@ var class_ogre_1_1_particle_system =
     [ "getSortingEnabled", "class_ogre_1_1_particle_system.html#abdedb814365c8a7f69b86c0f531e7284", null ],
     [ "getSpeedFactor", "class_ogre_1_1_particle_system.html#a3e27105ab30e9a6fe63818e35c6a219f", null ],
     [ "getTranslateParticleDirectionIntoWorldSpace", "class_ogre_1_1_particle_system.html#aa45ac886b0dec13ec28dda2141a6b952", null ],
+    [ "isParticleSystemDef", "class_ogre_1_1_particle_system.html#a3338e0a222c6c184dc6f66a6596d9554", null ],
     [ "operator=", "class_ogre_1_1_particle_system.html#a2ec6573a85f2d672f263e8ae3c24ee0d", null ],
     [ "removeAffector", "class_ogre_1_1_particle_system.html#a71e902e42b7df9ea3bd1e100e730d5b2", null ],
     [ "removeAllAffectors", "class_ogre_1_1_particle_system.html#a5a29e8ca5c6777b0fe2f72bde6d0555c", null ],

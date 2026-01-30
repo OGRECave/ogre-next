@@ -332,7 +332,7 @@ var searchData=
   ['adjoint_329',['adjoint',['../class_ogre_1_1_matrix4.html#a0da0cacf5f846f642152e149a965a03d',1,'Ogre::Matrix4']]],
   ['advanceboundspack_330',['advanceBoundsPack',['../struct_ogre_1_1_object_data.html#aa08f75b6fbb006f445e4a591712f535f',1,'Ogre::ObjectData']]],
   ['advanceculllightpack_331',['advanceCullLightPack',['../struct_ogre_1_1_object_data.html#a3907a68655e22c3e5dce60128a78601b',1,'Ogre::ObjectData']]],
-  ['advanced_332',['advanced',['../struct_ogre_1_1_lod_config_1_1_advanced.html#a9f051724cc2c50cb6fc84a749c3bd26f',1,'Ogre::LodConfig::Advanced::Advanced()'],['../struct_ogre_1_1_lod_config.html#a57f8dbcdf687850f01f904973cab37a9',1,'Ogre::LodConfig::advanced'],['../struct_ogre_1_1_lod_config_1_1_advanced.html',1,'Ogre::LodConfig::Advanced']]],
+  ['advanced_332',['advanced',['../struct_ogre_1_1_lod_config.html#a57f8dbcdf687850f01f904973cab37a9',1,'Ogre::LodConfig::advanced'],['../struct_ogre_1_1_lod_config_1_1_advanced.html#a9f051724cc2c50cb6fc84a749c3bd26f',1,'Ogre::LodConfig::Advanced::Advanced()'],['../struct_ogre_1_1_lod_config_1_1_advanced.html',1,'Ogre::LodConfig::Advanced']]],
   ['advanced_20c_20users_333',['Advanced C++ users',['../compositor.html#CompositorWorkspacesSetupAdvanced',1,'']]],
   ['advanced_20msaa_334',['Advanced MSAA',['../compositor.html#AdvancedMSAA',1,'']]],
   ['advanced_20script_20inheritance_335',['Advanced Script Inheritance',['../_scripts.html#Advanced-Script-Inheritance',1,'']]],

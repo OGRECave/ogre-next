@@ -33,6 +33,7 @@ var class_ogre_1_1_particle_system_def =
     [ "getWorldTransforms", "class_ogre_1_1_particle_system_def.html#a26965502923d720c28c5f9fc9c13c56f", null ],
     [ "init", "class_ogre_1_1_particle_system_def.html#adf09554ee678bfb19592f924c58f42b6", null ],
     [ "isInitialized", "class_ogre_1_1_particle_system_def.html#a6b09db2c4feb775be2ec9e9b69ce9a43", null ],
+    [ "isParticleSystemDef", "class_ogre_1_1_particle_system_def.html#a723bcfd28d236d6c0d6e405cdcccf760", null ],
     [ "reserveNumAffectors", "class_ogre_1_1_particle_system_def.html#a1a41393fe93998bc272892db60e68bc6", null ],
     [ "reserveNumEmitters", "class_ogre_1_1_particle_system_def.html#aba64b562da5875123fb70ee2c714fbe8", null ],
     [ "setCommonDirection", "class_ogre_1_1_particle_system_def.html#ab1e6a8ddd4774f8f5895c74e05efc064", null ],

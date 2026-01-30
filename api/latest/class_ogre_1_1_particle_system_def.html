@@ -193,6 +193,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adf09554ee678bfb19592f924c58f42b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b09db2c4feb775be2ec9e9b69ce9a43" id="r_a6b09db2c4feb775be2ec9e9b69ce9a43"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_def.html#a6b09db2c4feb775be2ec9e9b69ce9a43">isInitialized</a> () const</td></tr>
 <tr class="separator:a6b09db2c4feb775be2ec9e9b69ce9a43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a723bcfd28d236d6c0d6e405cdcccf760" id="r_a723bcfd28d236d6c0d6e405cdcccf760"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_def.html#a723bcfd28d236d6c0d6e405cdcccf760">isParticleSystemDef</a> () const override</td></tr>
+<tr class="memdesc:a723bcfd28d236d6c0d6e405cdcccf760"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if 'this' is actually a <a class="el" href="class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene.">ParticleSystemDef</a>, as some behaviors are different while we try to maintain both systems isolated.  <br /></td></tr>
+<tr class="separator:a723bcfd28d236d6c0d6e405cdcccf760"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a41393fe93998bc272892db60e68bc6" id="r_a1a41393fe93998bc272892db60e68bc6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_def.html#a1a41393fe93998bc272892db60e68bc6">reserveNumAffectors</a> (size_t numAffectors)</td></tr>
 <tr class="memdesc:a1a41393fe93998bc272892db60e68bc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">If you know in advance how many times you will call <a class="el" href="class_ogre_1_1_particle_system_def.html#acd2357986a1557e49f12faf898464ff2">addAffector()</a> call this function to achieve optimum memory use.  <br /></td></tr>
 <tr class="separator:a1a41393fe93998bc272892db60e68bc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1303,7 +1306,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="line"><span class="keywordflow">for</span>( i = 0; i &lt; <a class="code hl_function" href="class_ogre_1_1_particle_system_def.html#a92e3ff634ddd9fd9ba0f63ddcb576d9d">getNumSimdActiveParticles</a>(); i += <a class="code hl_define" href="_ogre_array_config_8h.html#aae6e6e54870826a15444682ed7bae799">ARRAY_PACKED_REALS</a> )</div>
 <div class="line">    mParticleCpuData.<a class="code hl_function" href="struct_ogre_1_1_particle_cpu_data.html#aae35d67d1c4ddb979c312e0533e68bab">advancePack</a>();</div>
 <div class="ttc" id="a_ogre_array_config_8h_html_aae6e6e54870826a15444682ed7bae799"><div class="ttname"><a href="_ogre_array_config_8h.html#aae6e6e54870826a15444682ed7bae799">ARRAY_PACKED_REALS</a></div><div class="ttdeci">#define ARRAY_PACKED_REALS</div><div class="ttdef"><b>Definition</b> OgreArrayConfig.h:227</div></div>
-<div class="ttc" id="aclass_ogre_1_1_particle_system_def_html_a92e3ff634ddd9fd9ba0f63ddcb576d9d"><div class="ttname"><a href="class_ogre_1_1_particle_system_def.html#a92e3ff634ddd9fd9ba0f63ddcb576d9d">Ogre::ParticleSystemDef::getNumSimdActiveParticles</a></div><div class="ttdeci">size_t getNumSimdActiveParticles() const</div><div class="ttdoc">Returns the number of active particles rounded up to match up SIMD processing.</div><div class="ttdef"><b>Definition</b> OgreParticleSystem2.h:364</div></div>
+<div class="ttc" id="aclass_ogre_1_1_particle_system_def_html_a92e3ff634ddd9fd9ba0f63ddcb576d9d"><div class="ttname"><a href="class_ogre_1_1_particle_system_def.html#a92e3ff634ddd9fd9ba0f63ddcb576d9d">Ogre::ParticleSystemDef::getNumSimdActiveParticles</a></div><div class="ttdeci">size_t getNumSimdActiveParticles() const</div><div class="ttdoc">Returns the number of active particles rounded up to match up SIMD processing.</div><div class="ttdef"><b>Definition</b> OgreParticleSystem2.h:366</div></div>
 <div class="ttc" id="astruct_ogre_1_1_particle_cpu_data_html_aae35d67d1c4ddb979c312e0533e68bab"><div class="ttname"><a href="struct_ogre_1_1_particle_cpu_data.html#aae35d67d1c4ddb979c312e0533e68bab">Ogre::ParticleCpuData::advancePack</a></div><div class="ttdeci">void advancePack(size_t numAdvance=1u)</div><div class="ttdef"><b>Definition</b> OgreParticle2.h:76</div></div>
 </div><!-- fragment --><p>Must iterate 2 times. However if <a class="el" href="class_ogre_1_1_particle_system_def.html#a92e3ff634ddd9fd9ba0f63ddcb576d9d" title="Returns the number of active particles rounded up to match up SIMD processing.">getNumSimdActiveParticles()</a> returns 3 (3 = 5 - 3 + 1), it will only iterate once. Rounding 3 up to ARRAY_PACKED_REALS is also no good, because if it returns 4, it still iterates once.</p>
 <p>It must return 8 (ARRAY_PACKED_REALS * 2).</p>
@@ -1569,6 +1572,36 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a723bcfd28d236d6c0d6e405cdcccf760" name="a723bcfd28d236d6c0d6e405cdcccf760"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a723bcfd28d236d6c0d6e405cdcccf760">&#9670;&#160;</a></span>isParticleSystemDef()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::ParticleSystemDef::isParticleSystemDef </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if 'this' is actually a <a class="el" href="class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene.">ParticleSystemDef</a>, as some behaviors are different while we try to maintain both systems isolated. </p>
+<p><a class="el" href="class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene.">ParticleSystemDef</a> was only built on top of <a class="el" href="class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects.">ParticleSystem</a> to maintain a lot of backwards compatibility. </p>
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_particle_system.html#a3338e0a222c6c184dc6f66a6596d9554">Ogre::ParticleSystem</a>.</p>
 
 </div>
 </div>
