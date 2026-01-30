@@ -210,6 +210,8 @@ namespace Ogre
                            const bool bIsBillboardSet );
         ~ParticleSystemDef() override;
 
+        void setRenderer( const String &typeName ) override;
+
         uint32 getQuota() const;
 
         /** Clones this ParticleSystemDef with a new name into a new ParticleSystemManager2.
