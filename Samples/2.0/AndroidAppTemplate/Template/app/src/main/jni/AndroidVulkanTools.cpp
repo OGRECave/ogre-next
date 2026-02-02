@@ -76,10 +76,20 @@ void testEarlyVulkanWorkarounds()
             }
             else if( deviceProps.vendorID == 0x13B5 )
             {
-                // ARM / Mali. We know at least version 20.0.0 is bad.
-                const uint32_t knownBadArmVersion = VK_MAKE_API_VERSION( 0, 20, 0, 0 );
+                // ARM / Mali. We know at least version 21.0.0 is bad.
+                const uint32_t knownBadArmVersion = VK_MAKE_API_VERSION( 0, 21, 0, 0 );
                 if( deviceProps.driverVersion <= knownBadArmVersion )
                     Ogre::Workarounds::mVkSyncWindowInit = true;
+                else
+                {
+                    const int apiLevel = android_get_device_api_level();
+                    if( apiLevel > 0 && apiLevel <= 28 )
+                    {
+                        // Always broken. Older drivers used a driver scheme 8xx.x.x and 9xx.x.x
+                        // which would pass the previous checks. But they're actually ancient.
+                        Ogre::Workarounds::mVkSyncWindowInit = true;
+                    }
+                }
             }
             else if( deviceProps.vendorID == 0x1010 )
             {
