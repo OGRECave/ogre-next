@@ -11,8 +11,6 @@ macro( add_recursive dir retVal )
 	file( GLOB_RECURSE ${retVal} ${dir}/*.h ${dir}/*.cpp ${dir}/*.c )
 endmacro()
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-
 add_recursive( ./ SOURCE_FILES )
 
 ogre_add_executable(Sample_Tutorial_ReconstructPosFromDepth WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAMPLE_COMMON_RESOURCES})
