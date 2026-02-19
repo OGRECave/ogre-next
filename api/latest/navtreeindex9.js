@@ -1,5 +1,6 @@
 var NAVTREEINDEX9 =
 {
+"_ogre_x11_e_g_l_support_8h.html#a8a0543932617c1cc144b66bcd61f421d":[9,0,4,2,0,0,3,3,74],
 "_ogre_x11_e_g_l_support_8h.html#a92200921253eefd3ef59f32f5aa29e47":[9,0,4,2,0,0,3,3,34],
 "_ogre_x11_e_g_l_support_8h.html#aa4169ce536fca992c649729b4b80c67a":[9,0,4,2,0,0,3,3,54],
 "_ogre_x11_e_g_l_support_8h.html#aa563e8e7abd73ce344907eb39dcd181a":[9,0,4,2,0,0,3,3,60],
@@ -248,6 +249,5 @@ var NAVTREEINDEX9 =
 "_tuning_memory_resources.html#autotoc_md79":[4,3,2,2,0],
 "_using_ogre_in_your_app.html":[2],
 "_using_ogre_in_your_app.html#AnoteaboutcopiedfilesfromSamples_20_Common":[2,1,2,0],
-"_using_ogre_in_your_app.html#CreatingYourApplication":[2,1,2],
-"_using_ogre_in_your_app.html#SmallNoteAbout_iOS":[2,1,0]
+"_using_ogre_in_your_app.html#CreatingYourApplication":[2,1,2]
 };

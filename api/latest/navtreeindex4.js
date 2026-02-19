@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"_ogre_hlms_unlit_prerequisites_8h.html#a90397bac6ee36d3380f98a549eada0daabc5afcf1870dd9c5aa8383256b8c60ca":[9,0,0,1,2,0,3,1,2],
 "_ogre_hlms_unlit_prerequisites_8h.html#a90397bac6ee36d3380f98a549eada0daad93bcaf6810d1ebec3cb8a28e265a9a0":[9,0,0,1,2,0,3,1,8],
 "_ogre_hlms_unlit_prerequisites_8h.html#a90397bac6ee36d3380f98a549eada0daae500c18b8631a7175c032c680ed70640":[9,0,0,1,2,0,3,1,6],
 "_ogre_hlms_unlit_prerequisites_8h.html#a90397bac6ee36d3380f98a549eada0daaec7dd90b89bc15080ec4c7904bc9f55f":[9,0,0,1,2,0,3,1,11],
@@ -174,8 +175,8 @@ var NAVTREEINDEX4 =
 "_ogre_metal_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540ab4295ed7567385d3d32e8bbf7f69ed0f":[9,0,4,3,0,13,1,26],
 "_ogre_metal_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540ab4ce241b06f303ca69ec7d6e7445381f":[9,0,4,3,0,13,1,24],
 "_ogre_metal_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540ab88d99795b06ddfab7dca3bc55dea303":[9,0,4,3,0,13,1,6],
-"_ogre_metal_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540ac3a7d5a193ef3c437fcbdc8c61cc34a2":[9,0,4,3,0,13,1,20],
 "_ogre_metal_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540ac3a7d5a193ef3c437fcbdc8c61cc34a2":[9,0,4,3,0,13,1,15],
+"_ogre_metal_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540ac3a7d5a193ef3c437fcbdc8c61cc34a2":[9,0,4,3,0,13,1,20],
 "_ogre_metal_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540acd7ddc0ba749aedac2cc5094d3fdd798":[9,0,4,3,0,13,1,28],
 "_ogre_metal_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540acd7ddc0ba749aedac2cc5094d3fdd798":[9,0,4,3,0,13,1,19],
 "_ogre_metal_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540ad1bedf019953e0d051a8a7e2a09239ab":[9,0,4,3,0,13,1,25],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "_ogre_o_s_version_helpers_8h.html#a916f47ab16334b59ff1532cc0438c482":[9,0,4,0,0,37,2],
 "_ogre_o_s_version_helpers_8h.html#aad7d5e9663d83404a7a23a27aeceb0c5":[9,0,4,0,0,37,3],
 "_ogre_o_s_version_helpers_8h.html#ad8a247a955766c3f4905be6c3021f93c":[9,0,4,0,0,37,0],
-"_ogre_o_s_x_cocoa_context_8h.html":[9,0,4,1,0,2,2,0],
-"_ogre_o_s_x_cocoa_touch_view_8h.html":[9,0,2,0,8,2]
+"_ogre_o_s_x_cocoa_context_8h.html":[9,0,4,1,0,2,2,0]
 };

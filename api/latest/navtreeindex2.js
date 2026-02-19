@@ -30,8 +30,8 @@ var NAVTREEINDEX2 =
 "_ogre_d3_d11_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540a026ebce5adccd870eca80da92b7c9880":[9,0,4,0,0,19,1,17],
 "_ogre_d3_d11_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540a29348aa812cf20e7441259050ef4c48e":[9,0,4,0,0,19,1,13],
 "_ogre_d3_d11_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540a3758c57e1d1f100889ca50f7c538fb82":[9,0,4,0,0,19,1,8],
-"_ogre_d3_d11_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540a64978914a6898c4840c1c4788f7a2a79":[9,0,4,0,0,19,1,11],
 "_ogre_d3_d11_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540a64978914a6898c4840c1c4788f7a2a79":[9,0,4,0,0,19,1,23],
+"_ogre_d3_d11_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540a64978914a6898c4840c1c4788f7a2a79":[9,0,4,0,0,19,1,11],
 "_ogre_d3_d11_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540a7173060e28d9c17e78e871d3072e6f49":[9,0,4,0,0,19,1,27],
 "_ogre_d3_d11_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540a7571dbde6ec0b71d5e43cdd8fb6a9e55":[9,0,4,0,0,19,1,3],
 "_ogre_d3_d11_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540a7cb368b496a1caa153d6b249675924be":[9,0,4,0,0,19,1,0],
@@ -87,6 +87,7 @@ var NAVTREEINDEX2 =
 "_ogre_d3_d11_window_8h.html":[9,0,4,0,0,34],
 "_ogre_d3_d11_window_hwnd_8h.html":[9,0,4,0,0,2,0,0],
 "_ogre_d3_d11_window_win_r_t_8h.html":[9,0,4,0,0,2,0,1],
+"_ogre_d3_d11_window_win_u_i3_8h.html":[9,0,4,0,0,2,0,2],
 "_ogre_d_d_s_codec2_8h.html":[9,0,2,0,56],
 "_ogre_data_stream_8h.html":[9,0,2,0,55],
 "_ogre_data_stream_8h.html#a71a2d398037a64aa241ef5c0be350430":[9,0,2,0,55,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "_ogre_g_l_e_s2_prerequisites_8h.html#a3ba341f0c4f5598150071033e57b504a":[9,0,4,2,0,24,65],
 "_ogre_g_l_e_s2_prerequisites_8h.html#a3bafed7330a8e875b6fa5696911d49ec":[9,0,4,2,0,24,54],
 "_ogre_g_l_e_s2_prerequisites_8h.html#a3bc2e39f623dcbb488c3d305a448afef":[9,0,4,2,0,24,38],
-"_ogre_g_l_e_s2_prerequisites_8h.html#a3cf2485269ee60d898fbaf734040360c":[9,0,4,2,0,24,41],
-"_ogre_g_l_e_s2_prerequisites_8h.html#a3d3b7e52f4521f60f2793bfc1273c6f2":[9,0,4,2,0,24,22]
+"_ogre_g_l_e_s2_prerequisites_8h.html#a3cf2485269ee60d898fbaf734040360c":[9,0,4,2,0,24,41]
 };

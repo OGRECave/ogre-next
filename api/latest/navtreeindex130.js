@@ -1,5 +1,6 @@
 var NAVTREEINDEX130 =
 {
+"struct_ogre_1_1_pbs_property.html#a36edaac4ed84336253dcf00ca19ef165":[6,0,0,16,110],
 "struct_ogre_1_1_pbs_property.html#a3775d430326255fd382d73fb205bcff8":[6,0,0,16,114],
 "struct_ogre_1_1_pbs_property.html#a3d39a567fa8751b46ad1b6cc63a7183b":[6,0,0,16,44],
 "struct_ogre_1_1_pbs_property.html#a44084ff587ec40308f179aa6e71eaf8f":[6,0,0,16,18],
@@ -130,8 +131,8 @@ var NAVTREEINDEX130 =
 "struct_ogre_1_1_profiled_edge.html#a1f62a56068f71a2040043b22acbd904f":[8,0,0,763,0],
 "struct_ogre_1_1_profiled_edge.html#a77b8a7e4cfbf39504aa8b806f1cec2ed":[7,0,0,793,1],
 "struct_ogre_1_1_profiled_edge.html#a77b8a7e4cfbf39504aa8b806f1cec2ed":[8,0,0,763,1],
-"struct_ogre_1_1_profiled_edge.html#ac12408b0de5e8bd4a9dd7ed35d657342":[8,0,0,763,2],
 "struct_ogre_1_1_profiled_edge.html#ac12408b0de5e8bd4a9dd7ed35d657342":[7,0,0,793,2],
+"struct_ogre_1_1_profiled_edge.html#ac12408b0de5e8bd4a9dd7ed35d657342":[8,0,0,763,2],
 "struct_ogre_1_1_property_value.html":[6,1,1,4],
 "struct_ogre_1_1_property_value.html#a6b8054bd7cb64a2a21c22cd987c7885f":[6,1,1,4,1],
 "struct_ogre_1_1_property_value.html#acba372a06626d7d2d0a6a232d0fdffbf":[6,1,1,4,0],
@@ -146,8 +147,8 @@ var NAVTREEINDEX130 =
 "struct_ogre_1_1_raster_params.html":[7,0,0,813],
 "struct_ogre_1_1_raster_params.html#abb3063ac46798d8104a2b148fef9f9c8":[7,0,0,813,1],
 "struct_ogre_1_1_raster_params.html#abb3063ac46798d8104a2b148fef9f9c8":[8,0,0,783,1],
-"struct_ogre_1_1_raster_params.html#ae6ac20083847cbb4de3890e692e9509c":[8,0,0,783,3],
 "struct_ogre_1_1_raster_params.html#ae6ac20083847cbb4de3890e692e9509c":[7,0,0,813,3],
+"struct_ogre_1_1_raster_params.html#ae6ac20083847cbb4de3890e692e9509c":[8,0,0,783,3],
 "struct_ogre_1_1_raster_params.html#ae83ecd7e7cb5b6b6d77d488bfb85b68f":[7,0,0,813,4],
 "struct_ogre_1_1_raster_params.html#ae83ecd7e7cb5b6b6d77d488bfb85b68f":[8,0,0,783,4],
 "struct_ogre_1_1_raster_params.html#aee5f67885ec946b99fff90e63f4ed9a9":[7,0,0,813,2],
@@ -160,10 +161,10 @@ var NAVTREEINDEX130 =
 "struct_ogre_1_1_ray_scene_query_result_entry.html#a17af5a6b49fcd71ca726daf1dd67af98":[6,2,11,41,0],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#a58ba184768924a39ab195dcf96472f65":[6,0,1,41,2],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#a58ba184768924a39ab195dcf96472f65":[6,2,11,41,2],
-"struct_ogre_1_1_ray_scene_query_result_entry.html#acc6655f373532d7b9d3017acab7535a9":[6,2,11,41,3],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#acc6655f373532d7b9d3017acab7535a9":[6,0,1,41,3],
-"struct_ogre_1_1_ray_scene_query_result_entry.html#af3e8eed523c4215c5733a9886db7ec29":[6,2,11,41,1],
+"struct_ogre_1_1_ray_scene_query_result_entry.html#acc6655f373532d7b9d3017acab7535a9":[6,2,11,41,3],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#af3e8eed523c4215c5733a9886db7ec29":[6,0,1,41,1],
+"struct_ogre_1_1_ray_scene_query_result_entry.html#af3e8eed523c4215c5733a9886db7ec29":[6,2,11,41,1],
 "struct_ogre_1_1_render_pass_colour_target.html":[6,2,10,108],
 "struct_ogre_1_1_render_pass_colour_target.html#a0a93c46bbc199953384875893b273d5f":[6,2,10,108,0],
 "struct_ogre_1_1_render_pass_colour_target.html#a0ad20f604cf286ca9e1923d6de97bb9c":[6,2,10,108,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX130 =
 "struct_ogre_1_1_resource_status.html#a4195e0f810edfb05ee5fb174fb839620":[6,2,10,119,1],
 "struct_ogre_1_1_resource_status.html#a8d72804bfbcebf3513e884fe3c782e9d":[6,2,10,119,3],
 "struct_ogre_1_1_resource_transition.html":[6,2,10,120],
-"struct_ogre_1_1_resource_transition.html#a0c57229b01460249c527751b8ab41b2e":[6,2,10,120,4],
-"struct_ogre_1_1_resource_transition.html#a32f813d9a49cc94253de6daf7b3f1bad":[6,2,10,120,5]
+"struct_ogre_1_1_resource_transition.html#a0c57229b01460249c527751b8ab41b2e":[6,2,10,120,4]
 };

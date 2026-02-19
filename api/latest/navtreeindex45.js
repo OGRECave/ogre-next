@@ -1,5 +1,6 @@
 var NAVTREEINDEX45 =
 {
+"class_ogre_1_1_gpu_program_parameters.html#af92e81b7b7bfb0c80ee390313b68d282":[6,2,5,8,68],
 "class_ogre_1_1_gpu_program_parameters.html#af9e29d2087c860156de6792405b679d4":[6,2,5,8,36],
 "class_ogre_1_1_gpu_program_parameters.html#aff98714de62cb19c0a54f301e9bf553f":[6,2,5,8,45],
 "class_ogre_1_1_gpu_program_parameters___auto_constant_entry.html":[6,2,5,9],
@@ -43,16 +44,16 @@ var NAVTREEINDEX45 =
 "class_ogre_1_1_gpu_resource.html#a3ecbf330f3a8ee478c77b250abb85ea9":[8,0,0,442,1],
 "class_ogre_1_1_gpu_resource.html#a56ccef279ef9251c5a4b40bfaf7b9e05":[7,0,0,472,3],
 "class_ogre_1_1_gpu_resource.html#a56ccef279ef9251c5a4b40bfaf7b9e05":[8,0,0,442,3],
-"class_ogre_1_1_gpu_resource.html#a9311078ea7d4d85ed5cbaae4e641f765":[7,0,0,472,4],
 "class_ogre_1_1_gpu_resource.html#a9311078ea7d4d85ed5cbaae4e641f765":[8,0,0,442,4],
+"class_ogre_1_1_gpu_resource.html#a9311078ea7d4d85ed5cbaae4e641f765":[7,0,0,472,4],
 "class_ogre_1_1_gpu_resource.html#a97a51a82de7ad88e7c09410d23d16d28":[8,0,0,442,8],
 "class_ogre_1_1_gpu_resource.html#a97a51a82de7ad88e7c09410d23d16d28":[7,0,0,472,8],
 "class_ogre_1_1_gpu_resource.html#aa747c8f9b2503e09c167d885e9dcbdee":[8,0,0,442,5],
 "class_ogre_1_1_gpu_resource.html#aa747c8f9b2503e09c167d885e9dcbdee":[7,0,0,472,5],
 "class_ogre_1_1_gpu_resource.html#acfbc14f1a5f1750b92a5197215f5e6dc":[8,0,0,442,7],
 "class_ogre_1_1_gpu_resource.html#acfbc14f1a5f1750b92a5197215f5e6dc":[7,0,0,472,7],
-"class_ogre_1_1_gpu_resource.html#ad623ee0c97e95e276074d3cfd64c374c":[8,0,0,442,2],
 "class_ogre_1_1_gpu_resource.html#ad623ee0c97e95e276074d3cfd64c374c":[7,0,0,472,2],
+"class_ogre_1_1_gpu_resource.html#ad623ee0c97e95e276074d3cfd64c374c":[8,0,0,442,2],
 "class_ogre_1_1_gpu_shared_parameters.html":[6,2,5,11],
 "class_ogre_1_1_gpu_shared_parameters.html#a00bfc4a07988d4719e95f59fe15f3892":[6,2,5,11,11],
 "class_ogre_1_1_gpu_shared_parameters.html#a09b0026f12f8bd997f88c7627991a56d":[6,2,5,11,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX45 =
 "class_ogre_1_1_high_level_gpu_program_manager.html#a900744260df0ceb1e1eec502a9e06d1d":[6,2,10,60,8],
 "class_ogre_1_1_high_level_gpu_program_manager.html#a992de8146fdd698d1cd6774fb15a2001":[6,2,10,60,4],
 "class_ogre_1_1_high_level_gpu_program_manager.html#ad95dcf667a304b0d59f8e09e69beef5b":[6,2,10,60,3],
-"class_ogre_1_1_hlms.html":[6,2,10,61],
-"class_ogre_1_1_hlms.html#a029b71d6801fc4acbb682d362cf4a1bd":[6,2,10,61,32]
+"class_ogre_1_1_hlms.html":[6,2,10,61]
 };

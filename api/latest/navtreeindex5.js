@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"_ogre_o_s_x_cocoa_touch_view_8h.html":[9,0,2,0,8,2],
 "_ogre_o_s_x_cocoa_view_8h.html":[9,0,4,1,0,2,2,1],
 "_ogre_o_s_x_cocoa_window_8h.html":[9,0,4,1,0,2,2,2],
 "_ogre_o_s_x_cocoa_window_delegate_8h.html":[9,0,4,1,0,2,2,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "_ogre_property_prerequisites_8h.html#af28d18a1b484acf19bec2841bc9ec96f":[9,0,0,7,0,1,0],
 "_ogre_pso_cache_helper_8h.html":[9,0,2,0,198],
 "_ogre_quaternion_8h.html":[9,0,2,0,200],
-"_ogre_radial_density_mask_8h.html":[9,0,2,0,201],
-"_ogre_radix_sort_8h.html":[9,0,2,0,202]
+"_ogre_radial_density_mask_8h.html":[9,0,2,0,201]
 };
