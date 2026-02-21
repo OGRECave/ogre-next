@@ -166,15 +166,24 @@ namespace Ogre {
 
         imgData->box.data = OGRE_MALLOC_SIMD( imgData->box.bytesPerImage, MEMCATEGORY_RESOURCE );
 
-        if( components != 3 )
+        if( components != 3 && imgData->box.bytesPerImage == width * components )
             memcpy( imgData->box.data, pixelData, imgData->box.bytesPerImage );
+        else if( components != 3 )
+        {
+            for( size_t y = 0; y < (size_t)height; ++y )
+            {
+                uint8 *pDst = reinterpret_cast<uint8 *>( imgData->box.at( 0u, y, 0u ) );
+                uint8 const *pSrc = pixelData + y * width * components;
+                memcpy(pDst, pSrc, width * components);
+            }
+        }
         else
         {
             for( size_t y = 0; y < (size_t)height; ++y )
             {
                 uint8 *pDst = reinterpret_cast<uint8 *>( imgData->box.at( 0u, y, 0u ) );
-                uint8 const *pSrc = pixelData + y * imgData->box.bytesPerRow;
-                for( size_t x = 0; x << (size_t)width; ++x )
+                uint8 const *pSrc = pixelData + y * width * components;
+                for( size_t x = 0; x < (size_t)width; ++x )
                 {
                     const uint8 b = *pSrc++;
                     const uint8 g = *pSrc++;
@@ -200,8 +209,46 @@ namespace Ogre {
         return mType;
     }
     //---------------------------------------------------------------------
+    static void logUnsupportedMagic(const char *magicNumberPtr, size_t maxbytes)
+    {
+        StringStream strMagic;
+        bool lastHex = false;
+        for (size_t i = 0; i < maxbytes; ++i)
+        {
+            uint8_t ch = magicNumberPtr[i];
+            if (std::isprint(ch))
+            {
+                if (lastHex)
+                    strMagic << " ";
+                strMagic << ch;
+                lastHex = false;
+            }
+            else
+            {
+                char hex[16];
+                sprintf(hex, "0x%02x", ch);
+                strMagic << " " << hex;
+                lastHex = true;
+            }
+        }
+        // In Gazebo, these logs appear by default in ~/.gz/rendering/ogre2.log.
+        LogManager::getSingleton().logMessage( std::string( "Unsupported magic in STBIImageCodec::magicNumberPtr(" ) +
+                                               std::to_string( maxbytes ) + "): " + strMagic.str());
+    }
+    //---------------------------------------------------------------------
     String STBIImageCodec::magicNumberToFileExt(const char *magicNumberPtr, size_t maxbytes) const
     {
+        static const uint8_t png_sig[] = { 137, 80, 78, 71, 13, 10, 26, 10 };
+        static const uint8_t jpg_sig[] = { 0xff, 0xd8, 0xff };
+
+        if( maxbytes >= sizeof( png_sig ) && memcmp( magicNumberPtr, &png_sig, sizeof( png_sig ) ) == 0 )
+            return "png";
+
+        if( maxbytes >= sizeof( jpg_sig ) && memcmp( magicNumberPtr, &jpg_sig, sizeof( jpg_sig ) ) == 0 )
+            return "jpg";
+
+        logUnsupportedMagic(magicNumberPtr, maxbytes);
+
         return BLANKSTRING;
     }
 }
