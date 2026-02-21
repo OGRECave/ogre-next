@@ -173,8 +173,8 @@ namespace Ogre {
             for( size_t y = 0; y < (size_t)height; ++y )
             {
                 uint8 *pDst = reinterpret_cast<uint8 *>( imgData->box.at( 0u, y, 0u ) );
-                uint8 const *pSrc = pixelData + y * imgData->box.bytesPerRow;
-                for( size_t x = 0; x << (size_t)width; ++x )
+                uint8 const *pSrc = pixelData + y * width * components;
+                for( size_t x = 0; x < (size_t)width; ++x )
                 {
                     const uint8 b = *pSrc++;
                     const uint8 g = *pSrc++;
