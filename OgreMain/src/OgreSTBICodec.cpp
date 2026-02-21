@@ -166,8 +166,17 @@ namespace Ogre {
 
         imgData->box.data = OGRE_MALLOC_SIMD( imgData->box.bytesPerImage, MEMCATEGORY_RESOURCE );
 
-        if( components != 3 )
+        if( components != 3 && imgData->box.bytesPerImage == width * components )
             memcpy( imgData->box.data, pixelData, imgData->box.bytesPerImage );
+        else if( components != 3 )
+        {
+            for( size_t y = 0; y < (size_t)height; ++y )
+            {
+                uint8 *pDst = reinterpret_cast<uint8 *>( imgData->box.at( 0u, y, 0u ) );
+                uint8 const *pSrc = pixelData + y * width * components;
+                memcpy(pDst, pSrc, width * components);
+            }
+        }
         else
         {
             for( size_t y = 0; y < (size_t)height; ++y )
