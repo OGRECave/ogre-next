@@ -209,6 +209,17 @@ namespace Ogre
     //---------------------------------------------------------------------
     String STBIImageCodec::magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const
     {
+        static const uint8_t png_sig[] = { 137, 80, 78, 71, 13, 10, 26, 10 };
+        static const uint8_t jpg_sig[] = { 0xff, 0xd8, 0xff };
+
+        if( maxbytes >= sizeof( png_sig ) && memcmp( magicNumberPtr, &png_sig, sizeof( png_sig ) ) == 0 )
+            return "png";
+
+        if( maxbytes >= sizeof( jpg_sig ) && memcmp( magicNumberPtr, &jpg_sig, sizeof( jpg_sig ) ) == 0 )
+            return "jpg";
+
+        logUnsupportedMagic( magicNumberPtr, maxbytes );
+
         return BLANKSTRING;
     }
     //---------------------------------------------------------------------
