@@ -12,6 +12,7 @@
 #include "OgrePlatform.h"
 
 #include "Hash/MurmurHash3.h"
+#include <string.h>
 
 //-----------------------------------------------------------------------------
 // Platform-specific functions and macros
@@ -65,17 +66,20 @@ inline uint64_t rotl64 ( uint64_t x, int8_t r )
 namespace Ogre
 {
 //-----------------------------------------------------------------------------
-// Block read - if your platform needs to do endian-swapping or can only
-// handle aligned reads, do the conversion here
+// Block read - if your platform needs to do endian-swapping, do the conversion here
 
-FORCE_INLINE uint32_t getblock32 ( const uint32_t * p, int i )
+FORCE_INLINE uint32_t getblock32 ( const uint8_t * p, int i )
 {
-  return p[i];
+    uint32_t dest;
+    memcpy( &dest, p + i * static_cast<int>(sizeof(uint32_t)), sizeof(uint32_t) );
+    return dest;
 }
 
-FORCE_INLINE uint64_t getblock64 ( const uint64_t * p, int i )
+FORCE_INLINE uint64_t getblock64 ( const uint8_t * p, int i )
 {
-  return p[i];
+    uint64_t dest;
+    memcpy( &dest, p + i * static_cast<int>(sizeof(uint64_t)), sizeof(uint64_t) );
+    return dest;
 }
 
 //-----------------------------------------------------------------------------
@@ -121,7 +125,7 @@ void _OgreExport MurmurHash3_x86_32 ( const void * key, const int len,
   //----------
   // body
 
-  const uint32_t * blocks = (const uint32_t *)(data + nblocks*4);
+  const uint8_t * blocks = (const uint8_t *)(data + nblocks*4);
 
   for(int i = -nblocks; i; i++)
   {
@@ -182,7 +186,7 @@ void _OgreExport MurmurHash3_x86_128 ( const void * key, const int len,
   //----------
   // body
 
-  const uint32_t * blocks = (const uint32_t *)(data + nblocks*16);
+  const uint8_t * blocks = (const uint8_t *)(data + nblocks*16);
 
   for(int i = -nblocks; i; i++)
   {
@@ -283,7 +287,7 @@ void _OgreExport MurmurHash3_x64_128 ( const void * key, const int len,
   //----------
   // body
 
-  const uint64_t * blocks = (const uint64_t *)(data);
+  const uint8_t * blocks = (const uint8_t *)(data);
 
   for(int i = 0; i < nblocks; i++)
   {
