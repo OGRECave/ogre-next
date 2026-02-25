@@ -1,7 +1,7 @@
 /*
 -----------------------------------------------------------------------------
 This source file is part of OGRE
-	(Object-oriented Graphics Rendering Engine)
+    (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
 Copyright (c) 2000-2014 Torus Knot Software Ltd
@@ -28,37 +28,37 @@ THE SOFTWARE.
 
 #ifdef _WIN32
 
-#	include "Threading/OgreCondVariable.h"
+#    include "Threading/OgreCondVariable.h"
 
 namespace Ogre
 {
-	CondVariable::CondVariable()
-	{
-		InitializeCriticalSection( &mMutex );
-		InitializeConditionVariable( &mCondVariable );
-	}
-	//-----------------------------------------------------------------------------------
-	CondVariable::~CondVariable()
-	{
-		// mCondVariable doesn't need freeing (as long as it's no longer in use!!!)
-		DeleteCriticalSection( &mMutex );
-	}
-	//-----------------------------------------------------------------------------------
-	void CondVariable::lock( void ) { EnterCriticalSection( &mMutex ); }
-	//-----------------------------------------------------------------------------------
-	void CondVariable::unlock( void ) { LeaveCriticalSection( &mMutex ); }
-	//-----------------------------------------------------------------------------------
-	void CondVariable::wait( CondVariableWaitFunc waitFunc, void *userData )
-	{
-		EnterCriticalSection( &mMutex );
-		while( ( *waitFunc )( userData ) )
-			SleepConditionVariableCS( &mCondVariable, &mMutex, INFINITE );
-		LeaveCriticalSection( &mMutex );
-	}
-	//-----------------------------------------------------------------------------------
-	void CondVariable::notifyOne( void ) { WakeConditionVariable( &mCondVariable ); }
-	//-----------------------------------------------------------------------------------
-	void CondVariable::notifyAll( void ) { WakeAllConditionVariable( &mCondVariable ); }
+    CondVariable::CondVariable()
+    {
+        InitializeCriticalSection( &mMutex );
+        InitializeConditionVariable( &mCondVariable );
+    }
+    //-----------------------------------------------------------------------------------
+    CondVariable::~CondVariable()
+    {
+        // mCondVariable doesn't need freeing (as long as it's no longer in use!!!)
+        DeleteCriticalSection( &mMutex );
+    }
+    //-----------------------------------------------------------------------------------
+    void CondVariable::lock( void ) { EnterCriticalSection( &mMutex ); }
+    //-----------------------------------------------------------------------------------
+    void CondVariable::unlock( void ) { LeaveCriticalSection( &mMutex ); }
+    //-----------------------------------------------------------------------------------
+    void CondVariable::wait( CondVariableWaitFunc waitFunc, void *userData )
+    {
+        EnterCriticalSection( &mMutex );
+        while( ( *waitFunc )( userData ) )
+            SleepConditionVariableCS( &mCondVariable, &mMutex, INFINITE );
+        LeaveCriticalSection( &mMutex );
+    }
+    //-----------------------------------------------------------------------------------
+    void CondVariable::notifyOne( void ) { WakeConditionVariable( &mCondVariable ); }
+    //-----------------------------------------------------------------------------------
+    void CondVariable::notifyAll( void ) { WakeAllConditionVariable( &mCondVariable ); }
 }  // namespace Ogre
 
 #endif
