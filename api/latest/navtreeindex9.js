@@ -1,5 +1,9 @@
 var NAVTREEINDEX9 =
 {
+"_ogre_x11_e_g_l_support_8h.html#a7494bfafd106d56df9ed438c0a03d9ad":[9,0,4,2,0,0,3,3,37],
+"_ogre_x11_e_g_l_support_8h.html#a775df07052bdc266314af82272c8a3ae":[9,0,4,2,0,0,3,3,46],
+"_ogre_x11_e_g_l_support_8h.html#a846a80562149754060339388f6f07a4d":[9,0,4,2,0,0,3,3,73],
+"_ogre_x11_e_g_l_support_8h.html#a89461d5e0614dfd557804e22100fecee":[9,0,4,2,0,0,3,3,66],
 "_ogre_x11_e_g_l_support_8h.html#a8a0543932617c1cc144b66bcd61f421d":[9,0,4,2,0,0,3,3,74],
 "_ogre_x11_e_g_l_support_8h.html#a92200921253eefd3ef59f32f5aa29e47":[9,0,4,2,0,0,3,3,34],
 "_ogre_x11_e_g_l_support_8h.html#aa4169ce536fca992c649729b4b80c67a":[9,0,4,2,0,0,3,3,54],
@@ -245,9 +249,5 @@ var NAVTREEINDEX9 =
 "_tuning_memory_resources.html":[4,3,2],
 "_tuning_memory_resources.html#DynamicVsDefaultBuffers":[4,3,2,1],
 "_tuning_memory_resources.html#GroupingTexturesByType":[4,3,2,0],
-"_tuning_memory_resources.html#TweakingVaoManager":[4,3,2,2],
-"_tuning_memory_resources.html#autotoc_md79":[4,3,2,2,0],
-"_using_ogre_in_your_app.html":[2],
-"_using_ogre_in_your_app.html#AnoteaboutcopiedfilesfromSamples_20_Common":[2,1,2,0],
-"_using_ogre_in_your_app.html#CreatingYourApplication":[2,1,2]
+"_tuning_memory_resources.html#TweakingVaoManager":[4,3,2,2]
 };

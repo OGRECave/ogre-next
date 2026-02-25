@@ -1,5 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,200,45"/>
-<area shape="rect" id="Node000001" href="$class_ogre_1_1_mesh_lod_generator.html" title=" " alt="" coords="248,13,432,38"/>
-<area shape="poly" id="edge1111_Node000000_Node000001" title=" " alt="" coords="214,23,248,23,248,28,214,28"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,228,45"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_d3_d11_stereo_driver_bridge.html" title="Bridge interface from the render system to the stereo driver." alt="" coords="276,42,505,67"/>
+<area shape="poly" id="edge1107_Node000000_Node000001" title=" " alt="" coords="242,36,276,40,276,45,241,41"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="49,70,185,95"/>
+<area shape="poly" id="edge1108_Node000002_Node000001" title=" " alt="" coords="198,72,276,64,276,69,199,77"/>
 </map>

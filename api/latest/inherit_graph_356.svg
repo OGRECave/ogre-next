@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="struct_ogre_1_1is_pod_like_3_01unsigned_01long_01_4.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="struct_ogre_1_1is_pod_like_3_01unsigned_01char_01_4.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="147,-30 0,-30 0,0 147,0 147,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::isPodLike&lt; unsigned</text>
-<text text-anchor="middle" x="73.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00"> long &gt;</text>
+<text text-anchor="middle" x="73.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00"> char &gt;</text>
 </a>
 </g>
 </g>

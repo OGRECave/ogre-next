@@ -142,6 +142,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2421714bb3fd00bef7268d92daadc5e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a683d441b5c51cd18a31ed8581d7b9de3" id="r_a683d441b5c51cd18a31ed8581d7b9de3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_android_window.html#a683d441b5c51cd18a31ed8581d7b9de3">destroy</a> () override</td></tr>
 <tr class="separator:a683d441b5c51cd18a31ed8581d7b9de3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add120d235c073917b0f926388564eba7" id="r_add120d235c073917b0f926388564eba7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_android_window.html#add120d235c073917b0f926388564eba7">flushQueuedNativeWindowChanges</a> (ANativeWindow *nativeWindow)</td></tr>
+<tr class="memdesc:add120d235c073917b0f926388564eba7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Must be called from main thread.  <br /></td></tr>
+<tr class="separator:add120d235c073917b0f926388564eba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d5fdfe9fed7934275a7016eaf3c4192" id="r_a5d5fdfe9fed7934275a7016eaf3c4192"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_android_window.html#a5d5fdfe9fed7934275a7016eaf3c4192">getCustomAttribute</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> name, void *pData) override</td></tr>
 <tr class="separator:a5d5fdfe9fed7934275a7016eaf3c4192"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a0a6a008d94955631351a2d49122da1" id="r_a5a0a6a008d94955631351a2d49122da1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_android_window.html#a5a0a6a008d94955631351a2d49122da1">isHidden</a> () const override</td></tr>
@@ -151,6 +154,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af7dbc1fe0e7562760ef2591f9ac6e564"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6245c967ecb321b7cd60fe90ea787395" id="r_a6245c967ecb321b7cd60fe90ea787395"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_android_window.html#a6245c967ecb321b7cd60fe90ea787395">reposition</a> (<a class="el" href="namespace_ogre.html#a1c37a43c04753c9ae0c17108c9e6c9d2">int32</a> left, <a class="el" href="namespace_ogre.html#a1c37a43c04753c9ae0c17108c9e6c9d2">int32</a> top) override</td></tr>
 <tr class="separator:a6245c967ecb321b7cd60fe90ea787395"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9df5f3991a15ce0ea0f8381251b1820d" id="r_a9df5f3991a15ce0ea0f8381251b1820d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_android_window.html#a9df5f3991a15ce0ea0f8381251b1820d">requestNativeWindowChange</a> ()</td></tr>
+<tr class="memdesc:a9df5f3991a15ce0ea0f8381251b1820d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Informs us that the main looper thread received a APP_CMD_INIT_WINDOW/APP_CMD_TERM_WINDOW event and thus we should expect the swapchain to become potentially invalid (it could return VK_ERROR_OUT_OF_DATE_KHR) and thus we should avoid submitting.  <br /></td></tr>
+<tr class="separator:a9df5f3991a15ce0ea0f8381251b1820d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2700a5c7adf5cb46559884d0c26db448" id="r_a2700a5c7adf5cb46559884d0c26db448"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_android_window.html#a2700a5c7adf5cb46559884d0c26db448">requestResolution</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> width, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> height) override</td></tr>
 <tr class="memdesc:a2700a5c7adf5cb46559884d0c26db448"><td class="mdescLeft">&#160;</td><td class="mdescRight">Requests a change in resolution.  <br /></td></tr>
 <tr class="separator:a2700a5c7adf5cb46559884d0c26db448"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -530,6 +536,32 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="add120d235c073917b0f926388564eba7" name="add120d235c073917b0f926388564eba7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add120d235c073917b0f926388564eba7">&#9670;&#160;</a></span>flushQueuedNativeWindowChanges()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::VulkanAndroidWindow::flushQueuedNativeWindowChanges </td>
+          <td>(</td>
+          <td class="paramtype">ANativeWindow *&#160;</td>
+          <td class="paramname"><em>nativeWindow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Must be called from main thread. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nativeWindow</td><td>Can be nullptr. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a5d5fdfe9fed7934275a7016eaf3c4192" name="a5d5fdfe9fed7934275a7016eaf3c4192"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5d5fdfe9fed7934275a7016eaf3c4192">&#9670;&#160;</a></span>getCustomAttribute()</h2>
 
@@ -684,6 +716,27 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="class_ogre_1_1_window.html#a5d39c20103e51bd756ebc97956b3c98d">Ogre::Window</a>.</p>
+
+</div>
+</div>
+<a id="a9df5f3991a15ce0ea0f8381251b1820d" name="a9df5f3991a15ce0ea0f8381251b1820d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9df5f3991a15ce0ea0f8381251b1820d">&#9670;&#160;</a></span>requestNativeWindowChange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::VulkanAndroidWindow::requestNativeWindowChange </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Informs us that the main looper thread received a APP_CMD_INIT_WINDOW/APP_CMD_TERM_WINDOW event and thus we should expect the swapchain to become potentially invalid (it could return VK_ERROR_OUT_OF_DATE_KHR) and thus we should avoid submitting. </p>
+<p>We expect the graphics thread to call <a class="el" href="class_ogre_1_1_vulkan_android_window.html#add120d235c073917b0f926388564eba7" title="Must be called from main thread.">flushQueuedNativeWindowChanges()</a> with the new window (or with a nullptr if the window is being destroyed).</p>
+<p>Can be called from other threads. </p>
 
 </div>
 </div>

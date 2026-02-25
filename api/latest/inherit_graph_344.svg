@@ -11,9 +11,9 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="struct_ogre_1_1is_pod_like_3_01char_01_4.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="struct_ogre_1_1is_pod_like_3_01bool_01_4.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="135,-19 0,-19 0,0 135,0 135,-19"/>
-<text text-anchor="middle" x="67.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::isPodLike&lt; char &gt;</text>
+<text text-anchor="middle" x="67.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::isPodLike&lt; bool &gt;</text>
 </a>
 </g>
 </g>

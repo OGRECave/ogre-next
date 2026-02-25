@@ -389,6 +389,7 @@ var hierarchy =
     [ "Ogre::ComPtr< T >", "class_ogre_1_1_com_ptr.html", null ],
     [ "Ogre::ComputeProperty", "struct_ogre_1_1_compute_property.html", null ],
     [ "Ogre::ComputeTools", "class_ogre_1_1_compute_tools.html", null ],
+    [ "Ogre::CondVariable", "class_ogre_1_1_cond_variable.html", null ],
     [ "Ogre::ConstBufferPool", "class_ogre_1_1_const_buffer_pool.html", [
       [ "Ogre::HlmsPbs", "class_ogre_1_1_hlms_pbs.html", null ],
       [ "Ogre::HlmsUnlit", "class_ogre_1_1_hlms_unlit.html", null ]
@@ -1760,6 +1761,7 @@ var hierarchy =
     [ "Ogre::SceneQueryListener", "class_ogre_1_1_scene_query_listener.html", [
       [ "Ogre::RegionSceneQuery", "class_ogre_1_1_region_scene_query.html", null ]
     ] ],
+    [ "Ogre::ScopedCvLock", "class_ogre_1_1_scoped_cv_lock.html", null ],
     [ "Ogre::ScopedLock", "class_ogre_1_1_scoped_lock.html", null ],
     [ "Ogre::ScriptCompilerEvent", "class_ogre_1_1_script_compiler_event.html", [
       [ "Ogre::CreateCompositorScriptCompilerEvent", "class_ogre_1_1_create_compositor_script_compiler_event.html", null ],

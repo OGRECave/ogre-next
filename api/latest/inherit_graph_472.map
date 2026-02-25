@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_property_base.html" title="Base interface for an instance of a property." alt="" coords="5,5,153,31"/>
-<area shape="rect" id="Node000001" href="$class_ogre_1_1_property.html" title="Property instance with passthrough calls to a given object." alt="" coords="201,5,356,31"/>
-<area shape="poly" id="edge1092_Node000000_Node000001" title=" " alt="" coords="167,15,201,15,201,21,167,21"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_profile_session_listener.html" title="ProfileSessionListener should be used to visualize profile results." alt="" coords="5,13,209,38"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1v1_1_1_overlay_profile_session_listener.html" title="Concrete impl." alt="" coords="257,5,435,45"/>
+<area shape="poly" id="edge1091_Node000000_Node000001" title=" " alt="" coords="223,23,257,23,257,28,223,28"/>
 </map>

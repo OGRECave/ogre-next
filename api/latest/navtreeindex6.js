@@ -1,5 +1,7 @@
 var NAVTREEINDEX6 =
 {
+"_ogre_quaternion_8h.html":[9,0,2,0,200],
+"_ogre_radial_density_mask_8h.html":[9,0,2,0,201],
 "_ogre_radix_sort_8h.html":[9,0,2,0,202],
 "_ogre_raw_ptr_8h.html":[9,0,2,0,203],
 "_ogre_ray_8h.html":[9,0,2,0,204],
@@ -139,7 +141,7 @@ var NAVTREEINDEX6 =
 "_ogre_search_ops_8h.html#a627d0ba73ada4393b872e041bee960b4":[9,0,2,0,235,4],
 "_ogre_search_ops_8h.html#ad6e6e684d0f4464fab567dea1f33a8e0":[9,0,2,0,235,8],
 "_ogre_search_ops_8h.html#ad73476fd833652008c0d73896c8f9d5a":[9,0,2,0,235,6],
-"_ogre_semaphore_8h.html":[9,0,2,0,12,5],
+"_ogre_semaphore_8h.html":[9,0,2,0,12,6],
 "_ogre_serializer_8h.html":[9,0,2,0,236],
 "_ogre_serializer_8h.html#a7aabed00486d19ae59504fcb0fe276a1":[9,0,2,0,236,0],
 "_ogre_shader_params_8h.html":[9,0,2,0,237],
@@ -247,7 +249,5 @@ var NAVTREEINDEX6 =
 "_ogre_texture_gpu_8h.html#a59b71e36a14465bd82595d6d467e1434af47a81e993767e84b31d42bcbe27be16":[9,0,2,0,275,2,2],
 "_ogre_texture_gpu_8h.html#a88628e41c3e6b360f8b1653a1fc6697a":[9,0,2,0,275,0],
 "_ogre_texture_gpu_8h.html#a88628e41c3e6b360f8b1653a1fc6697aac8df964fe9e3a074f16264bf4286328d":[9,0,2,0,275,0,1],
-"_ogre_texture_gpu_8h.html#a88628e41c3e6b360f8b1653a1fc6697aaf94136572738824a9b28ec2da3ee01a1":[9,0,2,0,275,0,2],
-"_ogre_texture_gpu_8h.html#a88628e41c3e6b360f8b1653a1fc6697aafa04688137f25d1b66e3e5c9b6429172":[9,0,2,0,275,0,0],
-"_ogre_texture_gpu_8h.html#aa05717bddc9101a336507b0a167cde29":[9,0,2,0,275,1]
+"_ogre_texture_gpu_8h.html#a88628e41c3e6b360f8b1653a1fc6697aaf94136572738824a9b28ec2da3ee01a1":[9,0,2,0,275,0,2]
 };

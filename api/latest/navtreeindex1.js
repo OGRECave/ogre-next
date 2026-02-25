@@ -182,6 +182,8 @@ var NAVTREEINDEX1 =
 "_ogre_compositor_workspace_def_8h.html":[9,0,2,0,3,10],
 "_ogre_compositor_workspace_listener_8h.html":[9,0,2,0,3,11],
 "_ogre_compute_tools_8h.html":[9,0,2,0,4,0],
+"_ogre_cond_variable_8h.html":[9,0,2,0,12,1],
+"_ogre_cond_variable_8h.html#a652754fa64e1e8021de72b06630d3ae1":[9,0,2,0,12,1,2],
 "_ogre_config_8h.html":[9,0,2,0,46],
 "_ogre_config_8h.html#a0b1213282cf1a6f40da535f1dd3e4565":[9,0,2,0,46,18],
 "_ogre_config_8h.html#a1555343fe7aade0966aa442f2e0c16f5":[9,0,2,0,46,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "_ogre_d3_d11_hardware_buffer_manager_8h.html":[9,0,4,0,0,10],
 "_ogre_d3_d11_hardware_index_buffer_8h.html":[9,0,4,0,0,11],
 "_ogre_d3_d11_hardware_occlusion_query_8h.html":[9,0,4,0,0,12],
-"_ogre_d3_d11_hardware_vertex_buffer_8h.html":[9,0,4,0,0,13],
-"_ogre_d3_d11_hlms_pso_8h.html":[9,0,4,0,0,14],
-"_ogre_d3_d11_legacy_s_d_k_emulation_8h.html":[9,0,4,0,0,17]
+"_ogre_d3_d11_hardware_vertex_buffer_8h.html":[9,0,4,0,0,13]
 };

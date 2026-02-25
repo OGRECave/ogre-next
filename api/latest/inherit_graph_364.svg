@@ -15,7 +15,7 @@
 <polygon fill="white" stroke="#666666" points="123,-41 0,-41 0,0 123,0 123,-41"/>
 <text text-anchor="start" x="8" y="-29" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::IteratorWrapper</text>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; T, T::iterator, T::</text>
-<text text-anchor="middle" x="61.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">value_type &gt;</text>
+<text text-anchor="middle" x="61.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">mapped_type &gt;</text>
 </a>
 </g>
 </g>

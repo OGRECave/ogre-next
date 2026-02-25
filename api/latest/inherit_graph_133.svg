@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="struct_ogre_1_1_d3_d11_vao_manager_1_1_vao_1_1_vertex_binding.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="struct_ogre_1_1_d3_d11_vao_manager_1_1_stride_changer.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="140,-30 0,-30 0,0 140,0 140,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::D3D11VaoManager</text>
-<text text-anchor="middle" x="70" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">::Vao::VertexBinding</text>
+<text text-anchor="middle" x="70" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">::StrideChanger</text>
 </a>
 </g>
 </g>

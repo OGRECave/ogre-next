@@ -14,7 +14,7 @@
 <g id="a_Node000000"><a xlink:href="class_ogre_1_1_fast_array.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="153,-30 0,-30 0,0 153,0 153,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::FastArray&lt; Descriptor</text>
-<text text-anchor="middle" x="76.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">SetUav::Slot &gt;</text>
+<text text-anchor="middle" x="76.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">SetTexture2::Slot &gt;</text>
 </a>
 </g>
 </g>

@@ -613,6 +613,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_concrete_node.html">ConcreteNode</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_cond_variable.html">CondVariable</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_config_dialog.html">ConfigDialog</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the behaviour of an automatic renderer configuration dialog.  <a href="class_ogre_1_1_config_dialog.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2373,6 +2375,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_scene_query_result.html">SceneQueryResult</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Holds the results of a scene query.  <a href="struct_ogre_1_1_scene_query_result.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scoped_cv_lock.html">ScopedCvLock</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scoped_lock.html">ScopedLock</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_screen_ratio_pixel_count_lod_strategy.html">ScreenRatioPixelCountLodStrategy</a></td></tr>
@@ -3011,6 +3015,8 @@ Typedefs</h2></td></tr>
 <tr class="separator:ga9d11953f4cfbc8a1e225b910d881dc36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga3e6697969dbea85ec6ce5a95b89f85d4" id="r_ga3e6697969dbea85ec6ce5a95b89f85d4"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&lt; <a class="el" href="struct_ogre_1_1_concrete_node.html">ConcreteNode</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga3e6697969dbea85ec6ce5a95b89f85d4">ConcreteNodePtr</a></td></tr>
 <tr class="separator:ga3e6697969dbea85ec6ce5a95b89f85d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a652754fa64e1e8021de72b06630d3ae1" id="r_a652754fa64e1e8021de72b06630d3ae1"><td class="memItemLeft" align="right" valign="top">typedef bool(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a652754fa64e1e8021de72b06630d3ae1">CondVariableWaitFunc</a>) (void *userData)</td></tr>
+<tr class="separator:a652754fa64e1e8021de72b06630d3ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga694c5bb99530afaa83edd44aa3b5a8c4" id="r_ga694c5bb99530afaa83edd44aa3b5a8c4"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="struct_ogre_1_1___config_option.html">Ogre::_ConfigOption</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga694c5bb99530afaa83edd44aa3b5a8c4">ConfigOption</a></td></tr>
 <tr class="memdesc:ga694c5bb99530afaa83edd44aa3b5a8c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Packages the details of a configuration option.  <br /></td></tr>
 <tr class="separator:ga694c5bb99530afaa83edd44aa3b5a8c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -5960,6 +5966,20 @@ THE SOFTWARE.</h2>
       <table class="memname">
         <tr>
           <td class="memname">typedef vector&lt;<a class="el" href="class_ogre_1_1_compositor_workspace_listener.html">CompositorWorkspaceListener</a>*&gt;::type <a class="el" href="namespace_ogre.html#a98503157cdb45dcaf5e79671a9d4f7a0">Ogre::CompositorWorkspaceListenerVec</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a652754fa64e1e8021de72b06630d3ae1" name="a652754fa64e1e8021de72b06630d3ae1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a652754fa64e1e8021de72b06630d3ae1">&#9670;&#160;</a></span>CondVariableWaitFunc</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef bool(* Ogre::CondVariableWaitFunc) (void *userData)</td>
         </tr>
       </table>
 </div><div class="memdoc">

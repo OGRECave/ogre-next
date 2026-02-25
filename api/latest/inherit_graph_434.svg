@@ -11,9 +11,9 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="class_ogre_1_1_optimised_util.html" target="_top" xlink:title="Utility class for provides optimised functions.">
+<g id="a_Node000000"><a xlink:href="class_ogre_1_1_offline_profiler.html" target="_top" xlink:title="Simple profiler that will produce a CSV file for offline analysis once dumpProfileResults is called.">
 <polygon fill="white" stroke="#666666" points="113,-19 0,-19 0,0 113,0 113,-19"/>
-<text text-anchor="middle" x="56.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::OptimisedUtil</text>
+<text text-anchor="middle" x="56.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::OfflineProfiler</text>
 </a>
 </g>
 </g>

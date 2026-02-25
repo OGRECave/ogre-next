@@ -11,9 +11,9 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="struct_ogre_1_1_profile_frame.html" target="_top" xlink:title="Represents the total timing information of a profile since profiles can be called more than once each...">
+<g id="a_Node000000"><a xlink:href="struct_ogre_1_1_profiled_edge.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="107,-19 0,-19 0,0 107,0 107,-19"/>
-<text text-anchor="middle" x="53.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ProfileFrame</text>
+<text text-anchor="middle" x="53.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ProfiledEdge</text>
 </a>
 </g>
 </g>

@@ -1,7 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_page_strategy.html" title="Defines the interface to a strategy class which is responsible for deciding when Page instances are r..." alt="" coords="5,31,152,56"/>
-<area shape="rect" id="Node000001" href="$class_ogre_1_1_grid2_d_page_strategy.html" title="Page strategy which loads new pages based on a regular 2D grid." alt="" coords="200,5,392,31"/>
-<area shape="poly" id="edge926_Node000000_Node000001" title=" " alt="" coords="165,31,200,27,200,32,166,36"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_grid3_d_page_strategy.html" title="Page strategy which loads new pages based on a regular 3D grid." alt="" coords="200,55,392,80"/>
-<area shape="poly" id="edge927_Node000000_Node000002" title=" " alt="" coords="166,50,200,54,200,59,165,56"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_page_provider.html" title="Abstract class that can be implemented by the user application to provide a way to retrieve or genera..." alt="" coords="5,5,152,31"/>
 </map>

@@ -13,8 +13,8 @@
 <title>Node0</title>
 <g id="a_Node000000"><a xlink:href="class_ogre_1_1_fast_array.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="166,-30 0,-30 0,0 166,0 166,-30"/>
-<text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::FastArray&lt; VkDescriptor</text>
-<text text-anchor="middle" x="83" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">BufferInfo &gt;</text>
+<text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::FastArray&lt; VkCommand</text>
+<text text-anchor="middle" x="83" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Buffer &gt;</text>
 </a>
 </g>
 </g>
