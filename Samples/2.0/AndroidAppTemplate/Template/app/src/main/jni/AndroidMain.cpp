@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include <android/log.h>
 #include <android_native_app_glue.h>
 
+#include "AndroidVulkanTools.h"
+
 #include "System/Android/AndroidSystems.h"
 #include "System/MainEntryPoints.h"
 
@@ -42,9 +44,12 @@ THE SOFTWARE.
 #include "OgreTimer.h"
 #include "OgreWindow.h"
 #include "OgreWindowEventUtilities.h"
+#include "Threading/OgreCondVariable.h"
 
 #include "OgreVulkanPlugin.h"
 #include "Windowing/Android/OgreVulkanAndroidWindow.h"
+
+#include "Threading/OgreWaitableEvent.h"
 
 #include <fstream>
 
@@ -91,6 +96,20 @@ namespace Demo
 
         bool mCriticalFailure;
 
+        // Custom Looper Data begins.
+
+        bool destroyRequested;
+        bool mNativeWindowChangeRequested;  // GUARDED_BY( mWindowMutex )
+
+        Ogre::LightweightMutex mCmdMutex;
+        Ogre::CondVariable mWindowMutex;
+        Ogre::WaitableEvent mWaitableEvent;
+
+        std::vector<std::pair<android_app *, int32_t>> cmds[2];  // GUARDED_BY( mCmdMutex )
+        ANativeWindow *mRequestedNativeWindow;                   // GUARDED_BY( mWindowMutex )
+
+        // Custom Looper Data ends.
+
         AndroidAppController() :
             mGraphicsGameState( 0 ),
             mGraphicsSystem( 0 ),
@@ -98,107 +117,95 @@ namespace Demo
             mLogicSystem( 0 ),
             mStartTime( 0 ),
             mAccumulator( 0 ),
-            mCriticalFailure( false )
+            mCriticalFailure( false ),
+            destroyRequested( false ),
+            mNativeWindowChangeRequested( false ),
+            mRequestedNativeWindow( 0 )
         {
         }
 
         void init()
         {
             if( mCriticalFailure )
+            {
+                Demo::AndroidSystems::setNativeWindow( 0 );
                 return;
-
-            if( !mGraphicsSystem )
-            {
-                MainEntryPoints::createSystems( &mGraphicsGameState, &mGraphicsSystem, &mLogicGameState,
-                                                &mLogicSystem );
-                try
-                {
-                    mGraphicsSystem->initialize( MainEntryPoints::getWindowTitle() );
-                }
-                catch( Ogre::RenderingAPIException &e )
-                {
-                    ANativeActivity *nativeActivity = Demo::AndroidSystems::getAndroidApp()->activity;
-
-                    JNIEnv *jni = 0;
-                    nativeActivity->vm->AttachCurrentThread( &jni, nullptr );
-
-                    jclass classDef = jni->GetObjectClass( nativeActivity->clazz );
-                    jstring errorMsgJStr = jni->NewStringUTF( e.getDescription().c_str() );
-                    jstring detailedErrorMsgJStr = jni->NewStringUTF( e.getFullDescription().c_str() );
-                    jmethodID showNoVulkanAlertMethod = jni->GetMethodID(
-                        classDef, "showNoVulkanAlert", "(Ljava/lang/String;Ljava/lang/String;)V" );
-                    jni->CallVoidMethod( nativeActivity->clazz, showNoVulkanAlertMethod, errorMsgJStr,
-                                         detailedErrorMsgJStr );
-                    jni->DeleteLocalRef( errorMsgJStr );
-                    jni->DeleteLocalRef( detailedErrorMsgJStr );
-                    jni->DeleteLocalRef( classDef );
-
-                    // Let them leak. We can't do a clean shutdown. If we're here then there's
-                    // nothing we can do. Let's just avoid crashing.
-                    mLogicSystem = 0;
-                    mGraphicsSystem = 0;
-
-                    mCriticalFailure = true;
-
-                    Demo::AndroidSystems::setNativeWindow( 0 );
-                    nativeActivity->vm->DetachCurrentThread();
-                    return;
-                }
-
-                if( mLogicSystem )
-                    mLogicSystem->initialize();
-
-                {
-                    // Disable Swappy if a previous run determined it was buggy.
-                    struct stat buffer;
-                    if( stat( ( Android_getCacheFolder() + "SwappyDisabled" ).c_str(), &buffer ) == 0 )
-                    {
-                        Ogre::LogManager::getSingleton().logMessage(
-                            "Disabling Swappy Frame Pacing because previous runs determined it's buggy "
-                            "on this "
-                            "device.",
-                            Ogre::LML_CRITICAL );
-
-                        OGRE_ASSERT_HIGH( dynamic_cast<Ogre::VulkanRenderSystem *>(
-                            mGraphicsSystem->getSceneManager()->getDestinationRenderSystem() ) );
-                        Ogre::VulkanRenderSystem *renderSystem = static_cast<Ogre::VulkanRenderSystem *>(
-                            mGraphicsSystem->getSceneManager()->getDestinationRenderSystem() );
-                        renderSystem->setSwappyFramePacing( false );
-                    }
-                }
-
-                mGraphicsSystem->createScene01();
-                if( mLogicSystem )
-                    mLogicSystem->createScene01();
-
-                mGraphicsSystem->createScene02();
-                if( mLogicSystem )
-                    mLogicSystem->createScene02();
-
-                mStartTime = mTimer.getMicroseconds();
-                mAccumulator = MainEntryPoints::Frametime;
             }
-            else
+
+            MainEntryPoints::createSystems( &mGraphicsGameState, &mGraphicsSystem, &mLogicGameState,
+                                            &mLogicSystem );
+            try
             {
-                Ogre::Window *windowBase = mGraphicsSystem->getRenderWindow();
-                OGRE_ASSERT_HIGH( dynamic_cast<Ogre::VulkanAndroidWindow *>( windowBase ) );
-                Ogre::VulkanAndroidWindow *window =
-                    static_cast<Ogre::VulkanAndroidWindow *>( windowBase );
-                window->setNativeWindow( Demo::AndroidSystems::getNativeWindow() );
+                mGraphicsSystem->initialize( MainEntryPoints::getWindowTitle() );
             }
+            catch( Ogre::RenderingAPIException &e )
+            {
+                ANativeActivity *nativeActivity = Demo::AndroidSystems::getAndroidApp()->activity;
+
+                JNIEnv *jni = 0;
+                nativeActivity->vm->AttachCurrentThread( &jni, nullptr );
+
+                jclass classDef = jni->GetObjectClass( nativeActivity->clazz );
+                jstring errorMsgJStr = jni->NewStringUTF( e.getDescription().c_str() );
+                jstring detailedErrorMsgJStr = jni->NewStringUTF( e.getFullDescription().c_str() );
+                jmethodID showNoVulkanAlertMethod = jni->GetMethodID(
+                    classDef, "showNoVulkanAlert", "(Ljava/lang/String;Ljava/lang/String;)V" );
+                jni->CallVoidMethod( nativeActivity->clazz, showNoVulkanAlertMethod, errorMsgJStr,
+                                     detailedErrorMsgJStr );
+                jni->DeleteLocalRef( errorMsgJStr );
+                jni->DeleteLocalRef( detailedErrorMsgJStr );
+                jni->DeleteLocalRef( classDef );
+
+                // Let them leak. We can't do a clean shutdown. If we're here then there's
+                // nothing we can do. Let's just avoid crashing.
+                mLogicSystem = 0;
+                mGraphicsSystem = 0;
+
+                mCriticalFailure = true;
+
+                Demo::AndroidSystems::setNativeWindow( 0 );
+                nativeActivity->vm->DetachCurrentThread();
+                return;
+            }
+
+            if( mLogicSystem )
+                mLogicSystem->initialize();
+
+            {
+                // Disable Swappy if a previous run determined it was buggy.
+                struct stat buffer;
+                if( stat( ( Android_getCacheFolder() + "SwappyDisabled" ).c_str(), &buffer ) == 0 )
+                {
+                    Ogre::LogManager::getSingleton().logMessage(
+                        "Disabling Swappy Frame Pacing because previous runs determined it's buggy "
+                        "on this "
+                        "device.",
+                        Ogre::LML_CRITICAL );
+
+                    OGRE_ASSERT_HIGH( dynamic_cast<Ogre::VulkanRenderSystem *>(
+                        mGraphicsSystem->getSceneManager()->getDestinationRenderSystem() ) );
+                    Ogre::VulkanRenderSystem *renderSystem = static_cast<Ogre::VulkanRenderSystem *>(
+                        mGraphicsSystem->getSceneManager()->getDestinationRenderSystem() );
+                    renderSystem->setSwappyFramePacing( false );
+                }
+            }
+
+            mGraphicsSystem->createScene01();
+            if( mLogicSystem )
+                mLogicSystem->createScene01();
+
+            mGraphicsSystem->createScene02();
+            if( mLogicSystem )
+                mLogicSystem->createScene02();
+
+            mStartTime = mTimer.getMicroseconds();
+            mAccumulator = MainEntryPoints::Frametime;
         }
 
-        void destroy()
+        void windowDestroyed()
         {
-            Demo::AndroidSystems::setNativeWindow( 0 );
             if( mGraphicsSystem )
             {
-                Ogre::Window *windowBase = mGraphicsSystem->getRenderWindow();
-                OGRE_ASSERT_HIGH( dynamic_cast<Ogre::VulkanAndroidWindow *>( windowBase ) );
-                Ogre::VulkanAndroidWindow *window =
-                    static_cast<Ogre::VulkanAndroidWindow *>( windowBase );
-                window->setNativeWindow( 0 );
-
                 // Cache the fact that Swappy is buggy on this device, using an empty file.
                 OGRE_ASSERT_HIGH( dynamic_cast<Ogre::VulkanRenderSystem *>(
                     mGraphicsSystem->getSceneManager()->getDestinationRenderSystem() ) );
@@ -239,6 +246,30 @@ namespace Demo
 
             mAccumulator += timeSinceLast;
         }
+
+        Ogre::VulkanAndroidWindow *getVulkanWindow()
+        {
+            if( mGraphicsSystem )
+            {
+                // Due to race conditions, windowBase can be nullptr even if mGraphicsSystem
+                // isn't (because one thread is still in mGraphicsSystem->initialize()
+                // while another thread is calling getVulkanWindow().
+                Ogre::Window *windowBase = mGraphicsSystem->getRenderWindow();
+                if( windowBase )
+                {
+                    OGRE_ASSERT_HIGH( dynamic_cast<Ogre::VulkanAndroidWindow *>( windowBase ) );
+                    return static_cast<Ogre::VulkanAndroidWindow *>( windowBase );
+                }
+            }
+            return nullptr;
+        }
+
+        // Must return true while we're blocking. Returns false if we can continue.
+        static bool blockWhileInitializingWindow( void *userData )
+        {
+            const AndroidAppController *app = reinterpret_cast<const AndroidAppController *>( userData );
+            return app->mNativeWindowChangeRequested;
+        }
     };
 
     class DemoJniProvider final : public Ogre::AndroidJniProvider
@@ -261,33 +292,237 @@ namespace Demo
 static Demo::AndroidAppController g_appController;
 static Demo::DemoJniProvider g_demoJniProvider;
 
-// Process the next main command.
+// Forward the next main command.
 void handle_cmd( android_app *app, int32_t cmd )
 {
+    {
+        Ogre::ScopedLock lock( g_appController.mCmdMutex );
+        g_appController.cmds[0].push_back( { app, cmd } );
+    }
+
+    bool bFullSync = false;
+
     switch( cmd )
     {
     case APP_CMD_INIT_WINDOW:
-        // The window is being shown, get it ready.
-        Demo::AndroidSystems::setAndroidApp( app );
-        Demo::AndroidSystems::setNativeWindow( app->window );
-        g_appController.init();
-        break;
     case APP_CMD_TERM_WINDOW:
-        __android_log_print( ANDROID_LOG_INFO, "OgreSamples", "g_appController.destroy(): %d", cmd );
-        g_appController.destroy();
+    {
+        Ogre::ScopedCvLock lock( g_appController.mWindowMutex );
+
+        ANativeWindow *nextWindow = 0;
+
+        if( cmd == APP_CMD_INIT_WINDOW )
+        {
+            __android_log_print( ANDROID_LOG_INFO, "OgreSamples",
+                                 "Requesting / Delaying NativeWindow creation" );
+            OGRE_ASSERT_MEDIUM( app->window );
+            nextWindow = app->window;
+        }
+        else
+        {
+            __android_log_print( ANDROID_LOG_INFO, "OgreSamples",
+                                 "Requesting / Delaying NativeWindow destruction" );
+            if( Ogre::Workarounds::mVkSyncWindowInit )
+                bFullSync = true;
+        }
+
+        if( g_appController.mRequestedNativeWindow != nextWindow )
+        {
+            // mRequestedNativeWindow can be non-null if two requests queued up in a row.
+            if( g_appController.mRequestedNativeWindow )
+            {
+                ANativeWindow_release( g_appController.mRequestedNativeWindow );
+                __android_log_print(
+                    ANDROID_LOG_VERBOSE, "OgreSamples", "[ANativeWindow][RELEASE][looper thread] %#llx",
+                    (unsigned long long)(void *)g_appController.mRequestedNativeWindow );
+            }
+            if( nextWindow )
+            {
+                ANativeWindow_acquire( nextWindow );
+                __android_log_print( ANDROID_LOG_VERBOSE, "OgreSamples",
+                                     "[ANativeWindow][ACQUIRE][looper thread] %#llx",
+                                     (unsigned long long)(void *)nextWindow );
+            }
+        }
+        g_appController.mRequestedNativeWindow = nextWindow;
+        g_appController.mNativeWindowChangeRequested = true;
+
+        Ogre::VulkanAndroidWindow *window = g_appController.getVulkanWindow();
+        if( window )
+            window->requestNativeWindowChange();
         break;
-    case APP_CMD_CONTENT_RECT_CHANGED:
-    case APP_CMD_WINDOW_RESIZED:
-        __android_log_print( ANDROID_LOG_INFO, "OgreSamples", "windowMovedOrResized: %d", cmd );
-        // We got crash reports from getting _RESIZED events w/ mGraphicsSystem being a nullptr.
-        // That's Android for you.
-        if( g_appController.mGraphicsSystem && g_appController.mGraphicsSystem->getRenderWindow() )
-            g_appController.mGraphicsSystem->getRenderWindow()->windowMovedOrResized();
-        break;
-    default:
-        __android_log_print( ANDROID_LOG_INFO, "OgreSamples", "event not handled: %d", cmd );
+    }
+    }
+
+    if( bFullSync )
+    {
+        g_appController.mWaitableEvent.wake();
+        g_appController.mWindowMutex.wait( Demo::AndroidAppController::blockWhileInitializingWindow,
+                                           &g_appController );
     }
 }
+
+static unsigned long main_graphics_thread( Ogre::ThreadHandle *threadHandle )
+{
+    while( !g_appController.destroyRequested )
+    {
+        {
+            Ogre::ScopedLock lock( g_appController.mCmdMutex );
+            g_appController.cmds[0].swap( g_appController.cmds[1] );
+        }
+
+        bool notifyFullSyncThreads = false;
+        {
+            // This is not best practice because we change the logic out of order. If we receive:
+            //  APP_CMD_INIT_WINDOW
+            //  APP_CMD_WINDOW_RESIZED
+            //  APP_CMD_TERM_WINDOW
+            //
+            // We'll end up processing them as:
+            //  APP_CMD_TERM_WINDOW
+            //  APP_CMD_WINDOW_RESIZED
+            //
+            // (yes, INIT_WINDOW got eaten by TERM_WINDOW). However we are forced to do this
+            // because actual good practice would use need an expensive APP_CMD_INIT_WINDOW for
+            // initialization and stall in APP_CMD_TERM_WINDOW to guarantee the GPU is no longer in use.
+            // But we can't do that, because according to Google "good practice" is not having ANRs
+            // and making sure command messages are processed ASAP.
+            Ogre::ScopedCvLock lock( g_appController.mWindowMutex );
+            if( g_appController.mNativeWindowChangeRequested )
+            {
+                Demo::AndroidSystems::setNativeWindow( g_appController.mRequestedNativeWindow );
+
+                if( !g_appController.mGraphicsSystem )
+                {
+                    // Do NOT do anything here (except workaround), because the mutex would
+                    // block the UI thread, causing ANRs.
+
+                    // We will call g_appController.init() init later, outside the mutex.
+                    // For the time being, g_appController.mRequestedNativeWindow will be set to nullptr
+                    // but NOT released (we'll release it later via AndroidSystems::getNativeWindow)
+#ifdef OGRE_VK_WORKAROUND_SYNC_WINDOW_INIT
+                    if( g_appController.mRequestedNativeWindow && Ogre::Workarounds::mVkSyncWindowInit )
+                    {
+                        // We're forced to do it synchronously, due to driver bugs.
+                        __android_log_print( ANDROID_LOG_INFO, "OgreSamples",
+                                             "Creating GraphicsSystem" );
+                        g_appController.init();
+                        ANativeWindow_release( g_appController.mRequestedNativeWindow );
+                        __android_log_print(
+                            ANDROID_LOG_VERBOSE, "OgreSamples",
+                            "[ANativeWindow][RELEASE][main thread1] %#llx",
+                            (unsigned long long)(void *)g_appController.mRequestedNativeWindow );
+                    }
+#endif
+                }
+                else
+                {
+                    if( g_appController.mRequestedNativeWindow )
+                    {
+                        __android_log_print( ANDROID_LOG_INFO, "OgreSamples",
+                                             "Flushing NativeWindow creation" );
+                    }
+                    else
+                    {
+                        __android_log_print( ANDROID_LOG_INFO, "OgreSamples",
+                                             "Flushing NativeWindow destruction" );
+                    }
+
+                    Ogre::VulkanAndroidWindow *window = g_appController.getVulkanWindow();
+                    window->flushQueuedNativeWindowChanges( g_appController.mRequestedNativeWindow );
+                    if( g_appController.mRequestedNativeWindow )
+                    {
+                        // flushQueuedNativeWindowChanges() just increased reference count, and we
+                        // already did that in handle_cmd(), so decrease it to avoid leaking it later.
+                        ANativeWindow_release( g_appController.mRequestedNativeWindow );
+                        __android_log_print(
+                            ANDROID_LOG_VERBOSE, "OgreSamples",
+                            "[ANativeWindow][RELEASE][main thread0] %#llx",
+                            (unsigned long long)(void *)g_appController.mRequestedNativeWindow );
+                    }
+                    else
+                    {
+                        g_appController.windowDestroyed();
+                    }
+                }
+                g_appController.mRequestedNativeWindow = 0;
+                g_appController.mNativeWindowChangeRequested = false;
+                notifyFullSyncThreads = Ogre::Workarounds::mVkSyncWindowInit;
+            }
+        }
+
+        if( notifyFullSyncThreads )
+            g_appController.mWindowMutex.notifyAll();
+
+        if( !g_appController.mGraphicsSystem
+#ifdef OGRE_VK_WORKAROUND_SYNC_WINDOW_INIT
+            && !Ogre::Workarounds::mVkSyncWindowInit
+#endif
+        )
+        {
+            // We delayed initialization to be done after releasing the mutex.
+            ANativeWindow *nativeWindow = Demo::AndroidSystems::getNativeWindow();
+            if( nativeWindow )
+            {
+                __android_log_print( ANDROID_LOG_INFO, "OgreSamples", "Creating GraphicsSystem" );
+                g_appController.init();
+                ANativeWindow_release( nativeWindow );
+                __android_log_print( ANDROID_LOG_VERBOSE, "OgreSamples",
+                                     "[ANativeWindow][RELEASE][main thread1] %#llx",
+                                     (unsigned long long)(void *)nativeWindow );
+
+                {
+                    // It is possible handle_cmd() in another thread got a request but saw
+                    // g_appController.getVulkanWindow() return nullptr because we were still
+                    // initializing. If that happened, tell the window it is dirty.
+                    Ogre::ScopedCvLock lock( g_appController.mWindowMutex );
+                    if( g_appController.mNativeWindowChangeRequested )
+                    {
+                        Ogre::VulkanAndroidWindow *window = g_appController.getVulkanWindow();
+                        if( window )
+                            window->requestNativeWindowChange();
+                    }
+                }
+            }
+        }
+
+        // Process all the cmds forwarded to this thread.
+        for( const std::pair<android_app *, int32_t> &pair : g_appController.cmds[1] )
+        {
+            const int32_t cmd = pair.second;
+
+            switch( cmd )
+            {
+            case APP_CMD_INIT_WINDOW:
+            case APP_CMD_TERM_WINDOW:
+                break;
+            case APP_CMD_CONTENT_RECT_CHANGED:
+            case APP_CMD_WINDOW_RESIZED:
+                __android_log_print( ANDROID_LOG_INFO, "OgreSamples", "windowMovedOrResized: %d", cmd );
+                // We got crash reports from getting _RESIZED events w/ mGraphicsSystem being a nullptr.
+                // That's Android for you.
+                if( g_appController.mGraphicsSystem &&
+                    g_appController.mGraphicsSystem->getRenderWindow() )
+                {
+                    g_appController.mGraphicsSystem->getRenderWindow()->windowMovedOrResized();
+                }
+                break;
+            default:
+                __android_log_print( ANDROID_LOG_INFO, "OgreSamples", "event not handled: %d", cmd );
+            }
+        }
+        g_appController.cmds[1].clear();
+
+        if( Demo::AndroidSystems::getNativeWindow() )
+            g_appController.updateMainLoop();
+        else
+            g_appController.mWaitableEvent.wait();
+    }
+
+    return 0;
+}
+
+THREAD_DECLARE( main_graphics_thread );
 
 void android_main( struct android_app *app )
 {
@@ -311,15 +546,19 @@ void android_main( struct android_app *app )
     Ogre::VulkanAndroidWindow::setFramePacingSwappyAutoMode(
         Ogre::VulkanAndroidWindow::PipelineForcedOn );
 
-    // Used to poll the events in the main loop
-    int events;
-    android_poll_source *source;
+    testEarlyVulkanWorkarounds();
+
+    Ogre::ThreadHandlePtr threadHandles[1];
+    threadHandles[0] = Ogre::Threads::CreateThread( THREAD_GET( main_graphics_thread ), 0, nullptr );
 
     // Main loop
     do
     {
-        int ident = ALooper_pollOnce( Demo::AndroidSystems::getNativeWindow() ? 0 : -1, nullptr, &events,
-                                      (void **)&source );
+        // Used to poll the events in the main loop
+        int events;
+        android_poll_source *source;
+
+        int ident = ALooper_pollOnce( -1, nullptr, &events, (void **)&source );
         while( ident >= 0 )
         {
             if( source != NULL )
@@ -327,8 +566,11 @@ void android_main( struct android_app *app )
             ident = ALooper_pollOnce( 0, nullptr, &events, (void **)&source );
         }
 
-        // render if vulkan is ready
-        if( Demo::AndroidSystems::getNativeWindow() )
-            g_appController.updateMainLoop();
+        g_appController.mWaitableEvent.wake();
     } while( app->destroyRequested == 0 );
+
+    g_appController.destroyRequested = true;
+    g_appController.mWaitableEvent.wake();
+
+    Ogre::Threads::WaitForThreads( 1, threadHandles );
 }

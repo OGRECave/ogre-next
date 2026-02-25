@@ -128,6 +128,7 @@ if (EMSCRIPTEN)
 elseif (WIN32)
   set(THREAD_SOURCE_FILES
       src/Threading/OgreBarrierWin.cpp
+      src/Threading/OgreCondVariableWin32.cpp
 	  src/Threading/OgreLightweightMutexWin.cpp
       src/Threading/OgreThreadsWin.cpp
   )
@@ -264,7 +265,8 @@ endif()
 if (NOT WIN32)
   set(THREAD_SOURCE_FILES
       src/Threading/OgreBarrierPThreads.cpp
-	  src/Threading/OgreLightweightMutexPThreads.cpp
+      src/Threading/OgreCondVariablePThreads.cpp
+      src/Threading/OgreLightweightMutexPThreads.cpp
       src/Threading/OgreThreadsPThreads.cpp
   )
 endif()

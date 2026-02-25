@@ -62,7 +62,9 @@ void ImguiGraphicsSystem::deinitialize()
     delete mImguiManager;
     mImguiManager = 0;
 
+#if OGRE_USE_SDL2
     ImGui_ImplSDL2_Shutdown();
+#endif
 
     GraphicsSystem::deinitialize();
 }
@@ -105,7 +107,9 @@ void ImguiGraphicsSystem::setupResources()
     ImGuiIO &io = ImGui::GetIO();
     io.Fonts->AddFontDefault();
     mImguiManager->setupFont( io.Fonts, false );
+#if OGRE_USE_SDL2
     ImGui_ImplSDL2_InitForOther( mSdlWindow );
+#endif
 }
 //-----------------------------------------------------------------------------
 void MainEntryPoints::createSystems( GameState **outGraphicsGameState,
