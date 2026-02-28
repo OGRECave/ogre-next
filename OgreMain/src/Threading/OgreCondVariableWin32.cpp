@@ -46,7 +46,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CondVariable::lock( void ) { EnterCriticalSection( &mMutex ); }
     //-----------------------------------------------------------------------------------
-    bool CondVariable::tryLock() { TryEnterCriticalSection( &mMutex ) != 0; }
+    bool CondVariable::tryLock() { return TryEnterCriticalSection( &mMutex ) != 0; }
     //-----------------------------------------------------------------------------------
     void CondVariable::unlock( void ) { LeaveCriticalSection( &mMutex ); }
     //-----------------------------------------------------------------------------------
