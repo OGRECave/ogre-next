@@ -207,16 +207,16 @@ namespace Ogre
     //---------------------------------------------------------------------
     String STBIImageCodec::getType() const { return mType; }
     //---------------------------------------------------------------------
-    static void logUnsupportedMagic(const char *magicNumberPtr, size_t maxbytes)
+    static void logUnsupportedMagic( const char *magicNumberPtr, size_t maxbytes )
     {
         StringStream strMagic;
         bool lastHex = false;
-        for (size_t i = 0; i < maxbytes; ++i)
+        for( size_t i = 0; i < maxbytes; ++i )
         {
             uint8_t ch = magicNumberPtr[i];
-            if (std::isprint(ch))
+            if( std::isprint( ch ) )
             {
-                if (lastHex)
+                if( lastHex )
                     strMagic << " ";
                 strMagic << ch;
                 lastHex = false;
@@ -224,14 +224,15 @@ namespace Ogre
             else
             {
                 char hex[16];
-                sprintf(hex, "0x%02x", ch);
+                sprintf( hex, "0x%02x", ch );
                 strMagic << " " << hex;
                 lastHex = true;
             }
         }
         // In Gazebo, these logs appear by default in ~/.gz/rendering/ogre2.log.
-        LogManager::getSingleton().logMessage( std::string( "Unsupported magic in STBIImageCodec::magicNumberPtr(" ) +
-                                               std::to_string( maxbytes ) + "): " + strMagic.str());
+        LogManager::getSingleton().logMessage(
+            std::string( "Unsupported magic in STBIImageCodec::magicNumberPtr(" ) +
+            std::to_string( maxbytes ) + "): " + strMagic.str() );
     }
     //---------------------------------------------------------------------
     String STBIImageCodec::magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const
