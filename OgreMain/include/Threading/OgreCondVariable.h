@@ -29,6 +29,8 @@ THE SOFTWARE.
 #ifndef OgreCondVariable_H
 #define OgreCondVariable_H
 
+#include "OgrePlatform.h"
+
 #ifdef _WIN32
 #    define WIN32_LEAN_AND_MEAN
 #    define VC_EXTRALEAN
@@ -47,7 +49,7 @@ namespace Ogre
     @author
         Matias N. Goldberg
     */
-    class CondVariable
+    class _OgreExport CondVariable
     {
 #ifdef _WIN32
         CRITICAL_SECTION   mMutex;
@@ -92,7 +94,7 @@ namespace Ogre
         void notifyAll();
     };
 
-    class ScopedCvLock
+    class _OgreExport ScopedCvLock
     {
         CondVariable &mCv;
 
