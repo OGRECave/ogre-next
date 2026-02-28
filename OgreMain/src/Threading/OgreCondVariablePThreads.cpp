@@ -46,6 +46,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CondVariable::lock( void ) { pthread_mutex_lock( &mMutex ); }
     //-----------------------------------------------------------------------------------
+    bool CondVariable::tryLock() { return pthread_mutex_trylock( &mMutex ) == 0; }
+    //-----------------------------------------------------------------------------------
     void CondVariable::unlock( void ) { pthread_mutex_unlock( &mMutex ); }
     //-----------------------------------------------------------------------------------
     void CondVariable::wait( CondVariableWaitFunc waitFunc, void *userData )

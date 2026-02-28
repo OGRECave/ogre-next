@@ -64,6 +64,7 @@ namespace Ogre
         ~CondVariable();
 
         void lock();
+        bool tryLock();
         void unlock();
 
         /** Blocks until waitFunc returns false.
