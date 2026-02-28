@@ -116,6 +116,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a06cdd0c7b91e2eeccd2c4a4cc2e049f1" id="r_a06cdd0c7b91e2eeccd2c4a4cc2e049f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_cond_variable.html#a06cdd0c7b91e2eeccd2c4a4cc2e049f1">notifyOne</a> ()</td></tr>
 <tr class="memdesc:a06cdd0c7b91e2eeccd2c4a4cc2e049f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wakes up at least one thread being blocked by <a class="el" href="class_ogre_1_1_cond_variable.html#a5198a113b8c4af1e7361619c4b580724" title="Blocks until waitFunc returns false.">CondVariable::wait</a>.  <br /></td></tr>
 <tr class="separator:a06cdd0c7b91e2eeccd2c4a4cc2e049f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94d9a369dbca2784d45fcd1b5de3d271" id="r_a94d9a369dbca2784d45fcd1b5de3d271"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_cond_variable.html#a94d9a369dbca2784d45fcd1b5de3d271">tryLock</a> ()</td></tr>
+<tr class="separator:a94d9a369dbca2784d45fcd1b5de3d271"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7c3c0cc22c5e18ba9ce9a3a924fd10f" id="r_ad7c3c0cc22c5e18ba9ce9a3a924fd10f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_cond_variable.html#ad7c3c0cc22c5e18ba9ce9a3a924fd10f">unlock</a> ()</td></tr>
 <tr class="separator:ad7c3c0cc22c5e18ba9ce9a3a924fd10f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5198a113b8c4af1e7361619c4b580724" id="r_a5198a113b8c4af1e7361619c4b580724"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_cond_variable.html#a5198a113b8c4af1e7361619c4b580724">wait</a> (<a class="el" href="namespace_ogre.html#a652754fa64e1e8021de72b06630d3ae1">CondVariableWaitFunc</a> waitFunc, void *userData)</td></tr>
@@ -214,6 +216,23 @@ Public Member Functions</h2></td></tr>
 
 <p>Wakes up at least one thread being blocked by <a class="el" href="class_ogre_1_1_cond_variable.html#a5198a113b8c4af1e7361619c4b580724" title="Blocks until waitFunc returns false.">CondVariable::wait</a>. </p>
 <p>You can modify the condition and call notifyOne while inside lock/unlock pairs: condVar.lock(); bCondition = true; condVar.notifyOne(); condVar.unlock(); or outside: condVar.lock(); bCondition = true; condVar.unlock(); condVar.notifyOne(); </p>
+
+</div>
+</div>
+<a id="a94d9a369dbca2784d45fcd1b5de3d271" name="a94d9a369dbca2784d45fcd1b5de3d271"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94d9a369dbca2784d45fcd1b5de3d271">&#9670;&#160;</a></span>tryLock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::CondVariable::tryLock </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>

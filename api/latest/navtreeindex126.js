@@ -1,5 +1,7 @@
 var NAVTREEINDEX126 =
 {
+"struct_ogre_1_1_hidden_area_vr_settings.html#a80aa7c9981f0fb82d2516ed2a1e1ef24":[6,2,10,57,3],
+"struct_ogre_1_1_hidden_area_vr_settings.html#a8729ee2ece54466fc992a6185c27b4f1":[6,2,10,57,6],
 "struct_ogre_1_1_hidden_area_vr_settings.html#a8ab0b721d456556fcf54305f9c0c481c":[6,2,10,57,5],
 "struct_ogre_1_1_hidden_area_vr_settings.html#aac400000cac5c745ff5980999a3b9181":[6,2,10,57,7],
 "struct_ogre_1_1_hidden_area_vr_settings.html#af6f880a9fb10883cfdcd0977de3345de":[6,2,10,57,2],
@@ -163,8 +165,8 @@ var NAVTREEINDEX126 =
 "struct_ogre_1_1_hlms_blendblock.html#a07995e128bd5c66fef5784296aede703":[6,2,10,65,6],
 "struct_ogre_1_1_hlms_blendblock.html#a275c638971e8578cfe0d4a1f1b891ea3":[6,2,10,65,21],
 "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3":[6,2,10,65,2],
-"struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3aad87522843a09304454eaa59b887f47c":[6,2,10,65,2,2],
 "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3aad87522843a09304454eaa59b887f47c":[6,2,10,65,2,3],
+"struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3aad87522843a09304454eaa59b887f47c":[6,2,10,65,2,2],
 "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3aad87522843a09304454eaa59b887f47c":[6,2,10,65,2,1],
 "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3aad87522843a09304454eaa59b887f47c":[6,2,10,65,2,0],
 "struct_ogre_1_1_hlms_blendblock.html#a34b45571f42c02b2db06eb7c8808c1d3afea26bd06d76713afc7ef479d20b1320":[6,2,10,65,2,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX126 =
 "struct_ogre_1_1_hlms_macroblock.html":[6,2,10,74],
 "struct_ogre_1_1_hlms_macroblock.html#a0b69626f1e6edb6eb6a21cf48f4ebb2a":[6,2,10,74,4],
 "struct_ogre_1_1_hlms_macroblock.html#a38d3242e6c29312f16a8293b9f70efae":[6,2,10,74,10],
-"struct_ogre_1_1_hlms_macroblock.html#a40a3623c935d1a2e43f9676392fbeaff":[6,2,10,74,2],
-"struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636af":[6,2,10,74,0],
-"struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa0a66b28d4d2d0adda92d5d70a9cc48f0":[6,2,10,74,0,27]
+"struct_ogre_1_1_hlms_macroblock.html#a40a3623c935d1a2e43f9676392fbeaff":[6,2,10,74,2]
 };
