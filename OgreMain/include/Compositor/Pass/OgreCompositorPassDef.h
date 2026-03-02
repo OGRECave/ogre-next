@@ -83,7 +83,7 @@ namespace Ogre
             + PASS_COMPUTE (see CompositorPassComputeDef)
             + PASS_SHADOWS (see CompositorPassShadowsDef)
             + PASS_MIPMAP (see CompositorPassMipmapDef)
-            
+
         This class doesn't do much on its own. See the derived types for more information
         A definition is shared by all pass instantiations (i.e. Five CompositorPassScene can
         share the same CompositorPassSceneDef) and are assumed to remain const throughout
@@ -160,8 +160,8 @@ namespace Ogre
         /** Will issue a warning (by raising an exception) if Ogre is forced to flush
             the RenderTarget, which is very bad for performance on mobile, and can
             cause serious performance problems in Desktop if using MSAA, and also
-            cause correctness problems (i.e. bad rendering) if store action is
-            StoreAction::Resolve.
+            cause correctness problems (i.e., bad rendering) if store action is
+            StoreAction::MultisampleResolve.
         @remarks
             Flushes are caused by splitting rendering to the same RenderTarget
             in multiple passes while rendering to a different RenderTarget in the middle.
