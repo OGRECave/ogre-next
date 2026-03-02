@@ -6677,7 +6677,7 @@ namespace Ogre{
                 fsaa = atom->value;
                 break;
             case ID_MSAA_AUTO:
-                fsaa = "";
+                fsaa.clear();
                 break;
             case ID_EXPLICIT_RESOLVE:
                 textureFlags |= TextureFlags::MsaaExplicitResolve;

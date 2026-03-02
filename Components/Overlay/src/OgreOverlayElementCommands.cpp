@@ -89,7 +89,7 @@ namespace Ogre
             }
             void CmdMaterial::doSet( void *target, const String &val )
             {
-                if( val != "" )
+                if( !val.empty() )
                 {
                     static_cast<OverlayElement *>( target )->setMaterialName( val );
                 }
