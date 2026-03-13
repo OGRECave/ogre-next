@@ -187,8 +187,8 @@ namespace Ogre
             mSwapChain1.ReleaseAndGetAddressOf() );
 #    else
         HRESULT hr = mDevice.GetDXGIFactory()->CreateSwapChainForCoreWindow(
-            mDevice.get(), *reinterpret_cast<IUnknown **>( &mCoreWindow.get() ), &desc, NULL,
-            mSwapChain1.ReleaseAndGetAddressOf() );
+            mDevice.get(), reinterpret_cast<IUnknown *>( winrt::get_abi( mCoreWindow.get() ) ), &desc,
+            NULL, mSwapChain1.ReleaseAndGetAddressOf() );
 #    endif
         if( FAILED( hr ) )
             return hr;

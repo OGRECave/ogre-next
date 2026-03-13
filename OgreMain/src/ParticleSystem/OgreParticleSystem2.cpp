@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreException.h"
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
+#include "OgreLogManager.h"
 #include "OgreRoot.h"
 #include "OgreSceneManager.h"
 #include "ParticleSystem/OgreEmitter2.h"
@@ -163,6 +164,12 @@ ParticleSystemDef::~ParticleSystemDef()
 {
     OGRE_ASSERT_LOW( !mParticleCpuData.mPosition && !mGpuData && !mGpuCommonData &&
                      "destroy() not called!" );
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemDef::setRenderer( const String &typeName )
+{
+    LogManager::getSingleton().logMessage( "WARNING: " + getName() +
+                                           " 'renderer' property not available (ignored) for v2 PFX." );
 }
 //-----------------------------------------------------------------------------
 uint32 ParticleSystemDef::getQuota() const { return static_cast<uint32>( mActiveParticles.capacity() ); }

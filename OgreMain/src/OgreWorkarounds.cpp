@@ -61,6 +61,9 @@ namespace Ogre
 #ifdef OGRE_VK_WORKAROUND_BROKEN_VKPIPELINECACHE
     bool Workarounds::mBrokenVkPipelineCache = false;
 #endif
+#ifdef OGRE_VK_WORKAROUND_SYNC_WINDOW_INIT
+    bool Workarounds::mVkSyncWindowInit = false;
+#endif
 
     void Workarounds::dump( String &outStr )
     {
@@ -94,6 +97,10 @@ namespace Ogre
 #ifdef OGRE_VK_WORKAROUND_BROKEN_VKPIPELINECACHE
         outStr += "\n - mBrokenVkPipelineCache: " +
                   StringConverter::toString( Workarounds::mBrokenVkPipelineCache );
+#endif
+#ifdef OGRE_VK_WORKAROUND_SYNC_WINDOW_INIT
+        outStr +=
+            "\n - mVkSyncWindowInit: " + StringConverter::toString( Workarounds::mVkSyncWindowInit );
 #endif
     }
 }  // namespace Ogre

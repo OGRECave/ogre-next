@@ -150,87 +150,100 @@ namespace Ogre
         mEventNames.push_back( "DeviceRestored" );
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && defined( __cplusplus_winrt )
+        if( Windows::UI::Core::CoreWindow::GetForCurrentThread() )  // UWP, not WinUI3 for Desktop
+        {
 #    if defined( _WIN32_WINNT_WINBLUE ) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
-        suspendingToken =
-            ( Windows::ApplicationModel::Core::CoreApplication::Suspending +=
-              ref new Windows::Foundation::EventHandler<
-                  Windows::ApplicationModel::SuspendingEventArgs ^>(
-                  [this]( Platform::Object ^ sender,
-                          Windows::ApplicationModel::SuspendingEventArgs ^ e ) {
-                      // Hints to the driver that the app is entering an idle state and that its memory
-                      // can be used temporarily for other apps.
-                      ComPtr<IDXGIDevice3> pDXGIDevice;
-                      if( mDevice.get() &&
-                          SUCCEEDED( mDevice->QueryInterface( pDXGIDevice.GetAddressOf() ) ) )
-                          pDXGIDevice->Trim();
-                  } ) );
+            suspendingToken =
+                ( Windows::ApplicationModel::Core::CoreApplication::Suspending +=
+                  ref new Windows::Foundation::EventHandler<
+                      Windows::ApplicationModel::SuspendingEventArgs ^>(
+                      [this]( Platform::Object ^ sender,
+                              Windows::ApplicationModel::SuspendingEventArgs ^ e ) {
+                          // Hints to the driver that the app is entering an idle state and that its
+                          // memory can be used temporarily for other apps.
+                          ComPtr<IDXGIDevice3> pDXGIDevice;
+                          if( mDevice.get() &&
+                              SUCCEEDED( mDevice->QueryInterface( pDXGIDevice.GetAddressOf() ) ) )
+                              pDXGIDevice->Trim();
+                      } ) );
 
-        surfaceContentLostToken =
-            ( Windows::Graphics::Display::DisplayInformation::DisplayContentsInvalidated +=
-              ref new Windows::Foundation::TypedEventHandler<
-                  Windows::Graphics::Display::DisplayInformation ^, Platform::Object ^>(
-                  [this]( Windows::Graphics::Display::DisplayInformation ^ sender,
-                          Platform::Object ^ arg ) {
-                      LogManager::getSingleton().logMessage( "D3D11: DisplayContentsInvalidated." );
-                      validateDevice( true );
-                  } ) );
+            surfaceContentLostToken =
+                ( Windows::Graphics::Display::DisplayInformation::DisplayContentsInvalidated +=
+                  ref new Windows::Foundation::TypedEventHandler<
+                      Windows::Graphics::Display::DisplayInformation ^, Platform::Object ^>(
+                      [this]( Windows::Graphics::Display::DisplayInformation ^ sender,
+                              Platform::Object ^ arg ) {
+                          LogManager::getSingleton().logMessage( "D3D11: DisplayContentsInvalidated." );
+                          validateDevice( true );
+                      } ) );
 #    else  // Win 8.0
-        surfaceContentLostToken =
-            ( Windows::Graphics::Display::DisplayProperties::DisplayContentsInvalidated +=
-              ref new Windows::Graphics::Display::DisplayPropertiesEventHandler(
-                  [this]( Platform::Object ^ sender ) {
-                      LogManager::getSingleton().logMessage( "D3D11: DisplayContentsInvalidated." );
-                      validateDevice( true );
-                  } ) );
+            surfaceContentLostToken =
+                ( Windows::Graphics::Display::DisplayProperties::DisplayContentsInvalidated +=
+                  ref new Windows::Graphics::Display::DisplayPropertiesEventHandler(
+                      [this]( Platform::Object ^ sender ) {
+                          LogManager::getSingleton().logMessage( "D3D11: DisplayContentsInvalidated." );
+                          validateDevice( true );
+                      } ) );
 #    endif
+        }
 #elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+        if( winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread() )  // UWP, not WinUI3 for Desktop
+        {
 #    if defined( _WIN32_WINNT_WINBLUE ) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
-        suspendingToken = winrt::Windows::ApplicationModel::Core::CoreApplication::Suspending(
-            [this]( auto const &, auto const & ) {
-                // Hints to the driver that the app is entering an idle state and that its memory
-                // can be used temporarily for other apps.
-                ComPtr<IDXGIDevice3> pDXGIDevice;
-                if( mDevice.get() && SUCCEEDED( mDevice->QueryInterface( pDXGIDevice.GetAddressOf() ) ) )
-                    pDXGIDevice->Trim();
-            } );
-
-        surfaceContentLostToken =
-            winrt::Windows::Graphics::Display::DisplayInformation::DisplayContentsInvalidated(
+            suspendingToken = winrt::Windows::ApplicationModel::Core::CoreApplication::Suspending(
                 [this]( auto const &, auto const & ) {
-                    LogManager::getSingleton().logMessage( "D3D11: DisplayContentsInvalidated." );
-                    validateDevice( true );
+                    // Hints to the driver that the app is entering an idle state and that its memory
+                    // can be used temporarily for other apps.
+                    ComPtr<IDXGIDevice3> pDXGIDevice;
+                    if( mDevice.get() &&
+                        SUCCEEDED( mDevice->QueryInterface( pDXGIDevice.GetAddressOf() ) ) )
+                        pDXGIDevice->Trim();
                 } );
+
+            surfaceContentLostToken =
+                winrt::Windows::Graphics::Display::DisplayInformation::DisplayContentsInvalidated(
+                    [this]( auto const &, auto const & ) {
+                        LogManager::getSingleton().logMessage( "D3D11: DisplayContentsInvalidated." );
+                        validateDevice( true );
+                    } );
 #    else  // Win 8.0
-        surfaceContentLostToken =
-            winrt::Windows::Graphics::Display::DisplayProperties::DisplayContentsInvalidated(
-                [this]( auto const & ) {
-                    LogManager::getSingleton().logMessage( "D3D11: DisplayContentsInvalidated." );
-                    validateDevice( true );
-                } );
+            surfaceContentLostToken =
+                winrt::Windows::Graphics::Display::DisplayProperties::DisplayContentsInvalidated(
+                    [this]( auto const & ) {
+                        LogManager::getSingleton().logMessage( "D3D11: DisplayContentsInvalidated." );
+                        validateDevice( true );
+                    } );
 #    endif
+        }
 #endif
     }
     //---------------------------------------------------------------------
     D3D11RenderSystem::~D3D11RenderSystem()
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && defined( __cplusplus_winrt )
+        if( Windows::UI::Core::CoreWindow::GetForCurrentThread() )  // UWP, not WinUI3 for Desktop
+        {
 #    if defined( _WIN32_WINNT_WINBLUE ) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
-        Windows::ApplicationModel::Core::CoreApplication::Suspending -= suspendingToken;
-        Windows::Graphics::Display::DisplayInformation::DisplayContentsInvalidated -=
-            surfaceContentLostToken;
+            Windows::ApplicationModel::Core::CoreApplication::Suspending -= suspendingToken;
+            Windows::Graphics::Display::DisplayInformation::DisplayContentsInvalidated -=
+                surfaceContentLostToken;
 #    else  // Win 8.0
-        Windows::Graphics::Display::DisplayProperties::DisplayContentsInvalidated -=
-            surfaceContentLostToken;
+            Windows::Graphics::Display::DisplayProperties::DisplayContentsInvalidated -=
+                surfaceContentLostToken;
 #    endif
+        }
 #elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+        if( winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread() )  // UWP, not WinUI3 for Desktop
+        {
 #    if defined( _WIN32_WINNT_WINBLUE ) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
-        winrt::Windows::ApplicationModel::Core::CoreApplication::Suspending( suspendingToken );
-        winrt::Windows::Graphics::Display::DisplayInformation::DisplayContentsInvalidated(
-            surfaceContentLostToken );
+            winrt::Windows::ApplicationModel::Core::CoreApplication::Suspending( suspendingToken );
+            winrt::Windows::Graphics::Display::DisplayInformation::DisplayContentsInvalidated(
+                surfaceContentLostToken );
 #    else  // Win 8.0
-        winrt::Windows::Graphics::Display::DisplayProperties::DisplayContentsInvalidated(
-            surfaceContentLostToken );
+            winrt::Windows::Graphics::Display::DisplayProperties::DisplayContentsInvalidated(
+                surfaceContentLostToken );
 #    endif
+        }
 #endif
 
         shutdown();
@@ -983,25 +996,39 @@ namespace Ogre
             LogManager::getSingleton().logMessage( ss.str() );
         }
 
-        String msg;
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-        D3D11Window *win =
-            new D3D11WindowHwnd( name, width, height, fullScreen, DepthBuffer::DefaultDepthBufferFormat,
-                                 miscParams, mDevice, this );
-#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT
         String windowType;
+        void *externalHandle = nullptr;
         if( miscParams )
         {
             // Get variable-length params
             NameValuePairList::const_iterator opt = miscParams->find( "windowType" );
             if( opt != miscParams->end() )
                 windowType = opt->second;
+            opt = miscParams->find( "externalWindowHandle" );
+            if( opt != miscParams->end() )
+                externalHandle = (void *)StringConverter::parseSizeT( opt->second );
         }
 
         D3D11Window *win = NULL;
+#ifdef OGRE_WINUI3_SWAPCHAINPANEL_SUPPORTED
+        if( win == NULL && windowType == "SwapChainPanel" && externalHandle &&
+            reinterpret_cast<winrt::Windows::Foundation::IInspectable &>( externalHandle )
+                .try_as<winrt::Microsoft::UI::Xaml::Controls::SwapChainPanel>() )
+            win = new D3D11WindowSwapChainPanelWinUI3( name, width, height, fullScreen,
+                                                       DepthBuffer::DefaultDepthBufferFormat, miscParams,
+                                                       mDevice, this );
+#endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
 #    if defined( _WIN32_WINNT_WINBLUE ) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
-        if( win == NULL && windowType == "SwapChainPanel" )
+        if( win == NULL && windowType == "SwapChainPanel" && externalHandle &&
+#        ifdef __cplusplus_winrt
+            dynamic_cast<Windows::UI::Xaml::Controls::SwapChainPanel ^>( ( Platform::Object ^ )
+                                                                             externalHandle )
+#        else
+            reinterpret_cast<winrt::Windows::Foundation::IInspectable &>( externalHandle )
+                .try_as<winrt::Windows::UI::Xaml::Controls::SwapChainPanel>()
+#        endif
+        )
             win = new D3D11WindowSwapChainPanel( name, width, height, fullScreen,
                                                  DepthBuffer::DefaultDepthBufferFormat, miscParams,
                                                  mDevice, this );
@@ -1010,6 +1037,11 @@ namespace Ogre
             win = new D3D11WindowCoreWindow( name, width, height, fullScreen,
                                              DepthBuffer::DefaultDepthBufferFormat, miscParams, mDevice,
                                              this );
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+        if( win == NULL )
+            win =
+                new D3D11WindowHwnd( name, width, height, fullScreen,
+                                     DepthBuffer::DefaultDepthBufferFormat, miscParams, mDevice, this );
 #endif
 
         mWindows.insert( win );

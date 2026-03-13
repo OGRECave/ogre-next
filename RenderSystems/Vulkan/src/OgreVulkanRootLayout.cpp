@@ -254,7 +254,7 @@ namespace Ogre
         {
             // If mRootLayout is nullptr but being created in another thread, we will check again
             // but with a proper lock. If it's not a nullptr, it means it's properly been created.
-            VkPipelineLayout retVal = mRootLayout.load( std::memory_order::memory_order_relaxed );
+            VkPipelineLayout retVal = mRootLayout.load( std::memory_order_relaxed );
             if( retVal )
                 return retVal;
         }
@@ -356,7 +356,7 @@ namespace Ogre
             vkCreatePipelineLayout( device->mDevice, &pipelineLayoutCi, 0, &rootLayoutResult );
         checkVkResult( device, result, "vkCreatePipelineLayout" );
 
-        mRootLayout.store( rootLayoutResult, std::memory_order::memory_order_relaxed );
+        mRootLayout.store( rootLayoutResult, std::memory_order_relaxed );
 
         return mRootLayout;
     }

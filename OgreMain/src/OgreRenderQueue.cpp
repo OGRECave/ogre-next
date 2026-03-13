@@ -1231,7 +1231,7 @@ namespace Ogre
         // There is no need to incur in the perf penalty of locking mMutex because we guarantee
         // no more entries will be added to mRequests. (Unless I missed something?).
         // The mMutex locks (and mSemaphore) already guarantee ordering.
-        mKeepCompiling.store( false, std::memory_order::memory_order_relaxed );
+        mKeepCompiling.store( false, std::memory_order_relaxed );
         mSemaphore.increment( static_cast<uint32_t>( sceneManager->getNumWorkerThreads() ) );
         sceneManager->waitForParallelHlmsCompile();
 
@@ -1302,8 +1302,7 @@ namespace Ogre
 
                 if( request.reservedStubEntry->flags == HLMS_CACHE_FLAGS_COMPILATION_REQUIRED )
                 {
-                    mCompilationIncompleteCounter.fetch_add( 1,
-                                                             std::memory_order::memory_order_relaxed );
+                    mCompilationIncompleteCounter.fetch_add( 1, std::memory_order_relaxed );
                 }
             }
             catch( Exception & )
@@ -1398,7 +1397,7 @@ namespace Ogre
             // mKeepCompiling = true it won't add more work.
             //
             // We use memory_order_relaxed because the mutex already guarantees ordering.
-            bKeepCompiling = mKeepCompiling.load( std::memory_order::memory_order_relaxed );
+            bKeepCompiling = mKeepCompiling.load( std::memory_order_relaxed );
             mMutex.unlock();
 
             if( bWorkGrabbed )
@@ -1412,8 +1411,7 @@ namespace Ogre
                                             request.renderableHash, request.finalHash, threadIdx );
                     if( request.reservedStubEntry->flags == HLMS_CACHE_FLAGS_COMPILATION_REQUIRED )
                     {
-                        mCompilationIncompleteCounter.fetch_add(
-                            1, std::memory_order::memory_order_relaxed );
+                        mCompilationIncompleteCounter.fetch_add( 1, std::memory_order_relaxed );
                     }
                 }
                 catch( Exception & )
@@ -1422,7 +1420,7 @@ namespace Ogre
                     // We can only report one exception.
                     if( !mExceptionFound )
                     {
-                        mKeepCompiling.store( false, std::memory_order::memory_order_relaxed );
+                        mKeepCompiling.store( false, std::memory_order_relaxed );
                         mExceptionFound = true;
                         mThreadedException = std::current_exception();
                     }
