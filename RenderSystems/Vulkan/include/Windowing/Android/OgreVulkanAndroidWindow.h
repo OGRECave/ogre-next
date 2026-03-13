@@ -105,6 +105,7 @@ namespace Ogre
 
     private:
         ANativeWindow *mNativeWindow;
+
 #ifdef OGRE_VULKAN_USE_SWAPPY
         AndroidJniProvider *mJniProvider;
         uint64 mRefreshDuration;
@@ -179,6 +180,21 @@ namespace Ogre
 
         /// If the ANativeWindow changes, allows to set a new one.
         void setNativeWindow( ANativeWindow *nativeWindow );
+
+        /// Informs us that the main looper thread received a APP_CMD_INIT_WINDOW/APP_CMD_TERM_WINDOW
+        /// event and thus we should expect the swapchain to become potentially invalid (it could return
+        /// VK_ERROR_OUT_OF_DATE_KHR) and thus we should avoid submitting.
+        /// We expect the graphics thread to call flushQueuedNativeWindowChanges() with the new
+        /// window (or with a nullptr if the window is being destroyed).
+        ///
+        /// Can be called from other threads.
+        void requestNativeWindowChange();
+
+        /** Must be called from main thread.
+        @param nativeWindow
+            Can be nullptr.
+        */
+        void flushQueuedNativeWindowChanges( ANativeWindow *nativeWindow );
 
         /// User must call this function before initializing if built with OGRE_VULKAN_USE_SWAPPY.
         ///

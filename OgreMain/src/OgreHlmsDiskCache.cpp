@@ -280,8 +280,7 @@ namespace Ogre
                 if( !jobParams.exceptionFound )
                 {
                     // Force the other threads to stop iterating. We're aborting.
-                    jobParams.currentEntry.store( jobParams.numEntries,
-                                                  std::memory_order::memory_order_relaxed );
+                    jobParams.currentEntry.store( jobParams.numEntries, std::memory_order_relaxed );
                     jobParams.exceptionFound = true;
                     jobParams.threadedException = std::current_exception();
                 }

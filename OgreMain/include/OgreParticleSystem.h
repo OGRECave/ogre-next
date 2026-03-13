@@ -164,7 +164,7 @@ namespace Ogre
             instance of this type will be created; a factory must have been registered
             with ParticleSystemManager.
         */
-        void setRenderer( const String &typeName );
+        virtual void setRenderer( const String &typeName );
 
         /** Gets the ParticleRenderer to be used to render this particle system. */
         ParticleSystemRenderer *getRenderer() const;

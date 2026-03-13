@@ -13,6 +13,8 @@
 
 #include "imgui.h"
 
+#include "SdlEmulationLayer.h"
+
 #if OGRE_USE_SDL2
 #    include "backends/imgui_impl_sdl2.h"
 #endif
@@ -133,6 +135,40 @@ void ImguiGameState::textInput( const SDL_TextInputEvent &arg )
 #endif
 }
 //-----------------------------------------------------------------------------
+
+// TODO. e.g. something like this:
+// clang-format off
+ImGuiKey ToImGuiKey(SDL_Keycode kc)
+{
+    switch (kc)
+    {
+    case SDLK_TAB:        return ImGuiKey_Tab;
+    case SDLK_LEFT:       return ImGuiKey_LeftArrow;
+    case SDLK_RIGHT:      return ImGuiKey_RightArrow;
+    case SDLK_UP:         return ImGuiKey_UpArrow;
+    case SDLK_DOWN:       return ImGuiKey_DownArrow;
+    case SDLK_PAGEUP:     return ImGuiKey_PageUp;
+    case SDLK_PAGEDOWN:   return ImGuiKey_PageDown;
+    case SDLK_HOME:       return ImGuiKey_Home;
+    case SDLK_END:        return ImGuiKey_End;
+    case SDLK_INSERT:     return ImGuiKey_Insert;
+    case SDLK_DELETE:     return ImGuiKey_Delete;
+    case SDLK_BACKSPACE:  return ImGuiKey_Backspace;
+    case SDLK_SPACE:      return ImGuiKey_Space;
+    case SDLK_RETURN:     return ImGuiKey_Enter;
+    case SDLK_ESCAPE:     return ImGuiKey_Escape;
+    case SDLK_a:          return ImGuiKey_A;
+    case SDLK_c:          return ImGuiKey_C;
+    case SDLK_v:          return ImGuiKey_V;
+    case SDLK_x:          return ImGuiKey_X;
+    case SDLK_y:          return ImGuiKey_Y;
+    case SDLK_z:          return ImGuiKey_Z;
+
+    default:              return ImGuiKey_None;
+    }
+}
+// clang-format on
+
 void ImguiGameState::keyEvent( const SDL_KeyboardEvent &arg, bool keyPressed )
 {
 #if !OGRE_USE_SDL2
@@ -144,38 +180,6 @@ void ImguiGameState::keyEvent( const SDL_KeyboardEvent &arg, bool keyPressed )
     io.KeySuper = ( ( arg.keysym.mod & KMOD_GUI ) != 0 );
 
     ImGuiKey translatedKey = ImGuiKey_LeftArrow;
-    // TODO. e.g. something like this:
-    // clang-format off
-    ImGuiKey ToImGuiKey(SDL_Keycode kc)
-    {
-        switch (kc)
-        {
-        case SDLK_TAB:        return ImGuiKey_Tab;
-        case SDLK_LEFT:       return ImGuiKey_LeftArrow;
-        case SDLK_RIGHT:      return ImGuiKey_RightArrow;
-        case SDLK_UP:         return ImGuiKey_UpArrow;
-        case SDLK_DOWN:       return ImGuiKey_DownArrow;
-        case SDLK_PAGEUP:     return ImGuiKey_PageUp;
-        case SDLK_PAGEDOWN:   return ImGuiKey_PageDown;
-        case SDLK_HOME:       return ImGuiKey_Home;
-        case SDLK_END:        return ImGuiKey_End;
-        case SDLK_INSERT:     return ImGuiKey_Insert;
-        case SDLK_DELETE:     return ImGuiKey_Delete;
-        case SDLK_BACKSPACE:  return ImGuiKey_Backspace;
-        case SDLK_SPACE:      return ImGuiKey_Space;
-        case SDLK_RETURN:     return ImGuiKey_Enter;
-        case SDLK_ESCAPE:     return ImGuiKey_Escape;
-        case SDLK_a:          return ImGuiKey_A;
-        case SDLK_c:          return ImGuiKey_C;
-        case SDLK_v:          return ImGuiKey_V;
-        case SDLK_x:          return ImGuiKey_X;
-        case SDLK_y:          return ImGuiKey_Y;
-        case SDLK_z:          return ImGuiKey_Z;
-
-        default:              return ImGuiKey_None;
-        }
-    }
-    // clang-format on
 
     io.AddKeyEvent( ToImGuiKey( arg.keysym.sym ), keyPressed );
 #endif

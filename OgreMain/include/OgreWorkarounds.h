@@ -176,6 +176,17 @@ namespace Ogre
 /// Last seen: 2025-12-18
 #        define OGRE_VK_WORKAROUND_BROKEN_VKPIPELINECACHE
         static bool mBrokenVkPipelineCache;
+
+/// Adreno 505 on driver 512.415.0.0, Androind 10, will either:
+///     1. Run fine.
+///     2. Crash in vkDestroySwapchainKHR.
+///     3. Return VK_ERROR_NATIVE_WINDOW_IN_USE_KHR in vkCreateAndroidSurfaceKHR.
+///
+/// when the VulkanAndroidWindow creates/destroy the surface after returning from
+/// APP_CMD_TERM_WINDOW. The solution is to force operations to be synchronous.
+#        define OGRE_VK_WORKAROUND_SYNC_WINDOW_INIT
+        static bool mVkSyncWindowInit;
+
 #    endif
 #endif
     };
