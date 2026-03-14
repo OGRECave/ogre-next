@@ -5,6 +5,8 @@ var class_ogre_1_1_compositor_pass_def =
     [ "UavDependencyVec", "class_ogre_1_1_compositor_pass_def.html#a114c9c278a29353ebe78cc7d7e3fce6f", null ],
     [ "CompositorPassDef", "class_ogre_1_1_compositor_pass_def.html#a625c0163d6577b29e5d502da3f13837d", null ],
     [ "~CompositorPassDef", "class_ogre_1_1_compositor_pass_def.html#ab9a7518fac29393328ac8f3b3e0f1d9a", null ],
+    [ "_setCustomId", "class_ogre_1_1_compositor_pass_def.html#a65f3490870c129c9fa6e91170ca5bfb6", null ],
+    [ "getCustomId", "class_ogre_1_1_compositor_pass_def.html#a262aa81709bf902fe3692c77e7581498", null ],
     [ "getParentTargetDef", "class_ogre_1_1_compositor_pass_def.html#a8c3285eeb1ee8a3538f327ff8d556c53", null ],
     [ "getRtIndex", "class_ogre_1_1_compositor_pass_def.html#a59e9bca410727e2b8b891dd9a1f0c1ad", null ],
     [ "getType", "class_ogre_1_1_compositor_pass_def.html#a5044b7066a60cf46d506e1247b3a58fd", null ],
