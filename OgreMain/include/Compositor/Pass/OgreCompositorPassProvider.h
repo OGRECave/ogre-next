@@ -37,6 +37,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    OGRE_ASSUME_NONNULL_BEGIN
+
     /** \addtogroup Core
      *  @{
      */
@@ -86,18 +88,25 @@ namespace Ogre
         @param parentTargetDef
         @param parentNodeDef
         @return
+            The pass definition, or nullptr if customId is not handled by this provider.
+            NOTE: The "master" provider MUST ultimately return a valid pointer.
         */
-        virtual CompositorPassDef *addPassDef( CompositorPassType passType, IdString customId,
-                                               CompositorTargetDef *parentTargetDef,
-                                               CompositorNodeDef   *parentNodeDef ) = 0;
+        virtual CompositorPassDef *ogre_nullable addPassDef( CompositorPassType   passType,
+                                                             IdString             customId,
+                                                             CompositorTargetDef *parentTargetDef,
+                                                             CompositorNodeDef   *parentNodeDef ) = 0;
 
         /** Creates a CompositorPass from a CompositorPassDef for Compositor Pass of type 'custom'
         @remarks    If you have multiple custom pass types then you will need to use dynamic_cast<>()
                     on the CompositorPassDef to determine what custom pass it is.
+        @return
+            The pass, or nullptr if definition was not created by this provider.
+            NOTE: The "master" provider MUST ultimately return a valid pointer.
         */
-        virtual CompositorPass *addPass( const CompositorPassDef *definition, Camera *defaultCamera,
-                                         CompositorNode *parentNode, const RenderTargetViewDef *rtvDef,
-                                         SceneManager *sceneManager ) = 0;
+        virtual CompositorPass *ogre_nullable addPass( const CompositorPassDef *definition,
+                                                       Camera *defaultCamera, CompositorNode *parentNode,
+                                                       const RenderTargetViewDef *rtvDef,
+                                                       SceneManager              *sceneManager ) = 0;
 
         /** Optional override which allows users to define custom properties in the compositor scripts
         for custom passes.
@@ -133,6 +142,8 @@ namespace Ogre
 
     /** @} */
     /** @} */
+
+    OGRE_ASSUME_NONNULL_END
 }  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
