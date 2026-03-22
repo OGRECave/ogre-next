@@ -100,25 +100,29 @@ namespace Ogre
         };
 
         /// ctor
-        inline explicit STLAllocator()
+        inline constexpr STLAllocator()
         { }
 
         /// dtor
+#if __cplusplus >= 202002L
+        constexpr ~STLAllocator()
+#else
         ~STLAllocator()
+#endif
         { }
 
         /// copy ctor - done component wise
-        inline STLAllocator( STLAllocator const& )
+        inline constexpr STLAllocator( STLAllocator const& )
         { }
 
         /// cast
         template <typename U>
-        inline STLAllocator( STLAllocator<U, AllocPolicy> const& )
+        inline constexpr STLAllocator( STLAllocator<U, AllocPolicy> const& )
         { }
 
         /// cast
         template <typename U, typename P>
-        inline STLAllocator( STLAllocator<U, P> const& )
+        inline constexpr STLAllocator( STLAllocator<U, P> const& )
         { }
 
         /// memory allocation (elements, used by STL)
