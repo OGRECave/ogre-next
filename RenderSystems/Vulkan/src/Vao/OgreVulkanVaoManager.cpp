@@ -93,6 +93,20 @@ namespace Ogre
         "MAX_VBO_FLAG",                   //
     };
 
+#ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
+    static bool isPowerVR_8xxx_or_9xxx( uint32 deviceId )
+    {
+        // This list may be incomplete.
+        return deviceId == 0x22104018u ||  // GE8250 / GE8220
+               deviceId == 0x22104218u ||  // GE8322
+               deviceId == 0x22054030u ||  // GE8300
+               deviceId == 0x22054038u ||  // GE8300 (Variant)
+               deviceId == 0x22021016u ||  // GE8100
+               deviceId == 0x24208504u     // GM9446
+            ;
+    }
+#endif
+
     VulkanVaoManager::VulkanVaoManager( VulkanDevice *device, VulkanRenderSystem *renderSystem,
                                         const NameValuePairList *params ) :
         VaoManager( params ),
@@ -154,7 +168,8 @@ namespace Ogre
 
 #ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
         if( mVkRenderSystem->getCapabilities()->getVendor() == GPU_IMGTEC &&
-            !mVkRenderSystem->getCapabilities()->getDriverVersion().hasMinVersion( 1, 426, 234 ) )
+            ( isPowerVR_8xxx_or_9xxx( mVkRenderSystem->getCapabilities()->getDeviceId() ) ||
+              !mVkRenderSystem->getCapabilities()->getDriverVersion().hasMinVersion( 1, 426, 234 ) ) )
         {
             Workarounds::mPowerVRAlignment = 16u;
 
