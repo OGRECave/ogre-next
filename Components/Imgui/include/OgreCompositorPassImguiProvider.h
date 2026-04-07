@@ -73,18 +73,24 @@ namespace Ogre
         @param rtIndex
         @param parentNodeDef
         @return
+            The pass definition, or nullptr if customId is not handled by this provider.
+            NOTE: The "master" provider MUST ultimately return a valid pointer.
         */
-        CompositorPassDef *addPassDef( CompositorPassType passType, IdString customId,
-                                       CompositorTargetDef *parentTargetDef,
-                                       CompositorNodeDef   *parentNodeDef ) override;
+        CompositorPassDef *ogre_nullable addPassDef( CompositorPassType passType, IdString customId,
+                                                     CompositorTargetDef *parentTargetDef,
+                                                     CompositorNodeDef   *parentNodeDef ) override;
 
         /** Creates a CompositorPass from a CompositorPassDef for Compositor Pass of type 'custom'
         @remarks    If you have multiple custom pass types then you will need to use dynamic_cast<>()
                     on the CompositorPassDef to determine what custom pass it is.
+        @return
+            The pass, or nullptr if definition was not created by this provider.
+            NOTE: The "master" provider MUST ultimately return a valid pointer.
         */
-        CompositorPass *addPass( const CompositorPassDef *definition, Camera *defaultCamera,
-                                 CompositorNode *parentNode, const RenderTargetViewDef *rtvDef,
-                                 SceneManager *sceneManager ) override;
+        CompositorPass *ogre_nullable addPass( const CompositorPassDef *definition,
+                                               Camera *defaultCamera, CompositorNode *parentNode,
+                                               const RenderTargetViewDef *rtvDef,
+                                               SceneManager              *sceneManager ) override;
 
         void translateCustomPass( ScriptCompiler *compiler, const AbstractNodePtr &node,
                                   IdString customId, CompositorPassDef *customPassDef ) override;

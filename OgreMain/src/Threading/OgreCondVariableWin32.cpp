@@ -26,8 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#ifdef _WIN32
+#include "OgreStableHeaders.h"
 
+#ifdef _WIN32
 #    include "Threading/OgreCondVariable.h"
 
 namespace Ogre

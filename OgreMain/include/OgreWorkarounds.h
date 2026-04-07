@@ -159,7 +159,11 @@ namespace Ogre
 /// As of Driver 1.386.1368, API version 1.1.131 (Android 11),
 /// this bug is still present.
 ///
-/// PowerVR has fixed this in driver version 1.426.234
+/// PowerVR reportedly has fixed this in driver version 1.426.234.
+///
+/// However we assume that all GE 8xxx and GM 9xxx are affected by it, as there are
+/// reports of "spiky polygon soup" which are often an indication of misaligned
+/// transfers that didn't complete successfully.
 ///
 /// First seen: Unknown
 /// Last seen: 2022-05-13

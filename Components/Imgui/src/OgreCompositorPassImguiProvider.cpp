@@ -66,6 +66,10 @@ namespace Ogre
                                                           const RenderTargetViewDef *rtvDef,
                                                           SceneManager *sceneManager )
     {
+        // Not created by us.
+        if( definition->getCustomId() != IdString( "dear_imgui" ).getU32Value() )
+            return 0;
+
         OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassImguiDef *>( definition ) );
         const CompositorPassImguiDef *imguiDef =
             static_cast<const CompositorPassImguiDef *>( definition );
