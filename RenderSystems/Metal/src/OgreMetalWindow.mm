@@ -360,57 +360,68 @@ namespace Ogre
         // create window if nothing was provided
         if( !externalWindowHandle )
         {
-            NSRect frame = NSMakeRect(0.0, 0.0, mRequestedWidth, mRequestedHeight);
-            if (mRequestedWidth == 1)
+            if( mHidden )
             {
-                // just make it big enough to see
-                frame.size.width = frame.size.height = 500.0;
+                // Hidden offscreen window: create a Metal view without an NSWindow.
+                // NSWindow must be created on the main thread on macOS; skipping it
+                // makes hidden windows safe to create from any thread.
+                NSRect frame = NSMakeRect( 0.0, 0.0, mRequestedWidth, mRequestedHeight );
+                mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
             }
-            NSWindowStyleMask style = NSWindowStyleMaskResizable | NSWindowStyleMaskTitled |
-                NSWindowStyleMaskClosable;
-            if( mRequestedFullscreenMode )
+            else
             {
-                frame.size = NSScreen.mainScreen.visibleFrame.size;
-                style = NSWindowStyleMaskBorderless;
-            }
-            NSWindow* window = [[NSWindow alloc] initWithContentRect:frame
-                                                           styleMask:style
-                                                             backing:NSBackingStoreBuffered
-                                                               defer:YES];
-            window.title = @(mTitle.c_str());
-            window.contentView = [[OgreMetalView alloc] initWithFrame:frame];
-            
-            externalWindowHandle = window;
-            SetupMetalWindowListeners( this, window );
-            if( !mHidden )
+                NSRect frame = NSMakeRect(0.0, 0.0, mRequestedWidth, mRequestedHeight);
+                if (mRequestedWidth == 1)
+                {
+                    // just make it big enough to see
+                    frame.size.width = frame.size.height = 500.0;
+                }
+                NSWindowStyleMask style = NSWindowStyleMaskResizable | NSWindowStyleMaskTitled |
+                    NSWindowStyleMaskClosable;
+                if( mRequestedFullscreenMode )
+                {
+                    frame.size = NSScreen.mainScreen.visibleFrame.size;
+                    style = NSWindowStyleMaskBorderless;
+                }
+                NSWindow* window = [[NSWindow alloc] initWithContentRect:frame
+                                                               styleMask:style
+                                                                 backing:NSBackingStoreBuffered
+                                                                   defer:YES];
+                window.title = @(mTitle.c_str());
+                window.contentView = [[OgreMetalView alloc] initWithFrame:frame];
+                externalWindowHandle = window;
+                SetupMetalWindowListeners( this, window );
                 [window orderFront: nil];
+            }
         }
         else
         {
             mIsExternal = true;
         }
 
-        NSView* externalView;
-        if( [externalWindowHandle isKindOfClass:[NSWindow class]] )
+        if( !mMetalView )
         {
-            mWindow = (NSWindow*)externalWindowHandle;
-            externalView = mWindow.contentView;
-        }
-        else
-        {
-            assert( [externalWindowHandle isKindOfClass:[NSView class]] );
-            externalView = (NSView*)externalWindowHandle;
-            mWindow = externalView.window;
-        }
-
-        if( [externalView isKindOfClass:[OgreMetalView class]] )
-            mMetalView = (OgreMetalView*)externalView;
-        else
-        {
-            NSRect frame = externalView.bounds;
-            mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
-            mMetalView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-            [externalView addSubview:mMetalView];
+            NSView* externalView;
+            if( [externalWindowHandle isKindOfClass:[NSWindow class]] )
+            {
+                mWindow = (NSWindow*)externalWindowHandle;
+                externalView = mWindow.contentView;
+            }
+            else
+            {
+                assert( [externalWindowHandle isKindOfClass:[NSView class]] );
+                externalView = (NSView*)externalWindowHandle;
+                mWindow = externalView.window;
+            }
+            if( [externalView isKindOfClass:[OgreMetalView class]] )
+                mMetalView = (OgreMetalView*)externalView;
+            else
+            {
+                NSRect frame = externalView.bounds;
+                mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
+                mMetalView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+                [externalView addSubview:mMetalView];
+            }
         }
 #endif
 
