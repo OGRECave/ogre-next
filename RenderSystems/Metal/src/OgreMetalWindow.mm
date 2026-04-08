@@ -416,8 +416,7 @@ namespace Ogre
                     frame.size.width = frame.size.height = 500.0;
                 }
                 NSWindowStyleMask style =
-                    NSWindowStyleMaskResizable | NSWindowStyleMaskTitled |
-                    NSWindowStyleMaskClosable;
+                    NSWindowStyleMaskResizable | NSWindowStyleMaskTitled | NSWindowStyleMaskClosable;
                 if( mRequestedFullscreenMode )
                 {
                     frame.size = NSScreen.mainScreen.visibleFrame.size;
