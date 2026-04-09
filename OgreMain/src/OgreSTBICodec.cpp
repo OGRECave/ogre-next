@@ -189,9 +189,9 @@ namespace Ogre {
                     const uint8 g = *pSrc++;
                     const uint8 r = *pSrc++;
 
-                    *pDst++ = r;
-                    *pDst++ = g;
                     *pDst++ = b;
+                    *pDst++ = g;
+                    *pDst++ = r;
                     *pDst++ = 0xFF;
                 }
             }
