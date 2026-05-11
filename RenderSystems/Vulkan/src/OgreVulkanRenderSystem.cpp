@@ -1742,9 +1742,9 @@ namespace Ogre
 
         if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] != writeDescSet )
         {
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] = 0;
             mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] = 0;
             mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = writeDescSet;
-            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] = 0;
             mGlobalTable.dirtyBakedTextures = true;
             mTableDirty = true;
         }
@@ -1807,7 +1807,7 @@ namespace Ogre
             mComputeTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] = 0;
             mComputeTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] = 0;
             mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = &vulkanSet->mWriteDescSet;
-            mComputeTable.dirtyBakedSamplers = true;
+            mComputeTable.dirtyBakedTextures = true;
             mComputeTableDirty = true;
         }
     }
@@ -1826,7 +1826,7 @@ namespace Ogre
                 &vulkanSet->mWriteDescSets[1];
             mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] =
                 &vulkanSet->mWriteDescSets[2];
-            mComputeTable.dirtyBakedSamplers = true;
+            mComputeTable.dirtyBakedTextures = true;
             mComputeTableDirty = true;
         }
     }
