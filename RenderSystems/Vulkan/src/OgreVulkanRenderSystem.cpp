@@ -3725,6 +3725,20 @@ namespace Ogre
         OGRE_ASSERT_LOW( set->mRsData );
         VulkanDescriptorSetTexture *vulkanSet =
             static_cast<VulkanDescriptorSetTexture *>( set->mRsData );
+        if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] ==
+            &vulkanSet->mWriteDescSet )
+        {
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = 0;
+            mGlobalTable.dirtyBakedTextures = true;
+            mTableDirty = true;
+        }
+        if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] ==
+            &vulkanSet->mWriteDescSet )
+        {
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = 0;
+            mComputeTable.dirtyBakedTextures = true;
+            mComputeTableDirty = true;
+        }
         delete vulkanSet;
         set->mRsData = 0;
     }
@@ -3740,6 +3754,24 @@ namespace Ogre
         OGRE_ASSERT_LOW( set->mRsData );
         VulkanDescriptorSetTexture2 *vulkanSet =
             static_cast<VulkanDescriptorSetTexture2 *>( set->mRsData );
+        if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] ==
+            &vulkanSet->mWriteDescSets[0] )
+        {
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] = 0;
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] = 0;
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = 0;
+            mGlobalTable.dirtyBakedTextures = true;
+            mTableDirty = true;
+        }
+        if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] ==
+            &vulkanSet->mWriteDescSets[0] )
+        {
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] = 0;
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] = 0;
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = 0;
+            mComputeTable.dirtyBakedTextures = true;
+            mComputeTableDirty = true;
+        }
         vulkanSet->destroy( mVaoManager, mDevice->mDevice, *set );
         delete vulkanSet;
         set->mRsData = 0;
@@ -3756,6 +3788,20 @@ namespace Ogre
         OGRE_ASSERT_LOW( set->mRsData );
         VulkanDescriptorSetSampler *vulkanSet =
             static_cast<VulkanDescriptorSetSampler *>( set->mRsData );
+        if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Samplers] ==
+            &vulkanSet->mWriteDescSet )
+        {
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Samplers] = &vulkanSet->mWriteDescSet;
+            mGlobalTable.dirtyBakedSamplers = true;
+            mTableDirty = true;
+        }
+        if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Samplers] ==
+            &vulkanSet->mWriteDescSet )
+        {
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Samplers] = 0;
+            mComputeTable.dirtyBakedSamplers = true;
+            mComputeTableDirty = true;
+        }
         delete vulkanSet;
         set->mRsData = 0;
     }
@@ -3771,6 +3817,27 @@ namespace Ogre
         OGRE_ASSERT_LOW( set->mRsData );
 
         VulkanDescriptorSetUav *vulkanSet = reinterpret_cast<VulkanDescriptorSetUav *>( set->mRsData );
+        if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] ==
+            &vulkanSet->mWriteDescSets[0] )
+        {
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] = 0;
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavTextures] = 0;
+            mGlobalTable.dirtyBakedUavs = true;
+            mTableDirty = true;
+        }
+        if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] ==
+            &vulkanSet->mWriteDescSets[0] )
+        {
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] = 0;
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::UavTextures] = 0;
+            mComputeTable.dirtyBakedUavs = true;
+            mComputeTableDirty = true;
+        }
+        if( mUavRenderingDescSet && mUavRenderingDescSet->mRsData == set->mRsData )
+        {
+            mUavRenderingDescSet = 0;
+            mUavRenderingDirty = true;
+        }
         vulkanSet->destroy( *set );
         delete vulkanSet;
 
