@@ -1022,8 +1022,8 @@ namespace Ogre
 #    if defined( _WIN32_WINNT_WINBLUE ) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
         if( win == NULL && windowType == "SwapChainPanel" && externalHandle &&
 #        ifdef __cplusplus_winrt
-            dynamic_cast<Windows::UI::Xaml::Controls::SwapChainPanel ^>( ( Platform::Object ^ )
-                                                                             externalHandle )
+            dynamic_cast<Windows::UI::Xaml::Controls::SwapChainPanel ^>(
+                reinterpret_cast<Platform::Object ^>( externalHandle ) )
 #        else
             reinterpret_cast<winrt::Windows::Foundation::IInspectable &>( externalHandle )
                 .try_as<winrt::Windows::UI::Xaml::Controls::SwapChainPanel>()
