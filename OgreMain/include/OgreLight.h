@@ -60,13 +60,6 @@ namespace Ogre
         and direction.
         Light::setDirection and Light::getDirection will redirect to the SceneNode and assert
         or crash if not attached to one.
-    @par
-        Remember also that dynamic lights rely on modifying the colour of vertices based on the position
-    of the light compared to an object's vertex normals. Dynamic lighting will only look good if the
-        object being lit has a fair level of tessellation and the normals are properly set. This is
-    particularly true for the spotlight which will only look right on highly tessellated models. In the
-    future OGRE may be extended for certain scene types so an alternative to the standard dynamic
-    lighting may be used, such as dynamic lightmaps.
     */
     class _OgreExport Light : public MovableObject, public TextureGpuListener
     {
@@ -184,14 +177,19 @@ namespace Ogre
          */
         const ColourValue &getSpecularColour() const { return mSpecular; }
 
-        /** Sets the attenuation parameters (range, constant, linear & quadratic, @see setAttenuation)
+        /** Sets the attenuation parameters (range, constant, linear & quadratic, see #setAttenuation)
             based on a given radius.
         @remarks
-            The actual attenuation formula is:
-                            1
-            --------------------------------
-            (distance / radius)² * 0.5 + 0.5
-
+            The actual attenuation formula is:<br/>
+            <table style="text-align: center;">
+              <tr>
+                <td style="border-bottom: 1px solid black;">1</td>
+              </tr>
+              <tr>
+                <td>(distance / radius)<sup>2</sup> * 0.5 + 0.5</td>
+              </tr>
+            </table>
+        @remarks
             The original formula never ends, that is the range is infinity. This function calculates
             a range based on "lumThreshold": When the luminosity past certain distance is below the
             established threshold, the light calculations are cut.
@@ -415,7 +413,6 @@ namespace Ogre
         */
         Vector4 getAs4DVector() const;
 
-
         /// @copydoc AnimableObject::createAnimableValue
         AnimableValuePtr createAnimableValue( const String &valueName ) override;
 
@@ -428,7 +425,7 @@ namespace Ogre
             This method allows you to set the distance at which shadows will no
             longer be rendered.
         @note
-            Each shadow technique can interpret this subtely differently.
+            Each shadow technique can interpret this subtly differently.
             For example, one technique may use this to eliminate casters,
             another might use it to attenuate the shadows themselves.
             You should tweak this value to suit your chosen shadow technique
@@ -456,7 +453,7 @@ namespace Ogre
         /** Get the near clip plane distance to be used by the shadow camera, if
             this light casts texture shadows.
         @remarks
-            May be zero if the light doesn't have it's own near distance set;
+            May be zero if the light doesn't have its own near distance set;
             use _deriveShadowNearDistance for a version guaranteed to give a result.
         */
         Real getShadowNearClipDistance() const { return mShadowNearClipDist; }
@@ -480,7 +477,7 @@ namespace Ogre
         /** Get the far clip plane distance to be used by the shadow camera, if
             this light casts texture shadows.
         @remarks
-            May be zero if the light doesn't have it's own far distance set;
+            May be zero if the light doesn't have its own far distance set;
             use _deriveShadowfarDistance for a version guaranteed to give a result.
         */
         Real getShadowFarClipDistance() const { return mShadowFarClipDist; }
@@ -552,7 +549,7 @@ namespace Ogre
             information only this Light knows.
         @remarks
             This method allows a Light to map in a custom GPU program parameter
-            based on it's own data. This is represented by a GPU auto parameter
+            based on its own data. This is represented by a GPU auto parameter
             of ACT_LIGHT_CUSTOM, and to allow there to be more than one of these per
             Light, the 'data' field on the auto parameter will identify
             which parameter is being updated and on which light. The implementation
