@@ -860,17 +860,47 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     String HlmsJson::getName( const HlmsMacroblock *macroblock ) const
     {
-        return "\"Macroblock_" + StringConverter::toString( macroblock->mLifetimeId ) + '"';
+        uint64 encoded[2];
+        macroblock->encode( encoded );
+
+        uint32 hash;
+        MurmurHash3_x86_32( encoded, sizeof( encoded ), IdString::Seed, &hash );
+
+        char tmpBuffer[64];
+        LwString encodedName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+        encodedName.a( "\"Macroblock_", hash, "\"" );
+
+        return encodedName.c_str();
     }
     //-----------------------------------------------------------------------------------
     String HlmsJson::getName( const HlmsBlendblock *blendblock ) const
     {
-        return "\"Blendblock_" + StringConverter::toString( blendblock->mLifetimeId ) + '"';
+        uint64 encoded[2];
+        blendblock->encode( encoded );
+
+        uint32 hash;
+        MurmurHash3_x86_32( encoded, sizeof( encoded ), IdString::Seed, &hash );
+
+        char tmpBuffer[64];
+        LwString encodedName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+        encodedName.a( "\"Blendblock_", hash, "\"" );
+
+        return encodedName.c_str();
     }
     //-----------------------------------------------------------------------------------
     String HlmsJson::getName( const HlmsSamplerblock *samplerblock )
     {
-        return "\"Sampler_" + StringConverter::toString( samplerblock->mLifetimeId ) + '"';
+        uint64 encoded[6];
+        samplerblock->encode( encoded );
+
+        uint32 hash;
+        MurmurHash3_x86_32( encoded, sizeof( encoded ), IdString::Seed, &hash );
+
+        char tmpBuffer[64];
+        LwString encodedName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+        encodedName.a( "\"Sampler_", hash, "\"" );
+
+        return encodedName.c_str();
     }
     //-----------------------------------------------------------------------------------
     void HlmsJson::saveSamplerblock( const HlmsSamplerblock *samplerblock, String &outString )

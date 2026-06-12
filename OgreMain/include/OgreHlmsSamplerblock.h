@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 
 #include "OgreColourValue.h"
+#include "OgreCommon.h"
 #include "OgreHlmsDatablock.h"
 
 #include "OgreHeaderPrefix.h"
@@ -104,6 +105,36 @@ namespace Ogre
                    mBorderColour != _r.mBorderColour ||                //
                    mMinLod != _r.mMinLod ||                            //
                    mMaxLod != _r.mMaxLod;
+        }
+
+        /// Encodes all data into multiple uint64. Technically it can server as serialization.
+        /// But it's used for generating unique name out of hashes in JSON.
+        void encode( uint64 outVals[6] ) const
+        {
+            outVals[0] = static_cast<uint64_t>( mMinFilter ) << 56ul |          // 8 bits (56-63)
+                         static_cast<uint64_t>( mMagFilter ) << 48ul |          // 8 bits (48-55)
+                         static_cast<uint64_t>( mMipFilter ) << 40ul |          // 8 bits (40-47)
+                         static_cast<uint64_t>( mU ) << 32ul |                  // 8 bits (32-39)
+                         static_cast<uint64_t>( mV ) << 24ul |                  // 8 bits (24-31)
+                         static_cast<uint64_t>( mW ) << 16ul |                  // 8 bits (16-23)
+                         static_cast<uint64_t>( mAllowGlobalDefaults ) << 0ul;  // 1 bit (0)
+#if OGRE_DOUBLE_PRECISION == 1
+            outVals[1] = bit_cast<uint64_t>( mMipLodBias );  // 64 bits (double)
+#else
+            outVals[1] = bit_cast<uint32_t>( mMipLodBias );  // 32 bits (float)
+#endif
+            outVals[2] =
+                ( static_cast<uint64_t>( bit_cast<uint32_t>( mMaxAnisotropy ) ) << 32ul ) |  // 32 bits
+                static_cast<uint64_t>( mCompareFunction );                                   // 8 bits
+
+            outVals[3] = ( uint64_t( bit_cast<uint32_t>( mBorderColour.r ) ) << 32ul ) |
+                         ( uint64_t( bit_cast<uint32_t>( mBorderColour.g ) ) << 32ul );
+
+            outVals[4] = ( uint64_t( bit_cast<uint32_t>( mBorderColour.b ) ) << 32ul ) |
+                         ( uint64_t( bit_cast<uint32_t>( mBorderColour.a ) ) << 32ul );
+
+            outVals[5] = static_cast<uint64_t>( bit_cast<float>( mMinLod ) ) << 32ul |  // min lod
+                         bit_cast<uint32_t>( mMaxLod );                                 // max lod
         }
 
         /// Helper function to set filtering to the most common settings
