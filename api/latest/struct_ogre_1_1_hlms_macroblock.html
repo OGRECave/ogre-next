@@ -163,6 +163,9 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a59013785563e6a19b27a03943b85acdd" id="r_a59013785563e6a19b27a03943b85acdd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a59013785563e6a19b27a03943b85acdd">HlmsMacroblock</a> ()</td></tr>
 <tr class="separator:a59013785563e6a19b27a03943b85acdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19fc2b49f2c4b8fc85832c09ac556e66" id="r_a19fc2b49f2c4b8fc85832c09ac556e66"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a19fc2b49f2c4b8fc85832c09ac556e66">encode</a> (<a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a> outVals[2]) const</td></tr>
+<tr class="memdesc:a19fc2b49f2c4b8fc85832c09ac556e66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encodes all data into multiple uint64.  <br /></td></tr>
+<tr class="separator:a19fc2b49f2c4b8fc85832c09ac556e66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40a3623c935d1a2e43f9676392fbeaff" id="r_a40a3623c935d1a2e43f9676392fbeaff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a40a3623c935d1a2e43f9676392fbeaff">operator!=</a> (const <a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> &amp;_r) const</td></tr>
 <tr class="separator:a40a3623c935d1a2e43f9676392fbeaff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:accab50d79b1fb2cbe0d02d0cd57160cf" id="r_accab50d79b1fb2cbe0d02d0cd57160cf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_macroblock.html#accab50d79b1fb2cbe0d02d0cd57160cf">operator==</a> (const <a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> &amp;_r) const</td></tr>
@@ -284,6 +287,35 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a19fc2b49f2c4b8fc85832c09ac556e66" name="a19fc2b49f2c4b8fc85832c09ac556e66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19fc2b49f2c4b8fc85832c09ac556e66">&#9670;&#160;</a></span>encode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::HlmsMacroblock::encode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a>&#160;</td>
+          <td class="paramname"><em>outVals</em>[2]</td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Encodes all data into multiple uint64. </p>
+<p>Technically it can server as serialization. But it's used for generating unique name out of hashes in JSON. </p>
+
+</div>
+</div>
 <a id="a40a3623c935d1a2e43f9676392fbeaff" name="a40a3623c935d1a2e43f9676392fbeaff"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a40a3623c935d1a2e43f9676392fbeaff">&#9670;&#160;</a></span>operator!=()</h2>
 

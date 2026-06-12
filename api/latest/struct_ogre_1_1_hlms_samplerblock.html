@@ -117,6 +117,9 @@ $(document).ready(function(){initNavTree('struct_ogre_1_1_hlms_samplerblock.html
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa5997a8cd5825b0daceb4d72b0afc858" id="r_aa5997a8cd5825b0daceb4d72b0afc858"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_samplerblock.html#aa5997a8cd5825b0daceb4d72b0afc858">HlmsSamplerblock</a> ()</td></tr>
 <tr class="separator:aa5997a8cd5825b0daceb4d72b0afc858"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a551ca3a8d1e6453f1e6e7ccf4c44dc73" id="r_a551ca3a8d1e6453f1e6e7ccf4c44dc73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_samplerblock.html#a551ca3a8d1e6453f1e6e7ccf4c44dc73">encode</a> (<a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a> outVals[6]) const</td></tr>
+<tr class="memdesc:a551ca3a8d1e6453f1e6e7ccf4c44dc73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encodes all data into multiple uint64.  <br /></td></tr>
+<tr class="separator:a551ca3a8d1e6453f1e6e7ccf4c44dc73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac869fdf6195034b570a466462746ef73" id="r_ac869fdf6195034b570a466462746ef73"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_samplerblock.html#ac869fdf6195034b570a466462746ef73">operator!=</a> (const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> &amp;_r) const</td></tr>
 <tr class="separator:ac869fdf6195034b570a466462746ef73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6460eecf70f4f712ea321795b4a75971" id="r_a6460eecf70f4f712ea321795b4a75971"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_samplerblock.html#a6460eecf70f4f712ea321795b4a75971">setAddressingMode</a> (<a class="el" href="group___resources.html#gac224d1943fe269a125e10f02c8b8bc8a">TextureAddressingMode</a> addressingMode)</td></tr>
@@ -196,6 +199,37 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a551ca3a8d1e6453f1e6e7ccf4c44dc73" name="a551ca3a8d1e6453f1e6e7ccf4c44dc73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a551ca3a8d1e6453f1e6e7ccf4c44dc73">&#9670;&#160;</a></span>encode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::HlmsSamplerblock::encode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#af7c8391e4119084465186113a849f065">uint64</a>&#160;</td>
+          <td class="paramname"><em>outVals</em>[6]</td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Encodes all data into multiple uint64. </p>
+<p>Technically it can server as serialization. But it's used for generating unique name out of hashes in JSON. </p>
+
+<p class="reference">References <a class="el" href="class_ogre_1_1_colour_value.html#a854058a76927880ae345ac1c465f9713">Ogre::ColourValue::a</a>, <a class="el" href="class_ogre_1_1_colour_value.html#aae078d77b654f76e3b760174f93474ec">Ogre::ColourValue::b</a>, <a class="el" href="class_ogre_1_1_colour_value.html#a13fbd050af26b8bd549ccb46aa699e07">Ogre::ColourValue::g</a>, and <a class="el" href="class_ogre_1_1_colour_value.html#a6e086633637e335238d517e0ec9f2cd2">Ogre::ColourValue::r</a>.</p>
+
+</div>
+</div>
 <a id="ac869fdf6195034b570a466462746ef73" name="ac869fdf6195034b570a466462746ef73"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac869fdf6195034b570a466462746ef73">&#9670;&#160;</a></span>operator!=()</h2>
 
