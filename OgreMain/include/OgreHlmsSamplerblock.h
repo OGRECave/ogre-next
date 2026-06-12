@@ -109,7 +109,7 @@ namespace Ogre
 
         /// Encodes all data into multiple uint64. Technically it can server as serialization.
         /// But it's used for generating unique name out of hashes in JSON.
-        void encode( uint64 outVals[6] ) const
+        void encode( uint64 ( &outVals )[6] ) const
         {
             outVals[0] = static_cast<uint64_t>( mMinFilter ) << 56ul |          // 8 bits (56-63)
                          static_cast<uint64_t>( mMagFilter ) << 48ul |          // 8 bits (48-55)
