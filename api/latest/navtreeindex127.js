@@ -1,7 +1,6 @@
 var NAVTREEINDEX127 =
 {
 "struct_ogre_1_1_hlms_macroblock.html#a0b69626f1e6edb6eb6a21cf48f4ebb2a":[6,2,10,74,5],
-"struct_ogre_1_1_hlms_macroblock.html#a19fc2b49f2c4b8fc85832c09ac556e66":[6,2,10,74,2],
 "struct_ogre_1_1_hlms_macroblock.html#a38d3242e6c29312f16a8293b9f70efae":[6,2,10,74,11],
 "struct_ogre_1_1_hlms_macroblock.html#a40a3623c935d1a2e43f9676392fbeaff":[6,2,10,74,3],
 "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636af":[6,2,10,74,0],
@@ -40,6 +39,7 @@ var NAVTREEINDEX127 =
 "struct_ogre_1_1_hlms_macroblock.html#a6992c372553d3cf1045f403bdd1a488c":[6,2,10,74,13],
 "struct_ogre_1_1_hlms_macroblock.html#a84c2808fce656f84311edfba9c5192ae":[6,2,10,74,6],
 "struct_ogre_1_1_hlms_macroblock.html#abe268acf5606ed35b7af995a2b031843":[6,2,10,74,10],
+"struct_ogre_1_1_hlms_macroblock.html#ac148374bc623a5b206d821ae76fca9a2":[6,2,10,74,2],
 "struct_ogre_1_1_hlms_macroblock.html#ac8868b95f6dc87b0d9e75449414dbacb":[6,2,10,74,9],
 "struct_ogre_1_1_hlms_macroblock.html#accab50d79b1fb2cbe0d02d0cd57160cf":[6,2,10,74,4],
 "struct_ogre_1_1_hlms_macroblock.html#ad51e417c152a4061cdd21b215502c5c0":[6,2,10,74,12],
@@ -96,7 +96,6 @@ var NAVTREEINDEX127 =
 "struct_ogre_1_1_hlms_samplerblock.html#a3bcc29a23b6b0ab3df78b03e9ac6b1e0":[6,2,10,81,8],
 "struct_ogre_1_1_hlms_samplerblock.html#a3ea46f76e697aad4c5e13ed6d803e0e4":[6,2,10,81,10],
 "struct_ogre_1_1_hlms_samplerblock.html#a40b3d816aee861a42b0dfe3aa9866667":[6,2,10,81,5],
-"struct_ogre_1_1_hlms_samplerblock.html#a551ca3a8d1e6453f1e6e7ccf4c44dc73":[6,2,10,81,1],
 "struct_ogre_1_1_hlms_samplerblock.html#a626bdfc5ade2a5330f91e26f93ff334b":[6,2,10,81,6],
 "struct_ogre_1_1_hlms_samplerblock.html#a629dbb1e373dbbad0f9cca503335a85f":[6,2,10,81,14],
 "struct_ogre_1_1_hlms_samplerblock.html#a6460eecf70f4f712ea321795b4a75971":[6,2,10,81,3],
@@ -108,6 +107,7 @@ var NAVTREEINDEX127 =
 "struct_ogre_1_1_hlms_samplerblock.html#abbfb00e24c1e59164eb9fc54e2ca2a8e":[6,2,10,81,16],
 "struct_ogre_1_1_hlms_samplerblock.html#ac869fdf6195034b570a466462746ef73":[6,2,10,81,2],
 "struct_ogre_1_1_hlms_samplerblock.html#acde27e5599b6281f5f59a29d5b54ff2b":[6,2,10,81,15],
+"struct_ogre_1_1_hlms_samplerblock.html#ad60382a58cdd43549e87002e11086f54":[6,2,10,81,1],
 "struct_ogre_1_1_hlms_samplerblock.html#af6490e4df1f868370696578d7ce315c1":[6,2,10,81,7],
 "struct_ogre_1_1_hlms_samplerblock.html#af6da21ec07df389d6b9fcc6dc4fd1800":[6,2,10,81,12],
 "struct_ogre_1_1_hlms_texture_pack.html":[6,2,10,83],

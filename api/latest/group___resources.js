@@ -1029,7 +1029,7 @@ var group___resources =
       ] ],
       [ "HlmsBlendblock", "struct_ogre_1_1_hlms_blendblock.html#a920ff67adb5aaa2238ce71994d7f9c7e", null ],
       [ "calculateSeparateBlendMode", "struct_ogre_1_1_hlms_blendblock.html#acaab72f26e7b41ab1082508d86a7ac0f", null ],
-      [ "encode", "struct_ogre_1_1_hlms_blendblock.html#a745bb147cc9d7333f56f98c91d678d35", null ],
+      [ "encode", "struct_ogre_1_1_hlms_blendblock.html#a901a88b6c362c1b596cda52ae034e786", null ],
       [ "isAlphaToCoverage", "struct_ogre_1_1_hlms_blendblock.html#a60707e7fdeec21944b9b951481554613", null ],
       [ "isAutoTransparent", "struct_ogre_1_1_hlms_blendblock.html#a07995e128bd5c66fef5784296aede703", null ],
       [ "isForcedTransparent", "struct_ogre_1_1_hlms_blendblock.html#a4bd13a12602c3f2b0a3fe32069a1348e", null ],
@@ -1266,7 +1266,7 @@ var group___resources =
         [ "PolygonMode_SOLID", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa81f198c345236134ae615a5362d4b303", null ]
       ] ],
       [ "HlmsMacroblock", "struct_ogre_1_1_hlms_macroblock.html#a59013785563e6a19b27a03943b85acdd", null ],
-      [ "encode", "struct_ogre_1_1_hlms_macroblock.html#a19fc2b49f2c4b8fc85832c09ac556e66", null ],
+      [ "encode", "struct_ogre_1_1_hlms_macroblock.html#ac148374bc623a5b206d821ae76fca9a2", null ],
       [ "operator!=", "struct_ogre_1_1_hlms_macroblock.html#a40a3623c935d1a2e43f9676392fbeaff", null ],
       [ "operator==", "struct_ogre_1_1_hlms_macroblock.html#accab50d79b1fb2cbe0d02d0cd57160cf", null ],
       [ "mCullMode", "struct_ogre_1_1_hlms_macroblock.html#a0b69626f1e6edb6eb6a21cf48f4ebb2a", null ],
@@ -1476,7 +1476,7 @@ var group___resources =
     ] ],
     [ "Ogre::HlmsSamplerblock", "struct_ogre_1_1_hlms_samplerblock.html", [
       [ "HlmsSamplerblock", "struct_ogre_1_1_hlms_samplerblock.html#aa5997a8cd5825b0daceb4d72b0afc858", null ],
-      [ "encode", "struct_ogre_1_1_hlms_samplerblock.html#a551ca3a8d1e6453f1e6e7ccf4c44dc73", null ],
+      [ "encode", "struct_ogre_1_1_hlms_samplerblock.html#ad60382a58cdd43549e87002e11086f54", null ],
       [ "operator!=", "struct_ogre_1_1_hlms_samplerblock.html#ac869fdf6195034b570a466462746ef73", null ],
       [ "setAddressingMode", "struct_ogre_1_1_hlms_samplerblock.html#a6460eecf70f4f712ea321795b4a75971", null ],
       [ "setFiltering", "struct_ogre_1_1_hlms_samplerblock.html#a8d935b0cc2d1ed94234035ffaf412e79", null ],

@@ -1,7 +1,7 @@
 var struct_ogre_1_1_hlms_samplerblock =
 [
     [ "HlmsSamplerblock", "struct_ogre_1_1_hlms_samplerblock.html#aa5997a8cd5825b0daceb4d72b0afc858", null ],
-    [ "encode", "struct_ogre_1_1_hlms_samplerblock.html#a551ca3a8d1e6453f1e6e7ccf4c44dc73", null ],
+    [ "encode", "struct_ogre_1_1_hlms_samplerblock.html#ad60382a58cdd43549e87002e11086f54", null ],
     [ "operator!=", "struct_ogre_1_1_hlms_samplerblock.html#ac869fdf6195034b570a466462746ef73", null ],
     [ "setAddressingMode", "struct_ogre_1_1_hlms_samplerblock.html#a6460eecf70f4f712ea321795b4a75971", null ],
     [ "setFiltering", "struct_ogre_1_1_hlms_samplerblock.html#a8d935b0cc2d1ed94234035ffaf412e79", null ],

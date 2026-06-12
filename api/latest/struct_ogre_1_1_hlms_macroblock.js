@@ -33,7 +33,7 @@ var struct_ogre_1_1_hlms_macroblock =
       [ "PolygonMode_SOLID", "struct_ogre_1_1_hlms_macroblock.html#a4b9208c9dd4efb98a7d3e4508a9636afa81f198c345236134ae615a5362d4b303", null ]
     ] ],
     [ "HlmsMacroblock", "struct_ogre_1_1_hlms_macroblock.html#a59013785563e6a19b27a03943b85acdd", null ],
-    [ "encode", "struct_ogre_1_1_hlms_macroblock.html#a19fc2b49f2c4b8fc85832c09ac556e66", null ],
+    [ "encode", "struct_ogre_1_1_hlms_macroblock.html#ac148374bc623a5b206d821ae76fca9a2", null ],
     [ "operator!=", "struct_ogre_1_1_hlms_macroblock.html#a40a3623c935d1a2e43f9676392fbeaff", null ],
     [ "operator==", "struct_ogre_1_1_hlms_macroblock.html#accab50d79b1fb2cbe0d02d0cd57160cf", null ],
     [ "mCullMode", "struct_ogre_1_1_hlms_macroblock.html#a0b69626f1e6edb6eb6a21cf48f4ebb2a", null ],

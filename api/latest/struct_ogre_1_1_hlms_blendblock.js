@@ -22,7 +22,7 @@ var struct_ogre_1_1_hlms_blendblock =
     ] ],
     [ "HlmsBlendblock", "struct_ogre_1_1_hlms_blendblock.html#a920ff67adb5aaa2238ce71994d7f9c7e", null ],
     [ "calculateSeparateBlendMode", "struct_ogre_1_1_hlms_blendblock.html#acaab72f26e7b41ab1082508d86a7ac0f", null ],
-    [ "encode", "struct_ogre_1_1_hlms_blendblock.html#a745bb147cc9d7333f56f98c91d678d35", null ],
+    [ "encode", "struct_ogre_1_1_hlms_blendblock.html#a901a88b6c362c1b596cda52ae034e786", null ],
     [ "isAlphaToCoverage", "struct_ogre_1_1_hlms_blendblock.html#a60707e7fdeec21944b9b951481554613", null ],
     [ "isAutoTransparent", "struct_ogre_1_1_hlms_blendblock.html#a07995e128bd5c66fef5784296aede703", null ],
     [ "isForcedTransparent", "struct_ogre_1_1_hlms_blendblock.html#a4bd13a12602c3f2b0a3fe32069a1348e", null ],
