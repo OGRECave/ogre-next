@@ -37,6 +37,7 @@ THE SOFTWARE.
 
 #    include "OgreLwString.h"
 
+#    include "OgreLogManager.h"
 #    include "OgreStringConverter.h"
 
 #    if defined( __clang__ )
@@ -489,6 +490,8 @@ namespace Ogre
             const String iAsStr = StringConverter::toString( i );
             String texTypeName = "detail_diffuse" + iAsStr;
 
+            bool bOffsetScaleSet = false;
+
             itor = json.FindMember( texTypeName.c_str() );
             if( itor != json.MemberEnd() && itor->value.IsObject() )
             {
@@ -505,14 +508,19 @@ namespace Ogre
                     pbsDatablock->setDetailMapBlendMode( i, parseBlendMode( itor->value.GetString() ) );
 
                 Vector4 offsetScale( 0, 0, 1, 1 );
-
                 itor = subobj.FindMember( "offset" );
                 if( itor != subobj.MemberEnd() && itor->value.IsArray() )
+                {
                     parseOffset( itor->value, offsetScale );
+                    bOffsetScaleSet = true;
+                }
 
                 itor = subobj.FindMember( "scale" );
                 if( itor != subobj.MemberEnd() && itor->value.IsArray() )
+                {
                     parseScale( itor->value, offsetScale );
+                    bOffsetScaleSet = true;
+                }
 
                 pbsDatablock->setDetailMapOffsetScale( i, offsetScale );
             }
@@ -542,7 +550,21 @@ namespace Ogre
                 if( itor != subobj.MemberEnd() && itor->value.IsArray() )
                     parseScale( itor->value, offsetScale );
 
-                pbsDatablock->setDetailMapOffsetScale( i, offsetScale );
+                if( offsetScale != Vector4( 0, 0, 1, 1 ) )
+                {
+                    if( bOffsetScaleSet && offsetScale != pbsDatablock->getDetailMapOffsetScale( i ) )
+                    {
+                        LogManager::getSingleton().logMessage(
+                            "WARNING: JSON datablock: '" + *pbsDatablock->getNameStr() +
+                                "' defines offset/scale in both detail_diffuse" + iAsStr + " and " +
+                                texTypeName +
+                                ". However only the latter setting will be honored since this value is "
+                                "shared by both!",
+                            LML_CRITICAL );
+                    }
+
+                    pbsDatablock->setDetailMapOffsetScale( i, offsetScale );
+                }
             }
         }
 
