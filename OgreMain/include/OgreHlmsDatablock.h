@@ -178,6 +178,23 @@ namespace Ogre
                    mCullMode != _r.mCullMode ||                        //
                    mPolygonMode != _r.mPolygonMode;
         }
+
+        /// Encodes all data into multiple uint64. Technically it can server as serialization.
+        /// But it's used for generating unique name out of hashes in JSON.
+        void encode( uint64 ( &outVals )[2] ) const
+        {
+            outVals[0] = static_cast<uint64_t>( mDepthFunc ) << 56ul |           // 8 bits (bits 56-63)
+                         static_cast<uint64_t>( mCullMode ) << 48ul |            // 8 bits (bits 48-55)
+                         static_cast<uint64_t>( mPolygonMode ) << 40ul |         // 8 bits (bits 40-47)
+                         static_cast<uint64_t>( mDepthWrite ) << 39ul |          // 1 bit (bit 39)
+                         static_cast<uint64_t>( mDepthCheck ) << 38ul |          // 1 bit (bit 38)
+                         static_cast<uint64_t>( mDepthClamp ) << 37ul |          // 1 bit (bit 37)
+                         static_cast<uint64_t>( mScissorTestEnabled ) << 36ul |  // 1 bit (bit 36)
+                         static_cast<uint64_t>( mAllowGlobalDefaults ) << 0ul;   // 1 bit (bit 0)
+
+            outVals[1] = ( uint64_t( bit_cast<uint32_t>( mDepthBiasConstant ) ) << 32ul ) |
+                         uint64_t( bit_cast<uint32_t>( mDepthBiasSlopeScale ) );
+        }
     };
 
     /** A blend block contains settings that rarely change, and thus are common to many materials.
@@ -353,6 +370,24 @@ namespace Ogre
                    mBlendChannelMask != _r.mBlendChannelMask ||                  //
                    ( mIsTransparent & 0x02u ) != ( _r.mIsTransparent & 0x02u );
         }
+
+        /// Encodes all data into multiple uint64. Technically it can server as serialization.
+        /// But it's used for generating unique name out of hashes in JSON.
+        void encode( uint64 ( &outVals )[2] ) const
+        {
+            outVals[0] = static_cast<uint64_t>( mAlphaToCoverage ) << 56ul |      // 8 bits (56-63)
+                         static_cast<uint64_t>( mBlendChannelMask ) << 48ul |     // 8 bits (48-55)
+                         static_cast<uint64_t>( mBlendOperationAlpha ) << 40ul |  // 8 bits (40-48)
+                         static_cast<uint64_t>( mIsTransparent ) << 39ul |        // 1 bit (39)
+                         static_cast<uint64_t>( mSeparateBlend ) << 38ul |        // 1 bit (38)
+                         static_cast<uint64_t>( mAllowGlobalDefaults ) << 0ul;    // 1 bit (0)
+
+            outVals[1] = static_cast<uint64_t>( mSourceBlendFactor ) << 32ul |       // 8 bits (32-39)
+                         static_cast<uint64_t>( mDestBlendFactor ) << 24ul |         // 8 bits (24-31)
+                         static_cast<uint64_t>( mSourceBlendFactorAlpha ) << 16ul |  // 8 bits (16-23)
+                         static_cast<uint64_t>( mDestBlendFactorAlpha ) << 8ul |     // 8 bits (8-15)
+                         static_cast<uint64_t>( mBlendOperation ) << 0ul;            // 8 bits (0-7)
+        }
     };
 
     class _OgreExport HlmsTextureExportListener
@@ -395,13 +430,31 @@ namespace Ogre
     {
         friend class RenderQueue;
 
+    public:
+        struct CustomProperty
+        {
+            /// We must keep keyStr for proper serialization (e.g. saving to JSON).
+            String   keyStr;
+            IdString keyName;
+            int32    value;
+
+            CustomProperty( const String &_keyStr, int32 _value ) :
+                keyStr( _keyStr ),
+                keyName( _keyStr ),
+                value( _value )
+            {
+            }
+        };
+
+        typedef FastArray<CustomProperty> CustomPropertyArray;
+
     protected:
         // Non-hot variables first (can't put them last as HlmsDatablock may be derived and
         // it's better if mShadowConstantBias is together with the derived type's variables
         /// List of renderables currently using this datablock
         vector<Renderable *>::type mLinkedRenderables;
 
-        int32 mCustomPieceFileIdHash[NumShaderTypes];
+        int32 mCustomPieceFileIdHash[CustomPieceStage::NumCustomPieceStages];
 
         Hlms    *mCreator;
         IdString mName;
@@ -432,6 +485,8 @@ namespace Ogre
     protected:
         HlmsMacroblock const *mMacroblock[2];
         HlmsBlendblock const *mBlendblock[2];
+
+        CustomPropertyArray mCustomProperties;
 
     public:
         /// When false, we won't try to have Textures become resident
@@ -476,11 +531,11 @@ namespace Ogre
             If the filename has already been previously provided, the contents must be an exact match.
         @param shaderCode
             Shader source code.
-        @param shaderType
+        @param stage
             Shader stage to be used.
         */
         void setCustomPieceCodeFromMemory( const String &filename, const String &shaderCode,
-                                           ShaderType shaderType );
+                                           CustomPieceStage::CustomPieceStage stage );
 
         /** Sets the filename of a piece file to be parsed from disk. First, before all other files.
 
@@ -491,19 +546,35 @@ namespace Ogre
             Filename of the piece file. Must be unique. Empty to disable.
             If the filename has already been previously provided, the contents must be an exact match.
         @param resourceGroup
-        @param shaderType
+        @param stage
             Shader stage to be used.
         */
         void setCustomPieceFile( const String &filename, const String &resourceGroup,
-                                 ShaderType shaderType );
+                                 CustomPieceStage::CustomPieceStage stage );
 
         /// Returns the internal ID generated by setCustomPieceFile() and setCustomPieceCodeFromMemory().
         /// All calls with the same filename share the same ID. This ID is a deterministic hash.
         /// Returns 0 if unset.
-        int32 getCustomPieceFileIdHash( ShaderType shaderType ) const;
+        int32 getCustomPieceFileIdHash( CustomPieceStage::CustomPieceStage stage ) const;
 
         /// Returns the filename argument set to setCustomPieceFile() and setCustomPieceCodeFromMemory().
-        const String &getCustomPieceFileStr( ShaderType shaderType ) const;
+        const String &getCustomPieceFileStr( CustomPieceStage::CustomPieceStage stage ) const;
+
+        /** Sets properties to be used by this datablock. This is useful when you want to activate
+            custom shader code for specific materials (i.e. via setCustomPieceFile() or customized Hlms
+            implementations).
+            If you set a property whose name conflicts with an internal name used by the Hlms
+            implementation, shader generation will likely be invalid.
+        @remarks
+            Calling this function triggers HlmsDatablock::flushRenderables.
+        @param properties
+            Properties to set. Order does not matter.
+        @param bSwap
+            True if we should swap the contents of properties with out container.
+        */
+        void setCustomProperties( CustomPropertyArray &properties, bool bSwap );
+
+        const CustomPropertyArray &getCustomProperties() const { return mCustomProperties; }
 
         /** Sets a new macroblock that matches the same parameter as the input.
             Decreases the reference count of the previously set one.

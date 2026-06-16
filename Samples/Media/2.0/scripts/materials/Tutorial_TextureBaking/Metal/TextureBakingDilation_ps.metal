@@ -30,7 +30,7 @@ fragment float4 main_metal
 		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  1,  1 ) ), 0u, 0u );
 		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2( -1,  1 ) ), 0u, 0u );
 		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  1, -1 ) ), 0u, 0u );
-		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  1, -1 ) ), 0u, 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2( -1, -1 ) ), 0u, 0u );
 	}
 
 	return c.xyzw;

@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 // Don't include prerequisites, can cause a circular dependency
 // This file must be included within another file which already has the prerequisites in it
-//#include "OgrePrerequisites.h"
+// #include "OgrePrerequisites.h"
 #ifndef OGRE_COMPILER
 #    pragma message "MemoryTracker included somewhere OgrePrerequisites.h wasn't!"
 #endif

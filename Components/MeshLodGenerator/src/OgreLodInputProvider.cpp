@@ -41,8 +41,7 @@ namespace Ogre
         {
             const LodData::Vertex *v = &data->mVertexList[triangle->vertexi[i]];
             str << ( i + 1 ) << ". vertex position: (" << v->position.x << ", " << v->position.y << ", "
-                << v->position.z << ") "
-                << "vertex ID: " << triangle->vertexID[i] << std::endl;
+                << v->position.z << ") " << "vertex ID: " << triangle->vertexID[i] << std::endl;
         }
     }
 

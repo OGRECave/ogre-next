@@ -60,7 +60,7 @@ namespace Ogre
         As a workaround to the disadvantage, you can compile this code using cl.exe /EP /P /C to
         generate this file with macros replaced as actual code (very handy!)
     */
-// clang-format off
+    // clang-format off
 	// Arithmetic operations
 #define DEFINE_OPERATION( leftClass, rightClass, op )\
 	inline ArrayVector2 operator op ( const leftClass &lhs, const rightClass &rhs )\

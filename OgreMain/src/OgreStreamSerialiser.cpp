@@ -143,9 +143,9 @@ namespace Ogre
         }
         else if( c->version > maxVersion )
         {
-            LogManager::getSingleton().stream() << "Error: " << msg << " : Data version is "
-                                                << c->version << " but this software can only read "
-                                                << "up to version " << maxVersion;
+            LogManager::getSingleton().stream()
+                << "Error: " << msg << " : Data version is " << c->version
+                << " but this software can only read " << "up to version " << maxVersion;
             // skip
             readChunkEnd( c->id );
             return 0;

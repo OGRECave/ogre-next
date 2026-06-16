@@ -127,7 +127,7 @@ namespace Ogre
                 "CompositorPassIblSpecular::CompositorPassIblSpecular" );
         }
 
-        if( !mInputTexture->allowsAutoMipmaps() )
+        if( !mInputTexture->allowsAutoMipmaps() && mDefinition->mAutogenInputMipmaps )
         {
             OGRE_EXCEPT(
                 Exception::ERR_INVALIDPARAMS,
@@ -354,21 +354,21 @@ namespace Ogre
             if( mInputTexture != mOutputTexture )
             {
                 // If output has no mipmaps, do a fast path copy
-                if( mOutputTexture->getNumMipmaps() > 1u )
+                if( mOutputTexture->getNumMipmaps() > 1u && mDefinition->mAutogenInputMipmaps )
                 {
                     mInputTexture->_autogenerateMipmaps(
                         CopyEncTransitionMode::AlreadyInLayoutThenManual );
-                }
 
-                {
-                    // Prepare mInputTexture for copying. We have to do it here because analyzeBarriers
-                    // prepared mInputTexture for generating mipmaps
-                    mResourceTransitions.clear();
-                    mBarrierSolver.resolveTransition( mResourceTransitions, mInputTexture,
-                                                      ResourceLayout::CopySrc, ResourceAccess::Read,
-                                                      0u );
-                    RenderSystem *renderSystem = mParentNode->getRenderSystem();
-                    renderSystem->executeResourceTransition( mResourceTransitions );
+                    {
+                        // Prepare mInputTexture for copying. We have to do it here because
+                        // analyzeBarriers prepared mInputTexture for generating mipmaps
+                        mResourceTransitions.clear();
+                        mBarrierSolver.resolveTransition( mResourceTransitions, mInputTexture,
+                                                          ResourceLayout::CopySrc, ResourceAccess::Read,
+                                                          0u );
+                        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+                        renderSystem->executeResourceTransition( mResourceTransitions );
+                    }
                 }
 
                 const uint8 outNumMips = mOutputTexture->getNumMipmaps();
@@ -393,14 +393,17 @@ namespace Ogre
             RenderSystem *renderSystem = mParentNode->getRenderSystem();
             renderSystem->endRenderPassDescriptor();
 
-            mInputTexture->_autogenerateMipmaps( CopyEncTransitionMode::AlreadyInLayoutThenManual );
-
+            if( mDefinition->mAutogenInputMipmaps )
             {
-                mResourceTransitions.clear();
-                mBarrierSolver.resolveTransition( mResourceTransitions, mInputTexture,
-                                                  ResourceLayout::Texture, ResourceAccess::Read,
-                                                  1u << GPT_COMPUTE_PROGRAM );
-                renderSystem->executeResourceTransition( mResourceTransitions );
+                mInputTexture->_autogenerateMipmaps( CopyEncTransitionMode::AlreadyInLayoutThenManual );
+
+                {
+                    mResourceTransitions.clear();
+                    mBarrierSolver.resolveTransition( mResourceTransitions, mInputTexture,
+                                                      ResourceLayout::Texture, ResourceAccess::Read,
+                                                      1u << GPT_COMPUTE_PROGRAM );
+                    renderSystem->executeResourceTransition( mResourceTransitions );
+                }
             }
 
             vector<HlmsComputeJob *>::type::iterator itor = mJobs.begin();
@@ -437,8 +440,17 @@ namespace Ogre
 
         if( usesCompute )
         {
-            // Check <anything> -> MipmapGen for mInputTexture
-            resolveTransition( mInputTexture, ResourceLayout::MipmapGen, ResourceAccess::ReadWrite, 0u );
+            if( mDefinition->mAutogenInputMipmaps )
+            {
+                // Check <anything> -> MipmapGen for mInputTexture
+                resolveTransition( mInputTexture, ResourceLayout::MipmapGen, ResourceAccess::ReadWrite,
+                                   0u );
+            }
+            else
+            {
+                resolveTransition( mInputTexture, ResourceLayout::Texture, ResourceAccess::Read,
+                                   1u << GPT_COMPUTE_PROGRAM );
+            }
 
             // Check <anything> -> UAV for mOutputTexture (we need to write to it).
             resolveTransition( mOutputTexture, ResourceLayout::Uav, ResourceAccess::Write,
@@ -448,11 +460,16 @@ namespace Ogre
         {
             if( mInputTexture != mOutputTexture )
             {
-                if( mOutputTexture->getNumMipmaps() > 1u )
+                if( mOutputTexture->getNumMipmaps() > 1u && mDefinition->mAutogenInputMipmaps )
                 {
                     // Check <anything> -> MipmapGen for mInputTexture
                     resolveTransition( mInputTexture, ResourceLayout::MipmapGen,
                                        ResourceAccess::ReadWrite, 0u );
+                }
+                else
+                {
+                    resolveTransition( mInputTexture, ResourceLayout::CopySrc, ResourceAccess::Read,
+                                       0u );
                 }
 
                 resolveTransition( mOutputTexture, ResourceLayout::CopyDst, ResourceAccess::Write, 0u );

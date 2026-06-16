@@ -122,10 +122,7 @@ Real ColourInterpolatorAffector2::getTimeAdjust( size_t index ) const
     return Mathlib::Get0( mTimeAdj[index] );
 }
 //-----------------------------------------------------------------------------------
-String ColourInterpolatorAffector2::getType() const
-{
-    return "ColourInterpolator";
-}
+String ColourInterpolatorAffector2::getType() const { return "ColourInterpolator"; }
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------

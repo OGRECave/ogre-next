@@ -83,7 +83,7 @@ namespace Ogre
             + PASS_COMPUTE (see CompositorPassComputeDef)
             + PASS_SHADOWS (see CompositorPassShadowsDef)
             + PASS_MIPMAP (see CompositorPassMipmapDef)
-            
+
         This class doesn't do much on its own. See the derived types for more information
         A definition is shared by all pass instantiations (i.e. Five CompositorPassScene can
         share the same CompositorPassSceneDef) and are assumed to remain const throughout
@@ -97,6 +97,9 @@ namespace Ogre
     class _OgreExport CompositorPassDef : public OgreAllocatedObj
     {
         CompositorPassType mPassType;
+        /// Used by PASS_CUSTOM to identify who created us. Required if there
+        /// are multiple compositor pass providers living together.
+        uint32 mCustomId;
 
         CompositorTargetDef *mParentTargetDef;
 
@@ -236,6 +239,7 @@ namespace Ogre
     public:
         CompositorPassDef( CompositorPassType passType, CompositorTargetDef *parentTargetDef ) :
             mPassType( passType ),
+            mCustomId( 0u ),
             mParentTargetDef( parentTargetDef ),
             mNumViewports( 1u ),
             mShadowMapIdx( ~0U ),
@@ -270,6 +274,9 @@ namespace Ogre
         void setAllClearColours( const ColourValue &clearValue );
         void setAllLoadActions( LoadAction::LoadAction loadAction );
         void setAllStoreActions( StoreAction::StoreAction storeAction );
+
+        void   _setCustomId( uint32 customId ) { mCustomId = customId; }
+        uint32 getCustomId() const { return mCustomId; }
 
         CompositorPassType         getType() const { return mPassType; }
         uint32                     getRtIndex() const;

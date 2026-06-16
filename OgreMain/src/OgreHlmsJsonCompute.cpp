@@ -551,9 +551,15 @@ namespace Ogre
                 itor = itJob->value.FindMember( "source" );
                 if( itor != itJob->value.MemberEnd() && itor->value.IsString() )
                 {
-                    HlmsComputeJob *job = hlmsCompute->createComputeJob(
-                        jobName, jobName, itor->value.GetString(), pieceFiles );
-                    loadJob( itJob->value, blocks, job, jobName, resourceGroup );
+                    try
+                    {
+                        HlmsComputeJob *job = hlmsCompute->createComputeJob(
+                            jobName, jobName, itor->value.GetString(), pieceFiles );
+                        loadJob( itJob->value, blocks, job, jobName, resourceGroup );
+                    }
+                    catch( Exception & )
+                    {
+                    }
                 }
             }
 

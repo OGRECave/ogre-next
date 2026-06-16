@@ -214,7 +214,7 @@ namespace Ogre
             }
         };
 
-        //#########################################################################
+        // #########################################################################
         //! base iterator class for UTFString
         class _OgreExport _base_iterator
             : public std::iterator<std::random_access_iterator_tag, value_type>
@@ -242,9 +242,9 @@ namespace Ogre
             UTFString        *mString;
         };
 
-        //#########################################################################
-        // FORWARD ITERATORS
-        //#########################################################################
+        // #########################################################################
+        //  FORWARD ITERATORS
+        // #########################################################################
         class _const_fwd_iterator;  // forward declaration
 
         //! forward iterator for UTFString
@@ -294,7 +294,7 @@ namespace Ogre
             int setCharacter( unicode_char uc );
         };
 
-        //#########################################################################
+        // #########################################################################
         //! const forward iterator for UTFString
         class _OgreExport _const_fwd_iterator : public _base_iterator
         { /* i don't know why the beautifier is freaking out on this line */
@@ -353,9 +353,9 @@ namespace Ogre
             friend bool operator>=( const _const_fwd_iterator &left, const _const_fwd_iterator &right );
         };
 
-        //#########################################################################
-        // REVERSE ITERATORS
-        //#########################################################################
+        // #########################################################################
+        //  REVERSE ITERATORS
+        // #########################################################################
         class _const_rev_iterator;  // forward declaration
         //! forward iterator for UTFString
         class _OgreExport _rev_iterator : public _base_iterator
@@ -392,7 +392,7 @@ namespace Ogre
             //! dereference at offset operator
             value_type &operator[]( difference_type n ) const;
         };
-        //#########################################################################
+        // #########################################################################
         //! const reverse iterator for UTFString
         class _OgreExport _const_rev_iterator : public _base_iterator
         { /* i don't know why the beautifier is freaking out on this line */
@@ -442,7 +442,7 @@ namespace Ogre
             //! greater than or equal
             friend bool operator>=( const _const_rev_iterator &left, const _const_rev_iterator &right );
         };
-        //#########################################################################
+        // #########################################################################
 
         typedef _fwd_iterator       iterator;                //!< iterator
         typedef _rev_iterator       reverse_iterator;        //!< reverse iterator

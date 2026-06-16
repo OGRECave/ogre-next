@@ -433,7 +433,7 @@ namespace Ogre
                     pDest = static_cast<void *>( static_cast<unsigned char *>( pDest ) +
                                                  ( vertexSize * uStep ) );
                 }  // u
-            }      // v
+            }  // v
         }
         //-----------------------------------------------------------------------
         void PatchSurface::subdivideCurve( void *lockedBuffer, size_t startIdx, size_t stepSize,

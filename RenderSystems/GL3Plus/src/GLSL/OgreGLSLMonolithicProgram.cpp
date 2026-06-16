@@ -536,7 +536,7 @@ namespace Ogre
                     }  // End switch
 
                 }  // Variability & mask
-            }      // fromProgType == currentUniform->mSourceProgType
+            }  // fromProgType == currentUniform->mSourceProgType
 
         }  // End for
     }

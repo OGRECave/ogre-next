@@ -146,6 +146,6 @@ namespace Ogre
     private:
         void _createNewWindow( String title, unsigned int widthPt, unsigned int heightPt );
     };
-}
+}  // namespace Ogre
 
 #endif  // __OSXCocoaWindow_H__

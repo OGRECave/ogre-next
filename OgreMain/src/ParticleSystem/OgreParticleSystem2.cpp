@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreException.h"
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
+#include "OgreLogManager.h"
 #include "OgreRoot.h"
 #include "OgreSceneManager.h"
 #include "ParticleSystem/OgreEmitter2.h"
@@ -165,10 +166,13 @@ ParticleSystemDef::~ParticleSystemDef()
                      "destroy() not called!" );
 }
 //-----------------------------------------------------------------------------
-uint32 ParticleSystemDef::getQuota() const
+void ParticleSystemDef::setRenderer( const String &typeName )
 {
-    return static_cast<uint32>( mActiveParticles.capacity() );
+    LogManager::getSingleton().logMessage( "WARNING: " + getName() +
+                                           " 'renderer' property not available (ignored) for v2 PFX." );
 }
+//-----------------------------------------------------------------------------
+uint32 ParticleSystemDef::getQuota() const { return static_cast<uint32>( mActiveParticles.capacity() ); }
 //-----------------------------------------------------------------------------
 ParticleSystemDef *ParticleSystemDef::clone( const String &newName, ParticleSystemManager2 *dstManager )
 {
@@ -305,10 +309,7 @@ void ParticleSystemDef::_destroy( VaoManager *vaoManager )
     mAffectors.clear();
 }
 //-----------------------------------------------------------------------------
-bool ParticleSystemDef::isInitialized() const
-{
-    return mParticleCpuData.mPosition != nullptr;
-}
+bool ParticleSystemDef::isInitialized() const { return mParticleCpuData.mPosition != nullptr; }
 //-----------------------------------------------------------------------------
 void ParticleSystemDef::setParticleQuota( size_t quota )
 {
@@ -357,25 +358,16 @@ void ParticleSystemDef::setCommonDirection( const Vector3 &vec )
     setCommonVectors( vec, mCommonUpVector );
 }
 //-----------------------------------------------------------------------------
-const Vector3 &ParticleSystemDef::getCommonDirection() const
-{
-    return mCommonDirection;
-}
+const Vector3 &ParticleSystemDef::getCommonDirection() const { return mCommonDirection; }
 //-----------------------------------------------------------------------------
 void ParticleSystemDef::setCommonUpVector( const Vector3 &vec )
 {
     setCommonVectors( mCommonDirection, vec );
 }
 //-----------------------------------------------------------------------------
-const Vector3 &ParticleSystemDef::getCommonUpVector() const
-{
-    return mCommonUpVector;
-}
+const Vector3 &ParticleSystemDef::getCommonUpVector() const { return mCommonUpVector; }
 //-----------------------------------------------------------------------------
-void ParticleSystemDef::reserveNumEmitters( size_t numEmitters )
-{
-    mEmitters.reserve( numEmitters );
-}
+void ParticleSystemDef::reserveNumEmitters( size_t numEmitters ) { mEmitters.reserve( numEmitters ); }
 //-----------------------------------------------------------------------------
 EmitterDefData *ParticleSystemDef::addEmitter( IdString name )
 {
@@ -384,10 +376,7 @@ EmitterDefData *ParticleSystemDef::addEmitter( IdString name )
     return mEmitters.back();
 }
 //-----------------------------------------------------------------------------
-size_t ParticleSystemDef::getNumEmitters() const
-{
-    return mEmitters.size();
-}
+size_t ParticleSystemDef::getNumEmitters() const { return mEmitters.size(); }
 //-----------------------------------------------------------------------------
 void ParticleSystemDef::reserveNumAffectors( size_t numAffectors )
 {
@@ -406,10 +395,7 @@ ParticleAffector2 *ParticleSystemDef::addAffector( IdString name )
     return newAffector;
 }
 //-----------------------------------------------------------------------------
-size_t ParticleSystemDef::getNumAffectors() const
-{
-    return mAffectors.size();
-}
+size_t ParticleSystemDef::getNumAffectors() const { return mAffectors.size(); }
 //-----------------------------------------------------------------------------
 ParticleSystem2 *ParticleSystemDef::_createParticleSystem( ObjectMemoryManager *objectMemoryManager )
 {
@@ -588,11 +574,11 @@ void ParticleSystemDef::deallocParticle( uint32 handle )
             if( firstSet == mActiveParticles.capacity() )
             {
                 // No active particles in [mFirstParticleIdx; capacity)
-                // We need to shrink mLastParticleIdx by searching [0; mLastParticleIdx)
+                // We need to shrink mLastParticleIdx by searching [0; lastParticleIdxWrapped)
                 OGRE_ASSERT_HIGH( mActiveParticles.empty() );
                 mFirstParticleIdx = 0u;
-                mLastParticleIdx =
-                    static_cast<uint32>( mActiveParticles.findLastBitSetPlusOne( mLastParticleIdx ) );
+                mLastParticleIdx = static_cast<uint32>(
+                    mActiveParticles.findLastBitSetPlusOne( lastParticleIdxWrapped ) );
                 OGRE_ASSERT_MEDIUM( mLastParticleIdx != 0u || mActiveParticles.empty() );
             }
             else
@@ -663,10 +649,7 @@ void ParticleSystemDef::cloneTo( ParticleSystemDef *toClone )
     }
 }
 //-----------------------------------------------------------------------------
-ParticleType::ParticleType ParticleSystemDef::getParticleType() const
-{
-    return mParticleType;
-}
+ParticleType::ParticleType ParticleSystemDef::getParticleType() const { return mParticleType; }
 //-----------------------------------------------------------------------------
 void ParticleSystemDef::_notifyAttached( Node *parent )
 {
@@ -729,10 +712,7 @@ const String &ParticleSystem2::getMovableType() const
 //-----------------------------------------------------------------------------
 const String ParticleSystem2Factory::FACTORY_TYPE_NAME = "ParticleSystem2";
 //-----------------------------------------------------------------------------
-const String &ParticleSystem2Factory::getType() const
-{
-    return FACTORY_TYPE_NAME;
-}
+const String &ParticleSystem2Factory::getType() const { return FACTORY_TYPE_NAME; }
 //-----------------------------------------------------------------------------
 MovableObject *ParticleSystem2Factory::createInstanceImpl( IdType id,
                                                            ObjectMemoryManager *objectMemoryManager,

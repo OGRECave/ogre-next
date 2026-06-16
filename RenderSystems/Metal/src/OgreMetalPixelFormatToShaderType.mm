@@ -264,4 +264,4 @@ namespace Ogre
             return c_dataTypes[dataTypeIdx];
         }
     }
-}
+}  // namespace Ogre

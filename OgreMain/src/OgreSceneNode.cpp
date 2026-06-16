@@ -372,37 +372,29 @@ namespace Ogre
 
         const bool inheritOrientation = mTransform.mInheritOrientation[mTransform.mIndex];
 
-        // Transform target direction to world space
+        // Transform target direction to parent space
         switch( relativeTo )
         {
         case TS_PARENT:
-            if( inheritOrientation )
-            {
-                if( mParent )
-                {
-                    targetDir = mParent->_getDerivedOrientation() * targetDir;
-                }
-            }
+            // default orientation
             break;
         case TS_LOCAL:
-            targetDir = _getDerivedOrientation() * targetDir;
+            targetDir = mTransform.mOrientation->getAsQuaternion( mTransform.mIndex ) * targetDir;
             break;
         case TS_WORLD:
-            // default orientation
+            if( inheritOrientation && mParent )
+            {
+                targetDir = mParent->_getDerivedOrientation().UnitInverse() * targetDir;
+            }
             break;
         }
 
-        // Calculate target orientation relative to world space
+        // Calculate target orientation relative to parent space
         Quaternion targetOrientation;
         if( mYawFixed )
         {
             // Calculate the quaternion for rotate local Z to target direction
             Vector3 yawAxis = mYawFixedAxis;
-
-            if( inheritOrientation && mParent )
-            {
-                yawAxis = mParent->_getDerivedOrientation() * yawAxis;
-            }
 
             Vector3 xVec = yawAxis.crossProduct( targetDir );
             xVec.normalise();
@@ -425,9 +417,10 @@ namespace Ogre
         }
         else
         {
-            const Quaternion &currentOrient = _getDerivedOrientation();
+            const Quaternion &currentOrient =
+                mTransform.mOrientation->getAsQuaternion( mTransform.mIndex );
 
-            // Get current local direction relative to world space
+            // Get current local direction relative to parent space
             Vector3 currentDir = currentOrient * localDirectionVector;
 
             if( ( currentDir + targetDir ).squaredLength() < 0.00005f )
@@ -445,11 +438,8 @@ namespace Ogre
             }
         }
 
-        // Set target orientation, transformed to parent space
-        if( mParent && inheritOrientation )
-            setOrientation( mParent->_getDerivedOrientation().UnitInverse() * targetOrientation );
-        else
-            setOrientation( targetOrientation );
+        // Set target orientation in parent space
+        setOrientation( targetOrientation );
     }
     //-----------------------------------------------------------------------
     void SceneNode::lookAt( const Vector3 &targetPoint, TransformSpace relativeTo,

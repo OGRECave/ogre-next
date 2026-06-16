@@ -77,9 +77,7 @@ namespace Ogre
         @par
             The subclass must have called it's own createParamDictionary before calling this method.
         */
-        void addBaseParameters()
-        { /* actually do nothing - for future possible use */
-        }
+        void addBaseParameters() { /* actually do nothing - for future possible use */ }
 
         ParticleSystem *mParent;
 

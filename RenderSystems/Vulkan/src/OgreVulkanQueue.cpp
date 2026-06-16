@@ -459,6 +459,23 @@ namespace Ogre
             imageMemBarrier.newLayout = vkTexture->mNextLayout;
             OGRE_ASSERT_LOW( imageMemBarrier.newLayout != VK_IMAGE_LAYOUT_UNDEFINED &&
                              imageMemBarrier.newLayout != VK_IMAGE_LAYOUT_PREINITIALIZED );
+
+            if( imageMemBarrier.newLayout == VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ||
+                imageMemBarrier.newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL ||
+                imageMemBarrier.newLayout == VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL ||
+                imageMemBarrier.newLayout == VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL )
+            {
+                // We know for certain it won't be used for shader access.
+                // Validation Layers may(*) complain the flag is incompatible with
+                // VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT & co. Strip it.
+                //
+                // (*) It "may" (not "will") because if dstStage in endCopyEncoder() ends up including
+                // VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT for other reasons, then the flag
+                // combination is valid. However there's a chance it won't (e.g. Refractions sample
+                // using texture_copy pass triggers this).
+                imageMemBarrier.dstAccessMask &= (VkAccessFlags)~VK_ACCESS_SHADER_READ_BIT;
+            }
+
             mImageMemBarriers.push_back( imageMemBarrier );
             mImageMemBarrierPtrs.push_back( vkTexture );
         }

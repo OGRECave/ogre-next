@@ -129,8 +129,16 @@ For a list of samples and their demonstrated features, refer to the [samples sec
 Debian-based. Run:
 
 ```
-sudo apt-get install libfreetype6-dev libfreeimage-dev libzzip-dev libxrandr-dev libxaw7-dev freeglut3-dev libgl1-mesa-dev libglu1-mesa-dev libx11-xcb-dev libxcb-keysyms1-dev doxygen graphviz python-clang libsdl2-dev cmake ninja-build git
+sudo apt-get install libfreetype6-dev libfreeimage-dev libzzip-dev libxrandr-dev libxaw7-dev freeglut3-dev libgl1-mesa-dev libglu1-mesa-dev libxcb-randr0-dev libx11-xcb-dev libxcb-keysyms1-dev doxygen graphviz python3-clang libsdl2-dev cmake ninja-build git
 ```
+
+If you wish to build Material Editor, you will also need wxWidgets:
+
+```
+sudo apt install libwxgtk3.2-dev libgtk-3-dev
+```
+
+Note that "libwxgtk3.2" may be a different version (e.g. 3.1, 3.3) depending on the distro.
 
 Arch-based Run:
 

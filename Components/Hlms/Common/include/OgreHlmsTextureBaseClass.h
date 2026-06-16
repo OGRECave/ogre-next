@@ -94,9 +94,9 @@ namespace Ogre
         void updateDescriptorSets( bool textureSetDirty, bool samplerSetDirty );
 
         /// Expects caller to call flushRenderables if we return true.
-        virtual bool bakeTextures( bool hasSeparateSamplers );
+        virtual void bakeTextures( bool hasSeparateSamplers );
         /// Expects caller to call flushRenderables if we return true.
-        bool bakeSamplers();
+        void bakeSamplers();
 
         void cloneImpl( HlmsDatablock *datablock ) const override;
 

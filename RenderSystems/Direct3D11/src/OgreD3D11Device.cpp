@@ -29,8 +29,8 @@ THE SOFTWARE.
 
 #include "OgreException.h"
 
-//#include <dxgi1_3.h> // for DXGIGetDebugInterface1
-//#include <dxgidebug.h> // for IDXGIDebug1
+// #include <dxgi1_3.h> // for DXGIGetDebugInterface1
+// #include <dxgidebug.h> // for IDXGIDebug1
 
 #include "ogrestd/vector.h"
 

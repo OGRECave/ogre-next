@@ -39,10 +39,7 @@ THE SOFTWARE.
 #    pragma GCC diagnostic ignored "-Wclass-memaccess"
 
 inline void *silent_memset( void *a, int b, size_t c ) noexcept __nonnull( ( 1 ) );
-inline void *silent_memset( void *a, int b, size_t c ) noexcept
-{
-    return memset( a, b, c );
-}
+inline void *silent_memset( void *a, int b, size_t c ) noexcept { return memset( a, b, c ); }
 
 inline void *silent_memcpy( void *__restrict __dest, const void *__restrict __src, size_t __n ) noexcept
     __nonnull( ( 1, 2 ) );

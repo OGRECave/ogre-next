@@ -176,6 +176,6 @@ namespace Ogre
 
         String mShaderReflectionPairHint;
     };
-}
+}  // namespace Ogre
 
 #endif  // __MetalProgram_H__

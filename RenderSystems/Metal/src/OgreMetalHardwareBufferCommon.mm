@@ -324,5 +324,5 @@ namespace Ogre
                 srcBuffer->unlockImpl( srcOffset, length );
             }
         }
-    }
-}
+    }  // namespace v1
+}  // namespace Ogre

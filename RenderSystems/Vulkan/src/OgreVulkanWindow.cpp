@@ -191,6 +191,10 @@ namespace Ogre
         mSwapchainStatus( SwapchainReleased ),
         mRebuildingSwapchain( false ),
         mSuboptimal( false )
+#ifdef OGRE_PLATFORM_ANDROID
+        ,
+        mNativeWindowChangeRequested( false )
+#endif
     {
         mFocused = true;
     }
@@ -207,6 +211,12 @@ namespace Ogre
     {
         if( pass == 0 )
         {
+            // TODO: We could end up here with mWindowReleaseRequested = true. If so, we should call
+            // flushAndroidSurfaceRequests(). But if the last request ended up in "release", then
+            // there are no surfaces/swapchains to create and the whole restoration sequence
+            // will break down. Perhaps the solution is to not attempt to restore the device while
+            // there are pending release requests? Delay device restoration until a new surface has been
+            // submitted?
             createSurface();
             createSwapchain();
         }
@@ -298,6 +308,7 @@ namespace Ogre
     {
         if( mDevice->isDeviceLost() )  // notifyDeviceRestored() will call us again
             return;
+        OGRE_ANDROID_SURFACE_PREVENT_USE;
 
         mSuboptimal = false;
 
@@ -550,6 +561,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanWindowSwapChainBased::destroySwapchain( bool finalDestruction )
     {
+        OGRE_ANDROID_SURFACE_LOCK;
         mDevice->mRenderSystem->notifySwapchainDestroyed( this );
 
         if( mSwapchainSemaphore )
@@ -604,6 +616,10 @@ namespace Ogre
     {
         OGRE_ASSERT_LOW( mSwapchainStatus == SwapchainReleased );
         OGRE_ASSERT_MEDIUM( !mSwapchainSemaphore );
+
+        // We may end up here because mWindowReleaseRequested = true and Vulkan returned
+        // VK_ERROR_OUT_OF_DATE_KHR. Thus we must avoid acquiring another swapchain.
+        OGRE_ANDROID_SURFACE_PREVENT_USE;
 
         VulkanVaoManager *vaoManager = mDevice->mVaoManager;
 
@@ -695,6 +711,10 @@ namespace Ogre
 
         mVSync = vSync;
 
+        // If mWindowReleaseRequested = true, then the swapchain will soon be recreated.
+        // Don't do it right now because we need to recreate the surface as well.
+        OGRE_ANDROID_SURFACE_PREVENT_USE;
+
         destroySwapchain();
         createSwapchain();
     }
@@ -705,6 +725,10 @@ namespace Ogre
             return;
 
         mCanDownloadData = bWantsToDownload;
+
+        // If mWindowReleaseRequested = true, then the swapchain will soon be recreated.
+        // Don't do it right now because we need to recreate the surface as well.
+        OGRE_ANDROID_SURFACE_PREVENT_USE;
 
         destroySwapchain();
         createSwapchain();

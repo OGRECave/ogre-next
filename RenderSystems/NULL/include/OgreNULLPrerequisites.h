@@ -74,4 +74,4 @@ namespace Ogre
 #    define _OgreNULLExport
 #endif
 
-#endif  //#ifndef _OgreNULLPrerequisites_H_
+#endif  // #ifndef _OgreNULLPrerequisites_H_

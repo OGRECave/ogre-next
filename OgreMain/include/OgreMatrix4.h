@@ -31,7 +31,7 @@ THE SOFTWARE.
 // Precompiler options
 #include "OgrePrerequisites.h"
 
-//#include "Math/Array/OgreArrayConfig.h"
+// #include "Math/Array/OgreArrayConfig.h"
 
 #include "OgreMatrix3.h"
 #include "OgrePlane.h"
@@ -257,7 +257,7 @@ namespace Ogre
 
             return r;
         }
-        //#endif
+        // #endif
 
         /** Matrix concatenation using '*'.
          */

@@ -572,6 +572,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::loadPipelineCache( DataStreamPtr stream )
     {
+#ifdef OGRE_VK_WORKAROUND_BROKEN_VKPIPELINECACHE
+        if( Workarounds::mBrokenVkPipelineCache )
+            return;
+#endif
         if( stream && stream->size() > sizeof( PipelineCachePrefixHeader ) )
         {
             std::vector<unsigned char> buf;  // PipelineCachePrefixHeader + payload
@@ -631,6 +635,11 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::savePipelineCache( DataStreamPtr stream ) const
     {
+#ifdef OGRE_VK_WORKAROUND_BROKEN_VKPIPELINECACHE
+        if( Workarounds::mBrokenVkPipelineCache )
+            return;
+#endif
+
         OGRE_STATIC_ASSERT( sizeof( PipelineCachePrefixHeader ) == 48 );
         if( mDevice->mPipelineCache )
         {
@@ -639,12 +648,78 @@ namespace Ogre
                 vkGetPipelineCacheData( mDevice->mDevice, mDevice->mPipelineCache, &size, nullptr );
             if( result == VK_SUCCESS && size > 0 && size <= 0x7FFFFFFF )
             {
+                int attempts = 0;
                 std::vector<unsigned char> buf;  // PipelineCachePrefixHeader + payload
                 do
                 {
                     buf.resize( sizeof( PipelineCachePrefixHeader ) + size );
+                    const size_t oldSize = size;
                     result = vkGetPipelineCacheData( mDevice->mDevice, mDevice->mPipelineCache, &size,
                                                      buf.data() + sizeof( PipelineCachePrefixHeader ) );
+
+                    if( result == VK_INCOMPLETE )
+                    {
+                        LogManager::getSingleton().logMessage(
+                            "VulkanRenderSystem::savePipelineCache: Driver returned unexpected "
+                            "VK_INCOMPLETE. Retrying... (capacity = " +
+                                StringConverter::toString( oldSize ) +
+                                " data_written = " + StringConverter::toString( size ) + ")",
+                            LML_CRITICAL );
+
+                        // We can end up here if we (or the driver?) were still compiling in parallel.
+                        // "size" contains the data that was just written. We need to know how much
+                        // data to write instead or else we'll get stuck in an infinite loop.
+                        //
+                        // Additionally, Qualcomm driver 512.415.0.0 is known to get permanently stuck
+                        // in VK_INCOMPLETE if we call vkGetPipelineCacheData too close to the last PSO
+                        // creation.
+                        result = vkGetPipelineCacheData( mDevice->mDevice, mDevice->mPipelineCache,
+                                                         &size, nullptr );
+                        if( result == VK_SUCCESS && size > 0u )
+                        {
+                            // Set to VK_INCOMPLETE so we can loop again.
+                            result = VK_INCOMPLETE;
+
+                            if( oldSize == size )
+                            {
+                                // Qualcomm driver 512.415.0.0 can hit this.
+                                LogManager::getSingleton().logMessage(
+                                    "VulkanRenderSystem::savePipelineCache: Buggy implementation. "
+                                    "Aborting.",
+                                    LML_CRITICAL );
+                                result = VK_ERROR_UNKNOWN;
+                            }
+
+                            ++attempts;
+                            if( attempts > 5 )
+                            {
+                                // Give up. Consider the driver to either be broken or stuck.
+                                result = VK_ERROR_UNKNOWN;
+                                LogManager::getSingleton().logMessage(
+                                    "VulkanRenderSystem::savePipelineCache: Driver returned unexpected "
+                                    "VK_INCOMPLETE too many times. Aborting.",
+                                    LML_CRITICAL );
+                            }
+                            else if( attempts > 1 )
+                            {
+                                // After the 2nd attempt, give some time for threads to catch up.
+                                // Not too much time or else we'll get ANRs on Android.
+                                Threads::Sleep( 5 );
+                            }
+                        }
+                        else
+                        {
+                            LogManager::getSingleton().logMessage(
+                                "VulkanRenderSystem::savePipelineCache: Driver returned unexpected "
+                                "VK_INCOMPLETE and then failure. Aborting.",
+                                LML_CRITICAL );
+
+                            // Failure? That's weird. Make sure we get out of the
+                            // loop AND we don't save this weird cache to disk.
+                            if( result == VK_INCOMPLETE || size == 0u )
+                                result = VK_ERROR_UNKNOWN;
+                        }
+                    }
                 } while( result == VK_INCOMPLETE );
 
                 if( result == VK_SUCCESS && size > 0 && size <= 0x7FFFFFFF )
@@ -674,8 +749,10 @@ namespace Ogre
                 }
             }
             if( result != VK_SUCCESS )
+            {
                 LogManager::getSingleton().logMessage( "Vulkan: Pipeline cache not saved. VkResult = " +
                                                        vkResultToString( result ) );
+            }
         }
     }
     //-------------------------------------------------------------------------
@@ -963,11 +1040,15 @@ namespace Ogre
                 0x5040001,  // 540
 
                 0x6010000,  // 610
+                0x6010001,  // 610.1
                 0x6010200,  // 612
+                0x6010201,  // 612.1
                 0x6010501,  // 615
                 0x6010600,  // 616
                 0x6010800,  // 618
                 0x6010900,  // 619
+                0x6010901,  // 619.1
+                0x6010902,  // 619.2
                 0x6020001,  // 620
                 0x6030001,  // 630
                 0x6040001,  // 640
@@ -1661,9 +1742,9 @@ namespace Ogre
 
         if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] != writeDescSet )
         {
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] = 0;
             mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] = 0;
             mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = writeDescSet;
-            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] = 0;
             mGlobalTable.dirtyBakedTextures = true;
             mTableDirty = true;
         }
@@ -1726,7 +1807,7 @@ namespace Ogre
             mComputeTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] = 0;
             mComputeTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] = 0;
             mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = &vulkanSet->mWriteDescSet;
-            mComputeTable.dirtyBakedSamplers = true;
+            mComputeTable.dirtyBakedTextures = true;
             mComputeTableDirty = true;
         }
     }
@@ -1745,7 +1826,7 @@ namespace Ogre
                 &vulkanSet->mWriteDescSets[1];
             mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] =
                 &vulkanSet->mWriteDescSets[2];
-            mComputeTable.dirtyBakedSamplers = true;
+            mComputeTable.dirtyBakedTextures = true;
             mComputeTableDirty = true;
         }
     }
@@ -3644,6 +3725,20 @@ namespace Ogre
         OGRE_ASSERT_LOW( set->mRsData );
         VulkanDescriptorSetTexture *vulkanSet =
             static_cast<VulkanDescriptorSetTexture *>( set->mRsData );
+        if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] ==
+            &vulkanSet->mWriteDescSet )
+        {
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = 0;
+            mGlobalTable.dirtyBakedTextures = true;
+            mTableDirty = true;
+        }
+        if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] ==
+            &vulkanSet->mWriteDescSet )
+        {
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = 0;
+            mComputeTable.dirtyBakedTextures = true;
+            mComputeTableDirty = true;
+        }
         delete vulkanSet;
         set->mRsData = 0;
     }
@@ -3659,6 +3754,24 @@ namespace Ogre
         OGRE_ASSERT_LOW( set->mRsData );
         VulkanDescriptorSetTexture2 *vulkanSet =
             static_cast<VulkanDescriptorSetTexture2 *>( set->mRsData );
+        if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] ==
+            &vulkanSet->mWriteDescSets[0] )
+        {
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] = 0;
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] = 0;
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = 0;
+            mGlobalTable.dirtyBakedTextures = true;
+            mTableDirty = true;
+        }
+        if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] ==
+            &vulkanSet->mWriteDescSets[0] )
+        {
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] = 0;
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] = 0;
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = 0;
+            mComputeTable.dirtyBakedTextures = true;
+            mComputeTableDirty = true;
+        }
         vulkanSet->destroy( mVaoManager, mDevice->mDevice, *set );
         delete vulkanSet;
         set->mRsData = 0;
@@ -3675,6 +3788,20 @@ namespace Ogre
         OGRE_ASSERT_LOW( set->mRsData );
         VulkanDescriptorSetSampler *vulkanSet =
             static_cast<VulkanDescriptorSetSampler *>( set->mRsData );
+        if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Samplers] ==
+            &vulkanSet->mWriteDescSet )
+        {
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Samplers] = &vulkanSet->mWriteDescSet;
+            mGlobalTable.dirtyBakedSamplers = true;
+            mTableDirty = true;
+        }
+        if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Samplers] ==
+            &vulkanSet->mWriteDescSet )
+        {
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Samplers] = 0;
+            mComputeTable.dirtyBakedSamplers = true;
+            mComputeTableDirty = true;
+        }
         delete vulkanSet;
         set->mRsData = 0;
     }
@@ -3690,6 +3817,27 @@ namespace Ogre
         OGRE_ASSERT_LOW( set->mRsData );
 
         VulkanDescriptorSetUav *vulkanSet = reinterpret_cast<VulkanDescriptorSetUav *>( set->mRsData );
+        if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] ==
+            &vulkanSet->mWriteDescSets[0] )
+        {
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] = 0;
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavTextures] = 0;
+            mGlobalTable.dirtyBakedUavs = true;
+            mTableDirty = true;
+        }
+        if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] ==
+            &vulkanSet->mWriteDescSets[0] )
+        {
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] = 0;
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::UavTextures] = 0;
+            mComputeTable.dirtyBakedUavs = true;
+            mComputeTableDirty = true;
+        }
+        if( mUavRenderingDescSet && mUavRenderingDescSet->mRsData == set->mRsData )
+        {
+            mUavRenderingDescSet = 0;
+            mUavRenderingDirty = true;
+        }
         vulkanSet->destroy( *set );
         delete vulkanSet;
 

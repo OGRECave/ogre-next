@@ -35,6 +35,23 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+#ifdef OGRE_PLATFORM_ANDROID
+#    define OGRE_ANDROID_SURFACE_LOCK \
+        std::lock_guard<std::recursive_mutex> androidLock( mAndroidSurfaceMutex )
+#    define OGRE_ANDROID_SURFACE_PREVENT_USE \
+        std::lock_guard<std::recursive_mutex> androidLock( mAndroidSurfaceMutex ); \
+        if( mNativeWindowChangeRequested ) \
+        { \
+            LogManager::getSingleton().logMessage( \
+                "[VulkanWindow*] Preventing surface access due to requested change." ); \
+            return; \
+        } \
+        void()
+#else
+#    define OGRE_ANDROID_SURFACE_LOCK void()
+#    define OGRE_ANDROID_SURFACE_PREVENT_USE void()
+#endif
+
     OGRE_ASSUME_NONNULL_BEGIN
 
     class VulkanWindow : public Window
@@ -111,6 +128,23 @@ namespace Ogre
         SwapchainStatus mSwapchainStatus;
         bool mRebuildingSwapchain;
         bool mSuboptimal;
+
+#ifdef OGRE_PLATFORM_ANDROID
+        // A bit ugly but here goes: Android will trigger ANRs if we spend too much in
+        // onSurfaceDestroyed. Our original solution was to wait for the render thread to
+        // be done rendering and release the surface, then return from onSurfaceDestroyed.
+        //
+        // However this causes ANRs higher than Google's threshold on slow phones, so the solution is to
+        // release the surface asynchronously and return from onSurfaceDestroyed immediately. Once we get
+        // a release request, we must not use the surface again.
+        //
+        // To avoid placing virtuals anywhere, this code is injected into VulkanWindowSwapChainBased
+        // using compile-time macros instead of moving everything to VulkanAndroidWindow.
+        //
+        // Old drivers crash when we do this, so we use OGRE_VK_WORKAROUND_SYNC_WINDOW_INIT for them.
+        std::recursive_mutex mAndroidSurfaceMutex;
+        bool mNativeWindowChangeRequested;  // GUARDED_BY( mAndroidSurfaceMutex )
+#endif
 
         void parseSharedParams( const NameValuePairList *miscParams );
 

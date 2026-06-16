@@ -113,7 +113,10 @@ namespace Ogre
             if( (FREE_IMAGE_FORMAT)i == FIF_DDS )
                 continue;
 
-            String exts( FreeImage_GetFIFExtensionList( (FREE_IMAGE_FORMAT)i ) );
+            const char *exts = FreeImage_GetFIFExtensionList( (FREE_IMAGE_FORMAT)i );
+            if( !exts )
+                continue;
+
             if( !first )
             {
                 strExt << ",";

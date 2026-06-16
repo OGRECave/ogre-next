@@ -58,7 +58,7 @@ namespace Ogre
         /// Enum describing the different CPU features we want to check for, platform-dependent
         enum CpuFeatures
         {
-// clang-format off
+        // clang-format off
 #if OGRE_CPU == OGRE_CPU_X86
             CPU_FEATURE_SSE         = 1 << 0,
             CPU_FEATURE_SSE2        = 1 << 1,

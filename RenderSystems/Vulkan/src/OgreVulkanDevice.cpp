@@ -777,11 +777,51 @@ namespace Ogre
 
         initQueues();
 
-        // initial pipeline cache
-        VkPipelineCacheCreateInfo pipelineCacheCreateInfo;
-        makeVkStruct( pipelineCacheCreateInfo, VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO );
-        result = vkCreatePipelineCache( mDevice, &pipelineCacheCreateInfo, nullptr, &mPipelineCache );
-        checkVkResult( this, result, "vkCreatePipelineCache" );
+#ifdef OGRE_VK_WORKAROUND_BROKEN_VKPIPELINECACHE
+        if( mDeviceProperties.vendorID == 0x1010 )
+        {
+            // GPU_IMGTEC / PowerVR.
+            // Just assume they are all broken until we have more info.
+            Workarounds::mBrokenVkPipelineCache = true;
+            // For what is worth (also it's more likely to be driver version dependant than device ID):
+            // PowerVR Rogue GE8100
+            // 0x22021016u,
+            // PowerVR Rogue GE8300
+            // 0x22054030u,
+            // PowerVR Rogue GE8300
+            // 0x22054038u,
+            // PowerVR Rogue GE8320
+            // 0x22104018u,
+            // PowerVR Rogue GE8322
+            // 0x22104218u,
+            // PowerVR Rogue GM9446
+            // 0x24208504u
+            // This is further more mysterious: LENOVO Lenovo TB-X6C6X (GE8320):
+            // https://vulkan.gpuinfo.org/displayreport.php?id=19080
+            // Samsung SM-A045M (GE8320):
+            // https://vulkan.gpuinfo.org/displayreport.php?id=30570#properties
+            //
+            // Are extremely similar, notably different on:
+            //  1. Android version (12 vs 14).
+            //  2. The last 5 bytes of pipelineCacheUUID.
+            //  3. A045M has VK_EXT_swapchain_maintenance1 extension.
+            //  4. Available VRAM.
+            //
+            // The Lenovo one is broken, Samsung one is fine.
+        }
+#endif
+
+#ifdef OGRE_VK_WORKAROUND_BROKEN_VKPIPELINECACHE
+        if( !Workarounds::mBrokenVkPipelineCache )
+#endif
+        {
+            // initial pipeline cache
+            VkPipelineCacheCreateInfo pipelineCacheCreateInfo;
+            makeVkStruct( pipelineCacheCreateInfo, VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO );
+            result =
+                vkCreatePipelineCache( mDevice, &pipelineCacheCreateInfo, nullptr, &mPipelineCache );
+            checkVkResult( this, result, "vkCreatePipelineCache" );
+        }
 
         // debug utils
         initUtils( mDevice );

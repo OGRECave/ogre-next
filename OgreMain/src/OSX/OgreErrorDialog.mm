@@ -31,9 +31,7 @@ THE SOFTWARE.
 
 using namespace Ogre;
 
-ErrorDialog::ErrorDialog()
-{
-}
+ErrorDialog::ErrorDialog() {}
 
 void ErrorDialog::display( const String &errorMessage, String logName )
 {
@@ -45,7 +43,7 @@ void ErrorDialog::display( const String &errorMessage, String logName )
         NSAlert *alert = [[NSAlert alloc] init];
 
         [alert setMessageText:@"An error has occurred!"];
-        [alert setAlertStyle: NSAlertStyleCritical];
+        [alert setAlertStyle:NSAlertStyleCritical];
         [alert setInformativeText:[NSString stringWithCString:errorMessage.c_str()
                                                      encoding:NSASCIIStringEncoding]];
         [alert runModal];

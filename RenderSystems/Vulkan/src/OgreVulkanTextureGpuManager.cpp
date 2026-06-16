@@ -573,7 +573,8 @@ namespace Ogre
 
         if( textureFlags & TextureFlags::AllowAutomipmaps )
         {
-            features |= VK_FORMAT_FEATURE_BLIT_SRC_BIT | VK_FORMAT_FEATURE_BLIT_DST_BIT;
+            features |= VK_FORMAT_FEATURE_BLIT_SRC_BIT | VK_FORMAT_FEATURE_BLIT_DST_BIT |
+                        VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
             if( !PixelFormatGpuUtils::supportsHwMipmaps( format ) )
                 return false;
         }

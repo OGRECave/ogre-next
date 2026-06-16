@@ -48,6 +48,6 @@ namespace Ogre
         Root::getSingleton().uninstallPlugin( plugin );
         OGRE_DELETE plugin;
     }
-}
+}  // namespace Ogre
 
 #endif

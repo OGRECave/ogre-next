@@ -80,8 +80,8 @@ THE SOFTWARE.
 #    endif
 #endif
 
-//#define OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD 1
-//#define OGRE_DEBUG_MEMORY_CONSUMPTION 1
+// #define OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD 1
+// #define OGRE_DEBUG_MEMORY_CONSUMPTION 1
 
 #define TODO_grow_pool
 
@@ -316,6 +316,7 @@ namespace Ogre
         while( itor != endt )
         {
             const ResourceEntry &entry = itor->second;
+            entry.texture->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
             delete entry.texture;
             ++itor;
         }

@@ -121,7 +121,7 @@ namespace Ogre
         v1::HardwareIndexBuffer::IndexType indexType = indexBuffer->getType();
         v1::HardwareIndexBuffer::IndexType newIndexType = minimalIndexType();
         v1::HardwareIndexBufferSharedPtr   newIndexBuffer = pHWBufferManager->createIndexBuffer(
-              newIndexType, indexCount, indexBuffer->getUsage(), indexBuffer->hasShadowBuffer() );
+            newIndexType, indexCount, indexBuffer->getUsage(), indexBuffer->hasShadowBuffer() );
 
         v1::HardwareBufferLockGuard srcLock(
             indexBuffer, indexData->indexStart * indexBuffer->getIndexSize(),

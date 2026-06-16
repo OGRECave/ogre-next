@@ -20,6 +20,7 @@ else()
 endif()
 
 set(INST_FILES
+  Packages/FindDearImgui.cmake
   Packages/FindRapidjson.cmake
   Packages/FindRemotery.cmake
   Packages/FindSDL2.cmake

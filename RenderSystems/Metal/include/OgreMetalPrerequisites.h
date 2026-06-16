@@ -97,4 +97,4 @@ namespace Ogre
 #    define _OgreMetalExport
 #endif
 
-#endif  //#ifndef _OgreMetalPrerequisites_H_
+#endif  // #ifndef _OgreMetalPrerequisites_H_

@@ -50,6 +50,8 @@ THE SOFTWARE.
 #    include "swappy/swappyVk.h"
 #endif
 
+#include <android/log.h>
+
 namespace Ogre
 {
 #ifdef OGRE_VULKAN_USE_SWAPPY
@@ -212,6 +214,7 @@ namespace Ogre
 
     void VulkanAndroidWindow::windowMovedOrResized()
     {
+        OGRE_ANDROID_SURFACE_PREVENT_USE;
         if( mClosed || !mNativeWindow )
             return;
 
@@ -310,6 +313,7 @@ namespace Ogre
 #ifdef OGRE_VULKAN_USE_SWAPPY
     void VulkanAndroidWindow::_notifySwappyToggled()
     {
+        OGRE_ANDROID_SURFACE_PREVENT_USE;
         if( !mDevice->mRenderSystem->getSwappyFramePacing() )
         {
             // Disabling
@@ -344,10 +348,20 @@ namespace Ogre
         if( mNativeWindow != nativeWindow )
         {
             if( mNativeWindow )
+            {
                 ANativeWindow_release( mNativeWindow );
+                __android_log_print( ANDROID_LOG_VERBOSE, "OgreSamples",
+                                     "[ANativeWindow][RELEASE][setNativeWindow] %#llx",
+                                     (unsigned long long)(void *)mNativeWindow );
+            }
             mNativeWindow = nativeWindow;
             if( mNativeWindow )
+            {
                 ANativeWindow_acquire( mNativeWindow );
+                __android_log_print( ANDROID_LOG_VERBOSE, "OgreSamples",
+                                     "[ANativeWindow][ACQUIRE][setNativeWindow] %#llx",
+                                     (unsigned long long)(void *)mNativeWindow );
+            }
         }
 
         if( !mNativeWindow )
@@ -363,6 +377,19 @@ namespace Ogre
 
         createSurface();
         createSwapchain();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanAndroidWindow::requestNativeWindowChange()
+    {
+        OGRE_ANDROID_SURFACE_LOCK;
+        mNativeWindowChangeRequested = true;
+    }
+    //-------------------------------------------------------------------------
+    void VulkanAndroidWindow::flushQueuedNativeWindowChanges( ANativeWindow *nativeWindow )
+    {
+        OGRE_ANDROID_SURFACE_LOCK;
+        mNativeWindowChangeRequested = false;
+        setNativeWindow( nativeWindow );
     }
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::createSurface()
@@ -392,6 +419,8 @@ namespace Ogre
 #endif
         VulkanWindowSwapChainBased::setVSync( vSync, vSyncInterval );
 
+        OGRE_ANDROID_SURFACE_PREVENT_USE;
+
 #ifdef OGRE_VULKAN_USE_SWAPPY
         if( !bSwapchainWillbeRecreated && mSwapchain && mDevice->mRenderSystem->getSwappyFramePacing() )
         {
@@ -404,6 +433,7 @@ namespace Ogre
 #ifdef OGRE_VULKAN_USE_SWAPPY
     void VulkanAndroidWindow::initSwappy()
     {
+        OGRE_ANDROID_SURFACE_PREVENT_USE;
         if( !mDevice->mRenderSystem->getSwappyFramePacing() )
         {
             mFrequencyNumerator = 0u;
@@ -461,6 +491,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::destroySwapchain( bool finalDestruction )
     {
+        OGRE_ANDROID_SURFACE_LOCK;
 #ifdef OGRE_VULKAN_USE_SWAPPY
         // Swappy has a bug where calling SwappyVk_destroySwapchain will leak the mNativeWindow.
         // So we must call SwappyVk_setWindow() ourselves.

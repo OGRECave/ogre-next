@@ -89,4 +89,4 @@ namespace Ogre
     void MetalConstBufferPacked::bindBufferPS( uint16 slot ) { bindBufferPS( slot, 0 ); }
     //-----------------------------------------------------------------------------------
     void MetalConstBufferPacked::bindBufferCS( uint16 slot ) { bindBufferCS( slot, 0 ); }
-}
+}  // namespace Ogre

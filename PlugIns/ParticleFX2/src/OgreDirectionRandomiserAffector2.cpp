@@ -121,40 +121,19 @@ void DirectionRandomiserAffector2::run( ParticleCpuData cpuData, const size_t nu
     }
 }
 //-----------------------------------------------------------------------------
-void DirectionRandomiserAffector2::setRandomness( Real force )
-{
-    mRandomness = force;
-}
+void DirectionRandomiserAffector2::setRandomness( Real force ) { mRandomness = force; }
 //-----------------------------------------------------------------------------
-void DirectionRandomiserAffector2::setScope( Real scope )
-{
-    mScope = scope;
-}
+void DirectionRandomiserAffector2::setScope( Real scope ) { mScope = scope; }
 //-----------------------------------------------------------------------------
-void DirectionRandomiserAffector2::setKeepVelocity( bool keepVelocity )
-{
-    mKeepVelocity = keepVelocity;
-}
+void DirectionRandomiserAffector2::setKeepVelocity( bool keepVelocity ) { mKeepVelocity = keepVelocity; }
 //-----------------------------------------------------------------------------
-Real DirectionRandomiserAffector2::getRandomness() const
-{
-    return mRandomness;
-}
+Real DirectionRandomiserAffector2::getRandomness() const { return mRandomness; }
 //-----------------------------------------------------------------------------
-Real DirectionRandomiserAffector2::getScope() const
-{
-    return mScope;
-}
+Real DirectionRandomiserAffector2::getScope() const { return mScope; }
 //-----------------------------------------------------------------------------
-bool DirectionRandomiserAffector2::getKeepVelocity() const
-{
-    return mKeepVelocity;
-}
+bool DirectionRandomiserAffector2::getKeepVelocity() const { return mKeepVelocity; }
 //-----------------------------------------------------------------------------
-String DirectionRandomiserAffector2::getType() const
-{
-    return "DirectionRandomiser";
-}
+String DirectionRandomiserAffector2::getType() const { return "DirectionRandomiser"; }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

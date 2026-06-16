@@ -28,6 +28,9 @@ THE SOFTWARE.
 #ifndef __OGREOSVERSIONHELPERS_H__
 #define __OGREOSVERSIONHELPERS_H__
 #include "OgrePrerequisites.h"
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && !defined( __cplusplus_winrt )
+#    include <winrt/Windows.Foundation.Metadata.h>
+#endif
 
 namespace Ogre
 {
@@ -62,9 +65,12 @@ namespace Ogre
     {
 #    if _WIN32_WINNT < 0x0A00  // _WIN32_WINNT_WIN10
         return false;
-#    else
+#    elif defined( __cplusplus_winrt )
         return Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(
             "Windows.Foundation.UniversalApiContract", version );
+#    else
+        return winrt::Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(
+            L"Windows.Foundation.UniversalApiContract", version );
 #    endif
     }
 #endif

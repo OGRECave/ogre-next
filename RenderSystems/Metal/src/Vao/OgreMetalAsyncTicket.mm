@@ -87,4 +87,4 @@ namespace Ogre
 
         return retVal;
     }
-}
+}  // namespace Ogre

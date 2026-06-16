@@ -45,7 +45,5 @@ void _chkstk()
 // provide dummy implementations.
 intptr_t __security_cookie;
 
-void _fastcall __security_check_cookie( intptr_t i )
-{
-}
+void _fastcall __security_check_cookie( intptr_t i ) {}
 }

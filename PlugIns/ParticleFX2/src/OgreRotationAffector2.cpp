@@ -74,15 +74,9 @@ RotationAffector2::RotationAffector2() :
     }
 }
 //-----------------------------------------------------------------------------
-bool RotationAffector2::needsInitialization() const
-{
-    return true;
-}
+bool RotationAffector2::needsInitialization() const { return true; }
 //-----------------------------------------------------------------------------
-bool RotationAffector2::wantsRotation() const
-{
-    return true;
-}
+bool RotationAffector2::wantsRotation() const { return true; }
 //-----------------------------------------------------------------------------
 void RotationAffector2::initEmittedParticles( ParticleCpuData cpuData, const EmittedParticle *newHandles,
                                               size_t numParticles ) const
@@ -109,50 +103,26 @@ void RotationAffector2::run( ParticleCpuData cpuData, const size_t numParticles,
     }
 }
 //-----------------------------------------------------------------------------
-const Radian &RotationAffector2::getRotationSpeedRangeStart() const
-{
-    return mRotationSpeedRangeStart;
-}
+const Radian &RotationAffector2::getRotationSpeedRangeStart() const { return mRotationSpeedRangeStart; }
 //-----------------------------------------------------------------------------
-const Radian &RotationAffector2::getRotationSpeedRangeEnd() const
-{
-    return mRotationSpeedRangeEnd;
-}
+const Radian &RotationAffector2::getRotationSpeedRangeEnd() const { return mRotationSpeedRangeEnd; }
 //-----------------------------------------------------------------------------
 void RotationAffector2::setRotationSpeedRangeStart( const Radian &val )
 {
     mRotationSpeedRangeStart = val;
 }
 //-----------------------------------------------------------------------------
-void RotationAffector2::setRotationSpeedRangeEnd( const Radian &val )
-{
-    mRotationSpeedRangeEnd = val;
-}
+void RotationAffector2::setRotationSpeedRangeEnd( const Radian &val ) { mRotationSpeedRangeEnd = val; }
 //-----------------------------------------------------------------------------
-const Radian &RotationAffector2::getRotationRangeStart() const
-{
-    return mRotationRangeStart;
-}
+const Radian &RotationAffector2::getRotationRangeStart() const { return mRotationRangeStart; }
 //-----------------------------------------------------------------------------
-const Radian &RotationAffector2::getRotationRangeEnd() const
-{
-    return mRotationRangeEnd;
-}
+const Radian &RotationAffector2::getRotationRangeEnd() const { return mRotationRangeEnd; }
 //-----------------------------------------------------------------------------
-void RotationAffector2::setRotationRangeStart( const Radian &val )
-{
-    mRotationRangeStart = val;
-}
+void RotationAffector2::setRotationRangeStart( const Radian &val ) { mRotationRangeStart = val; }
 //-----------------------------------------------------------------------------
-void RotationAffector2::setRotationRangeEnd( const Radian &val )
-{
-    mRotationRangeEnd = val;
-}
+void RotationAffector2::setRotationRangeEnd( const Radian &val ) { mRotationRangeEnd = val; }
 //-----------------------------------------------------------------------------
-String RotationAffector2::getType() const
-{
-    return "Rotator";
-}
+String RotationAffector2::getType() const { return "Rotator"; }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

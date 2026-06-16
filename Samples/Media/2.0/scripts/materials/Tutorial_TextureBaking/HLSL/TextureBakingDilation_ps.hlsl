@@ -26,7 +26,7 @@ float4 main( PS_INPUT inPs, float4 gl_FragCoord : SV_Position ) : SV_Target
 		c = c.a > 0 ? c : srcTex.Load( rshort4( iFragCoord.xy + short2(  1,  1 ), 0, 0 ) );
 		c = c.a > 0 ? c : srcTex.Load( rshort4( iFragCoord.xy + short2( -1,  1 ), 0, 0 ) );
 		c = c.a > 0 ? c : srcTex.Load( rshort4( iFragCoord.xy + short2(  1, -1 ), 0, 0 ) );
-		c = c.a > 0 ? c : srcTex.Load( rshort4( iFragCoord.xy + short2(  1, -1 ), 0, 0 ) );
+		c = c.a > 0 ? c : srcTex.Load( rshort4( iFragCoord.xy + short2( -1, -1 ), 0, 0 ) );
 	}
 
 	return c.xyzw;

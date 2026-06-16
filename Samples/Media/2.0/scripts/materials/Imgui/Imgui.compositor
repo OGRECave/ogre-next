@@ -1,0 +1,50 @@
+compositor_node ImguiRenderingNode
+{
+    in 0 rt_renderwindow
+
+    target rt_renderwindow
+	{
+	    pass render_scene
+		{
+		    load
+			{
+			    all				clear
+				clear_colour	0.2 0.4 0.6 1
+			}
+			store
+			{
+			    colour	store_or_resolve
+				depth	dont_care
+				stencil	dont_care
+			}
+			overlays	on
+
+            profiling_id "Main Render"
+		}
+
+        // For this to work, CompositorPassImguiProvider must've been
+		// registered before parsing the script.
+		pass custom dear_imgui
+		{
+		    load
+			{
+			    depth	dont_care
+				stencil	dont_care
+			}
+			store
+			{
+			    // It is strongly discouraged to use colour	settings other than store_or_resolve
+				colour	store_or_resolve
+				depth	dont_care
+				stencil	dont_care
+			}
+
+            profiling_id "Dear Imgui"
+		}
+	}
+}
+
+workspace ImguiWorkspace
+{
+    connect_output ImguiRenderingNode 0
+}

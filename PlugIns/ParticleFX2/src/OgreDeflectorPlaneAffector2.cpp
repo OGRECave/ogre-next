@@ -124,40 +124,19 @@ void DeflectorPlaneAffector2::run( ParticleCpuData cpuData, const size_t numPart
     }
 }
 //-----------------------------------------------------------------------------
-void DeflectorPlaneAffector2::setPlanePoint( const Vector3 &pos )
-{
-    mPlanePoint = pos;
-}
+void DeflectorPlaneAffector2::setPlanePoint( const Vector3 &pos ) { mPlanePoint = pos; }
 //-----------------------------------------------------------------------------
-void DeflectorPlaneAffector2::setPlaneNormal( const Vector3 &normal )
-{
-    mPlaneNormal = normal;
-}
+void DeflectorPlaneAffector2::setPlaneNormal( const Vector3 &normal ) { mPlaneNormal = normal; }
 //-----------------------------------------------------------------------------
-void DeflectorPlaneAffector2::setBounce( Real bounce )
-{
-    mBounce = bounce;
-}
+void DeflectorPlaneAffector2::setBounce( Real bounce ) { mBounce = bounce; }
 //-----------------------------------------------------------------------------
-Vector3 DeflectorPlaneAffector2::getPlanePoint() const
-{
-    return mPlanePoint;
-}
+Vector3 DeflectorPlaneAffector2::getPlanePoint() const { return mPlanePoint; }
 //-----------------------------------------------------------------------------
-Vector3 DeflectorPlaneAffector2::getPlaneNormal() const
-{
-    return mPlaneNormal;
-}
+Vector3 DeflectorPlaneAffector2::getPlaneNormal() const { return mPlaneNormal; }
 //-----------------------------------------------------------------------------
-Real DeflectorPlaneAffector2::getBounce() const
-{
-    return mBounce;
-}
+Real DeflectorPlaneAffector2::getBounce() const { return mBounce; }
 //-----------------------------------------------------------------------------
-String DeflectorPlaneAffector2::getType() const
-{
-    return "DeflectorPlane";
-}
+String DeflectorPlaneAffector2::getType() const { return "DeflectorPlane"; }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

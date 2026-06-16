@@ -84,30 +84,15 @@ void ScaleAffector2::run( ParticleCpuData cpuData, const size_t numParticles,
     }
 }
 //-----------------------------------------------------------------------------
-void ScaleAffector2::setAdjust( Real rate )
-{
-    mScaleAdj = rate;
-}
+void ScaleAffector2::setAdjust( Real rate ) { mScaleAdj = rate; }
 //-----------------------------------------------------------------------------
-Real ScaleAffector2::getAdjust() const
-{
-    return mScaleAdj;
-}
+Real ScaleAffector2::getAdjust() const { return mScaleAdj; }
 //-----------------------------------------------------------------------------
-void ScaleAffector2::setMultiplyMode( bool bMultiplyMode )
-{
-    mMultiplyMode = bMultiplyMode;
-}
+void ScaleAffector2::setMultiplyMode( bool bMultiplyMode ) { mMultiplyMode = bMultiplyMode; }
 //-----------------------------------------------------------------------------
-bool ScaleAffector2::getMultiplyMode() const
-{
-    return mMultiplyMode;
-}
+bool ScaleAffector2::getMultiplyMode() const { return mMultiplyMode; }
 //-----------------------------------------------------------------------------
-String ScaleAffector2::getType() const
-{
-    return "Scaler";
-}
+String ScaleAffector2::getType() const { return "Scaler"; }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

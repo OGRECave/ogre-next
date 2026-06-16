@@ -1369,6 +1369,7 @@ namespace Ogre
         mIds["samples_per_iteration"] = ID_SAMPLES_PER_ITERATION;
         mIds["samples_single_iteration_fallback"] = ID_SAMPLES_SINGLE_ITERATION_FALLBACK;
         mIds["force_mipmap_fallback"] = ID_FORCE_MIPMAP_FALLBACK;
+        mIds["autogen_input_mipmaps"] = ID_AUTOGEN_INPUT_MIPMAPS;
 
         mIds["mode"] = ID_MODE;
 

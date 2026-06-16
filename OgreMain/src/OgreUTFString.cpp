@@ -1789,7 +1789,7 @@ namespace Ogre
             break;
         case 1:
         default:
-            out_cp[0] = static_cast<unsigned char>( (c)&0x7F );
+            out_cp[0] = static_cast<unsigned char>( ( c ) & 0x7F );
             break;
         }
 

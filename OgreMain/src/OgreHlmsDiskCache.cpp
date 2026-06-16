@@ -137,7 +137,7 @@ namespace Ogre
             {
                 bool bCacheable = true;
 
-                for( size_t i = 0u; i < NumShaderTypes; ++i )
+                for( size_t i = 0u; i < CustomPieceStage::NumCustomPieceStages; ++i )
                 {
                     const int32 customPieceName =
                         hlms->getProperty( itor->mergedCache.setProperties,
@@ -177,7 +177,7 @@ namespace Ogre
 
                 bool bCacheable = true;
 
-                for( size_t i = 0u; i < NumShaderTypes; ++i )
+                for( size_t i = 0u; i < CustomPieceStage::NumCustomPieceStages; ++i )
                 {
                     const int32 customPieceName =
                         hlms->getProperty( hlms->mRenderableCache[renderableIdx].setProperties,
@@ -280,8 +280,7 @@ namespace Ogre
                 if( !jobParams.exceptionFound )
                 {
                     // Force the other threads to stop iterating. We're aborting.
-                    jobParams.currentEntry.store( jobParams.numEntries,
-                                                  std::memory_order::memory_order_relaxed );
+                    jobParams.currentEntry.store( jobParams.numEntries, std::memory_order_relaxed );
                     jobParams.exceptionFound = true;
                     jobParams.threadedException = std::current_exception();
                 }

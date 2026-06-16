@@ -195,4 +195,4 @@ namespace Ogre
 #    define _OgreVulkanExport
 #endif
 
-#endif  //#ifndef _OgreVulkanPrerequisites_H_
+#endif  // #ifndef _OgreVulkanPrerequisites_H_

@@ -30,7 +30,7 @@ void main()
 		c = c.a > 0 ? c : texelFetch( srcTex, rshort3( iFragCoord.xy + short2(  1,  1 ), 0 ), 0 );
 		c = c.a > 0 ? c : texelFetch( srcTex, rshort3( iFragCoord.xy + short2( -1,  1 ), 0 ), 0 );
 		c = c.a > 0 ? c : texelFetch( srcTex, rshort3( iFragCoord.xy + short2(  1, -1 ), 0 ), 0 );
-		c = c.a > 0 ? c : texelFetch( srcTex, rshort3( iFragCoord.xy + short2(  1, -1 ), 0 ), 0 );
+		c = c.a > 0 ? c : texelFetch( srcTex, rshort3( iFragCoord.xy + short2( -1, -1 ), 0 ), 0 );
 	}
 
 	fragColour.xyzw = c.xyzw;

@@ -323,9 +323,8 @@ namespace Ogre
         static inline ArrayMaskI TestFlags4( ArrayInt a, ArrayMaskI b )
         {
             // !( (a & b) == 0 ) --> ( (a & b) == 0 ) ^ -1
-            return veorq_u32(
-                vceqq_u32( vandq_u32( vreinterpretq_u32_s32( a ), b ), vdupq_n_u32( 0 ) ),
-                vdupq_n_u32( 0xFFFFFFFF ) );
+            return veorq_u32( vceqq_u32( vandq_u32( vreinterpretq_u32_s32( a ), b ), vdupq_n_u32( 0 ) ),
+                              vdupq_n_u32( 0xFFFFFFFF ) );
         }
         static inline ArrayMaskI TestFlags4( ArrayMaskI a, ArrayInt b )
         {

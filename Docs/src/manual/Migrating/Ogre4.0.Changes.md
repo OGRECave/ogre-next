@@ -39,6 +39,58 @@ You should Find & Replace in that order. If you first find all `setProperty( ` a
 
 However if you first find all `setProperty( ` and replace them with `setProperty( tid, `, you will end up with code that does not compile wherever `kNoTid` should be used (still exercise care when replacing `tid` with `kNoTid`, make sure to be conscious of it. See [The tid (Thread ID) argument](@ref HlmsThreading_tidArgument) for details).
 
+## Trivial Hlms changes
+
+There are changes that will prevent compilation but can be easily fixed by adding a default value and ignoring them, as their behavior doesn't fundamentally change:
+
+**Trivial Change:** `HlmsCache` now requires a new argument.
+
+```cpp
+// Old:
+HlmsCache retVal( hash, mType, HlmsPso() );
+// New:
+HlmsCache retVal( hash, mType, HLMS_CACHE_FLAGS_NONE, HlmsPso() );
+```
+
+**Trivial Change:** Signature change in `notifyPropertiesMergedPreGenerationStep`.
+
+```cpp
+// Before (version A):
+void notifyPropertiesMergedPreGenerationStep() override
+{
+	// ..
+}
+
+// After (version A):
+PropertiesMergeStatus notifyPropertiesMergedPreGenerationStep( size_t tid, PiecesMap *inOutPieces ) override
+{
+	// ..
+	return PropertiesMergeStatusOk;
+}
+
+// Before (version B):
+void notifyPropertiesMergedPreGenerationStep() override
+{
+	HlmsPbs::notifyPropertiesMergedPreGenerationStep();
+	// ... your code ...
+}
+
+// After (version B):
+PropertiesMergeStatus notifyPropertiesMergedPreGenerationStep( size_t tid, PiecesMap *inOutPieces ) override
+{
+	PropertiesMergeStatus status =
+		HlmsPbs::notifyPropertiesMergedPreGenerationStep( tid, inOutPieces );
+
+	// It's not strictly necessary to return early. But on error
+	// we know for certain this Hlms cannot be compiled.
+	if( status == PropertiesMergeStatusError )
+		return status;
+
+	// ... your code ...
+	return status; // Important, because status may be PropertiesMergeStatusWarning.
+}
+```
+
 ## Compositor Script changes
 
 Added the `not_texture` keyword. This can improve performance in scenarios where you don't intend to sample from this texture i.e. usually in conjuntion with either the `uav` or `explicit_resolve` keywords:

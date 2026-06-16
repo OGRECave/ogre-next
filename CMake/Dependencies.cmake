@@ -108,6 +108,9 @@ endif ()
 find_package(Rapidjson)
 macro_log_feature(Rapidjson_FOUND "rapidjson" "C++ JSON parser" "https://rapidjson.org/" FALSE "" "")
 
+find_package(DearImgui)
+macro_log_feature(DearImgui_FOUND "Dear Imgui" "Dear Imgui" "https://github.com/ocornut/imgui" FALSE "" "")
+
 find_package(RenderDoc)
 macro_log_feature(RenderDoc_FOUND "RenderDoc" "RenderDoc Integration" "https://renderdoc.org/" FALSE "" "")
 
@@ -240,6 +243,9 @@ elseif (EXISTS "${OGRE_SOURCE_DIR}/ogredeps/CMakeLists.txt")
   add_subdirectory(ogredeps)
 endif ()
 
+include( CMake/Packages/wxWidgetsSetup.cmake )
+findWxWidgets()
+macro_log_feature( wxWidgets_FOUND "wxWidgets" "GUI library for some tools" "https://wxwidgets.org/" FALSE "3.2" "" )
 
 # Display results, terminate if anything required is missing
 MACRO_DISPLAY_FEATURE_LOG()

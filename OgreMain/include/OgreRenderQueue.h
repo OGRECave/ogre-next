@@ -89,11 +89,19 @@ namespace Ogre
         LightweightMutex     mMutex;
         Semaphore            mSemaphore;
         std::atomic<bool>    mKeepCompiling;
-        uint64               mCompilationDeadline;           // 16ms in the future, or UINT64_MAX.
-        std::atomic<uint64>  mCompilationIncompleteCounter;  // at least one was skipped.
+        std::atomic<uint32>  mCompilationIncompleteCounter;  // at least one was skipped.
+        // 16ms in the future, or UINT64_MAX. This contains the current deadline.
+        uint64 mCompilationDeadline;
+        // The 16ms in the future, or UINT64_MAX. This value is set only once per frame.
+        // mCompilationDeadline contains the current value being used (which may be different
+        // if deadline must be disabled).
+        uint64 mMasterDeadline;
+        bool   mDeadlineSet;
 
         bool               mExceptionFound;     // GUARDED_BY( mMutex )
         std::exception_ptr mThreadedException;  // GUARDED_BY( mMutex )
+
+        void setupDeadline( Root &root, SceneManager &sceneManager, bool casterPass );
 
     public:
         ParallelHlmsCompileQueue();
@@ -112,6 +120,8 @@ namespace Ogre
             mRequests.emplace_back( request );
         }
 
+        void frameEnded();
+
         /** Starts worker threads (job queue) so they start accepting work every time pushRequest()
             gets called and will keep compiling those shaders until stopAndWait() is called.
 
@@ -121,7 +131,7 @@ namespace Ogre
             is false.
         @param sceneManager
         */
-        void start( SceneManager *sceneManager, bool casterPass );
+        void start( Root *root, SceneManager *sceneManager, bool casterPass );
         /** Signals worker threads we won't be submitting more work, so they should stop once they're
             done compiling all pending shaders / PSOs.
 
@@ -137,7 +147,7 @@ namespace Ogre
         /// and fires all threads to compile the shaders and PSOs in parallel.
         ///
         /// It will wait until all threads are done.
-        void fireWarmUpParallel( SceneManager *sceneManager );
+        void fireWarmUpParallel( Root *root, SceneManager *sceneManager, bool casterPass );
 
         /// The actual work done by fireWarmUpParallel().
         void updateWarmUpThread( size_t threadIdx, HlmsManager *hlmsManager,
@@ -391,7 +401,7 @@ namespace Ogre
         @param casterPass
         */
         void warmUpShadersCollect( uint8 firstRq, uint8 lastRq, bool casterPass );
-        void warmUpShadersTrigger( RenderSystem *rs );
+        void warmUpShadersTrigger( RenderSystem *rs, bool casterPass );
 
         void _warmUpShadersThread( size_t threadIdx );
 

@@ -94,10 +94,7 @@ void AreaEmitter2::setWidth( Real width )
     genAreaAxes();
 }
 //-----------------------------------------------------------------------------
-Real AreaEmitter2::getWidth() const
-{
-    return mSize.x;
-}
+Real AreaEmitter2::getWidth() const { return mSize.x; }
 //-----------------------------------------------------------------------------
 void AreaEmitter2::setHeight( Real height )
 {
@@ -105,10 +102,7 @@ void AreaEmitter2::setHeight( Real height )
     genAreaAxes();
 }
 //-----------------------------------------------------------------------------
-Real AreaEmitter2::getHeight() const
-{
-    return mSize.y;
-}
+Real AreaEmitter2::getHeight() const { return mSize.y; }
 //-----------------------------------------------------------------------------
 void AreaEmitter2::setDepth( Real depth )
 {
@@ -116,10 +110,7 @@ void AreaEmitter2::setDepth( Real depth )
     genAreaAxes();
 }
 //-----------------------------------------------------------------------------
-Real AreaEmitter2::getDepth() const
-{
-    return mSize.z;
-}
+Real AreaEmitter2::getDepth() const { return mSize.z; }
 //-----------------------------------------------------------------------------
 void AreaEmitter2::genAreaAxes()
 {

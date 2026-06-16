@@ -28,7 +28,7 @@ THE SOFTWARE.
 #ifndef __ObjectData_H__
 #define __ObjectData_H__
 
-//#include "OgreArrayMatrix4.h"
+// #include "OgreArrayMatrix4.h"
 #include "OgreArrayAabb.h"
 #include "OgreArrayMemoryManager.h"
 

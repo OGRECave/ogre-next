@@ -108,4 +108,4 @@ namespace Ogre
 
         return ( iter->second )( this, name, handle, group, isManual, loader, gptype, syntaxCode );
     }
-}
+}  // namespace Ogre

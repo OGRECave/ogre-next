@@ -139,4 +139,4 @@ namespace Ogre
         *buffers = bufferInterface->getVboName();
         *offsets = mFinalBufferStart * mBytesPerElement + offset;
     }
-}
+}  // namespace Ogre

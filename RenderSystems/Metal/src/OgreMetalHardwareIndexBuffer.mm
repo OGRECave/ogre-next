@@ -141,5 +141,5 @@ namespace Ogre
         }
         //-----------------------------------------------------------------------------------
         void *MetalHardwareIndexBuffer::getRenderSystemData() { return &mMetalHardwareBufferCommon; }
-    }
-}
+    }  // namespace v1
+}  // namespace Ogre

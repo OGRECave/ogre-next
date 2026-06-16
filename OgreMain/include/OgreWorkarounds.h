@@ -159,12 +159,38 @@ namespace Ogre
 /// As of Driver 1.386.1368, API version 1.1.131 (Android 11),
 /// this bug is still present.
 ///
-/// PowerVR has fixed this in driver version 1.426.234
+/// PowerVR reportedly has fixed this in driver version 1.426.234.
+///
+/// However we assume that all GE 8xxx and GM 9xxx are affected by it, as there are
+/// reports of "spiky polygon soup" which are often an indication of misaligned
+/// transfers that didn't complete successfully.
 ///
 /// First seen: Unknown
 /// Last seen: 2022-05-13
 #        define OGRE_VK_WORKAROUND_PVR_ALIGNMENT
-		static uint32 mPowerVRAlignment;
+        static uint32 mPowerVRAlignment;
+
+/// PowerVR 8xxx will crash the entire OS when using VkPipelineCache
+/// and has a cache hit.
+///
+/// As of Driver 1.386.1368, API version 1.1.131 (Android 11),
+/// this bug is still present.
+///
+/// First seen: Unknown
+/// Last seen: 2025-12-18
+#        define OGRE_VK_WORKAROUND_BROKEN_VKPIPELINECACHE
+        static bool mBrokenVkPipelineCache;
+
+/// Adreno 505 on driver 512.415.0.0, Androind 10, will either:
+///     1. Run fine.
+///     2. Crash in vkDestroySwapchainKHR.
+///     3. Return VK_ERROR_NATIVE_WINDOW_IN_USE_KHR in vkCreateAndroidSurfaceKHR.
+///
+/// when the VulkanAndroidWindow creates/destroy the surface after returning from
+/// APP_CMD_TERM_WINDOW. The solution is to force operations to be synchronous.
+#        define OGRE_VK_WORKAROUND_SYNC_WINDOW_INIT
+        static bool mVkSyncWindowInit;
+
 #    endif
 #endif
     };

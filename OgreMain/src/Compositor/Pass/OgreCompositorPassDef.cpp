@@ -165,6 +165,8 @@ namespace Ogre
             }
 
             retVal = passProvider->addPassDef( passType, customId, this, mParentNodeDef );
+            if( retVal->getCustomId() == 0u )
+                retVal->_setCustomId( customId.getU32Value() );
         }
         break;
         case PASS_TARGET_BARRIER:

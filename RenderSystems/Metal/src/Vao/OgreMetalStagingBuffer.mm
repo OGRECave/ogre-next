@@ -212,10 +212,10 @@ namespace Ogre
     {
         //        if( mUploadOnly )
         //        {
-        //#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        // #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         //            NSRange range = NSMakeRange( mInternalBufferStart + mMappingStart, mMappingCount );
         //            [mVboName didModifyRange:range];
-        //#endif
+        // #endif
         //        }
 
         mMappedPtr = 0;
@@ -334,10 +334,10 @@ namespace Ogre
 
         //        if( mUploadOnly )
         //        {
-        //#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        // #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         //            NSRange range = NSMakeRange( mInternalBufferStart + mMappingStart, mMappingCount );
         //            [mVboName didModifyRange:range];
-        //#endif
+        // #endif
         //        }
 
         mMappedPtr = 0;
@@ -479,4 +479,4 @@ namespace Ogre
 
         return freeRegionOffset + extraOffset;
     }
-}
+}  // namespace Ogre

@@ -11,4 +11,4 @@ namespace Demo
         return (unsigned long)view;
     }
 
-}
+}  // namespace Demo

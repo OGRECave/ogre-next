@@ -78,4 +78,4 @@ namespace Ogre
     String getSpirvReflectError( SpvReflectResult spirvReflectResult );
 }  // namespace Ogre
 
-#endif  //#ifndef _OgreVulkanPrerequisites_H_
+#endif  // #ifndef _OgreVulkanPrerequisites_H_

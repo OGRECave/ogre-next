@@ -40,10 +40,7 @@ THE SOFTWARE.
 using namespace Ogre;
 
 //-----------------------------------------------------------------------------
-EllipsoidEmitter2::EllipsoidEmitter2()
-{
-    initDefaults();
-}
+EllipsoidEmitter2::EllipsoidEmitter2() { initDefaults(); }
 //-----------------------------------------------------------------------------
 void EllipsoidEmitter2::initEmittedParticles( ParticleCpuData cpuData, const EmittedParticle *newHandles,
                                               const size_t numParticles )
@@ -109,19 +106,10 @@ void EllipsoidEmitter2::initEmittedParticles( ParticleCpuData cpuData, const Emi
 }
 //-----------------------------------------------------------------------------------
 static const String kEllipsoidEmitterFactoryName = "Ellipsoid";
-const String &EllipsoidEmitter2::getType() const
-{
-    return kEllipsoidEmitterFactoryName;
-}
+const String &EllipsoidEmitter2::getType() const { return kEllipsoidEmitterFactoryName; }
 //-----------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------
-const String &EllipsoidEmitterFactory2::getName() const
-{
-    return kEllipsoidEmitterFactoryName;
-}
+const String &EllipsoidEmitterFactory2::getName() const { return kEllipsoidEmitterFactoryName; }
 //-----------------------------------------------------------------------------------------
-EmitterDefData *EllipsoidEmitterFactory2::createEmitter()
-{
-    return new EllipsoidEmitter2();
-}
+EmitterDefData *EllipsoidEmitterFactory2::createEmitter() { return new EllipsoidEmitter2(); }

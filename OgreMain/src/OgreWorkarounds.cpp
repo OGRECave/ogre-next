@@ -58,6 +58,12 @@ namespace Ogre
 #ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
     uint32 Workarounds::mPowerVRAlignment = 0u;
 #endif
+#ifdef OGRE_VK_WORKAROUND_BROKEN_VKPIPELINECACHE
+    bool Workarounds::mBrokenVkPipelineCache = false;
+#endif
+#ifdef OGRE_VK_WORKAROUND_SYNC_WINDOW_INIT
+    bool Workarounds::mVkSyncWindowInit = false;
+#endif
 
     void Workarounds::dump( String &outStr )
     {
@@ -87,6 +93,14 @@ namespace Ogre
 #ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
         outStr +=
             "\n - mPowerVRAlignment: " + StringConverter::toString( Workarounds::mPowerVRAlignment );
+#endif
+#ifdef OGRE_VK_WORKAROUND_BROKEN_VKPIPELINECACHE
+        outStr += "\n - mBrokenVkPipelineCache: " +
+                  StringConverter::toString( Workarounds::mBrokenVkPipelineCache );
+#endif
+#ifdef OGRE_VK_WORKAROUND_SYNC_WINDOW_INIT
+        outStr +=
+            "\n - mVkSyncWindowInit: " + StringConverter::toString( Workarounds::mVkSyncWindowInit );
 #endif
     }
 }  // namespace Ogre

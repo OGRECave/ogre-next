@@ -43,6 +43,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     class CompositorShadowNode;
+    class ConfigFile;
     struct QueuedRenderable;
     typedef vector<Archive *>::type ArchiveVec;
 
@@ -465,6 +466,8 @@ namespace Ogre
         HighLevelGpuProgramPtr compileShaderCode( const String &source,
                                                   const String &debugFilenameOutput, uint32 finalHash,
                                                   ShaderType shaderType, size_t tid );
+
+        void parseCustomPiece( const int32 customPieceName, const size_t tid );
 
     public:
         void _compileShaderFromPreprocessedSource( const RenderableCache &mergedCache,
@@ -1145,6 +1148,31 @@ namespace Ogre
 
         virtual void _changeRenderSystem( RenderSystem *newRs );
 
+        /// Same as the other getDefaultPaths() overload but it automatically fills
+        /// the hlmsTypeName param.
+        void getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths,
+                              const ConfigFile &configFile );
+
+        /** Same as HlmsPbs::getDefaultPaths but retrieves the files & folders from cfg file.
+            The syntax is as follows:
+            @code
+                [pbs]
+                Library=Hlms/Common/[SHADER_SYNTAX]
+                Library=Hlms/Common/Any
+                Library=Hlms/Pbs/Any
+                Library=Hlms/Pbs/Any/Atmosphere
+                Library=Hlms/Pbs/Any/Main
+                Main=Hlms/Pbs/[SHADER_SYNTAX]
+            @endcode
+        @param outDataFolderPath
+        @param outLibraryFoldersPaths
+        @param configFile
+        @param hlmsTypeName
+            Name of the Hlms. e.g. "pbs", "unlit". See getTypeNameStr().
+        */
+        static void getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths,
+                                     const ConfigFile &configFile, const String &hlmsTypeName );
+
         RenderSystem *getRenderSystem() const { return mRenderSystem; }
 
 #ifdef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
@@ -1295,8 +1323,8 @@ namespace Ogre
         static const IdString AccurateNonUniformNormalScaling;
         // Per material. Related with SsRefractionsAvailable
         static const IdString ScreenSpaceRefractions;
-        static const IdString
-            _DatablockCustomPieceShaderName[NumShaderTypes];  // Do not set/get directly.
+        // Do not set/get directly.
+        static const IdString _DatablockCustomPieceShaderName[CustomPieceStage::NumCustomPieceStages];
 
         // Standard depth range is being used instead of reverse Z.
         static const IdString NoReverseDepth;

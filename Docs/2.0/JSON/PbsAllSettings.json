@@ -66,11 +66,14 @@ including invalid combinations (i.e. having a Metallic texture and a Specular te
             "receive_shadows"	:	true,
             "refraction_strength" : 0.2,
 
+            "custom_piece_file_pre": [ "filename.glsl", "resourceGroup" ],
             "custom_piece_file_vs" : [ "filename.glsl", "resourceGroup" ],
             "custom_piece_file_ps" : [ "filename.any", "resourceGroup" ],
             "custom_piece_file_gs" : [ "filename.any", "resourceGroup" ],
             "custom_piece_file_hs" : [ "filename.hlsl", "resourceGroup" ],
             "custom_piece_file_ds" : [ "filename.metal", "resourceGroup" ],
+
+            "custom_properties" : { "property_name0" : 5, "property_name2" : -2 },
 
             "workflow" : "specular_ogre" "specular_fresnel" "metallic",
 

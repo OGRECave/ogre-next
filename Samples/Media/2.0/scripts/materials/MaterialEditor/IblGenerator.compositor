@@ -1,0 +1,24 @@
+compositor_node MatEditorIblGeneratorNode
+{
+	in 0 cubemap
+	in 1 ibl_output
+
+	target ibl_output
+	{
+		pass ibl_specular
+		{
+			input	cubemap
+			output	ibl_output
+
+			autogen_input_mipmaps false
+
+			profiling_id "Mipmap IBL Specular Gen"
+		}
+	}
+}
+
+workspace MatEditorIblGenerator
+{
+	connect_external 0 MatEditorIblGeneratorNode 0
+	connect_external 1 MatEditorIblGeneratorNode 1
+}

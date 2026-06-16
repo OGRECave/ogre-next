@@ -208,8 +208,8 @@ namespace Ogre
 #        define _ogre_mm_nmsub_ps( a, b, c ) vmlsq_f32( c, a, b )
 
 /// Does not convert, just cast ArrayReal to ArrayInt
-//#define CastRealToInt( x )          vreinterpretq_s32_f32( x )
-//#define CastIntToReal( x )          vreinterpretq_f32_s32( x )
+// #define CastRealToInt( x )          vreinterpretq_s32_f32( x )
+// #define CastIntToReal( x )          vreinterpretq_f32_s32( x )
 #        define CastRealToInt( x ) ( x )
 #        define CastIntToReal( x ) ( x )
 /// Input must be 16-byte aligned

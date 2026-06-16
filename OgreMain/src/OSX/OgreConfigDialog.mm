@@ -87,7 +87,7 @@ namespace Ogre
         return ( retVal == NSModalResponseStop ) ? true : false;
     }
 
-}
+}  // namespace Ogre
 
 @implementation OgreConfigWindowDelegate
 
@@ -162,7 +162,7 @@ namespace Ogre
         tableBox.title = NSLocalizedString( @"Rendering System Options", @"optionsBoxString" );
         tableBox.contentViewMargins = NSMakeSize( 0, 0 );
         tableBox.focusRingType = NSFocusRingTypeNone;
- 
+
         // Set up the tableview
         mOptionsTable = [[NSTableView alloc] init];
         mOptionsTable.delegate = self;

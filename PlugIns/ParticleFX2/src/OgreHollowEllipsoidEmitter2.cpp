@@ -166,26 +166,14 @@ void HollowEllipsoidEmitter2::setInnerSizeZ( Real z )
     mInnerSize.z = z;
 }
 //-----------------------------------------------------------------------------
-Real HollowEllipsoidEmitter2::getInnerSizeX() const
-{
-    return mInnerSize.x;
-}
+Real HollowEllipsoidEmitter2::getInnerSizeX() const { return mInnerSize.x; }
 //-----------------------------------------------------------------------------
-Real HollowEllipsoidEmitter2::getInnerSizeY() const
-{
-    return mInnerSize.y;
-}
+Real HollowEllipsoidEmitter2::getInnerSizeY() const { return mInnerSize.y; }
 //-----------------------------------------------------------------------------
-Real HollowEllipsoidEmitter2::getInnerSizeZ() const
-{
-    return mInnerSize.z;
-}
+Real HollowEllipsoidEmitter2::getInnerSizeZ() const { return mInnerSize.z; }
 //-----------------------------------------------------------------------------------
 static const String kHollowEllipsoidEmitterFactoryName = "HollowEllipsoid";
-const String &HollowEllipsoidEmitter2::getType() const
-{
-    return kHollowEllipsoidEmitterFactoryName;
-}
+const String &HollowEllipsoidEmitter2::getType() const { return kHollowEllipsoidEmitterFactoryName; }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -229,7 +217,4 @@ const String &HollowEllipsoidEmitterFactory2::getName() const
     return kHollowEllipsoidEmitterFactoryName;
 }
 //-----------------------------------------------------------------------------------------
-EmitterDefData *HollowEllipsoidEmitterFactory2::createEmitter()
-{
-    return new EllipsoidEmitter2();
-}
+EmitterDefData *HollowEllipsoidEmitterFactory2::createEmitter() { return new EllipsoidEmitter2(); }

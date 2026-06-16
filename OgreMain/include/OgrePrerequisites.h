@@ -106,8 +106,8 @@ namespace Ogre
     /** Software floating point type.
     @note Not valid as a pointer to GPU buffers / parameters
     */
-    typedef float        Real;
-    typedef uint32       RealAsUint;
+    typedef float  Real;
+    typedef uint32 RealAsUint;
 #endif
 
     /** In order to avoid finger-aches :)
@@ -531,7 +531,7 @@ namespace Ogre
     }
 
     template <typename T>
-    CustomMemoryStringT( T ) operator+( const T *l, const CustomMemoryStringT( T ) & o )
+    CustomMemoryStringT( T ) operator+( const T * l, const CustomMemoryStringT( T ) & o )
     {
         return CustomMemoryStringT( T )( l ) += o;
     }

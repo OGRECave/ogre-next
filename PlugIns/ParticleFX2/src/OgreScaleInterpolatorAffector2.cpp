@@ -117,10 +117,7 @@ Real ScaleInterpolatorAffector2::getTimeAdjust( size_t index ) const
     return Mathlib::Get0( mTimeAdj[index] );
 }
 //-----------------------------------------------------------------------------------
-String ScaleInterpolatorAffector2::getType() const
-{
-    return "ScaleInterpolator";
-}
+String ScaleInterpolatorAffector2::getType() const { return "ScaleInterpolator"; }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

@@ -128,6 +128,7 @@ if (EMSCRIPTEN)
 elseif (WIN32)
   set(THREAD_SOURCE_FILES
       src/Threading/OgreBarrierWin.cpp
+      src/Threading/OgreCondVariableWin32.cpp
 	  src/Threading/OgreLightweightMutexWin.cpp
       src/Threading/OgreThreadsWin.cpp
   )
@@ -264,7 +265,8 @@ endif()
 if (NOT WIN32)
   set(THREAD_SOURCE_FILES
       src/Threading/OgreBarrierPThreads.cpp
-	  src/Threading/OgreLightweightMutexPThreads.cpp
+      src/Threading/OgreCondVariablePThreads.cpp
+      src/Threading/OgreLightweightMutexPThreads.cpp
       src/Threading/OgreThreadsPThreads.cpp
   )
 endif()
@@ -439,33 +441,35 @@ if (APPLE)
         LINK_FLAGS "-framework IOKit -framework Cocoa -framework Carbon -framework OpenGL -framework CoreVideo"
     )
 
-    set(OGRE_OSX_BUILD_CONFIGURATION "$(PLATFORM_NAME)/$(CONFIGURATION)")
-  
-	add_custom_command(TARGET ${OGRE_NEXT}Main POST_BUILD
-		COMMAND mkdir ARGS -p ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/Threading
-        COMMAND ditto 
-		${OGRE_SOURCE_DIR}/OgreMain/include/Threading/*.h ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/Threading
-		COMMAND mkdir ARGS -p ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/OSX
-        COMMAND ditto 
-		${OGRE_SOURCE_DIR}/OgreMain/include/OSX/*.h ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/OSX
-		COMMAND cd ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers
-		)
+    if (OGRE_BUILD_LIBS_AS_FRAMEWORKS)
+      set(OGRE_OSX_BUILD_CONFIGURATION "$(PLATFORM_NAME)/$(CONFIGURATION)")
 
-    foreach(HEADER_PATH ${THREAD_HEADER_FILES})
-        get_filename_component(HEADER_FILE ${HEADER_PATH} NAME)
-        set(FWK_HEADER_PATH ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/${HEADER_FILE})
-        add_custom_command(TARGET ${OGRE_NEXT}Main POST_BUILD
-            COMMAND rm -f ${FWK_HEADER_PATH}
-            )
-    endforeach()
+      add_custom_command(TARGET ${OGRE_NEXT}Main POST_BUILD
+          COMMAND mkdir ARGS -p ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/Threading
+          COMMAND ditto
+          ${OGRE_SOURCE_DIR}/OgreMain/include/Threading/*.h ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/Threading
+          COMMAND mkdir ARGS -p ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/OSX
+          COMMAND ditto
+          ${OGRE_SOURCE_DIR}/OgreMain/include/OSX/*.h ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/OSX
+          COMMAND cd ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers
+          )
 
-    foreach(HEADER_PATH ${PLATFORM_HEADERS})
-        get_filename_component(HEADER_FILE ${HEADER_PATH} NAME)
-        set(FWK_HEADER_PATH ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/${HEADER_FILE})
-        add_custom_command(TARGET ${OGRE_NEXT}Main POST_BUILD
-            COMMAND rm -f ${FWK_HEADER_PATH}
-            )
-    endforeach()
+      foreach(HEADER_PATH ${THREAD_HEADER_FILES})
+          get_filename_component(HEADER_FILE ${HEADER_PATH} NAME)
+          set(FWK_HEADER_PATH ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/${HEADER_FILE})
+          add_custom_command(TARGET ${OGRE_NEXT}Main POST_BUILD
+              COMMAND rm -f ${FWK_HEADER_PATH}
+              )
+      endforeach()
+
+      foreach(HEADER_PATH ${PLATFORM_HEADERS})
+          get_filename_component(HEADER_FILE ${HEADER_PATH} NAME)
+          set(FWK_HEADER_PATH ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/${HEADER_FILE})
+          add_custom_command(TARGET ${OGRE_NEXT}Main POST_BUILD
+              COMMAND rm -f ${FWK_HEADER_PATH}
+              )
+      endforeach()
+    endif ()
 
     ogre_config_framework(${OGRE_NEXT}Main)
   endif ()

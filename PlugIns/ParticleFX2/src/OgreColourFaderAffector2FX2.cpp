@@ -154,25 +154,13 @@ void ColourFaderAffector2FX2::run( ParticleCpuData cpuData, const size_t numPart
     }
 }
 //-----------------------------------------------------------------------------
-void ColourFaderAffector2FX2::setMaxColour( const Vector4 &rgba )
-{
-    mMaxColour = rgba;
-}
+void ColourFaderAffector2FX2::setMaxColour( const Vector4 &rgba ) { mMaxColour = rgba; }
 //-----------------------------------------------------------------------------
-const Vector4 &ColourFaderAffector2FX2::getMaxColour() const
-{
-    return mMaxColour;
-}
+const Vector4 &ColourFaderAffector2FX2::getMaxColour() const { return mMaxColour; }
 //-----------------------------------------------------------------------------
-void ColourFaderAffector2FX2::setMinColour( const Vector4 &rgba )
-{
-    mMinColour = rgba;
-}
+void ColourFaderAffector2FX2::setMinColour( const Vector4 &rgba ) { mMinColour = rgba; }
 //-----------------------------------------------------------------------------
-const Vector4 &ColourFaderAffector2FX2::getMinColour() const
-{
-    return mMinColour;
-}
+const Vector4 &ColourFaderAffector2FX2::getMinColour() const { return mMinColour; }
 //-----------------------------------------------------------------------------
 void ColourFaderAffector2FX2::setAdjust1( float red, float green, float blue, float alpha )
 {
@@ -190,100 +178,43 @@ void ColourFaderAffector2FX2::setAdjust2( float red, float green, float blue, fl
     mColourAdj2.w = alpha;
 }
 //-----------------------------------------------------------------------------
-void ColourFaderAffector2FX2::setRedAdjust1( float red )
-{
-    mColourAdj1.x = red;
-}
+void ColourFaderAffector2FX2::setRedAdjust1( float red ) { mColourAdj1.x = red; }
 //-----------------------------------------------------------------------------
-void ColourFaderAffector2FX2::setRedAdjust2( float red )
-{
-    mColourAdj2.x = red;
-}
+void ColourFaderAffector2FX2::setRedAdjust2( float red ) { mColourAdj2.x = red; }
 //-----------------------------------------------------------------------------
-float ColourFaderAffector2FX2::getRedAdjust1() const
-{
-    return mColourAdj1.x;
-}
+float ColourFaderAffector2FX2::getRedAdjust1() const { return mColourAdj1.x; }
 //-----------------------------------------------------------------------------
-float ColourFaderAffector2FX2::getRedAdjust2() const
-{
-    return mColourAdj2.x;
-}
+float ColourFaderAffector2FX2::getRedAdjust2() const { return mColourAdj2.x; }
 //-----------------------------------------------------------------------------
-void ColourFaderAffector2FX2::setGreenAdjust1( float green )
-{
-    mColourAdj1.y = green;
-}
+void ColourFaderAffector2FX2::setGreenAdjust1( float green ) { mColourAdj1.y = green; }
 //-----------------------------------------------------------------------------
-void ColourFaderAffector2FX2::setGreenAdjust2( float green )
-{
-    mColourAdj2.y = green;
-}
+void ColourFaderAffector2FX2::setGreenAdjust2( float green ) { mColourAdj2.y = green; }
 //-----------------------------------------------------------------------------
-float ColourFaderAffector2FX2::getGreenAdjust1() const
-{
-    return mColourAdj1.y;
-}
+float ColourFaderAffector2FX2::getGreenAdjust1() const { return mColourAdj1.y; }
 //-----------------------------------------------------------------------------
-float ColourFaderAffector2FX2::getGreenAdjust2() const
-{
-    return mColourAdj2.y;
-}
+float ColourFaderAffector2FX2::getGreenAdjust2() const { return mColourAdj2.y; }
 //-----------------------------------------------------------------------------
-void ColourFaderAffector2FX2::setBlueAdjust1( float blue )
-{
-    mColourAdj1.z = blue;
-}
+void ColourFaderAffector2FX2::setBlueAdjust1( float blue ) { mColourAdj1.z = blue; }
 //-----------------------------------------------------------------------------
-void ColourFaderAffector2FX2::setBlueAdjust2( float blue )
-{
-    mColourAdj2.z = blue;
-}
+void ColourFaderAffector2FX2::setBlueAdjust2( float blue ) { mColourAdj2.z = blue; }
 //-----------------------------------------------------------------------------
-float ColourFaderAffector2FX2::getBlueAdjust1() const
-{
-    return mColourAdj1.z;
-}
+float ColourFaderAffector2FX2::getBlueAdjust1() const { return mColourAdj1.z; }
 //-----------------------------------------------------------------------------
-float ColourFaderAffector2FX2::getBlueAdjust2() const
-{
-    return mColourAdj2.z;
-}
+float ColourFaderAffector2FX2::getBlueAdjust2() const { return mColourAdj2.z; }
 //-----------------------------------------------------------------------------
-void ColourFaderAffector2FX2::setAlphaAdjust1( float alpha )
-{
-    mColourAdj1.w = alpha;
-}
+void ColourFaderAffector2FX2::setAlphaAdjust1( float alpha ) { mColourAdj1.w = alpha; }
 //-----------------------------------------------------------------------------
-void ColourFaderAffector2FX2::setAlphaAdjust2( float alpha )
-{
-    mColourAdj2.w = alpha;
-}
+void ColourFaderAffector2FX2::setAlphaAdjust2( float alpha ) { mColourAdj2.w = alpha; }
 //-----------------------------------------------------------------------------
-float ColourFaderAffector2FX2::getAlphaAdjust1() const
-{
-    return mColourAdj1.w;
-}
+float ColourFaderAffector2FX2::getAlphaAdjust1() const { return mColourAdj1.w; }
 //-----------------------------------------------------------------------------
-float ColourFaderAffector2FX2::getAlphaAdjust2() const
-{
-    return mColourAdj2.w;
-}
+float ColourFaderAffector2FX2::getAlphaAdjust2() const { return mColourAdj2.w; }
 //-----------------------------------------------------------------------------
-void ColourFaderAffector2FX2::setStateChange( Real NewValue )
-{
-    mStateChangeVal = NewValue;
-}
+void ColourFaderAffector2FX2::setStateChange( Real NewValue ) { mStateChangeVal = NewValue; }
 //-----------------------------------------------------------------------------
-Real ColourFaderAffector2FX2::getStateChange() const
-{
-    return mStateChangeVal;
-}
+Real ColourFaderAffector2FX2::getStateChange() const { return mStateChangeVal; }
 //-----------------------------------------------------------------------------------
-String ColourFaderAffector2FX2::getType() const
-{
-    return "ColourFader2";
-}
+String ColourFaderAffector2FX2::getType() const { return "ColourFader2"; }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

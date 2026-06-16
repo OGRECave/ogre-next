@@ -112,7 +112,7 @@ namespace Ogre
         mReverseDepth( true ),
         mInvertedClipSpaceY( false ),
         mPsoRequestsTimeout( 0u ),
-        mIncompletePsoRequestsCounter( 0 )
+        mIncompletePsoRequestsCounterFrame( 0u )
     {
         mEventNames.push_back( "RenderSystemCapabilitiesCreated" );
     }
@@ -805,6 +805,7 @@ namespace Ogre
     void RenderSystem::_beginFrameOnce()
     {
         _resetMetrics();
+        mIncompletePsoRequestsCounterFrame = 0u;
         mVaoManager->_beginFrame();
     }
     //-----------------------------------------------------------------------
@@ -1381,7 +1382,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     void RenderSystem::savePipelineCache( DataStreamPtr stream ) const {}
     //---------------------------------------------------------------------
-    void RenderSystem::_notifyIncompletePsoRequests( uint64 count )
+    void RenderSystem::_notifyIncompletePsoRequests( uint32 count )
     {
         if( count > 0u )
         {
@@ -1391,7 +1392,7 @@ namespace Ogre
                 StringConverter::toString( mPsoRequestsTimeout ) + "ms time budget" );
         }
 
-        mIncompletePsoRequestsCounter += count;
+        mIncompletePsoRequestsCounterFrame += count;
     }
     //---------------------------------------------------------------------
     bool RenderSystem::startGpuDebuggerFrameCapture( Window *window )

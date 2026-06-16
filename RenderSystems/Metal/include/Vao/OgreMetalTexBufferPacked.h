@@ -75,6 +75,6 @@ namespace Ogre
 
         BufferPackedTypes getBufferPackedType() const override { return BP_TYPE_READONLY; }
     };
-}
+}  // namespace Ogre
 
 #endif

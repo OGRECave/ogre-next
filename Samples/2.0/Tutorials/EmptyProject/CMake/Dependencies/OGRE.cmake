@@ -114,7 +114,8 @@ endmacro()
 # Generates Plugins.cfg file out of user-editable Plugins.cfg.in file. Will automatically disable those plugins
 # that were not built
 # Copies all relevant DLLs: RenderSystem files, OgreOverlay, Hlms PBS & Unlit.
-macro( setupPluginFileFromTemplate BUILD_TYPE OGRE_USE_SCENE_FORMAT OGRE_USE_PLANAR_REFLECTIONS )
+macro( setupPluginFileFromTemplate BUILD_TYPE
+		OGRE_USE_SCENE_FORMAT OGRE_USE_PLANAR_REFLECTIONS OGRE_USE_IMGUI )
 	if( CMAKE_BUILD_TYPE )
 		if( ${CMAKE_BUILD_TYPE} STREQUAL ${BUILD_TYPE} )
 			set( OGRE_BUILD_TYPE_MATCHES 1 )
@@ -153,6 +154,10 @@ macro( setupPluginFileFromTemplate BUILD_TYPE OGRE_USE_SCENE_FORMAT OGRE_USE_PLA
 
 		if( ${OGRE_USE_SCENE_FORMAT} )
 			set( OGRE_DLLS ${OGRE_DLLS} ${OGRE_NEXT}SceneFormat )
+		endif()
+
+		if( ${OGRE_USE_IMGUI} )
+			set( OGRE_DLLS ${OGRE_DLLS} ${OGRE_NEXT}Imgui )
 		endif()
 
 		if( NOT OGRE_BUILD_COMPONENT_ATMOSPHERE EQUAL -1 )
@@ -234,7 +239,7 @@ endfunction()
 
 # Main call to setup Ogre.
 macro( setupOgre OGRE_SOURCE, OGRE_BINARIES, OGRE_LIBRARIES_OUT,
-		OGRE_USE_SCENE_FORMAT OGRE_USE_PLANAR_REFLECTIONS )
+		OGRE_USE_SCENE_FORMAT OGRE_USE_PLANAR_REFLECTIONS OGRE_USE_IMGUI )
 
 set( CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Dependencies/Ogre/CMake/Packages" )
 
@@ -276,6 +281,9 @@ if( ${OGRE_USE_SCENE_FORMAT} )
 endif()
 if( ${OGRE_USE_PLANAR_REFLECTIONS} )
 	include_directories( "${OGRE_SOURCE}/Components/PlanarReflections/include" )
+endif()
+if( ${OGRE_USE_IMGUI} )
+	include_directories( "${OGRE_SOURCE}/Components/Imgui/include" )
 endif()
 
 # Parse OgreBuildSettings.h to see if it's a static build
@@ -328,6 +336,13 @@ if( ${OGRE_USE_PLANAR_REFLECTIONS} )
 		debug ${OGRE_NEXT}PlanarReflections${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
 		optimized ${OGRE_NEXT}PlanarReflections${OGRE_STATIC}
 		)
+endif()
+
+if( ${OGRE_USE_IMGUI} )
+	set( OGRE_LIBRARIES ${OGRE_LIBRARIES}
+		debug ${OGRE_NEXT}Imgui${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
+		optimized ${OGRE_NEXT}Imgui${OGRE_STATIC}
+	    )
 endif()
 
 if( NOT OGRE_BUILD_COMPONENT_ATMOSPHERE EQUAL -1 )
@@ -414,13 +429,13 @@ file( COPY "${OGRE_SOURCE}/Samples/Media/2.0/scripts/materials/Common"	DESTINATI
 file( COPY "${OGRE_SOURCE}/Samples/Media/packs/DebugPack.zip"	DESTINATION "${CMAKE_SOURCE_DIR}/bin/Data" )
 
 message( STATUS "Copying DLLs and generating Plugins.cfg for Debug" )
-setupPluginFileFromTemplate( "Debug" ${OGRE_USE_SCENE_FORMAT} ${OGRE_USE_PLANAR_REFLECTIONS} )
+setupPluginFileFromTemplate( "Debug" ${OGRE_USE_SCENE_FORMAT} ${OGRE_USE_PLANAR_REFLECTIONS} ${OGRE_USE_IMGUI} )
 message( STATUS "Copying DLLs and generating Plugins.cfg for Release" )
-setupPluginFileFromTemplate( "Release" ${OGRE_USE_SCENE_FORMAT} ${OGRE_USE_PLANAR_REFLECTIONS} )
+setupPluginFileFromTemplate( "Release" ${OGRE_USE_SCENE_FORMAT} ${OGRE_USE_PLANAR_REFLECTIONS} ${OGRE_USE_IMGUI} )
 message( STATUS "Copying DLLs and generating Plugins.cfg for RelWithDebInfo" )
-setupPluginFileFromTemplate( "RelWithDebInfo" ${OGRE_USE_SCENE_FORMAT} ${OGRE_USE_PLANAR_REFLECTIONS} )
+setupPluginFileFromTemplate( "RelWithDebInfo" ${OGRE_USE_SCENE_FORMAT} ${OGRE_USE_PLANAR_REFLECTIONS} ${OGRE_USE_IMGUI} )
 message( STATUS "Copying DLLs and generating Plugins.cfg for MinSizeRel" )
-setupPluginFileFromTemplate( "MinSizeRel" ${OGRE_USE_SCENE_FORMAT} ${OGRE_USE_PLANAR_REFLECTIONS} )
+setupPluginFileFromTemplate( "MinSizeRel" ${OGRE_USE_SCENE_FORMAT} ${OGRE_USE_PLANAR_REFLECTIONS} ${OGRE_USE_IMGUI} )
 
 setupResourceFileFromTemplate()
 setupOgreSamplesCommon()

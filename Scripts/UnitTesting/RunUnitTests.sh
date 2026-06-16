@@ -4,6 +4,6 @@ case "$OSTYPE" in
 		;;
 	*)
 		# python3 RunUnitTests.py gl ../../build/Debug/bin/ ./JSON ../../build/UnitTestsOutput/ ../../build/UnitTestsOutput_old/
-		python3 RunUnitTests.py gl ../../build/Debug/bin/ ./JSON ../../build/UnitTestsOutput/
+		python3 RunUnitTests.py vk ../../build/Debug/bin/ ./JSON ../../build/UnitTestsOutput/
 		;;
 esac

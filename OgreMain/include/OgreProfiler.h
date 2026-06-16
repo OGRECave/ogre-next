@@ -133,7 +133,7 @@ namespace Ogre
 #    define OgreProfileGpuBeginDynamicHashed( a, hash ) \
         Ogre::Profiler::getSingleton().beginGPUSample( a, hash )
 #    define OgreProfileGpuEnd( a ) Ogre::Profiler::getSingleton().endGPUSample( a )
-//#   define OgreProfileGpu( g ) Ogre::Profiler::getSingleton().endGPUEvent(g)
+// #   define OgreProfileGpu( g ) Ogre::Profiler::getSingleton().endGPUEvent(g)
 
 namespace Ogre
 {
@@ -379,10 +379,10 @@ namespace Ogre
             should hide its panels (if any exists) or stop
             sending data over the network
         */
-        virtual void changeEnableState( bool enabled ){};
+        virtual void changeEnableState( bool enabled ) {};
 
         /// Here we get the real profiling information which we can use
-        virtual void displayResults( const ProfileInstance &instance, uint64 maxTotalFrameTime ){};
+        virtual void displayResults( const ProfileInstance &instance, uint64 maxTotalFrameTime ) {};
 
         /// Set the display mode for the overlay.
         void setDisplayMode( DisplayMode d ) { mDisplayMode = d; }

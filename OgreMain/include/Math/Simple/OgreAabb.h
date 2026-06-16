@@ -39,6 +39,6 @@ THE SOFTWARE.
     #endif
 #else*/
 #include "C/OgreAabbC.h"
-//#endif
+// #endif
 
 #endif
