@@ -404,6 +404,11 @@ void PbsTexturePanel::OnSlider( wxCommandEvent &event )
                     datablock->setDetailMapWeight( uint8_t( i - Ogre::PBSM_DETAIL0 ),
                                                    Ogre::Real( val ) );
                 }
+                else if( i >= Ogre::PBSM_DETAIL0_NM && i <= Ogre::PBSM_DETAIL3_NM )
+                {
+                    datablock->setDetailNormalWeight( uint8_t( i - Ogre::PBSM_DETAIL0_NM ),
+                                                      Ogre::Real( val ) );
+                }
             }
 
             return;

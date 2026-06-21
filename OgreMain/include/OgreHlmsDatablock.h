@@ -178,6 +178,23 @@ namespace Ogre
                    mCullMode != _r.mCullMode ||                        //
                    mPolygonMode != _r.mPolygonMode;
         }
+
+        /// Encodes all data into multiple uint64. Technically it can server as serialization.
+        /// But it's used for generating unique name out of hashes in JSON.
+        void encode( uint64 ( &outVals )[2] ) const
+        {
+            outVals[0] = static_cast<uint64_t>( mDepthFunc ) << 56ul |           // 8 bits (bits 56-63)
+                         static_cast<uint64_t>( mCullMode ) << 48ul |            // 8 bits (bits 48-55)
+                         static_cast<uint64_t>( mPolygonMode ) << 40ul |         // 8 bits (bits 40-47)
+                         static_cast<uint64_t>( mDepthWrite ) << 39ul |          // 1 bit (bit 39)
+                         static_cast<uint64_t>( mDepthCheck ) << 38ul |          // 1 bit (bit 38)
+                         static_cast<uint64_t>( mDepthClamp ) << 37ul |          // 1 bit (bit 37)
+                         static_cast<uint64_t>( mScissorTestEnabled ) << 36ul |  // 1 bit (bit 36)
+                         static_cast<uint64_t>( mAllowGlobalDefaults ) << 0ul;   // 1 bit (bit 0)
+
+            outVals[1] = ( uint64_t( bit_cast<uint32_t>( mDepthBiasConstant ) ) << 32ul ) |
+                         uint64_t( bit_cast<uint32_t>( mDepthBiasSlopeScale ) );
+        }
     };
 
     /** A blend block contains settings that rarely change, and thus are common to many materials.
@@ -352,6 +369,24 @@ namespace Ogre
                    mAlphaToCoverage != _r.mAlphaToCoverage ||                    //
                    mBlendChannelMask != _r.mBlendChannelMask ||                  //
                    ( mIsTransparent & 0x02u ) != ( _r.mIsTransparent & 0x02u );
+        }
+
+        /// Encodes all data into multiple uint64. Technically it can server as serialization.
+        /// But it's used for generating unique name out of hashes in JSON.
+        void encode( uint64 ( &outVals )[2] ) const
+        {
+            outVals[0] = static_cast<uint64_t>( mAlphaToCoverage ) << 56ul |      // 8 bits (56-63)
+                         static_cast<uint64_t>( mBlendChannelMask ) << 48ul |     // 8 bits (48-55)
+                         static_cast<uint64_t>( mBlendOperationAlpha ) << 40ul |  // 8 bits (40-48)
+                         static_cast<uint64_t>( mIsTransparent ) << 39ul |        // 1 bit (39)
+                         static_cast<uint64_t>( mSeparateBlend ) << 38ul |        // 1 bit (38)
+                         static_cast<uint64_t>( mAllowGlobalDefaults ) << 0ul;    // 1 bit (0)
+
+            outVals[1] = static_cast<uint64_t>( mSourceBlendFactor ) << 32ul |       // 8 bits (32-39)
+                         static_cast<uint64_t>( mDestBlendFactor ) << 24ul |         // 8 bits (24-31)
+                         static_cast<uint64_t>( mSourceBlendFactorAlpha ) << 16ul |  // 8 bits (16-23)
+                         static_cast<uint64_t>( mDestBlendFactorAlpha ) << 8ul |     // 8 bits (8-15)
+                         static_cast<uint64_t>( mBlendOperation ) << 0ul;            // 8 bits (0-7)
         }
     };
 

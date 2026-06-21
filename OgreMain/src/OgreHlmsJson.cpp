@@ -860,17 +860,47 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     String HlmsJson::getName( const HlmsMacroblock *macroblock ) const
     {
-        return "\"Macroblock_" + StringConverter::toString( macroblock->mLifetimeId ) + '"';
+        uint64 encoded[2];
+        macroblock->encode( encoded );
+
+        uint32 hash;
+        MurmurHash3_x86_32( encoded, sizeof( encoded ), IdString::Seed, &hash );
+
+        char tmpBuffer[64];
+        LwString encodedName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+        encodedName.a( "\"Macroblock_", hash, "\"" );
+
+        return encodedName.c_str();
     }
     //-----------------------------------------------------------------------------------
     String HlmsJson::getName( const HlmsBlendblock *blendblock ) const
     {
-        return "\"Blendblock_" + StringConverter::toString( blendblock->mLifetimeId ) + '"';
+        uint64 encoded[2];
+        blendblock->encode( encoded );
+
+        uint32 hash;
+        MurmurHash3_x86_32( encoded, sizeof( encoded ), IdString::Seed, &hash );
+
+        char tmpBuffer[64];
+        LwString encodedName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+        encodedName.a( "\"Blendblock_", hash, "\"" );
+
+        return encodedName.c_str();
     }
     //-----------------------------------------------------------------------------------
     String HlmsJson::getName( const HlmsSamplerblock *samplerblock )
     {
-        return "\"Sampler_" + StringConverter::toString( samplerblock->mLifetimeId ) + '"';
+        uint64 encoded[6];
+        samplerblock->encode( encoded );
+
+        uint32 hash;
+        MurmurHash3_x86_32( encoded, sizeof( encoded ), IdString::Seed, &hash );
+
+        char tmpBuffer[64];
+        LwString encodedName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+        encodedName.a( "\"Sampler_", hash, "\"" );
+
+        return encodedName.c_str();
     }
     //-----------------------------------------------------------------------------------
     void HlmsJson::saveSamplerblock( const HlmsSamplerblock *samplerblock, String &outString )
@@ -1125,6 +1155,40 @@ namespace Ogre
         outString += "\n\t\t},";
     }
     //-----------------------------------------------------------------------------------
+    struct SortByData
+    {
+        bool operator()( const HlmsMacroblock *a, const HlmsMacroblock *b ) const
+        {
+            uint64 ua[2], ub[2];
+            a->encode( ua );
+            b->encode( ub );
+            if( ua[0] != ub[0] )
+                return ua[0] < ub[0];
+            return ua[1] < ub[1];
+        }
+        bool operator()( const HlmsBlendblock *a, const HlmsBlendblock *b ) const
+        {
+            uint64 ua[2], ub[2];
+            a->encode( ua );
+            b->encode( ub );
+            if( ua[0] != ub[0] )
+                return ua[0] < ub[0];
+            return ua[1] < ub[1];
+        }
+        bool operator()( const HlmsSamplerblock *a, const HlmsSamplerblock *b ) const
+        {
+            uint64 ua[6], ub[6];
+            a->encode( ua );
+            b->encode( ub );
+            for( size_t i = 0u; i < 5u; ++i )
+            {
+                if( ua[i] != ub[i] )
+                    return ua[i] < ub[i];
+            }
+            return ua[5] < ub[5];
+        }
+    };
+
     void HlmsJson::saveMaterials( const Hlms *hlms, String &outString,
                                   const String &additionalTextureExtension, bool sortByName )
     {
@@ -1133,9 +1197,9 @@ namespace Ogre
         const Hlms::HlmsDatablockMap &datablockMap = hlms->getDatablockMap();
         const HlmsDatablock *defaultDatablock = hlms->getDefaultDatablock();
 
-        set<const HlmsMacroblock *>::type macroblocks;
-        set<const HlmsBlendblock *>::type blendblocks;
-        set<const HlmsSamplerblock *>::type samplerblocks;
+        set<const HlmsMacroblock *, SortByData>::type macroblocks;
+        set<const HlmsBlendblock *, SortByData>::type blendblocks;
+        set<const HlmsSamplerblock *>::type samplerblocksTmp;
 
         {
             Hlms::HlmsDatablockMap::const_iterator itor = datablockMap.begin();
@@ -1160,7 +1224,7 @@ namespace Ogre
                     if( blendblock != blendblockCaster )
                         blendblocks.insert( blendblockCaster );
 
-                    hlms->_collectSamplerblocks( samplerblocks, datablock );
+                    hlms->_collectSamplerblocks( samplerblocksTmp, datablock );
                 }
 
                 ++itor;
@@ -1168,14 +1232,15 @@ namespace Ogre
         }
 
         {
-            set<const HlmsSamplerblock *>::type::const_iterator itor = samplerblocks.begin();
-            set<const HlmsSamplerblock *>::type::const_iterator endt = samplerblocks.end();
+            set<const HlmsSamplerblock *, SortByData>::type samplerblocks;
+            for( const HlmsSamplerblock *s : samplerblocksTmp )
+                samplerblocks.insert( s );
 
             if( !samplerblocks.empty() )
                 outString += "\n\t\"samplers\" :\n\t{";
 
-            while( itor != endt )
-                saveSamplerblock( *itor++, outString );
+            for( const HlmsSamplerblock *s : samplerblocks )
+                saveSamplerblock( s, outString );
 
             if( !samplerblocks.empty() )
             {
@@ -1185,14 +1250,11 @@ namespace Ogre
         }
 
         {
-            set<const HlmsMacroblock *>::type::const_iterator itor = macroblocks.begin();
-            set<const HlmsMacroblock *>::type::const_iterator endt = macroblocks.end();
-
             if( !macroblocks.empty() )
                 outString += "\n\n\t\"macroblocks\" :\n\t{";
 
-            while( itor != endt )
-                saveMacroblock( *itor++, outString );
+            for( const HlmsMacroblock *m : macroblocks )
+                saveMacroblock( m, outString );
 
             if( !macroblocks.empty() )
             {
@@ -1202,14 +1264,11 @@ namespace Ogre
         }
 
         {
-            set<const HlmsBlendblock *>::type::const_iterator itor = blendblocks.begin();
-            set<const HlmsBlendblock *>::type::const_iterator endt = blendblocks.end();
-
             if( !blendblocks.empty() )
                 outString += "\n\n\t\"blendblocks\" :\n\t{";
 
-            while( itor != endt )
-                saveBlendblock( *itor++, outString );
+            for( const HlmsBlendblock *b : blendblocks )
+                saveBlendblock( b, outString );
 
             if( !blendblocks.empty() )
             {
