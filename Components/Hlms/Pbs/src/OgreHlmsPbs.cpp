@@ -3128,6 +3128,8 @@ namespace Ogre
 
         if( OGRE_EXTRACT_HLMS_TYPE_FROM_CACHE_HASH( lastCacheHash ) != mType )
         {
+            if( mCurrentPassBuffer == 0 )
+                return 0;
             // layout(binding = 0) uniform PassBuffer {} pass
             ConstBufferPacked *passBuffer = mPassBuffers[mCurrentPassBuffer - 1];
             *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
