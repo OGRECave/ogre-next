@@ -284,7 +284,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     bool Camera::isViewOutOfDate() const
     {
-        const Quaternion derivedOrient( mParentNode->_getDerivedOrientationUpdated() );
+        const Quaternion derivedOrient( mParentNode->_getDerivedOrientation() );
         const Vector3 derivedPos( mParentNode->_getDerivedPosition() );
 
         // Overridden from Frustum to use local orientation / position offsets

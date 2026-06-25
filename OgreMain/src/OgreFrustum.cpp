@@ -719,7 +719,7 @@ namespace Ogre
         // Attached to node?
         if( mParentNode )
         {
-            const Quaternion derivedOrient( mParentNode->_getDerivedOrientationUpdated() );
+            const Quaternion derivedOrient( mParentNode->_getDerivedOrientation() );
             const Vector3 derivedPos( mParentNode->_getDerivedPosition() );
 
             if( mRecalcView || derivedOrient != mLastParentOrientation ||

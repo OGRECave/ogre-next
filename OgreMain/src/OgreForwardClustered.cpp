@@ -99,6 +99,16 @@ namespace Ogre
             sceneNode->attachObject( newCamera );
             mThreadCameras.push_back( newCamera );
         }
+
+        // Make sure mCachedTransformOutOfDate = false. We don't multithread this because
+        // unless we have thousands of threads, we have exactly one node per thread.
+        const size_t numDepths = mNodeMemoryManager->getNumDepths();
+        for( size_t i = 0u; i < numDepths; ++i )
+        {
+            Transform t;
+            const size_t numNodes = mNodeMemoryManager->getFirstNode( t, i );
+            Node::updateAllTransforms( numNodes, t );
+        }
     }
     //-----------------------------------------------------------------------------------
     ForwardClustered::~ForwardClustered()

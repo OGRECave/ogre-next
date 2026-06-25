@@ -109,6 +109,12 @@ namespace Ogre
         {
             pseudoRootNode = sceneManager->createSceneNode( SCENE_DYNAMIC );
             pseudoRootNode->setIndestructibleByClearScene( true );
+            // If user called CompositorManager::addWorkspace after SceneManager::updateSceneGraph,
+            // then this pseudoRootNode will trigger unnecessary asserts. Make sure this doesn't happen
+            // by forcing a _getFullTransformUpdated(). The cost should be negligible unless the user
+            // is creating and destroying lots of workspaces (but that in itself is a VERY expensive
+            // operation).
+            pseudoRootNode->_getFullTransformUpdated();
         }
 
         // Create the local textures
