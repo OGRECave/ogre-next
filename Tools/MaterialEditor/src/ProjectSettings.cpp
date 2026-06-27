@@ -6,6 +6,7 @@
 #include "OgreHlms.h"
 #include "OgreHlmsJson.h"
 #include "OgreHlmsManager.h"
+#include "OgreLogManager.h"
 #include "OgreMeshManager.h"
 #include "OgreMeshManager2.h"
 #include "OgreResourceGroupManager.h"
@@ -212,6 +213,8 @@ void ProjectSettings::loadProject( Ogre::HlmsManager *hlmsManager )
     m_samplerTemplates.clear();
     generateDefaultSamplerTemplates();
 
+    bool bErrorsFound = false;
+
     const Ogre::String relativeFolder = m_relativeFolder.utf8_string();
 
     for( const wxString &resource : m_resources )
@@ -241,21 +244,51 @@ void ProjectSettings::loadProject( Ogre::HlmsManager *hlmsManager )
                         if( !archName.empty() && archName.front() == '/' )
                             archName.erase( 0u );
 
-                        Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
-                            relativeFolder + archName, typeName, secName );
-                        m_resourceLocations.push_back( { relativeFolder + archName, secName } );
+                        try
+                        {
+                            Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+                                relativeFolder + archName, typeName, secName );
+                            m_resourceLocations.push_back( { relativeFolder + archName, secName } );
+                        }
+                        catch( Ogre::Exception &e )
+                        {
+                            Ogre::LogManager::getSingleton().logMessage( e.getFullDescription(),
+                                                                         Ogre::LML_CRITICAL );
+                            bErrorsFound = true;
+                        }
                     }
                 }
             }
         }
         else
         {
-            Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
-                resource.utf8_string(), "FileSystem",
-                Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
-            m_resourceLocations.push_back(
-                { resource.utf8_string(), Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME } );
+            try
+            {
+                Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+                    resource.utf8_string(), "FileSystem",
+                    Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+                m_resourceLocations.push_back(
+                    { resource.utf8_string(),
+                      Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME } );
+            }
+            catch( Ogre::Exception &e )
+            {
+                Ogre::LogManager::getSingleton().logMessage( e.getFullDescription(),
+                                                             Ogre::LML_CRITICAL );
+                bErrorsFound = true;
+            }
         }
+    }
+
+    if( bErrorsFound )
+    {
+        wxMessageDialog dlg( this,
+                             "Some folders threw errors while trying to load them.\n"
+                             "Probably wrong paths to *.zip files.\n"
+                             "See Ogre.log or console for more info.",
+                             "Errors in ResourceGroupManager::addResourceLocation",
+                             wxOK | wxICON_ERROR );
+        dlg.ShowModal();
     }
 
     const char *suffix[] = { "_pbs.material.json", "_unlit.material.json" };
