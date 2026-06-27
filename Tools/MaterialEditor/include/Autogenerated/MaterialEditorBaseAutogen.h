@@ -54,9 +54,11 @@ protected:
         wxID_MENUCOORDINATE_X_UP,
         wxID_MENUCOORDINATE_Y_UP,
         wxID_MENUCOORDINATE_Z_UP,
+        wxID_ENGINE_HLMS_RELOAD,
     };
 
     wxMenu *m_menuView;
+    wxMenu *m_menuEngine;
 
     // Virtual event handlers, override them in your derived class
     virtual void OnMenuSelection( wxCommandEvent &event ) { event.Skip(); }

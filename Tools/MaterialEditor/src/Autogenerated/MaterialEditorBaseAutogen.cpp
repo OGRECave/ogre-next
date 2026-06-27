@@ -123,6 +123,15 @@ MainWindowBase::MainWindowBase( wxWindow *parent, wxWindowID id, const wxString 
 
     m_menubar->Append( m_menuView, _( "&View" ) );
 
+    m_menuEngine = new wxMenu();
+    wxMenuItem *m_menuItem26;
+    m_menuItem26 = new wxMenuItem( m_menuEngine, wxID_ENGINE_HLMS_RELOAD,
+                                   wxString( _( "Reload Hlms Shaders" ) ) + wxT( '\t' ) + wxT( "F8" ),
+                                   _( "Reloads all Hlms shaders for live editing" ), wxITEM_NORMAL );
+    m_menuEngine->Append( m_menuItem26 );
+
+    m_menubar->Append( m_menuEngine, _( "E&ngine" ) );
+
     this->SetMenuBar( m_menubar );
 
     this->Centre( wxBOTH );
@@ -164,6 +173,9 @@ MainWindowBase::MainWindowBase( wxWindow *parent, wxWindowID id, const wxString 
     m_menu11->Bind( wxEVT_COMMAND_MENU_SELECTED,
                     wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this,
                     m_menuCoordZup->GetId() );
+    m_menuEngine->Bind( wxEVT_COMMAND_MENU_SELECTED,
+                        wxCommandEventHandler( MainWindowBase::OnMenuSelection ), this,
+                        m_menuItem26->GetId() );
 }
 
 MainWindowBase::~MainWindowBase() {}

@@ -299,6 +299,25 @@
             </object>
           </object>
         </object>
+        <object class="wxMenu" expanded="false">
+          <property name="label">E&amp;ngine</property>
+          <property name="name">m_menuEngine</property>
+          <property name="permission">protected</property>
+          <object class="wxMenuItem" expanded="false">
+            <property name="bitmap"></property>
+            <property name="checked">0</property>
+            <property name="enabled">1</property>
+            <property name="help">Reloads all Hlms shaders for live editing</property>
+            <property name="id">wxID_ENGINE_HLMS_RELOAD</property>
+            <property name="kind">wxITEM_NORMAL</property>
+            <property name="label">Reload Hlms Shaders</property>
+            <property name="name">m_menuItem26</property>
+            <property name="permission">none</property>
+            <property name="shortcut">F8</property>
+            <property name="unchecked_bitmap"></property>
+            <event name="OnMenuSelection">OnMenuSelection</event>
+          </object>
+        </object>
       </object>
     </object>
     <object class="Panel" expanded="false">
