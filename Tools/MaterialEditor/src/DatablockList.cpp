@@ -6,6 +6,10 @@
 #include "OgreHlmsManager.h"
 #include "OgreRoot.h"
 
+#include "rapidjson/document.h"
+
+#include <wx/base64.h>
+#include <wx/log.h>
 #include <wx/tokenzr.h>
 
 DatablockList::DatablockList( MainWindow *parent ) :
@@ -165,4 +169,57 @@ void DatablockList::notifyDatablockSelectChanged()
                 populateFromDatabase( false );
         }
     }
+}
+//-----------------------------------------------------------------------------
+void DatablockList::loadProject( const rapidjson::Document &d )
+{
+    EditingScope scope( m_editing );
+
+    rapidjson::Value::ConstMemberIterator itor = d.FindMember( "datablock_list" );
+    if( itor == d.MemberEnd() || !itor->value.IsObject() )
+        return;
+
+    const rapidjson::Value &dbListObj = itor->value;
+
+    itor = dbListObj.FindMember( "pbs" );
+    if( itor != dbListObj.MemberEnd() && itor->value.IsBool() )
+        m_pbsCheckbox->SetValue( itor->value.GetBool() );
+
+    itor = dbListObj.FindMember( "unlit" );
+    if( itor != dbListObj.MemberEnd() && itor->value.IsBool() )
+        m_unlitCheckbox->SetValue( itor->value.GetBool() );
+
+    itor = dbListObj.FindMember( "active_mesh_only" );
+    if( itor != dbListObj.MemberEnd() && itor->value.IsBool() )
+        m_activeMeshOnlyCheckbox->SetValue( itor->value.GetBool() );
+
+    itor = dbListObj.FindMember( "search" );
+    if( itor != dbListObj.MemberEnd() && itor->value.IsString() )
+    {
+        const char *searchAsBase64 = itor->value.GetString();
+
+        const wxMemoryBuffer decoded = wxBase64Decode( searchAsBase64 );
+
+        wxString searchStr( static_cast<const char *>( decoded.GetData() ), wxConvUTF8,
+                            decoded.GetDataLen() );
+        m_searchCtrl->SetValue( searchStr );
+    }
+}
+//-----------------------------------------------------------------------------
+void DatablockList::saveProject( Ogre::String &jsonString )
+{
+    const std::string utf8 = m_searchCtrl->GetValue().utf8_string();
+    const wxString searchAsBase64 = wxBase64Encode( utf8.data(), utf8.length() );
+
+    jsonString += ",\n	\"datablock_list\" :\n	{";
+    jsonString += "\n		\"pbs\" : ";
+    jsonString += m_pbsCheckbox->IsChecked() ? "true" : "false";
+    jsonString += ",\n		\"unlit\" : ";
+    jsonString += m_unlitCheckbox->IsChecked() ? "true" : "false";
+    jsonString += ",\n		\"active_mesh_only\" : ";
+    jsonString += m_activeMeshOnlyCheckbox->IsChecked() ? "true" : "false";
+    jsonString += ",\n		\"search\" : \"";
+    jsonString += searchAsBase64;
+    jsonString += "\"";
+    jsonString += "\n	}";
 }

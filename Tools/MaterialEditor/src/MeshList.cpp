@@ -5,6 +5,9 @@
 #include "OgreMesh2.h"
 #include "OgreMeshManager2.h"
 
+#include "rapidjson/document.h"
+
+#include <wx/base64.h>
 #include <wx/tokenzr.h>
 
 MeshList::MeshList( MainWindow *parent ) :
@@ -123,4 +126,39 @@ void MeshList::notifyMeshSelectChanged()
                 populateFromDatabase();
         }
     }
+}
+//-----------------------------------------------------------------------------
+void MeshList::loadProject( const rapidjson::Document &d )
+{
+    EditingScope scope( m_editing );
+
+    rapidjson::Value::ConstMemberIterator itor = d.FindMember( "mesh_list" );
+    if( itor == d.MemberEnd() || !itor->value.IsObject() )
+        return;
+
+    const rapidjson::Value &meshListObj = itor->value;
+
+    itor = meshListObj.FindMember( "search" );
+    if( itor != meshListObj.MemberEnd() && itor->value.IsString() )
+    {
+        const char *searchAsBase64 = itor->value.GetString();
+
+        const wxMemoryBuffer decoded = wxBase64Decode( searchAsBase64 );
+
+        wxString searchStr( static_cast<const char *>( decoded.GetData() ), wxConvUTF8,
+                            decoded.GetDataLen() );
+        m_searchCtrl->SetValue( searchStr );
+    }
+}
+//-----------------------------------------------------------------------------
+void MeshList::saveProject( Ogre::String &jsonString )
+{
+    const std::string utf8 = m_searchCtrl->GetValue().utf8_string();
+    const wxString searchAsBase64 = wxBase64Encode( utf8.data(), utf8.length() );
+
+    jsonString += ",\n	\"mesh_list\" :\n	{";
+    jsonString += "\n		\"search\" : \"";
+    jsonString += searchAsBase64;
+    jsonString += "\"";
+    jsonString += "\n	}";
 }

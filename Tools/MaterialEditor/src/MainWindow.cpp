@@ -844,7 +844,8 @@ void MainWindow::OnMenuSelection( wxCommandEvent &event )
             m_meshList->populateFromDatabase();
 
             m_pbsTexturePanel->unsetEnvMapFromAllDatablocks();
-            m_projectSettings->saveProject( m_root->getHlmsManager(), *m_lightPanel );
+            m_projectSettings->saveProject( m_root->getHlmsManager(), *m_lightPanel, *m_datablockList,
+                                            *m_meshList );
             m_pbsTexturePanel->notifyMeshChanged();
         }
         break;
@@ -854,7 +855,8 @@ void MainWindow::OnMenuSelection( wxCommandEvent &event )
         if( !projPath.empty() )
         {
             unloadForNewProject();
-            m_projectSettings->openProject( projPath, m_root->getHlmsManager(), *m_lightPanel );
+            m_projectSettings->openProject( projPath, m_root->getHlmsManager(), *m_lightPanel,
+                                            *m_datablockList, *m_meshList );
             Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups( true );
             m_datablockList->populateFromDatabase();
             m_meshList->populateFromDatabase();
@@ -863,7 +865,8 @@ void MainWindow::OnMenuSelection( wxCommandEvent &event )
     }
     case wxID_SAVE:
         m_pbsTexturePanel->unsetEnvMapFromAllDatablocks();
-        m_projectSettings->saveProject( m_root->getHlmsManager(), *m_lightPanel );
+        m_projectSettings->saveProject( m_root->getHlmsManager(), *m_lightPanel, *m_datablockList,
+                                        *m_meshList );
         m_pbsTexturePanel->notifyMeshChanged();
         break;
     case wxID_PREFERENCES:

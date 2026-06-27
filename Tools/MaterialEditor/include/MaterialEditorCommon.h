@@ -11,7 +11,9 @@ OGRE_ASSUME_NONNULL_BEGIN
 class wxSlider;
 class wxTextCtrl;
 
+class DatablockList;
 class LightPanel;
+class MeshList;
 
 struct EditingScope
 {

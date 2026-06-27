@@ -61,11 +61,13 @@ public:
 
     void newProject( Ogre::HlmsManager *hlmsManager );
 
-    void openProject( wxString projectPath, Ogre::HlmsManager *hlmsManager, LightPanel &lightPanel );
+    void openProject( wxString projectPath, Ogre::HlmsManager *hlmsManager, LightPanel &lightPanel,
+                      DatablockList &datablockList, MeshList &meshList );
 
     wxString openProjectModal();
 
-    void saveProject( Ogre::HlmsManager *hlmsManager, LightPanel &lightPanel );
+    void saveProject( Ogre::HlmsManager *hlmsManager, LightPanel &lightPanel,
+                      DatablockList &datablockList, MeshList &meshList );
 
     void loadInternalSettings( const std::string &rwFolder );
     void saveInternalSettings( const std::string &rwFolder );

@@ -1,6 +1,8 @@
 #include "ProjectSettings.h"
 
+#include "DatablockList.h"
 #include "LightPanel.h"
+#include "MeshList.h"
 
 #include "OgreConfigFile.h"
 #include "OgreHlms.h"
@@ -317,7 +319,8 @@ void ProjectSettings::loadProject( Ogre::HlmsManager *hlmsManager )
     }
 }
 //-----------------------------------------------------------------------------
-void ProjectSettings::saveProject( Ogre::HlmsManager *hlmsManager, LightPanel &lightPanel )
+void ProjectSettings::saveProject( Ogre::HlmsManager *hlmsManager, LightPanel &lightPanel,
+                                   DatablockList &datablockList, MeshList &meshList )
 {
     Ogre::String jsonString;
 
@@ -361,6 +364,8 @@ void ProjectSettings::saveProject( Ogre::HlmsManager *hlmsManager, LightPanel &l
     jsonString += "\n	}";
 
     lightPanel.saveProject( jsonString );
+    datablockList.saveProject( jsonString );
+    meshList.saveProject( jsonString );
 
     jsonString += "\n}";
 
@@ -423,7 +428,8 @@ void ProjectSettings::newProject( Ogre::HlmsManager *hlmsManager )
 }
 //-----------------------------------------------------------------------------
 void ProjectSettings::openProject( wxString projectPath, Ogre::HlmsManager *hlmsManager,
-                                   LightPanel &lightPanel )
+                                   LightPanel &lightPanel, DatablockList &datablockList,
+                                   MeshList &meshList )
 {
     projectPath.Replace( "\\", "/" );
     m_projectPath = projectPath;
@@ -523,6 +529,8 @@ void ProjectSettings::openProject( wxString projectPath, Ogre::HlmsManager *hlms
     }
 
     lightPanel.loadProject( d );
+    datablockList.loadProject( d );
+    meshList.loadProject( d );
 
     newProject( hlmsManager );
 }
