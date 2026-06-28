@@ -980,6 +980,15 @@ bool MainWindow::loadMeshAsItem( const Ogre::String &meshName, const Ogre::Strin
         mesh->prepareForShadowMapping( true );
 
         item = m_sceneManager->createItem( meshName, resourceGroup );
+
+        if( item->getNumSubItems() > 0u && item->getSubItem( 0u )->hasSkeletonAnimation() &&
+            !item->hasSkeleton() )
+        {
+            wxMessageBox( wxT( "Mesh has skeleton but couldn't be loaded.\nRefusing to load." ),
+                          wxT( "Mesh Open Error" ), wxOK | wxICON_ERROR );
+            m_sceneManager->destroyItem( item );
+            return false;
+        }
     }
     catch( Ogre::Exception & )
     {
