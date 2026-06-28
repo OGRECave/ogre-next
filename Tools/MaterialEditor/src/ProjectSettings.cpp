@@ -285,10 +285,10 @@ void ProjectSettings::loadProject( Ogre::HlmsManager *hlmsManager )
     if( bErrorsFound )
     {
         wxMessageDialog dlg( this,
-                             "Some folders threw errors while trying to load them.\n"
-                             "Probably wrong paths to *.zip files.\n"
-                             "See Ogre.log or console for more info.",
-                             "Errors in ResourceGroupManager::addResourceLocation",
+                             wxT( "Some folders threw errors while trying to load them.\n"
+                                  "Probably wrong paths to *.zip files.\n"
+                                  "See Ogre.log or console for more info." ),
+                             wxT( "Errors in ResourceGroupManager::addResourceLocation" ),
                              wxOK | wxICON_ERROR );
         dlg.ShowModal();
     }
