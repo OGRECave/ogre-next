@@ -8,10 +8,10 @@ var _ogre_hlms_common_8h =
     [ "CustomPieceStage", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2", [
       [ "PreVertexShader", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2a0659fd37adbe169a34bdeb26ad2ac499", null ],
       [ "VertexShader", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2aa12f7ba6da5d137f2d467a969d99a067", null ],
+      [ "PixelShader", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2a8a28a29c459c8ff066361423f5827fa2", null ],
       [ "GeometryShader", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2ac0cbd5d14013adadb2b51737f9b6e2c4", null ],
       [ "HullShader", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2a9deac1af05aeedfb3f804fa829b65ad2", null ],
       [ "DomainShader", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2a4d0cd53c1f975de3328233821810ab0f", null ],
-      [ "PixelShader", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2a8a28a29c459c8ff066361423f5827fa2", null ],
       [ "NumCustomPieceStages", "_ogre_hlms_common_8h.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2ac1d5c9984c071f1e546f8628fa88ed80", null ]
     ] ],
     [ "HlmsCacheFlags", "_ogre_hlms_common_8h.html#ga880ab7a167290fb308acb6e7ce39c87e", [
