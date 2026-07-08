@@ -247,10 +247,10 @@ namespace Ogre
         {
             PreVertexShader,  // For pieces parsed before the default Vertex Shader pieces are parses.
             VertexShader,
+            PixelShader,
             GeometryShader,
             HullShader,
             DomainShader,
-            PixelShader,
             NumCustomPieceStages
         };
 
