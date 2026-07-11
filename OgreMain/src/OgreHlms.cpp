@@ -3082,8 +3082,7 @@ namespace Ogre
         }
 
         {
-            const HlmsDatablock::CustomPropertyVec &customProperties =
-                datablock->getCustomProperties();
+            const HlmsDatablock::CustomPropertyVec &customProperties = datablock->getCustomProperties();
             for( const HlmsDatablock::CustomProperty &property : customProperties )
                 setProperty( kNoTid, property.keyName, property.value );
         }
