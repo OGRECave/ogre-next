@@ -1120,7 +1120,7 @@ var searchData=
   ['customparameters_1117',['customParameters',['../struct_ogre_1_1_material_script_program_definition.html#abf09687c02c29949b5d8dcc57cd5d700',1,'Ogre::MaterialScriptProgramDefinition']]],
   ['custompiecestage_1118',['CustomPieceStage',['../namespace_ogre_1_1_custom_piece_stage.html#a83fc0b9c0a74dc32fc5542fe6f6eadd2',1,'Ogre::CustomPieceStage']]],
   ['customproperty_1119',['customproperty',['../struct_ogre_1_1_hlms_datablock_1_1_custom_property.html#ab97c221f22789da2cbe8cf13c0d9271c',1,'Ogre::HlmsDatablock::CustomProperty::CustomProperty()'],['../struct_ogre_1_1_hlms_datablock_1_1_custom_property.html',1,'Ogre::HlmsDatablock::CustomProperty']]],
-  ['custompropertyarray_1120',['CustomPropertyArray',['../class_ogre_1_1_hlms_datablock.html#a0ae6b881e036c10a5bd0a8284418c699',1,'Ogre::HlmsDatablock']]],
+  ['custompropertyvec_1120',['CustomPropertyVec',['../class_ogre_1_1_hlms_datablock.html#a1f55e80b19d04a285c51b8215fdcf48c',1,'Ogre::HlmsDatablock']]],
   ['cwbackingstore_1121',['CWBackingStore',['../_ogre_x11_e_g_l_support_8h.html#ade673eb0c1fef040ace2e4db5da9927f',1,'OgreX11EGLSupport.h']]],
   ['cwbackpixel_1122',['CWBackPixel',['../_ogre_x11_e_g_l_support_8h.html#a27bdba5d4467ae3ae800c1514cd03b42',1,'OgreX11EGLSupport.h']]],
   ['cwborderpixel_1123',['CWBorderPixel',['../_ogre_x11_e_g_l_support_8h.html#a4e1465cc0764234bc6570dce3cbec6fd',1,'OgreX11EGLSupport.h']]],

@@ -84,7 +84,6 @@ var hierarchy =
     [ "Ogre::FastArray< const char * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< const Ogre::HlmsSamplerblock * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< const Ogre::TextureGpu * >", "class_ogre_1_1_fast_array.html", null ],
-    [ "Ogre::FastArray< CustomProperty >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< DescriptorSetTexture2::Slot >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< DescriptorSetUav::Slot >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< DEVMODE >", "class_ogre_1_1_fast_array.html", null ],

@@ -550,7 +550,7 @@ var searchData=
   ['getcustomparameters_547',['getCustomParameters',['../class_ogre_1_1_renderable.html#a2f525da7be6057601648d8ed69fa1e79',1,'Ogre::Renderable']]],
   ['getcustompiecefileidhash_548',['getCustomPieceFileIdHash',['../class_ogre_1_1_hlms_datablock.html#ac7515008982183be8aef60a43ca6738c',1,'Ogre::HlmsDatablock']]],
   ['getcustompiecefilestr_549',['getCustomPieceFileStr',['../class_ogre_1_1_hlms_datablock.html#a9101aef7b43e8a14750b8a49a84f4d2a',1,'Ogre::HlmsDatablock']]],
-  ['getcustomproperties_550',['getCustomProperties',['../class_ogre_1_1_hlms_datablock.html#ac86d196e742fac452860fcfe8ed0fa7f',1,'Ogre::HlmsDatablock']]],
+  ['getcustomproperties_550',['getCustomProperties',['../class_ogre_1_1_hlms_datablock.html#aec313ed029fb54142a47a417f10ae3df',1,'Ogre::HlmsDatablock']]],
   ['getcustomworldspacecorners_551',['getCustomWorldSpaceCorners',['../class_ogre_1_1_frustum.html#ab77b3b9a504518e7e8252cb789e74ff1',1,'Ogre::Frustum']]],
   ['getd3d11rendersystem_552',['getD3D11RenderSystem',['../class_ogre_1_1_d3_d11_vao_manager.html#a09d9ff0c1e4a348170816e6e7ecdac3b',1,'Ogre::D3D11VaoManager']]],
   ['getd3dbuffer_553',['getD3DBuffer',['../class_ogre_1_1v1_1_1_d3_d11_hardware_buffer.html#a0c87dc01c3209b5ac360544e612abd31',1,'Ogre::v1::D3D11HardwareBuffer']]],

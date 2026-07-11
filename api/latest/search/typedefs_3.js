@@ -64,5 +64,5 @@ var searchData=
   ['creategpuprogramcallback_61',['creategpuprogramcallback',['../class_ogre_1_1_vulkan_gpu_program_manager.html#af316078ddcd71c77c2d1c90a11671f8b',1,'Ogre::VulkanGpuProgramManager::CreateGpuProgramCallback'],['../class_ogre_1_1_metal_gpu_program_manager.html#a57f4e910b4f119e33a750b7fbb85ff66',1,'Ogre::MetalGpuProgramManager::CreateGpuProgramCallback'],['../class_ogre_1_1_g_l_e_s2_gpu_program_manager.html#ac46d42666f9dacaa89c29247cdfe8dda',1,'Ogre::GLES2GpuProgramManager::CreateGpuProgramCallback'],['../class_ogre_1_1_g_l_s_l_shader_manager.html#afc3f1f41407051680a625a1480b32ad2',1,'Ogre::GLSLShaderManager::CreateGpuProgramCallback']]],
   ['cubemapprobevec_62',['CubemapProbeVec',['../namespace_ogre.html#a2f4d75e871cfa4db95557dbb4fad0980',1,'Ogre']]],
   ['customparametermap_63',['CustomParameterMap',['../class_ogre_1_1_renderable.html#a117563eda1d3affcd4a64c6bf4f8663a',1,'Ogre::Renderable']]],
-  ['custompropertyarray_64',['CustomPropertyArray',['../class_ogre_1_1_hlms_datablock.html#a0ae6b881e036c10a5bd0a8284418c699',1,'Ogre::HlmsDatablock']]]
+  ['custompropertyvec_64',['CustomPropertyVec',['../class_ogre_1_1_hlms_datablock.html#a1f55e80b19d04a285c51b8215fdcf48c',1,'Ogre::HlmsDatablock']]]
 ];
