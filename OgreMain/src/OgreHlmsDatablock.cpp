@@ -308,7 +308,7 @@ namespace Ogre
         return mCreator->getDatablockCustomPieceFileNameStr( mCustomPieceFileIdHash[stage] );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsDatablock::setCustomProperties( CustomPropertyArray &properties, bool bSwap )
+    void HlmsDatablock::setCustomProperties( CustomPropertyVec &properties, bool bSwap )
     {
         if( bSwap )
             mCustomProperties.swap( properties );

@@ -446,7 +446,7 @@ namespace Ogre
             }
         };
 
-        typedef FastArray<CustomProperty> CustomPropertyArray;
+        typedef vector<CustomProperty>::type CustomPropertyVec;
 
     protected:
         // Non-hot variables first (can't put them last as HlmsDatablock may be derived and
@@ -486,7 +486,7 @@ namespace Ogre
         HlmsMacroblock const *mMacroblock[2];
         HlmsBlendblock const *mBlendblock[2];
 
-        CustomPropertyArray mCustomProperties;
+        CustomPropertyVec mCustomProperties;
 
     public:
         /// When false, we won't try to have Textures become resident
@@ -572,9 +572,9 @@ namespace Ogre
         @param bSwap
             True if we should swap the contents of properties with out container.
         */
-        void setCustomProperties( CustomPropertyArray &properties, bool bSwap );
+        void setCustomProperties( CustomPropertyVec &properties, bool bSwap );
 
-        const CustomPropertyArray &getCustomProperties() const { return mCustomProperties; }
+        const CustomPropertyVec &getCustomProperties() const { return mCustomProperties; }
 
         /** Sets a new macroblock that matches the same parameter as the input.
             Decreases the reference count of the previously set one.

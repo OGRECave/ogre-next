@@ -519,7 +519,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::SizeType numProperties = itor->value.MemberCount();
-            HlmsDatablock::CustomPropertyArray properties;
+            HlmsDatablock::CustomPropertyVec properties;
             properties.reserve( numProperties );
 
             rapidjson::Value::ConstMemberIterator it = itor->value.MemberBegin();
@@ -1112,7 +1112,7 @@ namespace Ogre
             }
         }
 
-        const HlmsDatablock::CustomPropertyArray &customProperties = datablock->getCustomProperties();
+        const HlmsDatablock::CustomPropertyVec &customProperties = datablock->getCustomProperties();
         if( !customProperties.empty() )
         {
             outString +=
