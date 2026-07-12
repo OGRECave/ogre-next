@@ -238,7 +238,7 @@ namespace Ogre
 
         // empty string is reserved for the root
         // not really fatal anymore, however one shouldn't name one's profile as an empty string anyway.
-        assert( ( profileName != "" ) && ( "Profile name can't be an empty string" ) );
+        assert( ( !profileName.empty() ) && ( "Profile name can't be an empty string" ) );
 
         // this would be an internal error.
         assert( mCurrent );
@@ -355,7 +355,7 @@ namespace Ogre
         const uint64 endTime = mTimer->getMicroseconds();
 
         // empty string is reserved for designating an empty parent
-        assert( ( profileName != "" ) && ( "Profile name can't be an empty string" ) );
+        assert( ( !profileName.empty() ) && ( "Profile name can't be an empty string" ) );
 
         // we only process this profile if isn't disabled
         // we check the current instance name against the provided profileName as a guard against
@@ -533,7 +533,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     bool Profiler::watchForMax( const String &profileName )
     {
-        assert( ( profileName != "" ) && ( "Profile name can't be an empty string" ) );
+        assert( ( !profileName.empty() ) && ( "Profile name can't be an empty string" ) );
 
         return mRoot.watchForMax( profileName );
     }
@@ -553,7 +553,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     bool Profiler::watchForMin( const String &profileName )
     {
-        assert( ( profileName != "" ) && ( "Profile name can't be an empty string" ) );
+        assert( ( !profileName.empty() ) && ( "Profile name can't be an empty string" ) );
         return mRoot.watchForMin( profileName );
     }
     //-----------------------------------------------------------------------
@@ -572,7 +572,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     bool Profiler::watchForLimit( const String &profileName, Real limit, bool greaterThan )
     {
-        assert( ( profileName != "" ) && ( "Profile name can't be an empty string" ) );
+        assert( ( !profileName.empty() ) && ( "Profile name can't be an empty string" ) );
         return mRoot.watchForLimit( profileName, limit, greaterThan );
     }
     //-----------------------------------------------------------------------

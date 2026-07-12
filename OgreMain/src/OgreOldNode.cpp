@@ -60,7 +60,7 @@ namespace Ogre
             mListener( 0 )
         {
             // Generate a name
-            mName = "";
+            mName.clear();
 
             needUpdate();
         }

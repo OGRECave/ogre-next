@@ -82,12 +82,12 @@ namespace Ogre
                 if( c == slash && lastc == slash )
                 {
                     // Comment start, clear out the lexeme
-                    lexeme = "";
+                    lexeme.clear();
                     state = COMMENT;
                 }
                 else if( c == star && lastc == slash )
                 {
-                    lexeme = "";
+                    lexeme.clear();
                     state = MULTICOMMENT;
                 }
                 else if( c == quote )
@@ -131,13 +131,13 @@ namespace Ogre
             case POSSIBLECOMMENT:
                 if( c == slash && lastc == slash )
                 {
-                    lexeme = "";
+                    lexeme.clear();
                     state = COMMENT;
                     break;
                 }
                 else if( c == star && lastc == slash )
                 {
-                    lexeme = "";
+                    lexeme.clear();
                     state = MULTICOMMENT;
                     break;
                 }
