@@ -33,9 +33,12 @@ THE SOFTWARE.
 #if __OGRE_HAVE_NEON
 #    define __Mathlib_H__  // Needed to directly include OgreMathlibNEON
 
+// OgreArrayConfig.h must come first: it includes arm_neon.h and defines the
+// ArrayReal/ArrayInt/uint32x4_ct types OgreMathlibNEON.h relies on.
+#    include "Math/Array/OgreArrayConfig.h"
+
 #    include "Math/Array/NEON/Single/OgreMathlibNEON.h"
 #    include "Math/Array/NEON/Single/neon_mathfun.h"
-#    include "Math/Array/OgreArrayConfig.h"
 #    include "Math/Array/OgreBooleanMask.h"
 
 namespace Ogre
