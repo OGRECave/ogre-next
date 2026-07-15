@@ -33,6 +33,9 @@ THE SOFTWARE.
 #    error "Don't include this file directly. include Math/Array/OgreBooleanMask.h"
 #endif
 
+// For vmovemaskq_u32 (the _mm_movemask_ps emulation used by getScalarMask).
+#include "Math/Array/OgreMathlib.h"
+
 namespace Ogre
 {
     class _OgreExport BooleanMask4
