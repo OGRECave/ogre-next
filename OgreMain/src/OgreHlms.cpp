@@ -2453,6 +2453,8 @@ namespace Ogre
             blendblock.mBlendOperationAlpha =
                 static_cast<SceneBlendOperation>( ( blendOperationAlpha >> 20u ) - 1u );
         }
+
+        blendblock.calculateSeparateBlendMode();
     }
     //-----------------------------------------------------------------------------------
     HighLevelGpuProgramPtr Hlms::compileShaderCode( const String &source,
