@@ -2411,8 +2411,9 @@ namespace Ogre
                     D3D11Mappings::get( newBlock->mSourceBlendFactorAlpha, true );
                 blendDesc.RenderTarget[0].DestBlendAlpha =
                     D3D11Mappings::get( newBlock->mDestBlendFactorAlpha, true );
-                blendDesc.RenderTarget[0].BlendOp = blendDesc.RenderTarget[0].BlendOpAlpha =
-                    D3D11Mappings::get( newBlock->mBlendOperation );
+                blendDesc.RenderTarget[0].BlendOp = D3D11Mappings::get( newBlock->mBlendOperation );
+                blendDesc.RenderTarget[0].BlendOpAlpha =
+                    D3D11Mappings::get( newBlock->mBlendOperationAlpha );
 
                 blendDesc.RenderTarget[0].RenderTargetWriteMask =
                     newBlock->mBlendChannelMask & HlmsBlendblock::BlendChannelAll;
@@ -2435,9 +2436,8 @@ namespace Ogre
                     D3D11Mappings::get( newBlock->mSourceBlendFactor, true );
                 blendDesc.RenderTarget[0].DestBlendAlpha =
                     D3D11Mappings::get( newBlock->mDestBlendFactor, true );
-                blendDesc.RenderTarget[0].BlendOp = D3D11Mappings::get( newBlock->mBlendOperation );
-                blendDesc.RenderTarget[0].BlendOpAlpha =
-                    D3D11Mappings::get( newBlock->mBlendOperationAlpha );
+                blendDesc.RenderTarget[0].BlendOp = blendDesc.RenderTarget[0].BlendOpAlpha =
+                    D3D11Mappings::get( newBlock->mBlendOperation );
 
                 blendDesc.RenderTarget[0].RenderTargetWriteMask =
                     newBlock->mBlendChannelMask & HlmsBlendblock::BlendChannelAll;
