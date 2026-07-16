@@ -2186,6 +2186,8 @@ namespace Ogre
 
             pso.macroblock = mHlmsManager->getMacroblock( prepassMacroblock );
         }
+
+        blendblock.calculateSeparateBlendMode();
     }
     //-----------------------------------------------------------------------------------
     HighLevelGpuProgramPtr Hlms::compileShaderCode( const String &source,
