@@ -1848,7 +1848,21 @@ namespace Ogre
 
         const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
         setProperty( kNoTid, PbsProperty::HwGammaRead, capabilities->hasCapability( RSC_HW_GAMMA ) );
-        setProperty( kNoTid, PbsProperty::HwGammaWrite, 1 );
+        {
+            // Honour non-sRGB colour targets: without hardware gamma on write the
+            // shader must gamma-encode the linear lighting result itself (the
+            // !hw_gamma_write template path), otherwise PBS output lands raw in a
+            // UNORM target and displays crushed/dark.
+            bool hwGammaWrite = true;
+            const RenderPassDescriptor *colourPassDesc = mRenderSystem->getCurrentPassDescriptor();
+            if( colourPassDesc && colourPassDesc->getNumColourEntries() > 0u &&
+                colourPassDesc->mColour[0].texture )
+            {
+                hwGammaWrite = PixelFormatGpuUtils::isSRgb(
+                    colourPassDesc->mColour[0].texture->getPixelFormat() );
+            }
+            setProperty( kNoTid, PbsProperty::HwGammaWrite, hwGammaWrite ? 1 : 0 );
+        }
         retVal.setProperties = mT[kNoTid].setProperties;
 
         CamerasInProgress cameras = sceneManager->getCamerasInProgress();
