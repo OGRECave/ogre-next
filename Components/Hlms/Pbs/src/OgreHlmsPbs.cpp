@@ -1858,8 +1858,8 @@ namespace Ogre
             if( colourPassDesc && colourPassDesc->getNumColourEntries() > 0u &&
                 colourPassDesc->mColour[0].texture )
             {
-                hwGammaWrite = PixelFormatGpuUtils::isSRgb(
-                    colourPassDesc->mColour[0].texture->getPixelFormat() );
+                hwGammaWrite =
+                    PixelFormatGpuUtils::isSRgb( colourPassDesc->mColour[0].texture->getPixelFormat() );
             }
             setProperty( kNoTid, PbsProperty::HwGammaWrite, hwGammaWrite ? 1 : 0 );
         }
