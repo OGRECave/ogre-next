@@ -40,6 +40,7 @@ THE SOFTWARE.
 #include "OgreVulkanRootLayout.h"
 #include "OgreVulkanSupport.h"
 #include "OgreVulkanTextureGpuManager.h"
+#include "OgreVulkanTextureGpuWindow.h"
 #include "OgreVulkanUtils.h"
 #include "OgreVulkanWindow.h"
 #include "Vao/OgreVulkanVaoManager.h"
@@ -3162,6 +3163,22 @@ namespace Ogre
                 VkImageMemoryBarrier imageBarrier = texture->getImageMemoryBarrier();
                 imageBarrier.oldLayout = VulkanMappings::get( itor->oldLayout, texture );
                 imageBarrier.newLayout = VulkanMappings::get( itor->newLayout, texture );
+
+                if( texture->isRenderWindowSpecific() &&
+                    PixelFormatGpuUtils::isAccessible( texture->getPixelFormat() ) )
+                {
+                    // We must add the semaphore now. We may have to flush the queue earlier,
+                    // before even reaching VulkanRenderPassDescriptor::performLoadActions.
+                    OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpuWindow *>( texture ) );
+                    VulkanTextureGpuWindow *textureVulkan =
+                        static_cast<VulkanTextureGpuWindow *>( texture );
+                    VkSemaphore semaphore = textureVulkan->getImageAcquiredSemaphore();
+                    if( semaphore )
+                    {
+                        // We cannot start transition this texture commands until the semaphore says so.
+                        mDevice->mGraphicsQueue.addWindowToWaitFor( semaphore );
+                    }
+                }
 
                 const bool bIsDepth = PixelFormatGpuUtils::isDepth( texture->getPixelFormat() );
 
