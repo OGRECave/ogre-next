@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgreResourceTransition.h"
 
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreRenderSystem.h"
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuManager.h"
@@ -170,7 +171,16 @@ namespace Ogre
             resTrans.resource = texture;
             if( texture->isDiscardableContent() )
             {
-                resTrans.oldLayout = ResourceLayout::Undefined;
+                if( texture->isRenderWindowSpecific() &&
+                    PixelFormatGpuUtils::isAccessible( texture->getPixelFormat() ) )
+                {
+                    resTrans.oldLayout = ResourceLayout::Undefined;
+                }
+                else
+                {
+                    resTrans.oldLayout = texture->getCurrentLayout();
+                }
+
                 if( access == ResourceAccess::Read )
                 {
                     OGRE_EXCEPT(
