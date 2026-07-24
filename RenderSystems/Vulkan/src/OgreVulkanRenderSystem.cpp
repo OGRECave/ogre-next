@@ -3177,6 +3177,7 @@ namespace Ogre
                     {
                         // We cannot start transition this texture commands until the semaphore says so.
                         mDevice->mGraphicsQueue.addWindowToWaitFor( semaphore );
+                        srcStage |= VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
                     }
                 }
 
@@ -3186,7 +3187,13 @@ namespace Ogre
                 // the first time on a new frame (but not necessarily the first time ever)
                 // thus there are no caches needed to flush.
                 //
-                // dstStage only needs to wait for the transition to happen though
+                // dstStage needs to wait for srcStage to finish for the transition to happen though.
+                if( itor->oldLayout != ResourceLayout::Texture &&
+                    itor->oldLayout != ResourceLayout::Uav )
+                {
+                    srcStage |= toVkPipelineStageFlags( itor->oldLayout, bIsDepth );
+                }
+
                 if( itor->oldAccess != ResourceAccess::Undefined )
                 {
                     if( itor->oldAccess & ResourceAccess::Write )
@@ -3195,12 +3202,6 @@ namespace Ogre
                             VulkanMappings::getAccessFlags( itor->oldLayout, itor->oldAccess, texture,
                                                             false ) &
                             c_srcValidAccessFlags;
-                    }
-
-                    if( itor->oldLayout != ResourceLayout::Texture &&
-                        itor->oldLayout != ResourceLayout::Uav )
-                    {
-                        srcStage |= toVkPipelineStageFlags( itor->oldLayout, bIsDepth );
                     }
 
                     if( itor->oldStageMask != 0u )
