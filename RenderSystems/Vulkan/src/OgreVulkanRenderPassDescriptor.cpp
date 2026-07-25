@@ -324,10 +324,7 @@ namespace Ogre
         attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
         if( !bResolveTex )
         {
-            if( attachment.loadOp == VK_ATTACHMENT_LOAD_OP_LOAD )
-                attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            else
-                attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
             if( texture->isRenderWindowSpecific() && !texture->isMultisample() &&
                 mReadyWindowForPresent )
@@ -341,7 +338,7 @@ namespace Ogre
         }
         else
         {
-            attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
             if( texture->isRenderWindowSpecific() && mReadyWindowForPresent )
                 attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
             else
@@ -419,13 +416,7 @@ namespace Ogre
         }
         else
         {
-            if( attachment.loadOp == VK_ATTACHMENT_LOAD_OP_LOAD ||
-                attachment.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_LOAD )
-            {
-                attachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            }
-            else
-                attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            attachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
             attachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
         }
 
