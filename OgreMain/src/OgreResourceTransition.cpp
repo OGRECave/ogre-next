@@ -174,6 +174,7 @@ namespace Ogre
                 if( texture->isRenderWindowSpecific() &&
                     PixelFormatGpuUtils::isAccessible( texture->getPixelFormat() ) )
                 {
+                    // This is a swapchain (depth & stencil textures should not reach here).
                     resTrans.oldLayout = ResourceLayout::Undefined;
                 }
                 else
@@ -212,10 +213,7 @@ namespace Ogre
                                            itor->second.layout );
 #endif
 
-            if( !renderSystem->isSameLayout( itor->second.layout, newLayout, texture, false ) ||
-                ( newLayout == ResourceLayout::Uav &&  //
-                  ( access != ResourceAccess::Read ||  //
-                    itor->second.access != ResourceAccess::Read ) ) )
+            if( itor->second.access != ResourceAccess::Read || access != ResourceAccess::Read )
             {
                 ResourceTransition resTrans;
                 resTrans.resource = texture;

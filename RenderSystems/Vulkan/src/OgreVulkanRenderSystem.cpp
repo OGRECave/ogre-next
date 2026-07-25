@@ -3039,6 +3039,8 @@ namespace Ogre
                 if( texture->isRenderWindowSpecific() &&
                     PixelFormatGpuUtils::isAccessible( texture->getPixelFormat() ) )
                 {
+                    // This is a swapchain (depth & stencil textures should not reach here).
+                    //
                     // We must add the semaphore now. We may have to flush the queue earlier,
                     // before even reaching VulkanRenderPassDescriptor::performLoadActions.
                     OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpuWindow *>( texture ) );
