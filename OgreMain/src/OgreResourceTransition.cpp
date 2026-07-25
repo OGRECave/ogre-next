@@ -211,7 +211,8 @@ namespace Ogre
                                            itor->second.layout );
 #endif
 
-            if( itor->second.access != ResourceAccess::Read || access != ResourceAccess::Read )
+            if( access != ResourceAccess::Read || itor->second.access != ResourceAccess::Read ||
+                !renderSystem->isSameLayout( itor->second.layout, newLayout, texture, false ) )
             {
                 ResourceTransition resTrans;
                 resTrans.resource = texture;
