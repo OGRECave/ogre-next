@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreVulkanMappings.h"
 #include "OgreVulkanQueue.h"
 #include "OgreVulkanTextureGpu.h"
+#include "OgreVulkanTextureGpuWindow.h"
 #include "OgreVulkanUtils.h"
 #include "Vao/OgreVulkanVaoManager.h"
 
@@ -134,6 +135,24 @@ namespace Ogre
             // GPU must stop using this buffer before we can write into it
             vkCmdPipelineBarrier( mQueue->mCurrentCmdBuffer, VK_PIPELINE_STAGE_TRANSFER_BIT,
                                   VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 1u, &memBarrier, 0u, 0, 0u, 0 );
+        }
+
+        if( textureSrc->isRenderWindowSpecific() &&
+            PixelFormatGpuUtils::isAccessible( textureSrc->getPixelFormat() ) )
+        {
+            // This is a swapchain (depth & stencil textures should not reach here).
+            //
+            // We must add the semaphore now.
+            OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpuWindow *>( textureSrc ) );
+            VulkanTextureGpuWindow *textureVulkan = static_cast<VulkanTextureGpuWindow *>( textureSrc );
+            VkSemaphore semaphore = textureVulkan->getImageAcquiredSemaphore();
+            if( semaphore )
+            {
+                mQueue->addWindowToWaitFor( semaphore );
+                vkCmdPipelineBarrier( mQueue->getCurrentCmdBuffer(),
+                                      VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                                      VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0u, 0, 0u, 0, 0u, 0 );
+            }
         }
 
         size_t destBytesPerRow = getBytesPerRow();
