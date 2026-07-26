@@ -811,6 +811,8 @@ namespace Ogre
 
         VkImageViewType texType = this->getInternalVulkanTextureViewType();
 
+        // See comments in VulkanPixelFormatToShaderType::getDataType.
+        // Cubemaps in UAVs are always interpreted as Array2D images.
         if( ( cubemapsAs2DArrays || forUav || numSlices == 1u ) &&
             ( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray ) )
         {
