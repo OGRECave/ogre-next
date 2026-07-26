@@ -158,10 +158,19 @@ namespace Ogre
                 return isMsaa ? "image2DMS" : "image2D";
             case TextureTypes::Type2DArray:
                 return isMsaa ? "image2DMSArray" : "image2DArray";
+            // We treat imageCube (i.e. UAV) as image2DArray for a couple reasons:
+            //  - It's consistent with VulkanTextureGpu::_createView.
+            //  - D3D11/12 does the same thing.
+            //  - It otherwise increases maintenance of shaders by having different shaders
+            //    and paths for cubemaps when they are 100% identical to 2D arrays.
+            //
+            // case TextureTypes::TypeCube:
+            //     return "imageCube";
+            // case TextureTypes::TypeCubeArray:
+            //     return "imageCubeArray";
             case TextureTypes::TypeCube:
-                return "imageCube";
             case TextureTypes::TypeCubeArray:
-                return "imageCubeArray";
+                return "image2DArray";
             case TextureTypes::Type3D:
                 return "image3D";
             }
@@ -182,10 +191,13 @@ namespace Ogre
                     return isMsaa ? "uimage2DMS" : "uimage2D";
                 case TextureTypes::Type2DArray:
                     return isMsaa ? "uimage2DMSArray" : "uimage2DArray";
+                // case TextureTypes::TypeCube:
+                //     return "uimageCube";
+                // case TextureTypes::TypeCubeArray:
+                //     return "uimageCubeArray";
                 case TextureTypes::TypeCube:
-                    return "uimageCube";
                 case TextureTypes::TypeCubeArray:
-                    return "uimageCubeArray";
+                    return "uimage2DArray";
                 case TextureTypes::Type3D:
                     return "uimage3D";
                 }
@@ -203,10 +215,13 @@ namespace Ogre
                     return isMsaa ? "iimage2DMS" : "iimage2D";
                 case TextureTypes::Type2DArray:
                     return isMsaa ? "iimage2DMSArray" : "iimage2DArray";
+                // case TextureTypes::TypeCube:
+                //     return "iimageCube";
+                // case TextureTypes::TypeCubeArray:
+                //     return "iimageCubeArray";
                 case TextureTypes::TypeCube:
-                    return "iimageCube";
                 case TextureTypes::TypeCubeArray:
-                    return "iimageCubeArray";
+                    return "iimage2DArray";
                 case TextureTypes::Type3D:
                     return "iimage3D";
                 }
