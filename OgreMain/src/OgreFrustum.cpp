@@ -67,7 +67,7 @@ namespace Ogre
         mCustomViewMatrix( false ),
         mCustomProjMatrix( false ),
         mFrustumExtentsManuallySet( false ),
-        mFrustrumExtentsType( FET_PROJ_PLANE_POS ),
+        mFrustumExtentsType( FET_PROJ_PLANE_POS ),
         mOrientationMode( OR_DEGREE_0 ),
         mVertexData( NULL ),
         mReflect( false ),
@@ -351,7 +351,7 @@ namespace Ogre
                 top = mTop;
                 bottom = mBottom;
 
-                if( mFrustrumExtentsType == FET_TAN_HALF_ANGLES && mProjType != PT_ORTHOGRAPHIC )
+                if( mFrustumExtentsType == FET_TAN_HALF_ANGLES && mProjType != PT_ORTHOGRAPHIC )
                 {
                     left *= mNearDist;
                     right *= mNearDist;
@@ -553,7 +553,7 @@ namespace Ogre
                 mProjMatrix[2][3] = qn;
                 mProjMatrix[3][3] = 1;
             }  // ortho
-        }      // !mCustomProjMatrix
+        }  // !mCustomProjMatrix
 
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
         // Deal with orientation mode
@@ -1330,10 +1330,10 @@ namespace Ogre
     Real Frustum::getOrthoWindowWidth() const { return mOrthoHeight * mAspect; }
     //---------------------------------------------------------------------
     void Frustum::setFrustumExtents( Real left, Real right, Real top, Real bottom,
-                                     FrustrumExtentsType frustrumExtentsType )
+                                     FrustumExtentsType frustumExtentsType )
     {
         mFrustumExtentsManuallySet = true;
-        mFrustrumExtentsType = frustrumExtentsType;
+        mFrustumExtentsType = frustumExtentsType;
         mLeft = left;
         mRight = right;
         mTop = top;
@@ -1347,15 +1347,15 @@ namespace Ogre
     void Frustum::resetFrustumExtents()
     {
         mFrustumExtentsManuallySet = false;
-        mFrustrumExtentsType = FET_PROJ_PLANE_POS;
+        mFrustumExtentsType = FET_PROJ_PLANE_POS;
         invalidateFrustum();
     }
     //---------------------------------------------------------------------
     void Frustum::getFrustumExtents( Real &outleft, Real &outright, Real &outtop, Real &outbottom,
-                                     FrustrumExtentsType frustrumExtentsType ) const
+                                     FrustumExtentsType frustumExtentsType ) const
     {
         updateFrustum();
-        if( frustrumExtentsType == FET_TAN_HALF_ANGLES && mFrustrumExtentsType == FET_PROJ_PLANE_POS &&
+        if( frustumExtentsType == FET_TAN_HALF_ANGLES && mFrustumExtentsType == FET_PROJ_PLANE_POS &&
             mProjType != PT_ORTHOGRAPHIC )
         {
             outleft = mLeft / mNearDist;
@@ -1363,8 +1363,8 @@ namespace Ogre
             outtop = mTop / mNearDist;
             outbottom = mBottom / mNearDist;
         }
-        else if( frustrumExtentsType == FET_PROJ_PLANE_POS &&
-                 mFrustrumExtentsType == FET_TAN_HALF_ANGLES && mProjType != PT_ORTHOGRAPHIC )
+        else if( frustumExtentsType == FET_PROJ_PLANE_POS &&
+                 mFrustumExtentsType == FET_TAN_HALF_ANGLES && mProjType != PT_ORTHOGRAPHIC )
         {
             outleft = mLeft * mNearDist;
             outright = mRight * mNearDist;
@@ -1397,8 +1397,8 @@ namespace Ogre
     void Frustum::setOrientationMode( OrientationMode orientationMode )
     {
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE != 0
-        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                     "Setting Frustrum orientation mode is not supported", __FUNCTION__ );
+        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Setting Frustum orientation mode is not supported",
+                     __FUNCTION__ );
 #endif
         if( mOrientationMode != orientationMode )
         {
@@ -1410,8 +1410,8 @@ namespace Ogre
     OrientationMode Frustum::getOrientationMode() const
     {
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE != 0
-        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                     "Getting Frustrum orientation mode is not supported", __FUNCTION__ );
+        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Getting Frustum orientation mode is not supported",
+                     __FUNCTION__ );
 #endif
         return mOrientationMode;
     }
