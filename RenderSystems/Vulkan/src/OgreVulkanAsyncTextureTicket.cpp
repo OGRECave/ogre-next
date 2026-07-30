@@ -149,7 +149,7 @@ namespace Ogre
             if( semaphore )
             {
                 mQueue->addWindowToWaitFor( semaphore );
-                vkCmdPipelineBarrier( mQueue->getCurrentCmdBuffer(),
+                vkCmdPipelineBarrier( mQueue->mCurrentCmdBuffer,
                                       VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                                       VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0u, 0, 0u, 0, 0u, 0 );
             }
