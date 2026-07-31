@@ -149,7 +149,38 @@ namespace Ogre
 
 #ifdef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
 #    ifdef OGRE_SHADER_THREADING_USE_TLS
+#        ifdef OGRE_GCC_VISIBILITY
+        /** Left visible on purpose, even though _OgreExport hides every other
+            member of this class in a static build (OGRE_SHADER_THREADING_USE_TLS
+            is a static-only setting, so that is the only build this declaration
+            appears in).
+
+            A translation unit that sees only the declaration cannot know that
+            the definition in OgreHlms.cpp is constant-initialized, so it emits
+            the Itanium ABI thread-local access wrapper (_ZTW...), which weakly
+            references the thread-local init function
+            _ZTHN4Ogre4Hlms10msThreadIdE - a symbol that a constant-initialized
+            variable never defines anywhere. Resolving that dangling weak
+            reference to zero is the linker's job, and it needs the indirection
+            of a GOT entry, which the compiler only emits for a symbol that may
+            bind externally; a hidden symbol it addresses directly, and the
+            resulting relocation cannot be linked into a position-independent
+            executable:
+
+                relocation R_X86_64_PC32 against undefined hidden symbol
+                `_ZTHN4Ogre4Hlms10msThreadIdE' can not be used when making a
+                PIE object
+
+            Only optimized builds hit it. Unoptimized ones leave the reference
+            inside the wrapper's own COMDAT section, which the linker discards
+            in favour of the clean copy OgreHlms.cpp contributes; inlining the
+            wrapper moves the relocation into ordinary code, where it survives
+            to the final link.
+        */
+        static __attribute__( ( visibility( "default" ) ) ) thread_local uint32 msThreadId;
+#        else
         static thread_local uint32 msThreadId;
+#        endif
 #    else
         static constexpr uint32 msThreadId = 0u;
 #    endif
