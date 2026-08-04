@@ -102,4 +102,23 @@ namespace Ogre
     {
         return mDesiredDepthBufferFormat;
     }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    NULLTextureGpuWindow::NULLTextureGpuWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                                VaoManager *vaoManager, IdString name,
+                                                uint32 textureFlags,
+                                                TextureTypes::TextureTypes initialType,
+                                                TextureGpuManager *textureManager, Window *window ) :
+        NULLTextureGpuRenderTarget( pageOutStrategy, vaoManager, name, textureFlags, initialType,
+                                    textureManager ),
+        mWindow( window )
+    {
+    }
+    //-----------------------------------------------------------------------------------
+    void NULLTextureGpuWindow::getCustomAttribute( IdString name, void *pData )
+    {
+        if( name == "Window" )
+            *static_cast<Window **>( pData ) = mWindow;
+    }
 }  // namespace Ogre

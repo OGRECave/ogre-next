@@ -86,6 +86,22 @@ namespace Ogre
         PixelFormatGpu getDesiredDepthBufferFormat() const override;
     };
 
+    /// A RenderWindow-specific texture. Its only job over the base class is to
+    /// answer the "Window" custom attribute, which RenderSystem::getDepthBufferFor
+    /// relies on for every render-window-specific colour target.
+    class _OgreNULLExport NULLTextureGpuWindow final : public NULLTextureGpuRenderTarget
+    {
+        Window *mWindow;
+
+    public:
+        NULLTextureGpuWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                              VaoManager *vaoManager, IdString name, uint32 textureFlags,
+                              TextureTypes::TextureTypes initialType, TextureGpuManager *textureManager,
+                              Window *window );
+
+        void getCustomAttribute( IdString name, void *pData ) override;
+    };
+
     /** @} */
     /** @} */
 }  // namespace Ogre
