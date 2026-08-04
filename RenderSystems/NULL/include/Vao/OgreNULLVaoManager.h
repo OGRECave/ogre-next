@@ -129,6 +129,10 @@ namespace Ogre
 
         VaoVec mVaos;
 
+        /// 0 is reserved by RenderQueue as "no Vao bound", so names start at 1.
+        /// Monotonic: a name is never reused, not even after the Vao is destroyed.
+        uint32 mVaoNames;
+
         VertexBufferPacked *mDrawId;
 
     protected:
