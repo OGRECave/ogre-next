@@ -894,6 +894,7 @@ var annotated_dup =
       [ "NULLTextureGpu", "class_ogre_1_1_n_u_l_l_texture_gpu.html", "class_ogre_1_1_n_u_l_l_texture_gpu" ],
       [ "NULLTextureGpuManager", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html", "class_ogre_1_1_n_u_l_l_texture_gpu_manager" ],
       [ "NULLTextureGpuRenderTarget", "class_ogre_1_1_n_u_l_l_texture_gpu_render_target.html", "class_ogre_1_1_n_u_l_l_texture_gpu_render_target" ],
+      [ "NULLTextureGpuWindow", "class_ogre_1_1_n_u_l_l_texture_gpu_window.html", "class_ogre_1_1_n_u_l_l_texture_gpu_window" ],
       [ "NULLUavBufferPacked", "class_ogre_1_1_n_u_l_l_uav_buffer_packed.html", "class_ogre_1_1_n_u_l_l_uav_buffer_packed" ],
       [ "NULLVaoManager", "class_ogre_1_1_n_u_l_l_vao_manager.html", "class_ogre_1_1_n_u_l_l_vao_manager" ],
       [ "NULLVertexArrayObject", "struct_ogre_1_1_n_u_l_l_vertex_array_object.html", "struct_ogre_1_1_n_u_l_l_vertex_array_object" ],

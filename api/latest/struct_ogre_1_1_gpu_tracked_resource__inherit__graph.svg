@@ -692,19 +692,19 @@
 </a>
 </g>
 </g>
-<!-- Node48 -->
-<g id="Node000048" class="node">
-<title>Node48</title>
-<g id="a_Node000048"><a xlink:href="class_ogre_1_1_vulkan_texture_gpu.html" target="_top" xlink:title=" ">
+<!-- Node49 -->
+<g id="Node000049" class="node">
+<title>Node49</title>
+<g id="a_Node000049"><a xlink:href="class_ogre_1_1_vulkan_texture_gpu.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="468,-27.5 334,-27.5 334,-8.5 468,-8.5 468,-27.5"/>
 <text text-anchor="middle" x="401" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::VulkanTextureGpu</text>
 </a>
 </g>
 </g>
-<!-- Node35&#45;&gt;Node48 -->
-<g id="edge46_Node000035_Node000048" class="edge">
-<title>Node35&#45;&gt;Node48</title>
-<g id="a_edge46_Node000035_Node000048"><a xlink:title=" ">
+<!-- Node35&#45;&gt;Node49 -->
+<g id="edge47_Node000035_Node000049" class="edge">
+<title>Node35&#45;&gt;Node49</title>
+<g id="a_edge47_Node000035_Node000049"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M253.4,-121.76C270.17,-103.1 298.88,-73.31 328,-53 342.82,-42.66 361.16,-33.8 375.61,-27.58"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="250.58,-119.66 246.58,-129.47 255.83,-124.3 250.58,-119.66"/>
 </a>
@@ -733,8 +733,8 @@
 <g id="Node000038" class="node">
 <title>Node38</title>
 <g id="a_Node000038"><a xlink:href="class_ogre_1_1_d3_d11_texture_gpu_window.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="902,-229.5 729,-229.5 729,-210.5 902,-210.5 902,-229.5"/>
-<text text-anchor="middle" x="815.5" y="-217.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::D3D11TextureGpuWindow</text>
+<polygon fill="white" stroke="#666666" points="902,-238.5 729,-238.5 729,-219.5 902,-219.5 902,-238.5"/>
+<text text-anchor="middle" x="815.5" y="-226.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::D3D11TextureGpuWindow</text>
 </a>
 </g>
 </g>
@@ -742,8 +742,8 @@
 <g id="edge36_Node000037_Node000038" class="edge">
 <title>Node37&#45;&gt;Node38</title>
 <g id="a_edge36_Node000037_Node000038"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M693.5,-212.68C705.26,-213.39 717.24,-214.12 728.86,-214.82"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="693.43,-209.17 683.24,-212.06 693.01,-216.16 693.43,-209.17"/>
+<path fill="none" stroke="#63b8ff" d="M693.5,-216.62C705.26,-217.82 717.24,-219.05 728.86,-220.24"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="693.54,-213.1 683.24,-215.57 692.83,-220.07 693.54,-213.1"/>
 </a>
 </g>
 </g>
@@ -770,9 +770,9 @@
 <g id="Node000041" class="node">
 <title>Node41</title>
 <g id="a_Node000041"><a xlink:href="class_ogre_1_1_g_l3_plus_texture_gpu_headless_window.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="908,-192 723,-192 723,-162 908,-162 908,-192"/>
-<text text-anchor="start" x="731" y="-180" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::GL3PlusTextureGpuHeadless</text>
-<text text-anchor="middle" x="815.5" y="-169" font-family="Helvetica,sans-Serif" font-size="10.00">Window</text>
+<polygon fill="white" stroke="#666666" points="908,-201 723,-201 723,-171 908,-171 908,-201"/>
+<text text-anchor="start" x="731" y="-189" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::GL3PlusTextureGpuHeadless</text>
+<text text-anchor="middle" x="815.5" y="-178" font-family="Helvetica,sans-Serif" font-size="10.00">Window</text>
 </a>
 </g>
 </g>
@@ -780,8 +780,8 @@
 <g id="edge39_Node000040_Node000041" class="edge">
 <title>Node40&#45;&gt;Node41</title>
 <g id="a_edge39_Node000040_Node000041"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M696.04,-167.08C704.97,-167.83 714,-168.59 722.89,-169.33"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="696.28,-163.59 686.02,-166.24 695.69,-170.57 696.28,-163.59"/>
+<path fill="none" stroke="#63b8ff" d="M696.04,-171.12C704.97,-172.25 714,-173.38 722.89,-174.5"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="696.38,-167.64 686.02,-169.87 695.51,-174.58 696.38,-167.64"/>
 </a>
 </g>
 </g>
@@ -789,8 +789,8 @@
 <g id="Node000042" class="node">
 <title>Node42</title>
 <g id="a_Node000042"><a xlink:href="class_ogre_1_1_g_l3_plus_texture_gpu_window.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="905,-143.5 726,-143.5 726,-124.5 905,-124.5 905,-143.5"/>
-<text text-anchor="middle" x="815.5" y="-131.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::GL3PlusTextureGpuWindow</text>
+<polygon fill="white" stroke="#666666" points="905,-152.5 726,-152.5 726,-133.5 905,-133.5 905,-152.5"/>
+<text text-anchor="middle" x="815.5" y="-140.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::GL3PlusTextureGpuWindow</text>
 </a>
 </g>
 </g>
@@ -798,8 +798,8 @@
 <g id="edge40_Node000040_Node000042" class="edge">
 <title>Node40&#45;&gt;Node42</title>
 <g id="a_edge40_Node000040_Node000042"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M696.2,-147.76C708.39,-146.34 720.76,-144.9 732.69,-143.51"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="695.55,-144.31 686.02,-148.94 696.36,-151.26 695.55,-144.31"/>
+<path fill="none" stroke="#63b8ff" d="M696.2,-151.8C706.02,-151.07 715.97,-150.33 725.7,-149.61"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="695.73,-148.33 686.02,-152.56 696.25,-155.31 695.73,-148.33"/>
 </a>
 </g>
 </g>
@@ -826,8 +826,8 @@
 <g id="Node000045" class="node">
 <title>Node45</title>
 <g id="a_Node000045"><a xlink:href="class_ogre_1_1_metal_texture_gpu_window.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="899.5,-106.5 731.5,-106.5 731.5,-87.5 899.5,-87.5 899.5,-106.5"/>
-<text text-anchor="middle" x="815.5" y="-94.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::MetalTextureGpuWindow</text>
+<polygon fill="white" stroke="#666666" points="899.5,-115.5 731.5,-115.5 731.5,-96.5 899.5,-96.5 899.5,-115.5"/>
+<text text-anchor="middle" x="815.5" y="-103.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::MetalTextureGpuWindow</text>
 </a>
 </g>
 </g>
@@ -835,8 +835,8 @@
 <g id="edge43_Node000044_Node000045" class="edge">
 <title>Node44&#45;&gt;Node45</title>
 <g id="a_edge43_Node000044_Node000045"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M690.95,-105.05C704.35,-104.17 718.09,-103.28 731.32,-102.42"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="690.53,-101.56 680.78,-105.71 690.99,-108.55 690.53,-101.56"/>
+<path fill="none" stroke="#63b8ff" d="M690.95,-108.87C704.35,-108.56 718.09,-108.24 731.32,-107.93"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="690.7,-105.38 680.78,-109.11 690.86,-112.38 690.7,-105.38"/>
 </a>
 </g>
 </g>
@@ -859,31 +859,31 @@
 </a>
 </g>
 </g>
-<!-- Node49 -->
-<g id="Node000049" class="node">
-<title>Node49</title>
-<g id="a_Node000049"><a xlink:href="class_ogre_1_1_vulkan_texture_gpu_render_target.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="682.5,-30 514.5,-30 514.5,0 682.5,0 682.5,-30"/>
-<text text-anchor="start" x="522.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::VulkanTextureGpuRender</text>
-<text text-anchor="middle" x="598.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Target</text>
+<!-- Node48 -->
+<g id="Node000048" class="node">
+<title>Node48</title>
+<g id="a_Node000048"><a xlink:href="class_ogre_1_1_n_u_l_l_texture_gpu_window.html" target="_top" xlink:title="A RenderWindow&#45;specific texture.">
+<polygon fill="white" stroke="#666666" points="898,-72.5 733,-72.5 733,-53.5 898,-53.5 898,-72.5"/>
+<text text-anchor="middle" x="815.5" y="-60.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::NULLTextureGpuWindow</text>
 </a>
 </g>
 </g>
-<!-- Node48&#45;&gt;Node49 -->
-<g id="edge47_Node000048_Node000049" class="edge">
-<title>Node48&#45;&gt;Node49</title>
-<g id="a_edge47_Node000048_Node000049"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M478.43,-16.83C490.22,-16.65 502.46,-16.46 514.4,-16.28"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="478.13,-13.33 468.19,-16.98 478.24,-20.33 478.13,-13.33"/>
+<!-- Node47&#45;&gt;Node48 -->
+<g id="edge46_Node000047_Node000048" class="edge">
+<title>Node47&#45;&gt;Node48</title>
+<g id="a_edge46_Node000047_Node000048"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M689.58,-63C703.89,-63 718.62,-63 732.72,-63"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="689.25,-59.5 679.25,-63 689.25,-66.5 689.25,-59.5"/>
 </a>
 </g>
 </g>
 <!-- Node50 -->
 <g id="Node000050" class="node">
 <title>Node50</title>
-<g id="a_Node000050"><a xlink:href="class_ogre_1_1_vulkan_texture_gpu_window.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="902,-24.5 729,-24.5 729,-5.5 902,-5.5 902,-24.5"/>
-<text text-anchor="middle" x="815.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::VulkanTextureGpuWindow</text>
+<g id="a_Node000050"><a xlink:href="class_ogre_1_1_vulkan_texture_gpu_render_target.html" target="_top" xlink:title=" ">
+<polygon fill="#fff0f0" stroke="red" points="682.5,-30 514.5,-30 514.5,0 682.5,0 682.5,-30"/>
+<text text-anchor="start" x="522.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::VulkanTextureGpuRender</text>
+<text text-anchor="middle" x="598.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Target</text>
 </a>
 </g>
 </g>
@@ -891,8 +891,8 @@
 <g id="edge48_Node000049_Node000050" class="edge">
 <title>Node49&#45;&gt;Node50</title>
 <g id="a_edge48_Node000049_Node000050"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M692.63,-15C704.64,-15 716.88,-15 728.75,-15"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="692.62,-11.5 682.62,-15 692.62,-18.5 692.62,-11.5"/>
+<path fill="none" stroke="#63b8ff" d="M478.43,-16.83C490.22,-16.65 502.46,-16.46 514.4,-16.28"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="478.13,-13.33 468.19,-16.98 478.24,-20.33 478.13,-13.33"/>
 </a>
 </g>
 </g>

@@ -1,5 +1,7 @@
 <map id="Ogre::NULLTextureGpuRenderTarget" name="Ogre::NULLTextureGpuRenderTarget">
 <area shape="rect" id="Node000001" title=" " alt="" coords="93,299,308,339"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_n_u_l_l_texture_gpu_window.html" title="A RenderWindow&#45;specific texture." alt="" coords="91,387,311,412"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="203,352,203,386,198,386,198,352"/>
 <area shape="rect" id="Node000002" href="$class_ogre_1_1_n_u_l_l_texture_gpu.html" title=" " alt="" coords="117,225,285,251"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,264,203,299,198,299,198,264"/>
 <area shape="rect" id="Node000003" href="$class_ogre_1_1_texture_gpu.html" title=" " alt="" coords="133,152,268,177"/>

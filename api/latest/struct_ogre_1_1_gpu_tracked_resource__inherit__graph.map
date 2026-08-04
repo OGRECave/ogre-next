@@ -74,26 +74,26 @@
 <area shape="poly" id="edge41_Node000035_Node000043" title=" " alt="" coords="404,1061,454,1069,453,1074,403,1067"/>
 <area shape="rect" id="Node000046" href="$class_ogre_1_1_n_u_l_l_texture_gpu.html" title=" " alt="" coords="456,1131,624,1156"/>
 <area shape="poly" id="edge44_Node000035_Node000046" title=" " alt="" coords="363,1069,444,1105,504,1128,502,1133,442,1110,361,1074"/>
-<area shape="rect" id="Node000048" href="$class_ogre_1_1_vulkan_texture_gpu.html" title=" " alt="" coords="451,1201,629,1227"/>
-<area shape="poly" id="edge46_Node000035_Node000048" title=" " alt="" coords="345,1074,389,1119,444,1165,476,1184,507,1199,505,1204,473,1189,441,1170,385,1123,341,1078"/>
+<area shape="rect" id="Node000049" href="$class_ogre_1_1_vulkan_texture_gpu.html" title=" " alt="" coords="451,1201,629,1227"/>
+<area shape="poly" id="edge47_Node000035_Node000049" title=" " alt="" coords="345,1074,389,1119,444,1165,476,1184,507,1199,505,1204,473,1189,441,1170,385,1123,341,1078"/>
 <area shape="rect" id="Node000037" href="$class_ogre_1_1_d3_d11_texture_gpu_render_target.html" title=" " alt="" coords="691,942,916,982"/>
 <area shape="poly" id="edge35_Node000036_Node000037" title=" " alt="" coords="643,963,690,962,690,968,643,969"/>
-<area shape="rect" id="Node000038" href="$class_ogre_1_1_d3_d11_texture_gpu_window.html" title=" " alt="" coords="977,932,1208,957"/>
-<area shape="poly" id="edge36_Node000037_Node000038" title=" " alt="" coords="930,952,977,949,977,954,930,957"/>
+<area shape="rect" id="Node000038" href="$class_ogre_1_1_d3_d11_texture_gpu_window.html" title=" " alt="" coords="977,920,1208,945"/>
+<area shape="poly" id="edge36_Node000037_Node000038" title=" " alt="" coords="930,947,977,942,977,947,930,952"/>
 <area shape="rect" id="Node000040" href="$class_ogre_1_1_g_l3_plus_texture_gpu_render_target.html" title=" " alt="" coords="687,1006,920,1046"/>
 <area shape="poly" id="edge38_Node000039_Node000040" title=" " alt="" coords="647,1025,687,1025,687,1030,647,1030"/>
-<area shape="rect" id="Node000041" href="$class_ogre_1_1_g_l3_plus_texture_gpu_headless_window.html" title=" " alt="" coords="969,982,1216,1022"/>
-<area shape="poly" id="edge39_Node000040_Node000041" title=" " alt="" coords="933,1013,969,1010,969,1015,934,1018"/>
-<area shape="rect" id="Node000042" href="$class_ogre_1_1_g_l3_plus_texture_gpu_window.html" title=" " alt="" coords="973,1047,1212,1072"/>
-<area shape="poly" id="edge40_Node000040_Node000042" title=" " alt="" coords="934,1038,983,1044,982,1049,933,1044"/>
+<area shape="rect" id="Node000041" href="$class_ogre_1_1_g_l3_plus_texture_gpu_headless_window.html" title=" " alt="" coords="969,970,1216,1010"/>
+<area shape="poly" id="edge39_Node000040_Node000041" title=" " alt="" coords="933,1007,969,1003,970,1008,934,1012"/>
+<area shape="rect" id="Node000042" href="$class_ogre_1_1_g_l3_plus_texture_gpu_window.html" title=" " alt="" coords="973,1035,1212,1060"/>
+<area shape="poly" id="edge40_Node000040_Node000042" title=" " alt="" coords="934,1033,973,1036,973,1041,933,1038"/>
 <area shape="rect" id="Node000044" href="$class_ogre_1_1_metal_texture_gpu_render_target.html" title=" " alt="" coords="694,1070,913,1110"/>
 <area shape="poly" id="edge42_Node000043_Node000044" title=" " alt="" coords="640,1083,694,1085,694,1090,640,1089"/>
-<area shape="rect" id="Node000045" href="$class_ogre_1_1_metal_texture_gpu_window.html" title=" " alt="" coords="981,1096,1205,1121"/>
-<area shape="poly" id="edge43_Node000044_Node000045" title=" " alt="" coords="927,1095,981,1099,980,1104,926,1101"/>
+<area shape="rect" id="Node000045" href="$class_ogre_1_1_metal_texture_gpu_window.html" title=" " alt="" coords="981,1084,1205,1109"/>
+<area shape="poly" id="edge43_Node000044_Node000045" title=" " alt="" coords="927,1090,980,1091,980,1097,927,1096"/>
 <area shape="rect" id="Node000047" href="$class_ogre_1_1_n_u_l_l_texture_gpu_render_target.html" title=" " alt="" coords="696,1134,911,1174"/>
 <area shape="poly" id="edge45_Node000046_Node000047" title=" " alt="" coords="638,1145,696,1147,696,1152,638,1150"/>
-<area shape="rect" id="Node000049" href="$class_ogre_1_1_vulkan_texture_gpu_render_target.html" title=" " alt="" coords="691,1198,915,1238"/>
-<area shape="poly" id="edge47_Node000048_Node000049" title=" " alt="" coords="643,1213,691,1214,691,1219,643,1218"/>
-<area shape="rect" id="Node000050" href="$class_ogre_1_1_vulkan_texture_gpu_window.html" title=" " alt="" coords="977,1205,1208,1231"/>
-<area shape="poly" id="edge48_Node000049_Node000050" title=" " alt="" coords="929,1215,977,1215,977,1221,929,1221"/>
+<area shape="rect" id="Node000048" href="$class_ogre_1_1_n_u_l_l_texture_gpu_window.html" title="A RenderWindow&#45;specific texture." alt="" coords="983,1141,1203,1167"/>
+<area shape="poly" id="edge46_Node000047_Node000048" title=" " alt="" coords="925,1151,982,1151,982,1157,925,1157"/>
+<area shape="rect" id="Node000050" href="$class_ogre_1_1_vulkan_texture_gpu_render_target.html" title=" " alt="" coords="691,1198,915,1238"/>
+<area shape="poly" id="edge48_Node000049_Node000050" title=" " alt="" coords="643,1213,691,1214,691,1219,643,1218"/>
 </map>

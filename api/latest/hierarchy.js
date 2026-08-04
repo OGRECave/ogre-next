@@ -613,7 +613,9 @@ var hierarchy =
           ] ]
         ] ],
         [ "Ogre::NULLTextureGpu", "class_ogre_1_1_n_u_l_l_texture_gpu.html", [
-          [ "Ogre::NULLTextureGpuRenderTarget", "class_ogre_1_1_n_u_l_l_texture_gpu_render_target.html", null ]
+          [ "Ogre::NULLTextureGpuRenderTarget", "class_ogre_1_1_n_u_l_l_texture_gpu_render_target.html", [
+            [ "Ogre::NULLTextureGpuWindow", "class_ogre_1_1_n_u_l_l_texture_gpu_window.html", null ]
+          ] ]
         ] ],
         [ "Ogre::VulkanTextureGpu", "class_ogre_1_1_vulkan_texture_gpu.html", [
           [ "Ogre::VulkanTextureGpuRenderTarget", "class_ogre_1_1_vulkan_texture_gpu_render_target.html", [

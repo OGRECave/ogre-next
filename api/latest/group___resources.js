@@ -1739,7 +1739,7 @@ var group___resources =
     [ "Ogre::NULLTextureGpuManager", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html", [
       [ "NULLTextureGpuManager", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a3b2eb464f34ca01c6e0f60b3a7e837cf", null ],
       [ "~NULLTextureGpuManager", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a2e868be0876550196ba148e86a370695", null ],
-      [ "createTextureGpuWindow", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a6a5de598c9c9b6820c019c93123c0dfc", null ]
+      [ "createTextureGpuWindow", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#ae00cda24560506bb03ae02efe6f4f210", null ]
     ] ],
     [ "Ogre::NULLTextureGpuRenderTarget", "class_ogre_1_1_n_u_l_l_texture_gpu_render_target.html", [
       [ "NULLTextureGpuRenderTarget", "class_ogre_1_1_n_u_l_l_texture_gpu_render_target.html#a8f380c216a848de1e3119744f57ff593", null ],
@@ -1747,6 +1747,10 @@ var group___resources =
       [ "getDepthBufferPoolId", "class_ogre_1_1_n_u_l_l_texture_gpu_render_target.html#a45d1fd9ffea81211a233dc22657fb236", null ],
       [ "getDesiredDepthBufferFormat", "class_ogre_1_1_n_u_l_l_texture_gpu_render_target.html#ada36da188b487be1a026edd938173341", null ],
       [ "getPreferDepthTexture", "class_ogre_1_1_n_u_l_l_texture_gpu_render_target.html#ad05f97271a6b1069b9c441141d238a49", null ]
+    ] ],
+    [ "Ogre::NULLTextureGpuWindow", "class_ogre_1_1_n_u_l_l_texture_gpu_window.html", [
+      [ "NULLTextureGpuWindow", "class_ogre_1_1_n_u_l_l_texture_gpu_window.html#ab072bdf388f227df88ebe801155fd4cc", null ],
+      [ "getCustomAttribute", "class_ogre_1_1_n_u_l_l_texture_gpu_window.html#adc312db8f5d07991f94ab3163e15339d", null ]
     ] ],
     [ "Ogre::ObjCmdBuffer", "class_ogre_1_1_obj_cmd_buffer.html", [
       [ "Cmd", "class_ogre_1_1_obj_cmd_buffer_1_1_cmd.html", [
