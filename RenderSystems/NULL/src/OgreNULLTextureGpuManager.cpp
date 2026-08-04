@@ -45,13 +45,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     NULLTextureGpuManager::~NULLTextureGpuManager() { destroyAll(); }
     //-----------------------------------------------------------------------------------
-    TextureGpu *NULLTextureGpuManager::createTextureGpuWindow()
+    TextureGpu *NULLTextureGpuManager::createTextureGpuWindow( Window *window )
     {
-        return OGRE_NEW NULLTextureGpuRenderTarget(
-            GpuPageOutStrategy::Discard, mVaoManager, "RenderWindow",
-            TextureFlags::NotTexture | TextureFlags::RenderToTexture |
-                TextureFlags::RenderWindowSpecific | TextureFlags::DiscardableContent,
-            TextureTypes::Type2D, this );
+        return OGRE_NEW NULLTextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager, "RenderWindow",
+                                              TextureFlags::NotTexture | TextureFlags::RenderToTexture |
+                                                  TextureFlags::RenderWindowSpecific |
+                                                  TextureFlags::DiscardableContent,
+                                              TextureTypes::Type2D, this, window );
     }
     //-----------------------------------------------------------------------------------
     TextureGpu *NULLTextureGpuManager::createTextureImpl(

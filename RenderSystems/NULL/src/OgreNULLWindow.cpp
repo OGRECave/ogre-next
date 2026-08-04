@@ -95,8 +95,8 @@ namespace Ogre
         NULLTextureGpuManager *textureManager =
             static_cast<NULLTextureGpuManager *>( textureGpuManager );
 
-        mTexture = textureManager->createTextureGpuWindow();
-        mDepthBuffer = textureManager->createTextureGpuWindow();
+        mTexture = textureManager->createTextureGpuWindow( this );
+        mDepthBuffer = textureManager->createTextureGpuWindow( this );
         mStencilBuffer = mDepthBuffer;
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
