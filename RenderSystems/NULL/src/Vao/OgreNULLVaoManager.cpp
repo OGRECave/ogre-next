@@ -45,7 +45,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    NULLVaoManager::NULLVaoManager() : VaoManager( 0 ), mDrawId( 0 )
+    NULLVaoManager::NULLVaoManager() : VaoManager( 0 ), mVaoNames( 1u ), mDrawId( 0 )
     {
         mConstBufferAlignment = 256;
         mTexBufferAlignment = 256;
@@ -290,7 +290,7 @@ namespace Ogre
         const VertexBufferPackedVec &vertexBuffers, IndexBufferPacked *indexBuffer,
         OperationType opType )
     {
-        uint32 idx = (uint32)mVertexArrayObjects.size();
+        uint32 idx = mVaoNames++;
 
         const uint32 bitsOpType = 3;
         const uint32 bitsVaoGl = 2;
