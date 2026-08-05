@@ -35,6 +35,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     // Forward declarations
+    class NULLGpuProgramManager;
     class NULLStagingBuffer;
     class NULLRenderSystem;
     class NULLVaoManager;
