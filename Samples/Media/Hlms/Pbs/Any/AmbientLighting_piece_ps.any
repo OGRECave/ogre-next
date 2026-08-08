@@ -73,11 +73,11 @@
 
 	@property( ambient_hemisphere )
 		@property( ambient_hemisphere_inverted )
-			float tmpAmbientWS = ambientWD;
-			float tmpAmbientWD = ambientWS;
+			midf tmpAmbientWS = ambientWD;
+			midf tmpAmbientWD = ambientWS;
 		@else
-			float tmpAmbientWS = ambientWS;
-			float tmpAmbientWD = ambientWD;
+			midf tmpAmbientWS = ambientWS;
+			midf tmpAmbientWD = ambientWD;
 		@end
 		@property( vct_num_probes )
 			//Only use ambient lighting if object is outside any VCT probe
