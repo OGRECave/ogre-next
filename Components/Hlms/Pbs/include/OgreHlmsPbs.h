@@ -113,6 +113,13 @@ namespace Ogre
             /// This version was called "AmbientHemisphere" in OgreNext <= 2.3
             AmbientHemisphereInverted,
 
+            /// It's similar to AmbientHemisphereNormal but with different math that makes it resemble
+            /// rim lighting. It has got a higher contrast, but can cause dark spots.
+            AmbientHemisphereRim,
+
+            /// Same as AmbientHemisphereRim, but the rim/contrast effect is even stronger.
+            AmbientHemisphereRimSquared,
+
             /// Uses spherical harmonics
             AmbientSh,
 
@@ -646,6 +653,8 @@ namespace Ogre
 
         static const IdString AmbientHemisphere;
         static const IdString AmbientHemisphereInverted;
+        static const IdString AmbientHemiStandard;
+        static const IdString AmbientHemiRimSquared;
         static const IdString AmbientSh;
         static const IdString AmbientShMonochrome;
         static const IdString LightProfilesTexture;

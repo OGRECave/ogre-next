@@ -84,10 +84,35 @@
 			if( vctSpecular.w == 0 )
 			{
 		@end
+			@property( ambient_hemi_standard )
 				pixelData.envColourS += lerp( midf3_c( passBuf.ambientLowerHemi.xyz ),
 											  midf3_c( passBuf.ambientUpperHemi.xyz ), tmpAmbientWS );
 				pixelData.envColourD += lerp( midf3_c( passBuf.ambientLowerHemi.xyz ),
 											  midf3_c( passBuf.ambientUpperHemi.xyz ), tmpAmbientWD );
+			@else
+				tmpAmbientWD = ( tmpAmbientWD - _h( 0.5 ) ) * _h( 2.0 );
+				tmpAmbientWS = ( tmpAmbientWS - _h( 0.5 ) ) * _h( 2.0 );
+
+				@property( ambient_hemi_rim_squared )
+					tmpAmbientWD *= abs( tmpAmbientWD );
+					tmpAmbientWS *= abs( tmpAmbientWS );
+				@end
+
+				// Use saturate here because it's more efficient.
+				midf tmpL = saturate( tmpAmbientWS * _h( -1.0 ) );
+				midf tmpU = saturate( tmpAmbientWS );
+
+				pixelData.envColourS += midf3_c( passBuf.ambientLowerHemi.xyz ) * tmpL;
+				pixelData.envColourS += midf3_c( passBuf.ambientUpperHemi.xyz ) * tmpU;
+
+				// We'd love to use saturate() too. But If tmpL == tmpU == 0, we risk getting 0.0 if no
+				// light touches this, which can be catastrophic in HDR. Prevent that from happening.
+				tmpL = clamp( tmpAmbientWD * _h( -1.0 ), _h( 0.01 ), _h( 1.0 ) );
+				tmpU = clamp( tmpAmbientWD, _h( 0.01 ), _h( 1.0 ) );
+
+				pixelData.envColourD += midf3_c( passBuf.ambientLowerHemi.xyz ) * tmpL;
+				pixelData.envColourD += midf3_c( passBuf.ambientUpperHemi.xyz ) * tmpU;
+			@end
 		@property( vct_num_probes )
 			}
 		@end
