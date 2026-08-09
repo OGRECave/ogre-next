@@ -124,8 +124,11 @@ Public Types</h2></td></tr>
 , <a class="el" href="class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a2a29c463e013aadf38dc63ac506ed847">AmbientHemisphereNormal</a>
 , <br />
 &#160;&#160;<a class="el" href="class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a570a317412d709f3eb7a3f6feadd003e">AmbientHemisphereInverted</a>
+, <a class="el" href="class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67af9a3dde9e1c4c81a730ee8b85e6fd413">AmbientHemisphereRim</a>
+, <a class="el" href="class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67abdb903f718a1af7a2829b5d6d2f04bed">AmbientHemisphereRimSquared</a>
 , <a class="el" href="class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a2156f8e07e16f24989b1072ae7d92255">AmbientSh</a>
-, <a class="el" href="class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a06f45ab8ca57835d1a9cb9d579c3afb1">AmbientShMonochrome</a>
+, <br />
+&#160;&#160;<a class="el" href="class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a06f45ab8ca57835d1a9cb9d579c3afb1">AmbientShMonochrome</a>
 , <a class="el" href="class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a20e7d81b6755e62d18eeade71bc7abd2">AmbientNone</a>
 <br />
  }</td></tr>
@@ -539,6 +542,13 @@ Additional Inherited Members</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="a5fed9e596a4ec91b729d9fdbfc054c67a570a317412d709f3eb7a3f6feadd003e" name="a5fed9e596a4ec91b729d9fdbfc054c67a570a317412d709f3eb7a3f6feadd003e"></a>AmbientHemisphereInverted&#160;</td><td class="fielddoc"><p>Same as AmbientHemisphereNormal, but inverts the specular &amp; diffuse calculations which can be visually more pleasant, or you just need it to look how it was in 2.3. </p>
 <p>This version was called "AmbientHemisphere" in OgreNext &lt;= 2.3 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5fed9e596a4ec91b729d9fdbfc054c67af9a3dde9e1c4c81a730ee8b85e6fd413" name="a5fed9e596a4ec91b729d9fdbfc054c67af9a3dde9e1c4c81a730ee8b85e6fd413"></a>AmbientHemisphereRim&#160;</td><td class="fielddoc"><p>It's similar to AmbientHemisphereNormal but with different math that makes it resemble rim lighting. </p>
+<p>It has got a higher contrast, but can cause dark spots. that might be undesirable in HDR. The math prevents the ambient lighting from ever going to colour( 0,
+            0, 0 )* which is a catastrophic value for HDR (it doesn't signify regular black, but rather black-hole absense of light, causing eye adaptation luminance to go haywire).</p>
+<p>However still, the darker spots may or may not be a problem in HDR depending on the scene. (*) Unless the input ambient colour is already 0.0. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5fed9e596a4ec91b729d9fdbfc054c67abdb903f718a1af7a2829b5d6d2f04bed" name="a5fed9e596a4ec91b729d9fdbfc054c67abdb903f718a1af7a2829b5d6d2f04bed"></a>AmbientHemisphereRimSquared&#160;</td><td class="fielddoc"><p>Same as AmbientHemisphereRim, but the rim/contrast effect is even stronger. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a5fed9e596a4ec91b729d9fdbfc054c67a2156f8e07e16f24989b1072ae7d92255" name="a5fed9e596a4ec91b729d9fdbfc054c67a2156f8e07e16f24989b1072ae7d92255"></a>AmbientSh&#160;</td><td class="fielddoc"><p>Uses spherical harmonics. </p>
 </td></tr>

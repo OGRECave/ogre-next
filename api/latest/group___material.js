@@ -207,6 +207,8 @@ var group___material =
         [ "AmbientFixed", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a22cf2cf1dafcb142a6a8d9ffab2cc3df", null ],
         [ "AmbientHemisphereNormal", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a2a29c463e013aadf38dc63ac506ed847", null ],
         [ "AmbientHemisphereInverted", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a570a317412d709f3eb7a3f6feadd003e", null ],
+        [ "AmbientHemisphereRim", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67af9a3dde9e1c4c81a730ee8b85e6fd413", null ],
+        [ "AmbientHemisphereRimSquared", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67abdb903f718a1af7a2829b5d6d2f04bed", null ],
         [ "AmbientSh", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a2156f8e07e16f24989b1072ae7d92255", null ],
         [ "AmbientShMonochrome", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a06f45ab8ca57835d1a9cb9d579c3afb1", null ],
         [ "AmbientNone", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a20e7d81b6755e62d18eeade71bc7abd2", null ]
@@ -372,8 +374,10 @@ var group___material =
     ] ],
     [ "Ogre::PbsProperty", "struct_ogre_1_1_pbs_property.html", [
       [ "AmbientFixed", "struct_ogre_1_1_pbs_property.html#a4866419a67e296cc413219b1825afa86", null ],
+      [ "AmbientHemiRimSquared", "struct_ogre_1_1_pbs_property.html#a6df95ebb1e7810f95fb69edf96899047", null ],
       [ "AmbientHemisphere", "struct_ogre_1_1_pbs_property.html#abf2d2d6c9980b59d920b2fa696a81d1b", null ],
       [ "AmbientHemisphereInverted", "struct_ogre_1_1_pbs_property.html#a1c15c1cfb15134311203c93de410d357", null ],
+      [ "AmbientHemiStandard", "struct_ogre_1_1_pbs_property.html#a0cce6cfe2ecc7cb4d595c7c5e1688299", null ],
       [ "AmbientSh", "struct_ogre_1_1_pbs_property.html#a89f065107a8a2e2a48ef63892c243492", null ],
       [ "AmbientShMonochrome", "struct_ogre_1_1_pbs_property.html#ae10517a315c24a8b2f664c1b137034ae", null ],
       [ "BlendModeIndex0", "struct_ogre_1_1_pbs_property.html#a8efd3fe96365b28ca6b483f7d879ffaf", null ],

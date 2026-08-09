@@ -106,6 +106,7 @@ $(document).ready(function(){initNavTree('_ogre40_changes.html',''); initResizab
 <li class="level1"><a href="#autotoc_md61">New initialization step</a></li>
 <li class="level1"><a href="#autotoc_md62">HlmsUnlit changes</a></li>
 <li class="level1"><a href="#autotoc_md63">Header renames</a></li>
+<li class="level1"><a href="#autotoc_md64">New AmbientLightMode values: AmbientHemisphereRim and AmbientHemisphereRimSquared</a></li>
 </ul>
 </div>
 <div class="textblock"><h1><a class="anchor" id="autotoc_md57"></a>
@@ -222,6 +223,14 @@ Header renames</h1>
 <blockquote class="doxtable">
 <p>&zwj;Avoid identically named source files - some build systems have problems with it, even if CMake have none (headermaps in XCode, shared intermediate folder in <a class="el" href="class_visual.html">Visual</a> Studio) </p>
 </blockquote>
+<h1><a class="anchor" id="autotoc_md64"></a>
+New AmbientLightMode values: AmbientHemisphereRim and AmbientHemisphereRimSquared</h1>
+<p>Two new ambient lighting modes have been added to <code><a class="el" href="class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67">Ogre::HlmsPbs::AmbientLightMode</a></code>:</p>
+<ul>
+<li><code>AmbientHemisphereRim</code>: Applies rim-like, high-contrast ambient lighting</li>
+<li><code>AmbientHemisphereRimSquared</code>: Same as <code>AmbientHemisphereRim</code>, but the rim/contrast effect is even stronger</li>
+</ul>
+<p>See the <a class="el" href="_gi_methods.html#GiAmbientLightingRim">Rim-Based Ambient Lighting</a> section in the Global Illumination documentation for more details. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

@@ -1,5 +1,7 @@
 var NAVTREEINDEX1 =
 {
+"_ogre_barrier_8h.html":[9,0,2,0,12,0],
+"_ogre_billboard2_8h.html":[9,0,2,0,11,0],
 "_ogre_billboard_8h.html":[9,0,2,0,34],
 "_ogre_billboard_chain_8h.html":[9,0,2,0,35],
 "_ogre_billboard_particle_renderer_8h.html":[9,0,2,0,36],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "_ogre_d3_d11_h_l_s_l_program_factory_8h.html":[9,0,4,0,0,16],
 "_ogre_d3_d11_hardware_buffer_8h.html":[9,0,4,0,0,9],
 "_ogre_d3_d11_hardware_buffer_manager_8h.html":[9,0,4,0,0,10],
-"_ogre_d3_d11_hardware_index_buffer_8h.html":[9,0,4,0,0,11],
-"_ogre_d3_d11_hardware_occlusion_query_8h.html":[9,0,4,0,0,12],
-"_ogre_d3_d11_hardware_vertex_buffer_8h.html":[9,0,4,0,0,13]
+"_ogre_d3_d11_hardware_index_buffer_8h.html":[9,0,4,0,0,11]
 };

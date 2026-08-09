@@ -1,8 +1,10 @@
 var struct_ogre_1_1_pbs_property =
 [
     [ "AmbientFixed", "struct_ogre_1_1_pbs_property.html#a4866419a67e296cc413219b1825afa86", null ],
+    [ "AmbientHemiRimSquared", "struct_ogre_1_1_pbs_property.html#a6df95ebb1e7810f95fb69edf96899047", null ],
     [ "AmbientHemisphere", "struct_ogre_1_1_pbs_property.html#abf2d2d6c9980b59d920b2fa696a81d1b", null ],
     [ "AmbientHemisphereInverted", "struct_ogre_1_1_pbs_property.html#a1c15c1cfb15134311203c93de410d357", null ],
+    [ "AmbientHemiStandard", "struct_ogre_1_1_pbs_property.html#a0cce6cfe2ecc7cb4d595c7c5e1688299", null ],
     [ "AmbientSh", "struct_ogre_1_1_pbs_property.html#a89f065107a8a2e2a48ef63892c243492", null ],
     [ "AmbientShMonochrome", "struct_ogre_1_1_pbs_property.html#ae10517a315c24a8b2f664c1b137034ae", null ],
     [ "BlendModeIndex0", "struct_ogre_1_1_pbs_property.html#a8efd3fe96365b28ca6b483f7d879ffaf", null ],

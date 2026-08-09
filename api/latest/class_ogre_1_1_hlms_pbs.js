@@ -6,6 +6,8 @@ var class_ogre_1_1_hlms_pbs =
       [ "AmbientFixed", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a22cf2cf1dafcb142a6a8d9ffab2cc3df", null ],
       [ "AmbientHemisphereNormal", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a2a29c463e013aadf38dc63ac506ed847", null ],
       [ "AmbientHemisphereInverted", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a570a317412d709f3eb7a3f6feadd003e", null ],
+      [ "AmbientHemisphereRim", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67af9a3dde9e1c4c81a730ee8b85e6fd413", null ],
+      [ "AmbientHemisphereRimSquared", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67abdb903f718a1af7a2829b5d6d2f04bed", null ],
       [ "AmbientSh", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a2156f8e07e16f24989b1072ae7d92255", null ],
       [ "AmbientShMonochrome", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a06f45ab8ca57835d1a9cb9d579c3afb1", null ],
       [ "AmbientNone", "class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a20e7d81b6755e62d18eeade71bc7abd2", null ]
