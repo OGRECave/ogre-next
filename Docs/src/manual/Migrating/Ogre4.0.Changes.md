@@ -145,3 +145,12 @@ See commits [75801f33df72844384549b11de96b10421584bce](https://github.com/OGRECa
 The message of the commit was:
 
 > Avoid identically named source files - some build systems have problems with it, even if CMake have none (headermaps in XCode, shared intermediate folder in Visual Studio)
+
+## New AmbientLightMode values: AmbientHemisphereRim and AmbientHemisphereRimSquared
+
+Two new ambient lighting modes have been added to `Ogre::HlmsPbs::AmbientLightMode`:
+
+- `AmbientHemisphereRim`: Applies rim-like, high-contrast ambient lighting
+- `AmbientHemisphereRimSquared`: Same as `AmbientHemisphereRim`, but the rim/contrast effect is even stronger
+
+See the [Rim-Based Ambient Lighting](@ref GiAmbientLightingRim) section in the Global Illumination documentation for more details.

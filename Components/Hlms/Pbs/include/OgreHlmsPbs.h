@@ -114,7 +114,14 @@ namespace Ogre
             AmbientHemisphereInverted,
 
             /// It's similar to AmbientHemisphereNormal but with different math that makes it resemble
-            /// rim lighting. It has got a higher contrast, but can cause dark spots.
+            /// rim lighting. It has got a higher contrast, but can cause dark spots. that might be
+            /// undesirable in HDR. The math prevents the ambient lighting from ever going to colour( 0,
+            /// 0, 0 )* which is a catastrophic value for HDR (it doesn't signify regular black, but
+            /// rather black-hole absense of light, causing eye adaptation luminance to go haywire).
+            ///
+            /// However still, the darker spots may or may not be a problem in HDR depending on the
+            /// scene.
+            /// (*) Unless the input ambient colour is already 0.0.
             AmbientHemisphereRim,
 
             /// Same as AmbientHemisphereRim, but the rim/contrast effect is even stronger.

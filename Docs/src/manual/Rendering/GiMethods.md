@@ -18,11 +18,24 @@ This is just a solid colour applied uniformly to the entire scene. Very basic
 
 ## Hemisphere {#GiAmbientLightingHemisphere}
 
-Use `SceneManager::setAmbientLight` and set `upperHemisphere` and `lowerHemisphere` to the different values and set `HlmsPbs::setAmbientLightMode` to either `AmbientAuto*` or `AmbientHemisphere*`.
+Use `SceneManager::setAmbientLight` and set `upperHemisphere` and `lowerHemisphere` to the different values and set `HlmsPbs::setAmbientLightMode` to either `AmbientAuto*`, `AmbientHemisphere*`, `AmbientHemisphereRim`, or `AmbientHemisphereRimSquared`.
 
 Hemisphere lighting is supposed to be set to the colour of the sky or sun in upperHemisphere, and the colour of the ground in lower hemisphere to mimic a single bounce coming from the ground.
 
 Good enough for simple outdoor scenes.
+
+## Rim-Based {#GiAmbientLightingRim}
+
+The `AmbientHemisphereRim` and `AmbientHemisphereRimSquared` modes are similar to `AmbientHemisphereNormal`, but use different math that makes it resemble rim lighting. It has got a higher contrast, but can cause dark spots that might be undesirable in HDR. The math prevents the ambient lighting from ever going to colour( 0, 0, 0 )\* which is a catastrophic value for HDR (it doesn't signify regular black, but rather black-hole absense of light, causing eye adaptation luminance to go haywire).
+
+However still, the darker spots may or may not be a problem in HDR depending on the scene.
+
+- `AmbientHemisphereRim`: Applies rim-like, high-contrast ambient lighting
+- `AmbientHemisphereRimSquared`: Same as `AmbientHemisphereRim`, but the rim/contrast effect is even stronger
+
+There is no `AmbientAutoHemisphereRim` or similar, thus these methods must be set manually.
+
+(\*) Unless the input ambient colour is already 0.0.
 
 ## Spherical Harmonics {#GiAmbientLightingSH}
 
