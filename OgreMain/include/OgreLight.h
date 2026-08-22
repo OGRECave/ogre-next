@@ -310,11 +310,12 @@ namespace Ogre
         /** Sets the range of a spotlight, i.e. the angle of the inner and outer cones
             and the rate of falloff between them.
         @param innerAngle
-            Angle covered by the bright inner cone
-            @note
-                The inner cone applicable only to Direct3D, it'll always treat as zero in OpenGL.
+            Angle covered by the bright inner cone. See outerAngle for details.
         @param outerAngle
-            Angle covered by the outer cone
+            Angle covered by the outer cone. This is NOT a half angle. The full range in degrees can be
+            [0°; 360°]. However spotlight shadowmaps may struggle with angles roughly >70° due to
+            FOV camera rendering issues. Angles >= 90° are very likely to have visible artifacts, and it
+            will definitely misbehave for angles >= 180°.
         @param falloff
             The rate of falloff between the inner and outer cones. 1.0 means a linear falloff,
             less means slower falloff, higher means faster falloff.
