@@ -177,5 +177,25 @@ endif()
 if( OGRE_GLSUPPORT_USE_EGL_WAYLAND )
 	install(FILES ${PLATFORM_HEADERS_EGL_WAYLAND} DESTINATION include/${OGRE_NEXT_PREFIX}/RenderSystems/GL3Plus/EGL/Wayland)
 endif()
+
+option(OGRE_BUILD_WAYLAND_EGL_SMOKE_TEST
+	"Build the Wayland EGL external-surface embedding smoke test (Test_GL3PlusWaylandEglSmoke). \
+Requires wayland-client/wayland-egl dev headers at build time (already required by \
+OGRE_GLSUPPORT_USE_EGL_WAYLAND) and a running Wayland compositor to actually run against. \
+Off by default so enabling OGRE_GLSUPPORT_USE_EGL_WAYLAND alone never requires a compositor \
+at build or link time."
+	OFF)
+if( OGRE_GLSUPPORT_USE_EGL_WAYLAND AND OGRE_BUILD_WAYLAND_EGL_SMOKE_TEST )
+	ogre_add_executable(Test_GL3PlusWaylandEglSmoke
+		"${CMAKE_CURRENT_SOURCE_DIR}/test/WaylandEglSmokeTest.cpp"
+		${XDG_SHELL_PROTOCOL_CODE} ${XDG_SHELL_CLIENT_PROTOCOL_HEADER})
+	target_include_directories(Test_GL3PlusWaylandEglSmoke PRIVATE
+		${CMAKE_CURRENT_SOURCE_DIR}/include
+		${WAYLAND_CLIENT_INCLUDE_DIRS} ${WAYLAND_EGL_INCLUDE_DIRS} "${WAYLAND_GENERATED_DIR}")
+	target_link_libraries(Test_GL3PlusWaylandEglSmoke
+		${OGRE_NEXT}Main RenderSystem_GL3Plus
+		${OPENGL_LIBRARIES} ${WAYLAND_CLIENT_LIBRARIES} ${WAYLAND_EGL_LIBRARIES})
+	ogre_config_tool(Test_GL3PlusWaylandEglSmoke)
+endif()
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION include/${OGRE_NEXT_PREFIX}/RenderSystems/GL3Plus)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/GLSL/ DESTINATION include/${OGRE_NEXT_PREFIX}/RenderSystems/GL3Plus)
