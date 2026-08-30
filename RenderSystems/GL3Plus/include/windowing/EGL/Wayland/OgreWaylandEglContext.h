@@ -42,10 +42,28 @@ namespace Ogre
         EGLSurface   mEglSurface;
         ::EGLContext mEglContext;
 
+        /// True if mEglContext was adopted from an external, caller-owned
+        /// EGLContext (see the externalContext constructor param) rather
+        /// than created by this class - in which case it must never be
+        /// destroyed here.
+        bool mExternalContext;
+
     public:
-        /// Constructs a context bound to eglSurface, sharing GL object
-        /// namespace with mGLSupport's shared context.
-        WaylandEglContext( WaylandEglSupport *support, EGLSurface eglSurface );
+        /// Constructs a context bound to eglSurface.
+        /// @param externalContext
+        ///     If not EGL_NO_CONTEXT, this exact context is adopted as-is
+        ///     (mirrors GLXContext's external-context constructor param,
+        ///     used for the "currentGLContext" miscParam) - no new context
+        ///     is created and it is never destroyed by this class.
+        ///     If EGL_NO_CONTEXT (the normal case), a new context is
+        ///     created sharing GL object namespace with whatever
+        ///     GL3PlusRenderSystem::_getMainContext() currently is (looked
+        ///     up fresh, exactly like GLXContext does), or with nothing if
+        ///     there is no main context yet (this is the first context
+        ///     created, which will itself become the main context once
+        ///     registered).
+        WaylandEglContext( WaylandEglSupport *support, EGLSurface eglSurface,
+                            ::EGLContext externalContext = EGL_NO_CONTEXT );
 
         ~WaylandEglContext() override;
 

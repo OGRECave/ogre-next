@@ -52,6 +52,7 @@ namespace Ogre
         mVisible( true ),
         mHidden( false ),
         mHwGamma( false ),
+        mIsExternalGLControl( false ),
         mGLSupport( glsupport ),
         mContext( 0 ),
         mWlDisplay( 0 ),
@@ -93,6 +94,7 @@ namespace Ogre
         bool   hidden = false;
         bool   vSync = false;
         uint32 vSyncInterval = 1u;
+        bool   wantCurrentGLContext = false;
 
         wl_display *externalDisplay = 0;
         wl_surface *externalSurface = 0;
@@ -128,6 +130,12 @@ namespace Ogre
 
             if( ( opt = miscParams->find( "hidden" ) ) != end )
                 hidden = StringConverter::parseBool( opt->second );
+
+            if( ( opt = miscParams->find( "currentGLContext" ) ) != end )
+                wantCurrentGLContext = StringConverter::parseBool( opt->second );
+
+            if( ( opt = miscParams->find( "externalGLControl" ) ) != end )
+                mIsExternalGLControl = StringConverter::parseBool( opt->second );
         }
 
         if( !externalDisplay || !externalSurface )
@@ -151,6 +159,23 @@ namespace Ogre
 
         mGLSupport->initialise( mWlDisplay );
 
+        // If requested, capture whatever EGLContext is current on this
+        // thread now (mirrors GLXWindow's "currentGLContext" handling) -
+        // must happen before any of our own EGL calls below, which don't
+        // change the current context but keep the intent explicit and
+        // fail fast if nothing is current.
+        ::EGLContext adoptedContext = EGL_NO_CONTEXT;
+        if( wantCurrentGLContext )
+        {
+            adoptedContext = eglGetCurrentContext();
+            if( adoptedContext == EGL_NO_CONTEXT )
+            {
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                             "currentGLContext was specified with no current GL context",
+                             "WaylandEglWindow::create" );
+            }
+        }
+
         mWlEglWindow = wl_egl_window_create( mWlSurface, static_cast<int>( mRequestedWidth ),
                                               static_cast<int>( mRequestedHeight ) );
         if( !mWlEglWindow )
@@ -160,7 +185,14 @@ namespace Ogre
         }
 
         EGLDisplay eglDisplay = mGLSupport->getEglDisplay();
-        EGLConfig  eglConfig = mGLSupport->getEglConfig();
+        // When adopting an external context, the surface must be created
+        // with the EXACT EGLConfig that context was created with (mixing
+        // configs between a context and the surface it's made current
+        // against is undefined behaviour) - derive it instead of using our
+        // own independently-chosen mGLSupport->getEglConfig().
+        EGLConfig eglConfig = ( adoptedContext != EGL_NO_CONTEXT )
+                                  ? mGLSupport->getEglConfigFromContext( adoptedContext )
+                                  : mGLSupport->getEglConfig();
 
         // Must match whichever entry point produced mEglDisplay (see
         // WaylandEglSupport::PlatformMode) - mixing a core/EXT-obtained
@@ -201,7 +233,7 @@ namespace Ogre
 
         try
         {
-            mContext = new WaylandEglContext( mGLSupport, mEglSurface );
+            mContext = new WaylandEglContext( mGLSupport, mEglSurface, adoptedContext );
         }
         catch( ... )
         {
@@ -298,7 +330,34 @@ namespace Ogre
 
         if( mEglSurface != EGL_NO_SURFACE )
         {
-            eglDestroySurface( mGLSupport->getEglDisplay(), mEglSurface );
+            // If mEglSurface is still the current thread's bound draw/read
+            // surface, detach it first (surfaceless current, keeping
+            // whatever context is current still current) rather than
+            // destroying a live-bound surface out from under it. This
+            // matters most for an externally-adopted context (see
+            // "currentGLContext"/mIsExternalGLControl): initialiseContext()
+            // binds the adopted context to this window's surface via
+            // setCurrent(), and if that context/window creation then fails
+            // (e.g. during a gz-rendering retry loop with different FSAA
+            // params) this destroy() runs on the still-current surface.
+            // On at least NVIDIA's proprietary driver, destroying a
+            // currently-bound EGLSurface here was observed to silently
+            // drop the context out of "current" entirely (not just
+            // unbind the surface) - which, for an adopted context Ogre
+            // doesn't own, corrupts state for the caller (e.g. Qt) and
+            // for every subsequent retry, which relies on that same
+            // context still being current. Rebinding to
+            // EGL_NO_SURFACE/EGL_NO_SURFACE while keeping the context
+            // (relies on EGL_KHR_surfaceless_context, near-universally
+            // supported) avoids this entirely.
+            EGLDisplay eglDisplay = mGLSupport->getEglDisplay();
+            if( eglGetCurrentSurface( EGL_DRAW ) == mEglSurface )
+            {
+                ::EGLContext stillCurrentContext = eglGetCurrentContext();
+                eglMakeCurrent( eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, stillCurrentContext );
+            }
+
+            eglDestroySurface( eglDisplay, mEglSurface );
             mEglSurface = EGL_NO_SURFACE;
         }
 
@@ -334,6 +393,12 @@ namespace Ogre
     void WaylandEglWindow::setVSync( bool vSync, uint32 vSyncInterval )
     {
         Window::setVSync( vSync, vSyncInterval );
+
+        // The caller owns presentation when externalGLControl is set (e.g.
+        // Qt/gz-rendering already manages its own swap interval) - mirrors
+        // GLXWindow's identical guard.
+        if( mIsExternalGLControl )
+            return;
 
         EGLSurface   oldSurface = eglGetCurrentSurface( EGL_DRAW );
         ::EGLContext oldContext = eglGetCurrentContext();
@@ -384,7 +449,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void WaylandEglWindow::swapBuffers()
     {
-        if( mClosed )
+        if( mClosed || mIsExternalGLControl )
             return;
 
         OgreProfileBeginDynamic( ( "SwapBuffers: " + mTitle ).c_str() );

@@ -88,7 +88,6 @@ namespace Ogre
         wl_display *mWlDisplay;
         EGLDisplay  mEglDisplay;
         EGLConfig   mEglConfig;
-        ::EGLContext mSharedContext;
 
         PlatformMode mPlatformMode;
 
@@ -96,26 +95,36 @@ namespace Ogre
         /// attribute sets from most to least preferred.
         void chooseEglConfig();
 
-        /// Creates the shared root EGLContext (mSharedContext) that every
-        /// window's own context is created to share GL object namespace with.
-        /// Walks GL core-profile versions from 4.5 down to 3.3.
-        ::EGLContext createSharedContext();
-
         void terminate();
 
     public:
         WaylandEglSupport();
         ~WaylandEglSupport() override;
 
-        /// Connects EGL to waylandDisplay (via eglGetPlatformDisplay) and
-        /// creates the shared context, unless already initialised against the
-        /// same wl_display. If already initialised against a *different*
-        /// wl_display, the old EGLDisplay/context is torn down first.
+        /// Connects EGL to waylandDisplay (via eglGetPlatformDisplay), unless
+        /// already initialised against the same wl_display. If already
+        /// initialised against a *different* wl_display, the old EGLDisplay
+        /// is torn down first. Does NOT create any EGLContext - contexts are
+        /// created on demand by WaylandEglContext (see createContext()),
+        /// which resolves GL object namespace sharing dynamically against
+        /// whatever GL3PlusRenderSystem::_getMainContext() currently is,
+        /// exactly like GLXContext does - there is no separate "the shared
+        /// context" concept here, matching GLX's architecture.
         void initialise( wl_display *waylandDisplay );
+
+        /// Creates a new EGLContext against mEglDisplay/mEglConfig, walking
+        /// GL core-profile versions from 4.5 down to 3.3, sharing GL object
+        /// namespace with shareContext (pass EGL_NO_CONTEXT for no sharing).
+        ::EGLContext createContext( ::EGLContext shareContext ) const;
+
+        /// EGL equivalent of GLX's getFBConfigFromContext(): derives the
+        /// EGLConfig a pre-existing (e.g. externally adopted) EGLContext was
+        /// created with, via eglQueryContext(EGL_CONFIG_ID). Throws
+        /// ERR_RENDERINGAPI_ERROR if the config can't be resolved.
+        EGLConfig getEglConfigFromContext( ::EGLContext context ) const;
 
         EGLDisplay   getEglDisplay() const { return mEglDisplay; }
         EGLConfig    getEglConfig() const { return mEglConfig; }
-        ::EGLContext getSharedContext() const { return mSharedContext; }
         PlatformMode getPlatformMode() const { return mPlatformMode; }
 
         /// @copydoc GL3PlusSupport::addConfig

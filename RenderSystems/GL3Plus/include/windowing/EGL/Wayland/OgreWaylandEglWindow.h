@@ -50,6 +50,20 @@ namespace Ogre
             xdg_wm_base binding, own xdg_toplevel) - that is deferred future
             work, tracked separately, and NOT implemented here.
 
+            Two further optional miscParams, matching GLXWindow's naming for
+            consistency: "currentGLContext" (bool) - when true, adopts
+            whatever EGLContext is current on the calling thread (via
+            eglGetCurrentContext()) instead of creating a new one, so this
+            window's GL objects share the caller's object namespace (e.g.
+            Qt's own EGL context under native Wayland). Throws
+            ERR_RENDERINGAPI_ERROR if nothing is current at that point.
+            "externalGLControl" (bool) - when true, the caller owns
+            presentation/vsync for this window; swapBuffers()/setVSync()
+            become no-ops. Unlike GLXWindow, adopting an external *drawable*
+            ("currentGLDrawable") is NOT implemented - this window always
+            creates its own wl_egl_window/EGLSurface bound to the (possibly
+            adopted) context; no caller needs surface adoption today.
+
             This window never dispatches Wayland protocol events on the shared
             wl_display (no wl_display_dispatch*, no wl_display_roundtrip, no
             wl_surface_commit) and must never be registered with
@@ -80,6 +94,11 @@ namespace Ogre
         bool mVisible;
         bool mHidden;
         bool mHwGamma;
+        /// Set from the "externalGLControl" miscParam: when true, the caller
+        /// (e.g. Qt/gz-rendering) owns presentation/vsync for this window,
+        /// so swapBuffers()/setVSync() become no-ops. Mirrors GLXWindow's
+        /// mIsExternalGLControl.
+        bool mIsExternalGLControl;
 
         WaylandEglSupport *mGLSupport;
         WaylandEglContext *mContext;
