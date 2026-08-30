@@ -162,16 +162,32 @@ namespace Ogre
         EGLDisplay eglDisplay = mGLSupport->getEglDisplay();
         EGLConfig  eglConfig = mGLSupport->getEglConfig();
 
-        if( mGLSupport->getUsePlatformExtensions() )
+        // Must match whichever entry point produced mEglDisplay (see
+        // WaylandEglSupport::PlatformMode) - mixing a core/EXT-obtained
+        // EGLDisplay with the wrong surface-creation entry point is either
+        // undefined behaviour or an unresolved symbol on drivers that only
+        // implement one of the two.
+        switch( mGLSupport->getPlatformMode() )
         {
-            mEglSurface =
-                eglCreatePlatformWindowSurface( eglDisplay, eglConfig, mWlEglWindow, 0 );
+        case WaylandEglSupport::PM_CORE_1_5:
+            mEglSurface = eglCreatePlatformWindowSurface( eglDisplay, eglConfig, mWlEglWindow, 0 );
+            break;
+        case WaylandEglSupport::PM_EXT:
+        {
+            PFNEGLCREATEPLATFORMWINDOWSURFACEEXTPROC _eglCreatePlatformWindowSurfaceEXT =
+                (PFNEGLCREATEPLATFORMWINDOWSURFACEEXTPROC)mGLSupport->getProcAddress(
+                    "eglCreatePlatformWindowSurfaceEXT" );
+            if( _eglCreatePlatformWindowSurfaceEXT )
+            {
+                mEglSurface =
+                    _eglCreatePlatformWindowSurfaceEXT( eglDisplay, eglConfig, mWlEglWindow, 0 );
+            }
+            break;
         }
-
-        if( mEglSurface == EGL_NO_SURFACE )
-        {
-            mEglSurface = eglCreateWindowSurface(
-                eglDisplay, eglConfig, (EGLNativeWindowType)mWlEglWindow, 0 );
+        case WaylandEglSupport::PM_LEGACY:
+            mEglSurface = eglCreateWindowSurface( eglDisplay, eglConfig,
+                                                   (EGLNativeWindowType)mWlEglWindow, 0 );
+            break;
         }
 
         if( mEglSurface == EGL_NO_SURFACE )
@@ -179,11 +195,24 @@ namespace Ogre
             wl_egl_window_destroy( mWlEglWindow );
             mWlEglWindow = 0;
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                         "eglCreatePlatformWindowSurface/eglCreateWindowSurface failed",
+                         "eglCreatePlatformWindowSurface(EXT)/eglCreateWindowSurface failed",
                          "WaylandEglWindow::create" );
         }
 
-        mContext = new WaylandEglContext( mGLSupport, mEglSurface );
+        try
+        {
+            mContext = new WaylandEglContext( mGLSupport, mEglSurface );
+        }
+        catch( ... )
+        {
+            // mContext was never successfully constructed, so ~WaylandEglWindow
+            // won't run and won't clean these up either - do it here.
+            eglDestroySurface( eglDisplay, mEglSurface );
+            mEglSurface = EGL_NO_SURFACE;
+            wl_egl_window_destroy( mWlEglWindow );
+            mWlEglWindow = 0;
+            throw;
+        }
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
 

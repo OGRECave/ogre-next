@@ -62,13 +62,35 @@ namespace Ogre
     */
     class _OgrePrivate WaylandEglSupport : public GL3PlusSupport
     {
+    public:
+        /// Which entry points were used to obtain mEglDisplay, and therefore
+        /// which entry points WaylandEglWindow must use to create a matching
+        /// EGLSurface: mixing e.g. a core EGL_PLATFORM_WAYLAND_KHR display
+        /// with the EGLNativeWindowType-based eglCreateWindowSurface (or vice
+        /// versa) is undefined behaviour per the EGL spec, and mixing the
+        /// core eglCreatePlatformWindowSurface with an EXT-obtained display
+        /// risks calling into a statically-linked core symbol a driver that
+        /// only implements the EXT extension may not even export.
+        enum PlatformMode
+        {
+            /// eglGetDisplay() + eglCreateWindowSurface() with
+            /// EGLNativeDisplayType/EGLNativeWindowType.
+            PM_LEGACY,
+            /// eglGetPlatformDisplay() + eglCreatePlatformWindowSurface()
+            /// (EGL 1.5 core).
+            PM_CORE_1_5,
+            /// eglGetPlatformDisplayEXT() + eglCreatePlatformWindowSurfaceEXT()
+            /// (EGL 1.4 + EGL_EXT_platform_wayland).
+            PM_EXT
+        };
+
     protected:
         wl_display *mWlDisplay;
         EGLDisplay  mEglDisplay;
         EGLConfig   mEglConfig;
         ::EGLContext mSharedContext;
 
-        bool mUsePlatformExtensions;
+        PlatformMode mPlatformMode;
 
         /// Picks mEglConfig from mEglDisplay, walking a fallback ladder of
         /// attribute sets from most to least preferred.
@@ -94,7 +116,7 @@ namespace Ogre
         EGLDisplay   getEglDisplay() const { return mEglDisplay; }
         EGLConfig    getEglConfig() const { return mEglConfig; }
         ::EGLContext getSharedContext() const { return mSharedContext; }
-        bool         getUsePlatformExtensions() const { return mUsePlatformExtensions; }
+        PlatformMode getPlatformMode() const { return mPlatformMode; }
 
         /// @copydoc GL3PlusSupport::addConfig
         void addConfig() override;
