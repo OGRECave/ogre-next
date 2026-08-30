@@ -228,8 +228,7 @@ namespace Ogre
             StringConverter::toString( mRequestedHeight ) + ")" );
     }
     //-----------------------------------------------------------------------------------
-    void WaylandEglWindow::_initialize( TextureGpuManager *_textureManager,
-                                         const NameValuePairList * )
+    void WaylandEglWindow::_initialize( TextureGpuManager *_textureManager )
     {
         GL3PlusTextureGpuManager *textureManager =
             static_cast<GL3PlusTextureGpuManager *>( _textureManager );
@@ -276,7 +275,7 @@ namespace Ogre
 
         if( mDepthBuffer )
         {
-            mTexture->_setDepthBufferDefaults( DepthBuffer::NO_POOL_EXPLICIT_RTV, false,
+            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE, false,
                                                 mDepthBuffer->getPixelFormat() );
         }
         else
