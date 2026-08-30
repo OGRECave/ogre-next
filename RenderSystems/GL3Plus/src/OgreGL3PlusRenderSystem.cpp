@@ -826,15 +826,34 @@ namespace Ogre {
                     mReverseDepth = StringConverter::parseBool( itOption->second, true );
             }
 
-            initialiseContext(win);
-
-            mDriverVersion = mGLSupport->getGLVersion();
-
-            if( !mDriverVersion.hasMinVersion( 3, 3 ) )
+            try
             {
-                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                             "OpenGL 3.3 or greater required. Try updating your drivers.",
-                             "GL3PlusRenderSystem::_createRenderWindow" );
+                initialiseContext( win );
+
+                mDriverVersion = mGLSupport->getGLVersion();
+
+                if( !mDriverVersion.hasMinVersion( 3, 3 ) )
+                {
+                    OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                                 "OpenGL 3.3 or greater required. Try updating your drivers.",
+                                 "GL3PlusRenderSystem::_createRenderWindow" );
+                }
+            }
+            catch( ... )
+            {
+                // win was already inserted into mWindows and fully created
+                // (its native window/surface exists) by mGLSupport->newWindow()
+                // above; on failure here it must be properly torn down (not
+                // just leaked) before rethrowing, otherwise the underlying
+                // native resources it holds (e.g. a Wayland surface's
+                // wl_egl_window role) stay attached and every subsequent
+                // creation attempt against the same native window/surface -
+                // which callers like gz-rendering retry with different
+                // parameters after a failure - fails too, masking the real
+                // error behind a cascade of unrelated ones.
+                mWindows.erase( win );
+                OGRE_DELETE win;
+                throw;
             }
 
             assert( !mVaoManager );

@@ -35,14 +35,37 @@
 namespace Ogre
 {
     //-------------------------------------------------------------------------
-    WaylandEglContext::WaylandEglContext( WaylandEglSupport *support, EGLSurface eglSurface ) :
+    WaylandEglContext::WaylandEglContext( WaylandEglSupport *support, EGLSurface eglSurface,
+                                           ::EGLContext externalContext ) :
         mGLSupport( support ),
         mEglDisplay( support->getEglDisplay() ),
         mEglSurface( eglSurface ),
-        mEglContext( EGL_NO_CONTEXT )
+        mEglContext( EGL_NO_CONTEXT ),
+        mExternalContext( false )
     {
-        mEglContext = eglCreateContext( mEglDisplay, mGLSupport->getEglConfig(),
-                                         mGLSupport->getSharedContext(), 0 );
+        if( externalContext != EGL_NO_CONTEXT )
+        {
+            mEglContext = externalContext;
+            mExternalContext = true;
+        }
+        else
+        {
+            // Mirrors GLXContext: look up the RenderSystem's current main
+            // context fresh (not cached) and share GL object namespace with
+            // it. If there is no main context yet, this is the very first
+            // context created - it shares with nothing and will itself
+            // become the main context once GL3PlusRenderSystem registers it
+            // (via the owning window's "GLCONTEXT" custom attribute).
+            GL3PlusRenderSystem *renderSystem =
+                static_cast<GL3PlusRenderSystem *>( Root::getSingleton().getRenderSystem() );
+            GL3PlusContext *mainContext = renderSystem->_getMainContext();
+            ::EGLContext    shareContext = EGL_NO_CONTEXT;
+
+            if( mainContext )
+                shareContext = static_cast<WaylandEglContext *>( mainContext )->getEglContext();
+
+            mEglContext = mGLSupport->createContext( shareContext );
+        }
 
         if( mEglContext == EGL_NO_CONTEXT )
         {
@@ -53,13 +76,22 @@ namespace Ogre
     //-------------------------------------------------------------------------
     WaylandEglContext::~WaylandEglContext()
     {
-        endCurrent();
-
+        // Deliberately does NOT call endCurrent() here - mirrors GLXContext's
+        // destructor exactly (it never un-currents on teardown either).
+        // eglDestroyContext() is safe to call on a still-current context
+        // (EGL only actually frees it once it stops being current); calling
+        // eglMakeCurrent(..., EGL_NO_CONTEXT) here would be wrong for an
+        // externally-adopted context in particular - Ogre doesn't own it
+        // and has no business un-currenting it out from under the caller
+        // (e.g. Qt), which is exactly what happened here: destroying a
+        // failed window mid-retry (see GL3PlusRenderSystem::_createRenderWindow's
+        // cleanup-on-exception path) used to clear the *caller's* adopted
+        // context, making every subsequent retry see EGL_NO_CONTEXT.
         GL3PlusRenderSystem *rs =
             static_cast<GL3PlusRenderSystem *>( Root::getSingleton().getRenderSystem() );
         rs->_unregisterContext( this );
 
-        if( mEglContext != EGL_NO_CONTEXT )
+        if( mEglContext != EGL_NO_CONTEXT && !mExternalContext )
             eglDestroyContext( mEglDisplay, mEglContext );
     }
     //-------------------------------------------------------------------------

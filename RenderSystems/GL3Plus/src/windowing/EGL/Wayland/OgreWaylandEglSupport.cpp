@@ -47,7 +47,6 @@ namespace Ogre
         mWlDisplay( 0 ),
         mEglDisplay( EGL_NO_DISPLAY ),
         mEglConfig( 0 ),
-        mSharedContext( EGL_NO_CONTEXT ),
         mPlatformMode( PM_LEGACY )
     {
     }
@@ -56,19 +55,25 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void WaylandEglSupport::terminate()
     {
-        if( mSharedContext != EGL_NO_CONTEXT )
-        {
-            eglMakeCurrent( mEglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT );
-            eglDestroyContext( mEglDisplay, mSharedContext );
-            mSharedContext = EGL_NO_CONTEXT;
-        }
-
-        if( mEglDisplay != EGL_NO_DISPLAY )
-        {
-            eglTerminate( mEglDisplay );
-            mEglDisplay = EGL_NO_DISPLAY;
-        }
-
+        // No context is owned here - each WaylandEglContext (created by
+        // individual windows) owns and destroys its own EGLContext, exactly
+        // like GLXGLSupport/GLXContext. By the time terminate() runs, all
+        // windows using this display should already be destroyed (same
+        // ordering requirement GLX already has).
+        //
+        // mWlDisplay is always host-owned (see the class doc on
+        // WaylandEglWindow - there is no self-owned wl_display mode), so
+        // the EGLDisplay eglGetPlatformDisplay() returned for it is a
+        // shared, global-per-connection resource, not something this class
+        // owns either. eglTerminate() would mark it uninitialised for the
+        // whole process, invalidating any other context still alive on
+        // that same display (e.g. the host's own adopted "currentGLContext"
+        // context) even though this class never created it. GLXGLSupport
+        // has the identical rule for mIsExternalDisplay
+        // (OgreGLXGLSupport.cpp: skips XCloseDisplay when the X connection
+        // was supplied externally) - mirror it here by simply never
+        // terminating.
+        mEglDisplay = EGL_NO_DISPLAY;
         mEglConfig = 0;
         mWlDisplay = 0;
     }
@@ -139,15 +144,6 @@ namespace Ogre
         eglBindAPI( EGL_OPENGL_API );
 
         chooseEglConfig();
-
-        mSharedContext = createSharedContext();
-
-        if( mSharedContext == EGL_NO_CONTEXT )
-        {
-            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                         "Unable to create a suitable shared OpenGL 3+ EGL context",
-                         "WaylandEglSupport::initialise" );
-        }
     }
     //-------------------------------------------------------------------------
     void WaylandEglSupport::chooseEglConfig()
@@ -224,7 +220,7 @@ namespace Ogre
                      "WaylandEglSupport::chooseEglConfig" );
     }
     //-------------------------------------------------------------------------
-    ::EGLContext WaylandEglSupport::createSharedContext()
+    ::EGLContext WaylandEglSupport::createContext( ::EGLContext shareContext ) const
     {
         EGLint contextAttrs[] = { EGL_CONTEXT_MAJOR_VERSION,
                                    4,
@@ -242,14 +238,14 @@ namespace Ogre
 
         while( context == EGL_NO_CONTEXT && contextAttrs[1] >= 3 )
         {
-            context = eglCreateContext( mEglDisplay, mEglConfig, EGL_NO_CONTEXT, contextAttrs );
+            context = eglCreateContext( mEglDisplay, mEglConfig, shareContext, contextAttrs );
 
             if( context != EGL_NO_CONTEXT )
             {
                 LogManager::getSingleton().logMessage(
-                    "WaylandEglSupport: created shared GL " +
-                    StringConverter::toString( contextAttrs[1] ) + "." +
-                    StringConverter::toString( contextAttrs[3] ) + " context" );
+                    "WaylandEglSupport: created GL " + StringConverter::toString( contextAttrs[1] ) +
+                    "." + StringConverter::toString( contextAttrs[3] ) + " context" +
+                    ( shareContext != EGL_NO_CONTEXT ? " (shared)" : " (unshared)" ) );
             }
             else
             {
@@ -268,7 +264,49 @@ namespace Ogre
         return context;
     }
     //-------------------------------------------------------------------------
-    void WaylandEglSupport::addConfig() {}
+    EGLConfig WaylandEglSupport::getEglConfigFromContext( ::EGLContext context ) const
+    {
+        EGLint configId = 0;
+        if( !eglQueryContext( mEglDisplay, context, EGL_CONFIG_ID, &configId ) )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "eglQueryContext(EGL_CONFIG_ID) failed for the given EGLContext",
+                         "WaylandEglSupport::getEglConfigFromContext" );
+        }
+
+        const EGLint configAttrs[] = { EGL_CONFIG_ID, configId, EGL_NONE };
+        EGLConfig    config = 0;
+        EGLint       numConfigs = 0;
+        if( !eglChooseConfig( mEglDisplay, configAttrs, &config, 1, &numConfigs ) || numConfigs == 0 )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Unable to resolve the EGLConfig (id " +
+                             StringConverter::toString( (int)configId ) +
+                             ") the adopted EGLContext was created with",
+                         "WaylandEglSupport::getEglConfigFromContext" );
+        }
+
+        return config;
+    }
+    //-------------------------------------------------------------------------
+    void WaylandEglSupport::addConfig()
+    {
+        // v1 has no meaningful FSAA enumeration to expose before a live
+        // wl_display exists (initialise() only happens once a window is
+        // actually created, per-instance, not at addConfig() time) -
+        // register a minimal placeholder instead of leaving "FSAA" absent
+        // entirely. Callers reasonably assume every GL3PlusSupport
+        // interface exposes an "FSAA" option (GLX and EGL headless both
+        // do) and may set it unconditionally after switching interfaces;
+        // leaving it unregistered makes that throw ERR_INVALIDPARAMS.
+        ConfigOption optFSAA;
+        optFSAA.name = "FSAA";
+        optFSAA.immutable = false;
+        optFSAA.possibleValues.push_back( "0" );
+        optFSAA.currentValue = "0";
+
+        mOptions[optFSAA.name] = optFSAA;
+    }
     //-------------------------------------------------------------------------
     String WaylandEglSupport::validateConfig() { return BLANKSTRING; }
     //-------------------------------------------------------------------------
