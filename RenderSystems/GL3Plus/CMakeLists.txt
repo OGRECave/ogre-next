@@ -69,6 +69,44 @@ if( OGRE_GLSUPPORT_USE_EGL_HEADLESS )
 	list( APPEND PLATFORM_LIBS ${EGL_LIBRARIES} )
 endif()
 
+if( OGRE_GLSUPPORT_USE_EGL_WAYLAND )
+	include(${OGRE_SOURCE_DIR}/CMake/Utils/OgreWaylandProtocol.cmake)
+
+	find_package(PkgConfig REQUIRED)
+	pkg_check_modules(WAYLAND_CLIENT REQUIRED wayland-client)
+	pkg_check_modules(WAYLAND_EGL REQUIRED wayland-egl)
+	pkg_check_modules(WAYLAND_PROTOCOLS REQUIRED wayland-protocols)
+	find_program(WAYLAND_SCANNER_EXECUTABLE NAMES wayland-scanner REQUIRED)
+	pkg_get_variable(WAYLAND_PROTOCOLS_DIR wayland-protocols pkgdatadir)
+	if( NOT WAYLAND_PROTOCOLS_DIR )
+		message(FATAL_ERROR "wayland-protocols pkgdatadir was not found")
+	endif()
+
+	# xdg-shell is generated even though WaylandEglWindow itself doesn't use
+	# xdg_wm_base (it only embeds into a host-owned wl_surface): the smoke
+	# test's host-simulation side needs it to create a toplevel to embed into,
+	# and a future self-owned-toplevel mode will need it too.
+	set(XDG_SHELL_PROTOCOL_XML "${WAYLAND_PROTOCOLS_DIR}/stable/xdg-shell/xdg-shell.xml")
+	set(WAYLAND_GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated/wayland")
+	ogre_generate_wayland_protocol("${XDG_SHELL_PROTOCOL_XML}" "${WAYLAND_GENERATED_DIR}"
+		XDG_SHELL_CLIENT_PROTOCOL_HEADER XDG_SHELL_PROTOCOL_CODE)
+
+	file(GLOB PLATFORM_HEADERS_TMP "include/windowing/EGL/Wayland/*.h")
+	file(GLOB PLATFORM_SOURCES_TMP "src/windowing/EGL/Wayland/*.cpp")
+	list( APPEND PLATFORM_HEADERS ${PLATFORM_HEADERS_TMP} )
+	list( APPEND PLATFORM_SOURCES ${PLATFORM_SOURCES_TMP} )
+	set( PLATFORM_HEADERS_EGL_WAYLAND ${PLATFORM_HEADERS_TMP} )
+
+	include_directories( include/windowing/EGL )
+	include_directories( ${WAYLAND_CLIENT_INCLUDE_DIRS} ${WAYLAND_EGL_INCLUDE_DIRS} "${WAYLAND_GENERATED_DIR}" )
+
+	if( OGRE_GLSUPPORT_NUM_INTERFACES EQUAL 1 )
+		include_directories( src/windowing/EGL )
+	endif()
+
+	list( APPEND PLATFORM_LIBS ${EGL_LIBRARIES} ${WAYLAND_CLIENT_LIBRARIES} ${WAYLAND_EGL_LIBRARIES} )
+endif()
+
 if( OGRE_GLSUPPORT_NUM_INTERFACES GREATER 1 )
 	list( APPEND SOURCE_FILES
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/windowing/OgreGlSwitchableSupport.cpp" )
@@ -135,6 +173,9 @@ if( OGRE_GLSUPPORT_USE_COCOA )
 endif()
 if( OGRE_GLSUPPORT_USE_EGL_HEADLESS )
   install(FILES ${PLATFORM_HEADERS_EGL} DESTINATION include/${OGRE_NEXT_PREFIX}/RenderSystems/GL3Plus/EGL)
+endif()
+if( OGRE_GLSUPPORT_USE_EGL_WAYLAND )
+	install(FILES ${PLATFORM_HEADERS_EGL_WAYLAND} DESTINATION include/${OGRE_NEXT_PREFIX}/RenderSystems/GL3Plus/EGL/Wayland)
 endif()
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION include/${OGRE_NEXT_PREFIX}/RenderSystems/GL3Plus)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/GLSL/ DESTINATION include/${OGRE_NEXT_PREFIX}/RenderSystems/GL3Plus)

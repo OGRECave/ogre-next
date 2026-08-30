@@ -83,6 +83,14 @@ void WindowEventUtilities::messagePump()
             XID xid;
             XEvent event;
 
+            // Skip windows that aren't X11-backed (e.g. a native Wayland
+            // embedded window, which never registers itself here anyway,
+            // but this guard protects against a mixed window list).
+            void *wlSurface = 0;
+            ( *win )->getCustomAttribute( "WAYLAND_SURFACE", &wlSurface );
+            if( wlSurface )
+                continue;
+
             if( !xDisplay )
                 ( *win )->getCustomAttribute( "XDISPLAY", &xDisplay );
 
