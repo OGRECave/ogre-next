@@ -27,5 +27,6 @@ Samples/Browser/WinRT.Xaml/Media
 AndroidBuild/
 AndroidDependencies/
 Build/
+build-v2-3/
 EmscriptenDependencies
 EmscriptenBuild

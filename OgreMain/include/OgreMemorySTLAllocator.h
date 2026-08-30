@@ -100,7 +100,7 @@ namespace Ogre
         };
 
         /// ctor
-        inline explicit STLAllocator()
+        inline STLAllocator()
         { }
 
         /// dtor

@@ -72,7 +72,6 @@ namespace Ogre
             dispatches. A host that pauses its own event loop (e.g. app
             suspended, window unmapped) will therefore stall this window's
             rendering thread inside swapBuffers() until dispatching resumes.
-            Wayland platform spec.
     */
     class _OgrePrivate WaylandEglWindow : public Window
     {
@@ -96,41 +95,40 @@ namespace Ogre
     public:
         WaylandEglWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode,
                            const NameValuePairList *miscParams, WaylandEglSupport *glsupport );
-        ~WaylandEglWindow() override;
+        virtual ~WaylandEglWindow();
 
-        void _initialize( TextureGpuManager *textureManager,
-                           const NameValuePairList *miscParams ) override;
+        virtual void _initialize( TextureGpuManager *textureManager );
 
-        void setVSync( bool vSync, uint32 vSyncInterval ) override;
-        void reposition( int32 left, int32 top ) override;
+        virtual void setVSync( bool vSync, uint32 vSyncInterval );
+        virtual void reposition( int32 left, int32 top );
 
         void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
                                        uint32 width, uint32 height, uint32 frequencyNumerator,
-                                       uint32 frequencyDenominator ) override;
+                                       uint32 frequencyDenominator );
 
-        /** @copydoc Window::destroy */
-        void destroy() override;
+        /** @copydoc see Window::destroy */
+        virtual void destroy( void );
 
-        /** @copydoc Window::isClosed */
-        bool isClosed() const override;
+        /** @copydoc see Window::isClosed */
+        virtual bool isClosed( void ) const;
 
-        bool isVisible() const override;
+        bool isVisible( void ) const;
 
-        void _setVisible( bool visible ) override;
+        virtual void _setVisible( bool visible );
 
-        /** @copydoc Window::isHidden */
-        bool isHidden() const override { return mHidden; }
+        /** @copydoc see Window::isHidden */
+        bool isHidden( void ) const { return mHidden; }
 
-        /** @copydoc Window::setHidden */
-        void setHidden( bool hidden ) override;
+        /** @copydoc see Window::setHidden */
+        void setHidden( bool hidden );
 
-        /** @copydoc Window::requestResolution */
-        void requestResolution( uint32 width, uint32 height ) override;
+        /** @copydoc see Window::requestResolution */
+        void requestResolution( uint32 width, uint32 height );
 
-        void windowMovedOrResized() override;
+        void windowMovedOrResized();
 
-        /** @copydoc Window::swapBuffers */
-        void swapBuffers() override;
+        /** @copydoc see Window::swapBuffers */
+        void swapBuffers();
 
         /**
            @remarks
@@ -148,7 +146,7 @@ namespace Ogre
            *                      pumping); do not repurpose this key.
            * WAYLAND_EGL_WINDOW   The wl_egl_window owned by this window.
            */
-        void getCustomAttribute( IdString name, void *pData ) override;
+        virtual void getCustomAttribute( IdString name, void *pData );
 
         /// This window renders directly to a real on-screen EGLSurface (like
         /// GLX), not to an intermediate FBO (like the EGL PBuffer backend),

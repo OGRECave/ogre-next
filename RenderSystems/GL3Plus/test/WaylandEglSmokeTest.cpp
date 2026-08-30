@@ -43,7 +43,6 @@
         WAYLAND_DISPLAY=<socket> ./Test_GL3PlusWaylandEglSmoke
 */
 
-#include "OgreAbiUtils.h"
 #include "OgreGL3PlusContext.h"
 #include "OgreGL3PlusPlugin.h"
 #include "OgreLogManager.h"
@@ -302,8 +301,7 @@ int main( int argc, char **argv )
         return 1;
     printf( "OK: host xdg_toplevel created and configured\n" );
 
-    const Ogre::AbiCookie abiCookie = Ogre::generateAbiCookie();
-    Ogre::Root            *root = new Ogre::Root( &abiCookie, "", "", "WaylandEglSmokeTest.log" );
+    Ogre::Root *root = new Ogre::Root( "", "", "WaylandEglSmokeTest.log" );
 
     Ogre::GL3PlusPlugin *plugin = new Ogre::GL3PlusPlugin();
     root->installPlugin( plugin, nullptr );
