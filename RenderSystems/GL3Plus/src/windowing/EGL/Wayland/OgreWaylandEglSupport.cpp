@@ -48,7 +48,7 @@ namespace Ogre
         mEglDisplay( EGL_NO_DISPLAY ),
         mEglConfig( 0 ),
         mSharedContext( EGL_NO_CONTEXT ),
-        mUsePlatformExtensions( false )
+        mPlatformMode( PM_LEGACY )
     {
     }
     //-------------------------------------------------------------------------
@@ -97,7 +97,7 @@ namespace Ogre
 #if defined( EGL_VERSION_1_5 )
         mEglDisplay =
             eglGetPlatformDisplay( EGL_PLATFORM_WAYLAND_KHR, (void *)mWlDisplay, 0 );
-        mUsePlatformExtensions = true;
+        mPlatformMode = PM_CORE_1_5;
 #else
         mEglDisplay = EGL_NO_DISPLAY;
 #endif
@@ -106,7 +106,7 @@ namespace Ogre
         {
             mEglDisplay =
                 _eglGetPlatformDisplayEXT( EGL_PLATFORM_WAYLAND_KHR, (void *)mWlDisplay, 0 );
-            mUsePlatformExtensions = true;
+            mPlatformMode = PM_EXT;
         }
 
         if( mEglDisplay == EGL_NO_DISPLAY )
@@ -115,7 +115,7 @@ namespace Ogre
             // EGL_EXT_platform_wayland accept a wl_display reinterpreted as
             // EGLNativeDisplayType directly.
             mEglDisplay = eglGetDisplay( (EGLNativeDisplayType)mWlDisplay );
-            mUsePlatformExtensions = false;
+            mPlatformMode = PM_LEGACY;
         }
 
         if( mEglDisplay == EGL_NO_DISPLAY )

@@ -62,6 +62,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <ctime>
+#include <poll.h>
 
 // Deliberately not #include <GL/gl.h>: OgreGL3PlusContext.h transitively
 // pulls in Ogre's gl3w loader (GL/gl3w.h), whose inline GL entry points
@@ -173,6 +175,60 @@ namespace
     {
         wl_display_flush( state.display );
         wl_display_dispatch_pending( state.display );
+    }
+
+    long long monotonicMs()
+    {
+        struct timespec ts;
+        clock_gettime( CLOCK_MONOTONIC, &ts );
+        return static_cast<long long>( ts.tv_sec ) * 1000 + ts.tv_nsec / 1000000;
+    }
+
+    /// Waits up to timeoutMs for `predicate` to become true, pumping the
+    /// host's Wayland connection via the standard libwayland
+    /// prepare_read/poll/read_events non-blocking pattern (rather than a
+    /// plain blocking wl_display_dispatch(), which can never time out).
+    /// Not every compositor sends an unsolicited xdg_toplevel::configure
+    /// just because a client changed its min/max size hint - the resize
+    /// test below needs to tell "the compositor didn't respond in time"
+    /// apart from "the connection died", which a blocking wait cannot do.
+    template <typename Predicate>
+    bool waitFor( HostState &state, int timeoutMs, Predicate predicate )
+    {
+        const long long deadline = monotonicMs() + timeoutMs;
+        while( !predicate() )
+        {
+            wl_display_flush( state.display );
+
+            if( wl_display_prepare_read( state.display ) != 0 )
+            {
+                // Events already queued locally; dispatch and re-check.
+                wl_display_dispatch_pending( state.display );
+                continue;
+            }
+
+            const long long remaining = deadline - monotonicMs();
+            if( remaining <= 0 )
+            {
+                wl_display_cancel_read( state.display );
+                return predicate();
+            }
+
+            pollfd pfd = { wl_display_get_fd( state.display ), POLLIN, 0 };
+            const int ret = poll( &pfd, 1, static_cast<int>( remaining ) );
+            if( ret > 0 && ( pfd.revents & POLLIN ) )
+            {
+                wl_display_read_events( state.display );
+                wl_display_dispatch_pending( state.display );
+            }
+            else
+            {
+                wl_display_cancel_read( state.display );
+                if( ret == 0 )
+                    return predicate();  // timed out
+            }
+        }
+        return true;
     }
 
     bool createHostWindow( HostState &state )
@@ -347,15 +403,49 @@ int main( int argc, char **argv )
     window->swapBuffers();
     pumpHost( hostState );
 
-    // ---- Resize test: host resizes its xdg_toplevel; Ogre must pick it up
-    // via requestResolution() the same way a real host (e.g. Qt) would
-    // translate xdg_toplevel::configure into a resize call. ----
-    xdg_toplevel_set_min_size( hostState.toplevel, 0, 0 );
-    xdg_toplevel_set_max_size( hostState.toplevel, 0, 0 );
+    // ---- Resize test: host requests a specific size from the compositor
+    // (pinning min==max is a common hint to request a specific configure
+    // size), then WAITS (bounded, non-blocking - not every compositor
+    // proactively reconfigures just from a min/max hint, e.g. Hyprland
+    // doesn't always) FOR AND READS the real xdg_toplevel::configure event
+    // when one arrives, rather than assuming a fixed size unconditionally.
+    // Either way, requestResolution() below still exercises the real resize
+    // code path; a real compositor-driven configure is extra assurance when
+    // available, not a hard requirement of every compositor. ----
+    const uint32_t requestedWidth = startWidth * 2u;
+    const uint32_t requestedHeight = startHeight * 2u;
+
+    hostState.resizeConfigured = false;
+    xdg_toplevel_set_min_size( hostState.toplevel, static_cast<int32_t>( requestedWidth ),
+                                static_cast<int32_t>( requestedHeight ) );
+    xdg_toplevel_set_max_size( hostState.toplevel, static_cast<int32_t>( requestedWidth ),
+                                static_cast<int32_t>( requestedHeight ) );
     wl_surface_commit( hostState.surface );
 
-    const uint32_t resizedWidth = startWidth * 2u;
-    const uint32_t resizedHeight = startHeight * 2u;
+    const bool gotResizeConfigure =
+        waitFor( hostState, 2000, [&]() { return hostState.resizeConfigured; } );
+
+    uint32_t resizedWidth = requestedWidth;
+    uint32_t resizedHeight = requestedHeight;
+    if( gotResizeConfigure )
+    {
+        // A configure dimension of 0 means "no preference, client decides" -
+        // fall back to what we asked for in that case.
+        if( hostState.pendingWidth > 0 )
+            resizedWidth = static_cast<uint32_t>( hostState.pendingWidth );
+        if( hostState.pendingHeight > 0 )
+            resizedHeight = static_cast<uint32_t>( hostState.pendingHeight );
+        printf( "OK: compositor sent an xdg_toplevel::configure for the resize (%ux%u)\n",
+                resizedWidth, resizedHeight );
+    }
+    else
+    {
+        printf( "OK: compositor did not send a resize configure within 2s (allowed - not all "
+                "compositors reconfigure from a min/max hint alone); exercising "
+                "requestResolution() with the requested size directly (%ux%u)\n",
+                resizedWidth, resizedHeight );
+    }
+
     window->requestResolution( resizedWidth, resizedHeight );
 
     GL::Viewport( 0, 0, static_cast<GL::Sizei>( window->getWidth() ),
