@@ -121,7 +121,7 @@ var NAVTREE =
         ] ]
       ] ],
       [ "Rendering", "_rendering.html", [
-        [ "Advanced Users", "_rendering.html#autotoc_md107", null ],
+        [ "Advanced Users", "_rendering.html#autotoc_md111", null ],
         [ "HLMS: High Level Material System", "hlms.html", [
           [ "Fundamental changes", "hlms.html#HlmsChanges", [
             [ "Viewports and Scissor tests", "hlms.html#HlmsChangesViewports", null ],
@@ -156,13 +156,13 @@ var NAVTREE =
             [ "Hot reloading", "hlms.html#HlmsCreationOfShadersHotReloading", null ],
             [ "Disabling a stage", "hlms.html#HlmsCreationOfShadersDisablingStage", null ],
             [ "Customizing an existing implementation", "hlms.html#HlmsCreationOfShadersCustomizing", [
-              [ "Examples:", "hlms.html#autotoc_md111", null ]
+              [ "Examples:", "hlms.html#autotoc_md115", null ]
             ] ]
           ] ],
           [ "Run-time rendering", "hlms.html#HlmsRuntimeRendering", [
             [ "preparePassHash", "hlms.html#HlmsRuntimeRenderingPreparePassHash", null ],
             [ "fillBuffersFor", "hlms.html#HlmsRuntimeRenderingFillBuffersFor", null ],
-            [ "Multithreaded Shader Compilation", "hlms.html#autotoc_md112", null ]
+            [ "Multithreaded Shader Compilation", "hlms.html#autotoc_md116", null ]
           ] ],
           [ "Using the HLMS implementations", "hlms.html#UsingHlmsImplementation", [
             [ "Initialization", "hlms.html#UsingHlmsImplementationInitialization", null ],
@@ -184,14 +184,14 @@ var NAVTREE =
           [ "Troubleshooting", "hlms.html#HlmsTroubleshooting", [
             [ "My shadows don't show up or are very glitchy", "hlms.html#HlmsTroubleshootingShadow", null ]
           ] ],
-          [ "Precision / Quality", "hlms.html#autotoc_md113", null ],
+          [ "Precision / Quality", "hlms.html#autotoc_md117", null ],
           [ "Multithreaded Shader Compilation", "_hlms_threading.html", [
             [ "CMake Options", "_hlms_threading.html#HlmsThreading_CMakeOptions", null ],
             [ "The tid (Thread ID) argument", "_hlms_threading.html#HlmsThreading_tidArgument", [
-              [ "API when OGRE_SHADER_COMPILATION_THREADING_MODE = 1", "_hlms_threading.html#autotoc_md100", null ]
+              [ "API when OGRE_SHADER_COMPILATION_THREADING_MODE = 1", "_hlms_threading.html#autotoc_md104", null ]
             ] ],
-            [ "How does threaded Hlms work?", "_hlms_threading.html#autotoc_md101", [
-              [ "What is the range of tid argument?", "_hlms_threading.html#autotoc_md102", null ]
+            [ "How does threaded Hlms work?", "_hlms_threading.html#autotoc_md105", [
+              [ "What is the range of tid argument?", "_hlms_threading.html#autotoc_md106", null ]
             ] ]
           ] ]
         ] ],
@@ -220,14 +220,14 @@ var NAVTREE =
           [ "Image Voxel Cone Tracing", "_image_voxel_cone_tracing.html", [
             [ "Step 1: Image Voxelizer", "_image_voxel_cone_tracing.html#IVCT_Step1", [
               [ "Downside", "_image_voxel_cone_tracing.html#IVCT_Step1_Downside", [
-                [ "Non-researched solutions:", "_image_voxel_cone_tracing.html#autotoc_md103", null ]
+                [ "Non-researched solutions:", "_image_voxel_cone_tracing.html#autotoc_md107", null ]
               ] ],
-              [ "Trivia", "_image_voxel_cone_tracing.html#autotoc_md104", null ]
+              [ "Trivia", "_image_voxel_cone_tracing.html#autotoc_md108", null ]
             ] ],
             [ "Step 2: Row Translation", "_image_voxel_cone_tracing.html#IVCT_Step2", null ],
             [ "Step 3: Cascades", "_image_voxel_cone_tracing.html#IVCT_Step3", null ],
-            [ "Wait isn't this what UE5's Lumen does?", "_image_voxel_cone_tracing.html#autotoc_md105", null ],
-            [ "Wait isn't this what Godot does?", "_image_voxel_cone_tracing.html#autotoc_md106", null ]
+            [ "Wait isn't this what UE5's Lumen does?", "_image_voxel_cone_tracing.html#autotoc_md109", null ],
+            [ "Wait isn't this what Godot does?", "_image_voxel_cone_tracing.html#autotoc_md110", null ]
           ] ]
         ] ],
         [ "The Command Buffer", "commandbuffer.html", [
@@ -242,7 +242,7 @@ var NAVTREE =
           [ "Old APIs (i.e. D3D11 and GL)", "_root_layouts.html#RootLayoutsOldAPIs", null ],
           [ "New APIs and Root Layouts", "_root_layouts.html#RootLayoutsNewAPIs", null ],
           [ "Setting up root layouts", "_root_layouts.html#RootLayoutsSettingUp", [
-            [ "Could you have used e.g. \"const_buffers\" : [0,7] instead of [4,7]?", "_root_layouts.html#autotoc_md108", null ]
+            [ "Could you have used e.g. \"const_buffers\" : [0,7] instead of [4,7]?", "_root_layouts.html#autotoc_md112", null ]
           ] ],
           [ "Declaring Root Layouts in shaders", "_root_layouts.html#RootLayoutsDeclaringInShaders", null ],
           [ "Baked sets", "_root_layouts.html#RootLayoutsBakedSets", null ],
@@ -253,15 +253,15 @@ var NAVTREE =
             [ "Automatic", "_root_layouts.html#RootLayoutsAoTAuto", null ],
             [ "Making GLSL shaders compatible with both Vulkan and OpenGL", "_root_layouts.html#RootLayoutsGLSLForGLandVK", [
               [ "Example:", "_root_layouts.html#RootLayoutsGLSLForGLandVKExample", [
-                [ "OpenGL", "_root_layouts.html#autotoc_md109", null ],
-                [ "Vulkan", "_root_layouts.html#autotoc_md110", null ]
+                [ "OpenGL", "_root_layouts.html#autotoc_md113", null ],
+                [ "Vulkan", "_root_layouts.html#autotoc_md114", null ]
               ] ]
             ] ]
           ] ]
         ] ]
       ] ],
       [ "Scripts", "_scripts.html", [
-        [ "Loading scripts", "_scripts.html#autotoc_md123", null ],
+        [ "Loading scripts", "_scripts.html#autotoc_md127", null ],
         [ "Format", "_scripts.html#Format", [
           [ "Script Inheritance", "_scripts.html#Script-Inheritance", [
             [ "Advanced Script Inheritance", "_scripts.html#Advanced-Script-Inheritance", null ]
@@ -335,7 +335,7 @@ var NAVTREE =
             ] ],
             [ "PBS Datablock Parameters", "hlmspbsdatablockref.html#dbPBSParameters", [
               [ "Parameter: brdf", "hlmspbsdatablockref.html#dbParamBRDF", null ],
-              [ "Parameter: refraction_strength", "hlmspbsdatablockref.html#autotoc_md114", null ],
+              [ "Parameter: refraction_strength", "hlmspbsdatablockref.html#autotoc_md118", null ],
               [ "Parameter: detail_diffuse[X]", "hlmspbsdatablockref.html#dbParamDetailDiffuse", null ],
               [ "Parameter: detail_normal[X]", "hlmspbsdatablockref.html#dbParamDetailNormal", null ],
               [ "Parameter: detail_weight", "hlmspbsdatablockref.html#dbParamDetailWeight", null ],
@@ -390,7 +390,7 @@ var NAVTREE =
               [ "Locally declared textures", "compositor.html#CompositorNodesChannelsAndRTTsLocalTextures", null ],
               [ "Textures coming from input channels", "compositor.html#CompositorNodesChannelsAndRTTsFromInputChannel", null ],
               [ "Global Textures", "compositor.html#CompositorNodesChannelsAndRTTsGlobal", null ],
-              [ "compositor_node parameters", "compositor.html#autotoc_md116", [
+              [ "compositor_node parameters", "compositor.html#autotoc_md120", [
                 [ "in", "compositor.html#CompositorNode_in", null ],
                 [ "out", "compositor.html#CompositorNode_out", null ],
                 [ "in_buffer", "compositor.html#CompositorNode_in_buffer", null ],
@@ -400,12 +400,12 @@ var NAVTREE =
               [ "Main RenderTarget", "compositor.html#CompositorNodesChannelsAndRTTsMainRenderTarget", null ]
             ] ],
             [ "Target", "compositor.html#CompositorNodesTarget", [
-              [ "target parameters", "compositor.html#autotoc_md117", [
+              [ "target parameters", "compositor.html#autotoc_md121", [
                 [ "target_level_barrier", "compositor.html#CompositorTarget_target_level_barrier", null ]
               ] ]
             ] ],
             [ "Passes", "compositor.html#CompositorNodesPasses", [
-              [ "pass parameters", "compositor.html#autotoc_md118", [
+              [ "pass parameters", "compositor.html#autotoc_md122", [
                 [ "pass", "compositor.html#CompositorPass_pass", null ],
                 [ "num_initial", "compositor.html#CompositorPass_num_initial", null ],
                 [ "flush_command_buffers", "compositor.html#CompositorPass_flush_command_buffers", null ],
@@ -533,13 +533,13 @@ var NAVTREE =
             [ "Default values", "compositor.html#CompositorWorkspacesStereoDefaultValues", null ]
           ] ],
           [ "Advanced MSAA", "compositor.html#AdvancedMSAA", [
-            [ "What is MSAA?", "compositor.html#autotoc_md119", [
-              [ "Supersampling Antialiasing (SSAA) vs MSAA", "compositor.html#autotoc_md120", null ],
-              [ "MSAA approach to the problem", "compositor.html#autotoc_md121", [
+            [ "What is MSAA?", "compositor.html#autotoc_md123", [
+              [ "Supersampling Antialiasing (SSAA) vs MSAA", "compositor.html#autotoc_md124", null ],
+              [ "MSAA approach to the problem", "compositor.html#autotoc_md125", [
                 [ "Resources", "compositor.html#CompositorNodesTexturesMsaaResources", null ]
               ] ]
             ] ],
-            [ "Ogre + MSAA with Implicit Resolves", "compositor.html#autotoc_md122", null ],
+            [ "Ogre + MSAA with Implicit Resolves", "compositor.html#autotoc_md126", null ],
             [ "Ogre + MSAA with Explicit Resolves", "compositor.html#MSAAExplicitResolves", null ]
           ] ],
           [ "RTV (RenderTargetView)", "compositor.html#CompositorRTV", [
@@ -573,7 +573,7 @@ var NAVTREE =
           ] ],
           [ "Particle Emitters", "_particle-_scripts.html#Particle-Emitters", [
             [ "Emitting Emitters", "_particle-_scripts.html#Emitting-Emitters", null ],
-            [ "Common Emitter Attributes", "_particle-_scripts.html#autotoc_md115", null ],
+            [ "Common Emitter Attributes", "_particle-_scripts.html#autotoc_md119", null ],
             [ "angle", "_particle-_scripts.html#ParticleEmitterAttributes_angle", null ],
             [ "colour", "_particle-_scripts.html#ParticleEmitterAttributes_colour", null ],
             [ "colour_range_start & colour_range_end", "_particle-_scripts.html#ParticleEmitterAttributes_colour_range_start", null ],
@@ -627,7 +627,7 @@ var NAVTREE =
           [ "Grouping textures by type", "_tuning_memory_resources.html#GroupingTexturesByType", null ],
           [ "Dynamic vs Default buffers", "_tuning_memory_resources.html#DynamicVsDefaultBuffers", null ],
           [ "Tweaking default memory consumption by VaoManager", "_tuning_memory_resources.html#TweakingVaoManager", [
-            [ "Vulkan and <tt>TEXTURES_OPTIMAL</tt>", "_tuning_memory_resources.html#autotoc_md80", null ]
+            [ "Vulkan and <tt>TEXTURES_OPTIMAL</tt>", "_tuning_memory_resources.html#autotoc_md84", null ]
           ] ]
         ] ]
       ] ],
@@ -696,20 +696,20 @@ var NAVTREE =
           [ "Using OIT (Order Independent Transparency)", "_particle_system2.html#ParticleSystem2Oit", [
             [ "Alpha Hashing: Blue Noise vs White Noise", "_particle_system2.html#AlphaHashingBlueNoiseSetup", null ]
           ] ],
-          [ "Thread Safe RandomValueProvider", "_particle_system2.html#autotoc_md81", null ],
-          [ "New settings", "_particle_system2.html#autotoc_md82", null ]
+          [ "Thread Safe RandomValueProvider", "_particle_system2.html#autotoc_md85", null ],
+          [ "New settings", "_particle_system2.html#autotoc_md86", null ]
         ] ],
         [ "Terra System", "_terra_system.html", [
-          [ "Vertex-bufferless rendering", "_terra_system.html#autotoc_md83", null ],
-          [ "Vertex Trick in Terra", "_terra_system.html#autotoc_md84", null ],
-          [ "Terra cells", "_terra_system.html#autotoc_md85", [
-            [ "First layer, the 4x4 block", "_terra_system.html#autotoc_md86", null ],
-            [ "Outer layers", "_terra_system.html#autotoc_md87", null ]
+          [ "Vertex-bufferless rendering", "_terra_system.html#autotoc_md87", null ],
+          [ "Vertex Trick in Terra", "_terra_system.html#autotoc_md88", null ],
+          [ "Terra cells", "_terra_system.html#autotoc_md89", [
+            [ "First layer, the 4x4 block", "_terra_system.html#autotoc_md90", null ],
+            [ "Outer layers", "_terra_system.html#autotoc_md91", null ]
           ] ],
-          [ "Skirts", "_terra_system.html#autotoc_md88", null ],
-          [ "Shadows", "_terra_system.html#autotoc_md89", null ],
-          [ "Shading", "_terra_system.html#autotoc_md90", null ],
-          [ "Why is it not a component?", "_terra_system.html#autotoc_md91", null ]
+          [ "Skirts", "_terra_system.html#autotoc_md92", null ],
+          [ "Shadows", "_terra_system.html#autotoc_md93", null ],
+          [ "Shading", "_terra_system.html#autotoc_md94", null ],
+          [ "Why is it not a component?", "_terra_system.html#autotoc_md95", null ]
         ] ]
       ] ],
       [ "Migrating Series", "_migrating_series.html", [
@@ -758,8 +758,8 @@ var NAVTREE =
         ] ],
         [ "Migrating from 2.3 to 3.0", "_migrating_23_to_30.html", [
           [ "Resolving Merge Conflicts in Ogre-Next 3.0", "_resolving_merge_conflicts30.html", [
-            [ "Notes:", "_resolving_merge_conflicts30.html#autotoc_md78", null ],
-            [ "Batch Script", "_resolving_merge_conflicts30.html#autotoc_md79", null ]
+            [ "Notes:", "_resolving_merge_conflicts30.html#autotoc_md82", null ],
+            [ "Batch Script", "_resolving_merge_conflicts30.html#autotoc_md83", null ]
           ] ],
           [ "What's new in Ogre-Next 3.0", "_ogre30_changes.html", [
             [ "Ogre to OgreNext name migration", "_ogre30_changes.html#autotoc_md52", null ],
@@ -769,24 +769,24 @@ var NAVTREE =
             [ "Move to C++11 and general cleanup", "_ogre30_changes.html#autotoc_md56", null ]
           ] ],
           [ "PBR / PBS Changes in 3.0", "_p_b_s_changes_in30.html", [
-            [ "Short version", "_p_b_s_changes_in30.html#autotoc_md65", null ],
-            [ "Long version", "_p_b_s_changes_in30.html#autotoc_md66", [
-              [ "Direct Lighting", "_p_b_s_changes_in30.html#autotoc_md67", [
-                [ "Fresnel Diffuse is no longer considered", "_p_b_s_changes_in30.html#autotoc_md68", [
-                  [ "Raffaele's comments:", "_p_b_s_changes_in30.html#autotoc_md69", null ],
-                  [ "Default-enable to diffuse fresnel", "_p_b_s_changes_in30.html#autotoc_md70", null ]
+            [ "Short version", "_p_b_s_changes_in30.html#autotoc_md69", null ],
+            [ "Long version", "_p_b_s_changes_in30.html#autotoc_md70", [
+              [ "Direct Lighting", "_p_b_s_changes_in30.html#autotoc_md71", [
+                [ "Fresnel Diffuse is no longer considered", "_p_b_s_changes_in30.html#autotoc_md72", [
+                  [ "Raffaele's comments:", "_p_b_s_changes_in30.html#autotoc_md73", null ],
+                  [ "Default-enable to diffuse fresnel", "_p_b_s_changes_in30.html#autotoc_md74", null ]
                 ] ],
-                [ "Geometric Term change", "_p_b_s_changes_in30.html#autotoc_md71", null ],
-                [ "Metalness change", "_p_b_s_changes_in30.html#autotoc_md72", null ]
+                [ "Geometric Term change", "_p_b_s_changes_in30.html#autotoc_md75", null ],
+                [ "Metalness change", "_p_b_s_changes_in30.html#autotoc_md76", null ]
               ] ],
-              [ "IBL", "_p_b_s_changes_in30.html#autotoc_md73", [
-                [ "IBL Diffuse", "_p_b_s_changes_in30.html#autotoc_md74", [
-                  [ "Multiplication by PI", "_p_b_s_changes_in30.html#autotoc_md75", null ]
+              [ "IBL", "_p_b_s_changes_in30.html#autotoc_md77", [
+                [ "IBL Diffuse", "_p_b_s_changes_in30.html#autotoc_md78", [
+                  [ "Multiplication by PI", "_p_b_s_changes_in30.html#autotoc_md79", null ]
                 ] ],
-                [ "IBL Specular", "_p_b_s_changes_in30.html#autotoc_md76", null ]
+                [ "IBL Specular", "_p_b_s_changes_in30.html#autotoc_md80", null ]
               ] ]
             ] ],
-            [ "Hemisphere Ambient Lighting changes", "_p_b_s_changes_in30.html#autotoc_md77", null ]
+            [ "Hemisphere Ambient Lighting changes", "_p_b_s_changes_in30.html#autotoc_md81", null ]
           ] ]
         ] ],
         [ "Migrating from 3.0 to 4.0", "_migrating_30_to_40.html", [
@@ -800,7 +800,12 @@ var NAVTREE =
             [ "New initialization step", "_ogre40_changes.html#autotoc_md61", null ],
             [ "HlmsUnlit changes", "_ogre40_changes.html#autotoc_md62", null ],
             [ "Header renames", "_ogre40_changes.html#autotoc_md63", null ],
-            [ "New AmbientLightMode values: AmbientHemisphereRim and AmbientHemisphereRimSquared", "_ogre40_changes.html#autotoc_md64", null ]
+            [ "New AmbientLightMode values: AmbientHemisphereRim and AmbientHemisphereRimSquared", "_ogre40_changes.html#autotoc_md64", null ],
+            [ "New HlmsPbs::setEncodedLightmaps setting", "_ogre40_changes.html#autotoc_md65", [
+              [ "Usage Example", "_ogre40_changes.html#autotoc_md66", null ],
+              [ "Requirements", "_ogre40_changes.html#autotoc_md67", null ],
+              [ "Note", "_ogre40_changes.html#autotoc_md68", null ]
+            ] ]
           ] ]
         ] ]
       ] ],
@@ -854,143 +859,143 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_android_2_ogre_config_dialog_imp_8h.html",
-"_ogre_barrier_8h.html",
-"_ogre_d3_d11_hardware_occlusion_query_8h.html",
-"_ogre_g_l_e_s2_prerequisites_8h.html#a3ba341f0c4f5598150071033e57b504a",
-"_ogre_hlms_unlit_prerequisites_8h.html#a90397bac6ee36d3380f98a549eada0daa70eb89253c364c6a7b6237b0dbc2c019",
-"_ogre_o_s_version_helpers_8h.html#a916f47ab16334b59ff1532cc0438c482",
-"_ogre_property_prerequisites_8h.html#af28d18a1b484acf19bec2841bc9ec96f",
-"_ogre_texture_gpu_8h.html#a88628e41c3e6b360f8b1653a1fc6697aac8df964fe9e3a074f16264bf4286328d",
-"_ogre_vertex_elements_8h.html#a027109503a988ba85f4c63b55082907fa952a7cf30c1f555019dfbeb1ed2c8c41",
-"_ogre_x11_e_g_l_support_8h.html#a71c8b3499eab93ac47d7952bdf5ec45a",
-"_tuning_memory_resources.html#GroupingTexturesByType",
-"class_ogre_1_1_archive.html#a11ea114ff5f17af87eb7b51c82118fae",
-"class_ogre_1_1_array_matrix_af4x3.html#aac3841269af026e2c3fe9062d8fc6d7a",
-"class_ogre_1_1_array_vector2.html#a5198784da38056116c1443058190c452",
-"class_ogre_1_1_array_vector3.html#a805a9b00aaa5a7814c5223c889ec5444",
-"class_ogre_1_1_async_texture_ticket.html#a0d83bdfafd8d1a19fe34f77b05850a16",
-"class_ogre_1_1_auto_param_data_source.html#afac03642ad3286b4f7f7afca616b4acb",
+"_ogre_atomic_object_8h.html",
+"_ogre_d3_d11_h_l_s_l_program_factory_8h.html",
+"_ogre_g_l_e_s2_prerequisites_8h.html#a21d769e684f6c26608a612ed04773515",
+"_ogre_hlms_unlit_prerequisites_8h.html#a90397bac6ee36d3380f98a549eada0daa22976a666dd4ced1bea453a9ccae8ac8",
+"_ogre_numerics_8h.html",
+"_ogre_profiler_common_8h.html#ad121424c1c2bcb7cada9bcbc441e2a19a09075c04acb5688f6983051c600284c2",
+"_ogre_texture_gpu_8h.html#a59b71e36a14465bd82595d6d467e1434af278cc1c74768c6066988b8755ffe332",
+"_ogre_vertex_elements_8h.html#a027109503a988ba85f4c63b55082907fa5bec901be6ebdc35a0426ba3fae62aa4",
+"_ogre_x11_e_g_l_support_8h.html#a55bef2ae3bc74aafa66949a5a31ec583",
+"_terra_system.html#autotoc_md94",
+"class_ogre_1_1_any_numeric.html#ae46b3b0ebe2e956031cfa3f771087708",
+"class_ogre_1_1_array_matrix_af4x3.html#a9c9c2917882ef770cde82960a6054f1a",
+"class_ogre_1_1_array_vector2.html#a4e5a1e77ababa584fca2776b31ab974c",
+"class_ogre_1_1_array_vector3.html#a6e8e9b0e7599217aeebb8ad30b9a62bb",
+"class_ogre_1_1_async_texture_ticket.html",
+"class_ogre_1_1_auto_param_data_source.html#af4d3c3a9f75313332e18cfc62ca4d8d7",
 "class_ogre_1_1_boolean_mask4.html#ac6137e6f71f691c3ac015d697ec9a811",
-"class_ogre_1_1_camera.html#a544d92ca3b916325f63b460e4de5b752",
-"class_ogre_1_1_colour_fader_affector.html#ab4cd1a28bd756c76b18f70e0e7f74434",
-"class_ogre_1_1_colour_fader_affector_f_x2.html#ad94c171663a0b0f8f6445147cc11d444",
-"class_ogre_1_1_command_buffer.html#ac738bd71ca00d243bc894d4f182a1f12",
-"class_ogre_1_1_compositor_pass_def.html#a6e881a7f92659dabfe52eefec2ccf603",
-"class_ogre_1_1_compositor_shadow_map_target_type_translator.html#ab52481ee99a9d26ecf812f49fc90ef9c",
-"class_ogre_1_1_const_buffer_packed.html#a4ecf6ab68e08468525626cfd253edfef",
-"class_ogre_1_1_cylinder_emitter.html#a136f5b1d971ce9d70ee4345bfa09c1ec",
-"class_ogre_1_1_d3_d11_dynamic_buffer.html#a678ecb9ae9bca583857801b84a30fab7",
-"class_ogre_1_1_d3_d11_render_pass_descriptor.html#aeaeb8e08e82dc9b7df7879b5702ef413",
-"class_ogre_1_1_d3_d11_render_system.html#afcb37fb68532bbdd75dd1628684e001c",
-"class_ogre_1_1_d3_d11_vao_manager.html#a995b22bd0bab22cf895b272372c491df",
-"class_ogre_1_1_default_scene_format_listener.html",
-"class_ogre_1_1_direction_randomiser_affector.html#a6e3625685f5f840fdb3677a187137ac1",
-"class_ogre_1_1_e_g_l_window.html#a4fec671a36901f72fc6081edd297e6b7",
-"class_ogre_1_1_emitter_commands_1_1_cmd_max_velocity.html#a3fa35580b406d64200d63bfe928efeac",
-"class_ogre_1_1_fast_array.html#a89b74d42aeff0f51b9bc5db006ae57ce",
-"class_ogre_1_1_frame_time_controller_value.html#affaa394bb3463a7749da311472bc974b",
-"class_ogre_1_1_g_l3_plus_read_only_buffer_emulated_packed.html#a5b7631363f76d82c49ed95a3d8ed35d9",
-"class_ogre_1_1_g_l3_plus_render_system.html#abc646d3bc40fcf809859f1eeb0375a19",
-"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#aa3b5d943f7e10a572efa2bb8fcc87a0a",
-"class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#aecea9ceccfdf7484a7d7ff56a971342e",
-"class_ogre_1_1_g_l_e_s2_render_system.html#a3e12bab5f8d6ed5a8ed8a8698ce18ded",
-"class_ogre_1_1_g_l_e_s2_tex_buffer_emulated_packed.html#a28cf0daeacb029a911a696de8f4ea7c4",
-"class_ogre_1_1_g_l_s_l_e_s_shader_1_1_cmd_optimisation.html",
-"class_ogre_1_1_g_l_x_context.html#a86356f1ed27dc6e7a083b5d093e8d055",
-"class_ogre_1_1_gpu_program_parameters.html#a086c9ac22c9c04a9d748ddef2c52d33d",
-"class_ogre_1_1_gpu_program_parameters.html#ad119b7a0d9faa48f780805401a0517e4",
-"class_ogre_1_1_high_level_gpu_program.html#abe36db3d6c7275c9fd7c50a6ffba6cb8",
-"class_ogre_1_1_hlms_datablock.html#ae8f09ce4391c44bdde8bc4c26acc19af",
-"class_ogre_1_1_hlms_pbs_datablock.html#a2faf69f394f0e6a80b8398fd1ff8a3be",
-"class_ogre_1_1_image2.html#a02bf677b34c30c57290e1db7ae0f11fc",
-"class_ogre_1_1_irradiance_field.html#aab135ea960ab3fad344bdbd10c7674de",
-"class_ogre_1_1_light.html#a6ffba71e5b797689b61ff0e285449491",
-"class_ogre_1_1_lod_collapser.html#ad292c42636402fafb2eb193264ca67a4",
-"class_ogre_1_1_lw_const_string.html#a831e0062d60e70cec93d77bff80340e4",
-"class_ogre_1_1_material.html#a1bb1aed9081702e2b7f65d32be7caad4",
-"class_ogre_1_1_mathlib_c.html#a50472ea7c1030f0d2b9bf8f498b1e033",
-"class_ogre_1_1_mesh.html#a9c80b78b0930cc91b2977599eebf46aa",
-"class_ogre_1_1_metal_mappings.html#a2e3d3fd1b83bf03fc591b7f58890fd57",
-"class_ogre_1_1_metal_render_system.html#a8a6dab649919479b8eca785196118aec",
-"class_ogre_1_1_metal_uav_buffer_packed.html#a072fb8c46ca2bba8b613b67725d62618",
-"class_ogre_1_1_movable_object.html#ad8db1f22329b2a96f2aed7260d565944",
-"class_ogre_1_1_n_u_l_l_render_system.html#a6e0ec9510c44c1907592f63d8c96648e",
-"class_ogre_1_1_node.html#a4f92f708c954f8bf6581eb2377656443",
-"class_ogre_1_1_obj_cmd_buffer_1_1_exception_thrown.html#a883c778437b468681dfd51dbb31c366d",
-"class_ogre_1_1_page_manager.html#a6380dcd6ef1baff30e595cbe5973dd3d",
-"class_ogre_1_1_parallax_corrected_cubemap_auto.html#afdabb26cc06821e04f6ce6e3853755d0",
-"class_ogre_1_1_particle_emitter_factory.html#a7a630190371c90cce260d5bc078d0db4",
-"class_ogre_1_1_particle_system_def.html#adf09554ee678bfb19592f924c58f42b6",
-"class_ogre_1_1_pass.html#aa23e78b3e2c676ea2efc5de73826c980",
-"class_ogre_1_1_plane.html#abd98e0aae4723943f83262e59cfda535",
-"class_ogre_1_1_property_def.html#a883ccd53919be65e73d2524fd5ea598c",
-"class_ogre_1_1_rectangle2_d.html#a5bd1bcaef934a833e2337325439fa5d0",
-"class_ogre_1_1_render_system.html#a97e2c11d3822c064ccb8ef0b52acf289",
-"class_ogre_1_1_renderable.html#a6496cb6bcaffcbb03e25e56f4b88bf7f",
-"class_ogre_1_1_resource_loading_listener.html#a62badbb7992a529cdfa35f23b9401141",
-"class_ogre_1_1_rotation_affector.html#a2400a1d8d619f46fed1da485ba04c917",
-"class_ogre_1_1_scale_interpolator_affector_1_1_cmd_scale_adjust.html#a7923a1506bbaf6aa047fb2af58e18f60",
-"class_ogre_1_1_scene_manager.html#a507d273b53104fb5b8c835bc0c7ce73a",
-"class_ogre_1_1_scene_manager.html#ab4c2ff4f6c76f7fe0a8eae76f2a84cbfa0f94148c2cfe190f3ea04374af220eba",
-"class_ogre_1_1_scene_node.html#a20e3d329929dda096ae10ac469289c90",
-"class_ogre_1_1_shadow_camera_setup.html#ada64716374ef5839054ebb8b9d5ecd19",
-"class_ogre_1_1_skeleton_track.html#a88d14adce97e2f2c27dced2ec6ad1680",
-"class_ogre_1_1_stack_vector.html#a934e2168a86c78f87e5c408444a19e85",
-"class_ogre_1_1_string_util.html#a861641bda60da5b659c03a21ed5182ba",
-"class_ogre_1_1_texture_definition_base.html#a9c8bdf6447416c9cdecdb56058295513",
-"class_ogre_1_1_texture_gpu_manager.html#a8d1cdf54c1a262bc911d37235682ec1c",
-"class_ogre_1_1_timer.html#a93b3cf0994bf9fdd32e2f52c43799bb3",
-"class_ogre_1_1_vct_cascaded_voxelizer.html#a4fd028a077a340e10cfe6746a18cd380",
-"class_ogre_1_1_vector2.html#ac04fe07fceec444e2a13b0195bcb2c64",
-"class_ogre_1_1_viewport.html#aec26c2dc8b0f2fdaa25cc63b0216dfd7",
-"class_ogre_1_1_volume_1_1_mesh_builder.html#ab69b90db83a3bd6fdb618dd78aa10814",
-"class_ogre_1_1_vulkan_async_texture_ticket.html#a6e241ead9a326169fc27ab8be527a76d",
-"class_ogre_1_1_vulkan_dynamic_buffer.html#aa24bed0666c1554569243ba3748f52c9",
-"class_ogre_1_1_vulkan_queue.html#a784887cb760d1d5548528e47a8806c2fac87ee43354bf148691669cc89973cd1c",
-"class_ogre_1_1_vulkan_render_system.html#a9e19f1a731ba5effe7755b8b48de409f",
-"class_ogre_1_1_vulkan_texture_gpu.html#aa9ee652beefe440f678067bcc3e04aaa",
-"class_ogre_1_1_vulkan_window_null.html#aa73dc6e7e79cd2632346adf2fb56e4ef",
-"class_ogre_1_1_win32_window.html#aac8bcf4188936dad4afbdb506001e8e2",
-"class_ogre_1_1bitset64.html#aa08d5a0cdab8378b92ba21a628d66d4b",
-"class_ogre_1_1v1_1_1_billboard_chain.html#aa4b336e51ebe7beedd896d8d169ec847",
-"class_ogre_1_1v1_1_1_d3_d11_hardware_buffer.html#a432906d6c9da8cca6d4603f8c45f98a7",
-"class_ogre_1_1v1_1_1_entity.html#ad7f28e760dc918ca8218b37eaac5697a",
-"class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager_base.html#aa8699c31ed8059ba3def978e43f2ec3f",
-"class_ogre_1_1v1_1_1_manual_object.html#a26291a7a727577aaf3b5236797beb0a0",
-"class_ogre_1_1v1_1_1_mesh_manager.html#a0114cc2df7b2fd296f10d785093b6de6",
-"class_ogre_1_1v1_1_1_old_node.html#a29c493e2b4cd70ecffca8e27f2f472b4",
-"class_ogre_1_1v1_1_1_overlay_container.html#aead9f40a34c44f1591afe8565b7cc03c",
-"class_ogre_1_1v1_1_1_pose.html#a97f2dae9b78eaa78edee2e489096e3af",
-"class_ogre_1_1v1_1_1_sub_mesh.html#a17c6b798ded9f846611c9ec2f9cfd4b6",
-"class_ogre_1_1v1_1_1_vertex_declaration.html#ab5d08c89a36ad7e393a0b3b8364f2b82",
-"compositor.html#CompositorPassCompute_uav",
-"functions_func_i.html",
-"group___general.html#ga158d9c8ba6320aa37b7c9c05a2f2fd8f",
-"group___general.html#gga30d5439896c2a2362024ec689b1e181ca3c59ff43cf526ca99597ca1aa8379e4b",
-"group___general.html#gga30d5439896c2a2362024ec689b1e181cae025e5c6224025255608f3b3f44e02c2",
-"group___image.html#gacbe9d7a09a33e31f7f7bd86fdf97d0d1",
-"group___materials.html#gga9c5b2950be06ff56a6ee0bace240d447a18edb505f8205cfed6bb28da3abefd53",
-"group___property.html#gga0883a5af9197151407965df0bacc4f3aa269350183053663ed0e36a69b72dc4c8",
-"group___resources.html#gga7b904fc5463a8ef1e61f6de39b603fc4a8690ebb1bad3baf0e18ec59fe7b3d1e8",
-"interface_ogre_view.html#a742f4db9b77c4037a8d6ac1b8bde4cff",
-"namespace_ogre.html#ab8c28303f04f47a222edfd79479ca279",
-"namespace_ogre_1_1_pixel_format_data_types.html#a320bd6a6b273a3abe76add6b64ff8540acd7ddc0ba749aedac2cc5094d3fdd798",
-"struct_d_x_g_i___p_r_e_s_e_n_t___p_a_r_a_m_e_t_e_r_s.html",
-"struct_ogre_1_1_cb_draw_call_indexed.html",
-"struct_ogre_1_1_d3_d11_frame_buffer_desc_value.html#a92045338d83c538dcafda06bcf72240e",
-"struct_ogre_1_1_emitter_instance_data.html#a1aa0da7c5c0fdee22e5cf5b46a47b40b",
-"struct_ogre_1_1_gpu_program_parameters_1_1_auto_constant_definition.html#ae5ad78cdb1c72d317aaf994fdc801b6b",
-"struct_ogre_1_1_hlms_disk_cache_1_1_source_code.html#a96d53855924a42735222c34890a8a61d",
-"struct_ogre_1_1_light_list_info.html#a85ea9f122b2b6eea2d1bd3b4b05dacd1",
-"struct_ogre_1_1_lod_vertex_buffer.html#a2ece4a3fd9118aa7e15124f3e1203643",
-"struct_ogre_1_1_particle_cpu_data.html#aa219d926db748ec2531aad88e9832f2a",
-"struct_ogre_1_1_render_target_view_def.html#a76099166d47baaf3db1905a98681dc0a",
-"struct_ogre_1_1_stencil_params.html#ac5637e019c40a590c2aaa781ea19b51e",
-"struct_ogre_1_1_unlit_property.html#a3ddbb75a15890bd7cb59ac8df26c478b",
-"struct_ogre_1_1_vertex_array_object.html#a68e318c4a7793b7195ffd7ba8b6afba9",
-"struct_ogre_1_1_voxelizer_bucket.html#a23c380ca1220b203228d7ceeb63c93ff",
-"struct_ogre_1_1_vulkan_global_binding_table.html#af2e3f6970d51c5d4e8fed5a332679ca0",
-"struct_ogre_1_1v1_1_1_cb_draw_call_indexed.html#aa4e3582a6ad20c1db7317b160c184974"
+"class_ogre_1_1_camera.html#a51a1358e3c8fea46cfb3c3724934a6d8",
+"class_ogre_1_1_colour_fader_affector.html#a9dba68a0a01e6fa6fc74b62cc2ae149a",
+"class_ogre_1_1_colour_fader_affector_f_x2.html#ad26574ecc6c486cb44e27b689157586d",
+"class_ogre_1_1_command_buffer.html#ac0b09aa00ae04532d3921538f61fa74a",
+"class_ogre_1_1_compositor_pass_def.html#a59e9bca410727e2b8b891dd9a1f0c1ad",
+"class_ogre_1_1_compositor_shadow_map_target_translator.html#a87a725da7581f870a57769b7172f9dc6",
+"class_ogre_1_1_const_buffer_packed.html#a3b27c3cb36b31d0a5392e43e035bdfca",
+"class_ogre_1_1_custom_composition_pass.html#a4f04b76126f4b667f4d4e62de1087044",
+"class_ogre_1_1_d3_d11_dynamic_buffer.html",
+"class_ogre_1_1_d3_d11_render_pass_descriptor.html#a3a7fb6d3da94cedf5a14c5e5b1bc733e",
+"class_ogre_1_1_d3_d11_render_system.html#af9fbdc108993bbfb2a0b464e9da907eb",
+"class_ogre_1_1_d3_d11_vao_manager.html#a932877d61f1ad97661594c196a3f6f0e",
+"class_ogre_1_1_default_ray_scene_query.html#a61b4f1fb6ff472bba5e89a516956dcb9",
+"class_ogre_1_1_direction_randomiser_affector.html#a300271e2e1268be65c65b42023267ead",
+"class_ogre_1_1_e_g_l_window.html#a4cb4fe9f0f89c68dc00ab491455f967e",
+"class_ogre_1_1_emitter_commands_1_1_cmd_max_velocity.html",
+"class_ogre_1_1_fast_array.html#a76046cedb6e63996bdfc24fc61d3573e",
+"class_ogre_1_1_frame_time_controller_value.html#a7cf58ff02b01a353e19f9d8fb5d89991",
+"class_ogre_1_1_g_l3_plus_read_only_buffer_emulated_packed.html#a3bc1e8ac13baf7736a0b6e22a822170f",
+"class_ogre_1_1_g_l3_plus_render_system.html#aba788c0c27d5169950cc18765f3c0b4d",
+"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html",
+"class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#adfbaf8f85c2f75bf25ce026f6d3be225",
+"class_ogre_1_1_g_l_e_s2_render_system.html#a3c5049067c422071a749aef67f9818e7",
+"class_ogre_1_1_g_l_e_s2_tex_buffer_emulated_packed.html#a19ea217c5dee5fe81c05cafddd9ecf43",
+"class_ogre_1_1_g_l_s_l_e_s_shader.html#afd7ca0d841735b8592b0ac1977b73b28",
+"class_ogre_1_1_g_l_x_context.html#a3f7c9e7c172cc185d62edf6d22d1fe65",
+"class_ogre_1_1_gpu_program_parameters.html#a04af8d22a74d8f2acaf2b750f93eecfd",
+"class_ogre_1_1_gpu_program_parameters.html#ac9913009755ab399d73e8a6b878b2a14",
+"class_ogre_1_1_high_level_gpu_program.html#aa57b135d2d8427eec4c7933792a93905",
+"class_ogre_1_1_hlms_datablock.html#ad36a1339c77eed85ce7488e1f82263f2",
+"class_ogre_1_1_hlms_pbs_datablock.html#a196cc0ff404bb01ebe3ccb28fdd9530b",
+"class_ogre_1_1_ifd_probe_visualizer.html#ac02cd63218dbf468dbd14d3c8cdac05e",
+"class_ogre_1_1_irradiance_field.html#a90b0c636f04aec3859dd3c5219234623",
+"class_ogre_1_1_light.html#a6aa540eeca49c287a3cdfed2d1bcbdb4",
+"class_ogre_1_1_lod_collapser.html#a51d851d50ebcee4f77cff26f500ccce7",
+"class_ogre_1_1_lw_const_string.html#a6fecf7ce73bddfc0822decdd0736b35a",
+"class_ogre_1_1_material.html#a008c264b3fa918677120621d6a112f99",
+"class_ogre_1_1_mathlib_c.html#a42a6c6481e282f099722394ac5292a10",
+"class_ogre_1_1_mesh.html#a7f9ca8326e29a4bd5243dcad86772744",
+"class_ogre_1_1_metal_mappings.html",
+"class_ogre_1_1_metal_render_system.html#a84b1ecc6f01d7a0f28f9afdd5379ba93",
+"class_ogre_1_1_metal_texture_gpu_window.html#aec18ef519dba2c6efe4334e15a24f4af",
+"class_ogre_1_1_movable_object.html#ad23fd215ed54a72f90c2b1765dfa8cdb",
+"class_ogre_1_1_n_u_l_l_render_system.html#a670d7ae88942e09843f9e28241ec65b3",
+"class_ogre_1_1_node.html#a49482dee5a9d1eebd1851c5f3464fbf7",
+"class_ogre_1_1_obj_cmd_buffer.html#ab5c0385cc1c1fe386f779f24d923e57a",
+"class_ogre_1_1_page_manager.html#a4a378e26b4f3ff593c6664811f1cf24d",
+"class_ogre_1_1_parallax_corrected_cubemap_auto.html#ae92117214661a34289dbba2deaab5861",
+"class_ogre_1_1_particle_emitter_def_data_factory.html#a85d6ef19e31b2e9ba0ec3b1699493052",
+"class_ogre_1_1_particle_system_def.html#acd2357986a1557e49f12faf898464ff2",
+"class_ogre_1_1_pass.html#a98b42a4f4304f3f2d08fb9394cbefe83",
+"class_ogre_1_1_plane.html#aa397a61879a2c4ffdc6c237820fae177",
+"class_ogre_1_1_property_def.html#a2aaf39f2193e70bed678c579169e4745",
+"class_ogre_1_1_rectangle2_d.html#a3cae8bd7d8ec2b6e92ee69925fcdd47c",
+"class_ogre_1_1_render_system.html#a91e7ee7dd1f244ffa9a0681efb6fae6c",
+"class_ogre_1_1_renderable.html#a572c0331ef2ec650d56063fdc17435f5",
+"class_ogre_1_1_resource_group_manager.html#af6d481a94018dee8ea60c953e63d33e8",
+"class_ogre_1_1_rotation_affector.html",
+"class_ogre_1_1_scale_interpolator_affector2.html#ae0126cd2de88e9ccb14c638bbb7d6c05",
+"class_ogre_1_1_scene_manager.html#a4f9ec83967af47028ae2731ccf9884afac3479b832ae356b1073e1bd3fb5370b6",
+"class_ogre_1_1_scene_manager.html#ab27fd867ec285c2628e0bd14762c9464",
+"class_ogre_1_1_scene_node.html#a05f61b8c0c5d2c13f014c8acbbddebb4",
+"class_ogre_1_1_shadow_camera_setup.html#a790a06721a8e3c6f48218aa659c334ef",
+"class_ogre_1_1_skeleton_track.html#a5a25b4e081f9931b6edcdeb9dd4b80db",
+"class_ogre_1_1_stack_vector.html#a8d91e3bfe41572384d63611346f4983c",
+"class_ogre_1_1_string_util.html#a3cb80565d54251ecc5fc7b48488643a6",
+"class_ogre_1_1_texture_definition_base.html#a7c2e6e1337065e18f6bc0abe8cd6428a",
+"class_ogre_1_1_texture_gpu_manager.html#a763c9420839cf914f7a5c1901c53539b",
+"class_ogre_1_1_timer.html#a49f70a0179cae582b6837f023d57ffbe",
+"class_ogre_1_1_vct_cascaded_voxelizer.html#a329850bd186e17d94e809197dc088d34",
+"class_ogre_1_1_vector2.html#aa3e8dc2f1bc9b507ef9d22a5656e563b",
+"class_ogre_1_1_viewport.html#ab8be5c82cd28c1b692a6183a5b183e1c",
+"class_ogre_1_1_volume_1_1_mesh_builder.html",
+"class_ogre_1_1_vulkan_android_window.html#ade143265847db414d9995919f1f61d68",
+"class_ogre_1_1_vulkan_dynamic_buffer.html#a34d2249c90567be33f6acf91c1395b01",
+"class_ogre_1_1_vulkan_queue.html#a784887cb760d1d5548528e47a8806c2f",
+"class_ogre_1_1_vulkan_render_system.html#a9a155be149f4112b1760cc52cec71464",
+"class_ogre_1_1_vulkan_texture_gpu.html#a81e8fba28f5ddd6fea56916e5fc51ad8",
+"class_ogre_1_1_vulkan_window_null.html#a4153ee89c55f636fad2db8695b597fdf",
+"class_ogre_1_1_win32_window.html#a956db9750672c349ac000ad28aea6e59",
+"class_ogre_1_1bitset64.html#a6f02af2301dae4346e56942ad2a51fe5",
+"class_ogre_1_1v1_1_1_billboard_chain.html#a90c460ad76d2bd279440f83a2a412b1c",
+"class_ogre_1_1v1_1_1_d3_d11_hardware_buffer.html#a0c87dc01c3209b5ac360544e612abd31",
+"class_ogre_1_1v1_1_1_entity.html#ad414101ac63b834554d05a3ec9e6e6d8",
+"class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager_base.html#a4cfcc49d5d3f23769cd38c9355e36efa",
+"class_ogre_1_1v1_1_1_manual_object.html#a1a0fac40e08047051a1fec8758395cc0",
+"class_ogre_1_1v1_1_1_mesh.html#af9aa58845148087b50d87adf3d3e302e",
+"class_ogre_1_1v1_1_1_old_node.html#a20067cd94f4bda19f736ebba75f09925",
+"class_ogre_1_1v1_1_1_overlay_container.html#aaac938c3019ab279356d331f5a342897",
+"class_ogre_1_1v1_1_1_pose.html#a7203a457cd0d2f869d4a06bf13b4d8bd",
+"class_ogre_1_1v1_1_1_sub_mesh.html#a043aa6a880cd9f7df9322b65fa365a3a",
+"class_ogre_1_1v1_1_1_vertex_declaration.html#a91e93162a87527fe0eb6d8f396712431",
+"compositor.html#CompositorNodesTexturesMsaa",
+"functions_func_c.html",
+"group___general.html#ga0ef99399e9e670e7bb69dc373968a666",
+"group___general.html#gga30d5439896c2a2362024ec689b1e181ca3a35c2ea9adb947084187dd76349e35e",
+"group___general.html#gga30d5439896c2a2362024ec689b1e181cadc41a501c52e79d3beb76fedf2cea8ac",
+"group___image.html#gabe7634af2209411257f9f19b9b28158c",
+"group___materials.html#gga9c5b2950be06ff56a6ee0bace240d447a0b2767a1b36c8e7821979adb15615c7a",
+"group___property.html#ga0883a5af9197151407965df0bacc4f3a",
+"group___resources.html#gga7b904fc5463a8ef1e61f6de39b603fc4a54917f44014273a7c01045bfc1f5c511",
+"interface_ogre_metal_view.html#a41d3e64f9c1e3c8630c9611f983c8ef3",
+"namespace_ogre.html#ab66e67b60d5f40dacf69ea55b82868abac78bbc9d0b64dc4fc3031b1a0a495093",
+"namespace_ogre_1_1_pixel_format_data_types.html#a320bd6a6b273a3abe76add6b64ff8540ac3a7d5a193ef3c437fcbdc8c61cc34a2",
+"struct___d3_d_c_o_l_o_r_v_a_l_u_e.html#a9528343e467e5e4507052f4d36fa4f1b",
+"struct_ogre_1_1_cb_draw_call.html#a2fecf25762605aceae5eda1e2812a330",
+"struct_ogre_1_1_cull_frustum_request.html#ad989603d5f7c91fe101cd5ad622203f7",
+"struct_ogre_1_1_emitted_particle.html#a3fb0b1d441ca491ea57126a09d200560",
+"struct_ogre_1_1_gpu_program_manager_1_1_hash.html#ac6ba538d30d90c857164295600d3e4b2",
+"struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#ab474d42949e1800fb64e0b3ab378de75",
+"struct_ogre_1_1_light_closest.html#aed0c94b9023439bf8fb67600270e9908",
+"struct_ogre_1_1_lod_vertex_buffer.html",
+"struct_ogre_1_1_particle_cpu_data.html#a48c72dbb18e5b80794a3a44053f285c7",
+"struct_ogre_1_1_render_system_1_1_pipeline_cache_prefix_header.html#ad310e23d8de3cbde5e53aa1300d39cae",
+"struct_ogre_1_1_stencil_params.html#a21b50e522ea54db40c35872a403c3897",
+"struct_ogre_1_1_unlit_property.html#a3064d90099b8960cc88ee448e86bdb13",
+"struct_ogre_1_1_vertex_array_object.html#a4a3a5b9a9bd87320dfa1f5bf9f98453e",
+"struct_ogre_1_1_voxelized_mesh_cache_1_1_voxelized_mesh.html#a611b4613147837f5f6680ede44b1e60b",
+"struct_ogre_1_1_vulkan_global_binding_table.html#a9f3128b386c21c35bf3dce6ee9dd34f4",
+"struct_ogre_1_1v1_1_1_cb_draw_call.html#a4f8e0c9c74a1a354048e6c6aa0f93208"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

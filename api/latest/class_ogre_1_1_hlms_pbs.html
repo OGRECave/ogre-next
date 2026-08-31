@@ -217,6 +217,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af52b13fdb164291e10a6f61aa0fb8ba4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69b7fc1f154afce7d12e544a363f7960" id="r_a69b7fc1f154afce7d12e544a363f7960"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#a69b7fc1f154afce7d12e544a363f7960">getDefaultBrdfWithDiffuseFresnel</a> () const</td></tr>
 <tr class="separator:a69b7fc1f154afce7d12e544a363f7960"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdc1c0936c65672fcd1d60baf9f9e46d" id="r_acdc1c0936c65672fcd1d60baf9f9e46d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#acdc1c0936c65672fcd1d60baf9f9e46d">getEncodedLightmaps</a> () const</td></tr>
+<tr class="separator:acdc1c0936c65672fcd1d60baf9f9e46d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade4a48a4d7a3a8294507f0f19da830fc" id="r_ade4a48a4d7a3a8294507f0f19da830fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#ade4a48a4d7a3a8294507f0f19da830fc">getEsmK</a> () const</td></tr>
 <tr class="separator:ade4a48a4d7a3a8294507f0f19da830fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a7a60f98767f21cff7da1f91a3c23fb" id="r_a5a7a60f98767f21cff7da1f91a3c23fb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#a5a7a60f98767f21cff7da1f91a3c23fb">getFineLightMaskGranularity</a> () const</td></tr>
@@ -266,6 +268,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a67bc1d23e1966e7e7363abbf019e06a2" id="r_a67bc1d23e1966e7e7363abbf019e06a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#a67bc1d23e1966e7e7363abbf019e06a2">setDefaultBrdfWithDiffuseFresnel</a> (bool bDefaultToDiffuseFresnel)</td></tr>
 <tr class="memdesc:a67bc1d23e1966e7e7363abbf019e06a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">OgreNext 3.0 changed Default BRDF to not include diffuse fresnel in order to match what most DCC tools (e.g.  <br /></td></tr>
 <tr class="separator:a67bc1d23e1966e7e7363abbf019e06a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5268ee2f4b00155bfb09e3c8ab5b9ccd" id="r_a5268ee2f4b00155bfb09e3c8ab5b9ccd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#a5268ee2f4b00155bfb09e3c8ab5b9ccd">setEncodedLightmaps</a> (bool bEncodedLightmaps)</td></tr>
+<tr class="memdesc:a5268ee2f4b00155bfb09e3c8ab5b9ccd"><td class="mdescLeft">&#160;</td><td class="mdescRight">When set to true, the emissive map is treated as an encoded lightmap.  <br /></td></tr>
+<tr class="separator:a5268ee2f4b00155bfb09e3c8ab5b9ccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5e13575a3e3da3b79b59721c7575016" id="r_ab5e13575a3e3da3b79b59721c7575016"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#ab5e13575a3e3da3b79b59721c7575016">setEsmK</a> (<a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> K)</td></tr>
 <tr class="memdesc:ab5e13575a3e3da3b79b59721c7575016"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the 'K' parameter of ESM filter.  <br /></td></tr>
 <tr class="separator:ab5e13575a3e3da3b79b59721c7575016"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1264,6 +1269,31 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="acdc1c0936c65672fcd1d60baf9f9e46d" name="acdc1c0936c65672fcd1d60baf9f9e46d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdc1c0936c65672fcd1d60baf9f9e46d">&#9670;&#160;</a></span>getEncodedLightmaps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::HlmsPbs::getEncodedLightmaps </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ade4a48a4d7a3a8294507f0f19da830fc" name="ade4a48a4d7a3a8294507f0f19da830fc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ade4a48a4d7a3a8294507f0f19da830fc">&#9670;&#160;</a></span>getEsmK()</h2>
 
@@ -1820,6 +1850,42 @@ Additional Inherited Members</h2></td></tr>
 <p>The same is done with CookTorrance and BlinnPhong models. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">bDefaultToDiffuseFresnel</td><td>True to convert Default/CookTorrance/BlinnPhong to DefaultHasDiffuseFresnel &amp; co. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5268ee2f4b00155bfb09e3c8ab5b9ccd" name="a5268ee2f4b00155bfb09e3c8ab5b9ccd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5268ee2f4b00155bfb09e3c8ab5b9ccd">&#9670;&#160;</a></span>setEncodedLightmaps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::HlmsPbs::setEncodedLightmaps </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bEncodedLightmaps</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>When set to true, the emissive map is treated as an encoded lightmap. </p>
+<p>This is used for baked lighting workflows to fit HDR results into RGBA8_UNORM (sRGB or not) textures at the cost of some possible banding or quality loss. The emissive texture stores both the baked lighting result and an encoded intensity value.</p>
+<p>The intensity encoding works as follows:</p><ul>
+<li>The RGB channels store the baked lighting result (RGB) normalized to [0; 1].</li>
+<li>The A channel stores the maximum intensity value.</li>
+</ul>
+<p>When this is enabled:</p><ul>
+<li>If baking, the shader will use the encoded intensity to normalize the baked lighting result, allowing for a wider dynamic range in low BPP textures.</li>
+<li>If rendering, the shader will decode the lightmap in the reverse way.</li>
+</ul>
+<dl class="section remark"><dt>Remarks</dt><dd>Either <a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#afb98de697dcbffbb54c4f6262d36ba4d" title="When mUvBakingSet is set, tells whether we should bake the whole render result or just the lighting i...">CompositorPassSceneDef::mBakeLightingOnly</a> or <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a6ca529cd32fe95efa8aee7f8cd3c2126" title="When set, it treats the emissive map as a lightmap; which means it will be multiplied against the dif...">HlmsPbsDatablock::setUseEmissiveAsLightmap</a> must be true for this setting to be relevant. If your lightmap is RGBA16_FLOAT this setting is likely a waste of performance and you should not set this to true.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bEncodedLightmaps</td><td>True to use encoded lightmap format for the emissive map. Default is false. </td></tr>
   </table>
   </dd>
 </dl>
