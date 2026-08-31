@@ -50,10 +50,10 @@ void buildEdgeLists( v1::MeshPtr &mesh )
             else
             {
                 std::cout << "Wrong answer!\n";
-                response = "";
+                response.clear();
             }
         }
-        while (response == "");
+        while (response.empty());
     }
     else
     {
@@ -103,10 +103,10 @@ void generateTangents( v1::MeshPtr &mesh )
             else
             {
                 std::cout << "Wrong answer!\n";
-                response = "";
+                response.clear();
             }
         }
-        while (response == "");
+        while (response.empty());
     }
 
     // Generate tangents?
@@ -136,11 +136,11 @@ void generateTangents( v1::MeshPtr &mesh )
                     else
                     {
                         std::cout << "Wrong answer!\n";
-                        response = "";
+                        response.clear();
                     }
 
                 }
-                while (response == "");
+                while (response.empty());
             }
             else
             {
