@@ -167,6 +167,8 @@ namespace Ogre
         /// Typically, when baking with this setting, it's because you're going
         /// to use this texture with HlmsPbsDatablock as an emissive map and calling
         /// HlmsPbsDatablock::setUseEmissiveAsLightmap with true.
+        ///
+        /// Also see HlmsPbs::setEncodedLightmaps. You probably want this setting to be true.
         bool mBakeLightingOnly;
 
         /// When mUvBakingSet is enabled, this defines the UV offset (in pixels).

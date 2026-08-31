@@ -154,3 +154,39 @@ Two new ambient lighting modes have been added to `Ogre::HlmsPbs::AmbientLightMo
 - `AmbientHemisphereRimSquared`: Same as `AmbientHemisphereRim`, but the rim/contrast effect is even stronger
 
 See the [Rim-Based Ambient Lighting](@ref GiAmbientLightingRim) section in the Global Illumination documentation for more details.
+
+## New HlmsPbs::setEncodedLightmaps setting
+
+A new pass-level setting has been added to `Ogre::HlmsPbs` to improve baked lighting workflows:
+
+```cpp
+void setEncodedLightmaps( bool bEncodedLightmaps );
+```
+
+When enabled, this setting treats the emissive map as an **encoded lightmap**, which allows fitting HDR baked lighting results into RGBA8_UNORM textures at the cost of some possible banding or quality loss.
+
+The emissive texture stores both the baked lighting result and an encoded intensity value:
+
+- The **RGB channels** store the baked lighting result (RGB) normalized to [0; 1].
+- The **A channel** stores the maximum intensity value.
+
+**When baking:**
+- The shader uses the encoded intensity to normalize the baked lighting result, allowing for a wider dynamic range in low BPP textures.
+
+**When rendering:**
+- The shader decodes the lightmap in the reverse way.
+
+### Usage Example
+
+```cpp
+// Enable encoded lightmaps for baked lighting
+hlmsPbs->setEncodedLightmaps( true );
+```
+
+### Requirements
+
+Either `CompositorPassSceneDef::mBakeLightingOnly` (see [bake_lighting_only](@ref CompositorNodesPassesRenderScene_bake_lighting_only)) or `HlmsPbsDatablock::setUseEmissiveAsLightmap` must be true for this setting to be relevant.
+
+### Note
+
+If your lightmap texture is `RGBA16_FLOAT`, this setting is likely a waste of performance and should not be enabled.

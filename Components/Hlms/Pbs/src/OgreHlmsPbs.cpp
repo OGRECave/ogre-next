@@ -169,6 +169,7 @@ namespace Ogre
     const IdString PbsProperty::FirstValidDetailMapNm = IdString( "first_valid_detail_map_nm" );
     const IdString PbsProperty::EmissiveConstant = IdString( "emissive_constant" );
     const IdString PbsProperty::EmissiveAsLightmap = IdString( "emissive_as_lightmap" );
+    const IdString PbsProperty::EncodedLightmaps = IdString( "hlms_encoded_lightmaps" );
 
     const IdString PbsProperty::Pcf = IdString( "pcf" );
     const IdString PbsProperty::PcfIterations = IdString( "pcf_iterations" );
@@ -331,6 +332,7 @@ namespace Ogre
         mUseLightBuffers( false ),
         mIndustryCompatible( false ),
         mDefaultBrdfWithDiffuseFresnel( false ),
+        mEncodedLightmaps( false ),
         mShadowFilter( PCF_3x3 ),
         mEsmK( 600u ),
         mAmbientLightMode( AmbientAutoNormal )
@@ -1572,6 +1574,9 @@ namespace Ogre
 
         if( shadowNode && mShadowFilter == ExponentialShadowMaps )
             setProperty( kNoTid, PbsProperty::ExponentialShadowMaps, mEsmK );
+
+        if( mEncodedLightmaps )
+            setProperty( kNoTid, PbsProperty::EncodedLightmaps, 1 );
 
         // The properties need to be set before preparePassHash so that
         // they are considered when building the HlmsCache's hash.
@@ -4030,6 +4035,11 @@ namespace Ogre
     void HlmsPbs::setIndustryCompatible( bool bIndustryCompatible )
     {
         mIndustryCompatible = bIndustryCompatible;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbs::setEncodedLightmaps( bool bEncodedLightmaps )
+    {
+        mEncodedLightmaps = bEncodedLightmaps;
     }
 #if !OGRE_NO_JSON
     //-----------------------------------------------------------------------------------

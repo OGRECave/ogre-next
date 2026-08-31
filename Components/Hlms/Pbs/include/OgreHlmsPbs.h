@@ -247,6 +247,8 @@ namespace Ogre
 
         bool mDefaultBrdfWithDiffuseFresnel;
 
+        bool mEncodedLightmaps;
+
         ShadowFilter     mShadowFilter;
         uint16           mEsmK;  ///< K parameter for ESM.
         AmbientLightMode mAmbientLightMode;
@@ -542,6 +544,33 @@ namespace Ogre
 
         bool getDefaultBrdfWithDiffuseFresnel() const { return mDefaultBrdfWithDiffuseFresnel; }
 
+        /** When set to true, the emissive map is treated as an encoded lightmap.
+
+            This is used for baked lighting workflows to fit HDR results into RGBA8_UNORM (sRGB or not)
+            textures at the cost of some possible banding or quality loss. The emissive texture stores
+            both the baked lighting result and an encoded intensity value.
+
+            The intensity encoding works as follows:
+            - The RGB channels store the baked lighting result (RGB) normalized to [0; 1].
+            - The A channel stores the maximum intensity value.
+
+            When this is enabled:
+            - If baking, the shader will use the encoded intensity to normalize the baked lighting
+              result, allowing for a wider dynamic range in low BPP textures.
+            - If rendering, the shader will decode the lightmap in the reverse way.
+
+        @remarks
+            Either CompositorPassSceneDef::mBakeLightingOnly or
+            HlmsPbsDatablock::setUseEmissiveAsLightmap must be true for this setting to be relevant.
+            If your lightmap is RGBA16_FLOAT this setting is likely a waste of performance and you should
+            not set this to true.
+
+        @param bEncodedLightmaps
+            True to use encoded lightmap format for the emissive map. Default is false.
+        */
+        void setEncodedLightmaps( bool bEncodedLightmaps );
+        bool getEncodedLightmaps() const { return mEncodedLightmaps; }
+
 #if !OGRE_NO_JSON
         /// @copydoc Hlms::_loadJson
         void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
@@ -644,6 +673,7 @@ namespace Ogre
         static const IdString UvEmissive;
         static const IdString EmissiveConstant;
         static const IdString EmissiveAsLightmap;
+        static const IdString EncodedLightmaps;
         static const IdString DetailMapsDiffuse;
         static const IdString DetailMapsNormal;
         static const IdString FirstValidDetailMapNm;
