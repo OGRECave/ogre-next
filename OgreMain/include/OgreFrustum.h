@@ -66,9 +66,9 @@ namespace Ogre
         FRUSTUM_PLANE_BOTTOM = 5
     };
 
-    /** Specify how the frustrum extents are represented.
+    /** Specify how the frustum extents are represented.
      */
-    enum FrustrumExtentsType
+    enum FrustumExtentsType
     {
         /// Represent extents as positions on the near clip plane
         FET_PROJ_PLANE_POS,
@@ -132,7 +132,7 @@ namespace Ogre
         bool mFrustumExtentsManuallySet;
         /// Whether to treat frustum extents as tangents of the angles between the viewing
         /// vector and the edges of the field of view or as positions on the projection plane
-        FrustrumExtentsType mFrustrumExtentsType;
+        FrustumExtentsType mFrustumExtentsType;
         /// Frustum extents
         mutable Real mLeft, mRight, mTop, mBottom;
         /// Frustum orientation mode
@@ -323,7 +323,7 @@ namespace Ogre
         @param left, right, top, bottom The position where the side clip planes intersect
             the near clip plane, in eye space OR the tangent of the half angles from the eye to the edges
             of the near clip plane
-        @param frustrumExtentsType
+        @param frustumExtentsType
             Specifies how the extents are represented. Be default they are the positions on near clip
         plane. However if this is a scene camera it is recommended that you actually use the tangent of
         the half angles. ie Half the FoV angles. This is because Ogre uses this camera setup to calculate
@@ -335,7 +335,7 @@ namespace Ogre
         Ogre can apply different near clip distances dynamically.
         */
         virtual void setFrustumExtents( Real left, Real right, Real top, Real bottom,
-                                        FrustrumExtentsType frustrumExtentsType = FET_PROJ_PLANE_POS );
+                                        FrustumExtentsType frustumExtentsType = FET_PROJ_PLANE_POS );
 
         bool getFrustumExtentsManuallySet() const;
 
@@ -346,13 +346,13 @@ namespace Ogre
         @param outleft, outright, outtop, outbottom The position where the side clip planes intersect
             the near clip plane, in eye space OR the tangent of the half angles from the eye to the edges
             of the near clip plane
-        @param frustrumExtentsType
-            Specifies in what format the extents are returned. See OgreFrustrum::setFrustumExtents for
+        @param frustumExtentsType
+            Specifies in what format the extents are returned. See OgreFrustum::setFrustumExtents for
         more information
         */
         virtual void getFrustumExtents(
             Real &outleft, Real &outright, Real &outtop, Real &outbottom,
-            FrustrumExtentsType frustrumExtentsType = FET_PROJ_PLANE_POS ) const;
+            FrustumExtentsType frustumExtentsType = FET_PROJ_PLANE_POS ) const;
 
         /** Gets the depth-adjusted projection matrix for the current rendersystem,
             but one which still conforms to right-hand rules.
