@@ -357,6 +357,26 @@ namespace Ogre
         /** Internal methods for loading LOD, do not use. */
         // void _setSubMeshLodFaceList(unsigned short subIdx, unsigned short level, IndexData* facedata);
 
+        /** Sets the per-LOD-level switch values for this mesh directly.
+        @remarks
+            Unlike _setLodInfo() (which historically only carried a level count and
+            was never completed for v2 meshes -- see its implementation), this sets
+            the actual transformed LodStrategy values used at render time to pick
+            which entry of SubMesh::mVao[...] to render (see LodStrategy::lodSet
+            and RenderQueue::addRenderable).
+        @param lodValues
+            One value per LOD level, sorted from most to least detail, starting
+            with the base (full detail) level. Must have the same number of
+            entries as every SubMesh::mVao[VpNormal]/[VpShadow] in this mesh,
+            or rendering will read out of bounds (see the assert in
+            RenderQueue::addRenderable).
+        @par
+            Intended to be called by LOD generators (e.g. MeshLodGenerator's v2
+            output provider) once every SubMesh has had its LOD VAOs appended via
+            SubMesh::mVao[...].push_back(). Not intended for general use.
+        */
+        void _setLodValues( const LodValueArray &lodValues );
+
         /** Removes all LOD data from this Mesh. */
         void removeLodLevels();
 
