@@ -108,7 +108,7 @@ namespace Ogre
         SubItemVec                    mSubItems;
 
         /** A set of all the entities which shares a single OldSkeletonInstance.
-            This is only created if the Item is in fact sharing it's OldSkeletonInstance with
+            This is only created if the Item is in fact sharing its OldSkeletonInstance with
             other Entities.
         */
         // ItemSet* mSharedSkeletonEntities;
@@ -209,7 +209,7 @@ namespace Ogre
         /// Stops sharing the SkeletonInstance with other Items. @see useSkeletonInstanceFrom
         void stopUsingSkeletonInstanceFromMaster();
 
-        /** Returns whether this Item shares it's SkeltonInstance with other Item instances.
+        /** Returns whether this Item shares its SkeltonInstance with other Item instances.
          */
         bool sharesSkeletonInstance() const;
 
@@ -242,7 +242,7 @@ namespace Ogre
         // bool hasVertexAnimation() const;
 
         /** Returns a pointer to the set of entities which share a OldSkeletonInstance.
-            If this instance does not share it's OldSkeletonInstance with other instances @c NULL will be
+            If this instance does not share its OldSkeletonInstance with other instances @c NULL will be
            returned
         */
         // const ItemSet* getSkeletonInstanceSharingSet() const    { return mSharedSkeletonEntities; }
@@ -264,7 +264,7 @@ namespace Ogre
             resources it references have been earmarked for background loading,
             so you should check isInitialised afterwards to see if it was successful.
         @param forceReinitialise
-            If @c true, this forces the Item to tear down it's
+            If @c true, this forces the Item to tear down its
             internal structures and try to rebuild them. Useful if you changed the
             content of a Mesh or Skeleton at runtime.
         */
@@ -278,7 +278,7 @@ namespace Ogre
         void _notifyParentNodeMemoryChanged() override;
     };
 
-    /** FItemy object for creating Item instances */
+    /** Factory object for creating Item instances */
     class _OgreExport ItemFactory final : public MovableObjectFactory
     {
     protected:

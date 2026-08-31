@@ -66,21 +66,26 @@ namespace Ogre
         This is not needed anymore.
 
         To summarize: a normal rendering flow with shadow map looks like this:
-            shadowNode->setupShadowCamera( normal->getVisibleBoundsInfo() );
-            shadowNode->_cullPhase01();
-            shadowNode->_renderPhase02();
-            normal->_cullPhase01();
-            normal->_renderPhase02();
+
+        @code{.cpp}
+        shadowNode->setupShadowCamera( normal->getVisibleBoundsInfo() );
+        shadowNode->_cullPhase01();
+        shadowNode->_renderPhase02();
+        normal->_cullPhase01();
+        normal->_renderPhase02();
+        @endcode
     @par
     @par
         On forward lighting passes, shadow mapping is handled in the following way:
-            1) Build a list of all lights visible by all cameras (SceneManager does this)
-            2) Traverse the list to get the closest lights to the current camera.
-               These lights will cast shadows.
-            3) Build a list of the closest lights for each object (SceneManager does this)
-            4) Traverse this list and find those that are actually casting a shadow
-            5) Send to the GPU & engine the list in step 4, but shadow casting lights are
+
+        1. Build a list of all lights visible by all cameras (SceneManager does this)
+        2. Traverse the list to get the closest lights to the current camera.
+          These lights will cast shadows.
+        3. Build a list of the closest lights for each object (SceneManager does this)
+        4. Traverse this list and find those that are actually casting a shadow
+        5. Send to the GPU & engine the list in step 4, but shadow casting lights are
                put first, then sorted by proximity.
+
         See the comments inside the function setShadowMapsToPass for more information.
     @author
         Matias N. Goldberg
