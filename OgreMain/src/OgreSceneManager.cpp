@@ -2157,10 +2157,14 @@ namespace Ogre
         ObjectMemoryManagerVec::const_iterator it = request.objectMemManager->begin();
         ObjectMemoryManagerVec::const_iterator en = request.objectMemManager->end();
 
+        const size_t numParticleRqs = std::max( mParticleSysDefMemoryManager.getNumRenderQueues(),
+                                                mParticleSysMemoryManager.getNumRenderQueues() );
+
         while( it != en )
         {
             ObjectMemoryManager *memoryManager = *it;
-            const size_t numRenderQueues = memoryManager->getNumRenderQueues();
+            const size_t numRenderQueues =
+                std::max( memoryManager->getNumRenderQueues(), numParticleRqs );
 
             size_t firstRq = std::min<size_t>( request.firstRq, numRenderQueues );
             size_t lastRq = std::min<size_t>( request.lastRq, numRenderQueues );
