@@ -764,7 +764,10 @@ namespace Ogre
                     while( it1 != en1 )
                     {
                         if( *it1 == VES_TEXTURE_COORDINATES )
+                        {
                             readRequests.push_back( VES_TEXTURE_COORDINATES );
+                            ++meshData.numUvSets;
+                        }
                         ++it1;
                     }
 
@@ -1139,7 +1142,8 @@ namespace Ogre
                                 material.image[imageIdx] = &downloadTexture( diffuseTex );
                                 material.box[imageIdx] = material.image[imageIdx]->getData( 0 );
                                 material.uvSet[imageIdx] =
-                                    pbsDatablock->getTextureUvSource( PBSM_DIFFUSE );
+                                    std::min<uint8>( pbsDatablock->getTextureUvSource( PBSM_DIFFUSE ),
+                                                     std::max<uint8>( 1u, meshData->numUvSets ) - 1u );
                                 material.needsUv = true;
                                 ++imageIdx;
                             }
@@ -1158,8 +1162,9 @@ namespace Ogre
                                     {
                                         material.image[imageIdx] = &downloadTexture( detailTex );
                                         material.box[imageIdx] = material.image[imageIdx]->getData( 0 );
-                                        material.uvSet[imageIdx] =
-                                            pbsDatablock->getTextureUvSource( texType );
+                                        material.uvSet[imageIdx] = std::min<uint8>(
+                                            pbsDatablock->getTextureUvSource( texType ),
+                                            std::max<uint8>( 1u, meshData->numUvSets ) - 1u );
                                         material.needsUv = true;
                                         ++imageIdx;
                                     }

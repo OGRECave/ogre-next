@@ -822,9 +822,12 @@ namespace Ogre
         if( brdf & PbsBrdf::FLAG_FULL_LEGACY )
             setProperty( kNoTid, PbsProperty::RoughnessIsShininess, 1 );
 
+        const int32 uvCount = getProperty( kNoTid, HlmsBaseProp::UvCount );
+        const int32 maxValidUv = std::max( 0, uvCount - 1 );
+
         for( size_t i = 0u; i < PBSM_REFLECTION; ++i )
         {
-            uint8 uvSource = datablock->mUvSource[i];
+            const int32 uvSource = std::min<int32>( datablock->mUvSource[i], maxValidUv );
             setProperty( kNoTid, *PbsProperty::UvSourcePtrs[i], uvSource );
 
             if( datablock->getTexture( static_cast<uint8>( i ) ) &&

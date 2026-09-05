@@ -492,11 +492,12 @@ namespace Ogre
             Calling this function triggers a HlmsDatablock::flushRenderables.
         @param sourceType
             Source texture to modify. Note that we don't enforce
-            PBSM_SOURCE_DETAIL0 = PBSM_SOURCE_DETAIL_NM0, but you probably
-            want to have both textures using the same UV source.
-            Must be lower than NUM_PBSM_SOURCES.
+            PBSM_SOURCE_DETAIL0 = PBSM_SOURCE_DETAIL_NM0, but you probably want to have both
+            textures using the same UV source. Must be lower than NUM_PBSM_SOURCES.
         @param uvSet
-            UV coordinate set. Value must be between in range [0; 8)
+            UV coordinate set. Value must be between in range [0; 8).
+            If the value is out of range for the number of UV sets the mesh has, the
+            highest UV set is used (i.e. the value is clamped to min( uvSet, numUVs - 1 )).
         */
         void setTextureUvSource( PbsTextureTypes sourceType, uint8 uvSet );
 

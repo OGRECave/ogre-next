@@ -67,6 +67,7 @@ namespace Ogre
             size_t numVertices;
             size_t numIndices;
             bool   useIndices16bit;
+            uint8  numUvSets;
 
             float *getUvStart( uint8_t uvSet ) const;
         };
