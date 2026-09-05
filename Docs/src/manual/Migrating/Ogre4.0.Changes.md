@@ -135,6 +135,24 @@ Users deriving from HlmsUnlit must set mReservedTexBufferSlots & mReservedTexSlo
 
 See [Colibri project's commit](https://github.com/darksylinc/colibrigui/commit/87e74824973007ee9f7f3f46719d2a6ba4948678) for an example of how the change was ported.
 
+## HlmsPbsDatablock texture UV source fallback behavior
+
+In Ogre 4.0, `HlmsPbsDatablock::setTextureUvSource` is more forgiving: if you specify a UV set that doesn't exist on the mesh, it will silently use the highest available UV set instead of crashing.
+
+For example:
+
+```cpp
+hlmsPbsDatablock->setTextureUvSource( PBSM_DIFFUSE, 3 );
+```
+
+If the mesh only has 2 UV sets (0 and 1), it will use UV set 1 instead of crashing. Previously the official stance was that the material had wrong settings, while now this behvaior is allowed.
+
+This change helps when sharing materials across meshes with different UV requirements.
+
+There are genuine cases where the user wants to use a dedicated UV set for lightmaps, but some meshes don't need it and therefore lack it to save memory. Thus this new fallabck behavior of using the highest UV set can handle this situation well.
+
+**Note:** If your code calls `getTextureUvSource` to manually read the vertex buffer, make sure you handle it gracefully in your code by clamping the max UV set value.
+
 ## Header renames
 
 Due to issues with different IDEs and build systems, renamed several headers so that all header files have a unique name, even if they live in a different folder.
