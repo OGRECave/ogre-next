@@ -1993,7 +1993,7 @@ Static Public Attributes</h2></td></tr>
 <p>Calling this function triggers a HlmsDatablock::flushRenderables. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">sourceType</td><td>Source texture to modify. Note that we don't enforce PBSM_SOURCE_DETAIL0 = PBSM_SOURCE_DETAIL_NM0, but you probably want to have both textures using the same UV source. Must be lower than NUM_PBSM_SOURCES. </td></tr>
-    <tr><td class="paramname">uvSet</td><td>UV coordinate set. Value must be between in range [0; 8) </td></tr>
+    <tr><td class="paramname">uvSet</td><td>UV coordinate set. Value must be between in range [0; 8). If the value is out of range for the number of UV sets the mesh has, the highest UV set is used (i.e. the value is clamped to min( uvSet, numUVs - 1 )). </td></tr>
   </table>
   </dd>
 </dl>
