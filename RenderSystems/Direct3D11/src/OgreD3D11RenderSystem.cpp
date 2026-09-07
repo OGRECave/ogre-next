@@ -3300,6 +3300,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_render( const CbDrawCallIndexed *cmd )
     {
+        OGRE_ASSERT_MEDIUM( !mDevice.isError() );
         ID3D11DeviceContextN *deviceContext = mDevice.GetImmediateContext();
 
         UINT indirectBufferOffset =
@@ -3307,13 +3308,24 @@ namespace Ogre
         for( uint32 i = cmd->numDraws; i--; )
         {
             deviceContext->DrawIndexedInstancedIndirect( mBoundIndirectBuffer, indirectBufferOffset );
-
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+            if( ogre_unlikely( mDevice.isError() ) )
+            {
+                String errorDescription = mDevice.getErrorDescription();
+                OGRE_EXCEPT(
+                    Exception::ERR_RENDERINGAPI_ERROR,
+                    "D3D11 device failed to render DrawIndexedInstancedIndirect\nError Description:" +
+                        errorDescription,
+                    "D3D11RenderSystem::_renderEmulated" );
+            }
+#endif
             indirectBufferOffset += sizeof( CbDrawIndexed );
         }
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_render( const CbDrawCallStrip *cmd )
     {
+        OGRE_ASSERT_MEDIUM( !mDevice.isError() );
         ID3D11DeviceContextN *deviceContext = mDevice.GetImmediateContext();
 
         UINT indirectBufferOffset =
@@ -3321,13 +3333,23 @@ namespace Ogre
         for( uint32 i = cmd->numDraws; i--; )
         {
             deviceContext->DrawInstancedIndirect( mBoundIndirectBuffer, indirectBufferOffset );
-
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+            if( ogre_unlikely( mDevice.isError() ) )
+            {
+                String errorDescription = mDevice.getErrorDescription();
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                             "D3D11 device failed to render DrawInstancedIndirect\nError Description:" +
+                                 errorDescription,
+                             "D3D11RenderSystem::_renderEmulated" );
+            }
+#endif
             indirectBufferOffset += sizeof( CbDrawStrip );
         }
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_renderEmulated( const CbDrawCallIndexed *cmd )
     {
+        OGRE_ASSERT_MEDIUM( !mDevice.isError() );
         ID3D11DeviceContextN *deviceContext = mDevice.GetImmediateContext();
 
         CbDrawIndexed *drawCmd = reinterpret_cast<CbDrawIndexed *>( mSwIndirectBufferPtr +
@@ -3338,12 +3360,23 @@ namespace Ogre
             deviceContext->DrawIndexedInstanced( drawCmd->primCount, drawCmd->instanceCount,
                                                  drawCmd->firstVertexIndex, drawCmd->baseVertex,
                                                  drawCmd->baseInstance );
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+            if( ogre_unlikely( mDevice.isError() ) )
+            {
+                String errorDescription = mDevice.getErrorDescription();
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                             "D3D11 device failed to render DrawIndexedInstanced\nError Description:" +
+                                 errorDescription,
+                             "D3D11RenderSystem::_renderEmulated" );
+            }
+#endif
             ++drawCmd;
         }
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_renderEmulated( const CbDrawCallStrip *cmd )
     {
+        OGRE_ASSERT_MEDIUM( !mDevice.isError() );
         ID3D11DeviceContextN *deviceContext = mDevice.GetImmediateContext();
 
         CbDrawStrip *drawCmd =
@@ -3353,6 +3386,16 @@ namespace Ogre
         {
             deviceContext->DrawInstanced( drawCmd->primCount, drawCmd->instanceCount,
                                           drawCmd->firstVertexIndex, drawCmd->baseInstance );
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+            if( ogre_unlikely( mDevice.isError() ) )
+            {
+                String errorDescription = mDevice.getErrorDescription();
+                OGRE_EXCEPT(
+                    Exception::ERR_RENDERINGAPI_ERROR,
+                    "D3D11 device failed to render DrawInstanced\nError Description:" + errorDescription,
+                    "D3D11RenderSystem::_renderEmulated" );
+            }
+#endif
             ++drawCmd;
         }
     }
@@ -3412,15 +3455,37 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_render( const v1::CbDrawCallIndexed *cmd )
     {
+        OGRE_ASSERT_MEDIUM( !mDevice.isError() );
         mDevice.GetImmediateContext()->DrawIndexedInstanced(
             cmd->primCount, cmd->instanceCount, cmd->firstVertexIndex,
             static_cast<INT>( mCurrentVertexBuffer->vertexStart ), cmd->baseInstance );
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        if( ogre_unlikely( mDevice.isError() ) )
+        {
+            String errorDescription = mDevice.getErrorDescription();
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "D3D11 device failed to render DrawIndexedInstanced\nError Description:" +
+                             errorDescription,
+                         "D3D11RenderSystem::_renderEmulated" );
+        }
+#endif
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_render( const v1::CbDrawCallStrip *cmd )
     {
+        OGRE_ASSERT_MEDIUM( !mDevice.isError() );
         mDevice.GetImmediateContext()->DrawInstanced( cmd->primCount, cmd->instanceCount,
                                                       cmd->firstVertexIndex, cmd->baseInstance );
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        if( ogre_unlikely( mDevice.isError() ) )
+        {
+            String errorDescription = mDevice.getErrorDescription();
+            OGRE_EXCEPT(
+                Exception::ERR_RENDERINGAPI_ERROR,
+                "D3D11 device failed to render DrawInstanced\nError Description:" + errorDescription,
+                "D3D11RenderSystem::_renderEmulated" );
+        }
+#endif
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::setNormaliseNormals( bool normalise ) {}
