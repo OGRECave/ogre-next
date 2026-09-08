@@ -1672,9 +1672,8 @@ namespace Ogre
 
     bool GL3PlusRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newBlock, uint64 deadline )
     {
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-        debugLogPso( newBlock );
-#endif
+        if( !RenderSystem::_hlmsPipelineStateObjectCreated( newBlock, deadline ) )
+            return false;
 
         GL3PlusHlmsPso *pso = new GL3PlusHlmsPso();
         memset( pso, 0, sizeof( GL3PlusHlmsPso ) );

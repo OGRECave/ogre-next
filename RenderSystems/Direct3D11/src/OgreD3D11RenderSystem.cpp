@@ -2223,9 +2223,8 @@ namespace Ogre
     //---------------------------------------------------------------------
     bool D3D11RenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *block, uint64 deadline )
     {
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-        debugLogPso( block );
-#endif
+        if( !RenderSystem::_hlmsPipelineStateObjectCreated( block, deadline ) )
+            return false;
 
         D3D11HlmsPso *pso = new D3D11HlmsPso();
         memset( pso, 0, sizeof( D3D11HlmsPso ) );
