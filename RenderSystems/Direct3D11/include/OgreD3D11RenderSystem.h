@@ -113,6 +113,15 @@ namespace Ogre
 
         bool checkVertexTextureFormats();
 
+        enum class ShaderSignatureType
+        {
+            Standard,      // VS->HS, HS->DS (Control Points), DS->GS, GS->PS
+            PatchConstant  // HS->DS (Patch Constants mapping)
+        };
+        bool _verifyPipelineStageLinkage( ID3DBlob *previousStageBlob, ID3DBlob *nextStageBlob,
+                                          ShaderSignatureType sigType, const char *hint ) const;
+        ComPtr<ID3DBlob> _createBlob( D3D11HLSLProgram *shader ) const;
+
         ID3D11Buffer     *mBoundIndirectBuffer;
         unsigned char    *mSwIndirectBufferPtr;
         D3D11HlmsPso     *mPso;
@@ -291,6 +300,7 @@ namespace Ogre
         void _setHlmsBlendblock( ComPtr<ID3D11BlendState> blendState );
         void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock ) override;
         void _setPipelineStateObject( const HlmsPso *pso ) override;
+        void _validatePipelineStateObject( const HlmsPso *pso ) const override;
 
         void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer ) override;
 
