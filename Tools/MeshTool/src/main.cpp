@@ -424,24 +424,46 @@ size_t getUniqueVertexCount(v1::MeshPtr mesh)
     MeshLodGenerator().generateLodLevels(lodConfig);
     return lodConfig.levels[0].outUniqueVertexCount;
 }
-void buildLod(v1::MeshPtr& mesh)
+size_t getUniqueVertexCount(MeshPtr mesh)
+{
+    // v2 equivalent of the overload above. Identical technique -- a single
+    // zero-reduction generated Lod level still has to walk every vertex through
+    // the position-based dedup pass, so outUniqueVertexCount comes out correct --
+    // just routed through the v2-native LodInputProviderMeshV2/
+    // LodOutputProviderMeshV2 path via LodConfig's v2 constructor.
+    LodConfig lodConfig(mesh, PixelCountLodStrategy::getSingletonPtr());
+    lodConfig.advanced.useBackgroundQueue = false; // Non-threaded
+    lodConfig.createGeneratedLodLevel(0.0f, 0.0f);
+    MeshLodGenerator().generateLodLevels(lodConfig);
+    return lodConfig.levels[0].outUniqueVertexCount;
+}
+void buildLod(v1::MeshPtr& v1Mesh, MeshPtr& v2Mesh)
 {
     String response;
+
+    // True v2-native source (no v1 mesh at all) -- e.g. the input file was already
+    // a v2 .mesh, not something converted from v1 during this run. Previously this
+    // whole function printed "LOD Generation only works on v1 meshes at the
+    // moment." and returned immediately for this case; it's now handled by the new
+    // v2-native LodInputProviderMeshV2/LodOutputProviderMeshV2 path.
+    const bool isV2Source = ( !v1Mesh && v2Mesh );
 
     // Prompt for LOD generation?
     bool genLod = (opts.numLods != 0 || opts.interactive || opts.lodAutoconfigure);
     bool askLodDtls = opts.interactive;
     if (genLod)
     {
-        if( !mesh )
+        if( !v1Mesh && !v2Mesh )
         {
-            cout << "LOD Generation only works on v1 meshes at the moment." << endl;
-            cout << "Export it as -v1, run the command again, and re-export it to -v2" << endl;
+            // Nothing loaded at all -- shouldn't normally happen, loadMesh() would
+            // already have failed earlier.
             return;
         }
 
         // otherwise only ask if not specified on command line
-        if (mesh->getNumLodLevels() > 1)
+        const unsigned short existingLodLevels =
+            isV2Source ? v2Mesh->getNumLodLevels() : v1Mesh->getNumLodLevels();
+        if (existingLodLevels > 1)
         {
             do
             {
@@ -456,7 +478,14 @@ void buildLod(v1::MeshPtr& mesh)
                 }
                 else if (response == "d")
                 {
-                    mesh->removeLodLevels();
+                    // removeLodLevels() used to be a no-op stub on v2 Mesh (its body
+                    // was entirely commented out) -- now implemented for real, see
+                    // OgreMesh2.cpp, specifically because this exact call site needed
+                    // it to actually work rather than silently leave stale LOD data.
+                    if (isV2Source)
+                        v2Mesh->removeLodLevels();
+                    else
+                        v1Mesh->removeLodLevels();
                     genLod = false;
                     askLodDtls = false;
                 }
@@ -502,7 +531,10 @@ void buildLod(v1::MeshPtr& mesh)
 
     int numLod;
     LodConfig lodConfig;
-    lodConfig.mesh = mesh;
+    if (isV2Source)
+        lodConfig.meshV2 = v2Mesh;
+    else
+        lodConfig.mesh = v1Mesh;
     lodConfig.strategy = DistanceLodStrategy::getSingletonPtr();
     if (askLodDtls)
     {
@@ -561,7 +593,7 @@ void buildLod(v1::MeshPtr& mesh)
                 if (response == "f")
                 {
                     lodLevel.reductionMethod = LodLevel::VRM_CONSTANT;
-                    vertexCount = getUniqueVertexCount(mesh);
+                    vertexCount = isV2Source ? getUniqueVertexCount(v2Mesh) : getUniqueVertexCount(v1Mesh);
                 }
                 else if (response == "p")
                 {
@@ -738,15 +770,22 @@ void buildLod(v1::MeshPtr& mesh)
 
     {
         // ensure we use correct bounds
+        v1::MeshPtr nullv1;
         MeshPtr nullv2;
-        recalcBounds( mesh, nullv2 );
+        if (isV2Source)
+            recalcBounds( nullv1, v2Mesh );
+        else
+            recalcBounds( v1Mesh, nullv2 );
     }
 
     MeshLodGenerator gen;
     if (opts.lodAutoconfigure)
     {
         // In this case we ignore other settings
-        gen.getAutoconfig(mesh, lodConfig);
+        if (isV2Source)
+            gen.getAutoconfig(v2Mesh, lodConfig);
+        else
+            gen.getAutoconfig(v1Mesh, lodConfig);
     }
     printLodConfig(lodConfig);
 
@@ -1316,7 +1355,7 @@ int main(int numargs, char** args)
             resolveColourAmbiguities(mesh);
         }
 
-        buildLod( v1Mesh );
+        buildLod( v1Mesh, v2Mesh );
         buildEdgeLists( v1Mesh );
         generateTangents( v1Mesh );
 

@@ -80,12 +80,28 @@ namespace Ogre
          */
         void getAutoconfig( v1::MeshPtr &inMesh, LodConfig &outLodConfig );
 
+        /**
+         * @brief Fills Lod Config with a config, which works on any v2 mesh.
+         *
+         * Identical heuristic to the v1 overload above; sets outLodConfig.meshV2
+         * instead of outLodConfig.mesh, which is what _resolveComponents() uses to
+         * select the v2 input/output providers.
+         *
+         * @param inMesh Optimize for this mesh.
+         * @param outLodConfig Lod configuration storing the output.
+         */
+        void getAutoconfig( MeshPtr &inMesh, LodConfig &outLodConfig );
+
         static void _configureMeshLodUsage( const LodConfig &lodConfig );
+        /// v2 equivalent of _configureMeshLodUsage(): populates Mesh::_setLodValues()
+        /// instead of v1::Mesh's MeshLodUsage list. Called from _process() instead of
+        /// _configureMeshLodUsage() whenever lodConfig.isV2() is true.
+        static void _configureMeshLodUsageV2( const LodConfig &lodConfig );
         void        _resolveComponents( LodConfig &lodConfig, LodCollapseCostPtr &cost, LodDataPtr &data,
                                         LodInputProviderPtr &input, LodOutputProviderPtr &output,
                                         LodCollapserPtr &collapser );
-        void        _process( LodConfig &lodConfig, LodCollapseCost *cost, LodData *data,
-                              LodInputProvider *input, LodOutputProvider *output, LodCollapser *collapser );
+        void _process( LodConfig &lodConfig, LodCollapseCost *cost, LodData *data,
+                       LodInputProvider *input, LodOutputProvider *output, LodCollapser *collapser );
 
         /// If you only use manual Lod levels, then you don't need to build LodData mesh representation.
         /// This function will generate manual Lod levels without overhead, but every Lod level needs to

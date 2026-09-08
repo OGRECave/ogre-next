@@ -46,6 +46,13 @@ namespace Ogre
     {
     }
 
+    LodConfig::LodConfig( MeshPtr &_meshV2,
+                          LodStrategy *_strategy /*= DistanceLodStrategy::getSingletonPtr()*/ ) :
+        meshV2( _meshV2 ),
+        strategy( _strategy )
+    {
+    }
+
     LodConfig::LodConfig() {}
 
     void LodConfig::createManualLodLevel( Ogre::Real distance, const String &manualMeshName )
