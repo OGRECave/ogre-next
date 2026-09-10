@@ -1,0 +1,85 @@
+/*
+-----------------------------------------------------------------------------
+This source file is part of OGRE-Next
+    (Object-oriented Graphics Rendering Engine)
+For the latest info, see http://www.ogre3d.org/
+
+Copyright (c) 2000-2014 Torus Knot Software Ltd
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-----------------------------------------------------------------------------
+*/
+#ifndef _OgreWaylandEglContext_H_
+#define _OgreWaylandEglContext_H_
+
+#include "OgreGL3PlusContext.h"
+
+#include "windowing/EGL/Wayland/OgreWaylandEglSupport.h"
+
+namespace Ogre
+{
+    class _OgrePrivate WaylandEglContext : public GL3PlusContext
+    {
+        WaylandEglSupport *mGLSupport;
+
+        EGLDisplay   mEglDisplay;
+        EGLSurface   mEglSurface;
+        ::EGLContext mEglContext;
+
+        /// True if mEglContext was adopted from an external, caller-owned
+        /// EGLContext (see the externalContext constructor param) rather
+        /// than created by this class - in which case it must never be
+        /// destroyed here.
+        bool mExternalContext;
+
+    public:
+        /// Constructs a context bound to eglSurface.
+        /// @param externalContext
+        ///     If not EGL_NO_CONTEXT, this exact context is adopted as-is
+        ///     (mirrors GLXContext's external-context constructor param,
+        ///     used for the "currentGLContext" miscParam) - no new context
+        ///     is created and it is never destroyed by this class.
+        ///     If EGL_NO_CONTEXT (the normal case), a new context is
+        ///     created sharing GL object namespace with whatever
+        ///     GL3PlusRenderSystem::_getMainContext() currently is (looked
+        ///     up fresh, exactly like GLXContext does), or with nothing if
+        ///     there is no main context yet (this is the first context
+        ///     created, which will itself become the main context once
+        ///     registered).
+        WaylandEglContext( WaylandEglSupport *support, EGLSurface eglSurface,
+                            ::EGLContext externalContext = EGL_NO_CONTEXT );
+
+        ~WaylandEglContext() override;
+
+        EGLDisplay   getEglDisplay() const { return mEglDisplay; }
+        EGLSurface   getEglSurface() const { return mEglSurface; }
+        ::EGLContext getEglContext() const { return mEglContext; }
+
+        /// @copydoc GL3PlusContext::setCurrent
+        void setCurrent() override;
+
+        /// @copydoc GL3PlusContext::endCurrent
+        void endCurrent() override;
+
+        /// @copydoc GL3PlusContext::clone
+        GL3PlusContext *clone() const override;
+    };
+}  // namespace Ogre
+
+#endif
