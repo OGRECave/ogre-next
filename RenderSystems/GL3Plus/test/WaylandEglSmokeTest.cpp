@@ -301,7 +301,7 @@ int main( int argc, char **argv )
         return 1;
     printf( "OK: host xdg_toplevel created and configured\n" );
 
-    Ogre::Root *root = new Ogre::Root( "", "", "WaylandEglSmokeTest.log" );
+    Ogre::Root *root = new Ogre::Root( nullptr, "", "", "WaylandEglSmokeTest.log" );
 
     Ogre::GL3PlusPlugin *plugin = new Ogre::GL3PlusPlugin();
     root->installPlugin( plugin, nullptr );

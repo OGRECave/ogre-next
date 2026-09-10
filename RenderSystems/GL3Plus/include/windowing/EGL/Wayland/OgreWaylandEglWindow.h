@@ -116,7 +116,8 @@ namespace Ogre
                            const NameValuePairList *miscParams, WaylandEglSupport *glsupport );
         virtual ~WaylandEglWindow();
 
-        virtual void _initialize( TextureGpuManager *textureManager );
+        virtual void _initialize( TextureGpuManager *textureManager,
+                                  const NameValuePairList *ogre_nullable miscParams ) override;
 
         virtual void setVSync( bool vSync, uint32 vSyncInterval );
         virtual void reposition( int32 left, int32 top );

@@ -28,5 +28,6 @@ AndroidBuild/
 AndroidDependencies/
 Build/
 build-v2-3/
+build-master/
 EmscriptenDependencies
 EmscriptenBuild

@@ -260,7 +260,8 @@ namespace Ogre
             StringConverter::toString( mRequestedHeight ) + ")" );
     }
     //-----------------------------------------------------------------------------------
-    void WaylandEglWindow::_initialize( TextureGpuManager *_textureManager )
+    void WaylandEglWindow::_initialize( TextureGpuManager *_textureManager,
+                                        const NameValuePairList * )
     {
         GL3PlusTextureGpuManager *textureManager =
             static_cast<GL3PlusTextureGpuManager *>( _textureManager );
