@@ -94,8 +94,7 @@ namespace Ogre
         };
 
         /// ctor
-        inline constexpr STLAllocator()
-        { }
+        inline constexpr STLAllocator() {}
 
         /// dtor
 #if __cplusplus >= 202002L
@@ -103,21 +102,23 @@ namespace Ogre
 #else
         ~STLAllocator()
 #endif
-        { }
+        {
+        }
 
         /// copy ctor - done component wise
-        inline constexpr STLAllocator( STLAllocator const& )
-        { }
+        inline constexpr STLAllocator( STLAllocator const & ) {}
 
         /// cast
         template <typename U>
-        inline constexpr STLAllocator( STLAllocator<U, AllocPolicy> const& )
-        { }
+        inline constexpr STLAllocator( STLAllocator<U, AllocPolicy> const & )
+        {
+        }
 
         /// cast
         template <typename U, typename P>
-        inline constexpr STLAllocator( STLAllocator<U, P> const& )
-        { }
+        inline constexpr STLAllocator( STLAllocator<U, P> const & )
+        {
+        }
 
         /// memory allocation (elements, used by STL)
 #if( __cplusplus >= 201703L ) || ( _MSVC_LANG >= 201703L )
