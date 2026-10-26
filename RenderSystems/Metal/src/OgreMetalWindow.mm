@@ -422,37 +422,34 @@ namespace Ogre
                 externalWindowHandle = window;
                 SetupMetalWindowListeners( this, window );
                 [window orderFront:nil];
-        }
-        else
-        {
-            mIsExternal = true;
-        }
+            }
+            else { mIsExternal = true; }
 
-        if( !mMetalView )
-        {
-            NSView *externalView;
-            if( [externalWindowHandle isKindOfClass:[NSWindow class]] )
+            if( !mMetalView )
             {
-                mWindow = (NSWindow *)externalWindowHandle;
-                externalView = mWindow.contentView;
-            }
-            else
-            {
-                assert( [externalWindowHandle isKindOfClass:[NSView class]] );
-                externalView = (NSView *)externalWindowHandle;
-                mWindow = externalView.window;
-            }
+                NSView *externalView;
+                if( [externalWindowHandle isKindOfClass:[NSWindow class]] )
+                {
+                    mWindow = (NSWindow *)externalWindowHandle;
+                    externalView = mWindow.contentView;
+                }
+                else
+                {
+                    assert( [externalWindowHandle isKindOfClass:[NSView class]] );
+                    externalView = (NSView *)externalWindowHandle;
+                    mWindow = externalView.window;
+                }
 
-            if( [externalView isKindOfClass:[OgreMetalView class]] )
-                mMetalView = (OgreMetalView *)externalView;
-            else
-            {
-                NSRect frame = externalView.bounds;
-                mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
-                mMetalView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-                [externalView addSubview:mMetalView];
+                if( [externalView isKindOfClass:[OgreMetalView class]] )
+                    mMetalView = (OgreMetalView *)externalView;
+                else
+                {
+                    NSRect frame = externalView.bounds;
+                    mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
+                    mMetalView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+                    [externalView addSubview:mMetalView];
+                }
             }
-        }
 #endif
 
         mMetalLayer = (CAMetalLayer *)mMetalView.layer;
@@ -539,8 +536,8 @@ namespace Ogre
         frame.origin.y = top;
         mMetalView.frame = frame;
 #else
-        mMetalView.frame = [mWindow.contentView bounds];
-        checkLayerSizeChanges();
+            mMetalView.frame = [mWindow.contentView bounds];
+            checkLayerSizeChanges();
 #endif
     }
     //-------------------------------------------------------------------------
@@ -552,7 +549,7 @@ namespace Ogre
         frame.size.height = height;
         mMetalView.frame = frame;
 #else
-        mMetalView.frame = [mWindow.contentView bounds];
+            mMetalView.frame = [mWindow.contentView bounds];
 #endif
         checkLayerSizeChanges();
     }
@@ -566,7 +563,7 @@ namespace Ogre
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         return mWindow.isVisible;
 #else
-        return mMetalView && mMetalView.window;
+            return mMetalView && mMetalView.window;
 #endif
     }
     //-------------------------------------------------------------------------
@@ -578,10 +575,10 @@ namespace Ogre
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
             [mMetalView.window setHidden:hidden];
 #else
-            if( hidden )
-                [mWindow orderOut:nil];
-            else
-                [mWindow makeKeyAndOrderFront:nil];
+                if( hidden )
+                    [mWindow orderOut:nil];
+                else
+                    [mWindow makeKeyAndOrderFront:nil];
 #endif
         }
     }
