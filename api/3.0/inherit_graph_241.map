@@ -1,3 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_g_l3_plus_dynamic_buffer.html" title="GL3+ doesn&#39;t support mapping the same buffer twice even if the regions don&#39;t overlap." alt="" coords="5,5,216,31"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_lod_output_provider.html" title=" " alt="" coords="5,57,187,85"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_lod_output_provider_buffer.html" title=" " alt="" coords="273,5,494,33"/>
+<area shape="poly" id="edge919_Node000000_Node000001" title=" " alt="" coords="189,51,234,43,304,33,299,34,235,48,191,57"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_lod_output_provider_compressed_mesh.html" title=" " alt="" coords="235,57,532,85"/>
+<area shape="poly" id="edge920_Node000000_Node000002" title=" " alt="" coords="202,69,237,71,232,72,203,74"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_lod_output_provider_mesh.html" title=" " alt="" coords="275,109,492,137"/>
+<area shape="poly" id="edge922_Node000000_Node000004" title=" " alt="" coords="190,86,235,94,304,109,299,109,234,99,190,91"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_lod_output_provider_compressed_buffer.html" title=" " alt="" coords="580,49,842,94"/>
+<area shape="poly" id="edge921_Node000002_Node000003" title=" " alt="" coords="548,69,582,71,577,71,548,74"/>
 </map>

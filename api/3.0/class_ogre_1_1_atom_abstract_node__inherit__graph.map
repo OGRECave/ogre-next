@@ -1,7 +1,7 @@
 <map id="Ogre::AtomAbstractNode" name="Ogre::AtomAbstractNode">
-<area shape="rect" id="Node000001" title="This is an abstract node which cannot be broken down further." alt="" coords="5,152,189,177"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_abstract_node.html" title=" " alt="" coords="23,79,172,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,118,100,152,95,152,95,118"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="29,5,165,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,44,100,79,95,79,95,44"/>
+<area shape="rect" id="Node000001" title="This is an abstract node which cannot be broken down further." alt="" coords="5,157,189,184"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_abstract_node.html" title=" " alt="" coords="23,81,171,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,123,99,157,95,155,95,126"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="29,5,165,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="98,46,100,81,94,80,96,51"/>
 </map>

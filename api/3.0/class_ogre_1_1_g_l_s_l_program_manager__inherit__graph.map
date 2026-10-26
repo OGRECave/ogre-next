@@ -1,5 +1,5 @@
 <map id="Ogre::GLSLProgramManager" name="Ogre::GLSLProgramManager">
-<area shape="rect" id="Node000001" title="Ogre assumes that there are separate programs to deal with but GLSL has one program object that repre..." alt="" coords="11,5,216,31"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l_s_l_monolithic_program_manager.html" title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL has one progr..." alt="" coords="5,79,221,119"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,44,116,79,111,79,111,44"/>
+<area shape="rect" id="Node000001" title="Ogre assumes that there are separate programs to deal with but GLSL has one program object that repre..." alt="" coords="11,5,215,33"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l_s_l_monolithic_program_manager.html" title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL has one progr..." alt="" coords="5,81,221,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,47,115,81,111,79,111,51"/>
 </map>

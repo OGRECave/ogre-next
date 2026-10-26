@@ -1,9 +1,9 @@
 <map id="Ogre::Volume::GridSource" name="Ogre::Volume::GridSource">
-<area shape="rect" id="Node000001" title="A volume source from a discrete 3d grid." alt="" coords="129,79,319,104"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_volume_1_1_half_float_grid_source.html" title="A volume source from a 16 Bit float 3D grid capable of loading volume serializations." alt="" coords="5,152,211,192"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="197,114,137,154,134,150,194,110"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_volume_1_1_texture_source.html" title="A volume source from a 3D texture." alt="" coords="235,159,445,185"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="254,110,324,157,321,161,251,114"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="143,5,305,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="227,44,227,79,221,79,221,44"/>
+<area shape="rect" id="Node000001" title="A volume source from a discrete 3d grid." alt="" coords="128,81,316,109"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_volume_1_1_half_float_grid_source.html" title="A volume source from a 16 Bit float 3D grid capable of loading volume serializations." alt="" coords="5,157,210,201"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,117,139,158,137,154,189,119"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_volume_1_1_texture_source.html" title="A volume source from a 3D texture." alt="" coords="234,165,443,193"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="254,115,322,165,317,165,252,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="142,5,303,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="224,47,225,82,220,79,221,51"/>
 </map>

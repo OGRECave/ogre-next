@@ -1,5 +1,5 @@
 <map id="Ogre::v1::VertexElement" name="Ogre::v1::VertexElement">
-<area shape="rect" id="Node000001" title="This class declares the usage of a single vertex buffer as a component of a complete VertexDeclaratio..." alt="" coords="5,79,187,104"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="9,5,183,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,44,99,79,93,79,93,44"/>
+<area shape="rect" id="Node000001" title="This class declares the usage of a single vertex buffer as a component of a complete VertexDeclaratio..." alt="" coords="5,81,186,109"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="8,5,183,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,47,98,82,93,80,94,51"/>
 </map>

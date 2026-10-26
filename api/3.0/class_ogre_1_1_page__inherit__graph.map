@@ -1,9 +1,9 @@
 <map id="Ogre::Page" name="Ogre::Page">
-<area shape="rect" id="Node000001" title="Page class." alt="" coords="285,93,377,119"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_work_queue_1_1_request_handler.html" title="Interface definition for a handler of requests." alt="" coords="5,5,203,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,47,298,91,296,96,171,52"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_work_queue_1_1_response_handler.html" title="Interface definition for a handler of responses." alt="" coords="227,5,434,45"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="333,59,333,93,328,93,328,59"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="459,13,544,38"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="465,46,357,96,354,91,463,41"/>
+<area shape="rect" id="Node000001" title="Page class." alt="" coords="283,98,374,126"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_work_queue_1_1_request_handler.html" title="Interface definition for a handler of requests." alt="" coords="5,5,202,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,53,295,96,290,98,177,58"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_work_queue_1_1_response_handler.html" title="Interface definition for a handler of responses." alt="" coords="226,5,432,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="331,64,331,99,327,96,327,68"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="456,14,540,42"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="460,48,357,100,355,95,455,49"/>
 </map>

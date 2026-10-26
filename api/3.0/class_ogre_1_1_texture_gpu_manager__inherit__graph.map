@@ -1,17 +1,17 @@
 <map id="Ogre::TextureGpuManager" name="Ogre::TextureGpuManager">
-<area shape="rect" id="Node000001" title="This class manages all textures (i.e." alt="" coords="240,104,432,129"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_d3_d11_texture_gpu_manager.html" title=" " alt="" coords="484,5,720,31"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="367,95,419,66,479,39,519,28,521,33,481,45,421,71,370,99"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_g_l3_plus_texture_gpu_manager.html" title=" " alt="" coords="480,55,724,80"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="418,99,532,77,533,83,419,104"/>
-<area shape="rect" id="Node000006" href="$class_ogre_1_1_metal_texture_gpu_manager.html" title=" " alt="" coords="487,104,717,129"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="446,114,487,114,487,119,446,119"/>
-<area shape="rect" id="Node000007" href="$class_ogre_1_1_n_u_l_l_texture_gpu_manager.html" title=" " alt="" coords="489,153,715,179"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="419,129,533,151,532,156,418,134"/>
-<area shape="rect" id="Node000008" href="$class_ogre_1_1_vulkan_texture_gpu_manager.html" title=" " alt="" coords="485,203,719,228"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="370,134,421,163,481,189,521,200,519,205,479,194,419,167,367,139"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="11,79,186,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,99,240,104,240,109,199,105"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="5,128,192,153"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="205,127,239,124,240,129,206,133"/>
+<area shape="rect" id="Node000001" title="This class manages all textures (i.e." alt="" coords="240,109,431,137"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_d3_d11_texture_gpu_manager.html" title=" " alt="" coords="483,5,718,33"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="370,99,420,70,478,43,522,33,517,34,480,48,422,75,372,103"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_g_l3_plus_texture_gpu_manager.html" title=" " alt="" coords="479,57,722,85"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="424,103,529,85,524,86,425,108"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_metal_texture_gpu_manager.html" title=" " alt="" coords="486,109,715,137"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="446,121,488,123,483,124,447,126"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_n_u_l_l_texture_gpu_manager.html" title=" " alt="" coords="488,161,713,189"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="425,138,529,160,523,161,425,143"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_vulkan_texture_gpu_manager.html" title=" " alt="" coords="484,213,718,241"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="372,143,422,172,480,198,522,213,517,213,478,203,420,176,370,148"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="11,83,186,110"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,105,242,112,237,113,201,111"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="5,135,192,162"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="206,134,242,133,237,134,208,139"/>
 </map>

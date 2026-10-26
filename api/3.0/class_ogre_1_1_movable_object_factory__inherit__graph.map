@@ -1,33 +1,33 @@
 <map id="Ogre::MovableObjectFactory" name="Ogre::MovableObjectFactory">
-<area shape="rect" id="Node000001" title="Interface definition for a factory class which produces a certain kind of MovableObject,..." alt="" coords="228,343,435,368"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_decal_factory.html" title=" " alt="" coords="521,5,667,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="335,328,349,268,377,191,396,150,420,110,448,73,481,41,500,30,520,22,522,27,502,35,484,45,452,77,424,113,401,152,382,193,355,270,340,329"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_internal_cubemap_probe_factory.html" title=" " alt="" coords="489,55,699,95"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="339,328,358,280,387,220,428,158,453,130,481,105,501,93,504,98,484,109,457,134,433,162,392,223,362,282,344,330"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_item_factory.html" title="FItemy object for creating Item instances." alt="" coords="525,120,663,145"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="342,329,363,290,393,242,433,194,481,154,502,144,524,137,525,142,504,149,484,159,437,198,398,246,367,293,346,332"/>
-<area shape="rect" id="Node000006" href="$class_ogre_1_1_light_factory.html" title="Factory object for creating Light instances." alt="" coords="524,169,664,195"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="348,330,402,266,439,232,481,204,523,188,525,193,484,208,443,236,406,270,352,333"/>
-<area shape="rect" id="Node000007" href="$class_ogre_1_1_manual_object_factory.html" title="Factory object for creating ManualObject instances." alt="" coords="495,219,693,244"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="357,332,412,291,482,253,516,242,517,247,484,258,415,296,360,336"/>
-<area shape="rect" id="Node000008" href="$class_ogre_1_1_particle_system_factory.html" title="Factory object for creating ParticleSystem instances." alt="" coords="491,268,697,293"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="379,335,482,302,528,291,529,296,483,307,380,340"/>
-<area shape="rect" id="Node000009" href="$class_ogre_1_1_rectangle2_d_factory.html" title="Factory object for creating Entity instances." alt="" coords="499,317,689,343"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="448,341,498,337,499,342,448,347"/>
-<area shape="rect" id="Node000010" href="$class_ogre_1_1_wire_aabb_factory.html" title="Factory object for creating WireAabb instances." alt="" coords="509,367,679,392"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="448,363,509,369,508,374,448,369"/>
-<area shape="rect" id="Node000011" href="$class_ogre_1_1v1_1_1_billboard_chain_factory.html" title="Factory object for creating BillboardChain instances." alt="" coords="504,417,684,457"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="384,370,483,402,523,414,521,419,482,407,382,375"/>
-<area shape="rect" id="Node000012" href="$class_ogre_1_1v1_1_1_billboard_set_factory.html" title="Factory object for creating BillboardSet instances." alt="" coords="489,481,699,507"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="357,375,412,422,447,446,484,466,519,479,517,484,482,471,444,450,409,426,354,379"/>
-<area shape="rect" id="Node000013" href="$class_ogre_1_1v1_1_1_entity_factory.html" title="Factory object for creating Entity instances." alt="" coords="509,531,679,556"/>
-<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="350,378,403,448,441,486,484,517,509,528,507,533,481,522,437,490,399,452,345,381"/>
-<area shape="rect" id="Node000014" href="$class_ogre_1_1v1_1_1_manual_object_factory.html" title="Factory object for creating ManualObject instances." alt="" coords="483,580,705,605"/>
-<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="345,380,366,421,396,472,435,524,459,547,484,566,506,578,504,582,481,571,455,551,431,527,391,475,361,424,341,382"/>
-<area shape="rect" id="Node000015" href="$class_ogre_1_1v1_1_1_rectangle2_d_factory.html" title="Factory object for creating Entity instances." alt="" coords="487,629,701,655"/>
-<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="342,381,360,431,388,496,430,561,455,591,484,616,504,627,501,632,481,620,451,594,425,564,384,498,355,433,337,382"/>
-<area shape="rect" id="Node000016" href="$class_ogre_1_1v1_1_1_ribbon_trail_factory.html" title="Factory object for creating RibbonTrail instances." alt="" coords="492,679,696,704"/>
-<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="340,381,354,441,381,518,401,559,424,598,452,634,484,665,503,676,500,681,481,669,448,638,419,601,396,561,377,520,349,442,335,383"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,343,180,368"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,353,228,353,228,358,194,358"/>
+<area shape="rect" id="Node000001" title="Interface definition for a factory class which produces a certain kind of MovableObject,..." alt="" coords="228,360,433,388"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_decal_factory.html" title=" " alt="" coords="520,5,664,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="334,343,347,281,374,199,393,156,417,114,445,76,479,42,498,31,521,24,517,27,500,36,483,47,449,79,421,117,398,158,379,201,352,282,339,346"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_internal_cubemap_probe_factory.html" title=" " alt="" coords="487,57,696,102"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="338,344,356,294,386,232,427,167,451,138,479,112,501,100,497,104,483,116,455,141,431,170,390,234,361,296,343,346"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_item_factory.html" title="FItemy object for creating Item instances." alt="" coords="523,125,660,153"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="341,345,362,304,392,255,432,205,479,164,500,153,525,146,520,149,502,158,483,168,436,209,397,258,367,307,346,347"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_light_factory.html" title="Factory object for creating Light instances." alt="" coords="522,177,661,205"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="348,345,401,280,438,245,480,215,524,200,519,203,482,220,442,249,405,283,352,349"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_manual_object_factory.html" title="Factory object for creating ManualObject instances." alt="" coords="493,229,690,257"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="358,348,412,307,480,267,517,256,513,259,482,272,415,311,361,352"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_particle_system_factory.html" title="Factory object for creating ParticleSystem instances." alt="" coords="490,281,694,309"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="383,352,480,319,529,308,524,311,482,324,385,357"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_rectangle2_d_factory.html" title="Factory object for creating Entity instances." alt="" coords="496,333,687,361"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="448,359,499,356,494,358,450,364"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_wire_aabb_factory.html" title="Factory object for creating WireAabb instances." alt="" coords="506,385,677,413"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="448,383,509,390,504,392,449,388"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1v1_1_1_billboard_chain_factory.html" title="Factory object for creating BillboardChain instances." alt="" coords="502,437,681,482"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="388,391,482,422,520,436,515,437,480,427,388,396"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1v1_1_1_billboard_set_factory.html" title="Factory object for creating BillboardSet instances." alt="" coords="486,505,697,533"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="356,396,412,445,446,470,482,491,512,505,507,505,480,496,443,475,408,450,355,401"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1v1_1_1_entity_factory.html" title="Factory object for creating Entity instances." alt="" coords="507,557,676,585"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="348,398,372,433,403,471,440,510,482,542,510,557,505,557,480,547,436,514,399,475,368,436,347,403"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1v1_1_1_manual_object_factory.html" title="Factory object for creating ManualObject instances." alt="" coords="481,609,702,637"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="343,400,365,444,395,497,434,550,457,574,482,594,507,609,501,609,480,599,453,578,430,553,390,500,360,447,342,405"/>
+<area shape="rect" id="Node000015" href="$class_ogre_1_1v1_1_1_rectangle2_d_factory.html" title="Factory object for creating Entity instances." alt="" coords="484,661,699,689"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="340,400,358,455,387,521,428,589,453,620,483,646,505,661,499,660,479,651,450,624,423,592,382,524,353,456,338,405"/>
+<area shape="rect" id="Node000016" href="$class_ogre_1_1v1_1_1_ribbon_trail_factory.html" title="Factory object for creating RibbonTrail instances." alt="" coords="490,713,693,741"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="337,401,353,465,380,545,399,587,422,628,450,666,483,698,504,713,498,712,479,703,446,669,417,631,394,590,375,547,348,466,335,406"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,360,180,388"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,371,229,372,225,375,197,376"/>
 </map>

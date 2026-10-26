@@ -1,5 +1,5 @@
 <map id="Ogre::EXRCodec" name="Ogre::EXRCodec">
-<area shape="rect" id="Node000001" title="Codec specialized in loading OpenEXR high dynamic range images." alt="" coords="5,79,132,104"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="17,5,120,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,44,71,79,66,79,66,44"/>
+<area shape="rect" id="Node000001" title="Codec specialized in loading OpenEXR high dynamic range images." alt="" coords="5,81,132,109"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="17,5,120,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="70,47,71,81,66,80,67,51"/>
 </map>

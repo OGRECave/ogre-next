@@ -1,5 +1,5 @@
 <map id="Ogre::NodeMemoryManager" name="Ogre::NodeMemoryManager">
-<area shape="rect" id="Node000001" title="Wrap&#45;around class that contains multiple ArrayMemoryManager, one per hierarchy depth." alt="" coords="5,93,212,119"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_array_memory_manager_1_1_rebase_listener.html" title="When mUsedMemory &gt;= mMaxMemory (that is, we&#39;ve exhausted all our preallocated memory) ArrayMemoryMana..." alt="" coords="5,5,212,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,59,111,93,106,93,106,59"/>
+<area shape="rect" id="Node000001" title="Wrap&#45;around class that contains multiple ArrayMemoryManager, one per hierarchy depth." alt="" coords="6,98,211,126"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_array_memory_manager_1_1_rebase_listener.html" title="When mUsedMemory &gt;= mMaxMemory (that is, we&#39;ve exhausted all our preallocated memory) ArrayMemoryMana..." alt="" coords="5,5,212,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,64,111,98,106,96,107,68"/>
 </map>

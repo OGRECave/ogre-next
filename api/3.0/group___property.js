@@ -1,7 +1,7 @@
 var group___property =
 [
     [ "OgreProperty.h", "_ogre_property_8h.html", null ],
-    [ "Ogre::Property< T >", "class_ogre_1_1_property.html", [
+    [ "Ogre::Property&lt; T &gt;", "class_ogre_1_1_property.html", [
       [ "getter_func", "class_ogre_1_1_property.html#aad6a9bb90d4c502d392dc93a2b5c6d9e", null ],
       [ "setter_func", "class_ogre_1_1_property.html#a17a075b8283c837859cd72c546b674ce", null ],
       [ "value_type", "class_ogre_1_1_property.html#a06f442becff5384a8fd99c21eeb0234b", null ],

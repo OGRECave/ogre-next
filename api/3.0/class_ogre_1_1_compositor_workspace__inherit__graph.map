@@ -1,7 +1,7 @@
 <map id="Ogre::CompositorWorkspace" name="Ogre::CompositorWorkspace">
-<area shape="rect" id="Node000001" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re..." alt="" coords="73,79,280,104"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,180,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,38,165,76,161,80,115,42"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="205,5,319,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="240,41,192,80,189,76,236,37"/>
+<area shape="rect" id="Node000001" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re..." alt="" coords="73,81,280,109"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,180,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,41,164,80,159,81,118,46"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="203,5,318,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="237,43,193,83,190,78,231,44"/>
 </map>

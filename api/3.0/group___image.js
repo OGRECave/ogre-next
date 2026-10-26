@@ -246,10 +246,10 @@ var group___image =
       [ "startup", "class_ogre_1_1_s_t_b_i_image_codec.html#a0f4a77f1701bafc609982ba7822ea34b", null ],
       [ "validateMagicNumber", "class_ogre_1_1_s_t_b_i_image_codec.html#a79c977a8a85bed4b4ace35ef5904a3e0", null ]
     ] ],
-    [ "Ogre::ImageBlur2D", "group___image.html#ga5f98d74e5f971ea088a19ee5dad3cff1", null ],
-    [ "Ogre::ImageDownsampler2D", "group___image.html#ga7e9e127e2cdc58e6fec40c2e0eef449d", null ],
-    [ "Ogre::ImageDownsampler3D", "group___image.html#ga0f0797f7e5fb70ae61b2d68147572fe7", null ],
-    [ "Ogre::ImageDownsamplerCube", "group___image.html#ga02085c7007d82b652f31bcd124a07a06", null ],
+    [ "Ogre::ImageBlur2D", "group___image.html#ga2f75b9e2b7c75ebeefb230c53d520046", null ],
+    [ "Ogre::ImageDownsampler2D", "group___image.html#gaaf731ba1414f0635f2b910a416a12e7d", null ],
+    [ "Ogre::ImageDownsampler3D", "group___image.html#ga460ca74e07dff72e85b9f02925476d6f", null ],
+    [ "Ogre::ImageDownsamplerCube", "group___image.html#ga4be1039bad96f9ce2408f50f37515d8d", null ],
     [ "Ogre::PixelFormatGpu", "group___image.html#ga71f09fe41a1db41186262f1aa5814a18", [
       [ "Ogre::PFG_UNKNOWN", "group___image.html#gga71f09fe41a1db41186262f1aa5814a18a58ad14f6a356381535152d79ec62bb60", null ],
       [ "Ogre::PFG_NULL", "group___image.html#gga71f09fe41a1db41186262f1aa5814a18a0b36a2df52b5dec901790a1e997e0b30", null ],

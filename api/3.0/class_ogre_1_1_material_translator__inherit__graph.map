@@ -1,7 +1,7 @@
 <map id="Ogre::MaterialTranslator" name="Ogre::MaterialTranslator">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,152,184,177"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="13,79,176,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,118,97,152,92,152,92,118"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="7,5,182,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="97,44,97,79,92,79,92,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,157,184,184"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="14,81,175,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,123,97,157,92,155,93,126"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="7,5,182,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="96,46,97,81,92,80,93,51"/>
 </map>

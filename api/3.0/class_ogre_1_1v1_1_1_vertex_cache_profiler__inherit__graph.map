@@ -1,5 +1,5 @@
 <map id="Ogre::v1::VertexCacheProfiler" name="Ogre::v1::VertexCacheProfiler">
-<area shape="rect" id="Node000001" title="Vertex cache profiler." alt="" coords="5,79,219,104"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="25,5,199,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,44,115,79,109,79,109,44"/>
+<area shape="rect" id="Node000001" title="Vertex cache profiler." alt="" coords="5,81,218,109"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="24,5,199,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,47,114,82,109,79,110,51"/>
 </map>

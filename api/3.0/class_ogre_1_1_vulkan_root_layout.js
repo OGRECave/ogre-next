@@ -11,7 +11,6 @@ var class_ogre_1_1_vulkan_root_layout =
     [ "findBindingIndex", "class_ogre_1_1_vulkan_root_layout.html#a6e51554ba393692d98e24c6146a29bf3", null ],
     [ "findParamsBuffer", "class_ogre_1_1_vulkan_root_layout.html#a0d927a71ab1acfa3931b1188a6e1480a", null ],
     [ "generateRootLayoutMacros", "class_ogre_1_1_vulkan_root_layout.html#a27333b345d35a516d87acb27254f5e04", null ],
-    [ "getDescBindingRanges", "class_ogre_1_1_vulkan_root_layout.html#a25608d1929f65056de8e0e5996e209a5", null ],
     [ "getDescBindingRanges", "class_ogre_1_1_vulkan_root_layout.html#a36999a994bdb79682e5129ce9ac203d8", null ],
     [ "operator<", "class_ogre_1_1_vulkan_root_layout.html#a361b85faf30f42c8ac64156cfe5a95a3", null ],
     [ "parseRootLayout", "class_ogre_1_1_vulkan_root_layout.html#abf9d8c87c8aefe908e3214d60a2d7d9c", null ],

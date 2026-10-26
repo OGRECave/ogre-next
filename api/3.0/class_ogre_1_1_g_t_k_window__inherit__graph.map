@@ -1,7 +1,7 @@
 <map id="Ogre::GTKWindow" name="Ogre::GTKWindow">
-<area shape="rect" id="Node000001" title=" " alt="" coords="63,79,201,104"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,125,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,39,123,77,119,80,84,43"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="149,5,251,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="181,42,145,80,141,77,178,39"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="62,81,201,109"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,125,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,42,122,80,117,81,86,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="148,5,248,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="179,44,145,83,142,78,174,46"/>
 </map>

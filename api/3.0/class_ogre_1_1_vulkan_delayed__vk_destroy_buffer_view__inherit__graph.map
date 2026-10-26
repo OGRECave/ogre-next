@@ -1,5 +1,5 @@
 <map id="Ogre::VulkanDelayed_vkDestroyBufferView" name="Ogre::VulkanDelayed_vkDestroyBufferView">
-<area shape="rect" id="Node000001" title=" " alt="" coords="32,79,199,119"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_vulkan_delayed_func_base.html" title=" " alt="" coords="5,5,225,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,44,118,79,113,79,113,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="32,81,198,126"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_vulkan_delayed_func_base.html" title=" " alt="" coords="5,5,225,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,47,117,81,113,79,113,51"/>
 </map>

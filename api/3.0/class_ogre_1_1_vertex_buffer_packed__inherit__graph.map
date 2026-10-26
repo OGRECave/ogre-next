@@ -1,9 +1,9 @@
 <map id="Ogre::VertexBufferPacked" name="Ogre::VertexBufferPacked">
-<area shape="rect" id="Node000001" title=" " alt="" coords="114,152,301,177"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_buffer_packed.html" title=" " alt="" coords="135,79,280,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,118,210,152,205,152,205,118"/>
-<area shape="rect" id="Node000003" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,5,201,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="133,36,192,76,189,81,130,41"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="225,5,400,31"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="286,41,226,81,223,76,283,36"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="114,157,300,184"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_buffer_packed.html" title=" " alt="" coords="135,81,279,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="209,123,209,158,205,155,205,126"/>
+<area shape="rect" id="Node000003" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,5,201,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="134,39,191,80,186,81,133,45"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="225,5,400,33"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="284,41,227,83,224,78,279,43"/>
 </map>

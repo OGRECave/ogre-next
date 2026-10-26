@@ -21,11 +21,11 @@ var _ogre_profiler_8h =
     [ "OgreProfileL2", "_ogre_profiler_8h.html#ae439852d4fefed65aeea0bdf18e0bb26", null ],
     [ "OgreProfileMarkGPUEvent", "_ogre_profiler_8h.html#ad2e159e927d57dc0c5009ec5eee861be", null ],
     [ "OgreProfilerUseStableMarkers", "_ogre_profiler_8h.html#aa89c5ebd69c406e66bc4fb54384827b5", null ],
-    [ "ProfileGroupMask", "_ogre_profiler_8h.html#ga22a20f11c008a0d9b677fc2635922cfe", [
-      [ "OGREPROF_USER_DEFAULT", "_ogre_profiler_8h.html#gga22a20f11c008a0d9b677fc2635922cfea721f30014dd7fbcd0bfb075ab74ab7d3", null ],
-      [ "OGREPROF_ALL", "_ogre_profiler_8h.html#gga22a20f11c008a0d9b677fc2635922cfeade870d108856d0d9fbd27694bcb2242a", null ],
-      [ "OGREPROF_GENERAL", "_ogre_profiler_8h.html#gga22a20f11c008a0d9b677fc2635922cfeaa62424531516cb168cd1865184eeb7a9", null ],
-      [ "OGREPROF_CULLING", "_ogre_profiler_8h.html#gga22a20f11c008a0d9b677fc2635922cfea025771347fabdae9bb5db80f997ced2c", null ],
-      [ "OGREPROF_RENDERING", "_ogre_profiler_8h.html#gga22a20f11c008a0d9b677fc2635922cfea1477e35ccd97730b18c1196a2f7fea64", null ]
+    [ "Ogre::ProfileGroupMask", "group___general.html#ga22a20f11c008a0d9b677fc2635922cfe", [
+      [ "Ogre::OGREPROF_USER_DEFAULT", "group___general.html#gga22a20f11c008a0d9b677fc2635922cfea721f30014dd7fbcd0bfb075ab74ab7d3", null ],
+      [ "Ogre::OGREPROF_ALL", "group___general.html#gga22a20f11c008a0d9b677fc2635922cfeade870d108856d0d9fbd27694bcb2242a", null ],
+      [ "Ogre::OGREPROF_GENERAL", "group___general.html#gga22a20f11c008a0d9b677fc2635922cfeaa62424531516cb168cd1865184eeb7a9", null ],
+      [ "Ogre::OGREPROF_CULLING", "group___general.html#gga22a20f11c008a0d9b677fc2635922cfea025771347fabdae9bb5db80f997ced2c", null ],
+      [ "Ogre::OGREPROF_RENDERING", "group___general.html#gga22a20f11c008a0d9b677fc2635922cfea1477e35ccd97730b18c1196a2f7fea64", null ]
     ] ]
 ];

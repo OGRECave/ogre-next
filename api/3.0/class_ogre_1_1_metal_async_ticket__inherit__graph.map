@@ -1,7 +1,7 @@
 <map id="Ogre::MetalAsyncTicket" name="Ogre::MetalAsyncTicket">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,152,181,177"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_async_ticket.html" title="In Ogre 2.0 data structures, reading data from GPU back to CPU is asynchronous." alt="" coords="24,79,163,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,118,96,152,91,152,91,118"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="6,5,181,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="96,44,96,79,91,79,91,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,157,181,184"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_async_ticket.html" title="In Ogre 2.0 data structures, reading data from GPU back to CPU is asynchronous." alt="" coords="24,81,162,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,123,95,157,91,155,91,126"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="6,5,180,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,46,96,81,90,80,92,51"/>
 </map>

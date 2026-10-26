@@ -1,7 +1,7 @@
 <map id="Ogre::AndroidLogListener" name="Ogre::AndroidLogListener">
-<area shape="rect" id="Node000001" title=" " alt="" coords="69,79,256,104"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_log_listener.html" title=" " alt="" coords="5,5,141,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,37,150,76,146,81,97,41"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="166,5,341,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,41,179,81,176,76,226,37"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="70,81,255,109"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_log_listener.html" title=" " alt="" coords="5,5,141,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,41,149,80,144,81,100,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="164,5,339,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="226,42,180,83,177,78,221,44"/>
 </map>

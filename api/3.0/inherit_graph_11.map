@@ -1,9 +1,13 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,31,160,56"/>
-<area shape="rect" id="Node000001" href="$class_ogre_1_1v1_1_1_g_l_e_s2_hardware_pixel_buffer.html" title=" " alt="" coords="208,23,428,63"/>
-<area shape="poly" id="edge6_Node000000_Node000001" title=" " alt="" coords="174,41,208,41,208,46,174,46"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_g_l_e_s2_render_buffer.html" title="Renderbuffer surface." alt="" coords="477,5,688,31"/>
-<area shape="poly" id="edge7_Node000001_Node000002" title=" " alt="" coords="441,29,477,25,477,31,442,34"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer.html" title="Texture surface." alt="" coords="476,55,689,80"/>
-<area shape="poly" id="edge8_Node000001_Node000003" title=" " alt="" coords="442,52,476,55,476,60,441,57"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,83,160,111"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1v1_1_1_g_l_e_s2_depth_pixel_buffer.html" title=" " alt="" coords="220,5,415,50"/>
+<area shape="poly" id="edge6_Node000000_Node000001" title=" " alt="" coords="145,76,241,49,237,52,147,81"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_g_l_e_s2_hardware_pixel_buffer.html" title=" " alt="" coords="208,75,427,119"/>
+<area shape="poly" id="edge7_Node000000_Node000002" title=" " alt="" coords="175,94,210,96,205,98,176,100"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1v1_1_1_g_l_e_s2_null_pixel_buffer.html" title=" " alt="" coords="226,144,408,189"/>
+<area shape="poly" id="edge10_Node000000_Node000005" title=" " alt="" coords="147,113,242,142,237,144,146,118"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_g_l_e_s2_render_buffer.html" title="Renderbuffer surface." alt="" coords="476,58,686,86"/>
+<area shape="poly" id="edge8_Node000002_Node000003" title=" " alt="" coords="442,82,478,81,473,82,443,88"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer.html" title="Texture surface." alt="" coords="475,110,687,138"/>
+<area shape="poly" id="edge9_Node000002_Node000004" title=" " alt="" coords="443,107,477,113,472,113,443,112"/>
 </map>

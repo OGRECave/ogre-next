@@ -1,51 +1,51 @@
 <map id="Ogre::MovableObject" name="Ogre::MovableObject">
-<area shape="rect" id="Node000001" title="Abstract class defining a movable object in a scene." alt="" coords="228,425,387,451"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_decal.html" title="Decals can have diffuse, normal map, and emissive on top of regular objects." alt="" coords="491,5,589,31"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="306,411,311,338,328,237,344,184,366,131,396,82,433,40,460,24,490,16,491,22,462,29,436,44,400,86,371,134,349,186,334,239,316,338,311,412"/>
-<area shape="rect" id="Node000006" href="$class_ogre_1_1_frustum.html" title="A frustum represents a pyramid, capped at the near and far end which is used to represent either a vi..." alt="" coords="483,55,597,80"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="307,411,315,346,335,259,351,213,372,168,399,126,433,89,456,75,482,67,483,73,458,80,436,93,404,129,377,170,356,215,340,260,320,347,313,412"/>
-<area shape="rect" id="Node000008" href="$class_ogre_1_1_internal_cubemap_probe.html" title="This class is internal and should not be interfaced directly by users." alt="" coords="435,104,645,129"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="309,411,320,354,342,280,358,241,378,204,403,169,433,139,451,127,454,132,436,143,407,172,383,207,363,244,347,282,325,355,314,412"/>
-<area shape="rect" id="Node000009" href="$class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh." alt="" coords="495,153,585,179"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="312,411,325,363,349,303,384,241,407,212,433,188,463,172,494,165,495,170,464,177,436,192,411,216,388,244,354,305,330,365,317,413"/>
-<area shape="rect" id="Node000010" href="$class_ogre_1_1_light.html" title="Representation of a dynamic light source in the scene." alt="" coords="493,203,587,228"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="315,411,332,372,357,325,390,277,433,237,462,223,492,216,494,221,464,228,436,242,394,281,361,327,336,374,320,413"/>
-<area shape="rect" id="Node000011" href="$class_ogre_1_1_manual_object.html" title=" " alt="" coords="465,252,615,277"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="320,412,365,348,397,315,433,286,463,273,465,278,436,291,400,319,369,352,325,415"/>
-<area shape="rect" id="Node000012" href="$class_ogre_1_1_movable_plane.html" title="Definition of a Plane that may be attached to a node, and the derived details of it retrieved simply." alt="" coords="463,301,617,327"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="329,413,375,373,403,353,434,336,464,324,465,329,436,340,406,357,378,378,332,417"/>
-<area shape="rect" id="Node000013" href="$class_ogre_1_1_null_entity.html" title=" " alt="" coords="477,351,603,376"/>
-<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="348,417,434,385,477,373,478,378,435,390,350,422"/>
-<area shape="rect" id="Node000014" href="$class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects." alt="" coords="461,400,619,425"/>
-<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="400,425,460,419,461,424,401,431"/>
-<area shape="rect" id="Node000015" href="$class_ogre_1_1_rectangle2_d.html" title=" " alt="" coords="468,449,612,475"/>
-<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="401,445,468,452,468,457,401,450"/>
-<area shape="rect" id="Node000016" href="$class_ogre_1_1_wire_aabb.html" title="Helper class to display the Aabb of a MovableObject as lines." alt="" coords="478,499,602,524"/>
-<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="352,453,435,483,481,496,480,501,434,489,351,458"/>
-<area shape="rect" id="Node000017" href="$class_ogre_1_1v1_1_1_billboard_chain.html" title="Allows the rendering of a chain of connected billboards." alt="" coords="450,548,630,573"/>
-<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="332,458,378,498,406,517,436,534,466,545,464,550,434,539,403,522,375,502,329,462"/>
-<area shape="rect" id="Node000019" href="$class_ogre_1_1v1_1_1_billboard_set.html" title="A collection of billboards (faces which are always facing the given direction) with the same (default..." alt="" coords="458,597,622,623"/>
-<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="325,461,369,523,400,556,436,584,460,595,458,600,433,588,397,560,365,527,320,464"/>
-<area shape="rect" id="Node000020" href="$class_ogre_1_1v1_1_1_entity.html" title="Defines an instance of a discrete, movable object based on a Mesh." alt="" coords="479,647,601,672"/>
-<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="320,463,337,501,361,548,395,594,436,633,457,644,479,651,477,656,454,649,433,638,391,598,357,551,332,504,315,465"/>
-<area shape="rect" id="Node000021" href="$class_ogre_1_1v1_1_1_manual_object.html" title="Class providing a much simplified interface to generating manual objects with custom geometry." alt="" coords="453,696,627,721"/>
-<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="317,464,331,511,354,571,389,632,411,659,436,683,455,694,453,698,433,687,407,663,384,635,349,573,326,513,312,465"/>
-<area shape="rect" id="Node000022" href="$class_ogre_1_1v1_1_1_overlay.html" title="Represents a layer which is rendered on top of the &#39;normal&#39; scene contents." alt="" coords="472,745,608,771"/>
-<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="314,464,325,520,347,593,363,631,383,668,407,703,436,732,453,743,473,750,471,755,451,747,433,736,403,706,378,671,358,634,342,595,320,522,309,465"/>
-<area shape="rect" id="Node000023" href="$class_ogre_1_1v1_1_1_rectangle2_d.html" title="Allows the rendering of a simple 2D rectangle This class renders a simple 2D rectangle; this rectangl..." alt="" coords="456,795,624,820"/>
-<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="313,464,321,529,340,615,356,660,377,705,404,746,436,781,457,794,455,799,433,785,399,749,372,707,351,662,335,616,315,530,307,464"/>
-<area shape="rect" id="Node000024" href="$class_ogre_1_1v1_1_1_simple_renderable.html" title="Simple implementation of MovableObject and Renderable for single&#45;part custom objects." alt="" coords="438,844,642,869"/>
-<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="311,464,316,537,334,637,350,690,371,741,400,789,436,831,453,842,450,846,433,835,396,792,367,744,345,691,329,638,311,538,306,465"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="10,376,175,401"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,402,252,423,251,428,161,407"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="5,425,180,451"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,435,228,435,228,441,194,441"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="35,475,150,500"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="161,469,251,448,252,453,163,474"/>
-<area shape="rect" id="Node000007" href="$class_ogre_1_1_camera.html" title="A viewpoint from which the scene will be rendered." alt="" coords="738,55,850,80"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="611,65,738,65,738,70,611,70"/>
-<area shape="rect" id="Node000018" href="$class_ogre_1_1v1_1_1_ribbon_trail.html" title="Subclass of BillboardChain which automatically leaves a trail behind one or more Node instances." alt="" coords="715,548,873,573"/>
-<area shape="poly" id="edge17_Node000017_Node000018" title=" " alt="" coords="644,558,715,558,715,563,644,563"/>
-<area shape="rect" id="Node000025" href="$class_ogre_1_1v1_1_1_wire_bounding_box.html" title="Allows the rendering of a wireframe bounding box." alt="" coords="693,844,895,869"/>
-<area shape="poly" id="edge24_Node000024_Node000025" title=" " alt="" coords="656,854,693,854,693,859,656,859"/>
+<area shape="rect" id="Node000001" title="Abstract class defining a movable object in a scene." alt="" coords="228,448,386,476"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_decal.html" title="Decals can have diffuse, normal map, and emissive on top of regular objects." alt="" coords="490,5,587,33"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="305,432,310,355,327,250,343,194,365,140,394,89,432,44,459,27,492,20,488,23,461,32,436,48,399,92,370,142,348,196,332,251,315,355,310,433"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_frustum.html" title="A frustum represents a pyramid, capped at the near and far end which is used to represent either a vi..." alt="" coords="482,57,595,85"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="307,431,314,363,334,273,350,225,371,178,398,134,432,96,455,81,484,74,479,77,457,86,436,100,402,137,376,180,355,227,339,274,319,364,312,433"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_internal_cubemap_probe.html" title="This class is internal and should not be interfaced directly by users." alt="" coords="434,109,643,137"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="309,431,319,372,341,295,357,255,377,216,402,180,432,148,454,136,451,140,436,152,406,183,382,219,362,257,346,297,324,373,314,433"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh." alt="" coords="494,161,584,189"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="311,431,325,381,348,319,383,254,406,225,432,200,461,184,495,177,491,180,463,189,436,204,410,229,388,257,353,321,330,383,316,433"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_light.html" title="Representation of a dynamic light source in the scene." alt="" coords="492,213,585,241"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="315,432,331,392,356,343,390,294,432,252,461,237,495,230,490,233,463,242,436,256,394,297,361,346,336,394,320,435"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_manual_object.html" title=" " alt="" coords="464,265,614,293"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="320,433,365,368,396,333,433,304,465,290,461,294,435,308,400,337,369,371,325,436"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_movable_plane.html" title="Definition of a Plane that may be attached to a node, and the derived details of it retrieved simply." alt="" coords="462,317,615,345"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="330,435,375,394,433,355,467,344,463,347,435,360,378,398,334,439"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_null_entity.html" title=" " alt="" coords="476,369,601,397"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="352,439,433,407,478,396,474,399,435,412,355,443"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects." alt="" coords="460,421,617,449"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="400,449,462,443,457,446,403,453"/>
+<area shape="rect" id="Node000015" href="$class_ogre_1_1_rectangle2_d.html" title=" " alt="" coords="467,473,610,501"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="400,470,469,478,464,480,402,475"/>
+<area shape="rect" id="Node000016" href="$class_ogre_1_1_wire_aabb.html" title="Helper class to display the Aabb of a MovableObject as lines." alt="" coords="477,525,600,553"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="354,479,435,510,479,524,474,526,433,515,355,485"/>
+<area shape="rect" id="Node000017" href="$class_ogre_1_1v1_1_1_billboard_chain.html" title="Allows the rendering of a chain of connected billboards." alt="" coords="449,577,628,605"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="332,484,379,525,435,562,467,576,462,577,433,567,375,529,332,489"/>
+<area shape="rect" id="Node000019" href="$class_ogre_1_1v1_1_1_billboard_set.html" title="A collection of billboards (faces which are always facing the given direction) with the same (default..." alt="" coords="457,629,620,657"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="323,487,369,552,400,586,435,614,462,628,456,629,433,619,396,590,365,555,323,492"/>
+<area shape="rect" id="Node000020" href="$class_ogre_1_1v1_1_1_entity.html" title="Defines an instance of a discrete, movable object based on a Mesh." alt="" coords="478,681,600,709"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="318,487,336,529,361,577,394,626,436,666,456,678,480,688,474,688,453,683,432,671,390,629,356,580,331,531,317,493"/>
+<area shape="rect" id="Node000021" href="$class_ogre_1_1v1_1_1_manual_object.html" title="Class providing a much simplified interface to generating manual objects with custom geometry." alt="" coords="452,733,626,761"/>
+<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="315,489,330,540,353,602,388,665,410,694,436,718,457,733,451,733,432,723,406,697,383,668,348,604,325,542,313,494"/>
+<area shape="rect" id="Node000022" href="$class_ogre_1_1v1_1_1_overlay.html" title="Represents a layer which is rendered on top of the &#39;normal&#39; scene contents." alt="" coords="471,785,606,813"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="312,489,324,550,346,626,362,665,382,704,406,740,436,770,452,782,473,792,468,792,450,786,432,775,402,743,377,707,357,668,341,628,319,551,310,494"/>
+<area shape="rect" id="Node000023" href="$class_ogre_1_1v1_1_1_rectangle2_d.html" title="Allows the rendering of a simple 2D rectangle This class renders a simple 2D rectangle; this rectangl..." alt="" coords="455,837,622,865"/>
+<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="310,489,319,559,339,649,355,696,376,742,403,785,436,822,457,838,452,838,432,827,398,788,371,745,350,698,334,650,314,560,308,494"/>
+<area shape="rect" id="Node000024" href="$class_ogre_1_1v1_1_1_simple_renderable.html" title="Simple implementation of MovableObject and Renderable for single&#45;part custom objects." alt="" coords="437,889,640,917"/>
+<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="309,489,315,568,332,672,348,727,370,781,399,831,436,875,454,889,449,888,432,878,394,834,365,783,343,728,327,673,310,569,307,494"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="10,396,175,424"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,425,249,446,244,449,169,430"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,448,180,476"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,460,229,460,225,463,196,464"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="35,500,150,528"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="163,494,248,474,245,478,166,499"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_camera.html" title="A viewpoint from which the scene will be rendered." alt="" coords="736,57,847,85"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="610,69,738,70,733,73,612,74"/>
+<area shape="rect" id="Node000018" href="$class_ogre_1_1v1_1_1_ribbon_trail.html" title="Subclass of BillboardChain which automatically leaves a trail behind one or more Node instances." alt="" coords="713,577,870,605"/>
+<area shape="poly" id="edge17_Node000017_Node000018" title=" " alt="" coords="643,589,715,590,710,592,644,594"/>
+<area shape="rect" id="Node000025" href="$class_ogre_1_1v1_1_1_wire_bounding_box.html" title="Allows the rendering of a wireframe bounding box." alt="" coords="691,889,892,917"/>
+<area shape="poly" id="edge24_Node000024_Node000025" title=" " alt="" coords="656,901,694,903,688,903,656,906"/>
 </map>

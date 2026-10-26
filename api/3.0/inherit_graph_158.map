@@ -1,3 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_fast_array.html" title=" " alt="" coords="5,5,220,45"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_g_l_s_l_e_s_program_manager_common.html" title="Ogre assumes that there are separate programs to deal with but GLSL ES has one program object that re..." alt="" coords="15,75,235,119"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_g_l_s_l_e_s_link_program_manager.html" title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL ES has one pr..." alt="" coords="293,51,540,79"/>
+<area shape="poly" id="edge834_Node000000_Node000001" title=" " alt="" coords="250,81,295,78,290,79,251,86"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_g_l_s_l_e_s_program_pipeline_manager.html" title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL ES has one pr..." alt="" coords="309,107,524,151"/>
+<area shape="poly" id="edge835_Node000000_Node000003" title=" " alt="" coords="251,108,311,117,305,118,251,113"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="19,5,231,50"/>
+<area shape="poly" id="edge836_Node000002_Node000001" title=" " alt="" coords="246,40,306,50,300,51,246,46"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,144,245,189"/>
+<area shape="poly" id="edge837_Node000004_Node000003" title=" " alt="" coords="259,146,311,142,306,143,260,152"/>
 </map>

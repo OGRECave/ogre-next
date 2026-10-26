@@ -6,8 +6,8 @@ var _ogre_threads_8h =
     [ "OGRE_TLS_INVALID_HANDLE", "_ogre_threads_8h.html#a447bbc3675e70ff217f1e20f6061b25d", null ],
     [ "THREAD_DECLARE", "_ogre_threads_8h.html#a9351c49b867fae9e2a0488bf653d8887", null ],
     [ "THREAD_GET", "_ogre_threads_8h.html#a0524284264a13ff1f7bbc64c85a02540", null ],
-    [ "THREAD_ENTRY_POINT", "_ogre_threads_8h.html#ac9e0497d78c73bb4686f4098542ee311", null ],
-    [ "ThreadHandlePtr", "_ogre_threads_8h.html#abd64b6e4eaf1f67aaf83a0d2d7f3bde0", null ],
-    [ "ThreadHandleVec", "_ogre_threads_8h.html#afce062dc548d2039494b4a77465714b5", null ],
-    [ "TlsHandle", "_ogre_threads_8h.html#ad7ea3be12f3852965f47072336fa7e97", null ]
+    [ "Ogre::THREAD_ENTRY_POINT", "namespace_ogre.html#ac9e0497d78c73bb4686f4098542ee311", null ],
+    [ "Ogre::ThreadHandlePtr", "namespace_ogre.html#abd64b6e4eaf1f67aaf83a0d2d7f3bde0", null ],
+    [ "Ogre::ThreadHandleVec", "namespace_ogre.html#afce062dc548d2039494b4a77465714b5", null ],
+    [ "Ogre::TlsHandle", "namespace_ogre.html#ad7ea3be12f3852965f47072336fa7e97", null ]
 ];

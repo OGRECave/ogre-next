@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_d3_d11_video_mode.html" title=" " alt="" coords="5,5,184,31"/>
+<area shape="rect" id="Node000000" href="$struct_ogre_1_1_frame_buffer_desc_key.html" title=" " alt="" coords="5,5,202,33"/>
+<area shape="rect" id="Node000001" href="$struct_ogre_1_1_vulkan_frame_buffer_desc_key.html" title=" " alt="" coords="250,5,489,33"/>
+<area shape="poly" id="edge796_Node000000_Node000001" title=" " alt="" coords="217,17,252,19,247,19,217,22"/>
 </map>

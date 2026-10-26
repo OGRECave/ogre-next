@@ -1,3 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_stack_vector.html" title="Compact implementation similar to std::array." alt="" coords="5,5,155,45"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,57,114,85"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_property_base.html" title="Base interface for an instance of a property." alt="" coords="162,5,309,33"/>
+<area shape="poly" id="edge1137_Node000000_Node000001" title=" " alt="" coords="123,50,188,32,184,35,125,55"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_property_def.html" title="Definition of a property of an object." alt="" coords="166,57,304,85"/>
+<area shape="poly" id="edge1139_Node000000_Node000003" title=" " alt="" coords="129,69,168,70,163,72,130,74"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_property_set.html" title="Defines a complete set of properties for a single object instance." alt="" coords="167,109,304,137"/>
+<area shape="poly" id="edge1140_Node000000_Node000004" title=" " alt="" coords="124,87,189,108,183,110,123,93"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_property.html" title="Property instance with passthrough calls to a given object." alt="" coords="357,5,510,33"/>
+<area shape="poly" id="edge1138_Node000001_Node000002" title=" " alt="" coords="324,17,359,19,354,20,325,22"/>
 </map>

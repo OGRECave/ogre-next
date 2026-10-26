@@ -1,7 +1,7 @@
 <map id="Ogre::D3D11VertexArrayObject" name="Ogre::D3D11VertexArrayObject">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,152,229,177"/>
-<area shape="rect" id="Node000002" href="$struct_ogre_1_1_vertex_array_object.html" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i..." alt="" coords="27,79,207,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,118,120,152,115,152,115,118"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="30,5,205,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="120,44,120,79,115,79,115,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,157,229,184"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_vertex_array_object.html" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i..." alt="" coords="27,81,207,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,123,119,157,115,155,115,126"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="30,5,204,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="118,46,120,81,114,80,116,51"/>
 </map>

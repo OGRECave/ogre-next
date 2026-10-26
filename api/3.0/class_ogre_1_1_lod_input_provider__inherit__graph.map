@@ -1,7 +1,7 @@
 <map id="Ogre::LodInputProvider" name="Ogre::LodInputProvider">
-<area shape="rect" id="Node000001" title=" " alt="" coords="141,5,312,31"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_lod_input_provider_buffer.html" title=" " alt="" coords="5,79,216,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,40,131,81,128,76,195,35"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_lod_input_provider_mesh.html" title=" " alt="" coords="241,79,447,104"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="259,35,326,76,323,81,256,40"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="141,5,311,33"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_lod_input_provider_buffer.html" title=" " alt="" coords="5,81,215,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,41,132,83,129,78,190,42"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_lod_input_provider_mesh.html" title=" " alt="" coords="239,81,445,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="260,39,324,81,319,80,259,44"/>
 </map>

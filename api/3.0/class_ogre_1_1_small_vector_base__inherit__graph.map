@@ -1,35 +1,25 @@
 <map id="Ogre::SmallVectorBase" name="Ogre::SmallVectorBase">
-<area shape="rect" id="Node000001" title="SmallVectorBase &#45; This is all the non&#45;templated stuff common to all SmallVectors." alt="" coords="5,234,176,259"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="224,163,423,203"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,228,249,200,251,205,152,233"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="224,227,423,267"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="190,244,224,244,224,249,190,249"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="224,291,423,331"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="152,260,251,288,249,293,150,266"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="471,126,669,181"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="415,281,421,277,437,256,444,235,452,213,469,190,484,179,488,183,473,194,456,215,450,237,442,259,425,281,418,286"/>
-<area shape="rect" id="Node000015" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="471,205,669,259"/>
-<area shape="poly" id="edge11_Node000004_Node000015" title=" " alt="" coords="399,284,483,257,484,262,400,289"/>
-<area shape="rect" id="Node000016" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="471,283,669,338"/>
-<area shape="poly" id="edge12_Node000004_Node000016" title=" " alt="" coords="437,308,470,308,470,313,437,313"/>
-<area shape="rect" id="Node000017" href="$class_ogre_1_1_small_vector_template_base.html" title="SmallVectorTemplateBase&lt;isPodLike = false&gt; &#45; This is where we put method implementations that are des..." alt="" coords="471,363,669,403"/>
-<area shape="poly" id="edge13_Node000004_Node000017" title=" " alt="" coords="406,332,501,360,500,365,405,337"/>
-<area shape="rect" id="Node000020" href="$class_ogre_1_1_small_vector_template_base_3_01_t_00_01true_01_4.html" title="SmallVectorTemplateBase&lt;isPodLike = true&gt; &#45; This is where we put method implementations that are desi..." alt="" coords="471,427,669,467"/>
-<area shape="poly" id="edge16_Node000004_Node000020" title=" " alt="" coords="360,337,411,376,472,412,500,424,497,429,469,417,408,380,357,341"/>
-<area shape="rect" id="Node000006" href="$class_ogre_1_1_small_vector_impl.html" title="SmallVectorImpl &#45; This class consists of common code factored out of the SmallVector class to reduce ..." alt="" coords="717,141,924,166"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="683,151,717,151,717,156,683,156"/>
-<area shape="rect" id="Node000007" href="$class_ogre_1_1_small_vector.html" title=" " alt="" coords="972,5,1123,45"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="850,131,905,94,971,55,995,43,998,48,973,60,908,98,853,135"/>
-<area shape="rect" id="Node000009" href="$class_ogre_1_1_small_vector.html" title=" " alt="" coords="972,69,1123,109"/>
-<area shape="poly" id="edge7_Node000006_Node000009" title=" " alt="" coords="879,134,975,107,976,112,880,139"/>
-<area shape="rect" id="Node000010" href="$class_ogre_1_1_small_vector.html" title=" " alt="" coords="972,133,1123,173"/>
-<area shape="poly" id="edge8_Node000006_Node000010" title=" " alt="" coords="938,151,971,151,971,156,938,156"/>
-<area shape="rect" id="Node000011" href="$class_ogre_1_1_small_vector.html" title="SmallVector &#45; This is a &#39;vector&#39; (really, a variable&#45;sized array), optimized for the case when the ar..." alt="" coords="972,197,1123,237"/>
-<area shape="poly" id="edge9_Node000006_Node000011" title=" " alt="" coords="880,167,976,195,975,200,879,172"/>
-<area shape="rect" id="Node000014" href="$class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html" title="Specialize SmallVector at N=0." alt="" coords="972,261,1123,301"/>
-<area shape="poly" id="edge10_Node000006_Node000014" title=" " alt="" coords="853,172,908,208,973,247,998,259,995,264,971,252,905,213,850,176"/>
-<area shape="rect" id="Node000018" href="$class_ogre_1_1_small_vector_impl.html" title=" " alt="" coords="737,331,905,371"/>
-<area shape="poly" id="edge14_Node000017_Node000018" title=" " alt="" coords="683,366,736,359,737,364,683,371"/>
-<area shape="rect" id="Node000019" href="$class_ogre_1_1_small_vector_impl.html" title=" " alt="" coords="737,395,905,435"/>
-<area shape="poly" id="edge15_Node000017_Node000019" title=" " alt="" coords="683,394,737,401,736,407,683,400"/>
+<area shape="rect" id="Node000001" title="SmallVectorBase &#45; This is all the non&#45;templated stuff common to all SmallVectors." alt="" coords="5,185,176,213"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="224,177,422,222"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,197,226,198,221,200,192,202"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="470,91,668,153"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="410,169,467,154,472,152,412,174"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_small_vector_template_base_3_01_t_00_01true_01_4.html" title="SmallVectorTemplateBase&lt;isPodLike = true&gt; &#45; This is where we put method implementations that are desi..." alt="" coords="470,177,668,222"/>
+<area shape="poly" id="edge10_Node000002_Node000013" title=" " alt="" coords="438,205,472,208,467,208,438,211"/>
+<area shape="poly" id="edge12_Node000002_Node000013" title=" " alt="" coords="438,188,472,190,467,191,438,193"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1_small_vector_template_base.html" title="SmallVectorTemplateBase&lt;isPodLike = false&gt; &#45; This is where we put method implementations that are des..." alt="" coords="470,246,668,291"/>
+<area shape="poly" id="edge11_Node000002_Node000014" title=" " alt="" coords="420,224,490,246,485,246,419,229"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_small_vector_impl.html" title=" " alt="" coords="765,83,873,110"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="683,108,767,101,762,102,684,113"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_small_vector_impl.html" title="SmallVectorImpl &#45; This class consists of common code factored out of the SmallVector class to reduce ..." alt="" coords="716,135,922,162"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="684,131,719,137,713,138,684,137"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_small_vector.html" title=" " alt="" coords="970,5,1132,33"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="912,125,920,120,936,102,943,83,951,62,968,42,986,34,991,32,971,47,956,65,948,84,941,104,923,124,914,130"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_small_vector.html" title=" " alt="" coords="976,57,1126,102"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="892,128,921,119,981,103,986,101,922,124,893,133"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html" title="Specialize SmallVector at N=0." alt="" coords="976,126,1126,171"/>
+<area shape="poly" id="edge7_Node000005_Node000009" title=" " alt="" coords="937,155,978,157,973,157,938,160"/>
+<area shape="poly" id="edge9_Node000005_Node000009" title=" " alt="" coords="937,137,978,140,973,140,938,142"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_small_vector.html" title="SmallVector &#45; This is a &#39;vector&#39; (really, a variable&#45;sized array), optimized for the case when the ar..." alt="" coords="976,196,1126,240"/>
+<area shape="poly" id="edge8_Node000005_Node000010" title=" " alt="" coords="883,165,979,196,973,195,882,170"/>
 </map>

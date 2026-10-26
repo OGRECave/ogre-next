@@ -1,5 +1,5 @@
 <map id="Ogre::HlmsBlendblock" name="Ogre::HlmsBlendblock">
-<area shape="rect" id="Node000001" title="A blend block contains settings that rarely change, and thus are common to many materials." alt="" coords="5,79,172,104"/>
-<area shape="rect" id="Node000002" href="$struct_ogre_1_1_basic_block.html" title=" " alt="" coords="23,5,155,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,44,91,79,86,79,86,44"/>
+<area shape="rect" id="Node000001" title="A blend block contains settings that rarely change, and thus are common to many materials." alt="" coords="5,81,172,109"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_basic_block.html" title=" " alt="" coords="23,5,154,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,47,91,82,86,80,87,51"/>
 </map>

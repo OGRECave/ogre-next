@@ -1,7 +1,7 @@
 <map id="Ogre::CompositorStoreActionTranslator" name="Ogre::CompositorStoreActionTranslator">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,152,216,192"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="29,79,192,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,118,113,152,108,152,108,118"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="23,5,198,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="113,44,113,79,108,79,108,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,157,216,201"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="30,81,191,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,123,113,157,108,155,109,127"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="23,5,198,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,46,113,81,108,80,109,51"/>
 </map>

@@ -1,9 +1,9 @@
 <map id="Ogre::Hlms" name="Ogre::Hlms">
-<area shape="rect" id="Node000001" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="125,93,219,119"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_hlms_compute.html" title="HLMS implementation that handles compute shaders." alt="" coords="5,167,160,192"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="149,129,99,169,96,164,145,125"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_hlms_low_level.html" title="This is an HLMS implementation that acts as proxy to use the Material system from Ogre 1...." alt="" coords="185,167,341,192"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="199,125,249,164,246,169,196,129"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="83,5,261,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="175,59,175,93,169,93,169,59"/>
+<area shape="rect" id="Node000001" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="124,98,218,126"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_hlms_compute.html" title="HLMS implementation that handles compute shaders." alt="" coords="5,174,159,201"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="146,135,99,175,96,171,141,136"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_hlms_low_level.html" title="This is an HLMS implementation that acts as proxy to use the Material system from Ogre 1...." alt="" coords="183,174,338,201"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="200,133,247,173,242,173,198,138"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="83,5,260,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="173,64,174,98,169,96,170,68"/>
 </map>

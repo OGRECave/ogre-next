@@ -1,9 +1,9 @@
 <map id="Ogre::ParticleSystemManager" name="Ogre::ParticleSystemManager">
-<area shape="rect" id="Node000001" title="Manages particle systems, particle system scripts (templates) and the available emitter &amp; affector fa..." alt="" coords="179,93,393,119"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,191,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,48,259,91,257,96,155,53"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="215,13,357,38"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="289,52,289,93,283,93,283,52"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="381,13,556,38"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="430,46,314,96,312,91,428,41"/>
+<area shape="rect" id="Node000001" title="Manages particle systems, particle system scripts (templates) and the available emitter &amp; affector fa..." alt="" coords="177,98,391,126"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,190,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,54,257,97,252,98,160,59"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="214,14,355,42"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="286,56,286,99,282,96,282,59"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="378,14,553,42"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="425,48,314,100,312,95,420,49"/>
 </map>

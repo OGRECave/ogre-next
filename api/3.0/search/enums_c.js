@@ -3,7 +3,7 @@ var searchData=
   ['parametertype_0',['ParameterType',['../group___general.html#ga4b8cfe4e77d7d21264a6497c06ed924a',1,'Ogre']]],
   ['particletype_1',['ParticleType',['../class_ogre_1_1_particle.html#a1c17e03466492e1983a439eb7e540e25',1,'Ogre::Particle']]],
   ['patchsurfacetype_2',['PatchSurfaceType',['../class_ogre_1_1v1_1_1_patch_surface.html#a45aa3fdf86a878209849e951b32783be',1,'Ogre::v1::PatchSurface']]],
-  ['pixelformatdatatypes_3',['pixelformatdatatypes',['../namespace_ogre_1_1_pixel_format_data_types.html#a320bd6a6b273a3abe76add6b64ff8540',1,'Ogre::PixelFormatDataTypes::PixelFormatDataTypes'],['../namespace_ogre_1_1_pixel_format_data_types.html#a320bd6a6b273a3abe76add6b64ff8540',1,'Ogre::PixelFormatDataTypes::PixelFormatDataTypes']]],
+  ['pixelformatdatatypes_3',['PixelFormatDataTypes',['../namespace_ogre_1_1_pixel_format_data_types.html#a320bd6a6b273a3abe76add6b64ff8540',1,'Ogre::PixelFormatDataTypes::PixelFormatDataTypes'],['../namespace_ogre_1_1_pixel_format_data_types.html#a320bd6a6b273a3abe76add6b64ff8540',1,'Ogre::PixelFormatDataTypes::PixelFormatDataTypes']]],
   ['pixelformatflags_4',['PixelFormatFlags',['../class_ogre_1_1_pixel_format_gpu_utils.html#a19c5422c171a259ffdc5967d1aead7c0',1,'Ogre::PixelFormatGpuUtils']]],
   ['pixelformatgpu_5',['PixelFormatGpu',['../group___image.html#ga71f09fe41a1db41186262f1aa5814a18',1,'Ogre']]],
   ['pixelformatlayout_6',['PixelFormatLayout',['../class_ogre_1_1_pixel_format_gpu_utils.html#ad8c6704e31e61fa0963e8adfc6573996',1,'Ogre::PixelFormatGpuUtils']]],

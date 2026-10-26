@@ -1,5 +1,5 @@
 <map id="Ogre::v1::CbRenderOp" name="Ogre::v1::CbRenderOp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,172,104"/>
-<area shape="rect" id="Node000002" href="$struct_ogre_1_1_cb_base.html" title=" " alt="" coords="33,5,144,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,44,91,79,86,79,86,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,81,171,109"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_cb_base.html" title=" " alt="" coords="33,5,143,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,47,90,82,86,80,86,51"/>
 </map>

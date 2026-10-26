@@ -1,13 +1,13 @@
 <map id="Ogre::ParticleSystem" name="Ogre::ParticleSystem">
-<area shape="rect" id="Node000001" title="Class defining particle system based special effects." alt="" coords="111,152,270,177"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="21,79,179,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,110,177,150,174,154,124,115"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="203,79,362,104"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="259,114,207,154,204,150,256,110"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,171,31"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="133,33,252,76,250,81,131,38"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="195,5,370,31"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="285,44,285,79,280,79,280,44"/>
-<area shape="rect" id="Node000006" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="395,5,509,31"/>
-<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="413,38,311,81,309,76,411,34"/>
+<area shape="rect" id="Node000001" title="Class defining particle system based special effects." alt="" coords="112,157,269,184"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="21,81,178,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,116,177,156,171,157,127,121"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="202,81,360,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="255,118,208,159,205,154,250,120"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,170,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="136,36,249,79,244,82,136,41"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="194,5,368,33"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="282,47,283,82,279,79,279,51"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="392,5,506,33"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="408,39,312,83,310,78,403,40"/>
 </map>

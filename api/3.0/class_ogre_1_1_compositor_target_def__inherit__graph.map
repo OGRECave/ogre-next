@@ -1,5 +1,5 @@
 <map id="Ogre::CompositorTargetDef" name="Ogre::CompositorTargetDef">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,204,104"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="17,5,192,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,44,107,79,102,79,102,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,81,204,109"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="17,5,192,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,47,107,82,102,79,103,51"/>
 </map>

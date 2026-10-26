@@ -1,11 +1,11 @@
 <map id="Ogre::ResourceBackgroundQueue" name="Ogre::ResourceBackgroundQueue">
-<area shape="rect" id="Node000001" title="This class is used to perform Resource operations in a background thread." alt="" coords="260,92,459,132"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="10,5,207,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,47,213,55,307,89,306,94,211,60,188,52"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="21,70,196,95"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="210,92,260,98,259,103,209,97"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_work_queue_1_1_request_handler.html" title="Interface definition for a handler of requests." alt="" coords="10,120,207,160"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="221,125,259,120,260,126,221,130"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_work_queue_1_1_response_handler.html" title="Interface definition for a handler of responses." alt="" coords="5,184,212,224"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="189,177,211,170,311,130,313,135,213,174,190,182"/>
+<area shape="rect" id="Node000001" title="This class is used to perform Resource operations in a background thread." alt="" coords="260,96,457,141"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="10,5,207,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,53,213,60,302,95,297,96,211,65,193,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="21,74,196,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="211,98,262,105,257,107,212,103"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_work_queue_1_1_request_handler.html" title="Interface definition for a handler of requests." alt="" coords="10,125,207,170"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="222,132,262,129,257,131,223,137"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_work_queue_1_1_response_handler.html" title="Interface definition for a handler of responses." alt="" coords="5,195,212,239"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="193,187,211,180,305,142,310,141,213,185,195,192"/>
 </map>

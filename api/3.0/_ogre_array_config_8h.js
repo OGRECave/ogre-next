@@ -13,9 +13,9 @@ var _ogre_array_config_8h =
     [ "OGRE_PREFETCH_T0", "_ogre_array_config_8h.html#ae44d4044af54027696a360044552cfa0", null ],
     [ "OGRE_PREFETCH_T1", "_ogre_array_config_8h.html#a841b78221b0d927fc79ef67c095d2fb0", null ],
     [ "OGRE_PREFETCH_T2", "_ogre_array_config_8h.html#a20f8f0aa14ca459dd14e29c6d224b3a5", null ],
-    [ "ArrayInt", "_ogre_array_config_8h.html#aff87fb36bffc84c3ebbbf33928cf4da9", null ],
-    [ "ArrayMaskI", "_ogre_array_config_8h.html#adbd5e63c7aa60e3be3b29a1c24292590", null ],
-    [ "ArrayMaskR", "_ogre_array_config_8h.html#a3d9f5c00761ed1ff7885a805d82f942c", null ],
-    [ "ArrayRadian", "_ogre_array_config_8h.html#a725a35f2df65645c39ef694fe468091d", null ],
-    [ "ArrayReal", "_ogre_array_config_8h.html#aac03185a5fd1c914eec2116588790352", null ]
+    [ "Ogre::ArrayInt", "namespace_ogre.html#aff87fb36bffc84c3ebbbf33928cf4da9", null ],
+    [ "Ogre::ArrayMaskI", "namespace_ogre.html#adbd5e63c7aa60e3be3b29a1c24292590", null ],
+    [ "Ogre::ArrayMaskR", "namespace_ogre.html#a3d9f5c00761ed1ff7885a805d82f942c", null ],
+    [ "Ogre::ArrayRadian", "namespace_ogre.html#a725a35f2df65645c39ef694fe468091d", null ],
+    [ "Ogre::ArrayReal", "namespace_ogre.html#aac03185a5fd1c914eec2116588790352", null ]
 ];

@@ -1,7 +1,7 @@
 <map id="Ogre::ArchiveManager" name="Ogre::ArchiveManager">
-<area shape="rect" id="Node000001" title="This class manages the available ArchiveFactory plugins." alt="" coords="118,93,285,119"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,192,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,52,188,91,184,95,133,56"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="217,13,391,38"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="279,49,218,95,215,91,276,44"/>
+<area shape="rect" id="Node000001" title="This class manages the available ArchiveFactory plugins." alt="" coords="116,98,282,126"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,191,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,57,186,97,180,98,136,62"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="215,14,389,42"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="276,51,217,100,214,95,271,52"/>
 </map>

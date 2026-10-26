@@ -1,13 +1,13 @@
 <map id="Ogre::v1::PatchMesh" name="Ogre::v1::PatchMesh">
-<area shape="rect" id="Node000001" title="Patch specialisation of Mesh." alt="" coords="197,225,352,251"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_mesh.html" title="Resource holding data about 3D mesh." alt="" coords="215,152,335,177"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="277,191,277,225,272,225,272,191"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g." alt="" coords="118,79,239,104"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="207,110,261,150,257,154,204,114"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,5,163,31"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="112,37,165,76,162,81,109,41"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="187,5,362,31"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="250,41,196,81,193,76,247,37"/>
-<area shape="rect" id="Node000006" href="$class_ogre_1_1v1_1_1_animation_container.html" title="An animation container interface, which allows generic access to sibling animations." alt="" coords="263,79,478,104"/>
-<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="346,114,292,154,289,150,343,110"/>
+<area shape="rect" id="Node000001" title="Patch specialisation of Mesh." alt="" coords="197,232,351,260"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_mesh.html" title="Resource holding data about 3D mesh." alt="" coords="214,157,334,184"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="276,198,276,233,272,230,272,202"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g." alt="" coords="118,81,238,109"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="208,116,260,156,255,157,207,121"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,5,162,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="112,40,164,80,159,81,112,45"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="186,5,360,33"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="242,45,197,83,193,79,246,41"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1v1_1_1_animation_container.html" title="An animation container interface, which allows generic access to sibling animations." alt="" coords="263,81,477,109"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="343,117,293,159,290,154,338,120"/>
 </map>

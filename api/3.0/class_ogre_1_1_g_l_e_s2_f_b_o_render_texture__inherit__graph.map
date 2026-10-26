@@ -1,5 +1,5 @@
 <map id="Ogre::GLES2FBORenderTexture" name="Ogre::GLES2FBORenderTexture">
-<area shape="rect" id="Node000001" title="RenderTexture for GL ES 2 FBO." alt="" coords="5,93,228,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="31,5,203,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,59,119,93,114,93,114,59"/>
+<area shape="rect" id="Node000001" title="RenderTexture for GL ES 2 FBO." alt="" coords="5,98,228,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="31,5,202,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,64,119,99,114,96,115,68"/>
 </map>

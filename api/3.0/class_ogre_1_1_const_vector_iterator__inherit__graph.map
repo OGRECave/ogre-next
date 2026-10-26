@@ -1,7 +1,7 @@
 <map id="Ogre::ConstVectorIterator&lt; T &gt;" name="Ogre::ConstVectorIterator&lt; T &gt;">
-<area shape="rect" id="Node000001" title="Concrete IteratorWrapper for const access to the underlying container." alt="" coords="5,181,231,207"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_vector_iterator_wrapper.html" title=" " alt="" coords="15,93,221,133"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,147,121,181,115,181,115,147"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_iterator_wrapper.html" title="Basefunctionality for IteratorWrappers." alt="" coords="16,5,220,45"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="121,59,121,93,115,93,115,59"/>
+<area shape="rect" id="Node000001" title="Concrete IteratorWrapper for const access to the underlying container." alt="" coords="5,208,230,235"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_vector_iterator_wrapper.html" title=" " alt="" coords="15,115,220,160"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,174,120,208,115,206,116,177"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_iterator_wrapper.html" title=" " alt="" coords="36,5,199,67"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="119,80,120,115,115,114,116,85"/>
 </map>

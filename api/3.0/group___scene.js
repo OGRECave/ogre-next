@@ -1589,7 +1589,6 @@ var group___scene =
       [ "getVertexDataForBinding", "class_ogre_1_1v1_1_1_sub_entity.html#a7d5f30304213883a56b44d3bfc3c7d73", null ],
       [ "getWorldTransforms", "class_ogre_1_1v1_1_1_sub_entity.html#a5821e60644021a1a4e9cea660283ffe9", null ],
       [ "resetIndexDataStartEndIndex", "class_ogre_1_1v1_1_1_sub_entity.html#a6d360ab14c6165a9491312126fbe3be4", null ],
-      [ "setDatablock", "class_ogre_1_1v1_1_1_sub_entity.html#a21d95904b985b26f99f88696958891c3", null ],
       [ "setDatablock", "class_ogre_1_1v1_1_1_sub_entity.html#a67894eb1d2f340767176631eaf6e6bb6", null ],
       [ "setDatablock", "class_ogre_1_1v1_1_1_sub_entity.html#a8096988a16728c8b7e32495146111c62", null ],
       [ "setIndexDataEndIndex", "class_ogre_1_1v1_1_1_sub_entity.html#ac6d122203023cc5f211ef5f4e2ab9f4b", null ],

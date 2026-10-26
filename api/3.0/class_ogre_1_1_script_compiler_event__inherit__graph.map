@@ -1,21 +1,21 @@
 <map id="Ogre::ScriptCompilerEvent" name="Ogre::ScriptCompilerEvent">
-<area shape="rect" id="Node000001" title="This struct is a base class for events which can be thrown by the compilers and caught by subscribers..." alt="" coords="5,269,200,294"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_create_compositor_script_compiler_event.html" title=" " alt="" coords="265,5,481,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,254,129,211,158,157,197,102,221,77,246,55,267,43,270,48,250,60,224,81,201,105,163,160,134,213,116,257"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_create_gpu_program_script_compiler_event.html" title=" " alt="" coords="261,69,484,109"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="117,255,169,187,205,150,247,119,271,107,273,112,249,124,209,154,173,191,121,259"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_create_gpu_shared_parameters_script_compiler_event.html" title=" " alt="" coords="248,133,497,173"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="129,258,181,220,247,183,279,171,281,176,249,188,184,224,132,262"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html" title=" " alt="" coords="267,197,478,237"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="170,263,287,235,288,240,171,268"/>
-<area shape="rect" id="Node000006" href="$class_ogre_1_1_create_material_script_compiler_event.html" title=" " alt="" coords="275,261,470,301"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="214,279,275,279,275,284,214,284"/>
-<area shape="rect" id="Node000007" href="$class_ogre_1_1_create_particle_system_script_compiler_event.html" title=" " alt="" coords="272,325,473,365"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="171,295,288,323,287,328,170,300"/>
-<area shape="rect" id="Node000008" href="$class_ogre_1_1_pre_apply_texture_aliases_script_compiler_event.html" title=" " alt="" coords="265,389,480,429"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="132,301,184,338,249,375,281,387,279,392,247,380,181,343,129,305"/>
-<area shape="rect" id="Node000009" href="$class_ogre_1_1_process_name_exclusion_script_compiler_event.html" title=" " alt="" coords="267,453,479,493"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="121,304,173,372,209,408,249,439,273,451,271,456,247,444,205,412,169,375,117,307"/>
-<area shape="rect" id="Node000010" href="$class_ogre_1_1_process_resource_name_script_compiler_event.html" title=" " alt="" coords="267,517,478,557"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="116,306,134,349,163,403,201,457,224,482,250,503,270,515,267,519,246,508,221,486,197,461,158,406,129,352,111,308"/>
+<area shape="rect" id="Node000001" title="This struct is a base class for events which can be thrown by the compilers and caught by subscribers..." alt="" coords="5,291,199,319"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_create_compositor_script_compiler_event.html" title=" " alt="" coords="263,5,478,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,276,128,229,156,170,195,111,219,84,245,60,267,49,264,53,248,64,222,88,199,114,161,173,133,231,115,277"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_create_gpu_program_script_compiler_event.html" title=" " alt="" coords="260,75,482,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="116,277,167,203,203,163,245,129,271,118,267,122,248,134,207,167,171,206,121,279"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_create_gpu_shared_parameters_script_compiler_event.html" title=" " alt="" coords="247,144,495,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="128,279,181,238,245,199,277,188,273,191,248,203,184,242,132,283"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html" title=" " alt="" coords="266,213,476,258"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="172,284,283,257,280,261,174,289"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_create_material_script_compiler_event.html" title=" " alt="" coords="274,283,468,327"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="213,303,276,304,271,306,215,307"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_create_particle_system_script_compiler_event.html" title=" " alt="" coords="271,352,471,397"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="173,321,284,350,279,353,174,326"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_pre_apply_texture_aliases_script_compiler_event.html" title=" " alt="" coords="264,421,478,466"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="130,326,184,368,248,407,278,420,272,421,245,411,181,372,130,332"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_process_name_exclusion_script_compiler_event.html" title=" " alt="" coords="265,491,476,535"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="119,330,171,404,207,443,248,476,271,490,266,490,245,481,203,447,167,407,118,335"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_process_resource_name_script_compiler_event.html" title=" " alt="" coords="266,560,476,605"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="113,331,133,379,161,437,199,496,222,522,248,546,269,560,263,559,245,550,219,526,195,499,156,440,128,381,112,336"/>
 </map>

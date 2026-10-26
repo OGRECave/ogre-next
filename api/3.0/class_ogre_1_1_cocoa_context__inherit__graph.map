@@ -1,7 +1,7 @@
 <map id="Ogre::CocoaContext" name="Ogre::CocoaContext">
-<area shape="rect" id="Node000001" title=" " alt="" coords="107,79,259,104"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l3_plus_context.html" title="Class that encapsulates an GL context." alt="" coords="5,5,169,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,37,169,76,166,81,112,41"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="193,5,368,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="255,41,201,81,198,76,252,37"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="107,81,259,109"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l3_plus_context.html" title="Class that encapsulates an GL context." alt="" coords="5,5,169,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,40,169,80,163,81,115,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="193,5,368,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="254,42,202,83,199,78,249,43"/>
 </map>

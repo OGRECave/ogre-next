@@ -1,43 +1,43 @@
 <map id="Ogre::TextureGpuListener" name="Ogre::TextureGpuListener">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,317,192,343"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_async_texture_ticket.html" title="In Ogre 2.2 reading data from GPU back to CPU is asynchronous." alt="" coords="269,120,455,145"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,304,131,269,159,228,196,188,239,154,267,142,270,146,241,159,199,192,164,232,135,272,115,306"/>
-<area shape="rect" id="Node000008" href="$class_ogre_1_1_compositor_pass_uav.html" title="Implementation of CompositorPass This implementation will set UAVs." alt="" coords="267,169,457,195"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="117,305,168,253,202,226,239,204,268,192,270,197,241,208,205,230,172,257,121,309"/>
-<area shape="rect" id="Node000009" href="$class_ogre_1_1_decal.html" title="Decals can have diffuse, normal map, and emissive on top of regular objects." alt="" coords="313,219,411,244"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="130,308,180,279,239,253,312,235,313,240,241,258,182,284,132,312"/>
-<area shape="rect" id="Node000010" href="$class_ogre_1_1_font.html" title="Class representing a font in the system." alt="" coords="317,268,407,293"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="180,312,317,286,318,292,181,317"/>
-<area shape="rect" id="Node000011" href="$class_ogre_1_1_hlms_compute_job.html" title=" " alt="" coords="275,317,449,343"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="206,327,275,327,275,333,206,333"/>
-<area shape="rect" id="Node000012" href="$class_ogre_1_1_light.html" title="Representation of a dynamic light source in the scene." alt="" coords="315,367,409,392"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="181,343,316,368,315,373,180,348"/>
-<area shape="rect" id="Node000013" href="$class_ogre_1_1_texture_gpu_manager.html" title="This class manages all textures (i.e." alt="" coords="266,416,458,441"/>
-<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="133,348,183,375,241,401,285,413,284,419,239,406,180,380,130,352"/>
-<area shape="rect" id="Node000019" href="$class_ogre_1_1_texture_gpu_manager_listener.html" title=" " alt="" coords="240,465,484,491"/>
-<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="121,351,172,402,205,428,241,450,274,463,272,468,239,455,202,433,168,406,117,355"/>
-<area shape="rect" id="Node000021" href="$class_ogre_1_1_texture_unit_state.html" title="Class representing the state of a single texture unit during a Pass of a Technique,..." alt="" coords="277,515,447,540"/>
-<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="115,353,135,387,164,427,199,467,241,500,277,515,275,520,239,504,196,471,160,431,131,390,111,356"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="539,5,769,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="393,110,456,75,531,41,575,28,577,33,533,46,458,80,396,115"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_l3_plus_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="554,55,754,95"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="440,115,553,92,554,98,442,120"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_metal_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="542,120,766,145"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="469,130,542,130,542,135,469,135"/>
-<area shape="rect" id="Node000006" href="$class_ogre_1_1_n_u_l_l_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="543,169,765,195"/>
-<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="452,145,578,167,577,172,451,150"/>
-<area shape="rect" id="Node000007" href="$class_ogre_1_1_vulkan_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="559,219,749,259"/>
-<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="470,147,485,154,501,166,510,179,519,192,533,204,561,217,559,222,531,208,515,196,506,183,497,170,483,159,467,152"/>
-<area shape="rect" id="Node000014" href="$class_ogre_1_1_d3_d11_texture_gpu_manager.html" title=" " alt="" coords="536,300,772,325"/>
-<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="469,408,482,401,498,386,506,369,514,351,530,334,553,323,556,328,534,339,518,354,510,371,502,389,486,405,472,413"/>
-<area shape="rect" id="Node000015" href="$class_ogre_1_1_g_l3_plus_texture_gpu_manager.html" title=" " alt="" coords="532,349,776,375"/>
-<area shape="poly" id="edge14_Node000013_Node000015" title=" " alt="" coords="445,410,483,401,531,383,579,372,580,377,533,389,485,406,446,416"/>
-<area shape="rect" id="Node000016" href="$class_ogre_1_1_metal_texture_gpu_manager.html" title=" " alt="" coords="539,399,769,424"/>
-<area shape="poly" id="edge15_Node000013_Node000016" title=" " alt="" coords="471,420,539,415,539,421,472,425"/>
-<area shape="rect" id="Node000017" href="$class_ogre_1_1_n_u_l_l_texture_gpu_manager.html" title=" " alt="" coords="541,448,767,473"/>
-<area shape="poly" id="edge16_Node000013_Node000017" title=" " alt="" coords="472,438,541,446,541,451,472,443"/>
-<area shape="rect" id="Node000018" href="$class_ogre_1_1_vulkan_texture_gpu_manager.html" title=" " alt="" coords="537,497,771,523"/>
-<area shape="poly" id="edge17_Node000013_Node000018" title=" " alt="" coords="463,442,485,450,509,466,533,482,572,495,570,500,531,487,507,471,483,455,461,447"/>
-<area shape="rect" id="Node000020" href="$class_ogre_1_1_default_texture_gpu_manager_listener.html" title="This is a Default implementation of TextureGpuManagerListener based on heuristics." alt="" coords="534,547,774,587"/>
-<area shape="poly" id="edge19_Node000019_Node000020" title=" " alt="" coords="464,492,485,500,510,516,533,533,563,545,562,550,531,538,507,521,483,504,462,497"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,333,192,361"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_async_texture_ticket.html" title="In Ogre 2.2 reading data from GPU back to CPU is asynchronous." alt="" coords="268,125,454,153"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,318,131,282,159,240,195,199,238,164,270,151,266,154,241,168,199,202,164,244,136,285,116,321"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_compositor_pass_uav.html" title="Implementation of CompositorPass This implementation will set UAVs." alt="" coords="266,177,456,205"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="118,320,169,266,202,239,238,215,272,204,268,207,241,220,205,243,173,270,122,323"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_decal.html" title="Decals can have diffuse, normal map, and emissive on top of regular objects." alt="" coords="313,229,410,257"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="132,323,182,294,239,267,314,249,310,252,241,272,184,299,136,327"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_font.html" title="Class representing a font in the system." alt="" coords="317,281,406,309"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="186,327,319,302,315,306,188,332"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_hlms_compute_job.html" title=" " alt="" coords="275,333,448,361"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="207,345,277,346,272,349,208,350"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_light.html" title="Representation of a dynamic light source in the scene." alt="" coords="315,385,408,413"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="187,362,317,389,313,392,187,367"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_texture_gpu_manager.html" title="This class manages all textures (i.e." alt="" coords="266,437,457,465"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="134,367,184,396,241,422,282,436,277,437,239,427,182,401,134,372"/>
+<area shape="rect" id="Node000019" href="$class_ogre_1_1_texture_gpu_manager_listener.html" title=" " alt="" coords="240,489,483,517"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="121,370,173,424,205,451,241,474,273,488,267,489,238,479,202,456,169,428,120,376"/>
+<area shape="rect" id="Node000021" href="$class_ogre_1_1_texture_unit_state.html" title="Class representing the state of a single texture unit during a Pass of a Technique,..." alt="" coords="277,541,446,569"/>
+<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="113,372,136,409,164,451,199,492,241,526,279,544,273,545,238,531,195,496,159,454,131,412,113,378"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="538,5,768,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="394,114,456,77,530,42,569,32,565,35,532,47,458,82,398,119"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_l3_plus_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="553,57,752,102"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="446,119,555,98,550,101,448,124"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_metal_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="541,125,764,153"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="469,137,543,138,538,140,471,142"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_n_u_l_l_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="542,177,763,205"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="457,154,573,176,568,178,458,159"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_vulkan_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="558,229,748,274"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="469,156,484,164,500,176,509,189,518,202,532,214,560,229,555,230,530,219,514,206,505,192,496,180,482,168,469,162"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1_d3_d11_texture_gpu_manager.html" title=" " alt="" coords="535,315,770,342"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="470,429,481,422,497,406,505,389,513,370,529,353,552,344,557,342,533,357,517,373,509,391,501,409,485,427,473,434"/>
+<area shape="rect" id="Node000015" href="$class_ogre_1_1_g_l3_plus_texture_gpu_manager.html" title=" " alt="" coords="531,367,774,394"/>
+<area shape="poly" id="edge14_Node000013_Node000015" title=" " alt="" coords="449,431,482,422,530,405,582,394,577,396,532,410,484,427,451,436"/>
+<area shape="rect" id="Node000016" href="$class_ogre_1_1_metal_texture_gpu_manager.html" title=" " alt="" coords="538,419,767,446"/>
+<area shape="poly" id="edge15_Node000013_Node000016" title=" " alt="" coords="472,441,541,439,536,440,473,447"/>
+<area shape="rect" id="Node000017" href="$class_ogre_1_1_n_u_l_l_texture_gpu_manager.html" title=" " alt="" coords="540,471,765,498"/>
+<area shape="poly" id="edge16_Node000013_Node000017" title=" " alt="" coords="473,461,543,471,538,472,473,467"/>
+<area shape="rect" id="Node000018" href="$class_ogre_1_1_vulkan_texture_gpu_manager.html" title=" " alt="" coords="536,523,770,550"/>
+<area shape="poly" id="edge17_Node000013_Node000018" title=" " alt="" coords="461,467,484,475,508,492,532,507,570,522,565,522,530,512,506,496,482,480,461,473"/>
+<area shape="rect" id="Node000020" href="$class_ogre_1_1_default_texture_gpu_manager_listener.html" title="This is a Default implementation of TextureGpuManagerListener based on heuristics." alt="" coords="533,574,772,619"/>
+<area shape="poly" id="edge19_Node000019_Node000020" title=" " alt="" coords="462,519,484,527,509,543,532,559,563,574,558,573,530,564,506,548,482,532,461,524"/>
 </map>

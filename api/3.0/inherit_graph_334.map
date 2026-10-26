@@ -1,3 +1,21 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$union_ogre_1_1_lod_data_1_1_index_buffer_pointer.html" title=" " alt="" coords="5,5,204,45"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_script_compiler_event.html" title="This struct is a base class for events which can be thrown by the compilers and caught by subscribers..." alt="" coords="5,291,199,319"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_create_compositor_script_compiler_event.html" title=" " alt="" coords="263,5,478,50"/>
+<area shape="poly" id="edge1079_Node000000_Node000001" title=" " alt="" coords="110,276,128,229,156,170,195,111,219,84,245,60,267,49,264,53,248,64,222,88,199,114,161,173,133,231,115,277"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_create_gpu_program_script_compiler_event.html" title=" " alt="" coords="260,75,482,119"/>
+<area shape="poly" id="edge1080_Node000000_Node000002" title=" " alt="" coords="116,277,167,203,203,163,245,129,271,118,267,122,248,134,207,167,171,206,121,279"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_create_gpu_shared_parameters_script_compiler_event.html" title=" " alt="" coords="247,144,495,189"/>
+<area shape="poly" id="edge1081_Node000000_Node000003" title=" " alt="" coords="128,279,181,238,245,199,277,188,273,191,248,203,184,242,132,283"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html" title=" " alt="" coords="266,213,476,258"/>
+<area shape="poly" id="edge1082_Node000000_Node000004" title=" " alt="" coords="172,284,283,257,280,261,174,289"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_create_material_script_compiler_event.html" title=" " alt="" coords="274,283,468,327"/>
+<area shape="poly" id="edge1083_Node000000_Node000005" title=" " alt="" coords="213,303,276,304,271,306,215,307"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_create_particle_system_script_compiler_event.html" title=" " alt="" coords="271,352,471,397"/>
+<area shape="poly" id="edge1084_Node000000_Node000006" title=" " alt="" coords="173,321,284,350,279,353,174,326"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_pre_apply_texture_aliases_script_compiler_event.html" title=" " alt="" coords="264,421,478,466"/>
+<area shape="poly" id="edge1085_Node000000_Node000007" title=" " alt="" coords="130,326,184,368,248,407,278,420,272,421,245,411,181,372,130,332"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_process_name_exclusion_script_compiler_event.html" title=" " alt="" coords="265,491,476,535"/>
+<area shape="poly" id="edge1086_Node000000_Node000008" title=" " alt="" coords="119,330,171,404,207,443,248,476,271,490,266,490,245,481,203,447,167,407,118,335"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_process_resource_name_script_compiler_event.html" title=" " alt="" coords="266,560,476,605"/>
+<area shape="poly" id="edge1087_Node000000_Node000009" title=" " alt="" coords="113,331,133,379,161,437,199,496,222,522,248,546,269,560,263,559,245,550,219,526,195,499,156,440,128,381,112,336"/>
 </map>

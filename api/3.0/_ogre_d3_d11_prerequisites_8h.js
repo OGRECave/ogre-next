@@ -5,5 +5,5 @@ var _ogre_d3_d11_prerequisites_8h =
     [ "SAFE_DELETE", "_ogre_d3_d11_prerequisites_8h.html#a9bbcd82e77c41df827c09759def05c9a", null ],
     [ "SAFE_DELETE_ARRAY", "_ogre_d3_d11_prerequisites_8h.html#a506b3685b3eb05aac751f9e14cbed93b", null ],
     [ "SAFE_RELEASE", "_ogre_d3_d11_prerequisites_8h.html#a6038f7bdb274c2e159988a57dedbf93d", null ],
-    [ "D3D11HLSLProgramPtr", "_ogre_d3_d11_prerequisites_8h.html#a4fdfbb7af58cbdd237866fe276917b0e", null ]
+    [ "Ogre::D3D11HLSLProgramPtr", "namespace_ogre.html#a4fdfbb7af58cbdd237866fe276917b0e", null ]
 ];

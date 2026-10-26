@@ -1,5 +1,5 @@
 <map id="Ogre::VulkanDiscardBuffer" name="Ogre::VulkanDiscardBuffer">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,197,104"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="14,5,189,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,44,104,79,99,79,99,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,81,197,109"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="14,5,188,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,47,103,82,99,80,99,51"/>
 </map>

@@ -1,9 +1,9 @@
 <map id="Ogre::HardwareOcclusionQuery" name="Ogre::HardwareOcclusionQuery">
-<area shape="rect" id="Node000001" title="This is a abstract class that that provides the interface for the query class for hardware occlusion." alt="" coords="137,79,363,104"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_hardware_occlusion_query.html" title="This is a class that is the DirectX9 implementation of hardware occlusion testing." alt="" coords="5,152,236,192"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="221,114,153,154,150,150,218,109"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_l3_plus_hardware_occlusion_query.html" title="This is a class that is the base class of the query class for hardware occlusion." alt="" coords="260,152,499,192"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="282,109,350,150,347,154,279,114"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="163,5,337,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="253,44,253,79,247,79,247,44"/>
+<area shape="rect" id="Node000001" title="This is a abstract class that that provides the interface for the query class for hardware occlusion." alt="" coords="137,81,362,109"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_hardware_occlusion_query.html" title="This is a class that is the DirectX9 implementation of hardware occlusion testing." alt="" coords="5,157,236,201"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,116,156,158,154,154,214,118"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_l3_plus_hardware_occlusion_query.html" title="This is a class that is the base class of the query class for hardware occlusion." alt="" coords="260,157,498,201"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="284,115,347,156,342,156,283,120"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="163,5,337,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="251,47,252,82,247,79,248,51"/>
 </map>

@@ -1,9 +1,9 @@
 <map id="Ogre::FrameTimeControllerValue" name="Ogre::FrameTimeControllerValue">
-<area shape="rect" id="Node000001" title="Predefined controller value for getting the latest frame time." alt="" coords="77,167,276,207"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_controller_value.html" title=" " alt="" coords="5,79,167,119"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,126,158,165,155,168,114,130"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="18,5,154,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="89,44,89,79,83,79,83,44"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_frame_listener.html" title="A interface class defining a listener which can be used to receive notifications of frame events." alt="" coords="191,86,346,111"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="248,123,199,168,195,165,244,119"/>
+<area shape="rect" id="Node000001" title="Predefined controller value for getting the latest frame time." alt="" coords="77,174,275,218"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_controller_value.html" title=" " alt="" coords="5,81,166,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,134,157,173,152,174,117,139"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="18,5,153,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="86,46,88,81,83,80,85,51"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_frame_listener.html" title="A interface class defining a listener which can be used to receive notifications of frame events." alt="" coords="190,90,344,117"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="246,127,199,175,196,171,241,129"/>
 </map>

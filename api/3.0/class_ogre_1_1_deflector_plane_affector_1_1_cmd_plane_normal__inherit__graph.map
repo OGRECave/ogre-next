@@ -1,5 +1,5 @@
 <map id="Ogre::DeflectorPlaneAffector::CmdPlaneNormal" name="Ogre::DeflectorPlaneAffector::CmdPlaneNormal">
-<area shape="rect" id="Node000001" title="Command object for plane normal (see ParamCommand)." alt="" coords="5,79,212,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="24,5,193,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,44,111,79,106,79,106,44"/>
+<area shape="rect" id="Node000001" title="Command object for plane normal (see ParamCommand)." alt="" coords="5,81,212,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="24,5,193,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,47,111,81,106,79,107,51"/>
 </map>

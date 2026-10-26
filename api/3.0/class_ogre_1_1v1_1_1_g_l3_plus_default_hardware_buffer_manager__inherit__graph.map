@@ -1,11 +1,11 @@
 <map id="Ogre::v1::GL3PlusDefaultHardwareBufferManager" name="Ogre::v1::GL3PlusDefaultHardwareBufferManager">
-<area shape="rect" id="Node000001" title="GL3PlusDefaultHardwareBufferManagerBase as a Singleton." alt="" coords="114,255,299,295"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_hardware_buffer_manager.html" title="Singleton wrapper for hardware buffer manager." alt="" coords="113,167,300,207"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="209,221,209,254,204,254,204,221"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html" title="Base definition of a hardware buffer manager." alt="" coords="5,79,192,119"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="135,125,184,164,181,169,132,129"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="11,5,186,31"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="101,44,101,79,96,79,96,44"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="216,79,416,119"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="283,129,233,169,229,164,279,125"/>
+<area shape="rect" id="Node000001" title="GL3PlusDefaultHardwareBufferManagerBase as a Singleton." alt="" coords="114,266,299,311"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_hardware_buffer_manager.html" title="Singleton wrapper for hardware buffer manager." alt="" coords="113,174,300,218"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="208,232,209,268,204,265,205,236"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html" title="Base definition of a hardware buffer manager." alt="" coords="5,81,192,126"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="136,133,183,173,178,174,135,138"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="11,5,186,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="99,46,101,81,96,80,98,51"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="216,81,416,126"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="281,134,234,175,231,171,276,137"/>
 </map>

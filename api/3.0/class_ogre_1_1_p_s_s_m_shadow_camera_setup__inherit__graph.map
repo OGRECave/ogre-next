@@ -1,11 +1,11 @@
 <map id="Ogre::PSSMShadowCameraSetup" name="Ogre::PSSMShadowCameraSetup">
-<area shape="rect" id="Node000001" title="Parallel Split Shadow Map (PSSM) shadow camera setup." alt="" coords="5,328,241,353"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_focused_shadow_camera_setup.html" title="Implements the uniform shadow mapping algorithm in focused mode." alt="" coords="15,240,231,280"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,294,126,328,121,328,121,294"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_default_shadow_camera_setup.html" title="Implements default shadow camera setup." alt="" coords="18,152,229,192"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="126,206,126,240,121,240,121,206"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_shadow_camera_setup.html" title="This class allows you to plug in new ways to define the camera setup when rendering and projecting sh..." alt="" coords="23,79,223,104"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="126,118,126,152,121,152,121,118"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="36,5,211,31"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="126,44,126,79,121,79,121,44"/>
+<area shape="rect" id="Node000001" title="Parallel Split Shadow Map (PSSM) shadow camera setup." alt="" coords="5,342,241,370"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_focused_shadow_camera_setup.html" title="Implements the uniform shadow mapping algorithm in focused mode." alt="" coords="15,249,231,294"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,308,125,343,121,340,121,312"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_default_shadow_camera_setup.html" title="Implements default shadow camera setup." alt="" coords="18,157,228,201"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="124,215,126,250,120,248,122,219"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_shadow_camera_setup.html" title="This class allows you to plug in new ways to define the camera setup when rendering and projecting sh..." alt="" coords="23,81,223,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="124,122,126,157,120,155,122,127"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="36,5,210,33"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="124,46,126,81,120,80,122,51"/>
 </map>

@@ -1,3 +1,13 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_exception_factory.html" title="Class implementing dispatch methods in order to construct by&#45;value exceptions of a derived type based..." alt="" coords="5,5,177,31"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_g_l_e_s2_support.html" title=" " alt="" coords="5,84,157,112"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_e_g_l_support.html" title=" " alt="" coords="205,84,340,112"/>
+<area shape="poly" id="edge828_Node000000_Node000001" title=" " alt="" coords="172,95,207,97,202,99,173,100"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_android_e_g_l_support.html" title=" " alt="" coords="400,5,585,33"/>
+<area shape="poly" id="edge829_Node000001_Node000002" title=" " alt="" coords="314,74,387,43,431,33,426,34,389,48,316,79"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_emscripten_e_g_l_support.html" title=" " alt="" coords="388,57,596,85"/>
+<area shape="poly" id="edge830_Node000001_Node000003" title=" " alt="" coords="355,85,390,83,385,84,356,90"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_win32_e_g_l_support.html" title=" " alt="" coords="404,109,580,137"/>
+<area shape="poly" id="edge831_Node000001_Node000004" title=" " alt="" coords="355,105,406,113,401,113,355,110"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_x11_e_g_l_support.html" title=" " alt="" coords="412,161,572,189"/>
+<area shape="poly" id="edge832_Node000001_Node000005" title=" " alt="" coords="317,116,389,146,431,161,426,161,387,151,316,121"/>
 </map>

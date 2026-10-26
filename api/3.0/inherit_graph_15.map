@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,5,108,31"/>
-<area shape="rect" id="Node000001" href="$class_ogre_1_1_e_x_r_codec.html" title="Codec specialized in loading OpenEXR high dynamic range images." alt="" coords="156,5,283,31"/>
-<area shape="poly" id="edge13_Node000000_Node000001" title=" " alt="" coords="122,15,156,15,156,21,122,21"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,5,108,33"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_e_x_r_codec.html" title="Codec specialized in loading OpenEXR high dynamic range images." alt="" coords="156,5,282,33"/>
+<area shape="poly" id="edge15_Node000000_Node000001" title=" " alt="" coords="123,17,158,19,153,19,123,22"/>
 </map>

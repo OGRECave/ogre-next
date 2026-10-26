@@ -159,7 +159,7 @@ var group___memory =
       [ "performCleanup", "class_ogre_1_1_object_memory_manager.html#a6a9f7f049d953a3fb4fe4ae5bc2ce225", null ],
       [ "shrinkToFit", "class_ogre_1_1_object_memory_manager.html#a653f6a2a1b0deba78eb242e9d09538ef", null ]
     ] ],
-    [ "Ogre::STLAllocator< T, AllocPolicy >", "class_ogre_1_1_s_t_l_allocator.html", [
+    [ "Ogre::STLAllocator&lt; T, AllocPolicy &gt;", "class_ogre_1_1_s_t_l_allocator.html", [
       [ "rebind", "struct_ogre_1_1_s_t_l_allocator_1_1rebind.html", [
         [ "other", "struct_ogre_1_1_s_t_l_allocator_1_1rebind.html#a38ae5b67425ece5706373301c23915f0", null ]
       ] ],
@@ -171,11 +171,11 @@ var group___memory =
       [ "reference", "class_ogre_1_1_s_t_l_allocator.html#a5d26e2252c837f0620a51c075aeb6d56", null ],
       [ "size_type", "class_ogre_1_1_s_t_l_allocator.html#aabd94312eb1a0e3f84339e5d810c273f", null ],
       [ "value_type", "class_ogre_1_1_s_t_l_allocator.html#af5221070699c31f29ff62f889ffd9b32", null ],
-      [ "STLAllocator", "class_ogre_1_1_s_t_l_allocator.html#a9c25559c7ed0e526a0195d4d44efce10", null ],
+      [ "STLAllocator", "class_ogre_1_1_s_t_l_allocator.html#ac0730c8b25eb8e19205b0762ace80074", null ],
       [ "~STLAllocator", "class_ogre_1_1_s_t_l_allocator.html#aa471292f11b97fad72f31c25048b7c33", null ],
-      [ "STLAllocator", "class_ogre_1_1_s_t_l_allocator.html#af85d3e2726cef7ec1f1d24f2ed3b0675", null ],
-      [ "STLAllocator", "class_ogre_1_1_s_t_l_allocator.html#a3d97ea3f530a55614990908f19ccd533", null ],
-      [ "STLAllocator", "class_ogre_1_1_s_t_l_allocator.html#ac80a6c2569f5812937287072c04d23ea", null ],
+      [ "STLAllocator", "class_ogre_1_1_s_t_l_allocator.html#a1af070fcb56a17f911012d8471db3118", null ],
+      [ "STLAllocator", "class_ogre_1_1_s_t_l_allocator.html#ace569454720f723c0d99bdd707caf7e2", null ],
+      [ "STLAllocator", "class_ogre_1_1_s_t_l_allocator.html#a2eab1861d57213e458b539e63c180806", null ],
       [ "address", "class_ogre_1_1_s_t_l_allocator.html#abbf348ef209c5e0e1f00ca1a8645c969", null ],
       [ "address", "class_ogre_1_1_s_t_l_allocator.html#a6612f5f0613e94729e714bda4b8bec93", null ],
       [ "allocate", "class_ogre_1_1_s_t_l_allocator.html#a219db3b3227be55452bf297cdb7bea89", null ],
@@ -184,10 +184,10 @@ var group___memory =
       [ "destroy", "class_ogre_1_1_s_t_l_allocator.html#ad4101ccdcdc6c5336a2ebd5169c55ff9", null ],
       [ "max_size", "class_ogre_1_1_s_t_l_allocator.html#a9c1e83043b7125ab226ddc78150520c8", null ]
     ] ],
-    [ "Ogre::STLAllocatorBase< T >", "struct_ogre_1_1_s_t_l_allocator_base.html", [
+    [ "Ogre::STLAllocatorBase&lt; T &gt;", "struct_ogre_1_1_s_t_l_allocator_base.html", [
       [ "value_type", "struct_ogre_1_1_s_t_l_allocator_base.html#a3fc45e6ad404fa54ad9246682e7ccd88", null ]
     ] ],
-    [ "Ogre::STLAllocatorBase< const T >", "struct_ogre_1_1_s_t_l_allocator_base_3_01const_01_t_01_4.html", [
+    [ "Ogre::STLAllocatorBase&lt; const T &gt;", "struct_ogre_1_1_s_t_l_allocator_base_3_01const_01_t_01_4.html", [
       [ "value_type", "struct_ogre_1_1_s_t_l_allocator_base_3_01const_01_t_01_4.html#ad0004d963c1616f06b527bc144bd883f", null ]
     ] ],
     [ "Ogre::CleanupRoutines", "group___memory.html#ga4670b4da69fc17f183690626fd3bf47f", null ],

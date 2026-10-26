@@ -1,5 +1,5 @@
 <map id="Ogre::CbTextures" name="Ogre::CbTextures">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,139,104"/>
-<area shape="rect" id="Node000002" href="$struct_ogre_1_1_cb_base.html" title=" " alt="" coords="17,5,127,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,44,75,79,69,79,69,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,81,138,109"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_cb_base.html" title=" " alt="" coords="17,5,126,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,47,74,81,69,80,70,51"/>
 </map>

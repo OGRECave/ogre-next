@@ -1,5 +1,5 @@
 <map id="Ogre::ParticleSystem::CmdEmittedEmitterQuota" name="Ogre::ParticleSystem::CmdEmittedEmitterQuota">
-<area shape="rect" id="Node000001" title="Command object for emittedEmitterQuota (see ParamCommand)." alt="" coords="5,79,204,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="20,5,189,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,44,107,79,102,79,102,44"/>
+<area shape="rect" id="Node000001" title="Command object for emittedEmitterQuota (see ParamCommand)." alt="" coords="5,81,203,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="20,5,188,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,47,106,81,102,79,102,51"/>
 </map>

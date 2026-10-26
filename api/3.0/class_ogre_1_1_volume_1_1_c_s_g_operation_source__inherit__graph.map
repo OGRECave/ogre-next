@@ -1,11 +1,11 @@
 <map id="Ogre::Volume::CSGOperationSource" name="Ogre::Volume::CSGOperationSource">
-<area shape="rect" id="Node000001" title="Abstract operation volume source holding two sources as operants." alt="" coords="216,69,425,109"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_volume_1_1_c_s_g_difference_source.html" title="Builds the difference between two sources." alt="" coords="481,5,693,45"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="417,63,502,43,504,48,418,69"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_volume_1_1_c_s_g_intersection_source.html" title="Builds the intersection between two sources." alt="" coords="475,69,698,109"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="439,87,475,87,475,92,439,92"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_volume_1_1_c_s_g_union_source.html" title="Builds the union between two sources." alt="" coords="473,134,700,159"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="428,110,528,131,526,137,427,115"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="5,77,168,102"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,87,216,87,216,92,182,92"/>
+<area shape="rect" id="Node000001" title="Abstract operation volume source holding two sources as operants." alt="" coords="215,75,423,119"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_volume_1_1_c_s_g_difference_source.html" title="Builds the difference between two sources." alt="" coords="478,5,690,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="421,68,493,51,499,50,423,73"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_volume_1_1_c_s_g_intersection_source.html" title="Builds the intersection between two sources." alt="" coords="474,75,695,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="439,94,476,97,470,97,439,100"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_volume_1_1_c_s_g_union_source.html" title="Builds the union between two sources." alt="" coords="471,143,697,171"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="435,121,472,129,522,143,516,142,470,134,435,126"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="5,83,167,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,94,217,96,212,98,183,100"/>
 </map>

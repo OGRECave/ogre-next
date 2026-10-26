@@ -1,5 +1,5 @@
 <map id="Ogre::PageManager" name="Ogre::PageManager">
-<area shape="rect" id="Node000001" title="The PageManager is the entry point through which you load all PagedWorld instances,..." alt="" coords="5,79,155,104"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="37,5,123,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,44,83,79,77,79,77,44"/>
+<area shape="rect" id="Node000001" title="The PageManager is the entry point through which you load all PagedWorld instances,..." alt="" coords="5,81,154,109"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="37,5,122,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="81,47,82,81,77,80,78,51"/>
 </map>

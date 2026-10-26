@@ -1,7 +1,7 @@
 <map id="Ogre::CbDrawCallStrip" name="Ogre::CbDrawCallStrip">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,152,172,177"/>
-<area shape="rect" id="Node000002" href="$struct_ogre_1_1_cb_draw_call.html" title=" " alt="" coords="20,79,157,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,118,91,152,86,152,86,118"/>
-<area shape="rect" id="Node000003" href="$struct_ogre_1_1_cb_base.html" title=" " alt="" coords="33,5,144,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="91,44,91,79,86,79,86,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,157,172,184"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_cb_draw_call.html" title=" " alt="" coords="20,81,157,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,123,91,157,86,155,87,126"/>
+<area shape="rect" id="Node000003" href="$struct_ogre_1_1_cb_base.html" title=" " alt="" coords="34,5,143,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="90,46,91,81,86,80,87,51"/>
 </map>

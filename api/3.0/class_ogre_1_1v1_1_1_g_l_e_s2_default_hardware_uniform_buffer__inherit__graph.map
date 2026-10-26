@@ -1,5 +1,5 @@
 <map id="Ogre::v1::GLES2DefaultHardwareUniformBuffer" name="Ogre::v1::GLES2DefaultHardwareUniformBuffer">
-<area shape="rect" id="Node000001" title="Specialisation of HardwareUniformBuffer for emulation." alt="" coords="5,79,243,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="35,5,213,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,44,127,79,121,79,121,44"/>
+<area shape="rect" id="Node000001" title="Specialisation of HardwareUniformBuffer for emulation." alt="" coords="5,81,242,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="35,5,212,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,47,126,81,121,79,122,51"/>
 </map>

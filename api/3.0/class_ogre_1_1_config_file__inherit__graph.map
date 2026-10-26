@@ -1,5 +1,5 @@
 <map id="Ogre::ConfigFile" name="Ogre::ConfigFile">
-<area shape="rect" id="Node000001" title="Class for quickly loading settings from a text file." alt="" coords="30,79,155,104"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,180,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,44,95,79,90,79,90,44"/>
+<area shape="rect" id="Node000001" title="Class for quickly loading settings from a text file." alt="" coords="30,81,155,109"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,180,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,47,95,82,90,80,91,51"/>
 </map>

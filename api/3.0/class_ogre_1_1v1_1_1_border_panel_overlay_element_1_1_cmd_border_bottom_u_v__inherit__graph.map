@@ -1,5 +1,5 @@
 <map id="Ogre::v1::BorderPanelOverlayElement::CmdBorderBottomUV" name="Ogre::v1::BorderPanelOverlayElement::CmdBorderBottomUV">
-<area shape="rect" id="Node000001" title="Command object for specifying texture coordinates for the border (see ParamCommand)." alt="" coords="5,79,229,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="33,5,202,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,44,120,79,115,79,115,44"/>
+<area shape="rect" id="Node000001" title="Command object for specifying texture coordinates for the border (see ParamCommand)." alt="" coords="5,81,229,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="33,5,201,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,47,119,81,115,79,115,51"/>
 </map>

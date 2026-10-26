@@ -1,9 +1,9 @@
 <map id="Ogre::D3D11RenderSystem" name="Ogre::D3D11RenderSystem">
-<area shape="rect" id="Node000001" title="Implementation of DirectX11 as a rendering system." alt="" coords="97,167,297,192"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API." alt="" coords="15,86,171,111"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,117,183,164,180,169,117,122"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,180,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,44,95,86,90,86,90,44"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_d3_d11_device_resource_manager.html" title="Singleton that is used to propagate device state changed notifications." alt="" coords="195,79,406,119"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="266,129,214,168,211,164,263,125"/>
+<area shape="rect" id="Node000001" title="Implementation of DirectX11 as a rendering system." alt="" coords="96,174,295,201"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API." alt="" coords="15,90,170,117"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,125,181,173,176,174,120,130"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,180,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,46,95,90,90,89,91,51"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_d3_d11_device_resource_manager.html" title="Singleton that is used to propagate device state changed notifications." alt="" coords="194,81,404,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="263,134,213,175,211,171,258,136"/>
 </map>
