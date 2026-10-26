@@ -150,7 +150,16 @@ namespace Ogre
             ++itor;
         }
         if( !optVideoMode.possibleValues.empty() )
+        {
             optVideoMode.currentValue = optVideoMode.possibleValues.front();
+        }
+        else
+        {
+            // No video modes (no X display, or no monitor connected). Fullscreen is not possible
+            // and refreshConfig() would throw "Malformed resolution string" on the empty Video Mode,
+            // so default to windowed mode to let the RenderSystem load (e.g. for headless rendering).
+            optFullScreen.currentValue = "No";
+        }
 
         optDisplayFrequency.name = "Display Frequency";
         optDisplayFrequency.immutable = false;
