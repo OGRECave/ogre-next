@@ -1,9 +1,9 @@
 <map id="Ogre::v1::CbDrawCall" name="Ogre::v1::CbDrawCall">
-<area shape="rect" id="Node000001" title=" " alt="" coords="143,79,304,104"/>
-<area shape="rect" id="Node000003" href="$struct_ogre_1_1v1_1_1_cb_draw_call_indexed.html" title=" " alt="" coords="5,152,217,177"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,114,131,154,128,150,192,109"/>
-<area shape="rect" id="Node000004" href="$struct_ogre_1_1v1_1_1_cb_draw_call_strip.html" title=" " alt="" coords="241,152,432,177"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="255,109,320,150,317,154,252,114"/>
-<area shape="rect" id="Node000002" href="$struct_ogre_1_1_cb_base.html" title=" " alt="" coords="168,5,279,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="226,44,226,79,221,79,221,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="143,81,303,109"/>
+<area shape="rect" id="Node000003" href="$struct_ogre_1_1v1_1_1_cb_draw_call_indexed.html" title=" " alt="" coords="5,157,217,184"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="193,117,132,159,130,154,188,118"/>
+<area shape="rect" id="Node000004" href="$struct_ogre_1_1v1_1_1_cb_draw_call_strip.html" title=" " alt="" coords="241,157,432,184"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="257,115,319,156,314,156,255,120"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_cb_base.html" title=" " alt="" coords="168,5,278,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="225,47,225,82,221,79,221,51"/>
 </map>

@@ -1,5 +1,5 @@
 <map id="Ogre::SkeletonAnimationDef" name="Ogre::SkeletonAnimationDef">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,212,104"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="21,5,196,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,44,111,79,106,79,106,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,81,212,109"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="21,5,196,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,47,111,82,106,79,107,51"/>
 </map>

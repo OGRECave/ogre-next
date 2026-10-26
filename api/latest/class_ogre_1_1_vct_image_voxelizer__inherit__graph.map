@@ -1,7 +1,7 @@
 <map id="Ogre::VctImageVoxelizer" name="Ogre::VctImageVoxelizer">
-<area shape="rect" id="Node000001" title="The image voxelizer aims to be faster than VctImageVoxelizer for the whole scene by following a diffe..." alt="" coords="23,152,205,177"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_vct_voxelizer_source_base.html" title="This class contains shared functionality between voxelizer; and is used by VctLighting to source its ..." alt="" coords="5,79,223,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,118,117,152,111,152,111,118"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="57,5,171,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="117,44,117,79,111,79,111,44"/>
+<area shape="rect" id="Node000001" title="The image voxelizer aims to be faster than VctImageVoxelizer for the whole scene by following a diffe..." alt="" coords="23,157,204,184"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_vct_voxelizer_source_base.html" title="This class contains shared functionality between voxelizer; and is used by VctLighting to source its ..." alt="" coords="5,81,222,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,123,116,157,111,155,112,126"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="56,5,171,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="115,46,116,81,111,80,112,51"/>
 </map>

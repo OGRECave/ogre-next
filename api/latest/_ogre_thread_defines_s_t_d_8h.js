@@ -1,6 +1,6 @@
 var _ogre_thread_defines_s_t_d_8h =
 [
-    [ "Ogre::ThreadLocalPtr< T >", "class_ogre_1_1_thread_local_ptr.html", "class_ogre_1_1_thread_local_ptr" ],
+    [ "Ogre::ThreadLocalPtr&lt; T &gt;", "class_ogre_1_1_thread_local_ptr.html", "class_ogre_1_1_thread_local_ptr" ],
     [ "OGRE_AUTO_MUTEX", "_ogre_thread_defines_s_t_d_8h.html#a18a523fad1f9e10324e1742865f562b7", null ],
     [ "OGRE_AUTO_SHARED_MUTEX", "_ogre_thread_defines_s_t_d_8h.html#ab0e8c6d123555d7447c38185a1b9105e", null ],
     [ "OGRE_COPY_AUTO_SHARED_MUTEX", "_ogre_thread_defines_s_t_d_8h.html#acf02af48b9d015cd2f0c10e22466c73a", null ],
@@ -38,5 +38,6 @@ var _ogre_thread_defines_s_t_d_8h =
     [ "OGRE_THREAD_WORKER_INHERIT", "_ogre_thread_defines_s_t_d_8h.html#aa930d7a43e02d7c703548852a55036e1", null ],
     [ "OGRE_THREAD_YIELD", "_ogre_thread_defines_s_t_d_8h.html#a30df0c1739013ab3cd4a816e61244146", null ],
     [ "OGRE_TOKEN_PASTE", "_ogre_thread_defines_s_t_d_8h.html#aadfaee1c10a53055c49ad591cbbb9e38", null ],
-    [ "OGRE_TOKEN_PASTE_EXTRA", "_ogre_thread_defines_s_t_d_8h.html#a91ea768464f54b7215ce6ddce806d168", null ]
+    [ "OGRE_TOKEN_PASTE_EXTRA", "_ogre_thread_defines_s_t_d_8h.html#a91ea768464f54b7215ce6ddce806d168", null ],
+    [ "Ogre::m_VarCounter", "namespace_ogre.html#ae354cb12a1e7bb67ad68e8bdd2df4b89", null ]
 ];

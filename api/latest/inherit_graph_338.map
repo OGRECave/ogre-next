@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_imgui_manager.html" title=" " alt="" coords="5,5,160,31"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_property_base.html" title="Base interface for an instance of a property." alt="" coords="5,5,153,33"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_property.html" title="Property instance with passthrough calls to a given object." alt="" coords="201,5,354,33"/>
+<area shape="poly" id="edge1153_Node000000_Node000001" title=" " alt="" coords="168,17,203,19,198,19,168,22"/>
 </map>

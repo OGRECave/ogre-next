@@ -1,3 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$struct_ogre_1_1_lod_output_buffer.html" title="Data representing the output of the Mesh reduction. Used by LodOutputProviderBuffer." alt="" coords="5,5,172,31"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,228,50"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_d3_d11_stereo_driver_bridge.html" title="Bridge interface from the render system to the stereo driver." alt="" coords="276,44,504,72"/>
+<area shape="poly" id="edge1168_Node000000_Node000001" title=" " alt="" coords="243,39,278,45,273,46,243,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="49,74,184,102"/>
+<area shape="poly" id="edge1169_Node000002_Node000001" title=" " alt="" coords="200,76,278,70,273,71,200,81"/>
 </map>

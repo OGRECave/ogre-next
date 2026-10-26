@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_degree.html" title="Wrapper class which indicates a given angle value is in Degrees." alt="" coords="5,5,113,31"/>
+<area shape="rect" id="Node000000" href="$struct_ogre_1_1_frame_buffer_desc_key.html" title=" " alt="" coords="5,5,202,33"/>
+<area shape="rect" id="Node000001" href="$struct_ogre_1_1_vulkan_frame_buffer_desc_key.html" title=" " alt="" coords="250,5,489,33"/>
+<area shape="poly" id="edge877_Node000000_Node000001" title=" " alt="" coords="217,17,252,19,247,19,217,22"/>
 </map>

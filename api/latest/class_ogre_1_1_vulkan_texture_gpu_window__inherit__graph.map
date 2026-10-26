@@ -1,15 +1,15 @@
 <map id="Ogre::VulkanTextureGpuWindow" name="Ogre::VulkanTextureGpuWindow">
-<area shape="rect" id="Node000001" title=" " alt="" coords="183,313,413,339"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_vulkan_texture_gpu_render_target.html" title=" " alt="" coords="186,225,410,265"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="301,279,301,313,295,313,295,279"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_vulkan_texture_gpu.html" title=" " alt="" coords="209,152,387,177"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="301,191,301,225,295,225,295,191"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_texture_gpu.html" title=" " alt="" coords="133,79,268,104"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="229,110,284,150,281,154,226,114"/>
-<area shape="rect" id="Node000005" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,5,201,31"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="132,37,186,76,183,81,129,41"/>
-<area shape="rect" id="Node000006" href="$class_ogre_1_1_gpu_resource.html" title=" " alt="" coords="226,5,373,31"/>
-<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="274,41,218,81,215,76,271,36"/>
-<area shape="rect" id="Node000008" href="$class_ogre_1_1_vulkan_device_resource.html" title="Represents a Vulkan device depended rendering resource." alt="" coords="292,79,501,104"/>
-<area shape="poly" id="edge6_Node000003_Node000008" title=" " alt="" coords="372,114,316,154,313,150,368,110"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="183,325,412,353"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_vulkan_texture_gpu_render_target.html" title=" " alt="" coords="186,232,409,277"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="300,291,300,326,296,323,296,295"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_vulkan_texture_gpu.html" title=" " alt="" coords="209,157,386,184"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="299,198,300,233,295,230,296,202"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_texture_gpu.html" title=" " alt="" coords="133,81,268,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="230,115,283,156,278,157,229,121"/>
+<area shape="rect" id="Node000005" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,5,201,33"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="132,40,186,80,181,81,132,45"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_gpu_resource.html" title=" " alt="" coords="224,5,371,33"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="267,44,219,83,216,79,270,40"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_vulkan_device_resource.html" title="Represents a Vulkan device depended rendering resource." alt="" coords="292,81,500,109"/>
+<area shape="poly" id="edge6_Node000003_Node000008" title=" " alt="" coords="369,117,317,158,314,154,364,120"/>
 </map>

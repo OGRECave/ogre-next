@@ -66,12 +66,12 @@ var _ogre_platform_8h =
     [ "virtual_l0", "_ogre_platform_8h.html#ab365672a946fca969834e0be99a5649a", null ],
     [ "virtual_l1", "_ogre_platform_8h.html#ad8a102b20f8a115e9787f68fc1045cdf", null ],
     [ "virtual_l2", "_ogre_platform_8h.html#a2c52accfdfe1971a9c62bac16d2bbdc8", null ],
-    [ "int16", "_ogre_platform_8h.html#a5c8843f6e8086a9239fed14de8b9d859", null ],
-    [ "int32", "_ogre_platform_8h.html#a1c37a43c04753c9ae0c17108c9e6c9d2", null ],
-    [ "int64", "_ogre_platform_8h.html#a0d87d229c909a3a971c1b2cea5dc1f8f", null ],
-    [ "int8", "_ogre_platform_8h.html#acad7c05003308f9b9be289faab5879f9", null ],
-    [ "uint16", "_ogre_platform_8h.html#aa8263b218e7d187ad5ef03a73a6ad7fd", null ],
-    [ "uint32", "_ogre_platform_8h.html#adf2a0cf2e77143b5ee1d38a75e289545", null ],
-    [ "uint64", "_ogre_platform_8h.html#af7c8391e4119084465186113a849f065", null ],
-    [ "uint8", "_ogre_platform_8h.html#a119732ea9d1e88bbddc47b4ac0fa21cb", null ]
+    [ "Ogre::int16", "namespace_ogre.html#a5c8843f6e8086a9239fed14de8b9d859", null ],
+    [ "Ogre::int32", "namespace_ogre.html#a1c37a43c04753c9ae0c17108c9e6c9d2", null ],
+    [ "Ogre::int64", "namespace_ogre.html#a0d87d229c909a3a971c1b2cea5dc1f8f", null ],
+    [ "Ogre::int8", "namespace_ogre.html#acad7c05003308f9b9be289faab5879f9", null ],
+    [ "Ogre::uint16", "namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd", null ],
+    [ "Ogre::uint32", "namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545", null ],
+    [ "Ogre::uint64", "namespace_ogre.html#af7c8391e4119084465186113a849f065", null ],
+    [ "Ogre::uint8", "namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb", null ]
 ];

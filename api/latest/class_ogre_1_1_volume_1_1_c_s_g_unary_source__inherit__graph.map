@@ -1,11 +1,11 @@
 <map id="Ogre::Volume::CSGUnarySource" name="Ogre::Volume::CSGUnarySource">
-<area shape="rect" id="Node000001" title="Source which does a unary operation to another one." alt="" coords="216,55,444,80"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_volume_1_1_c_s_g_negate_source.html" title="Negates the given volume." alt="" coords="492,5,728,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="416,50,537,28,537,33,417,55"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_volume_1_1_c_s_g_noise_source.html" title=" " alt="" coords="497,55,723,80"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="458,65,496,65,496,70,458,70"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_volume_1_1_c_s_g_scale_source.html" title="Scales the given volume source." alt="" coords="498,104,722,129"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="417,80,537,101,537,107,416,85"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="5,55,168,80"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,65,216,65,216,70,182,70"/>
+<area shape="rect" id="Node000001" title="Source which does a unary operation to another one." alt="" coords="215,57,442,85"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_volume_1_1_c_s_g_negate_source.html" title="Negates the given volume." alt="" coords="490,5,725,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="421,51,532,33,527,34,422,57"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_volume_1_1_c_s_g_noise_source.html" title=" " alt="" coords="495,57,720,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="457,69,497,71,492,71,458,74"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_volume_1_1_c_s_g_scale_source.html" title="Scales the given volume source." alt="" coords="496,109,719,137"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="422,86,532,109,527,109,421,91"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="5,57,167,85"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,69,217,71,212,72,183,74"/>
 </map>

@@ -1,7 +1,7 @@
 <map id="Ogre::ColourInterpolatorAffector2" name="Ogre::ColourInterpolatorAffector2">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,152,184,192"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_particle_affector2.html" title="Affectors are per ParticleSystemDef." alt="" coords="11,79,179,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,118,97,152,92,152,92,118"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="16,5,173,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="97,44,97,79,92,79,92,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,157,184,201"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_particle_affector2.html" title="Affectors are per ParticleSystemDef." alt="" coords="11,81,178,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,123,97,157,92,155,93,127"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="16,5,173,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="96,46,97,81,92,80,93,51"/>
 </map>

@@ -1,7 +1,7 @@
 <map id="Ogre::SceneFormatBase" name="Ogre::SceneFormatBase">
-<area shape="rect" id="Node000001" title=" " alt="" coords="130,5,309,31"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_scene_format_exporter.html" title=" " alt="" coords="5,79,207,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,40,126,81,123,76,188,36"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_scene_format_importer.html" title=" " alt="" coords="231,79,434,104"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="251,36,316,76,313,81,248,40"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="129,5,306,33"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_scene_format_exporter.html" title=" " alt="" coords="5,81,206,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,41,127,83,124,78,182,42"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_scene_format_importer.html" title=" " alt="" coords="230,81,432,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="251,39,313,81,308,80,250,44"/>
 </map>

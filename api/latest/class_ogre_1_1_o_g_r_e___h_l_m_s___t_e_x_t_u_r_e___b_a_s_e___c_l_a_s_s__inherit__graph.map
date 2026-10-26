@@ -1,11 +1,11 @@
 <map id="Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS" name="Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS">
-<area shape="rect" id="Node000001" title="This is not a regular header, therefore it has no include guards." alt="" coords="191,152,400,192"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_hlms_datablock.html" title="An hlms datablock contains individual information about a specific material." alt="" coords="12,79,173,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,106,248,149,246,154,134,111"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,180,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,44,95,79,90,79,90,44"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_const_buffer_pool_user.html" title=" " alt="" coords="198,79,393,104"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="298,118,298,152,293,152,293,118"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="417,79,603,104"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="467,111,348,154,346,149,465,106"/>
+<area shape="rect" id="Node000001" title="This is not a regular header, therefore it has no include guards." alt="" coords="190,157,398,201"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_hlms_datablock.html" title="An hlms datablock contains individual information about a specific material." alt="" coords="12,81,173,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="139,112,243,155,238,157,138,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,180,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,46,95,81,90,80,91,51"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_const_buffer_pool_user.html" title=" " alt="" coords="197,81,391,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="296,123,296,158,292,155,292,126"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="415,81,602,109"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="463,114,352,159,350,153,457,115"/>
 </map>

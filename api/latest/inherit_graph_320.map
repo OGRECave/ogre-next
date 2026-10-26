@@ -1,3 +1,15 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$struct_ogre_1_1_hlms_datablock_1_1_custom_property.html" title=" " alt="" coords="5,5,167,45"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_particle_emitter_def_data_factory.html" title="Abstract class defining the interface to be implemented by creators of EmitterDefData subclasses." alt="" coords="5,132,185,176"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_box_emitter_factory2.html" title=" " alt="" coords="248,5,436,33"/>
+<area shape="poly" id="edge1140_Node000000_Node000001" title=" " alt="" coords="128,119,175,79,231,43,267,32,263,35,234,48,178,83,132,122"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_cylinder_emitter_factory2.html" title=" " alt="" coords="233,57,450,85"/>
+<area shape="poly" id="edge1141_Node000000_Node000002" title=" " alt="" coords="159,123,232,95,278,84,273,87,234,100,162,128"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_ellipsoid_emitter_factory2.html" title=" " alt="" coords="233,109,451,137"/>
+<area shape="poly" id="edge1142_Node000000_Node000003" title=" " alt="" coords="199,138,235,136,230,138,201,143"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_hollow_ellipsoid_emitter_factory2.html" title=" " alt="" coords="238,161,446,206"/>
+<area shape="poly" id="edge1143_Node000000_Node000004" title=" " alt="" coords="200,164,240,170,235,172,200,169"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_point_emitter_factory2.html" title=" " alt="" coords="244,229,440,257"/>
+<area shape="poly" id="edge1144_Node000000_Node000005" title=" " alt="" coords="153,181,234,215,272,228,267,229,232,220,152,186"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_ring_emitter_factory2.html" title=" " alt="" coords="246,281,438,309"/>
+<area shape="poly" id="edge1145_Node000000_Node000006" title=" " alt="" coords="128,185,176,228,234,266,266,281,261,281,231,271,173,232,127,190"/>
 </map>

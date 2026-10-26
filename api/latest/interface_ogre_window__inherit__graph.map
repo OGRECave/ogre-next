@@ -1,5 +1,5 @@
 <map id="OgreWindow" name="OgreWindow">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,111,104"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="14,5,102,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="61,44,61,79,55,79,55,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,81,110,109"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="14,5,101,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="59,47,60,81,55,80,56,51"/>
 </map>

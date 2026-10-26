@@ -1,11 +1,11 @@
 <map id="Ogre::MeshSerializerImpl" name="Ogre::MeshSerializerImpl">
-<area shape="rect" id="Node000001" title="Internal implementation of Mesh reading / writing for the latest version of the .mesh format." alt="" coords="5,152,192,177"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_mesh_serializer_impl__v2__1___r1.html" title=" " alt="" coords="5,225,192,265"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="101,191,101,225,96,225,96,191"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_serializer.html" title="Generic class for serialising data to / from binary stream&#45;based files." alt="" coords="37,79,160,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,118,101,152,96,152,96,118"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="11,5,186,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,44,101,79,96,79,96,44"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_mesh_serializer_impl__v2__1___r0.html" title=" " alt="" coords="5,313,192,353"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="101,279,101,313,96,313,96,279"/>
+<area shape="rect" id="Node000001" title="Internal implementation of Mesh reading / writing for the latest version of the .mesh format." alt="" coords="5,157,191,184"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_mesh_serializer_impl__v2__1___r1.html" title=" " alt="" coords="5,232,191,277"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="99,198,101,232,95,231,97,203"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_serializer.html" title="Generic class for serialising data to / from binary stream&#45;based files." alt="" coords="37,81,159,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,122,101,157,95,156,97,127"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="11,5,185,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="98,46,101,81,95,80,98,51"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_mesh_serializer_impl__v2__1___r0.html" title=" " alt="" coords="5,325,191,370"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="100,291,101,326,95,324,96,295"/>
 </map>

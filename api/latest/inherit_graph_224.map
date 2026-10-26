@@ -1,3 +1,67 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_fast_array.html" title=" " alt="" coords="5,5,199,31"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_iterator_wrapper.html" title=" " alt="" coords="5,1037,169,1098"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_map_iterator_wrapper.html" title="Prepared IteratorWrapper for key&#45;value container." alt="" coords="217,1045,408,1090"/>
+<area shape="poly" id="edge900_Node000000_Node000001" title=" " alt="" coords="182,1066,218,1066,214,1069,185,1070"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_const_map_iterator.html" title=" " alt="" coords="484,5,657,50"/>
+<area shape="poly" id="edge901_Node000001_Node000002" title=" " alt="" coords="311,1029,316,830,323,690,335,540,353,390,377,253,393,192,411,139,431,95,454,60,484,40,481,45,458,64,436,97,416,141,398,194,383,254,358,391,340,540,328,690,321,830,316,1030"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_const_map_iterator.html" title=" " alt="" coords="484,75,657,119"/>
+<area shape="poly" id="edge902_Node000001_Node000003" title=" " alt="" coords="312,1029,318,842,326,712,339,573,357,434,381,307,396,251,413,202,432,161,454,130,484,110,482,114,458,134,437,164,418,204,401,253,387,309,362,435,344,573,332,713,324,842,317,1030"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_const_map_iterator.html" title=" " alt="" coords="484,144,657,189"/>
+<area shape="poly" id="edge903_Node000001_Node000004" title=" " alt="" coords="312,1029,321,854,343,606,361,479,385,362,416,266,434,228,454,199,485,179,482,183,458,203,439,231,421,268,391,363,367,480,348,607,326,855,317,1030"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_const_map_iterator.html" title=" " alt="" coords="480,213,660,258"/>
+<area shape="poly" id="edge904_Node000001_Node000005" title=" " alt="" coords="313,1029,323,866,347,639,366,523,389,417,418,329,435,295,454,268,481,250,478,255,458,272,440,298,423,331,395,418,371,524,353,640,329,867,318,1030"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_const_map_iterator.html" title=" " alt="" coords="484,283,657,327"/>
+<area shape="poly" id="edge905_Node000001_Node000006" title=" " alt="" coords="313,1029,326,879,352,673,370,568,393,472,421,393,437,362,454,338,485,318,482,322,458,342,441,364,426,395,399,473,376,569,357,674,331,880,319,1030"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_const_map_iterator.html" title=" " alt="" coords="457,352,683,397"/>
+<area shape="poly" id="edge906_Node000001_Node000007" title=" " alt="" coords="314,1029,329,892,356,706,375,612,397,527,424,456,438,428,454,407,471,395,469,399,458,411,443,431,428,458,403,528,380,613,361,707,334,893,320,1030"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_const_map_iterator.html" title=" " alt="" coords="484,421,657,466"/>
+<area shape="poly" id="edge907_Node000001_Node000008" title=" " alt="" coords="315,1029,332,905,361,740,380,657,401,582,426,519,454,476,485,457,482,461,458,480,431,522,407,583,385,659,366,741,337,906,321,1030"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_const_map_iterator.html" title=" " alt="" coords="484,491,657,535"/>
+<area shape="poly" id="edge908_Node000001_Node000009" title=" " alt="" coords="310,1030,313,934,320,872,331,804,349,735,375,667,409,603,454,546,485,527,482,531,458,550,414,605,380,669,354,737,336,805,325,872,318,934,315,1030"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_const_map_iterator.html" title=" " alt="" coords="484,560,657,605"/>
+<area shape="poly" id="edge909_Node000001_Node000010" title=" " alt="" coords="312,1029,319,945,327,891,340,834,358,775,383,717,414,663,454,615,485,597,481,601,458,619,419,666,387,720,363,777,345,835,333,892,324,946,317,1030"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_const_map_iterator.html" title=" " alt="" coords="458,629,682,674"/>
+<area shape="poly" id="edge910_Node000001_Node000011" title=" " alt="" coords="314,1029,325,957,349,864,368,816,391,768,419,724,454,684,473,672,470,677,458,688,424,727,395,771,372,818,354,866,331,958,320,1030"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_const_map_iterator.html" title=" " alt="" coords="462,699,679,743"/>
+<area shape="poly" id="edge911_Node000001_Node000012" title=" " alt="" coords="318,1030,333,970,359,895,377,857,399,819,424,784,454,754,474,742,471,746,458,758,428,788,403,822,382,859,364,897,338,971,323,1031"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="486,768,655,813"/>
+<area shape="poly" id="edge912_Node000001_Node000013" title=" " alt="" coords="323,1030,342,982,370,927,407,871,430,845,454,823,487,806,483,810,458,827,433,849,411,874,374,929,347,985,328,1031"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="496,837,644,882"/>
+<area shape="poly" id="edge913_Node000001_Node000014" title=" " alt="" coords="332,1031,382,960,416,924,455,892,498,873,494,877,457,897,419,928,386,964,336,1033"/>
+<area shape="rect" id="Node000015" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="493,907,647,951"/>
+<area shape="poly" id="edge914_Node000001_Node000015" title=" " alt="" coords="349,1033,398,996,455,961,495,947,491,950,457,966,401,1000,353,1037"/>
+<area shape="rect" id="Node000016" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="491,976,649,1021"/>
+<area shape="poly" id="edge915_Node000001_Node000016" title=" " alt="" coords="411,1039,492,1018,489,1021,415,1043"/>
+<area shape="rect" id="Node000017" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="462,1045,678,1090"/>
+<area shape="poly" id="edge916_Node000001_Node000017" title=" " alt="" coords="422,1065,464,1066,460,1069,425,1070"/>
+<area shape="rect" id="Node000018" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="492,1115,649,1159"/>
+<area shape="poly" id="edge917_Node000001_Node000018" title=" " alt="" coords="412,1092,493,1115,489,1117,414,1097"/>
+<area shape="rect" id="Node000019" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="463,1184,677,1229"/>
+<area shape="poly" id="edge918_Node000001_Node000019" title=" " alt="" coords="350,1098,401,1135,457,1169,486,1182,481,1184,455,1174,398,1139,352,1103"/>
+<area shape="rect" id="Node000020" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="464,1253,676,1298"/>
+<area shape="poly" id="edge919_Node000001_Node000020" title=" " alt="" coords="334,1101,386,1172,419,1208,457,1239,480,1252,475,1254,455,1243,416,1212,382,1175,334,1106"/>
+<area shape="rect" id="Node000021" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="456,1322,684,1384"/>
+<area shape="poly" id="edge920_Node000001_Node000021" title=" " alt="" coords="326,1102,348,1150,376,1205,412,1260,458,1308,475,1321,469,1322,454,1312,408,1263,371,1207,343,1152,326,1107"/>
+<area shape="rect" id="Node000022" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="482,1408,658,1453"/>
+<area shape="poly" id="edge921_Node000001_Node000022" title=" " alt="" coords="320,1103,336,1168,362,1245,380,1286,401,1325,427,1362,458,1394,484,1411,479,1413,454,1398,423,1365,397,1328,375,1288,357,1247,331,1169,319,1108"/>
+<area shape="rect" id="Node000023" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="496,1477,645,1522"/>
+<area shape="poly" id="edge922_Node000001_Node000023" title=" " alt="" coords="317,1103,329,1180,352,1276,370,1327,394,1376,422,1423,458,1463,476,1476,497,1487,492,1488,473,1481,454,1467,418,1426,389,1379,365,1329,347,1278,324,1181,316,1108"/>
+<area shape="rect" id="Node000024" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="496,1547,644,1591"/>
+<area shape="poly" id="edge923_Node000001_Node000024" title=" " alt="" coords="314,1103,323,1193,331,1248,343,1307,361,1368,386,1428,418,1483,458,1532,476,1546,499,1557,494,1559,473,1551,454,1536,413,1486,381,1430,356,1370,338,1308,326,1249,318,1193,314,1108"/>
+<area shape="rect" id="Node000025" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="478,1616,663,1661"/>
+<area shape="poly" id="edge924_Node000001_Node000025" title=" " alt="" coords="319,1103,340,1219,370,1368,388,1442,410,1509,433,1564,458,1602,480,1619,475,1620,454,1606,428,1567,405,1511,383,1443,364,1369,334,1220,319,1108"/>
+<area shape="rect" id="Node000026" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="483,1685,657,1730"/>
+<area shape="poly" id="edge925_Node000001_Node000026" title=" " alt="" coords="318,1103,336,1232,365,1402,384,1487,406,1565,430,1628,458,1671,485,1691,480,1692,454,1675,426,1631,401,1567,379,1489,360,1403,331,1233,317,1108"/>
+<area shape="rect" id="Node000027" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="496,1755,644,1799"/>
+<area shape="poly" id="edge926_Node000001_Node000027" title=" " alt="" coords="317,1103,333,1246,360,1436,379,1532,402,1620,428,1692,442,1719,458,1740,476,1755,499,1767,493,1767,473,1759,454,1744,438,1722,423,1694,397,1621,374,1533,355,1437,328,1246,316,1108"/>
+<area shape="rect" id="Node000028" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="496,1824,644,1869"/>
+<area shape="poly" id="edge927_Node000001_Node000028" title=" " alt="" coords="316,1103,331,1258,356,1469,375,1577,398,1675,425,1755,441,1786,458,1810,476,1824,499,1836,493,1837,473,1829,454,1813,436,1789,420,1757,392,1676,369,1578,351,1470,325,1259,315,1108"/>
+<area shape="rect" id="Node000029" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="496,1893,644,1938"/>
+<area shape="poly" id="edge928_Node000001_Node000029" title=" " alt="" coords="316,1103,328,1270,352,1503,370,1621,394,1730,423,1819,440,1853,458,1879,476,1894,499,1906,494,1906,473,1898,454,1883,435,1856,418,1821,388,1731,365,1622,346,1503,323,1271,315,1108"/>
+<area shape="rect" id="Node000030" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="488,1963,652,2007"/>
+<area shape="poly" id="edge929_Node000001_Node000030" title=" " alt="" coords="315,1103,325,1283,334,1405,347,1536,366,1666,390,1784,420,1882,438,1920,458,1949,472,1961,490,1972,485,1972,469,1965,454,1952,434,1923,415,1884,384,1786,360,1667,342,1537,329,1406,320,1284,314,1108"/>
+<area shape="rect" id="Node000031" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="496,2032,644,2077"/>
+<area shape="poly" id="edge930_Node000001_Node000031" title=" " alt="" coords="315,1103,323,1296,331,1428,343,1570,361,1710,386,1839,401,1896,418,1946,437,1987,458,2018,476,2033,499,2045,494,2045,473,2037,454,2021,432,1989,413,1948,396,1898,381,1841,356,1711,338,1570,326,1428,318,1296,314,1108"/>
+<area shape="rect" id="Node000032" href="$class_ogre_1_1_map_iterator.html" title=" " alt="" coords="496,2101,644,2146"/>
+<area shape="poly" id="edge931_Node000001_Node000032" title=" " alt="" coords="314,1103,321,1308,328,1449,339,1602,357,1754,382,1894,397,1955,415,2009,435,2053,458,2087,476,2102,499,2115,493,2114,473,2107,454,2091,431,2056,410,2011,392,1957,377,1895,352,1755,334,1603,322,1450,315,1308,313,1108"/>
 </map>

@@ -1,37 +1,37 @@
 <map id="Ogre::ScriptLoader" name="Ogre::ScriptLoader">
-<area shape="rect" id="Node000001" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,219,148,244"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="227,120,379,145"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,208,145,180,195,154,229,143,231,148,197,159,148,185,107,213"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_particle_system_manager.html" title="Manages particle systems, particle system scripts (templates) and the available emitter &amp; affector fa..." alt="" coords="196,169,411,195"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="148,213,244,192,245,197,150,218"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler." alt="" coords="214,219,393,244"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="162,229,214,229,214,234,162,234"/>
-<area shape="rect" id="Node000017" href="$class_ogre_1_1_script_compiler_manager.html" title="Manages threaded compilation of scripts." alt="" coords="196,268,411,293"/>
-<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="150,244,245,265,244,271,148,250"/>
-<area shape="rect" id="Node000018" href="$class_ogre_1_1v1_1_1_overlay_manager.html" title="Manages Overlay objects, parsing them from .overlay files and storing a lookup library of them." alt="" coords="207,317,400,343"/>
-<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="107,250,148,278,197,304,231,315,229,320,195,308,145,283,104,255"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_font_manager.html" title="Manages Font resources, parsing .fontdef files and generally organising them." alt="" coords="495,55,642,80"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="403,210,409,205,421,192,428,178,432,149,437,119,444,104,457,89,475,78,494,71,496,76,477,83,460,93,448,107,442,120,437,150,433,180,425,195,412,209,407,214"/>
-<area shape="rect" id="Node000006" href="$class_ogre_1_1_gpu_program_manager.html" title=" " alt="" coords="469,104,668,129"/>
-<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="399,211,409,205,424,190,432,174,441,156,457,140,483,127,485,132,460,144,445,159,437,176,429,193,412,209,402,215"/>
-<area shape="rect" id="Node000012" href="$class_ogre_1_1_high_level_gpu_program_manager.html" title="This ResourceManager manages high&#45;level vertex and fragment programs." alt="" coords="465,154,672,194"/>
-<area shape="poly" id="edge11_Node000004_Node000012" title=" " alt="" coords="376,213,475,191,476,197,377,218"/>
-<area shape="rect" id="Node000013" href="$class_ogre_1_1_material_manager.html" title="Class for managing Material settings for Ogre." alt="" coords="483,219,655,244"/>
-<area shape="poly" id="edge12_Node000004_Node000013" title=" " alt="" coords="406,229,482,229,482,234,406,234"/>
-<area shape="rect" id="Node000014" href="$class_ogre_1_1_mesh_manager.html" title="Handles the management of mesh resources." alt="" coords="492,268,645,293"/>
-<area shape="poly" id="edge13_Node000004_Node000014" title=" " alt="" coords="386,244,500,265,499,271,385,249"/>
-<area shape="rect" id="Node000015" href="$class_ogre_1_1v1_1_1_mesh_manager.html" title="Handles the management of mesh resources." alt="" coords="480,317,657,343"/>
-<area shape="poly" id="edge14_Node000004_Node000015" title=" " alt="" coords="395,246,412,254,428,267,437,280,446,292,460,304,486,315,484,320,457,308,442,296,432,283,424,270,409,259,393,251"/>
-<area shape="rect" id="Node000016" href="$class_ogre_1_1v1_1_1_old_skeleton_manager.html" title="Handles the management of skeleton resources." alt="" coords="459,367,679,392"/>
-<area shape="poly" id="edge15_Node000004_Node000016" title=" " alt="" coords="403,248,412,255,424,267,431,280,437,306,443,331,449,342,460,353,479,364,476,369,457,357,445,345,438,332,432,307,426,282,420,270,409,259,400,253"/>
-<area shape="rect" id="Node000007" href="$class_ogre_1_1_d3_d11_gpu_program_manager.html" title=" " alt="" coords="727,5,969,31"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="661,97,677,89,692,78,700,65,710,52,725,40,753,28,755,33,728,44,714,56,705,68,696,81,680,94,663,102"/>
-<area shape="rect" id="Node000008" href="$class_ogre_1_1_g_l_e_s2_gpu_program_manager.html" title=" " alt="" coords="728,55,968,80"/>
-<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="654,99,775,77,776,83,655,104"/>
-<area shape="rect" id="Node000009" href="$class_ogre_1_1_g_l_s_l_shader_manager.html" title=" " alt="" coords="751,104,945,129"/>
-<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="682,114,751,114,751,119,682,119"/>
-<area shape="rect" id="Node000010" href="$class_ogre_1_1_metal_gpu_program_manager.html" title=" " alt="" coords="730,153,966,179"/>
-<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="655,129,776,151,775,156,654,134"/>
-<area shape="rect" id="Node000011" href="$class_ogre_1_1_vulkan_gpu_program_manager.html" title=" " alt="" coords="727,203,969,228"/>
-<area shape="poly" id="edge10_Node000006_Node000011" title=" " alt="" coords="663,132,680,140,696,152,705,165,714,178,728,189,755,200,753,205,725,194,710,181,700,168,692,156,677,144,661,136"/>
+<area shape="rect" id="Node000001" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,229,147,257"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="226,125,378,153"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,218,146,189,194,163,231,152,227,155,196,168,149,194,109,221"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_particle_system_manager.html" title="Manages particle systems, particle system scripts (templates) and the available emitter &amp; affector fa..." alt="" coords="195,177,409,205"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="153,223,240,204,236,207,155,228"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler." alt="" coords="213,229,390,257"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="161,241,215,242,210,244,163,246"/>
+<area shape="rect" id="Node000017" href="$class_ogre_1_1_script_compiler_manager.html" title="Manages threaded compilation of scripts." alt="" coords="195,281,408,309"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="154,258,241,279,236,282,155,264"/>
+<area shape="rect" id="Node000018" href="$class_ogre_1_1v1_1_1_overlay_manager.html" title="Manages Overlay objects, parsing them from .overlay files and storing a lookup library of them." alt="" coords="206,333,398,361"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="107,264,149,293,196,318,232,332,227,333,194,323,146,297,107,270"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_font_manager.html" title="Manages Font resources, parsing .fontdef files and generally organising them." alt="" coords="494,57,639,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="401,219,407,215,419,201,426,187,430,157,435,126,442,111,455,96,473,84,496,77,491,80,475,89,459,100,447,114,440,128,436,158,431,188,424,204,411,218,404,224"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_gpu_program_manager.html" title=" " alt="" coords="468,109,666,137"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="398,220,407,214,423,198,431,181,439,163,455,146,480,136,475,139,459,151,443,166,435,183,427,201,411,219,400,225"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_high_level_gpu_program_manager.html" title="This ResourceManager manages high&#45;level vertex and fragment programs." alt="" coords="464,161,670,206"/>
+<area shape="poly" id="edge11_Node000004_Node000012" title=" " alt="" coords="380,223,468,205,463,207,382,228"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_material_manager.html" title="Class for managing Material settings for Ogre." alt="" coords="481,229,652,257"/>
+<area shape="poly" id="edge12_Node000004_Node000013" title=" " alt="" coords="406,241,483,243,478,244,406,246"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1_mesh_manager.html" title="Handles the management of mesh resources." alt="" coords="490,281,643,309"/>
+<area shape="poly" id="edge13_Node000004_Node000014" title=" " alt="" coords="391,258,495,280,490,281,391,263"/>
+<area shape="rect" id="Node000015" href="$class_ogre_1_1v1_1_1_mesh_manager.html" title="Handles the management of mesh resources." alt="" coords="478,333,655,361"/>
+<area shape="poly" id="edge14_Node000004_Node000015" title=" " alt="" coords="396,260,410,268,426,280,435,294,444,306,458,318,487,333,482,333,456,323,440,310,431,297,422,284,408,272,395,266"/>
+<area shape="rect" id="Node000016" href="$class_ogre_1_1v1_1_1_old_skeleton_manager.html" title="Handles the management of skeleton resources." alt="" coords="457,385,676,413"/>
+<area shape="poly" id="edge15_Node000004_Node000016" title=" " alt="" coords="402,262,411,268,423,281,430,294,436,321,441,347,448,359,459,370,480,385,474,384,455,375,443,362,436,348,430,322,425,296,418,284,407,272,402,267"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_d3_d11_gpu_program_manager.html" title=" " alt="" coords="724,5,967,33"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="662,101,675,94,689,82,698,70,707,56,723,44,755,32,750,35,726,48,711,60,702,73,693,86,678,99,664,106"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_g_l_e_s2_gpu_program_manager.html" title=" " alt="" coords="726,57,965,85"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="659,103,770,85,765,87,660,108"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_g_l_s_l_shader_manager.html" title=" " alt="" coords="748,109,943,137"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="681,121,750,123,745,124,682,126"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_metal_gpu_program_manager.html" title=" " alt="" coords="728,161,963,189"/>
+<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="659,138,770,160,765,161,660,143"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_vulkan_gpu_program_manager.html" title=" " alt="" coords="725,213,966,241"/>
+<area shape="poly" id="edge10_Node000006_Node000011" title=" " alt="" coords="666,141,678,146,693,159,703,173,711,186,726,198,755,213,750,213,723,203,707,190,698,176,689,163,675,151,666,146"/>
 </map>

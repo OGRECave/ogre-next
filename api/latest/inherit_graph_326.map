@@ -1,9 +1,15 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_hlms_json_listener.html" title=" " alt="" coords="37,5,211,31"/>
-<area shape="rect" id="Node000001" href="$class_ogre_1_1_scene_format_listener.html" title="Override this listener if you want to filter which objects get exported." alt="" coords="291,31,489,56"/>
-<area shape="poly" id="edge895_Node000000_Node000001" title=" " alt="" coords="226,25,291,31,290,37,225,30"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_default_scene_format_listener.html" title="Default implementation that prevents a SceneNode from being exported if the only attached objects." alt="" coords="537,23,732,63"/>
-<area shape="poly" id="edge896_Node000001_Node000002" title=" " alt="" coords="503,41,537,41,537,46,503,46"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_hlms_texture_export_listener.html" title=" " alt="" coords="5,55,243,80"/>
-<area shape="poly" id="edge897_Node000003_Node000001" title=" " alt="" coords="256,53,290,50,291,55,256,58"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_pixel_format_to_shader_type.html" title=" " alt="" coords="5,187,232,215"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_d3_d11_pixel_format_to_shader_type.html" title=" " alt="" coords="312,5,508,50"/>
+<area shape="poly" id="edge1146_Node000000_Node000001" title=" " alt="" coords="140,174,199,116,237,86,278,60,314,47,310,50,281,65,240,90,202,120,144,177"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l3_plus_pixel_format_to_shader_type.html" title=" " alt="" coords="315,75,504,119"/>
+<area shape="poly" id="edge1147_Node000000_Node000002" title=" " alt="" coords="162,178,279,129,319,119,314,121,281,134,164,183"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_g_l_e_s2_pixel_format_to_shader_type.html" title=" " alt="" coords="314,144,506,189"/>
+<area shape="poly" id="edge1148_Node000000_Node000003" title=" " alt="" coords="247,183,316,177,311,179,248,188"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_metal_pixel_format_to_shader_type.html" title=" " alt="" coords="316,213,504,258"/>
+<area shape="poly" id="edge1149_Node000000_Node000004" title=" " alt="" coords="247,214,318,224,313,225,247,219"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_n_u_l_l_pixel_format_to_shader_type.html" title=" " alt="" coords="280,282,540,310"/>
+<area shape="poly" id="edge1150_Node000000_Node000005" title=" " alt="" coords="162,219,218,245,280,268,324,281,319,282,279,273,216,250,162,225"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_vulkan_pixel_format_to_shader_type.html" title=" " alt="" coords="313,333,507,378"/>
+<area shape="poly" id="edge1151_Node000000_Node000006" title=" " alt="" coords="147,223,206,272,243,297,281,319,315,334,309,334,279,323,240,302,203,276,145,228"/>
 </map>

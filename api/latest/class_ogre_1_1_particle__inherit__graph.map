@@ -1,35 +1,35 @@
 <map id="Ogre::Particle" name="Ogre::Particle">
-<area shape="rect" id="Node000001" title="Class representing a single particle instance." alt="" coords="228,203,337,228"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_particle_emitter.html" title="Abstract class defining the interface to be implemented by particle emitters." alt="" coords="385,203,543,228"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="351,213,385,213,385,218,351,218"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,203,180,228"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,213,228,213,228,218,194,218"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_area_emitter.html" title="Particle emitter which emits particles randomly from points inside an area (box, sphere,..." alt="" coords="603,104,741,129"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="503,194,643,127,645,132,505,199"/>
-<area shape="rect" id="Node000010" href="$class_ogre_1_1_emitter_def_data.html" title="EmitterDefData are per ParticleSystemDef." alt="" coords="591,203,753,228"/>
-<area shape="poly" id="edge9_Node000003_Node000010" title=" " alt="" coords="557,213,591,213,591,218,557,218"/>
-<area shape="rect" id="Node000018" href="$class_ogre_1_1_point_emitter.html" title="Particle emitter which emits particles from a single point." alt="" coords="601,252,743,277"/>
-<area shape="poly" id="edge16_Node000003_Node000018" title=" " alt="" coords="532,229,618,249,617,255,531,234"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_box_emitter.html" title="Particle emitter which emits particles randomly from points inside a box." alt="" coords="816,5,951,31"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="702,94,747,66,800,40,831,28,833,33,802,44,750,71,705,99"/>
-<area shape="rect" id="Node000006" href="$class_ogre_1_1_cylinder_emitter.html" title="Particle emitter which emits particles randomly from points inside a cylinder." alt="" coords="802,55,965,80"/>
-<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="740,98,827,77,829,83,741,103"/>
-<area shape="rect" id="Node000007" href="$class_ogre_1_1_ellipsoid_emitter.html" title="Particle emitter which emits particles randomly from points inside an ellipsoid." alt="" coords="801,104,965,129"/>
-<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="755,114,801,114,801,119,755,119"/>
-<area shape="rect" id="Node000009" href="$class_ogre_1_1_ring_emitter.html" title="Particle emitter which emits particles randomly from points inside a ring (e.g." alt="" coords="814,153,953,179"/>
-<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="741,130,829,151,827,156,740,135"/>
-<area shape="rect" id="Node000008" href="$class_ogre_1_1_hollow_ellipsoid_emitter.html" title="Particle emitter which emits particles randomly from points inside a hollow ellipsoid." alt="" coords="1013,104,1223,129"/>
-<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="979,114,1013,114,1013,119,979,119"/>
-<area shape="rect" id="Node000011" href="$class_ogre_1_1_area_emitter2.html" title="Particle emitter which emits particles randomly from points inside an area (box, sphere,..." alt="" coords="810,203,957,228"/>
-<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="767,213,810,213,810,218,767,218"/>
-<area shape="rect" id="Node000017" href="$class_ogre_1_1_point_emitter2.html" title=" " alt="" coords="808,252,959,277"/>
-<area shape="poly" id="edge15_Node000010_Node000017" title=" " alt="" coords="741,229,829,249,827,255,740,234"/>
-<area shape="rect" id="Node000012" href="$class_ogre_1_1_box_emitter2.html" title="Particle emitter which emits particles randomly from points inside a box." alt="" coords="1047,153,1189,179"/>
-<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="957,197,1056,176,1057,181,958,202"/>
-<area shape="rect" id="Node000013" href="$class_ogre_1_1_cylinder_emitter2.html" title="Particle emitter which emits particles randomly from points inside a cylinder." alt="" coords="1033,203,1203,228"/>
-<area shape="poly" id="edge12_Node000011_Node000013" title=" " alt="" coords="971,213,1032,213,1032,218,971,218"/>
-<area shape="rect" id="Node000014" href="$class_ogre_1_1_ellipsoid_emitter2.html" title="Particle emitter which emits particles randomly from points inside an ellipsoid." alt="" coords="1032,252,1204,277"/>
-<area shape="poly" id="edge13_Node000011_Node000014" title=" " alt="" coords="958,228,1057,249,1056,255,957,233"/>
-<area shape="rect" id="Node000016" href="$class_ogre_1_1_ring_emitter2.html" title="Particle emitter which emits particles randomly from points inside a ring (e.g." alt="" coords="1045,301,1191,327"/>
-<area shape="poly" id="edge14_Node000011_Node000016" title=" " alt="" coords="952,231,967,238,982,251,991,264,1000,276,1015,288,1046,300,1044,305,1012,292,996,280,987,267,978,255,964,243,950,236"/>
+<area shape="rect" id="Node000001" title="Class representing a single particle instance." alt="" coords="228,213,336,241"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_particle_emitter.html" title="Abstract class defining the interface to be implemented by particle emitters." alt="" coords="384,213,540,241"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="351,225,387,227,381,228,352,230"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,213,180,241"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,225,230,226,225,228,196,230"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_area_emitter.html" title="Particle emitter which emits particles randomly from points inside an area (box, sphere,..." alt="" coords="600,109,739,137"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="504,203,637,138,642,137,506,208"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_emitter_def_data.html" title="EmitterDefData are per ParticleSystemDef." alt="" coords="588,213,751,241"/>
+<area shape="poly" id="edge9_Node000003_Node000010" title=" " alt="" coords="556,225,591,227,585,227,556,230"/>
+<area shape="rect" id="Node000018" href="$class_ogre_1_1_point_emitter.html" title="Particle emitter which emits particles from a single point." alt="" coords="599,265,740,293"/>
+<area shape="poly" id="edge16_Node000003_Node000018" title=" " alt="" coords="535,243,614,265,608,265,535,248"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_box_emitter.html" title="Particle emitter which emits particles randomly from points inside a box." alt="" coords="814,5,947,33"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="703,98,747,70,798,43,827,34,832,33,800,48,749,75,705,103"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_cylinder_emitter.html" title="Particle emitter which emits particles randomly from points inside a cylinder." alt="" coords="799,57,962,85"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="743,102,824,85,818,86,744,108"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_ellipsoid_emitter.html" title="Particle emitter which emits particles randomly from points inside an ellipsoid." alt="" coords="799,109,962,137"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="754,121,801,123,795,124,755,126"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_ring_emitter.html" title="Particle emitter which emits particles randomly from points inside a ring (e.g." alt="" coords="812,161,949,189"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="743,139,824,161,818,161,743,144"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_hollow_ellipsoid_emitter.html" title="Particle emitter which emits particles randomly from points inside a hollow ellipsoid." alt="" coords="1010,109,1218,137"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="977,121,1012,123,1007,123,978,126"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_area_emitter2.html" title="Particle emitter which emits particles randomly from points inside an area (box, sphere,..." alt="" coords="807,213,954,241"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="766,225,809,227,804,227,767,230"/>
+<area shape="rect" id="Node000017" href="$class_ogre_1_1_point_emitter2.html" title=" " alt="" coords="806,265,955,293"/>
+<area shape="poly" id="edge15_Node000010_Node000017" title=" " alt="" coords="744,243,824,265,818,265,743,248"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_box_emitter2.html" title="Particle emitter which emits particles randomly from points inside a box." alt="" coords="1044,161,1185,189"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="960,207,1046,190,1051,189,961,212"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_cylinder_emitter2.html" title="Particle emitter which emits particles randomly from points inside a cylinder." alt="" coords="1029,213,1199,241"/>
+<area shape="poly" id="edge12_Node000011_Node000013" title=" " alt="" coords="968,225,1031,227,1026,227,968,230"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1_ellipsoid_emitter2.html" title="Particle emitter which emits particles randomly from points inside an ellipsoid." alt="" coords="1028,265,1200,293"/>
+<area shape="poly" id="edge13_Node000011_Node000014" title=" " alt="" coords="961,242,1051,265,1046,265,960,248"/>
+<area shape="rect" id="Node000016" href="$class_ogre_1_1_ring_emitter2.html" title="Particle emitter which emits particles randomly from points inside a ring (e.g." alt="" coords="1042,317,1187,345"/>
+<area shape="poly" id="edge14_Node000011_Node000016" title=" " alt="" coords="952,245,964,252,979,265,988,278,997,290,1011,302,1044,319,1038,318,1009,307,993,294,984,281,975,268,960,256,951,250"/>
 </map>

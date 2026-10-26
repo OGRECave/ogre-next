@@ -1,5 +1,5 @@
 <map id="Ogre::SimplePageContentCollectionFactory" name="Ogre::SimplePageContentCollectionFactory">
-<area shape="rect" id="Node000001" title="Factory class for SimplePageContentCollection." alt="" coords="5,93,259,133"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_page_content_collection_factory.html" title="Define the interface to a factory class that will create subclasses of PageContentCollection." alt="" coords="28,5,236,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="135,59,135,93,129,93,129,59"/>
+<area shape="rect" id="Node000001" title="Factory class for SimplePageContentCollection." alt="" coords="5,98,258,143"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_page_content_collection_factory.html" title="Define the interface to a factory class that will create subclasses of PageContentCollection." alt="" coords="28,5,235,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,64,134,99,129,97,130,68"/>
 </map>

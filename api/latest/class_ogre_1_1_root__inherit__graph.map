@@ -1,7 +1,7 @@
 <map id="Ogre::Root" name="Ogre::Root">
-<area shape="rect" id="Node000001" title="The root class of the Ogre system." alt="" coords="153,79,243,104"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,188,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,36,183,76,180,81,123,41"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="212,5,387,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="273,41,216,81,213,76,270,36"/>
+<area shape="rect" id="Node000001" title="The root class of the Ogre system." alt="" coords="151,81,241,109"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,187,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,40,181,80,176,81,125,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="210,5,384,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="269,42,215,83,213,78,264,43"/>
 </map>

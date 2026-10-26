@@ -11,5 +11,5 @@ var searchData=
   ['bufferbindflags_8',['BufferBindFlags',['../namespace_ogre.html#af7e92c9a326b9cb618defcbc96e2feac',1,'Ogre']]],
   ['bufferlicensetype_9',['BufferLicenseType',['../class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a73af0e384fffafd30ec13438507d31eb',1,'Ogre::v1::HardwareBufferManagerBase']]],
   ['bufferpackedtypes_10',['BufferPackedTypes',['../namespace_ogre.html#ab66e67b60d5f40dacf69ea55b82868ab',1,'Ogre']]],
-  ['buffertype_11',['buffertype',['../class_ogre_1_1v1_1_1_d3_d11_hardware_buffer.html#a91ed4f52178d37386137d1bd86d3aaea',1,'Ogre::v1::D3D11HardwareBuffer::BufferType'],['../namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9',1,'Ogre::BufferType']]]
+  ['buffertype_11',['BufferType',['../class_ogre_1_1v1_1_1_d3_d11_hardware_buffer.html#a91ed4f52178d37386137d1bd86d3aaea',1,'Ogre::v1::D3D11HardwareBuffer::BufferType'],['../namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9',1,'Ogre::BufferType']]]
 ];

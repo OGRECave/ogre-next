@@ -1,5 +1,5 @@
 <map id="Ogre::Volume::CSGCubeSource" name="Ogre::Volume::CSGCubeSource">
-<area shape="rect" id="Node000001" title="A not rotated cube." alt="" coords="5,79,228,104"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="35,5,198,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,44,119,79,114,79,114,44"/>
+<area shape="rect" id="Node000001" title="A not rotated cube." alt="" coords="5,81,227,109"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="35,5,197,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,47,118,82,114,79,114,51"/>
 </map>

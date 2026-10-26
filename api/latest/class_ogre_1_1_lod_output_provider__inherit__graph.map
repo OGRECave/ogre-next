@@ -1,11 +1,11 @@
 <map id="Ogre::LodOutputProvider" name="Ogre::LodOutputProvider">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,55,188,80"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_lod_output_provider_buffer.html" title=" " alt="" coords="275,5,496,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,50,236,39,303,28,304,33,236,45,180,55"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_lod_output_provider_compressed_mesh.html" title=" " alt="" coords="236,55,535,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="202,65,236,65,236,70,202,70"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_lod_output_provider_mesh.html" title=" " alt="" coords="277,104,494,129"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="185,80,236,89,310,101,309,107,236,94,184,85"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_lod_output_provider_compressed_buffer.html" title=" " alt="" coords="583,47,845,87"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="548,65,582,65,582,70,548,70"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,57,187,85"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_lod_output_provider_buffer.html" title=" " alt="" coords="273,5,494,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,51,234,43,304,33,299,34,235,48,191,57"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_lod_output_provider_compressed_mesh.html" title=" " alt="" coords="235,57,532,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="202,69,237,71,232,72,203,74"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_lod_output_provider_mesh.html" title=" " alt="" coords="275,109,492,137"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="190,86,235,94,304,109,299,109,234,99,190,91"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_lod_output_provider_compressed_buffer.html" title=" " alt="" coords="580,49,842,94"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="548,69,582,71,577,71,548,74"/>
 </map>

@@ -1,9 +1,9 @@
 <map id="Ogre::VulkanRootLayout" name="Ogre::VulkanRootLayout">
-<area shape="rect" id="Node000001" title=" " alt="" coords="162,79,341,104"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_root_layout.html" title="The RootLayout class." alt="" coords="5,5,140,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,33,223,76,221,81,113,38"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="164,5,339,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="254,44,254,79,249,79,249,44"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_vulkan_device_resource.html" title="Represents a Vulkan device depended rendering resource." alt="" coords="363,5,572,31"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="420,37,287,81,285,76,419,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="162,81,340,109"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_root_layout.html" title="The RootLayout class." alt="" coords="5,5,140,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,37,222,79,217,82,118,42"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="164,5,338,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="253,47,253,82,249,79,249,51"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_vulkan_device_resource.html" title="Represents a Vulkan device depended rendering resource." alt="" coords="363,5,571,33"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="417,38,291,83,289,78,412,39"/>
 </map>

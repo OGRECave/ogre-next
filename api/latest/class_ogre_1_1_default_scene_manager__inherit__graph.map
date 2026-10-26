@@ -1,9 +1,9 @@
 <map id="Ogre::DefaultSceneManager" name="Ogre::DefaultSceneManager">
-<area shape="rect" id="Node000001" title="Default scene manager." alt="" coords="77,167,283,192"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e." alt="" coords="101,93,259,119"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="183,132,183,167,177,167,177,132"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,184,45"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,53,169,91,165,95,124,57"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="208,13,323,38"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="244,49,194,95,191,91,241,45"/>
+<area shape="rect" id="Node000001" title="Default scene manager." alt="" coords="76,174,280,201"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e." alt="" coords="100,98,256,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="180,140,180,175,176,172,176,143"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,183,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,58,167,97,162,98,126,63"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="206,14,320,42"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="241,51,193,100,190,96,237,54"/>
 </map>

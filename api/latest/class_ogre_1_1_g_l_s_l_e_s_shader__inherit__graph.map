@@ -1,5 +1,5 @@
 <map id="Ogre::GLSLESShader" name="Ogre::GLSLESShader">
-<area shape="rect" id="Node000001" title="Specialisation of HighLevelGpuProgram to encapsulate shader objects obtained from compiled shaders wr..." alt="" coords="14,93,169,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,177,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,59,94,93,89,93,89,59"/>
+<area shape="rect" id="Node000001" title="Specialisation of HighLevelGpuProgram to encapsulate shader objects obtained from compiled shaders wr..." alt="" coords="14,98,168,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,177,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,64,93,98,89,96,89,68"/>
 </map>

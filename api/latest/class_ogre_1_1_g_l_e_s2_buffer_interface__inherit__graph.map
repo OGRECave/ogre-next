@@ -1,5 +1,5 @@
 <map id="Ogre::GLES2BufferInterface" name="Ogre::GLES2BufferInterface">
-<area shape="rect" id="Node000001" title="For GL3+, most (if not all) buffers, can be treated with the same code." alt="" coords="5,79,204,104"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_buffer_interface.html" title="Most (if not all) buffers, can be treated with the same code." alt="" coords="25,5,184,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,44,107,79,102,79,102,44"/>
+<area shape="rect" id="Node000001" title="For GL3+, most (if not all) buffers, can be treated with the same code." alt="" coords="5,81,204,109"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_buffer_interface.html" title="Most (if not all) buffers, can be treated with the same code." alt="" coords="26,5,183,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,47,107,82,102,79,103,51"/>
 </map>

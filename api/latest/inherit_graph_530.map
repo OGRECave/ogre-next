@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_simple_matrix_af4x3.html" title="Simple wrap up to load an AoS matrix 4x3 using SSE." alt="" coords="5,5,192,31"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,57,121,85"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_g_l_e_s2_depth_texture_target.html" title=" " alt="" coords="169,5,397,33"/>
+<area shape="poly" id="edge1217_Node000000_Node000001" title=" " alt="" coords="135,51,168,43,222,33,218,35,169,48,137,56"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l_e_s2_null_texture_target.html" title=" " alt="" coords="175,57,390,85"/>
+<area shape="poly" id="edge1218_Node000000_Node000002" title=" " alt="" coords="136,69,177,70,172,72,137,74"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_g_l_e_s2_render_texture.html" title="Base class for GL Render Textures." alt="" coords="185,109,380,137"/>
+<area shape="poly" id="edge1219_Node000000_Node000003" title=" " alt="" coords="136,86,169,94,223,108,217,109,168,99,136,91"/>
 </map>

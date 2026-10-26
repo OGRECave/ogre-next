@@ -1,5 +1,5 @@
 <map id="Ogre::RingEmitterFactory2" name="Ogre::RingEmitterFactory2">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,93,199,119"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_particle_emitter_def_data_factory.html" title="Abstract class defining the interface to be implemented by creators of EmitterDefData subclasses." alt="" coords="12,5,192,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,59,105,93,99,93,99,59"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,98,198,126"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_particle_emitter_def_data_factory.html" title="Abstract class defining the interface to be implemented by creators of EmitterDefData subclasses." alt="" coords="12,5,191,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,64,104,98,99,96,100,68"/>
 </map>

@@ -1,5 +1,5 @@
 <map id="Ogre::RenderPassStencilTarget" name="Ogre::RenderPassStencilTarget">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,225,104"/>
-<area shape="rect" id="Node000002" href="$struct_ogre_1_1_render_pass_target_base.html" title=" " alt="" coords="11,5,219,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,44,118,79,113,79,113,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,81,225,109"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_render_pass_target_base.html" title=" " alt="" coords="11,5,219,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,47,117,82,113,79,113,51"/>
 </map>

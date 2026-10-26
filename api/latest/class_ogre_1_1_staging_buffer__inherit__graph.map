@@ -1,17 +1,17 @@
 <map id="Ogre::StagingBuffer" name="Ogre::StagingBuffer">
-<area shape="rect" id="Node000001" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="228,129,377,155"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_staging_buffer.html" title="NOTE FOR D3D12 PORTING: The GL3Plus implementation should be used as reference, since it is much lowe..." alt="" coords="429,5,623,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="324,117,368,77,395,57,424,40,453,28,455,33,426,44,398,61,371,81,327,121"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_l3_plus_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="425,55,627,80"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="342,121,424,89,465,77,466,83,426,94,344,126"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_g_l_e_s2_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="431,104,621,129"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="390,129,430,125,431,130,391,135"/>
-<area shape="rect" id="Node000006" href="$class_ogre_1_1_metal_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="433,153,619,179"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="391,149,433,153,432,159,391,154"/>
-<area shape="rect" id="Node000007" href="$class_ogre_1_1_n_u_l_l_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="435,203,617,228"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="346,158,426,189,466,200,465,205,424,194,344,163"/>
-<area shape="rect" id="Node000008" href="$class_ogre_1_1_vulkan_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="430,252,622,277"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="327,163,371,202,427,238,455,249,453,254,424,243,368,206,324,167"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,129,180,155"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,139,228,139,228,145,194,145"/>
+<area shape="rect" id="Node000001" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="228,136,376,164"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_staging_buffer.html" title="NOTE FOR D3D12 PORTING: The GL3Plus implementation should be used as reference, since it is much lowe..." alt="" coords="428,5,620,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="324,123,367,82,423,43,456,32,451,35,425,48,371,86,327,127"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_l3_plus_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="424,57,624,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="346,127,423,95,466,85,461,87,425,100,348,132"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_g_l_e_s2_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="430,109,619,137"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="391,137,431,134,426,135,392,142"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_metal_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="432,161,617,189"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="391,157,434,164,428,165,392,163"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_n_u_l_l_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="433,213,615,241"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="348,168,425,198,467,213,462,213,423,203,348,173"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_vulkan_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="428,265,620,293"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="327,173,371,213,425,250,456,265,451,264,423,255,368,217,326,178"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,136,180,164"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,147,230,149,225,151,196,152"/>
 </map>

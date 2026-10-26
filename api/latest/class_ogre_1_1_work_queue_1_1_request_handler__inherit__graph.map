@@ -1,11 +1,11 @@
 <map id="Ogre::WorkQueue::RequestHandler" name="Ogre::WorkQueue::RequestHandler">
-<area shape="rect" id="Node000001" title="Interface definition for a handler of requests." alt="" coords="5,77,203,117"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_lod_work_queue_worker.html" title="Processes requests." alt="" coords="254,5,458,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,69,250,39,293,28,294,33,251,45,167,74"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_page.html" title="Page class." alt="" coords="310,55,402,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,81,309,70,310,75,217,86"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_resource_background_queue.html" title="This class is used to perform Resource operations in a background thread." alt="" coords="257,105,455,145"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="216,106,257,111,256,116,216,112"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_volume_1_1_chunk_handler.html" title="Handles the WorkQueue management of the chunks." alt="" coords="251,169,461,195"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="163,120,252,154,296,167,295,172,250,159,161,125"/>
+<area shape="rect" id="Node000001" title="Interface definition for a handler of requests." alt="" coords="5,80,202,124"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_lod_work_queue_worker.html" title="Processes requests." alt="" coords="253,5,456,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="173,71,249,43,294,32,290,35,250,48,175,76"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_page.html" title="Page class." alt="" coords="309,57,400,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="217,85,311,76,306,78,218,91"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_resource_background_queue.html" title="This class is used to perform Resource operations in a background thread." alt="" coords="256,109,453,154"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="217,112,258,119,252,120,218,118"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_volume_1_1_chunk_handler.html" title="Handles the WorkQueue management of the chunks." alt="" coords="250,177,459,205"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="165,129,251,163,290,177,284,177,249,168,164,134"/>
 </map>

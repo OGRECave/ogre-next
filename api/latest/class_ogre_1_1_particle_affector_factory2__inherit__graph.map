@@ -1,23 +1,23 @@
 <map id="Ogre::ParticleAffectorFactory2" name="Ogre::ParticleAffectorFactory2">
-<area shape="rect" id="Node000001" title="Abstract class defining the interface to be implemented by creators of ParticleAffector2 subclasses." alt="" coords="5,301,220,326"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_colour_fader_affector2_f_x2_factory.html" title=" " alt="" coords="281,5,478,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,287,139,238,169,175,212,111,237,81,266,55,286,43,289,48,270,59,241,85,216,114,174,178,144,240,125,289"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_colour_fader_affector_f_x2_factory.html" title=" " alt="" coords="285,69,474,109"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="125,287,147,250,179,205,219,158,267,119,289,107,291,112,269,124,223,162,183,208,152,253,129,290"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_colour_image_affector_factory2.html" title=" " alt="" coords="282,133,477,173"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="134,289,191,236,227,207,267,183,294,171,296,176,269,188,230,212,194,240,137,293"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_colour_interpolator_affector_factory2.html" title=" " alt="" coords="290,197,469,237"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="153,293,267,247,304,235,306,240,269,252,155,298"/>
-<area shape="rect" id="Node000006" href="$class_ogre_1_1_deflector_plane_affector_factory2.html" title=" " alt="" coords="276,261,483,301"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="232,296,276,291,276,296,232,302"/>
-<area shape="rect" id="Node000007" href="$class_ogre_1_1_direction_randomiser_affector_factory2.html" title=" " alt="" coords="280,325,479,365"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="232,325,280,331,280,336,232,330"/>
-<area shape="rect" id="Node000008" href="$class_ogre_1_1_linear_force_affector_factory2.html" title=" " alt="" coords="286,389,473,429"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="155,329,269,375,306,387,304,392,267,380,153,334"/>
-<area shape="rect" id="Node000009" href="$class_ogre_1_1_rotation_affector_factory2.html" title=" " alt="" coords="268,454,491,479"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="137,334,193,388,230,415,269,439,302,451,300,456,267,444,227,420,190,392,133,338"/>
-<area shape="rect" id="Node000010" href="$class_ogre_1_1_scale_affector_factory2.html" title=" " alt="" coords="278,503,481,529"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="130,336,153,371,185,412,224,454,269,488,297,501,295,506,267,493,220,458,181,416,149,374,126,339"/>
-<area shape="rect" id="Node000011" href="$class_ogre_1_1_scale_interpolator_affector_factory2.html" title=" " alt="" coords="268,553,491,593"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="127,338,148,382,179,436,220,491,243,516,270,538,293,551,290,556,266,542,240,520,216,494,174,438,143,384,122,340"/>
+<area shape="rect" id="Node000001" title="Abstract class defining the interface to be implemented by creators of ParticleAffector2 subclasses." alt="" coords="5,326,220,354"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_colour_fader_affector2_f_x2_factory.html" title=" " alt="" coords="281,5,477,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,310,138,257,168,190,210,120,236,88,266,60,287,49,284,53,269,64,240,92,214,124,172,193,143,259,124,312"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_colour_fader_affector_f_x2_factory.html" title=" " alt="" coords="285,75,473,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="124,311,146,271,178,222,218,172,266,130,289,118,286,122,269,134,222,176,182,225,151,274,129,314"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_colour_image_affector_factory2.html" title=" " alt="" coords="282,144,476,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="134,313,190,256,227,225,266,199,294,187,290,191,269,203,230,229,194,259,138,316"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_colour_interpolator_affector_factory2.html" title=" " alt="" coords="290,213,468,258"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="155,317,267,268,303,257,299,260,269,273,158,321"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_deflector_plane_affector_factory2.html" title=" " alt="" coords="276,283,482,327"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="234,321,278,317,273,320,237,326"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_direction_randomiser_affector_factory2.html" title=" " alt="" coords="280,352,478,397"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="234,353,282,360,277,363,236,358"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_linear_force_affector_factory2.html" title=" " alt="" coords="286,421,472,466"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="156,358,269,407,303,420,298,421,267,411,157,363"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_rotation_affector_factory2.html" title=" " alt="" coords="268,490,490,518"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="135,363,193,421,229,451,269,476,297,489,292,490,266,481,226,455,189,425,135,368"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_scale_affector_factory2.html" title=" " alt="" coords="278,542,480,570"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="128,364,153,402,184,446,223,490,269,527,296,541,290,541,266,531,220,494,180,450,148,405,128,369"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_scale_interpolator_affector_factory2.html" title=" " alt="" coords="268,593,490,638"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="125,365,147,413,178,470,218,529,243,555,269,579,289,593,284,592,266,583,239,559,214,532,173,473,142,415,124,370"/>
 </map>

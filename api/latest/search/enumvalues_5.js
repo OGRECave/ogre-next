@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['fa_5fadd_0',['fa_add',['../class_ogre_1_1_linear_force_affector2.html#add1a70a3698858a6efc82e4a5e73a953a800dc412e3f5353489002a3ba7a7f1a3',1,'Ogre::LinearForceAffector2::FA_ADD'],['../class_ogre_1_1_linear_force_affector.html#afda639dd7ecccb57f5d138d95e419f85a1d4acc713df7db0b726380626a0e3966',1,'Ogre::LinearForceAffector::FA_ADD']]],
-  ['fa_5faverage_1',['fa_average',['../class_ogre_1_1_linear_force_affector.html#afda639dd7ecccb57f5d138d95e419f85a1068684cc58cba9faf1524387019622c',1,'Ogre::LinearForceAffector::FA_AVERAGE'],['../class_ogre_1_1_linear_force_affector2.html#add1a70a3698858a6efc82e4a5e73a953aef3a00add76b9c88db4fcbbfca79a2e3',1,'Ogre::LinearForceAffector2::FA_AVERAGE']]],
+  ['fa_5fadd_0',['FA_ADD',['../class_ogre_1_1_linear_force_affector.html#afda639dd7ecccb57f5d138d95e419f85a1d4acc713df7db0b726380626a0e3966',1,'Ogre::LinearForceAffector::FA_ADD'],['../class_ogre_1_1_linear_force_affector2.html#add1a70a3698858a6efc82e4a5e73a953a800dc412e3f5353489002a3ba7a7f1a3',1,'Ogre::LinearForceAffector2::FA_ADD']]],
+  ['fa_5faverage_1',['FA_AVERAGE',['../class_ogre_1_1_linear_force_affector.html#afda639dd7ecccb57f5d138d95e419f85a1068684cc58cba9faf1524387019622c',1,'Ogre::LinearForceAffector::FA_AVERAGE'],['../class_ogre_1_1_linear_force_affector2.html#add1a70a3698858a6efc82e4a5e73a953aef3a00add76b9c88db4fcbbfca79a2e3',1,'Ogre::LinearForceAffector2::FA_AVERAGE']]],
   ['fade_2',['Fade',['../class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382cebaab2d3d5abd16b997476cf4ee7bb6cdfa',1,'Ogre::HlmsPbsDatablock']]],
   ['false_3',['False',['../_ogre_x11_e_g_l_support_8h.html#ab739a825d0792ad43c1f19d79736b181af9d46b7804d93a4fcde88489a1b68c24',1,'OgreX11EGLSupport.h']]],
   ['far_5fleft_5fbottom_4',['FAR_LEFT_BOTTOM',['../class_ogre_1_1_axis_aligned_box.html#a771c83dfb946e6d66c9ddf09fba7e5b3a2ba07c11671eb44dae2015d45a9fa861',1,'Ogre::AxisAlignedBox']]],

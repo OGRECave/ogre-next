@@ -1,5 +1,5 @@
 <map id="Ogre::v1::OverlayElementCommands::CmdMetricsMode" name="Ogre::v1::OverlayElementCommands::CmdMetricsMode">
-<area shape="rect" id="Node000001" title="Command object for OverlayElement &#45; see ParamCommand." alt="" coords="5,79,224,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="30,5,199,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,44,117,79,112,79,112,44"/>
+<area shape="rect" id="Node000001" title="Command object for OverlayElement &#45; see ParamCommand." alt="" coords="5,81,223,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="30,5,198,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,47,116,81,112,79,112,51"/>
 </map>

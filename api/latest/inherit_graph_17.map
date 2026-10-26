@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,13,147,38"/>
-<area shape="rect" id="Node000001" href="$class_ogre_1_1_g_l_e_s2_f_b_o_multi_render_target.html" title="MultiRenderTarget for GL ES 2.x." alt="" coords="195,5,403,45"/>
-<area shape="poly" id="edge15_Node000000_Node000001" title=" " alt="" coords="160,23,194,23,194,28,160,28"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,14,146,42"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_g_l_e_s2_f_b_o_multi_render_target.html" title="MultiRenderTarget for GL ES 2.x." alt="" coords="194,5,401,50"/>
+<area shape="poly" id="edge17_Node000000_Node000001" title=" " alt="" coords="161,25,196,27,190,28,161,30"/>
 </map>

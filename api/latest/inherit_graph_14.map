@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,5,231,31"/>
-<area shape="rect" id="Node000001" href="$class_ogre_1_1_hlms_pbs_datablock.html" title="Contains information needed by PBS (Physically Based Shading) for OpenGL 3+ &amp; D3D11+." alt="" coords="279,5,463,31"/>
-<area shape="poly" id="edge12_Node000000_Node000001" title=" " alt="" coords="244,15,278,15,278,21,244,21"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,5,230,33"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_hlms_pbs_datablock.html" title="Contains information needed by PBS (Physically Based Shading) for OpenGL 3+ &amp; D3D11+." alt="" coords="278,5,461,33"/>
+<area shape="poly" id="edge14_Node000000_Node000001" title=" " alt="" coords="245,17,280,19,275,19,245,22"/>
 </map>

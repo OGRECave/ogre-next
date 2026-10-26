@@ -1,3 +1,33 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_raw_simd_unique_ptr.html" title=" " alt="" coords="5,5,251,60"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="5,195,167,223"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_volume_1_1_c_s_g_cube_source.html" title="A not rotated cube." alt="" coords="221,23,442,51"/>
+<area shape="poly" id="edge1190_Node000000_Node000001" title=" " alt="" coords="101,180,146,119,177,87,213,60,240,49,237,53,216,65,181,91,150,122,106,183"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_volume_1_1_c_s_g_operation_source.html" title="Abstract operation volume source holding two sources as operants." alt="" coords="227,75,436,119"/>
+<area shape="poly" id="edge1191_Node000000_Node000002" title=" " alt="" coords="118,184,162,156,214,129,247,118,243,122,216,134,165,161,121,188"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_volume_1_1_c_s_g_plane_source.html" title="A plane." alt="" coords="219,143,444,171"/>
+<area shape="poly" id="edge1195_Node000000_Node000006" title=" " alt="" coords="169,189,264,170,260,173,171,194"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_volume_1_1_c_s_g_sphere_source.html" title="A sphere." alt="" coords="215,195,448,223"/>
+<area shape="poly" id="edge1196_Node000000_Node000007" title=" " alt="" coords="181,207,216,208,212,210,183,211"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_volume_1_1_c_s_g_unary_source.html" title="Source which does a unary operation to another one." alt="" coords="218,247,445,275"/>
+<area shape="poly" id="edge1197_Node000000_Node000008" title=" " alt="" coords="169,224,265,245,260,248,170,229"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_volume_1_1_cache_source.html" title="A caching Source." alt="" coords="231,299,432,327"/>
+<area shape="poly" id="edge1201_Node000000_Node000012" title=" " alt="" coords="119,229,164,258,216,284,255,298,249,299,214,289,162,263,119,235"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_volume_1_1_grid_source.html" title="A volume source from a discrete 3d grid." alt="" coords="237,359,426,387"/>
+<area shape="poly" id="edge1202_Node000000_Node000013" title=" " alt="" coords="107,233,154,286,184,313,216,336,264,358,259,359,213,341,180,317,150,290,106,238"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_volume_1_1_c_s_g_difference_source.html" title="Builds the difference between two sources." alt="" coords="508,5,719,50"/>
+<area shape="poly" id="edge1192_Node000002_Node000003" title=" " alt="" coords="439,68,522,49,518,52,441,73"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_volume_1_1_c_s_g_intersection_source.html" title="Builds the intersection between two sources." alt="" coords="503,75,724,119"/>
+<area shape="poly" id="edge1193_Node000002_Node000004" title=" " alt="" coords="450,94,505,96,500,98,452,100"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_volume_1_1_c_s_g_union_source.html" title="Builds the union between two sources." alt="" coords="500,143,727,171"/>
+<area shape="poly" id="edge1194_Node000002_Node000005" title=" " alt="" coords="450,120,548,142,542,143,451,125"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_volume_1_1_c_s_g_negate_source.html" title="Negates the given volume." alt="" coords="496,195,731,223"/>
+<area shape="poly" id="edge1198_Node000008_Node000009" title=" " alt="" coords="425,241,537,223,532,224,426,246"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_volume_1_1_c_s_g_noise_source.html" title=" " alt="" coords="501,247,726,275"/>
+<area shape="poly" id="edge1199_Node000008_Node000010" title=" " alt="" coords="460,258,503,260,498,262,461,264"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_volume_1_1_c_s_g_scale_source.html" title="Scales the given volume source." alt="" coords="502,299,725,327"/>
+<area shape="poly" id="edge1200_Node000008_Node000011" title=" " alt="" coords="425,276,537,298,532,299,425,281"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1_volume_1_1_half_float_grid_source.html" title="A volume source from a 16 Bit float 3D grid capable of loading volume serializations." alt="" coords="512,351,716,395"/>
+<area shape="poly" id="edge1203_Node000013_Node000014" title=" " alt="" coords="441,370,514,373,508,373,441,376"/>
+<area shape="rect" id="Node000015" href="$class_ogre_1_1_volume_1_1_texture_source.html" title="A volume source from a 3D texture." alt="" coords="509,419,718,447"/>
+<area shape="poly" id="edge1204_Node000013_Node000015" title=" " alt="" coords="415,388,548,418,542,419,415,393"/>
 </map>

@@ -1,5 +1,5 @@
 <map id="Ogre::CompositorManager2" name="Ogre::CompositorManager2">
-<area shape="rect" id="Node000001" title="Main system for managing Render Targets through the use of nodes." alt="" coords="5,79,207,104"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="19,5,193,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,44,109,79,103,79,103,44"/>
+<area shape="rect" id="Node000001" title="Main system for managing Render Targets through the use of nodes." alt="" coords="5,81,206,109"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="18,5,193,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,47,108,82,103,79,104,51"/>
 </map>

@@ -1,5 +1,5 @@
 <map id="Ogre::RotationAffector::CmdRotationRangeEnd" name="Ogre::RotationAffector::CmdRotationRangeEnd">
-<area shape="rect" id="Node000001" title="Command object for particle emitter &#45; see ParamCommand." alt="" coords="5,79,185,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="11,5,180,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,44,98,79,93,79,93,44"/>
+<area shape="rect" id="Node000001" title="Command object for particle emitter &#45; see ParamCommand." alt="" coords="5,81,185,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="11,5,179,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,47,98,81,92,79,93,51"/>
 </map>

@@ -32,13 +32,13 @@ var group___core =
       [ "test", "class_ogre_1_1bitset64.html#aabcb68ad12baf9330d32d488140a4659", null ],
       [ "unset", "class_ogre_1_1bitset64.html#a7a469e6a52312e4b05c194499047b426", null ]
     ] ],
-    [ "Ogre::cbitset32< _N >", "class_ogre_1_1cbitset32.html", null ],
-    [ "Ogre::cbitset64< _N >", "class_ogre_1_1cbitset64.html", [
+    [ "Ogre::cbitset32&lt; _N &gt;", "class_ogre_1_1cbitset32.html", null ],
+    [ "Ogre::cbitset64&lt; _N &gt;", "class_ogre_1_1cbitset64.html", [
       [ "findFirstBitSet", "class_ogre_1_1cbitset64.html#a430d829c186ee166fdac787b31328529", null ],
       [ "findFirstBitSet", "class_ogre_1_1cbitset64.html#a12c36f27860e308e138ac60ddcb885d4", null ],
       [ "findLastBitSetPlusOne", "class_ogre_1_1cbitset64.html#a105b33f5e7a34c5fa03c9cf430132ca8", null ]
     ] ],
-    [ "Ogre::cbitsetN< _N, _internalDataType, _bits, _mask >", "class_ogre_1_1cbitset_n.html", [
+    [ "Ogre::cbitsetN&lt; _N, _internalDataType, _bits, _mask &gt;", "class_ogre_1_1cbitset_n.html", [
       [ "cbitsetN", "class_ogre_1_1cbitset_n.html#a697bfd602e3904596422036ac68ed3da", null ],
       [ "capacity", "class_ogre_1_1cbitset_n.html#a3211343d5cccaa55728ea32b1fbbdf44", null ],
       [ "clear", "class_ogre_1_1cbitset_n.html#a3da545373d154cb5378dd35a99e8dcda", null ],

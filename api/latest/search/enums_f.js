@@ -18,7 +18,7 @@ var searchData=
   ['skeletonchunkid_15',['SkeletonChunkID',['../group___animation.html#ga5b37bdf2f67384dbd81643164545f7bd',1,'Ogre']]],
   ['skeletonversion_16',['SkeletonVersion',['../namespace_ogre_1_1v1.html#a64f38234a267554c4c68b1c0206782f4',1,'Ogre::v1']]],
   ['skymethod_17',['SkyMethod',['../class_ogre_1_1_scene_manager.html#a6a925e073eee8e57dafc08083bc10238',1,'Ogre::SceneManager']]],
-  ['slottype_18',['slottype',['../struct_ogre_1_1_descriptor_set_uav.html#adbb8074b5116277a91930840b9fa653a',1,'Ogre::DescriptorSetUav::SlotType'],['../struct_ogre_1_1_descriptor_set_texture2.html#a4d69463988b7b5b64414c43a3aead6a4',1,'Ogre::DescriptorSetTexture2::SlotType']]],
+  ['slottype_18',['SlotType',['../struct_ogre_1_1_descriptor_set_texture2.html#a4d69463988b7b5b64414c43a3aead6a4',1,'Ogre::DescriptorSetTexture2::SlotType'],['../struct_ogre_1_1_descriptor_set_uav.html#adbb8074b5116277a91930840b9fa653a',1,'Ogre::DescriptorSetUav::SlotType']]],
   ['sortmode_19',['SortMode',['../group___general.html#ga73dc0089e326fa37f93a30bf67ba7e3a',1,'Ogre']]],
   ['stagingstalltype_20',['StagingStallType',['../namespace_ogre.html#af48b48d39914b067541a62b674b80935',1,'Ogre']]],
   ['status_21',['Status',['../class_ogre_1_1_async_texture_ticket.html#a4e4a25bb4d7cf6f3c5ab091432c3cbe8',1,'Ogre::AsyncTextureTicket']]],

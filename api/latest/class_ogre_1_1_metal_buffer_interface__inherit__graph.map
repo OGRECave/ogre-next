@@ -1,5 +1,5 @@
 <map id="Ogre::MetalBufferInterface" name="Ogre::MetalBufferInterface">
-<area shape="rect" id="Node000001" title="For Metal, all buffers can be treated with the same code." alt="" coords="5,79,200,104"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_buffer_interface.html" title="Most (if not all) buffers, can be treated with the same code." alt="" coords="23,5,182,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,44,105,79,100,79,100,44"/>
+<area shape="rect" id="Node000001" title="For Metal, all buffers can be treated with the same code." alt="" coords="5,81,200,109"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_buffer_interface.html" title="Most (if not all) buffers, can be treated with the same code." alt="" coords="24,5,181,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,47,105,82,100,80,101,51"/>
 </map>

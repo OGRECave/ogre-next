@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$struct_ogre_1_1_hlms_1_1_datablock_custom_piece_file.html" title=" " alt="" coords="5,5,224,45"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_parallax_corrected_cubemap_auto_listener.html" title=" " alt="" coords="5,5,243,50"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_pcc_per_pixel_grid_placement.html" title="Placing multiple PCC probes by hand can be difficult and even error prone." alt="" coords="291,14,521,42"/>
+<area shape="poly" id="edge991_Node000000_Node000001" title=" " alt="" coords="259,25,293,28,287,28,259,30"/>
 </map>

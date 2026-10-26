@@ -1,5 +1,5 @@
 <map id="Ogre::Plane" name="Ogre::Plane">
-<area shape="rect" id="Node000001" title="Defines a plane in 3D space." alt="" coords="33,5,131,31"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_movable_plane.html" title="Definition of a Plane that may be attached to a node, and the derived details of it retrieved simply." alt="" coords="5,79,159,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,44,85,79,79,79,79,44"/>
+<area shape="rect" id="Node000001" title="Defines a plane in 3D space." alt="" coords="33,5,130,33"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_movable_plane.html" title="Definition of a Plane that may be attached to a node, and the derived details of it retrieved simply." alt="" coords="5,81,158,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,47,84,81,79,80,80,51"/>
 </map>

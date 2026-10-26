@@ -1,11 +1,11 @@
 <map id="Ogre::DistanceLodSphereStrategy" name="Ogre::DistanceLodSphereStrategy">
-<area shape="rect" id="Node000001" title="Level of detail strategy based on distance from camera to an object&#39;s bounding sphere." alt="" coords="116,240,357,265"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_distance_lod_strategy_base.html" title="Level of detail strategy based on distance from camera." alt="" coords="5,159,233,185"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,190,221,238,218,242,147,195"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_lod_strategy.html" title="Strategy for determining level of detail." alt="" coords="50,79,189,104"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="122,118,122,159,117,159,117,118"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="32,5,207,31"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="122,44,122,79,117,79,117,44"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="258,152,453,192"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="316,202,256,242,253,238,313,198"/>
+<area shape="rect" id="Node000001" title="Level of detail strategy based on distance from camera to an object&#39;s bounding sphere." alt="" coords="116,249,356,277"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_distance_lod_strategy_base.html" title="Level of detail strategy based on distance from camera." alt="" coords="5,165,233,193"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,200,220,248,215,249,149,205"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_lod_strategy.html" title="Strategy for determining level of detail." alt="" coords="50,81,188,109"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="120,122,122,166,116,164,118,127"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="32,5,206,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="120,46,122,81,116,80,118,51"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="257,157,450,201"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="313,209,256,251,254,246,308,211"/>
 </map>

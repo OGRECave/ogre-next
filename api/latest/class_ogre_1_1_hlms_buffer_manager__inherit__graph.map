@@ -1,11 +1,11 @@
 <map id="Ogre::HlmsBufferManager" name="Ogre::HlmsBufferManager">
-<area shape="rect" id="Node000001" title="Managing constant and texture buffers for sending shader parameters is a very similar process to most..." alt="" coords="43,167,233,192"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_hlms_pbs.html" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys..." alt="" coords="5,240,124,265"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="118,204,78,242,75,238,114,200"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_hlms_unlit.html" title="Implementation without lighting or skeletal animation specfically designed for OpenGL 3+,..." alt="" coords="148,240,275,265"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="162,200,201,238,198,242,158,204"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="91,93,185,119"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="141,132,141,167,135,167,135,132"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="49,5,227,45"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="141,59,141,93,135,93,135,59"/>
+<area shape="rect" id="Node000001" title="Managing constant and texture buffers for sending shader parameters is a very similar process to most..." alt="" coords="41,174,231,201"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_hlms_pbs.html" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys..." alt="" coords="5,249,123,277"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="115,212,78,251,75,247,110,213"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_hlms_unlit.html" title="Implementation without lighting or skeletal animation specfically designed for OpenGL 3+,..." alt="" coords="147,249,272,277"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="161,210,199,249,194,249,159,215"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="89,98,183,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,139,139,174,133,172,135,144"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="47,5,225,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="137,63,139,98,133,97,135,68"/>
 </map>

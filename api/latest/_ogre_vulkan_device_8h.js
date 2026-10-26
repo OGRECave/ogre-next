@@ -6,5 +6,5 @@ var _ogre_vulkan_device_8h =
     [ "Ogre::VulkanExternalDevice", "struct_ogre_1_1_vulkan_external_device.html", "struct_ogre_1_1_vulkan_external_device" ],
     [ "Ogre::VulkanExternalInstance", "struct_ogre_1_1_vulkan_external_instance.html", "struct_ogre_1_1_vulkan_external_instance" ],
     [ "Ogre::VulkanInstance", "class_ogre_1_1_vulkan_instance.html", "class_ogre_1_1_vulkan_instance" ],
-    [ "c_srcValidAccessFlags", "_ogre_vulkan_device_8h.html#ae25fc08466018112ebbfaa616e88b38a", null ]
+    [ "Ogre::c_srcValidAccessFlags", "namespace_ogre.html#ae25fc08466018112ebbfaa616e88b38a", null ]
 ];

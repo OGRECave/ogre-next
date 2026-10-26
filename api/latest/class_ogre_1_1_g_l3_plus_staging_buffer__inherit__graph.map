@@ -1,7 +1,7 @@
 <map id="Ogre::GL3PlusStagingBuffer" name="Ogre::GL3PlusStagingBuffer">
-<area shape="rect" id="Node000001" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="5,152,207,177"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="31,79,181,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,118,109,152,103,152,103,118"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="19,5,193,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,44,109,79,103,79,103,44"/>
+<area shape="rect" id="Node000001" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="5,157,206,184"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="31,81,180,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,123,108,157,103,155,104,126"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="18,5,193,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="107,46,108,81,103,80,104,51"/>
 </map>

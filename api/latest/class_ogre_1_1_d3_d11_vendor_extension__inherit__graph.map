@@ -1,5 +1,5 @@
 <map id="Ogre::D3D11VendorExtension" name="Ogre::D3D11VendorExtension">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,220,31"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_d3_d11_amd_extension.html" title=" " alt="" coords="13,79,212,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,44,115,79,110,79,110,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,219,33"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_d3_d11_amd_extension.html" title=" " alt="" coords="13,81,211,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,47,114,82,110,79,110,51"/>
 </map>

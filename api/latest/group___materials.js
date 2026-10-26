@@ -586,6 +586,7 @@ var group___materials =
       [ "isDirty", "class_ogre_1_1_gpu_shared_parameters.html#ad8a616a195dcfaa38214748c468c6779", null ],
       [ "removeAllConstantDefinitions", "class_ogre_1_1_gpu_shared_parameters.html#a7af37940ab818c310227918e61fe1134", null ],
       [ "removeConstantDefinition", "class_ogre_1_1_gpu_shared_parameters.html#adaffa8b7ce948ab8474b7745ce29504f", null ],
+      [ "setNamedConstant", "class_ogre_1_1_gpu_shared_parameters.html#a3b2cf73b20561e51a42508d50b62f36d", null ],
       [ "setNamedConstant", "class_ogre_1_1_gpu_shared_parameters.html#af0f9f6c486e5cf67d966f996e99272b5", null ],
       [ "setNamedConstant", "class_ogre_1_1_gpu_shared_parameters.html#a1d338e448331ece06b476fa1dec4be2a", null ],
       [ "setNamedConstant", "class_ogre_1_1_gpu_shared_parameters.html#ac60bc2d912c0610ff23d03fc53341d0c", null ],

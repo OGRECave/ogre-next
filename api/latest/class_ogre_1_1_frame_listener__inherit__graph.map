@@ -1,11 +1,11 @@
 <map id="Ogre::FrameListener" name="Ogre::FrameListener">
-<area shape="rect" id="Node000001" title="A interface class defining a listener which can be used to receive notifications of frame events." alt="" coords="5,95,160,121"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_frame_time_controller_value.html" title="Predefined controller value for getting the latest frame time." alt="" coords="243,5,441,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,87,207,55,249,43,250,48,209,60,125,92"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="223,70,461,95"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="174,96,222,92,223,97,174,102"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="208,119,476,145"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="174,114,208,117,208,122,173,119"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_volume_1_1_chunk.html" title="A single volume chunk mesh." alt="" coords="263,169,421,194"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="126,124,209,153,263,166,262,171,207,159,124,129"/>
+<area shape="rect" id="Node000001" title="A interface class defining a listener which can be used to receive notifications of frame events." alt="" coords="5,100,159,128"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_frame_time_controller_value.html" title="Predefined controller value for getting the latest frame time." alt="" coords="241,5,440,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,92,206,60,247,49,242,52,208,65,129,96"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="222,74,459,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="173,102,224,99,219,101,175,107"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="207,126,474,154"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="174,121,209,126,203,127,174,126"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_volume_1_1_chunk.html" title="A single volume chunk mesh." alt="" coords="261,178,420,206"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="128,132,207,162,263,178,258,179,206,168,127,137"/>
 </map>

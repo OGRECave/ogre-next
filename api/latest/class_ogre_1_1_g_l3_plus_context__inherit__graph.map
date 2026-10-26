@@ -1,21 +1,21 @@
 <map id="Ogre::GL3PlusContext" name="Ogre::GL3PlusContext">
-<area shape="rect" id="Node000001" title="Class that encapsulates an GL context." alt="" coords="5,128,169,153"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_cocoa_context.html" title=" " alt="" coords="231,29,383,55"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,118,163,90,216,64,249,52,251,57,218,68,165,95,120,123"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_e_g_l_context.html" title=" " alt="" coords="238,79,375,104"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="157,122,249,101,250,107,158,128"/>
-<area shape="rect" id="Node000008" href="$class_ogre_1_1_egl_p_buffer_context.html" title=" " alt="" coords="217,128,396,153"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="183,138,217,138,217,143,183,143"/>
-<area shape="rect" id="Node000009" href="$class_ogre_1_1_g_l_x_context.html" title=" " alt="" coords="238,177,375,203"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="158,154,250,175,249,180,157,159"/>
-<area shape="rect" id="Node000010" href="$class_ogre_1_1_win32_context.html" title=" " alt="" coords="230,227,383,252"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="120,159,165,186,218,213,251,224,249,229,216,218,163,191,117,163"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_android_e_g_l_context.html" title=" " alt="" coords="456,5,643,31"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="370,72,395,64,419,51,443,40,481,28,483,33,445,44,421,56,397,68,372,77"/>
-<area shape="rect" id="Node000005" href="$class_ogre_1_1_emscripten_e_g_l_context.html" title=" " alt="" coords="444,55,655,80"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="389,81,444,75,444,80,390,86"/>
-<area shape="rect" id="Node000006" href="$class_ogre_1_1_win32_e_g_l_context.html" title=" " alt="" coords="460,104,639,129"/>
-<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="390,97,460,105,460,110,389,103"/>
-<area shape="rect" id="Node000007" href="$class_ogre_1_1_x11_e_g_l_context.html" title=" " alt="" coords="468,153,631,179"/>
-<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="376,105,397,113,421,126,445,138,486,151,484,156,443,143,419,130,395,118,374,110"/>
+<area shape="rect" id="Node000001" title="Class that encapsulates an GL context." alt="" coords="5,135,169,162"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_cocoa_context.html" title=" " alt="" coords="230,31,382,58"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,124,164,96,216,69,252,57,247,60,218,74,167,100,122,128"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_e_g_l_context.html" title=" " alt="" coords="238,83,374,110"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="162,128,246,109,242,113,164,133"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_egl_p_buffer_context.html" title=" " alt="" coords="217,135,395,162"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="183,146,219,148,214,149,185,151"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_g_l_x_context.html" title=" " alt="" coords="238,187,374,214"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="163,164,247,185,242,187,163,169"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_win32_context.html" title=" " alt="" coords="230,239,382,266"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="121,169,167,197,218,223,252,238,247,238,216,228,164,201,120,174"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_android_e_g_l_context.html" title=" " alt="" coords="454,5,641,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="373,75,394,67,442,43,484,33,479,35,444,48,396,72,375,80"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_emscripten_e_g_l_context.html" title=" " alt="" coords="443,57,652,85"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="389,85,445,81,440,83,390,90"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_win32_e_g_l_context.html" title=" " alt="" coords="459,109,636,137"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="389,103,461,113,456,114,390,108"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_x11_e_g_l_context.html" title=" " alt="" coords="467,161,628,189"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="375,113,396,121,420,134,444,146,484,161,478,161,442,151,418,138,394,126,375,118"/>
 </map>

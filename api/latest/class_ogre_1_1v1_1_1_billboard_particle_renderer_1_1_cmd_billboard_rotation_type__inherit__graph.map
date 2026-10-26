@@ -1,5 +1,5 @@
 <map id="Ogre::v1::BillboardParticleRenderer::CmdBillboardRotationType" name="Ogre::v1::BillboardParticleRenderer::CmdBillboardRotationType">
-<area shape="rect" id="Node000001" title="Command object for billboard rotation type (see ParamCommand)." alt="" coords="5,79,268,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="52,5,221,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="139,44,139,79,134,79,134,44"/>
+<area shape="rect" id="Node000001" title="Command object for billboard rotation type (see ParamCommand)." alt="" coords="5,81,267,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="52,5,220,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,47,138,81,134,79,134,51"/>
 </map>

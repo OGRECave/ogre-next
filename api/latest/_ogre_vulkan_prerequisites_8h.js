@@ -14,14 +14,14 @@ var _ogre_vulkan_prerequisites_8h =
     [ "OGRE_VULKAN_UAV_SLOT_START", "_ogre_vulkan_prerequisites_8h.html#a3d4fe5c1f2380f980925d557df5e3bb5", null ],
     [ "VkCommandBuffer", "_ogre_vulkan_prerequisites_8h.html#ac45cc67c448b7eb97bc0ddc9d4ce2422", null ],
     [ "VkDevice", "_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442", null ],
-    [ "VkFenceArray", "_ogre_vulkan_prerequisites_8h.html#a751d388a0b231360abe5cb03585f762e", null ],
+    [ "Ogre::VkFenceArray", "namespace_ogre.html#a751d388a0b231360abe5cb03585f762e", null ],
     [ "VkInstance", "_ogre_vulkan_prerequisites_8h.html#a6d9f7e27148712f2c97db45ca6991547", null ],
     [ "VkPhysicalDevice", "_ogre_vulkan_prerequisites_8h.html#a3586f545aff0ff062d7a58ac83b90ecf", null ],
-    [ "VkSemaphoreArray", "_ogre_vulkan_prerequisites_8h.html#acae60aed4d41345db59648a2379e3559", null ],
-    [ "SubmissionType", "_ogre_vulkan_prerequisites_8h.html#a119342ed453a2c317a310c790104831e", [
-      [ "FlushOnly", "_ogre_vulkan_prerequisites_8h.html#a119342ed453a2c317a310c790104831ead38befc11f27a51af69cd4bb7acf9231", null ],
-      [ "NewFrameIdx", "_ogre_vulkan_prerequisites_8h.html#a119342ed453a2c317a310c790104831ea008778c80c9330eb944ecf889f267462", null ],
-      [ "EndFrameAndSwap", "_ogre_vulkan_prerequisites_8h.html#a119342ed453a2c317a310c790104831ea502186dffd75155c5a68c40240352a90", null ]
+    [ "Ogre::VkSemaphoreArray", "namespace_ogre.html#acae60aed4d41345db59648a2379e3559", null ],
+    [ "Ogre::SubmissionType::SubmissionType", "namespace_ogre_1_1_submission_type.html#a119342ed453a2c317a310c790104831e", [
+      [ "Ogre::SubmissionType::FlushOnly", "namespace_ogre_1_1_submission_type.html#a119342ed453a2c317a310c790104831ead38befc11f27a51af69cd4bb7acf9231", null ],
+      [ "Ogre::SubmissionType::NewFrameIdx", "namespace_ogre_1_1_submission_type.html#a119342ed453a2c317a310c790104831ea008778c80c9330eb944ecf889f267462", null ],
+      [ "Ogre::SubmissionType::EndFrameAndSwap", "namespace_ogre_1_1_submission_type.html#a119342ed453a2c317a310c790104831ea502186dffd75155c5a68c40240352a90", null ]
     ] ],
-    [ "onVulkanFailure", "_ogre_vulkan_prerequisites_8h.html#a58b32574dbda32c8bb1e410634f1d929", null ]
+    [ "Ogre::onVulkanFailure", "namespace_ogre.html#a58b32574dbda32c8bb1e410634f1d929", null ]
 ];

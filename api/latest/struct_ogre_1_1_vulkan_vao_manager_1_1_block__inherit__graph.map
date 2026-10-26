@@ -1,5 +1,5 @@
 <map id="Ogre::VulkanVaoManager::Block" name="Ogre::VulkanVaoManager::Block">
-<area shape="rect" id="Node000001" title=" " alt="" coords="9,5,194,45"/>
-<area shape="rect" id="Node000002" href="$struct_ogre_1_1_vulkan_discard_buffer_manager_1_1_unsafe_block.html" title=" " alt="" coords="5,93,197,133"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,59,104,93,99,93,99,59"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="9,5,193,50"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_vulkan_discard_buffer_manager_1_1_unsafe_block.html" title=" " alt="" coords="5,98,197,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,64,103,99,99,97,99,68"/>
 </map>

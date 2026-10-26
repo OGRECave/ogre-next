@@ -1,9 +1,9 @@
 <map id="Ogre::GLES2Texture" name="Ogre::GLES2Texture">
-<area shape="rect" id="Node000001" title=" " alt="" coords="127,79,278,104"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_g_l_e_s2_depth_texture.html" title=" " alt="" coords="5,152,195,177"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="176,114,118,154,115,150,173,110"/>
-<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_l_e_s2_null_texture.html" title=" " alt="" coords="219,152,395,177"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="232,110,291,150,288,154,229,114"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="93,5,313,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="205,44,205,79,200,79,200,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="128,81,277,109"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_g_l_e_s2_depth_texture.html" title=" " alt="" coords="5,157,194,184"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="174,117,119,159,116,154,169,119"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_l_e_s2_null_texture.html" title=" " alt="" coords="217,157,392,184"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="234,116,289,156,284,156,232,121"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="92,5,312,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,47,205,82,200,79,201,51"/>
 </map>

@@ -1,9 +1,9 @@
 <map id="Ogre::ConcentricShadowCamera" name="Ogre::ConcentricShadowCamera">
-<area shape="rect" id="Node000001" title="Implements the concentric shadow mapping algorithm." alt="" coords="5,240,237,265"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_default_shadow_camera_setup.html" title="Implements default shadow camera setup." alt="" coords="16,152,227,192"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,206,124,240,119,240,119,206"/>
-<area shape="rect" id="Node000003" href="$class_ogre_1_1_shadow_camera_setup.html" title="This class allows you to plug in new ways to define the camera setup when rendering and projecting sh..." alt="" coords="21,79,221,104"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="124,118,124,152,119,152,119,118"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="34,5,209,31"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="124,44,124,79,119,79,119,44"/>
+<area shape="rect" id="Node000001" title="Implements the concentric shadow mapping algorithm." alt="" coords="5,249,237,277"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_default_shadow_camera_setup.html" title="Implements default shadow camera setup." alt="" coords="16,157,226,201"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,215,123,250,119,248,119,219"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_shadow_camera_setup.html" title="This class allows you to plug in new ways to define the camera setup when rendering and projecting sh..." alt="" coords="21,81,221,109"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="122,122,124,157,118,155,120,127"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="34,5,208,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="122,46,124,81,118,80,120,51"/>
 </map>

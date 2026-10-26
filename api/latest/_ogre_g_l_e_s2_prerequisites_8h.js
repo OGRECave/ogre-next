@@ -79,5 +79,5 @@ var _ogre_g_l_e_s2_prerequisites_8h =
     [ "OCGE", "_ogre_g_l_e_s2_prerequisites_8h.html#abfd865b3e7fad46b5e4e46ab17e04564", null ],
     [ "OGRE_CHECK_GL_ERROR", "_ogre_g_l_e_s2_prerequisites_8h.html#a68ed09c6ada21ef994461cea24497286", null ],
     [ "OGRE_IF_IOS_VERSION_IS_GREATER_THAN", "_ogre_g_l_e_s2_prerequisites_8h.html#a6c2be7f20d5f91ff9a714fd044ad9ca6", null ],
-    [ "GLES2TexturePtr", "_ogre_g_l_e_s2_prerequisites_8h.html#aa03128706f8570ed424eb6bbe665ca05", null ]
+    [ "Ogre::GLES2TexturePtr", "namespace_ogre.html#aa03128706f8570ed424eb6bbe665ca05", null ]
 ];

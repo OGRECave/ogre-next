@@ -1,5 +1,5 @@
 <map id="Ogre::RootLayout" name="Ogre::RootLayout">
-<area shape="rect" id="Node000001" title="The RootLayout class." alt="" coords="27,5,162,31"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_vulkan_root_layout.html" title=" " alt="" coords="5,79,184,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,44,97,79,92,79,92,44"/>
+<area shape="rect" id="Node000001" title="The RootLayout class." alt="" coords="27,5,161,33"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_vulkan_root_layout.html" title=" " alt="" coords="5,81,183,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,47,96,82,92,80,92,51"/>
 </map>

@@ -1935,8 +1935,8 @@ var group___math =
     [ "Ogre::rawOffsetPointer", "group___math.html#gaa161435a76ab49141fff8f2e2faa167a", null ],
     [ "Ogre::rawOffsetPointer", "group___math.html#ga851eb77e2ef235338b9f072977c14e99", null ],
     [ "Ogre::rawOffsetPointer", "group___math.html#gaa14297743ced17d06a53ab9ea914e17f", null ],
-    [ "Ogre::Radian::valueAngleUnits", "group___math.html#ga8f7034ef9399fbeed2e1183ee34c26d8", null ],
     [ "Ogre::Degree::valueAngleUnits", "group___math.html#gaa8f0b95bb9c1b907676f4f80d733efd3", null ],
+    [ "Ogre::Radian::valueAngleUnits", "group___math.html#ga8f7034ef9399fbeed2e1183ee34c26d8", null ],
     [ "Ogre::Radian::valueDegrees", "group___math.html#ga562b349029e40604b6cf201fc49ef68a", null ],
     [ "Ogre::Degree::valueRadians", "group___math.html#gad18eb71b870151f8db42f9f4c8318096", null ],
     [ "Ogre::Radian::wrapToRangeNPI_PI", "group___math.html#ga27cd9d0c1aae1f96774414a58daeb154", null ]

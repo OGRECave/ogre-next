@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$struct_ogre_1_1_scene_query_1_1_world_fragment.html" title="Represents part of the world geometry that is a result of a SceneQuery." alt="" coords="5,5,251,31"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_vulkan_support.html" title=" " alt="" coords="5,57,159,85"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_vulkan_android_support.html" title=" " alt="" coords="207,5,410,33"/>
+<area shape="poly" id="edge1213_Node000000_Node000001" title=" " alt="" coords="160,51,247,32,242,35,161,56"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_vulkan_win32_support.html" title=" " alt="" coords="211,57,406,85"/>
+<area shape="poly" id="edge1214_Node000000_Node000002" title=" " alt="" coords="174,69,213,71,208,72,174,74"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_vulkan_xcb_support.html" title=" " alt="" coords="220,109,397,137"/>
+<area shape="poly" id="edge1215_Node000000_Node000003" title=" " alt="" coords="161,86,247,108,242,109,160,92"/>
 </map>

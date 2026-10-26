@@ -1,7 +1,7 @@
 <map id="Ogre::v1::AnimationStateControllerValue" name="Ogre::v1::AnimationStateControllerValue">
-<area shape="rect" id="Node000001" title="ControllerValue wrapper class for AnimationState." alt="" coords="5,167,192,207"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_controller_value.html" title=" " alt="" coords="18,79,179,119"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,133,101,166,96,166,96,133"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="31,5,167,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,44,101,79,96,79,96,44"/>
+<area shape="rect" id="Node000001" title="ControllerValue wrapper class for AnimationState." alt="" coords="5,174,191,218"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_controller_value.html" title=" " alt="" coords="18,81,178,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,139,101,174,95,173,96,143"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="30,5,166,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,46,101,81,95,80,97,51"/>
 </map>

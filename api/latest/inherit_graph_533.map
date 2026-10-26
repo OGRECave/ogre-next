@@ -1,7 +1,25 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,280,31"/>
-<area shape="rect" id="Node000001" href="$class_ogre_1_1_g_l_e_s2_r_t_t_manager.html" title="Manager/factory for RenderTextures." alt="" coords="328,5,511,31"/>
-<area shape="poly" id="edge1110_Node000000_Node000001" title=" " alt="" coords="294,15,328,15,328,21,294,21"/>
-<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l_e_s2_f_b_o_manager.html" title="Factory for GL ES 2 Frame Buffer Objects, and related things." alt="" coords="559,5,745,31"/>
-<area shape="poly" id="edge1111_Node000001_Node000002" title=" " alt="" coords="525,15,558,15,558,21,525,21"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,240,119,268"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_exception.html" title="When thrown, provides information about an error that has occurred inside the engine." alt="" coords="167,240,291,268"/>
+<area shape="poly" id="edge1221_Node000000_Node000001" title=" " alt="" coords="133,251,169,252,164,255,135,256"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_file_not_found_exception.html" title=" " alt="" coords="356,5,565,33"/>
+<area shape="poly" id="edge1222_Node000001_Node000002" title=" " alt="" coords="235,224,247,183,268,134,297,85,316,63,337,44,362,32,358,35,341,48,320,67,302,88,273,137,252,185,239,226"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_i_o_exception.html" title=" " alt="" coords="391,57,529,85"/>
+<area shape="poly" id="edge1223_Node000001_Node000003" title=" " alt="" coords="240,224,277,159,304,124,338,96,363,83,393,76,388,79,365,88,340,100,308,128,281,162,244,227"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_internal_error_exception.html" title=" " alt="" coords="358,109,563,137"/>
+<area shape="poly" id="edge1224_Node000001_Node000004" title=" " alt="" coords="248,226,286,185,311,165,338,147,371,136,366,139,340,152,314,169,290,189,252,230"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_invalid_call_exception.html" title=" " alt="" coords="364,161,557,189"/>
+<area shape="poly" id="edge1225_Node000001_Node000005" title=" " alt="" coords="268,230,338,199,384,188,380,191,340,204,270,235"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_invalid_parameters_exception.html" title=" " alt="" coords="339,213,581,241"/>
+<area shape="poly" id="edge1226_Node000001_Node000006" title=" " alt="" coords="305,242,341,240,336,242,307,247"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_invalid_state_exception.html" title=" " alt="" coords="359,265,561,293"/>
+<area shape="poly" id="edge1227_Node000001_Node000007" title=" " alt="" coords="306,260,361,267,356,269,307,265"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_item_identity_exception.html" title=" " alt="" coords="358,317,562,345"/>
+<area shape="poly" id="edge1228_Node000001_Node000008" title=" " alt="" coords="270,272,340,302,385,316,379,317,338,307,270,278"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_rendering_a_p_i_exception.html" title=" " alt="" coords="354,369,566,397"/>
+<area shape="poly" id="edge1229_Node000001_Node000009" title=" " alt="" coords="251,277,291,318,314,338,340,354,372,369,367,369,338,359,311,342,287,322,250,282"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_runtime_assertion_exception.html" title=" " alt="" coords="340,421,580,449"/>
+<area shape="poly" id="edge1230_Node000001_Node000010" title=" " alt="" coords="243,279,281,345,308,378,340,406,366,421,361,421,338,411,304,382,277,348,241,284"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_unimplemented_exception.html" title="Template struct which creates a distinct type for each exception code." alt="" coords="346,473,575,501"/>
+<area shape="poly" id="edge1231_Node000001_Node000011" title=" " alt="" coords="238,280,252,322,273,370,302,418,320,440,341,458,363,473,358,472,337,463,316,444,298,421,268,373,247,324,236,285"/>
 </map>

@@ -1,3 +1,29 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_ogre_1_1_log_1_1_stream.html" title="Stream object which targets a log." alt="" coords="5,5,144,31"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_small_vector_base.html" title="SmallVectorBase &#45; This is all the non&#45;templated stuff common to all SmallVectors." alt="" coords="5,151,176,178"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="224,142,422,187"/>
+<area shape="poly" id="edge1173_Node000000_Node000001" title=" " alt="" coords="191,162,226,164,221,165,192,167"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="470,56,668,118"/>
+<area shape="poly" id="edge1174_Node000001_Node000002" title=" " alt="" coords="410,134,472,118,467,119,412,140"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_small_vector_template_base_3_01_t_00_01true_01_4.html" title="SmallVectorTemplateBase&lt;isPodLike = true&gt; &#45; This is where we put method implementations that are desi..." alt="" coords="470,142,668,187"/>
+<area shape="poly" id="edge1184_Node000001_Node000012" title=" " alt="" coords="438,162,472,164,467,165,438,167"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_small_vector_template_base.html" title="SmallVectorTemplateBase&lt;isPodLike = false&gt; &#45; This is where we put method implementations that are des..." alt="" coords="470,212,668,256"/>
+<area shape="poly" id="edge1185_Node000001_Node000013" title=" " alt="" coords="420,189,490,211,485,211,419,194"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_small_vector_impl.html" title=" " alt="" coords="765,48,873,76"/>
+<area shape="poly" id="edge1175_Node000002_Node000003" title=" " alt="" coords="683,73,767,67,762,68,684,78"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_small_vector_impl.html" title="SmallVectorImpl &#45; This class consists of common code factored out of the SmallVector class to reduce ..." alt="" coords="716,100,922,128"/>
+<area shape="poly" id="edge1176_Node000002_Node000004" title=" " alt="" coords="684,97,719,103,713,103,684,102"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_small_vector.html" title=" " alt="" coords="970,5,1132,33"/>
+<area shape="poly" id="edge1177_Node000004_Node000005" title=" " alt="" coords="906,92,920,85,935,75,944,64,953,53,968,42,991,34,996,33,971,47,957,57,948,68,938,79,923,89,907,97"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_small_vector.html" title=" " alt="" coords="976,57,1126,102"/>
+<area shape="poly" id="edge1178_Node000004_Node000006" title=" " alt="" coords="930,95,978,90,973,91,931,100"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html" title="Specialize SmallVector at N=0." alt="" coords="976,126,1126,171"/>
+<area shape="poly" id="edge1180_Node000004_Node000008" title=" " alt="" coords="931,128,978,137,973,137,931,133"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_small_vector.html" title="SmallVector &#45; This is a &#39;vector&#39; (really, a variable&#45;sized array), optimized for the case when the ar..." alt="" coords="976,196,1126,240"/>
+<area shape="poly" id="edge1181_Node000004_Node000009" title=" " alt="" coords="865,132,971,181,999,195,994,194,969,186,864,137"/>
+<area shape="rect" id="Node000007" href="$struct_ogre_1_1_vector_set.html" title="VectorSet is basically a helper to use a vector as a small set container." alt="" coords="1192,65,1368,93"/>
+<area shape="poly" id="edge1179_Node000006_Node000007" title=" " alt="" coords="1141,77,1194,79,1189,79,1141,82"/>
+<area shape="rect" id="Node000010" href="$struct_ogre_1_1_vector_set.html" title=" " alt="" coords="1180,173,1380,201"/>
+<area shape="poly" id="edge1182_Node000009_Node000010" title=" " alt="" coords="1140,203,1177,201,1182,200,1141,209"/>
+<area shape="rect" id="Node000011" href="$struct_ogre_1_1_vector_set.html" title=" " alt="" coords="1186,225,1374,270"/>
+<area shape="poly" id="edge1183_Node000009_Node000011" title=" " alt="" coords="1141,227,1188,235,1183,235,1141,232"/>
 </map>

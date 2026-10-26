@@ -16,6 +16,6 @@ var searchData=
   ['lodlevellist_13',['LodLevelList',['../struct_ogre_1_1_lod_config.html#afde8b2012578a20adfde035aa518f13e',1,'Ogre::LodConfig']]],
   ['lodoutputproviderptr_14',['LodOutputProviderPtr',['../namespace_ogre.html#ae57d12f3dc7924e86a2aee7c779d8726',1,'Ogre']]],
   ['lodprofile_15',['LodProfile',['../namespace_ogre.html#a8f2ca3c32da32a6a5eb07e12bfdcb1aa',1,'Ogre']]],
-  ['lodvaluearray_16',['lodvaluearray',['../class_ogre_1_1_mesh.html#a755ff206ec856db92062df2669a0b6d1',1,'Ogre::Mesh::LodValueArray'],['../class_ogre_1_1v1_1_1_mesh.html#ab66af3474321456dcdbc75c2c67b489b',1,'Ogre::v1::Mesh::LodValueArray'],['../class_ogre_1_1_material.html#a7726f446442e5df77f29e2fd91af1633',1,'Ogre::Material::LodValueArray']]],
+  ['lodvaluearray_16',['LodValueArray',['../class_ogre_1_1_material.html#a7726f446442e5df77f29e2fd91af1633',1,'Ogre::Material::LodValueArray'],['../class_ogre_1_1v1_1_1_mesh.html#ab66af3474321456dcdbc75c2c67b489b',1,'Ogre::v1::Mesh::LodValueArray'],['../class_ogre_1_1_mesh.html#a755ff206ec856db92062df2669a0b6d1',1,'Ogre::Mesh::LodValueArray']]],
   ['lodvalueiterator_17',['LodValueIterator',['../class_ogre_1_1_material.html#aefc64a391f751ffb3cb5153c3d81bc1b',1,'Ogre::Material']]]
 ];
