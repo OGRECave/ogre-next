@@ -37,7 +37,8 @@ namespace Ogre
         enum InterfaceType
         {
             WindowNative,  // GLX / WGL / Cocoa
-            HeadlessEgl    // EGL headless
+            HeadlessEgl,   // EGL headless
+            WaylandEgl     // EGL native Wayland (embeds into a host-owned wl_surface)
         };
 
         struct Interface
