@@ -1,4 +1,4 @@
-/*
+rustumfrustumFrustum/*
 -----------------------------------------------------------------------------
 This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
@@ -67,7 +67,7 @@ namespace Ogre
         mCustomViewMatrix( false ),
         mCustomProjMatrix( false ),
         mFrustumExtentsManuallySet( false ),
-        mFrustrumExtentsType( FET_PROJ_PLANE_POS ),
+        mFrustumExtentsType( FET_PROJ_PLANE_POS ),
         mOrientationMode( OR_DEGREE_0 ),
         mVertexData( NULL ),
         mReflect( false ),
@@ -351,7 +351,7 @@ namespace Ogre
                 top = mTop;
                 bottom = mBottom;
 
-                if( mFrustrumExtentsType == FET_TAN_HALF_ANGLES && mProjType != PT_ORTHOGRAPHIC )
+                if( mFrustumExtentsType == FET_TAN_HALF_ANGLES && mProjType != PT_ORTHOGRAPHIC )
                 {
                     left *= mNearDist;
                     right *= mNearDist;
@@ -1330,10 +1330,10 @@ namespace Ogre
     Real Frustum::getOrthoWindowWidth() const { return mOrthoHeight * mAspect; }
     //---------------------------------------------------------------------
     void Frustum::setFrustumExtents( Real left, Real right, Real top, Real bottom,
-                                     FrustrumExtentsType frustrumExtentsType )
+                                     FrustumExtentsType frustumExtentsType )
     {
         mFrustumExtentsManuallySet = true;
-        mFrustrumExtentsType = frustrumExtentsType;
+        mFrustumExtentsType = frustumExtentsType;
         mLeft = left;
         mRight = right;
         mTop = top;
@@ -1347,15 +1347,15 @@ namespace Ogre
     void Frustum::resetFrustumExtents()
     {
         mFrustumExtentsManuallySet = false;
-        mFrustrumExtentsType = FET_PROJ_PLANE_POS;
+        mFrustumExtentsType = FET_PROJ_PLANE_POS;
         invalidateFrustum();
     }
     //---------------------------------------------------------------------
     void Frustum::getFrustumExtents( Real &outleft, Real &outright, Real &outtop, Real &outbottom,
-                                     FrustrumExtentsType frustrumExtentsType ) const
+                                     FrustumExtentsType frustumExtentsType ) const
     {
         updateFrustum();
-        if( frustrumExtentsType == FET_TAN_HALF_ANGLES && mFrustrumExtentsType == FET_PROJ_PLANE_POS &&
+        if( frustumExtentsType == FET_TAN_HALF_ANGLES && mFrustumExtentsType == FET_PROJ_PLANE_POS &&
             mProjType != PT_ORTHOGRAPHIC )
         {
             outleft = mLeft / mNearDist;
@@ -1363,8 +1363,8 @@ namespace Ogre
             outtop = mTop / mNearDist;
             outbottom = mBottom / mNearDist;
         }
-        else if( frustrumExtentsType == FET_PROJ_PLANE_POS &&
-                 mFrustrumExtentsType == FET_TAN_HALF_ANGLES && mProjType != PT_ORTHOGRAPHIC )
+        else if( frustumExtentsType == FET_PROJ_PLANE_POS &&
+                 mFrustumExtentsType == FET_TAN_HALF_ANGLES && mProjType != PT_ORTHOGRAPHIC )
         {
             outleft = mLeft * mNearDist;
             outright = mRight * mNearDist;
@@ -1398,7 +1398,7 @@ namespace Ogre
     {
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE != 0
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                     "Setting Frustrum orientation mode is not supported", __FUNCTION__ );
+                     "Setting Frustum orientation mode is not supported", __FUNCTION__ );
 #endif
         if( mOrientationMode != orientationMode )
         {
@@ -1411,7 +1411,7 @@ namespace Ogre
     {
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE != 0
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                     "Getting Frustrum orientation mode is not supported", __FUNCTION__ );
+                     "Getting Frustum orientation mode is not supported", __FUNCTION__ );
 #endif
         return mOrientationMode;
     }
