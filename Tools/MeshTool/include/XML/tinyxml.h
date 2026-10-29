@@ -1481,7 +1481,7 @@ public:
     */
     void ClearError()                       {   error = false; 
                                                 errorId = 0; 
-                                                errorDesc = ""; 
+                                                errorDesc.clear(); 
                                                 errorLocation.row = errorLocation.col = 0; 
                                                 //errorLocation.last = 0; 
                                             }
@@ -1739,8 +1739,8 @@ public:
     /** Switch over to "stream printing" which is the most dense formatting without 
         linebreaks. Common when the XML is needed for network transmission.
     */
-    void SetStreamPrinting()                        { indent = "";
-                                                      lineBreak = "";
+    void SetStreamPrinting()                        { indent.clear();
+                                                      lineBreak.clear();
                                                     }   
     /// Return the result.
     const char* CStr()                              { return buffer.c_str(); }

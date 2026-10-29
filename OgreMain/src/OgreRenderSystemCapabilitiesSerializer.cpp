@@ -232,7 +232,7 @@ namespace Ogre
 
             // skip empty and comment lines
             // TODO: handle end of line comments
-            if (tokens[0] == "" || tokens[0].substr(0,2) == "//")
+            if (tokens[0].empty() || tokens[0].substr(0,2) == "//")
                 continue;
 
             switch (parseAction)
