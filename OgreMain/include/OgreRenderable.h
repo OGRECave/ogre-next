@@ -335,7 +335,7 @@ namespace Ogre
             information only this Renderable knows.
         @remarks
             This method allows a Renderable to map in a custom GPU program parameter
-            based on it's own data. This is represented by a GPU auto parameter
+            based on its own data. This is represented by a GPU auto parameter
             of ACT_CUSTOM, and to allow there to be more than one of these per
             Renderable, the 'data' field on the auto parameter will identify
             which parameter is being updated. The implementation of this method
@@ -419,13 +419,13 @@ namespace Ogre
         */
         void setDatablockOrMaterialName( String materialName, String groupName );
 
-        /** Assigns a datablock (i.e. HLMS material) based on its unique name.
+        /** Assigns a datablock (i.e., HLMS material) based on its unique name.
         @remarks
-            An null IdString() is valid, it will use the default material
+            A null IdString() is valid, it will use the default material
         */
         void setDatablock( IdString datablockName );
 
-        /// Assigns a datablock (i.e. HLMS Material) to this renderable
+        /// Assigns a datablock (i.e., HLMS Material) to this renderable
         virtual void setDatablock( HlmsDatablock *datablock );
 
         /** Sets the datablock to a null pointer. Use case: If you will be destroying an
@@ -511,7 +511,7 @@ namespace Ogre
         uint32 mHlmsGlobalIndex;
 
     public:
-        /** Control visibility at Renderable (e.g. SubMesh) level
+        /** Control visibility at Renderable (e.g., SubMesh) level
 
             Note that if our MovableObject owner called MovableObject::setVisible( false )
             we won't get rendered. Both must be true in order to render.

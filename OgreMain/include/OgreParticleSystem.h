@@ -182,7 +182,7 @@ namespace Ogre
         */
         ParticleEmitter *addEmitter( const String &emitterType );
 
-        /** Retrieves an emitter by it's index (zero-based).
+        /** Retrieves an emitter by its index (zero-based).
         @remarks
             Used to retrieve a pointer to an emitter for a particle system to procedurally change
             emission parameters etc.
@@ -228,7 +228,7 @@ namespace Ogre
         */
         ParticleAffector *addAffector( const String &affectorType );
 
-        /** Retrieves an affector by it's index (zero-based).
+        /** Retrieves an affector by its index (zero-based).
         @remarks
             Used to retrieve a pointer to an affector for a particle system to procedurally change
             affector parameters etc.
@@ -276,7 +276,7 @@ namespace Ogre
         @note
             There is no corresponding 'destroyParticle' method - if you want to dispose of a
             particle manually (say, if you've used setSpeedFactor(0) to make particles live forever)
-            you should use getParticle() and modify it's timeToLive to zero, meaning that it will
+            you should use getParticle() and modify its timeToLive to zero, meaning that it will
             get cleaned up in the next update.
         */
         Particle *createParticle();
@@ -311,7 +311,7 @@ namespace Ogre
             Particle systems all have a particle quota, i.e. a maximum number of particles they are
             allowed to have active at a time. This allows the application to set a keep particle systems
             under control should they be affected by complex parameters which alter their emission rates
-            etc. If a particle system reaches it's particle quota, none of the emitters will be able to
+            etc. If a particle system reaches its particle quota, none of the emitters will be able to
             emit any more particles. As existing particles die, the spare capacity will be allocated
             equally across all emitters to be as consistent to the original particle system style as
         possible. The quota can be increased but not decreased after the system has been created.
@@ -517,7 +517,7 @@ namespace Ogre
             set (maybe one set per section of landscape), which will be culled coarsely, but you also
             want to cull the particles individually because they are spread out. Whilst you could have
             lots of single-tree sets which are culled separately, this would be inefficient to render
-            because each tree would be issued as it's own rendering operation.
+            because each tree would be issued as its own rendering operation.
         @par
             By calling this method with a parameter of true, you can have large particle sets which
             are spaced out and so get the benefit of batch rendering and coarse culling, but also have
@@ -528,14 +528,14 @@ namespace Ogre
         virtual void setCullIndividually( bool cullIndividual );
         /// Return the resource group to be used to load dependent resources
         virtual const String &getResourceGroupName() const { return mResourceGroupName; }
-        /** Get the origin of this particle system, e.g. a script file name.
+        /** Get the origin of this particle system, e.g., a script file name.
         @remarks
             This property will only contain something if the creator of
             this particle system chose to populate it. Script loaders are advised
             to populate it.
         */
         const String &getOrigin() const { return mOrigin; }
-        /// Notify this particle system of it's origin
+        /// Notify this particle system of its origin
         void _notifyOrigin( const String &origin ) { mOrigin = origin; }
 
         /** @copydoc MovableObject::setRenderQueueGroup */
@@ -564,7 +564,7 @@ namespace Ogre
             number of seconds, so that the bounds are calculated for a few
             seconds and then frozen.
         @param autoUpdate If true (the default), the particle system will
-            update it's bounds every frame. If false, the bounds update will
+            update its bounds every frame. If false, the bounds update will
             cease after the 'stopIn' number of seconds have passed.
         @param stopIn Only applicable if the first parameter is true, this is the
             number of seconds after which the automatic update will cease.

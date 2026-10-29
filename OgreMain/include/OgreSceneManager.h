@@ -203,7 +203,7 @@ namespace Ogre
         }
     };
 
-    /** Manages the organisation and rendering of a 'scene' i.e. a collection
+    /** Manages the organisation and rendering of a 'scene', i.e., a collection
         of objects and potentially world geometry.
     @remarks
         This class defines the interface and the basic behaviour of a
@@ -945,7 +945,7 @@ namespace Ogre
 
         /** Builds a list of all lights that are visible by all queued cameras (this should be fed by
             Compositor). Then calls MovableObject::buildLightList with that list so that each
-            MovableObject gets it's own sorted list of the closest lights.
+            MovableObject gets its own sorted list of the closest lights.
         @remarks
             @see MovableObject::buildLightList()
         */
@@ -1055,7 +1055,7 @@ namespace Ogre
             @remarks
                 This method removes a previously added camera from the scene.
                 The camera is deleted so the caller must ensure no references
-                to it's previous instance (e.g. in a SceneNode) are used.
+                to its previous instance (e.g. in a SceneNode) are used.
             @param cam
                 Pointer to the camera to remove
         */
@@ -1129,7 +1129,7 @@ namespace Ogre
                 scenes.
             @par
                 To include the returned SceneNode in the scene, use the addChild
-                method of the SceneNode which is to be it's parent.
+                method of the SceneNode which is to be its parent.
             @par
                 Note that this method takes no parameters, and the node created is unnamed (it is
                 actually given a generated name, which you can retrieve if you want).
@@ -1220,7 +1220,7 @@ namespace Ogre
         /// we guarantee the dummy won't change its transform.
         SceneNode *getDummySceneNode() const { return mSceneDummy; }
 
-        /** Retrieves a SceneNode based on it's ID from the scene graph.
+        /** Retrieves a SceneNode based on its ID from the scene graph.
         @remarks
             @note Returns null if the ID does not exist
             @note It is a linear search O(N), retrieves the first node found
@@ -1601,7 +1601,7 @@ namespace Ogre
             be released earlier using the destroyParticleSystem method.
         @par
             The instance returned from this method won't actually do anything because on creation a
-            particle system has no emitters. The caller should manipulate the instance through it's
+            particle system has no emitters. The caller should manipulate the instance through its
             ParticleSystem methods to actually create a real particle effect.
         @par
             Creating a particle system does not make it a part of the scene. As with other MovableObject
@@ -1870,7 +1870,7 @@ namespace Ogre
         /// @see mTmpVisibleObjects
         VisibleObjectsPerThreadArray &_getTmpVisibleObjectsList() { return mTmpVisibleObjects; }
 
-        /** Notifies that the given MovableObject is dirty (i.e. the AABBs have changed).
+        /** Notifies that the given MovableObject is dirty (i.e., the AABBs have changed).
             Note that the parent SceneNodes of this/these objects are not updated and you will
             have to call @see notifyStaticDirty on the SceneNode if the position/rotation/scale
             have changed.
@@ -2030,7 +2030,7 @@ namespace Ogre
             @remarks
                 This method sets up the scene-wide fogging effect. These settings
                 apply to all geometry rendered, UNLESS the material with which it
-                is rendered has it's own fog settings (see Material::setFog).
+                is rendered has its own fog settings (see Material::setFog).
             @param
                 mode Set up the mode of fog as described in the FogMode
                 enum, or set to FOG_NONE to turn off.
@@ -2180,9 +2180,9 @@ namespace Ogre
             Remember, AnimationState objects are disabled by default at creation time.
             Turn them on when you want them using their setEnabled method.
         @par
-            Note that any SceneNode affected by this automatic animation will have it's state
-            reset to it's initial position before application of the animation. Unless specifically
-            modified using Node::setInitialState the Node assumes it's initial state is at the
+            Note that any SceneNode affected by this automatic animation will have its state
+            reset to its initial position before application of the animation. Unless specifically
+            modified using Node::setInitialState the Node assumes its initial state is at the
             origin. If you want the base state of the SceneNode to be elsewhere, make your changes
             to the node using the standard transform methods, then call setInitialState to
             'bake' this reference position into the node.
