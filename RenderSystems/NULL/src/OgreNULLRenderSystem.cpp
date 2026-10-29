@@ -29,6 +29,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreNULLRenderSystem.h"
 
 #include "OgreDefaultHardwareBufferManager.h"
+#include "OgreNULLGpuProgramManager.h"
 #include "OgreNULLTextureGpuManager.h"
 #include "OgreNULLWindow.h"
 #include "OgreRenderPassDescriptor.h"
@@ -40,7 +41,8 @@ namespace Ogre
     NULLRenderSystem::NULLRenderSystem() :
         RenderSystem(),
         mInitialized( false ),
-        mHardwareBufferManager( 0 )
+        mHardwareBufferManager( 0 ),
+        mShaderManager( 0 )
     {
     }
     //-------------------------------------------------------------------------
@@ -50,6 +52,9 @@ namespace Ogre
     {
         OGRE_DELETE mHardwareBufferManager;
         mHardwareBufferManager = 0;
+
+        OGRE_DELETE mShaderManager;
+        mShaderManager = 0;
     }
     //-------------------------------------------------------------------------
     const String &NULLRenderSystem::getName() const
@@ -143,6 +148,7 @@ namespace Ogre
             mHardwareBufferManager = new v1::DefaultHardwareBufferManager();
             mVaoManager = OGRE_NEW NULLVaoManager();
             mTextureGpuManager = OGRE_NEW NULLTextureGpuManager( mVaoManager, this );
+            mShaderManager = OGRE_NEW NULLGpuProgramManager();
 
             mInitialized = true;
         }
