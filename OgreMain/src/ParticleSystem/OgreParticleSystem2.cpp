@@ -487,6 +487,7 @@ uint32 ParticleSystemDef::allocParticle()
                 return InvalidHandle;
             }
 
+            mActiveParticles.set( newIdx );
             return static_cast<uint32>( newIdx );
         }
         else
@@ -513,6 +514,7 @@ uint32 ParticleSystemDef::allocParticle()
                 }
             }
 
+            mActiveParticles.set( newIdx );
             return static_cast<uint32>( newIdx );
         }
     }
