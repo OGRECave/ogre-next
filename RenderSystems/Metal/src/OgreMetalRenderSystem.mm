@@ -1595,9 +1595,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     bool MetalRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newPso, uint64 deadline )
     {
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-        debugLogPso( newPso );
-#endif
+        if( !RenderSystem::_hlmsPipelineStateObjectCreated( newPso, deadline ) )
+            return false;
 
         MTLRenderPipelineDescriptor *psd = [[MTLRenderPipelineDescriptor alloc] init];
         [psd

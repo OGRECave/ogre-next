@@ -392,6 +392,7 @@ namespace Ogre
                                  bool bIsMultisample );
         void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock ) override;
         void _setPipelineStateObject( const HlmsPso *pso ) override;
+        void _validatePipelineStateObject( const HlmsPso *pso ) const override;
 
         void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer ) override;
 

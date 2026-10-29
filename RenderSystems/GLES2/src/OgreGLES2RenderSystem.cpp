@@ -1183,6 +1183,9 @@ namespace Ogre {
 
     bool GLES2RenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newBlock, uint64 deadline )
     {
+        if( !RenderSystem::_hlmsPipelineStateObjectCreated( newBlock, deadline ) )
+            return false;
+
         GLES2HlmsPso *pso = new GLES2HlmsPso();
         memset( pso, 0, sizeof(GLES2HlmsPso) );
         

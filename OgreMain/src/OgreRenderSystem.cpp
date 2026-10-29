@@ -262,6 +262,8 @@ namespace Ogre
         // Derived class must set new state
     }
     //-----------------------------------------------------------------------
+    void RenderSystem::_validatePipelineStateObject( const HlmsPso * /*pso*/ ) const {}
+    //-----------------------------------------------------------------------
     void RenderSystem::_setTextureUnitSettings( size_t texUnit, TextureUnitState &tl )
     {
         // This method is only ever called to set a texture unit to valid details
@@ -1393,6 +1395,14 @@ namespace Ogre
         }
 
         mIncompletePsoRequestsCounterFrame += count;
+    }
+    bool RenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newPso, uint64 deadline )
+    {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        debugLogPso( newPso );
+        _validatePipelineStateObject( newPso );
+#endif
+        return true;
     }
     //---------------------------------------------------------------------
     bool RenderSystem::startGpuDebuggerFrameCapture( Window *window )
