@@ -267,6 +267,7 @@ private:
 protected:
     wxChoice   *m_presetChoice;
     wxCheckBox *m_cameraRelativeCheckbox;
+    wxCheckBox *m_hdrCheckbox;
     wxSlider   *m_eulerXSlider;
     wxTextCtrl *m_eulerX;
     wxSlider   *m_eulerYSlider;

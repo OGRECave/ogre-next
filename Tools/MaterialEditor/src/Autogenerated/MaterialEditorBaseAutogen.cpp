@@ -2064,9 +2064,19 @@ LightPanelBase::LightPanelBase( wxWindow *parent, wxWindowID id, const wxPoint &
 
     rootLayout->Add( Preset, 0, wxEXPAND, 5 );
 
+    wxBoxSizer *bSizer78;
+    bSizer78 = new wxBoxSizer( wxHORIZONTAL );
+
     m_cameraRelativeCheckbox =
         new wxCheckBox( this, wxID_ANY, _( "Camera Relative" ), wxDefaultPosition, wxDefaultSize, 0 );
-    rootLayout->Add( m_cameraRelativeCheckbox, 0, wxALL, 5 );
+    bSizer78->Add( m_cameraRelativeCheckbox, 0, wxALL, 5 );
+
+    bSizer78->Add( 0, 0, 1, wxEXPAND, 5 );
+
+    m_hdrCheckbox = new wxCheckBox( this, wxID_ANY, _( "HDR" ), wxDefaultPosition, wxDefaultSize, 0 );
+    bSizer78->Add( m_hdrCheckbox, 0, wxALL, 5 );
+
+    rootLayout->Add( bSizer78, 0, wxEXPAND, 5 );
 
     wxStaticBoxSizer *sbSizer26;
     sbSizer26 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _( "Euler" ) ), wxVERTICAL );

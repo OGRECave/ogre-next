@@ -76,6 +76,12 @@ class MainWindow final : public MainWindowBase,
     /// Creates Ogre secondary stuff like cameras and scene managers.
     void createSystems( const CmdSettings &cmdSettings );
 
+    /** (Re)creates the compositor workspace used to render the viewport.
+    @param bHdrEnabled
+        True to use the HDR workspace; false to use a simple LDR compositor.
+    */
+    void createCompositorWorkspace( const bool bHdrEnabled );
+
     void addResourceLocation( const Ogre::String &archName, const Ogre::String &typeName,
                               const Ogre::String &secName );
 
@@ -165,6 +171,9 @@ public:
     PbsParametersPanel *getPbsParametersPanel() { return m_pbsParametersPanel; }
     LightPanel         *getLightPanel() { return m_lightPanel; }
     ProjectSettings    &getProjectSettings() { return *m_projectSettings; }
+
+    /// Switches between the HDR and the simple LDR compositor workspace.
+    void setHdrEnabled( const bool bHdrEnabled ) { createCompositorWorkspace( bHdrEnabled ); }
 
     void setActiveDatablock( Ogre::HlmsDatablock *ogre_nullable datablock,
                              const bool                         bUpdateDatablockListSelection = true );

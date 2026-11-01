@@ -328,13 +328,33 @@ void MainWindow::createSystems( const CmdSettings &cmdSettings )
     Ogre::CompositorManager2 *compositorManager = m_root->getCompositorManager2();
     compositorManager->setCompositorPassProvider( new Ogre::DummyCompositorPassProvider() );
 
-    /*const Ogre::String workspaceName( "MaterialEditor Workspace" );
-    if( !compositorManager->hasWorkspaceDefinition( workspaceName ) )
+    createCompositorWorkspace( true );
+}
+//-----------------------------------------------------------------------------
+void MainWindow::createCompositorWorkspace( const bool bHdrEnabled )
+{
+    Ogre::CompositorManager2 *compositorManager = m_root->getCompositorManager2();
+
+    if( m_workspace )
     {
-        compositorManager->createBasicWorkspaceDef( workspaceName, Ogre::ColourValue( 0.2f, 0.4f, 0.6f ),
-                                                    Ogre::IdString() );
-    }*/
-    const Ogre::String workspaceName( "HdrWorkspaceMsaa" );
+        compositorManager->removeWorkspace( m_workspace );
+        m_workspace = 0;
+    }
+
+    Ogre::String workspaceName;
+    if( bHdrEnabled )
+    {
+        workspaceName = "HdrWorkspaceMsaa";
+    }
+    else
+    {
+        workspaceName = "MaterialEditor Ldr Workspace";
+        if( !compositorManager->hasWorkspaceDefinition( workspaceName ) )
+        {
+            compositorManager->createBasicWorkspaceDef(
+                workspaceName, Ogre::ColourValue( 0.2f, 0.4f, 0.6f ), "ShadowMapDebuggingShadowNode" );
+        }
+    }
 
     m_workspace = compositorManager->addWorkspace( m_sceneManager,
                                                    m_wxOgreRenderWindow->GetRenderWindow()->getTexture(),

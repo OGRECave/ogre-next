@@ -116,6 +116,21 @@ static const Preset c_presets[] = {
         3.0f,  // Bloom
         1.0f,  // Env. map scale
     },
+    {
+        "LDR Default",
+        Ogre::ColourValue( 0.2f, 0.4f, 0.6f ),
+        Ogre::ColourValue( 0.3f, 0.50f, 0.7f ) * 0.1125f,
+        Ogre::ColourValue( 0.6f, 0.45f, 0.3f ) * 0.073125f,
+        {
+            Ogre::Math::PI,                 // Sun power
+            Ogre::Math::PI, Ogre::Math::PI  // Lights
+        },
+        0.5f,  // Exposure (unused)
+        1.0f,  // Exposure (unused)
+        2.5f,  // Exposure (unused)
+        3.0f,  // Bloom (unused)
+        1.0f,  // Env. map scale
+    },
 };
 
 constexpr size_t kNumPresets = sizeof( c_presets ) / sizeof( c_presets[0] );
@@ -131,6 +146,7 @@ LightPanel::LightPanel( MainWindow *parent ) :
     m_lightNodes{},
     m_eulerAngles{},
     m_currPresetIdx( 0u ),
+    m_hdrEnabled( true ),
     m_editing( false )
 {
     EditingScope scope( m_editing );
@@ -177,6 +193,9 @@ LightPanel::LightPanel( MainWindow *parent ) :
 
     m_presetChoice->SetSelection( 0 );
     setPreset( 0u );
+
+    m_hdrCheckbox->SetValue( true );
+    m_hdrCheckbox->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED, &LightPanel::OnHdrCheckbox, this );
 
     m_cameraRelativeCheckbox->SetValue( true );
     setCameraRelative( true );
@@ -231,6 +250,21 @@ void LightPanel::OnCheckbox( wxCommandEvent &event )
 
     m_mainWindow->getUndoSystem().pushUndoLights();
     setCameraRelative( m_cameraRelativeCheckbox->IsChecked() );
+    event.Skip();
+}
+//-----------------------------------------------------------------------------
+void LightPanel::OnHdrCheckbox( wxCommandEvent &event )
+{
+    if( m_editing )
+        return;
+    EditingScope scope( m_editing );
+
+    m_mainWindow->getUndoSystem().pushUndoLights();
+    setHdrEnabled( m_hdrCheckbox->IsChecked() );
+
+    if( m_hdrEnabled )
+        setPreset( m_currPresetIdx );
+
     event.Skip();
 }
 //-----------------------------------------------------------------------------
@@ -346,6 +380,18 @@ bool LightPanel::isCameraRelative() const
     return m_secondaryNode->getParentSceneNode() != m_masterNode;
 }
 //-----------------------------------------------------------------------------
+void LightPanel::setHdrEnabled( const bool bHdrEnabled )
+{
+    if( m_hdrEnabled == bHdrEnabled )
+        return;
+
+    m_hdrEnabled = bHdrEnabled;
+    m_hdrCheckbox->SetValue( bHdrEnabled );
+    m_mainWindow->setHdrEnabled( bHdrEnabled );
+}
+//-----------------------------------------------------------------------------
+bool LightPanel::isHdrEnabled() const { return m_hdrEnabled; }
+//-----------------------------------------------------------------------------
 void LightPanel::notifyMeshChanged()
 {
     const Ogre::MovableObject *movableObject = m_mainWindow->getActiveObject();
@@ -370,11 +416,14 @@ void LightPanel::setPreset( const uint32_t presetIdx )
 
     const Preset &preset = c_presets[presetIdx];
 
-    using namespace Demo;
-    HdrUtils::setSkyColour( preset.skyColour, 1.0f, m_mainWindow->getCompositorWorkspace() );
-    HdrUtils::setExposure( preset.exposure, preset.minAutoExposure, preset.maxAutoExposure );
-    HdrUtils::setBloomThreshold( std::max( preset.bloomThreshold - 2.0f, 0.0f ),
-                                 std::max( preset.bloomThreshold, 0.01f ) );
+    if( m_hdrEnabled )
+    {
+        using namespace Demo;
+        HdrUtils::setSkyColour( preset.skyColour, 1.0f, m_mainWindow->getCompositorWorkspace() );
+        HdrUtils::setExposure( preset.exposure, preset.minAutoExposure, preset.maxAutoExposure );
+        HdrUtils::setBloomThreshold( std::max( preset.bloomThreshold - 2.0f, 0.0f ),
+                                     std::max( preset.bloomThreshold, 0.01f ) );
+    }
 
     for( size_t i = 0u; i < 3u; ++i )
     {
@@ -398,6 +447,12 @@ void LightPanel::loadProject( const rapidjson::Document &d )
         return;
 
     const rapidjson::Value &lightObj = itor->value;
+
+    bool bHdrEnabled = true;
+    itor = lightObj.FindMember( "hdr" );
+    if( itor != lightObj.MemberEnd() && itor->value.IsBool() )
+        bHdrEnabled = itor->value.GetBool();
+    setHdrEnabled( bHdrEnabled );
 
     itor = lightObj.FindMember( "preset" );
     if( itor != lightObj.MemberEnd() && itor->value.IsUint() &&
@@ -439,6 +494,8 @@ void LightPanel::saveProject( Ogre::String &jsonString )
     jsonString += std::to_string( m_currPresetIdx );
     jsonString += ",\n		\"camera_relative\" : ";
     jsonString += isCameraRelative() ? "true" : "false";
+    jsonString += ",\n		\"hdr\" : ";
+    jsonString += isHdrEnabled() ? "true" : "false";
     jsonString += ",\n		\"euler\" : [ ";
     jsonString += std::to_string( m_eulerAngles[0] ) + ", " + std::to_string( m_eulerAngles[1] ) + ", " +
                   std::to_string( m_eulerAngles[2] ) + " ]";

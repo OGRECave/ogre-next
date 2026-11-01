@@ -20,6 +20,7 @@ class LightPanel final : public LightPanelBase
 
     double   m_eulerAngles[3];
     uint32_t m_currPresetIdx;
+    bool     m_hdrEnabled;
 
     bool m_editing;
     bool m_ignoreUndo;
@@ -36,6 +37,7 @@ protected:
     // Handlers for LightPanelBase events.
     void OnPresetChoice( wxCommandEvent &event ) override;
     void OnCheckbox( wxCommandEvent &event ) override;
+    void OnHdrCheckbox( wxCommandEvent &event );
     void OnEulerText( wxCommandEvent &event ) override;
     void OnSlider( wxCommandEvent &event ) override;
     void OnText( wxCommandEvent &event ) override;
@@ -51,6 +53,9 @@ public:
     void setCameraRelative( const bool bCameraRelative );
     bool isCameraRelative() const;
     void notifyMeshChanged();
+
+    void setHdrEnabled( const bool bHdrEnabled );
+    bool isHdrEnabled() const;
 
     void setPreset( const uint32_t preset );
 
