@@ -180,7 +180,31 @@ void PbsParametersPanel::OnColourButton( wxCommandEvent &event )
 
     EditingScope scope( m_editing );
 
+    wxButton *pickerButton = static_cast<wxButton *>( event.GetEventObject() );
+
+    // Find which colour section owns this button before opening the dialog, so we can seed the
+    // dialog with the current colour instead of letting it default to black.
+    ColourWidgets widgets{};
+    bool bFoundWidgets = false;
+    for( size_t i = 0u; i < ColourSection::NumColourSection; ++i )
+    {
+        widgets = getColourWidgets( ColourSection::ColourSection( i ) );
+        if( widgets.buttonPicker == pickerButton )
+        {
+            bFoundWidgets = true;
+            break;
+        }
+    }
+
+    if( !bFoundWidgets )
+    {
+        event.Skip();
+        return;
+    }
+
     wxColourDialog pickerDlg( this );
+    // The button's background is kept in sync by ColourWidgets, in sRGB space.
+    pickerDlg.GetColourData().SetColour( pickerButton->GetBackgroundColour() );
 
     if( pickerDlg.ShowModal() != wxID_OK )
     {
@@ -188,22 +212,10 @@ void PbsParametersPanel::OnColourButton( wxCommandEvent &event )
         return;
     }
 
-    wxButton *pickerButton = static_cast<wxButton *>( event.GetEventObject() );
-
-    for( size_t i = 0u; i < ColourSection::NumColourSection; ++i )
-    {
-        ColourWidgets widgets = getColourWidgets( ColourSection::ColourSection( i ) );
-        if( widgets.buttonPicker == pickerButton )
-        {
-            const uint32_t rgba = pickerDlg.GetColourData().GetColour().GetRGBA();
-            widgets.fromButton( rgba );
-            m_datablockDirty = DirtyStateDirty;
-            event.Skip( false );
-            return;
-        }
-    }
-
-    event.Skip();
+    const uint32_t rgba = pickerDlg.GetColourData().GetColour().GetRGBA();
+    widgets.fromButton( rgba );
+    m_datablockDirty = DirtyStateDirty;
+    event.Skip( false );
 }
 //-----------------------------------------------------------------------------
 void PbsParametersPanel::OnColourText( wxCommandEvent &event )
