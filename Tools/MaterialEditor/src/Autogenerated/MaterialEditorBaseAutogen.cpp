@@ -401,14 +401,49 @@ PbsParametersPanelBase::PbsParametersPanelBase( wxWindow *parent, wxWindowID id,
 
     transparencySizer->Add( bSizer5, 1, wxEXPAND, 5 );
 
-    m_submeshListBox =
-        new wxListBox( transparencySizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0,
-                       NULL, wxLB_EXTENDED | wxLB_MULTIPLE | wxLB_NEEDED_SB );
+    rootLayout->Add( transparencySizer, 0, wxEXPAND, 5 );
+
+    wxStaticBoxSizer *emissiveSizer;
+    emissiveSizer =
+        new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _( "Emissive" ) ), wxVERTICAL );
+
+    wxBoxSizer *bSizer81;
+    bSizer81 = new wxBoxSizer( wxHORIZONTAL );
+
+    m_emissiveR = new wxTextCtrl( emissiveSizer->GetStaticBox(), wxID_ANY, wxEmptyString,
+                                  wxDefaultPosition, wxSize( 48, -1 ), 0 );
+    bSizer81->Add( m_emissiveR, 1, wxALL, 5 );
+
+    m_emissiveG = new wxTextCtrl( emissiveSizer->GetStaticBox(), wxID_ANY, wxEmptyString,
+                                  wxDefaultPosition, wxSize( 48, -1 ), 0 );
+    bSizer81->Add( m_emissiveG, 1, wxALL, 5 );
+
+    m_emissiveB = new wxTextCtrl( emissiveSizer->GetStaticBox(), wxID_ANY, wxEmptyString,
+                                  wxDefaultPosition, wxSize( 48, -1 ), 0 );
+    bSizer81->Add( m_emissiveB, 1, wxALL, 5 );
+
+    emissiveSizer->Add( bSizer81, 1, wxEXPAND, 5 );
+
+    wxBoxSizer *bSizer91;
+    bSizer91 = new wxBoxSizer( wxHORIZONTAL );
+
+    m_emissiveRGBA = new wxTextCtrl( emissiveSizer->GetStaticBox(), wxID_ANY, wxEmptyString,
+                                     wxDefaultPosition, wxDefaultSize, 0 );
+    bSizer91->Add( m_emissiveRGBA, 1, wxALL, 5 );
+
+    m_buttonEmissive = new wxButton( emissiveSizer->GetStaticBox(), wxID_ANY, wxEmptyString,
+                                     wxDefaultPosition, wxDefaultSize, 0 );
+    bSizer91->Add( m_buttonEmissive, 1, wxALL | wxEXPAND, 5 );
+
+    emissiveSizer->Add( bSizer91, 1, wxEXPAND, 5 );
+
+    rootLayout->Add( emissiveSizer, 0, wxEXPAND, 5 );
+
+    m_submeshListBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL,
+                                      wxLB_EXTENDED | wxLB_MULTIPLE | wxLB_NEEDED_SB );
     m_submeshListBox->SetMinSize( wxSize( -1, 400 ) );
 
-    transparencySizer->Add( m_submeshListBox, 1, wxALL | wxEXPAND, 5 );
-
-    rootLayout->Add( transparencySizer, 0, wxEXPAND, 5 );
+    rootLayout->Add( m_submeshListBox, 1, wxALL | wxEXPAND, 5 );
 
     this->SetSizer( rootLayout );
     this->Layout();
@@ -516,6 +551,17 @@ PbsParametersPanelBase::PbsParametersPanelBase( wxWindow *parent, wxWindowID id,
     m_alphaHashCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED,
                                   wxCommandEventHandler( PbsParametersPanelBase::OnCheckbox ), NULL,
                                   this );
+    m_emissiveR->Connect( wxEVT_COMMAND_TEXT_UPDATED,
+                          wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
+    m_emissiveG->Connect( wxEVT_COMMAND_TEXT_UPDATED,
+                          wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
+    m_emissiveB->Connect( wxEVT_COMMAND_TEXT_UPDATED,
+                          wxCommandEventHandler( PbsParametersPanelBase::OnColourText ), NULL, this );
+    m_emissiveRGBA->Connect( wxEVT_COMMAND_TEXT_UPDATED,
+                             wxCommandEventHandler( PbsParametersPanelBase::OnColourHtml ), NULL, this );
+    m_buttonEmissive->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
+                               wxCommandEventHandler( PbsParametersPanelBase::OnColourButton ), NULL,
+                               this );
     m_submeshListBox->Connect( wxEVT_COMMAND_LISTBOX_SELECTED,
                                wxCommandEventHandler( PbsParametersPanelBase::OnSubMeshApply ), NULL,
                                this );

@@ -106,6 +106,11 @@ protected:
     wxChoice *m_transparencyModeChoice;
     wxCheckBox *m_alphaFromTexCheckbox;
     wxCheckBox *m_alphaHashCheckbox;
+    wxTextCtrl *m_emissiveR;
+    wxTextCtrl *m_emissiveG;
+    wxTextCtrl *m_emissiveB;
+    wxTextCtrl *m_emissiveRGBA;
+    wxButton *m_buttonEmissive;
     wxListBox *m_submeshListBox;
 
     // Virtual event handlers, override them in your derived class

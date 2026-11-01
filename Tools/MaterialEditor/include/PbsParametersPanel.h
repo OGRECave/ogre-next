@@ -15,6 +15,7 @@ namespace ColourSection
     {
         Diffuse,
         Specular,
+        Emissive,
         Fresnel,
         NumColourSection
     };

@@ -109,6 +109,8 @@ PbsParametersPanel::ColourWidgets PbsParametersPanel::getColourWidgets(
         return { { m_diffuseR, m_diffuseG, m_diffuseB }, m_diffuseRGBA, m_buttonDiffuse };
     case ColourSection::Specular:
         return { { m_specularR, m_specularG, m_specularB }, m_specularRGBA, m_buttonSpecular };
+    case ColourSection::Emissive:
+        return { { m_emissiveR, m_emissiveG, m_emissiveB }, m_emissiveRGBA, m_buttonEmissive };
     case ColourSection::Fresnel:
         return { { m_fresnelR, m_fresnelG, m_fresnelB }, m_fresnelRGBA, m_buttonFresnel };
     }
@@ -411,6 +413,7 @@ void PbsParametersPanel::syncDatablockFromUI()
     ColourWidgets colourWidgets[ColourSection::NumColourSection] = {
         getColourWidgets( ColourSection::Diffuse ),
         getColourWidgets( ColourSection::Specular ),
+        getColourWidgets( ColourSection::Emissive ),
         getColourWidgets( ColourSection::Fresnel ),
     };
 
@@ -433,6 +436,16 @@ void PbsParametersPanel::syncDatablockFromUI()
                 col[i] = Ogre::Real( val );
         }
         pbsDatablock->setSpecular( col );
+    }
+    {
+        Ogre::Vector3 col( pbsDatablock->getEmissive() );
+        for( size_t i = 0u; i < 3u; ++i )
+        {
+            double val;
+            if( colourWidgets[ColourSection::Emissive].rgbaText[i]->GetValue().ToDouble( &val ) )
+                col[i] = Ogre::Real( val );
+        }
+        pbsDatablock->setEmissive( col );
     }
     {
         Ogre::Vector3 col( pbsDatablock->getFresnel() );
@@ -520,6 +533,7 @@ void PbsParametersPanel::refreshFromDatablock()
     ColourWidgets colourWidgets[ColourSection::NumColourSection] = {
         getColourWidgets( ColourSection::Diffuse ),
         getColourWidgets( ColourSection::Specular ),
+        getColourWidgets( ColourSection::Emissive ),
         getColourWidgets( ColourSection::Fresnel ),
     };
 
@@ -540,6 +554,15 @@ void PbsParametersPanel::refreshFromDatablock()
                 wxString::Format( wxT( "%.05lf" ), specularCol.ptr()[i] ) );
         }
         colourWidgets[ColourSection::Specular].fromRgbaText();
+    }
+    {
+        const Ogre::Vector3 emissiveCol = pbsDatablock->getEmissive();
+        for( size_t i = 0u; i < 3u; ++i )
+        {
+            colourWidgets[ColourSection::Emissive].rgbaText[i]->SetValue(
+                wxString::Format( wxT( "%.05lf" ), emissiveCol.ptr()[i] ) );
+        }
+        colourWidgets[ColourSection::Emissive].fromRgbaText();
     }
     {
         const Ogre::Vector3 fresnelCol = pbsDatablock->getFresnel();
