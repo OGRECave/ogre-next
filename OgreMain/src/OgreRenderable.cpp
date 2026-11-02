@@ -210,6 +210,9 @@ namespace Ogre
     {
         // Ensure new material loaded (will not load again if already loaded)
         material->load();
+        // Keep the previous material alive until setDatablock has unlinked its
+        // low-level datablock; mMaterial may own its last remaining reference.
+        const MaterialPtr previousMaterial = mMaterial;
         mMaterial = material;
         setDatablock( material->getTechnique(0)->getPass(0)->_getDatablock() );
         mLodMaterial = material->_getLodValues();
