@@ -1504,7 +1504,7 @@ namespace Ogre {
 
     public:
         GpuProgramParameters();
-        ~GpuProgramParameters() {}
+        ~GpuProgramParameters() = default;
 
         /// Copy constructor
         GpuProgramParameters(const GpuProgramParameters& oth);
@@ -1963,7 +1963,7 @@ namespace Ogre {
         /** Gets an iterator over the automatic constant bindings currently in place. */
         AutoConstantIterator getAutoConstantIterator(void) const;
         /// Gets the number of int constants that have been set
-        size_t getAutoConstantCount(void) const { return mAutoConstants.size(); }
+        size_t getAutoConstantCount( void ) const;
         /** Gets a specific Auto Constant entry if index is in valid range
             otherwise returns a NULL
             @param index which entry is to be retrieved
@@ -2493,6 +2493,11 @@ namespace Ogre {
         {
         }
     };
+
+    inline size_t GpuProgramParameters::getAutoConstantCount( void ) const
+    {
+        return mAutoConstants.size();
+    }
 
     /** @} */
     /** @} */
