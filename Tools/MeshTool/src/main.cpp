@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreLodStrategyManager.h"
 #include "OgreHardwareVertexBuffer.h"
 #include "OgrePixelCountLodStrategy.h"
+#include "OgreFileSystemLayer.h"
 #include "OgreLodConfig.h"
 #include "OgreRoot.h"
 
@@ -60,6 +61,11 @@ THE SOFTWARE.
 #include <iostream>
 #include <sstream>
 #include <sys/stat.h>
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#    include <limits.h>
+#    include <unistd.h>
+#endif
 
 using namespace std;
 using namespace Ogre;
@@ -1158,6 +1164,69 @@ void restoreWorkingDir()
 #endif
 }
 
+Ogre::String getExecutableDirectory()
+{
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+    char path[PATH_MAX];
+    const ssize_t length = readlink( "/proc/self/exe", path, sizeof( path ) - 1 );
+    if( length == -1 )
+        return Ogre::String();
+
+    path[length] = '\0';
+
+    const Ogre::String executablePath( path );
+    const Ogre::String::size_type charPos = executablePath.find_last_of( '/' );
+    if( charPos == Ogre::String::npos )
+        return Ogre::String();
+
+    return executablePath.substr( 0, charPos );
+#else
+    return Ogre::String();
+#endif
+}
+
+Ogre::String findPluginsConfigFile()
+{
+#ifndef OGRE_STATIC_LIB
+#    if OGRE_DEBUG_MODE
+    const Ogre::String configFileName( "plugins_tools_d.cfg" );
+#    else
+    const Ogre::String configFileName( "plugins_tools.cfg" );
+#    endif
+
+    // Prefer a config file in the current working directory. This is the usual case when
+    // running the tool from the build directory.
+    if( Ogre::FileSystemLayer::fileExists( configFileName ) )
+        return configFileName;
+
+#    if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+    const Ogre::String executableDir( getExecutableDirectory() );
+    if( !executableDir.empty() )
+    {
+#        ifdef OGRE_NAME_IS_OGRE_NEXT
+        const Ogre::String installConfigDir = executableDir + "/../share/OGRE-Next/";
+#        else
+        const Ogre::String installConfigDir = executableDir + "/../share/OGRE/";
+#        endif
+        const Ogre::String candidates[] = {
+            executableDir + "/" + configFileName,
+            installConfigDir + configFileName,
+        };
+
+        for( size_t i = 0; i < sizeof( candidates ) / sizeof( candidates[0] ); ++i )
+        {
+            if( Ogre::FileSystemLayer::fileExists( candidates[i] ) )
+                return candidates[i];
+        }
+    }
+#    endif
+
+    return configFileName;
+#else
+    return Ogre::String();
+#endif
+}
+
 int main(int numargs, char** args)
 {
     Root *root = 0;
@@ -1171,15 +1240,7 @@ int main(int numargs, char** args)
     int retCode = 0;
     try
     {
-        Ogre::String pluginsPath;
-        // only use plugins.cfg if not static
-#ifndef OGRE_STATIC_LIB
-#if OGRE_DEBUG_MODE
-        pluginsPath = "plugins_tools_d.cfg";
-#else
-        pluginsPath = "plugins_tools.cfg";
-#endif
-#endif
+        const Ogre::String pluginsPath = findPluginsConfigFile();
         logManager = OGRE_NEW LogManager();
         logManager->createLog( "OgreMeshTool.log", true, true );
         LogManager::getSingleton().getDefaultLog()->setLogDetail( LL_LOW );

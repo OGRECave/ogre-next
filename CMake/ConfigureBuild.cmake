@@ -27,6 +27,12 @@ else ()
   set(OGRE_LIB_TYPE SHARED)
 endif ()
 
+if (OGRE_USE_NEW_PROJECT_NAME)
+  set(OGRE_NAME_IS_OGRE_NEXT TRUE)
+else ()
+  unset(OGRE_NAME_IS_OGRE_NEXT)
+endif ()
+
 # configure threading options
 set(OGRE_THREAD_PROVIDER 0)
 if (OGRE_CONFIG_THREADS)
