@@ -129,14 +129,26 @@ namespace Ogre
 
     struct _OgreLodExport LodConfig
     {
-        v1::MeshPtr  mesh;      ///< The mesh which we want to reduce.
+        v1::MeshPtr  mesh;      ///< The v1 mesh which we want to reduce. Null if meshV2 is set.
+        MeshPtr      meshV2;    ///< The v2 mesh which we want to reduce. Null if mesh is set.
         LodStrategy *strategy;  ///< Lod strategy to use.
 
         typedef vector<LodLevel>::type LodLevelList;
         LodLevelList                   levels;  ///< Info about Lod levels
 
         LodConfig( v1::MeshPtr &_mesh, LodStrategy *_strategy = DistanceLodStrategy::getSingletonPtr() );
+        /** Constructs a config for generating LOD levels directly against a v2 mesh,
+            without going through a v1 mesh at any point.
+        @remarks
+            Exactly one of mesh / meshV2 must be set; MeshLodGenerator selects the v1 or
+            v2 code path (LodInputProviderMesh/LodOutputProviderMesh vs.
+            LodInputProviderMeshV2/LodOutputProviderMeshV2) based on which one is non-null.
+        */
+        LodConfig( MeshPtr &_meshV2, LodStrategy *_strategy = DistanceLodStrategy::getSingletonPtr() );
         LodConfig();
+
+        /// True if this config targets a v2 mesh (meshV2 is set) rather than a v1 one.
+        bool isV2() const { return meshV2 != 0; }
 
         // Helper functions:
         void createManualLodLevel( Ogre::Real distance, const String &manualMeshName );
