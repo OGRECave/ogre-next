@@ -156,6 +156,7 @@ namespace Ogre
                 textureName = itor->value[0].GetString();
                 if( itor->value[1].IsBool() )
                 {
+                    aliasName = textureName;
                     // Texture is specifically overriding mipmap behavior
                     if( itor->value[1].GetBool() )
                         textureFilters |= TextureFilter::TypeGenerateDefaultMipmaps;
