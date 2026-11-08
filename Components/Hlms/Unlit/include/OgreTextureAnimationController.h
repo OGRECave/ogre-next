@@ -18,6 +18,27 @@ namespace Ogre
         separate u and v offsets.
     @par
         Because of the nature of this value, it can accept values outside the 0..1 parametric range.
+    @par
+        Example usage to scroll across U (make sure the sampler is set to wrap):
+        @code
+            using namespace Ogre;
+            Ogre::HlmsDatablock *datablock = hlmsManager->getDatablock( "MyMat" );
+            HlmsUnlitDatablock *datablockUnlit = (HlmsUnlitDatablock *)datablock;
+            datablockUnlit->setEnableAnimationMatrix( true, texUnit ); // Make sure it's enabled.
+
+            // Setup
+            TextureAnimationControllerValue *texAnim =
+                new TextureAnimationControllerValue( datablock, texUnit );
+            texAnim->scrollAnimation( true, false );
+            SharedPtr<ControllerFunction<Real>> func( new ScaleControllerFunction( -0.75f, true ) );
+            Controller<Real> *ctrl = ControllerManager::getSingleton().createController(
+                ControllerManager::getSingleton().getFrameTimeSource(),
+                ControllerValueRealPtr( texAnim ), func );
+
+            // Destruction
+            Ogre::ControllerManager &controllerMgr = Ogre::ControllerManager::getSingleton();
+            controllerMgr.destroyController( ctrl );
+        @endcode
     */
     class _OgreHlmsUnlitExport TextureAnimationControllerValue : public Ogre::ControllerValue<Ogre::Real>
     {
