@@ -12,6 +12,7 @@ var class_ogre_1_1_hlms_unlit_datablock =
     [ "getEmissiveTexture", "class_ogre_1_1_hlms_unlit_datablock.html#a2993c0de07a5b3b0e3616bf146727e21", null ],
     [ "getEnableAnimationMatrix", "class_ogre_1_1_hlms_unlit_datablock.html#a155adc41b23793c2361190a2c444a1e2", null ],
     [ "getEnablePlanarReflection", "class_ogre_1_1_hlms_unlit_datablock.html#a0c6e59ba0ff8ddb8b6e6350b46968cf0", null ],
+    [ "getTextureSwizzle", "class_ogre_1_1_hlms_unlit_datablock.html#a51daef927f8545c4e15c047a87059d99", null ],
     [ "getTextureUvSource", "class_ogre_1_1_hlms_unlit_datablock.html#aabf598298b472e0153c46c19fa7855ee", null ],
     [ "hasColour", "class_ogre_1_1_hlms_unlit_datablock.html#aaf0687090ebaff62814bc95303e322b3", null ],
     [ "setAnimationMatrix", "class_ogre_1_1_hlms_unlit_datablock.html#a9491d118c2bc5dbdcd61fa6224e4f565", null ],

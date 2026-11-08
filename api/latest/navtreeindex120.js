@@ -1,5 +1,6 @@
 var NAVTREEINDEX120 =
 {
+"struct_ogre_1_1_atmosphere_npr_1_1_preset.html#a16100380936daef3711343b4011c986f":[6,0,0,2,0,0],
 "struct_ogre_1_1_atmosphere_npr_1_1_preset.html#a17ddb98cb66884b89ef4b726c69f2ce9":[6,0,0,2,0,8],
 "struct_ogre_1_1_atmosphere_npr_1_1_preset.html#a1b0f5f01420c52b2d85b8750ab0bafd3":[6,0,0,2,0,12],
 "struct_ogre_1_1_atmosphere_npr_1_1_preset.html#a1e78b50f2e537f43d428acf530dcdbbf":[6,0,0,2,0,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX120 =
 "struct_ogre_1_1_cb_textures.html#a4d6e3eacbcc28c1e9a37bcd38766838f":[8,0,0,95,2],
 "struct_ogre_1_1_cb_textures.html#ae5c7606a6773e4651a12d2e40f2edab0":[7,0,0,125,3],
 "struct_ogre_1_1_cb_textures.html#ae5c7606a6773e4651a12d2e40f2edab0":[8,0,0,95,3],
-"struct_ogre_1_1_cb_textures.html#af250b8092d87023109f831f07d1d918c":[7,0,0,125,1],
-"struct_ogre_1_1_cb_textures.html#af250b8092d87023109f831f07d1d918c":[8,0,0,95,1]
+"struct_ogre_1_1_cb_textures.html#af250b8092d87023109f831f07d1d918c":[7,0,0,125,1]
 };

@@ -124,6 +124,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2993c0de07a5b3b0e3616bf146727e21" id="r_a2993c0de07a5b3b0e3616bf146727e21"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2993c0de07a5b3b0e3616bf146727e21">getEmissiveTexture</a> () const override</td></tr>
 <tr class="memitem:a155adc41b23793c2361190a2c444a1e2" id="r_a155adc41b23793c2361190a2c444a1e2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a155adc41b23793c2361190a2c444a1e2">getEnableAnimationMatrix</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> textureUnit) const</td></tr>
 <tr class="memitem:a0c6e59ba0ff8ddb8b6e6350b46968cf0" id="r_a0c6e59ba0ff8ddb8b6e6350b46968cf0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0c6e59ba0ff8ddb8b6e6350b46968cf0">getEnablePlanarReflection</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> textureUnit) const</td></tr>
+<tr class="memitem:a51daef927f8545c4e15c047a87059d99" id="r_a51daef927f8545c4e15c047a87059d99"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a51daef927f8545c4e15c047a87059d99">getTextureSwizzle</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> texType, <a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> &amp;r, <a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> &amp;g, <a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> &amp;b, <a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> &amp;a) const</td></tr>
+<tr class="memdesc:a51daef927f8545c4e15c047a87059d99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the final swizzle used when sampling the given texture.  <br /></td></tr>
 <tr class="memitem:aabf598298b472e0153c46c19fa7855ee" id="r_aabf598298b472e0153c46c19fa7855ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aabf598298b472e0153c46c19fa7855ee">getTextureUvSource</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> sourceType) const</td></tr>
 <tr class="memitem:aaf0687090ebaff62814bc95303e322b3" id="r_aaf0687090ebaff62814bc95303e322b3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf0687090ebaff62814bc95303e322b3">hasColour</a> () const</td></tr>
 <tr class="memdesc:aaf0687090ebaff62814bc95303e322b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">If this returns false, the values of mR, mG, mB &amp; mA will be ignored.  <br /></td></tr>
@@ -453,6 +455,55 @@ Static Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a51daef927f8545c4e15c047a87059d99" name="a51daef927f8545c4e15c047a87059d99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51daef927f8545c4e15c047a87059d99">&#9670;&#160;</a></span>getTextureSwizzle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::HlmsUnlitDatablock::getTextureSwizzle </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a></td>          <td class="paramname"><span class="paramname"><em>texType</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>r</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>g</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>b</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>a</em></span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the final swizzle used when sampling the given texture. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a1d90137ec832bee3f7fe858507a953de" title="Sets the final swizzle when sampling the given texture.">setTextureSwizzle</a> </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">texType</td><td>Texture unit. Must be in range [0; NUM_UNLIT_TEXTURE_TYPES) </td></tr>
+    <tr><td class="paramname">r</td><td>Where the red channel is sourced from. Will be R_MASK, G_MASK, B_MASK or A_MASK. </td></tr>
+    <tr><td class="paramname">g</td><td>Where the green channel is sourced from. </td></tr>
+    <tr><td class="paramname">b</td><td>Where the blue channel is sourced from. </td></tr>
+    <tr><td class="paramname">a</td><td>Where the alpha channel is sourced from. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

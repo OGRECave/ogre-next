@@ -1,5 +1,6 @@
 var NAVTREEINDEX78 =
 {
+"class_ogre_1_1_skeleton_animation_def.html#af57031886febc0fa40f8bd041fce7395":[8,0,0,885,2],
 "class_ogre_1_1_skeleton_animation_def.html#af5e464e914a9074cc9744099f3349756":[7,0,0,915,4],
 "class_ogre_1_1_skeleton_animation_def.html#af5e464e914a9074cc9744099f3349756":[8,0,0,885,4],
 "class_ogre_1_1_skeleton_animation_def.html#afa9371c78ba358c8344c528e4deefeda":[7,0,0,915,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX78 =
 "class_ogre_1_1_small_vector_template_common.html#a8fd84d4c57b70b9b8111efa7d81c7d5b":[8,0,0,897,13],
 "class_ogre_1_1_small_vector_template_common.html#a922c12bc5de4cf0fee5c101919fecc94":[7,0,0,927,16],
 "class_ogre_1_1_small_vector_template_common.html#a922c12bc5de4cf0fee5c101919fecc94":[8,0,0,897,16],
-"class_ogre_1_1_small_vector_template_common.html#a9815c7884278cf8ae793f559d5da6d5f":[7,0,0,927,23],
-"class_ogre_1_1_small_vector_template_common.html#a9815c7884278cf8ae793f559d5da6d5f":[8,0,0,897,23]
+"class_ogre_1_1_small_vector_template_common.html#a9815c7884278cf8ae793f559d5da6d5f":[7,0,0,927,23]
 };

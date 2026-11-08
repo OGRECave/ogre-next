@@ -167,6 +167,7 @@ Parameter: diffuse_map[X]</h2>
 </ul>
 </li>
 <li><span class="tt">sampler</span>: Type string. The name of the sampler block definition to apply to the normal map texture. <b>OPTIONAL parameter</b></li>
+<li><span class="tt">swizzle</span>: Type string. Sets the swizzle applied when sampling the texture. Must contain exactly 4 characters, one per output channel (red, green, blue, alpha), each being one of <span class="tt">r</span>, <span class="tt">g</span>, <span class="tt">b</span> or <span class="tt">a</span> (case-insensitive). For example <span class="tt">"swizzle" : "rrrg"</span> samples the texture's red channel into the output's red, green and blue channels and its green channel into alpha. See HlmsUnlitDatablock::setTextureSwizzle. <b>DEFAULT="rgba"</b></li>
 <li><span class="tt">texture</span>: <b>OPTIONAL parameter</b>. Four value variations:<ul>
 <li>Type 1: Value is type string. Value is the name of a texture. The texture alias name is the same as the texture name. Example: <span class="tt">"texture" : "texture.tga"</span></li>
 <li>Type 2: Value is type string array. The first value is the name of a texture file. The second value is the alias name for the texture. Example: <span class="tt">"texture" : ["texture.tga","Texture_Alias_Name"]</span></li>
@@ -197,6 +198,7 @@ Example Unlit Datablock Definition:</h1>
 <div class="line">                            [0, 0, 0, 1]],</div>
 <div class="line">                &quot;blendmode&quot; : &quot;NormalNonPremul&quot;,</div>
 <div class="line">                &quot;sampler&quot; : &quot;unique_name&quot;,</div>
+<div class="line">                &quot;swizzle&quot; : &quot;rgba&quot;,</div>
 <div class="line">                &quot;texture&quot; : &quot;texture.tga&quot;,</div>
 <div class="line">                &quot;uv&quot; : 0.0</div>
 <div class="line">            }</div>

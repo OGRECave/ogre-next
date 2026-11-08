@@ -1,5 +1,6 @@
 var NAVTREEINDEX116 =
 {
+"hlms.html#autotoc_md117":[4,1,1,6,2],
 "hlms.html#autotoc_md118":[4,1,1,10],
 "hlms.html#setWorkerThreadMinimumBudget":[4,1,1,8,2,1],
 "hlmsblendblockref.html":[4,2,3,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX116 =
 "namespace_ogre.html#a49df4b24acc70e29d353052ab4e3f055":[7,0,0,1443],
 "namespace_ogre.html#a4b3ac5cd3c1499373bbb3ebc3904a418":[7,0,0,1431],
 "namespace_ogre.html#a4bbf05af668b0deefaf7b0c0f172d45b":[7,0,0,1187],
-"namespace_ogre.html#a4c9f4d697f980119e8cb1e640b0ada11":[7,0,0,1115],
-"namespace_ogre.html#a4fdfbb7af58cbdd237866fe276917b0e":[7,0,0,1157]
+"namespace_ogre.html#a4c9f4d697f980119e8cb1e640b0ada11":[7,0,0,1115]
 };

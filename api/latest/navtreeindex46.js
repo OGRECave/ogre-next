@@ -1,5 +1,6 @@
 var NAVTREEINDEX46 =
 {
+"class_ogre_1_1_hollow_ellipsoid_emitter.html#affda656cbbc1e5cfa7b1bbbc587beb84":[7,0,0,522,12],
 "class_ogre_1_1_hollow_ellipsoid_emitter.html#affda656cbbc1e5cfa7b1bbbc587beb84":[8,0,0,492,12],
 "class_ogre_1_1_hollow_ellipsoid_emitter2.html":[7,0,0,523],
 "class_ogre_1_1_hollow_ellipsoid_emitter2.html":[8,0,0,493],
@@ -248,6 +249,5 @@ var NAVTREEINDEX46 =
 "class_ogre_1_1_instant_radiosity.html#a9e2c6db21dd5b6a50e1b88ff99705b5d":[6,0,0,13,20],
 "class_ogre_1_1_instant_radiosity.html#a9f8f8701a7c1bbf9a68b6dac504db7d9":[6,0,0,13,3],
 "class_ogre_1_1_instant_radiosity.html#aa7c6e33feb786180d604ec122e966060":[6,0,0,13,11],
-"class_ogre_1_1_instant_radiosity.html#aaad3e501d7d53cc26b9063a47b16ca23":[6,0,0,13,10],
-"class_ogre_1_1_instant_radiosity.html#ab2e97da8bea866aaff9100a2e64e8edd":[6,0,0,13,31]
+"class_ogre_1_1_instant_radiosity.html#aaad3e501d7d53cc26b9063a47b16ca23":[6,0,0,13,10]
 };
