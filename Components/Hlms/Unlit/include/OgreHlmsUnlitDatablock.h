@@ -179,6 +179,21 @@ namespace Ogre
         */
         void setTextureSwizzle( uint8 texType, uint8 r, uint8 g, uint8 b, uint8 a );
 
+        /** Gets the final swizzle used when sampling the given texture.
+        @see setTextureSwizzle
+        @param texType
+            Texture unit. Must be in range [0; NUM_UNLIT_TEXTURE_TYPES)
+        @param r
+            Where the red channel is sourced from. Will be R_MASK, G_MASK, B_MASK or A_MASK.
+        @param g
+            Where the green channel is sourced from.
+        @param b
+            Where the blue channel is sourced from.
+        @param a
+            Where the alpha channel is sourced from.
+        */
+        void getTextureSwizzle( uint8 texType, uint8 &r, uint8 &g, uint8 &b, uint8 &a ) const;
+
         /** Sets which UV set to use for the given texture.
             Calling this function triggers a HlmsDatablock::flushRenderables.
         @param sourceType

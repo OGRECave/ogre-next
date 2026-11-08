@@ -60,6 +60,7 @@ Reference Guide: HLMS Unlit Datablock {#hlmsunlitdatablockref}
         - `GrainMerge` :
         - `Difference` :
     - `sampler`: Type string. The name of the sampler block definition to apply to the normal map texture. **OPTIONAL parameter**
+    - `swizzle`: Type string. Sets the swizzle applied when sampling the texture. Must contain exactly 4 characters, one per output channel (red, green, blue, alpha), each being one of `r`, `g`, `b` or `a` (case-insensitive). For example `"swizzle" : "rrrg"` samples the texture's red channel into the output's red, green and blue channels and its green channel into alpha. See HlmsUnlitDatablock::setTextureSwizzle. **DEFAULT="rgba"**
     - `texture`: **OPTIONAL parameter**. Four value variations:
         - Type 1: Value is type string. Value is the name of a texture. The texture alias name is the same as the texture name. Example: `"texture" : "texture.tga"`
         - Type 2: Value is type string array. The first value is the name of a texture file. The second value is the alias name for the texture. Example: `"texture" : ["texture.tga","Texture_Alias_Name"]`
@@ -87,6 +88,7 @@ Reference Guide: HLMS Unlit Datablock {#hlmsunlitdatablockref}
                             [0, 0, 0, 1]],
                 "blendmode" : "NormalNonPremul",
                 "sampler" : "unique_name",
+                "swizzle" : "rgba",
                 "texture" : "texture.tga",
                 "uv" : 0.0
             }

@@ -319,6 +319,17 @@ namespace Ogre
         flushRenderables();
     }
     //-----------------------------------------------------------------------------------
+    void HlmsUnlitDatablock::getTextureSwizzle( uint8 texType, uint8 &r, uint8 &g, uint8 &b,
+                                                uint8 &a ) const
+    {
+        assert( texType < NUM_UNLIT_TEXTURE_TYPES );
+        const uint8 swizzle = mTextureSwizzles[texType];
+        r = ( swizzle >> 6u ) & 0x03u;
+        g = ( swizzle >> 4u ) & 0x03u;
+        b = ( swizzle >> 2u ) & 0x03u;
+        a = swizzle & 0x03u;
+    }
+    //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::setTextureUvSource( uint8 sourceType, uint8 uvSet )
     {
         if( uvSet >= 8 )

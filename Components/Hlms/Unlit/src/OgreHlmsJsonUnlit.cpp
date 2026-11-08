@@ -31,6 +31,7 @@ THE SOFTWARE.
 #if !OGRE_NO_JSON
 
 #    include "OgreHlmsManager.h"
+#    include "OgreLogManager.h"
 #    include "OgreLwString.h"
 #    include "OgreStringConverter.h"
 #    include "OgreTextureFilters.h"
@@ -57,6 +58,38 @@ namespace Ogre
 {
     extern const String c_unlitBlendModes[];
 
+    static uint8 swizzleStrToMask( char c )
+    {
+        switch( c )
+        {
+        case 'r':
+        case 'R':
+            return HlmsUnlitDatablock::R_MASK;
+        case 'g':
+        case 'G':
+            return HlmsUnlitDatablock::G_MASK;
+        case 'b':
+        case 'B':
+            return HlmsUnlitDatablock::B_MASK;
+        case 'a':
+        case 'A':
+            return HlmsUnlitDatablock::A_MASK;
+        default:
+            return 0xFFu;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    static char swizzleMaskToStr( uint8 mask )
+    {
+        if( mask == HlmsUnlitDatablock::R_MASK )
+            return 'r';
+        if( mask == HlmsUnlitDatablock::G_MASK )
+            return 'g';
+        if( mask == HlmsUnlitDatablock::B_MASK )
+            return 'b';
+        return 'a';
+    }
+    //-----------------------------------------------------------------------------------
     HlmsJsonUnlit::HlmsJsonUnlit( HlmsManager *hlmsManager, TextureGpuManager *textureManager ) :
         mHlmsManager( hlmsManager ),
         mTextureManager( textureManager )
@@ -170,6 +203,37 @@ namespace Ogre
         {
             unsigned uv = itor->value.GetUint();
             datablock->setTextureUvSource( textureType, static_cast<uint8>( uv ) );
+        }
+
+        itor = json.FindMember( "swizzle" );
+        if( itor != json.MemberEnd() && itor->value.IsString() )
+        {
+            const char *swizzleStr = itor->value.GetString();
+            bool valid = strlen( swizzleStr ) == 4u;
+            uint8 swizzle[4] = { HlmsUnlitDatablock::R_MASK, HlmsUnlitDatablock::G_MASK,
+                                 HlmsUnlitDatablock::B_MASK, HlmsUnlitDatablock::A_MASK };
+            if( valid )
+            {
+                for( size_t i = 0u; i < 4u && valid; ++i )
+                {
+                    swizzle[i] = swizzleStrToMask( swizzleStr[i] );
+                    valid = swizzle[i] != 0xFFu;
+                }
+            }
+
+            if( valid )
+            {
+                datablock->setTextureSwizzle( textureType, swizzle[0], swizzle[1], swizzle[2],
+                                              swizzle[3] );
+            }
+            else
+            {
+                LogManager::getSingleton().logMessage(
+                    "WARNING: JSON datablock '" + *datablock->getNameStr() + "': Invalid swizzle '" +
+                        swizzleStr + "' for diffuse_map" + StringConverter::toString( textureType ) +
+                        ". Expected exactly 4 characters from 'rgba'. Ignoring.",
+                    LML_CRITICAL );
+            }
         }
 
         Matrix4 mat = Matrix4::IDENTITY;
@@ -303,6 +367,22 @@ namespace Ogre
             {
                 outString += ",\n\t\t\t\t\"uv\" : ";
                 outString += StringConverter::toString( datablock->getTextureUvSource( textureType ) );
+            }
+
+            if( textureType < NUM_UNLIT_TEXTURE_TYPES )
+            {
+                uint8 r, g, b, a;
+                datablock->getTextureSwizzle( textureType, r, g, b, a );
+                if( r != HlmsUnlitDatablock::R_MASK || g != HlmsUnlitDatablock::G_MASK ||
+                    b != HlmsUnlitDatablock::B_MASK || a != HlmsUnlitDatablock::A_MASK )
+                {
+                    outString += ",\n\t\t\t\t\"swizzle\" : \"";
+                    outString += swizzleMaskToStr( r );
+                    outString += swizzleMaskToStr( g );
+                    outString += swizzleMaskToStr( b );
+                    outString += swizzleMaskToStr( a );
+                    outString += '"';
+                }
             }
 
             if( textureType < NUM_UNLIT_TEXTURE_TYPES &&
