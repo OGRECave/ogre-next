@@ -811,7 +811,7 @@ namespace Ogre
         {
             Real unusedInt;
 
-            Real fractPart = std::abs( std::modf( v, &unusedInt ) );
+            Real fractPart = std::modf( v, &unusedInt );
             if( fractPart < 0.0 )
                 fractPart = Real( 1.0 ) + fractPart;
 
