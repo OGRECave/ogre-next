@@ -1,5 +1,6 @@
 var NAVTREEINDEX44 =
 {
+"class_ogre_1_1_hlms_compute.html#aa725ade963841a050fe281cc18def5be":[6,0,0,5,7],
 "class_ogre_1_1_hlms_compute.html#acb0f598df416024e5893b12a77f0e7d4":[6,0,0,5,10],
 "class_ogre_1_1_hlms_compute.html#ad3de3fd289945b985b04f3d39f466b36":[6,0,0,5,12],
 "class_ogre_1_1_hlms_compute_job.html":[6,0,0,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX44 =
 "class_ogre_1_1_hlms_manager.html#a9609ef7f01a693e43b34c3fb4151ace3":[6,2,10,75,4],
 "class_ogre_1_1_hlms_manager.html#a9a7d73cf6cb7bb16674eba093bbdffae":[6,2,10,75,48],
 "class_ogre_1_1_hlms_manager.html#a9c853f68fcf70a4d0af1d99c6cdba744":[6,2,10,75,49],
-"class_ogre_1_1_hlms_manager.html#aaf389a4d1d62b5493ed9b544486a9544":[6,2,10,75,2],
-"class_ogre_1_1_hlms_manager.html#ab91098469e77e9397a3e2b29b9704e29":[6,2,10,75,28]
+"class_ogre_1_1_hlms_manager.html#aaf389a4d1d62b5493ed9b544486a9544":[6,2,10,75,2]
 };

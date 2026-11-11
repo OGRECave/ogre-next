@@ -1,5 +1,6 @@
 var NAVTREEINDEX89 =
 {
+"class_ogre_1_1_vulkan_delayed__vk_destroy_shader_module.html#a2b9342aeb7d0ebb91beb3aca4a0d0836":[7,0,0,1034,3],
 "class_ogre_1_1_vulkan_delayed__vk_destroy_shader_module.html#a2b9342aeb7d0ebb91beb3aca4a0d0836":[8,0,0,1004,3],
 "class_ogre_1_1_vulkan_delayed__vk_destroy_shader_module.html#a991e0a0e6562ac12c47b5cc796752bbf":[7,0,0,1034,2],
 "class_ogre_1_1_vulkan_delayed__vk_destroy_shader_module.html#a991e0a0e6562ac12c47b5cc796752bbf":[8,0,0,1004,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX89 =
 "class_ogre_1_1_vulkan_program.html#a0f1eca1538bceaec1ca348b0c3d54394":[7,0,0,1060,7],
 "class_ogre_1_1_vulkan_program.html#a0f1eca1538bceaec1ca348b0c3d54394":[8,0,0,1030,7],
 "class_ogre_1_1_vulkan_program.html#a127d4b2205632ff09eee259aa67452d1":[7,0,0,1060,17],
-"class_ogre_1_1_vulkan_program.html#a127d4b2205632ff09eee259aa67452d1":[8,0,0,1030,17],
-"class_ogre_1_1_vulkan_program.html#a155cfd62fe4b60689ca295789917e6df":[7,0,0,1060,2]
+"class_ogre_1_1_vulkan_program.html#a127d4b2205632ff09eee259aa67452d1":[8,0,0,1030,17]
 };

@@ -33,13 +33,13 @@ var hlms =
       [ "Hot reloading", "hlms.html#HlmsCreationOfShadersHotReloading", null ],
       [ "Disabling a stage", "hlms.html#HlmsCreationOfShadersDisablingStage", null ],
       [ "Customizing an existing implementation", "hlms.html#HlmsCreationOfShadersCustomizing", [
-        [ "Examples:", "hlms.html#autotoc_md116", null ]
+        [ "Examples:", "hlms.html#autotoc_md117", null ]
       ] ]
     ] ],
     [ "Run-time rendering", "hlms.html#HlmsRuntimeRendering", [
       [ "preparePassHash", "hlms.html#HlmsRuntimeRenderingPreparePassHash", null ],
       [ "fillBuffersFor", "hlms.html#HlmsRuntimeRenderingFillBuffersFor", null ],
-      [ "Multithreaded Shader Compilation", "hlms.html#autotoc_md117", null ]
+      [ "Multithreaded Shader Compilation", "hlms.html#autotoc_md118", null ]
     ] ],
     [ "Using the HLMS implementations", "hlms.html#UsingHlmsImplementation", [
       [ "Initialization", "hlms.html#UsingHlmsImplementationInitialization", null ],
@@ -61,14 +61,14 @@ var hlms =
     [ "Troubleshooting", "hlms.html#HlmsTroubleshooting", [
       [ "My shadows don't show up or are very glitchy", "hlms.html#HlmsTroubleshootingShadow", null ]
     ] ],
-    [ "Precision / Quality", "hlms.html#autotoc_md118", null ],
+    [ "Precision / Quality", "hlms.html#autotoc_md119", null ],
     [ "Multithreaded Shader Compilation", "_hlms_threading.html", [
       [ "CMake Options", "_hlms_threading.html#HlmsThreading_CMakeOptions", null ],
       [ "The tid (Thread ID) argument", "_hlms_threading.html#HlmsThreading_tidArgument", [
-        [ "API when OGRE_SHADER_COMPILATION_THREADING_MODE = 1", "_hlms_threading.html#autotoc_md105", null ]
+        [ "API when OGRE_SHADER_COMPILATION_THREADING_MODE = 1", "_hlms_threading.html#autotoc_md106", null ]
       ] ],
-      [ "How does threaded Hlms work?", "_hlms_threading.html#autotoc_md106", [
-        [ "What is the range of tid argument?", "_hlms_threading.html#autotoc_md107", null ]
+      [ "How does threaded Hlms work?", "_hlms_threading.html#autotoc_md107", [
+        [ "What is the range of tid argument?", "_hlms_threading.html#autotoc_md108", null ]
       ] ]
     ] ]
 ];

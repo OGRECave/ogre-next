@@ -252,7 +252,15 @@ Requirements</h2>
 <p>Either <span class="tt">CompositorPassSceneDef::mBakeLightingOnly</span> (see <a class="el" href="compositor.html#CompositorNodesPassesRenderScene_bake_lighting_only">bake_lighting_only</a>) or <span class="tt">HlmsPbsDatablock::setUseEmissiveAsLightmap</span> must be true for this setting to be relevant.</p>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md69"></a>
 Note</h2>
-<p>If your lightmap texture is <span class="tt">RGBA16_FLOAT</span>, this setting is likely a waste of performance and should not be enabled. </p>
+<p>If your lightmap texture is <span class="tt">RGBA16_FLOAT</span>, this setting is likely a waste of performance and should not be enabled.</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md70"></a>
+Minimum Apple deployment targets</h1>
+<p>The minimum deployment targets were raised to versions still supported by current Xcode releases:</p>
+<ul>
+<li>iOS: <span class="tt">15.0</span> (<span class="tt">IPHONEOS_DEPLOYMENT_TARGET</span>)</li>
+<li>macOS: <span class="tt">12.0</span> (<span class="tt">MACOSX_DEPLOYMENT_TARGET</span>)</li>
+</ul>
+<p><span class="tt">CMake/Utils/OgreConfigTargets.cmake</span> applies these to every Ogre-Next target. macOS defaults can still be overridden by setting <span class="tt">CMAKE_OSX_DEPLOYMENT_TARGET</span> before configuring. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

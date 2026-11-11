@@ -16,6 +16,7 @@ var _migrating_30_to_40 =
         [ "Usage Example", "_ogre40_changes.html#autotoc_md67", null ],
         [ "Requirements", "_ogre40_changes.html#autotoc_md68", null ],
         [ "Note", "_ogre40_changes.html#autotoc_md69", null ]
-      ] ]
+      ] ],
+      [ "Minimum Apple deployment targets", "_ogre40_changes.html#autotoc_md70", null ]
     ] ]
 ];

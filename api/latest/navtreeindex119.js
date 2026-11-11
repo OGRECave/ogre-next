@@ -1,5 +1,6 @@
 var NAVTREEINDEX119 =
 {
+"namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aa4aae1ed01eda1f2f2e4cd3289d0f3fe6":[7,0,0,28,0,1],
 "namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aa602ee38ea2347d313beab4dabced99fb":[7,0,0,28,0,2],
 "namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aa7f41ae26cc31fbe71845cb824ab98f41":[7,0,0,28,0,5],
 "namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aac20d23827af269fdf5ae3b5daabaafa7":[7,0,0,28,0,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX119 =
 "struct_ogre_1_1_async_texture_ticket_1_1_delayed_download.html#acc99f9071602df8d44077dba1ceb6bb5":[7,0,0,73,0,3],
 "struct_ogre_1_1_async_texture_ticket_1_1_delayed_download.html#acc99f9071602df8d44077dba1ceb6bb5":[8,0,0,43,0,3],
 "struct_ogre_1_1_atmosphere_npr_1_1_preset.html":[6,0,0,2,0],
-"struct_ogre_1_1_atmosphere_npr_1_1_preset.html#a0c77846085ecabce3da1141d3e164883":[6,0,0,2,0,11],
-"struct_ogre_1_1_atmosphere_npr_1_1_preset.html#a12e2a072263e5d61d4ca2129634d3c82":[6,0,0,2,0,14]
+"struct_ogre_1_1_atmosphere_npr_1_1_preset.html#a0c77846085ecabce3da1141d3e164883":[6,0,0,2,0,11]
 };

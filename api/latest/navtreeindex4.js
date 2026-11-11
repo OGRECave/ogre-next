@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"_ogre_particle_system_manager2_8h.html":[9,0,2,0,11,6],
 "_ogre_particle_system_manager_8h.html":[9,0,2,0,178],
 "_ogre_particle_system_renderer_8h.html":[9,0,2,0,179],
 "_ogre_pass_8h.html":[9,0,2,0,180],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "_ogre_string_converter_8h.html":[9,0,2,0,263],
 "_ogre_string_interface_8h.html":[9,0,2,0,264],
 "_ogre_string_vector_8h.html":[9,0,2,0,265],
-"_ogre_sub_entity_8h.html":[9,0,2,0,266],
-"_ogre_sub_item_8h.html":[9,0,2,0,267]
+"_ogre_sub_entity_8h.html":[9,0,2,0,266]
 };

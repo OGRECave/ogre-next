@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"_ogre_sub_item_8h.html":[9,0,2,0,267],
 "_ogre_sub_mesh2_8h.html":[9,0,2,0,269],
 "_ogre_sub_mesh_8h.html":[9,0,2,0,268],
 "_ogre_tag_point2_8h.html":[9,0,2,0,1,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "_ogre_vulkan_hardware_index_buffer_8h.html":[9,0,4,5,0,13],
 "_ogre_vulkan_hardware_vertex_buffer_8h.html":[9,0,4,5,0,14],
 "_ogre_vulkan_hlms_pso_8h.html":[9,0,4,5,0,15],
-"_ogre_vulkan_mappings_8h.html":[9,0,4,5,0,16],
-"_ogre_vulkan_multi_source_vertex_buffer_pool_8h.html":[9,0,4,5,0,0,4]
+"_ogre_vulkan_mappings_8h.html":[9,0,4,5,0,16]
 };

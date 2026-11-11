@@ -1,5 +1,6 @@
 var NAVTREEINDEX27 =
 {
+"class_ogre_1_1_decal.html#a1d106b9c1b59477cffb0440dfd33a060":[8,0,0,251,5],
 "class_ogre_1_1_decal.html#a346fc3cc74be861a12e7d9a541468ab2":[7,0,0,281,15],
 "class_ogre_1_1_decal.html#a346fc3cc74be861a12e7d9a541468ab2":[8,0,0,251,15],
 "class_ogre_1_1_decal.html#a35d4fa19a2750732ceef42ec5f9aabd1":[7,0,0,281,26],
@@ -248,6 +249,5 @@ var NAVTREEINDEX27 =
 "class_ogre_1_1_deflector_plane_affector.html#a1270e11fac75d4a23c844663435880f4":[7,0,0,296,13],
 "class_ogre_1_1_deflector_plane_affector.html#a1270e11fac75d4a23c844663435880f4":[8,0,0,266,13],
 "class_ogre_1_1_deflector_plane_affector.html#a2a008aac63767f45c7eb2ae2dcf90bea":[7,0,0,296,7],
-"class_ogre_1_1_deflector_plane_affector.html#a2a008aac63767f45c7eb2ae2dcf90bea":[8,0,0,266,7],
-"class_ogre_1_1_deflector_plane_affector.html#a2b792c697baec1f9261441a8c3d8e411":[7,0,0,296,11]
+"class_ogre_1_1_deflector_plane_affector.html#a2a008aac63767f45c7eb2ae2dcf90bea":[8,0,0,266,7]
 };

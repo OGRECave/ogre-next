@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"_ogre_external_texture_source_8h.html":[9,0,2,0,73],
 "_ogre_external_texture_source_manager_8h.html":[9,0,2,0,74],
 "_ogre_factory_obj_8h.html":[9,0,2,0,75],
 "_ogre_fast_array_8h.html":[9,0,2,0,76],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "_ogre_hlms_pbs_datablock_8h.html#abc89c74f72da9141710c11fe6b1e3e3f":[9,0,0,1,1,0,7,3],
 "_ogre_hlms_pbs_datablock_8h.html#ae66f514c6a15072ebfc572bd10b678fb":[9,0,0,1,1,0,7,0],
 "_ogre_hlms_pbs_prerequisites_8h.html":[9,0,0,1,1,0,8],
-"_ogre_hlms_pbs_prerequisites_8h.html#ad5d5ade8ee86f3897553ceaec74dff0d":[9,0,0,1,1,0,8,0],
-"_ogre_hlms_pso_8h.html":[9,0,2,0,113]
+"_ogre_hlms_pbs_prerequisites_8h.html#ad5d5ade8ee86f3897553ceaec74dff0d":[9,0,0,1,1,0,8,0]
 };

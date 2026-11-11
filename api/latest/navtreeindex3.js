@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"_ogre_hlms_pso_8h.html":[9,0,2,0,113],
 "_ogre_hlms_samplerblock_8h.html":[9,0,2,0,114],
 "_ogre_hlms_texture_base_class_8h.html":[9,0,0,1,0,0,1],
 "_ogre_hlms_texture_pack_8h.html":[9,0,2,0,115],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "_ogre_particle_f_x_prerequisites_8h.html#a27fcc50572846f64f2a53a10dda7e094":[9,0,3,1,0,24,0],
 "_ogre_particle_iterator_8h.html":[9,0,2,0,176],
 "_ogre_particle_system2_8h.html":[9,0,2,0,11,5],
-"_ogre_particle_system_8h.html":[9,0,2,0,177],
-"_ogre_particle_system_manager2_8h.html":[9,0,2,0,11,6]
+"_ogre_particle_system_8h.html":[9,0,2,0,177]
 };

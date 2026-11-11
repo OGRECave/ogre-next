@@ -24,13 +24,13 @@ var _gi_methods =
     [ "Image Voxel Cone Tracing", "_image_voxel_cone_tracing.html", [
       [ "Step 1: Image Voxelizer", "_image_voxel_cone_tracing.html#IVCT_Step1", [
         [ "Downside", "_image_voxel_cone_tracing.html#IVCT_Step1_Downside", [
-          [ "Non-researched solutions:", "_image_voxel_cone_tracing.html#autotoc_md108", null ]
+          [ "Non-researched solutions:", "_image_voxel_cone_tracing.html#autotoc_md109", null ]
         ] ],
-        [ "Trivia", "_image_voxel_cone_tracing.html#autotoc_md109", null ]
+        [ "Trivia", "_image_voxel_cone_tracing.html#autotoc_md110", null ]
       ] ],
       [ "Step 2: Row Translation", "_image_voxel_cone_tracing.html#IVCT_Step2", null ],
       [ "Step 3: Cascades", "_image_voxel_cone_tracing.html#IVCT_Step3", null ],
-      [ "Wait isn't this what UE5's Lumen does?", "_image_voxel_cone_tracing.html#autotoc_md110", null ],
-      [ "Wait isn't this what Godot does?", "_image_voxel_cone_tracing.html#autotoc_md111", null ]
+      [ "Wait isn't this what UE5's Lumen does?", "_image_voxel_cone_tracing.html#autotoc_md111", null ],
+      [ "Wait isn't this what Godot does?", "_image_voxel_cone_tracing.html#autotoc_md112", null ]
     ] ]
 ];

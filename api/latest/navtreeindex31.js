@@ -1,5 +1,6 @@
 var NAVTREEINDEX31 =
 {
+"class_ogre_1_1_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9e2cd2d2436678236e339e6a42887090":[6,2,2,43,0,9],
 "class_ogre_1_1_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9f57f8f4aefb7fae5fcd69fe155e7003":[6,2,2,43,0,5],
 "class_ogre_1_1_exception.html#a9bdf9b8a0a83b95818d676848beaa29baaeb75efe079b550f380d62d9a0954e71":[6,2,2,43,0,0],
 "class_ogre_1_1_exception.html#a9bdf9b8a0a83b95818d676848beaa29bae8c10c1472a5d4005d1c25adb5e2764d":[6,2,2,43,0,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX31 =
 "class_ogre_1_1_font.html#ab68fc068d526a83163bf305acdc6c732":[6,2,10,40,23],
 "class_ogre_1_1_font.html#ab89abe298177153acda383de2d7823ca":[6,2,10,40,29],
 "class_ogre_1_1_font.html#abfa4659b19ef3052676ccf8a64181e6f":[6,2,10,40,27],
-"class_ogre_1_1_font.html#ac2c1fba5ad2d610ecc78b1e1a6a1b8dc":[6,2,10,40,7],
-"class_ogre_1_1_font.html#ac550d4abfd2c2a61edf2c1ad8718afc6":[6,2,10,40,13]
+"class_ogre_1_1_font.html#ac2c1fba5ad2d610ecc78b1e1a6a1b8dc":[6,2,10,40,7]
 };

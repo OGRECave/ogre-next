@@ -1,7 +1,8 @@
 var NAVTREEINDEX116 =
 {
-"hlms.html#autotoc_md117":[4,1,1,6,2],
-"hlms.html#autotoc_md118":[4,1,1,10],
+"hlms.html#autotoc_md117":[4,1,1,5,4,0],
+"hlms.html#autotoc_md118":[4,1,1,6,2],
+"hlms.html#autotoc_md119":[4,1,1,10],
 "hlms.html#setWorkerThreadMinimumBudget":[4,1,1,8,2,1],
 "hlmsblendblockref.html":[4,2,3,0],
 "hlmsblendblockref.html#bbBlendtypes":[4,2,3,0,2],
@@ -35,7 +36,7 @@ var NAVTREEINDEX116 =
 "hlmsmacroblockref.html#mbParamScissorText":[4,2,3,1,0,0],
 "hlmsmacroblockref.html#mbParameters":[4,2,3,1,0],
 "hlmspbsdatablockref.html":[4,2,3,3],
-"hlmspbsdatablockref.html#autotoc_md119":[4,2,3,3,1,1],
+"hlmspbsdatablockref.html#autotoc_md120":[4,2,3,3,1,1],
 "hlmspbsdatablockref.html#dbCommonParameters":[4,2,3,3,0],
 "hlmspbsdatablockref.html#dbExample":[4,2,3,3,2],
 "hlmspbsdatablockref.html#dbLinks":[4,2,3,3,2,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX116 =
 "namespace_ogre.html#a47aa3be163bca4f89016c19f24e3e626":[7,0,0,1260],
 "namespace_ogre.html#a49df4b24acc70e29d353052ab4e3f055":[7,0,0,1443],
 "namespace_ogre.html#a4b3ac5cd3c1499373bbb3ebc3904a418":[7,0,0,1431],
-"namespace_ogre.html#a4bbf05af668b0deefaf7b0c0f172d45b":[7,0,0,1187],
-"namespace_ogre.html#a4c9f4d697f980119e8cb1e640b0ada11":[7,0,0,1115]
+"namespace_ogre.html#a4bbf05af668b0deefaf7b0c0f172d45b":[7,0,0,1187]
 };

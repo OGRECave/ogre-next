@@ -1,5 +1,6 @@
 var NAVTREEINDEX45 =
 {
+"class_ogre_1_1_hlms_manager.html#ab91098469e77e9397a3e2b29b9704e29":[6,2,10,75,28],
 "class_ogre_1_1_hlms_manager.html#ac096e2fe19f2aa9f748509e6714f3227":[6,2,10,75,13],
 "class_ogre_1_1_hlms_manager.html#ac221adcd9abadfaa6281531c5304d6b6":[6,2,10,75,19],
 "class_ogre_1_1_hlms_manager.html#ac5cb9c5901130373789f76711c38c9ee":[6,2,10,75,31],
@@ -248,6 +249,5 @@ var NAVTREEINDEX45 =
 "class_ogre_1_1_hollow_ellipsoid_emitter.html#ab8a04670adcf78d5341c1ad9029ee269":[8,0,0,492,3],
 "class_ogre_1_1_hollow_ellipsoid_emitter.html#ad9dd4f034b30bd8cacac7085467dcb1a":[7,0,0,522,11],
 "class_ogre_1_1_hollow_ellipsoid_emitter.html#ad9dd4f034b30bd8cacac7085467dcb1a":[8,0,0,492,11],
-"class_ogre_1_1_hollow_ellipsoid_emitter.html#addd9cd21c7a3bfdaa90a5eb9054b18e8":[7,0,0,522,10],
-"class_ogre_1_1_hollow_ellipsoid_emitter.html#addd9cd21c7a3bfdaa90a5eb9054b18e8":[8,0,0,492,10]
+"class_ogre_1_1_hollow_ellipsoid_emitter.html#addd9cd21c7a3bfdaa90a5eb9054b18e8":[7,0,0,522,10]
 };

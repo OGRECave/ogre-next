@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['layer_20the_204x4_20block_0',['First layer, the 4x4 block',['../_terra_system.html#autotoc_md91',1,'']]],
-  ['layers_1',['Outer layers',['../_terra_system.html#autotoc_md92',1,'']]],
+  ['layer_20the_204x4_20block_0',['First layer, the 4x4 block',['../_terra_system.html#autotoc_md92',1,'']]],
+  ['layers_1',['Outer layers',['../_terra_system.html#autotoc_md93',1,'']]],
   ['layout_20of_20textures_20and_20images_2',['Memory layout of textures and images',['../_ogre22_changes.html#autotoc_md36',1,'']]],
   ['layouts_3',['Layouts',['../_root_layouts.html#RootLayoutsNewAPIs',1,'New APIs and Root Layouts'],['../_root_layouts.html',1,'Root Layouts']]],
   ['layouts_4',['Setting up root layouts',['../_root_layouts.html#RootLayoutsSettingUp',1,'']]],
@@ -12,8 +12,8 @@ var searchData=
   ['license_9',['License',['../index.html#autotoc_md10',1,'']]],
   ['light_20approximation_10',['API Usage: Area Light Approximation',['../_samples.html#arealighapprox',1,'']]],
   ['light_5fvisibility_5fmask_11',['light_visibility_mask',['../compositor.html#CompositorNodesPassesRenderScene_light_visibility_mask',1,'']]],
-  ['lighting_12',['Lighting',['../_gi_methods.html#GiAmbientLighting',1,'Ambient Lighting'],['../_p_b_s_changes_in30.html#autotoc_md72',1,'Direct Lighting']]],
-  ['lighting_20changes_13',['Hemisphere Ambient Lighting changes',['../_p_b_s_changes_in30.html#autotoc_md82',1,'']]],
+  ['lighting_12',['Lighting',['../_gi_methods.html#GiAmbientLighting',1,'Ambient Lighting'],['../_p_b_s_changes_in30.html#autotoc_md73',1,'Direct Lighting']]],
+  ['lighting_20changes_13',['Hemisphere Ambient Lighting changes',['../_p_b_s_changes_in30.html#autotoc_md83',1,'']]],
   ['lights_14',['Shadow map atlas &amp;amp; Point Lights',['../compositor.html#CompositorShadowNodesAtlasAndPointLights',1,'']]],
   ['lights_20cameras_15',['All MovableObjects require a SceneNode (Lights &amp;amp; Cameras)',['../_ogre20_changes.html#AllMovableObjectsRequireSceneNode',1,'']]],
   ['lights_20textures_16',['API Usage: Updating Decals And Area Lights&apos; Textures',['../_samples.html#updatedecal',1,'']]],
@@ -26,7 +26,7 @@ var searchData=
   ['load_20and_20store_20actions_23',['Now that we’ve explained how TBDRs work, we can explain load and store actions',['../_ogre22_changes.html#autotoc_md23',1,'']]],
   ['load_20store_20semantics_24',['Load Store semantics',['../_ogre22_changes.html#Ogre22LoadStoreSemantics',1,'']]],
   ['loading_20a_20texture_20twice_20i_20e_20with_20a_20different_20format_20via_20aliasing_25',['Loading a texture twice (i.e. with a different format) via aliasing',['../hlms.html#HlmsTextureManagerAutomaticBatchingLoadingTwice',1,'']]],
-  ['loading_20scripts_26',['Loading scripts',['../_scripts.html#autotoc_md128',1,'']]],
+  ['loading_20scripts_26',['Loading scripts',['../_scripts.html#autotoc_md129',1,'']]],
   ['local_20reflections_20using_20parallax_20corrected_20cubemaps_27',['API Usage: Local Reflections Using Parallax Corrected Cubemaps',['../_samples.html#localcubemaps',1,'']]],
   ['local_20reflections_20using_20parallax_20corrected_20cubemaps_20with_20manual_20probes_28',['API Usage: Local Reflections Using Parallax Corrected Cubemaps With Manual Probes',['../_samples.html#localcubemapsmp',1,'']]],
   ['local_5fspace_29',['local_space',['../_particle-_scripts.html#ParticleSystemAttributes_local_space',1,'']]],
@@ -35,8 +35,8 @@ var searchData=
   ['lod_5fbias_32',['lod_bias',['../compositor.html#CompositorNodesPassesRenderScene_lod_bias',1,'']]],
   ['lod_5fcamera_33',['lod_camera',['../compositor.html#CompositorNodesPassesRenderScene_lod_camera',1,'']]],
   ['lod_5fupdate_5flist_34',['lod_update_list',['../compositor.html#CompositorNodesPassesRenderScene_lod_update_list',1,'']]],
-  ['long_20version_35',['Long version',['../_p_b_s_changes_in30.html#autotoc_md71',1,'']]],
-  ['longer_20considered_36',['Fresnel Diffuse is no longer considered',['../_p_b_s_changes_in30.html#autotoc_md73',1,'']]],
+  ['long_20version_35',['Long version',['../_p_b_s_changes_in30.html#autotoc_md72',1,'']]],
+  ['longer_20considered_36',['Fresnel Diffuse is no longer considered',['../_p_b_s_changes_in30.html#autotoc_md74',1,'']]],
   ['longevity_20of_20the_20v1_20objects_20and_20deprecation_37',['Longevity of the v1 objects and deprecation',['../azdo.html#V2AndV1ObjectsV1Longevity',1,'']]],
   ['look_20washed_20out_38',['I activated gamma correction, but now my GUI textures look washed out!',['../_ogre20_changes.html#GUIWashedOut',1,'']]],
   ['looks_20too_20dark_20or_20dull_39',['My scene looks too dark or dull!',['../_ogre20_changes.html#SceneLooksDarkDull',1,'']]],
@@ -44,5 +44,5 @@ var searchData=
   ['loops_20from_20the_20get_20go_41',['Supporting Multithreading loops from the get go',['../_using_ogre_in_your_app.html#SupportingMultithreadingLoopsFromTheGetGo',1,'']]],
   ['lot_20of_20data_20is_20stored_20in_20blocks_42',['A lot of data is stored in &quot;Blocks&quot;',['../hlms.html#HlmsChangesBlocks',1,'']]],
   ['low_20level_20materials_43',['Prefab Root Layouts for low level materials',['../_root_layouts.html#RootLayoutPrefabs',1,'']]],
-  ['lumen_20does_44',['Wait isn&apos;t this what UE5&apos;s Lumen does?',['../_image_voxel_cone_tracing.html#autotoc_md110',1,'']]]
+  ['lumen_20does_44',['Wait isn&apos;t this what UE5&apos;s Lumen does?',['../_image_voxel_cone_tracing.html#autotoc_md111',1,'']]]
 ];

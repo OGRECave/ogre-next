@@ -13,7 +13,7 @@ var _performance_page =
       [ "Grouping textures by type", "_tuning_memory_resources.html#GroupingTexturesByType", null ],
       [ "Dynamic vs Default buffers", "_tuning_memory_resources.html#DynamicVsDefaultBuffers", null ],
       [ "Tweaking default memory consumption by VaoManager", "_tuning_memory_resources.html#TweakingVaoManager", [
-        [ "Vulkan and <span class=\"tt\">TEXTURES_OPTIMAL</span>", "_tuning_memory_resources.html#autotoc_md85", null ]
+        [ "Vulkan and <span class=\"tt\">TEXTURES_OPTIMAL</span>", "_tuning_memory_resources.html#autotoc_md86", null ]
       ] ]
     ] ]
 ];

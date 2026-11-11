@@ -1,5 +1,6 @@
 var NAVTREEINDEX93 =
 {
+"class_ogre_1_1_vulkan_vao_manager.html#ab58aa47c8a54e57fecd9d7e93b6651a6a1faa3e29dbe49f9f22a09f8d01e18bd0":[7,0,0,1078,6,5],
 "class_ogre_1_1_vulkan_vao_manager.html#ab58aa47c8a54e57fecd9d7e93b6651a6a1faa3e29dbe49f9f22a09f8d01e18bd0":[8,0,0,1048,6,5],
 "class_ogre_1_1_vulkan_vao_manager.html#ab58aa47c8a54e57fecd9d7e93b6651a6a4c69f747f4f94bb8b821acc0eacf676a":[7,0,0,1078,6,3],
 "class_ogre_1_1_vulkan_vao_manager.html#ab58aa47c8a54e57fecd9d7e93b6651a6a4c69f747f4f94bb8b821acc0eacf676a":[8,0,0,1048,6,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX93 =
 "class_ogre_1_1_waitable_event.html#ad9f80c2a326f5ec55c1b28b939d2dcba":[7,0,0,1086,2],
 "class_ogre_1_1_waitable_event.html#ad9f80c2a326f5ec55c1b28b939d2dcba":[8,0,0,1056,2],
 "class_ogre_1_1_waitable_event.html#adb23e55e733abc9656bc2fe90b0f1578":[7,0,0,1086,3],
-"class_ogre_1_1_waitable_event.html#adb23e55e733abc9656bc2fe90b0f1578":[8,0,0,1056,3],
-"class_ogre_1_1_warm_up_helper.html":[6,2,1,64]
+"class_ogre_1_1_waitable_event.html#adb23e55e733abc9656bc2fe90b0f1578":[8,0,0,1056,3]
 };
