@@ -22,7 +22,7 @@
 #
 # set_xcode_property (TARGET XCODE_PROPERTY XCODE_VALUE)
 #  A convenience macro for setting xcode specific properties on targets
-#  example: set_xcode_property (myioslib IPHONEOS_DEPLOYMENT_TARGET "3.1")
+#  example: set_xcode_property (myioslib IPHONEOS_DEPLOYMENT_TARGET "15.0")
 #
 # find_host_package (PROGRAM ARGS)
 #  A macro used to find executable programs on the host system, not within the iOS environment.
@@ -67,7 +67,7 @@ set( CMAKE_XCODE_ATTRIBUTE_GCC_WARN_UNUSED_VARIABLE YES )
 set( CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2" )
 
 # Required as of cmake 2.8.10
-set (CMAKE_OSX_DEPLOYMENT_TARGET "" CACHE STRING "Force unset of the deployment target for iOS" FORCE)
+set (CMAKE_OSX_DEPLOYMENT_TARGET "15.0" CACHE STRING "Force unset of the deployment target for iOS" FORCE)
 
 # Determine the cmake host system version so we know where to find the iOS SDKs
 find_program (CMAKE_UNAME uname /bin /usr/bin /usr/local/bin)
@@ -190,11 +190,11 @@ set (CMAKE_IOS_SDK_ROOT ${CMAKE_IOS_SDK_ROOT} CACHE PATH "Location of the select
 set (CMAKE_OSX_SYSROOT iphoneos)
 
 # set the architecture for iOS
-# NOTE: Currently both ARCHS_STANDARD_32_BIT and ARCHS_UNIVERSAL_IPHONE_OS set armv7 only, so set both manually
+# NOTE: iOS 15 dropped 32-bit (armv7/i386) support, so only 64-bit architectures are built
 if (${IOS_PLATFORM} STREQUAL "OS")
-  set (IOS_ARCH armv7 armv7s arm64)
+  set (IOS_ARCH arm64)
 elseif (${IOS_PLATFORM} STREQUAL "SIMULATOR")
-  set (IOS_ARCH i386)
+  set (IOS_ARCH x86_64)
 elseif (${IOS_PLATFORM} STREQUAL "SIMULATOR64")
   set (IOS_ARCH x86_64)
 endif ()

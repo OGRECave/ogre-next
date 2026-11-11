@@ -39,6 +39,14 @@ if (APPLE AND NOT ANDROID)
   set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11")
   set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
   set(CMAKE_XCODE_ATTRIBUTE_USE_HEADERMAP NO)
+
+  # Minimum macOS deployment target. iOS uses IPHONEOS_DEPLOYMENT_TARGET instead
+  # (see CMake/Utils/OgreConfigTargets.cmake).
+  if(NOT CMAKE_SYSTEM_NAME STREQUAL "iOS" AND NOT APPLE_IOS AND NOT OGRE_BUILD_PLATFORM_APPLE_IOS)
+    if(NOT CMAKE_OSX_DEPLOYMENT_TARGET)
+      set(CMAKE_OSX_DEPLOYMENT_TARGET "12.0" CACHE STRING "Minimum macOS deployment target")
+    endif()
+  endif()
 endif ()
 
 # This option needs to be set now

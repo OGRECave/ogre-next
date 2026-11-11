@@ -98,7 +98,7 @@ if( APPLE )
 
 		# These must be global for all projects; or else they'll cause
 		# trouble or increased compiling times
-		set( CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "10.0" )
+		set( CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "15.0" )
 		set( CMAKE_XCODE_ATTRIBUTE_VALID_ARCHS "arm64" )
 
 		set_target_properties( ${PROJECT_NAME} PROPERTIES
@@ -109,6 +109,7 @@ if( APPLE )
 		)
 	else()
 		# macOS
+		set( CMAKE_XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET "12.0" )
 		set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework Foundation" )
 		set_target_properties( ${PROJECT_NAME} PROPERTIES
 			MACOSX_BUNDLE_INFO_PLIST

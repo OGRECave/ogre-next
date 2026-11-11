@@ -208,3 +208,12 @@ Either `CompositorPassSceneDef::mBakeLightingOnly` (see [bake_lighting_only](@re
 ### Note
 
 If your lightmap texture is `RGBA16_FLOAT`, this setting is likely a waste of performance and should not be enabled.
+
+## Minimum Apple deployment targets
+
+The minimum deployment targets were raised to versions still supported by current Xcode releases:
+
+- iOS: `15.0` (`IPHONEOS_DEPLOYMENT_TARGET`)
+- macOS: `12.0` (`MACOSX_DEPLOYMENT_TARGET`)
+
+`CMake/Utils/OgreConfigTargets.cmake` applies these to every Ogre-Next target. macOS defaults can still be overridden by setting `CMAKE_OSX_DEPLOYMENT_TARGET` before configuring.

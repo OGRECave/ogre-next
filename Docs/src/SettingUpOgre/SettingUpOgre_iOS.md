@@ -5,8 +5,8 @@
 # Requirements {#Requirements_iOS}
     * [CMake 3.x](https://cmake.org/download/)
     * Mercurial. We recommend [TortoiseHg](https://tortoisehg.bitbucket.io/download/index.html)
-    * XCode 8 or newer
-    * iOS 9 or newer.
+    * XCode 27.2 or newer
+    * iOS 15 or newer.
     * [Metal-capable device](https://developer.apple.com/library/content/documentation/DeviceInformation/Reference/iOSDeviceCompatibility/HardwareGPUInformation/HardwareGPUInformation.html#//apple_ref/doc/uid/TP40013599-CH106-SW1)
       \(Apple A7 GPU or newer. That means iPhone 5s or newer, iPad Air or newer, iPad mini 2 or newer, iPad Pro\)
     * For HW & SW requirements, please visit http://www.ogre3d.org/developers/requirements

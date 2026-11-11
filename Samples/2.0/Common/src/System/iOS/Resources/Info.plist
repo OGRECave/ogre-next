@@ -28,7 +28,7 @@
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
-		<string>armv7</string>
+		<string>arm64</string>
 		<string>metal</string>
 	</array>
 	<key>UIRequiresFullScreen</key>
