@@ -2223,9 +2223,8 @@ namespace Ogre
     //---------------------------------------------------------------------
     bool D3D11RenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *block, uint64 deadline )
     {
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-        debugLogPso( block );
-#endif
+        if( !RenderSystem::_hlmsPipelineStateObjectCreated( block, deadline ) )
+            return false;
 
         D3D11HlmsPso *pso = new D3D11HlmsPso();
         memset( pso, 0, sizeof( D3D11HlmsPso ) );
@@ -2869,6 +2868,245 @@ namespace Ogre
                          "D3D11 device cannot set shaders\nError Description: " + errorDescription,
                          "D3D11RenderSystem::_setPipelineStateObject" );
         }
+    }
+    //---------------------------------------------------------------------
+    bool D3D11RenderSystem::_verifyPipelineStageLinkage( ID3DBlob *previousStageBlob,
+                                                         ID3DBlob *nextStageBlob,
+                                                         ShaderSignatureType sigType,
+                                                         const char *hint ) const
+    {
+        if( !previousStageBlob || !nextStageBlob )
+            return false;
+
+        ComPtr<ID3D11ShaderReflection> prevReflection;
+        ComPtr<ID3D11ShaderReflection> nextReflection;
+
+        D3DReflect( previousStageBlob->GetBufferPointer(), previousStageBlob->GetBufferSize(),
+                    IID_ID3D11ShaderReflection, (void **)prevReflection.GetAddressOf() );
+        D3DReflect( nextStageBlob->GetBufferPointer(), nextStageBlob->GetBufferSize(),
+                    IID_ID3D11ShaderReflection, (void **)nextReflection.GetAddressOf() );
+
+        D3D11_SHADER_DESC prevDesc;
+        D3D11_SHADER_DESC nextDesc;
+        prevReflection->GetDesc( &prevDesc );
+        nextReflection->GetDesc( &nextDesc );
+
+        struct InputSlot
+        {
+            std::string semanticName;
+            UINT semanticIndex;
+            BYTE mask;
+        };
+        std::unordered_map<UINT, InputSlot> nextInputRegisterMap;
+
+        // 1. Map out target stage inputs based on validation type
+        UINT nextParamCount = ( sigType == ShaderSignatureType::PatchConstant )
+                                  ? nextDesc.PatchConstantParameters
+                                  : nextDesc.InputParameters;
+
+        const auto getRegisterSlot = []( D3D11_SIGNATURE_PARAMETER_DESC paramDesc ) {
+            // Different variables can share the registers, e.g. single uint can be packed in x-value and
+            // single float in y-value of the same register.
+            if( ( paramDesc.Mask & 1 ) != 0 )
+                return paramDesc.Register * 4;
+            else if( ( paramDesc.Mask & 2 ) != 0 )
+                return paramDesc.Register * 4 + 1;
+            else if( ( paramDesc.Mask & 4 ) != 0 )
+                return paramDesc.Register * 4 + 2;
+            else if( ( paramDesc.Mask & 8 ) != 0 )
+                return paramDesc.Register * 4 + 3;
+
+            assert( 0 && "Unexpected parameter mask!" );
+            return paramDesc.Register * 4;
+        };
+
+        for( UINT i = 0; i < nextParamCount; ++i )
+        {
+            D3D11_SIGNATURE_PARAMETER_DESC paramDesc;
+            if( sigType == ShaderSignatureType::PatchConstant )
+            {
+                nextReflection->GetPatchConstantParameterDesc( i, &paramDesc );
+            }
+            else
+            {
+                nextReflection->GetInputParameterDesc( i, &paramDesc );
+            }
+
+            // Filter out system-generated variables like SV_TessFactor, SV_InsideTessFactor,
+            // SV_InstanceID, etc. Hardware auto-generates these; the previous shader doesn't explicitly
+            // write them to a register.
+            if( std::string( paramDesc.SemanticName ).find( "SV_" ) == 0 &&
+                std::string( paramDesc.SemanticName ) != "SV_Position" )
+            {
+                continue;
+            }
+
+            InputSlot slot;
+            slot.semanticName = paramDesc.SemanticName;
+            slot.semanticIndex = paramDesc.SemanticIndex;
+            slot.mask = paramDesc.Mask;
+
+            nextInputRegisterMap[getRegisterSlot( paramDesc )] = slot;
+        }
+
+        // 2. Validate against output signatures of the previous stage
+        bool isLinkageValid = true;
+        UINT prevParamCount = ( sigType == ShaderSignatureType::PatchConstant )
+                                  ? prevDesc.PatchConstantParameters
+                                  : prevDesc.OutputParameters;
+
+        for( UINT i = 0; i < prevParamCount; ++i )
+        {
+            D3D11_SIGNATURE_PARAMETER_DESC paramDesc;
+            if( sigType == ShaderSignatureType::PatchConstant )
+            {
+                prevReflection->GetPatchConstantParameterDesc( i, &paramDesc );
+            }
+            else
+            {
+                prevReflection->GetOutputParameterDesc( i, &paramDesc );
+            }
+
+            auto it = nextInputRegisterMap.find( getRegisterSlot( paramDesc ) );
+            if( it != nextInputRegisterMap.end() )
+            {
+                InputSlot &nextInput = it->second;
+
+                // Rule A: Semantics must match
+                if( nextInput.semanticName != paramDesc.SemanticName ||
+                    nextInput.semanticIndex != paramDesc.SemanticIndex )
+                {
+                    const String message =
+                        String( "Linkage Error [" ) +
+                        ( sigType == ShaderSignatureType::PatchConstant ? "PatchConstant"
+                                                                        : "Standard " ) +
+                        hint + " ]: Register " + std::to_string( paramDesc.Register ) +
+                        " semantic mismatch. Out: " + paramDesc.SemanticName +
+                        std::to_string( paramDesc.SemanticIndex ) + " | In: " + nextInput.semanticName +
+                        std::to_string( nextInput.semanticIndex );
+                    LogManager::getSingleton().logMessage( message, LML_CRITICAL );
+                    isLinkageValid = false;
+                }
+
+                // Rule B: Component verification (e.g., matching a float4 to a float4)
+                if( ( nextInput.mask & paramDesc.Mask ) != nextInput.mask )
+                {
+                    const String message =
+                        String( "Linkage Error [" ) +
+                        ( sigType == ShaderSignatureType::PatchConstant ? "PatchConstant"
+                                                                        : "Standard " ) +
+                        hint + " ]: Component mask mismatch at Register " +
+                        std::to_string( paramDesc.Register ) +
+                        ". Next stage reads components missing from previous stage output.";
+                    LogManager::getSingleton().logMessage( message, LML_CRITICAL );
+                    isLinkageValid = false;
+                }
+
+                nextInputRegisterMap.erase( it );
+            }
+        }
+
+        // 3. Confirm all requested inputs were satisfied
+        if( !nextInputRegisterMap.empty() )
+        {
+            for( auto &pair : nextInputRegisterMap )
+            {
+                const String message =
+                    String( "Linkage Error [" ) +
+                    ( sigType == ShaderSignatureType::PatchConstant ? "PatchConstant" : "Standard " ) +
+                    hint + " ]: Next stage requires input " + pair.second.semanticName +
+                    std::to_string( pair.second.semanticIndex ) + " at Register " +
+                    std::to_string( pair.first / 4 ) + " but it is unwritten by the previous stage.";
+                LogManager::getSingleton().logMessage( message, LML_CRITICAL );
+            }
+            isLinkageValid = false;
+        }
+
+        return isLinkageValid;
+    }
+    //---------------------------------------------------------------------
+    ComPtr<ID3DBlob> D3D11RenderSystem::_createBlob( D3D11HLSLProgram *shader ) const
+    {
+        if( !shader )
+            return ComPtr<ID3DBlob>();
+
+        if( !shader->isLoaded() )
+            shader->load();
+
+        const MicroCode &microCode = shader->getMicroCode();
+        if( microCode.empty() )
+            return ComPtr<ID3DBlob>();
+
+        ComPtr<ID3DBlob> blob;
+        HRESULT hr = D3DCreateBlob( microCode.size(), blob.GetAddressOf() );
+        if( FAILED( hr ) )
+            return ComPtr<ID3DBlob>();
+
+        // Copy your memory buffer into the newly created blob's pointer
+        memcpy( blob->GetBufferPointer(), microCode.data(), microCode.size() );
+        return blob;
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::_validatePipelineStateObject( const HlmsPso *pso ) const
+    {
+        ComPtr<ID3DBlob> vertexShader;
+        ComPtr<ID3DBlob> hullShader;
+        ComPtr<ID3DBlob> domainShader;
+        ComPtr<ID3DBlob> geometryShader;
+        ComPtr<ID3DBlob> pixelShader;
+        if( pso->vertexShader != nullptr )
+            vertexShader = _createBlob(
+                static_cast<D3D11HLSLProgram *>( pso->vertexShader->_getBindingDelegate() ) );
+        if( pso->tesselationHullShader != nullptr )
+            hullShader = _createBlob(
+                static_cast<D3D11HLSLProgram *>( pso->tesselationHullShader->_getBindingDelegate() ) );
+        if( pso->tesselationDomainShader != nullptr )
+            domainShader = _createBlob(
+                static_cast<D3D11HLSLProgram *>( pso->tesselationDomainShader->_getBindingDelegate() ) );
+        if( pso->geometryShader != nullptr )
+            geometryShader = _createBlob(
+                static_cast<D3D11HLSLProgram *>( pso->geometryShader->_getBindingDelegate() ) );
+        if( pso->pixelShader != nullptr )
+            pixelShader = _createBlob(
+                static_cast<D3D11HLSLProgram *>( pso->pixelShader->_getBindingDelegate() ) );
+
+        if( hullShader && domainShader )
+        {
+            // 1. VS -> HS (Control Point interface)
+            _verifyPipelineStageLinkage( vertexShader.Get(), hullShader.Get(),
+                                         ShaderSignatureType::Standard, "VS -> HS" );
+
+            // 2. HS -> DS (Control Point interface)
+            _verifyPipelineStageLinkage( hullShader.Get(), domainShader.Get(),
+                                         ShaderSignatureType::Standard, "HS -> DS" );
+
+            // 3. HS -> DS (Patch Constant function data structure)
+            _verifyPipelineStageLinkage( hullShader.Get(), domainShader.Get(),
+                                         ShaderSignatureType::PatchConstant, "HS -> DS" );
+
+            // 4. DS -> Next Stage (GS or PS)
+            ID3DBlob *nextStage =
+                geometryShader.Get() != nullptr ? geometryShader.Get() : pixelShader.Get();
+            if( nextStage )
+                _verifyPipelineStageLinkage( domainShader.Get(), nextStage,
+                                             ShaderSignatureType::Standard,
+                                             geometryShader.Get() != nullptr ? "DS -> GS" : "DS -> PS" );
+        }
+        else
+        {
+            // Standard Pipeline fallback (No tessellation active)
+            ID3DBlob *nextStage =
+                geometryShader.Get() != nullptr ? geometryShader.Get() : pixelShader.Get();
+            if( nextStage )
+                _verifyPipelineStageLinkage( vertexShader.Get(), nextStage,
+                                             ShaderSignatureType::Standard,
+                                             geometryShader.Get() != nullptr ? "VS -> GS" : "VS -> PS" );
+        }
+
+        // 5. GS -> PS if Geometry Shader is used
+        if( geometryShader.Get() != nullptr && pixelShader.Get() )
+            _verifyPipelineStageLinkage( geometryShader.Get(), pixelShader.Get(),
+                                         ShaderSignatureType::Standard, "GS -> PS" );
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setIndirectBuffer( IndirectBufferPacked *indirectBuffer )

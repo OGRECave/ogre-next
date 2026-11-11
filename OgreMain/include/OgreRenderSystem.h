@@ -940,10 +940,7 @@ namespace Ogre
         void   _notifyIncompletePsoRequests( uint32 count );
 
         /// return false for recoverable errors, for example for exhausted per-frame time budget
-        virtual bool _hlmsPipelineStateObjectCreated( HlmsPso *newPso, uint64 deadline = UINT64_MAX )
-        {
-            return true;
-        }
+        virtual bool _hlmsPipelineStateObjectCreated( HlmsPso *newPso, uint64 deadline = UINT64_MAX );
         virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso ) {}
         virtual void _hlmsMacroblockCreated( HlmsMacroblock *newBlock ) {}
         virtual void _hlmsMacroblockDestroyed( HlmsMacroblock *block ) {}
@@ -1068,6 +1065,13 @@ namespace Ogre
 
         /// @see HlmsPso
         virtual void _setPipelineStateObject( const HlmsPso *pso );
+
+        /// Checks the shader stages of this pso whether they have compatible output/input. E.g if only
+        /// vertex and pixel shaders are set, the vertex shader must output at least all the channels
+        /// required by the pixel shader. The implementation should only log the warnings or errors
+        /// instead of throwing an exception. This is just internal implementation to validate the
+        /// PSO.
+        virtual void _validatePipelineStateObject( const HlmsPso *pso ) const;
 
         /// Unlike _setPipelineStateObject, the RenderSystem will check if the PSO
         /// has changed to avoid redundant state changes (since it's hard to do it
