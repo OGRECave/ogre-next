@@ -61,7 +61,12 @@ if(WIN32) # The only platform it makes sense to check for DirectX11 SDK
 		# "C:/Program Files (x86)/Windows Kits/8.0/lib/win8/um/${MSVC_CXX_ARCHITECTURE_ID}/"
 		# "C:/Program Files (x86)/Windows Phone Kits/8.1/lib/${MSVC_CXX_ARCHITECTURE_ID}/"
 		# "C:/Program Files (x86)/Windows Phone Kits/8.0/lib/${MSVC_CXX_ARCHITECTURE_ID}/"
-		set(DirectX11_LIBRARY d3d11.lib dxgi.lib dxguid.lib) 
+		set(DirectX11_LIBRARY d3d11.lib dxgi.lib dxguid.lib d3dcompiler.lib)
+		if(MINGW)
+    			# MinGW ignores MSVC #pragma comment(lib) that pulls in d3dcompiler,
+    			# and OgreNsightChecker calls PSAPI directly.
+    			list(APPEND DirectX11_LIBRARY psapi.lib)
+		endif() 
 		# but it is usefull to output selected version to the log
 		message(STATUS "Found DirectX11 headers: ${DirectX11_INCLUDE_DIR}")
 	endif()
