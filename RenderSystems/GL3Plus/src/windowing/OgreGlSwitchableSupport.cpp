@@ -42,6 +42,9 @@
 #ifdef OGRE_GLSUPPORT_USE_EGL_HEADLESS
 #    include "windowing/EGL/PBuffer/OgreEglPBufferSupport.h"
 #endif
+#ifdef OGRE_GLSUPPORT_USE_EGL_WAYLAND
+#    include "windowing/EGL/Wayland/OgreWaylandEglSupport.h"
+#endif
 
 namespace Ogre
 {
@@ -72,6 +75,18 @@ namespace Ogre
         {
             LogManager::getSingleton().logMessage(
                 "EGL Headless raised an exception. Won't be available. Are drivers too old?" );
+            LogManager::getSingleton().logMessage( e.getFullDescription() );
+        }
+#endif
+#ifdef OGRE_GLSUPPORT_USE_EGL_WAYLAND
+        try
+        {
+            mAvailableInterfaces.push_back( Interface( WaylandEgl, new WaylandEglSupport() ) );
+        }
+        catch( Exception &e )
+        {
+            LogManager::getSingleton().logMessage(
+                "Wayland EGL raised an exception. Won't be available." );
             LogManager::getSingleton().logMessage( e.getFullDescription() );
         }
 #endif
@@ -114,6 +129,8 @@ namespace Ogre
 #endif
         case HeadlessEgl:
             return "Headless EGL / PBuffer";
+        case WaylandEgl:
+            return "Wayland EGL Window";
         }
 
         return "ERROR";
