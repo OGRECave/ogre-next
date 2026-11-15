@@ -400,7 +400,12 @@ endif ()
 
 set (TARGET_LINK_FLAGS "")
 
-set( BROKEN_FILES_IN_UNITY_BUILD "src/OgreFreeImageCodec2.cpp" )
+set( BROKEN_FILES_IN_UNITY_BUILD "" )
+if( OGRE_CONFIG_ENABLE_FREEIMAGE )
+	# the file is only in the build when the codec is enabled
+	list( APPEND BROKEN_FILES_IN_UNITY_BUILD
+			"src/OgreFreeImageCodec2.cpp" )
+endif()
 
 # setup OgreMain target
 if (WINDOWS_STORE OR WINDOWS_PHONE)
