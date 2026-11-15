@@ -29,6 +29,12 @@ THE SOFTWARE.
 
 #include "OgreException.h"
 
+// Some MinGW-w64 d3d11sdklayers.h versions define D3D11_RLDO_SUMMARY and
+// D3D11_RLDO_DETAIL only. The Windows SDK value of the missing flag is 0x4.
+#ifndef D3D11_RLDO_IGNORE_INTERNAL
+#define D3D11_RLDO_IGNORE_INTERNAL ( (D3D11_RLDO_FLAGS)0x4 )
+#endif
+
 // #include <dxgi1_3.h> // for DXGIGetDebugInterface1
 // #include <dxgidebug.h> // for IDXGIDebug1
 
