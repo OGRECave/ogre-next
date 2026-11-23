@@ -2165,6 +2165,11 @@ namespace Ogre
             ObjectMemoryManager *memoryManager = *it;
             const size_t numRenderQueues =
                 std::max( memoryManager->getNumRenderQueues(), numParticleRqs );
+            // Particle systems don't belong to any of these memory managers. Add them only once
+            // (while processing the first manager), otherwise they get drawn once per manager
+            // (e.g. twice with SCENE_DYNAMIC and SCENE_STATIC).
+            const bool addParticleSystems =
+                request.addToRenderQueue && it == request.objectMemManager->begin();
 
             size_t firstRq = std::min<size_t>( request.firstRq, numRenderQueues );
             size_t lastRq = std::min<size_t>( request.lastRq, numRenderQueues );
@@ -2229,8 +2234,8 @@ namespace Ogre
                     }
                 }
 
-                if( mRenderQueue->getRenderQueueMode( currRqId ) == RenderQueue::PARTICLE_SYSTEM &&
-                    request.addToRenderQueue )
+                if( addParticleSystems &&
+                    mRenderQueue->getRenderQueueMode( currRqId ) == RenderQueue::PARTICLE_SYSTEM )
                 {
                     mParticleSystemManager2->_addToRenderQueue( threadIdx, mNumWorkerThreads,
                                                                 mRenderQueue, currRqId, visibilityMask,
