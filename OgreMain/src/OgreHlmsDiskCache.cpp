@@ -189,7 +189,10 @@ namespace Ogre
                     }
                 }
 
-                if( bCacheable )
+                // Stub entries (HLMS_CACHE_FLAGS_COMPILATION_REQUIRED / _REQUESTED) haven't been
+                // compiled yet, so their HlmsPso has no macroblock/blendblock. They cannot be
+                // cached; they will be compiled (and cached) on a later run.
+                if( bCacheable && ( *itor )->flags == HLMS_CACHE_FLAGS_NONE )
                 {
                     Pso pso( hlms->mRenderableCache[renderableIdx], hlms->mPassCache[passIdx], *itor );
                     mCache.pso.push_back( pso );
