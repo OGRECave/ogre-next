@@ -49,7 +49,7 @@ uint32 EmitterDefData::genEmissionCount( Real timeSinceLast, EmitterInstanceData
         if( mDurationMax != 0.0 )
         {
             instanceData.mDurationRemain -= timeSinceLast;
-            if( mDurationRemain <= 0 )
+            if( instanceData.mDurationRemain <= 0 )
             {
                 // Disable, duration is out (takes effect next time)
                 instanceData.setEnabled( false, *this );
