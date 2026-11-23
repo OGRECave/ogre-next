@@ -2165,6 +2165,12 @@ namespace Ogre
             ObjectMemoryManager *memoryManager = *it;
             const size_t numRenderQueues =
                 std::max( memoryManager->getNumRenderQueues(), numParticleRqs );
+            // numParticleRqs may exceed the number of RQs this memoryManager has (e.g. the light
+            // and decal managers only have a few). We must still iterate those RQs to add the
+            // particle systems, but must not query this manager's objects in them as
+            // memoryManager->getFirstObjectData will assert or crash.
+            const size_t numManagerRqs = memoryManager->_getTotalRenderQueues();
+
             // Particle systems don't belong to any of these memory managers. Add them only once
             // (while processing the first manager), otherwise they get drawn once per manager
             // (e.g. twice with SCENE_DYNAMIC and SCENE_STATIC).
@@ -2180,7 +2186,8 @@ namespace Ogre
                     *( visibleObjectsPerRq.begin() + i );
 
                 ObjectData objData;
-                const size_t totalObjs = memoryManager->getFirstObjectData( objData, i );
+                const size_t totalObjs =
+                    i < numManagerRqs ? memoryManager->getFirstObjectData( objData, i ) : 0u;
 
                 const uint8 currRqId = static_cast<uint8>( i );
 
