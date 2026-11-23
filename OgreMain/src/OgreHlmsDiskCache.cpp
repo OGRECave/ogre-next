@@ -819,6 +819,7 @@ namespace Ogre
                 load( dataStream, pso.renderableCache );
                 load( dataStream, pso.passProperties );
 
+                pso.pso.vertexElements.clear();
                 const uint32 numVertexElements = read<uint32>( dataStream );
                 pso.pso.vertexElements.reserve( numVertexElements );
 
