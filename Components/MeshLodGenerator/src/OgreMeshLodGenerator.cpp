@@ -48,8 +48,8 @@
 #include "OgreLodWorkQueueWorker.h"
 #include "OgreMesh.h"
 #include "OgreMesh2.h"
-#include "OgreStringConverter.h"
 #include "OgrePixelCountLodStrategy.h"
+#include "OgreStringConverter.h"
 
 namespace Ogre
 {

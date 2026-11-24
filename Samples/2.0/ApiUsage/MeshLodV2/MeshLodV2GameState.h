@@ -1,9 +1,10 @@
 #ifndef _Demo_MeshLodV2GameState_H_
 #define _Demo_MeshLodV2GameState_H_
 
+#include "OgreHlmsPbsDatablock.h"
+
 #include "OgrePrerequisites.h"
 #include "TutorialGameState.h"
-#include "OgreHlmsPbsDatablock.h"
 
 namespace Demo
 {
