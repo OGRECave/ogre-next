@@ -86,6 +86,20 @@ namespace Ogre
                          "EglPBufferSupport::EglPBufferSupport" );
         }
 
+        // Device probing below calls eglMakeCurrent() on each device's own
+        // EGLDisplay, and destroyDevice() ends by calling
+        // eglMakeCurrent(display, 0, 0, 0) to release it - since EGL's
+        // "current context" state is per-thread (not per-display), that
+        // release call clobbers whatever context the caller had current
+        // *before* this constructor ran (e.g. a host app's context adopted
+        // later via "currentGLContext", or simply requested to remain
+        // current across RenderSystem/plugin construction). Save it now and
+        // restore it once every device has been probed.
+        EGLDisplay savedDisplay = eglGetCurrentDisplay();
+        ::EGLContext savedContext = eglGetCurrentContext();
+        EGLSurface savedDrawSurface = eglGetCurrentSurface( EGL_DRAW );
+        EGLSurface savedReadSurface = eglGetCurrentSurface( EGL_READ );
+
         for( int i = 0u; i < numDevices; ++i )
         {
             EGLDeviceEXT device = mDevices[size_t( i )];
@@ -139,6 +153,13 @@ namespace Ogre
                 destroyDevice( size_t( i ) );
             }
         }
+
+        // Restore whatever was current before this constructor started
+        // probing devices. If nothing was current before (the common case,
+        // e.g. plain headless/GLX startup), savedContext is EGL_NO_CONTEXT
+        // and there is nothing to restore.
+        if( savedContext != EGL_NO_CONTEXT )
+            eglMakeCurrent( savedDisplay, savedDrawSurface, savedReadSurface, savedContext );
     }
     //-------------------------------------------------------------------------
     EglPBufferSupport::~EglPBufferSupport() {}
