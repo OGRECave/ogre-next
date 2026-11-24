@@ -372,6 +372,21 @@ namespace Ogre
         */
     }
     //---------------------------------------------------------------------
+    void Mesh::_setLodValues( const LodValueArray &lodValues )
+    {
+#if OGRE_DEBUG_MODE
+        // lodSet() (see OgreLodStrategyPrivate.inl) relies on std::lower_bound over this
+        // array, which requires it to be sorted from most to least detail (ascending values
+        // for strategies such as PixelCountLodStrategy where 'value' grows as detail drops).
+        for( size_t i = 1u; i < lodValues.size(); ++i )
+        {
+            OgreAssert( lodValues[i - 1u] <= lodValues[i],
+                        "Lod values must be sorted from most to least detail" );
+        }
+#endif
+        mLodValues = lodValues;
+    }
+    //---------------------------------------------------------------------
     /*void Mesh::_setSubMeshLodFaceList(unsigned short subIdx, unsigned short level,
         IndexData* facedata)
     {
@@ -390,24 +405,47 @@ namespace Ogre
     //--------------------------------------------------------------------
     void Mesh::removeLodLevels()
     {
-#if !OGRE_NO_MESHLOD
-        // Remove data from SubMeshes
-        /*for( SubMesh *submesh : mSubMeshList )
-            submesh->removeLodLevels();
+        if( getNumLodLevels() <= 1u )
+            return;  // Nothing to remove.
 
-        freeEdgeList();
-        mMeshLodUsageList.clear();
+        VaoManager *vaoManager = _getVaoManager();
+
+        for( SubMesh *subMesh : mSubMeshes )
+        {
+            // Collect every Vao beyond index 0 (the base, full-detail level) that
+            // needs destroying. mVao[VpShadow] commonly shares pointers with
+            // mVao[VpNormal] (see SubMesh::destroyShadowMappingVaos's own
+            // [0]==[0] check) -- dedup so a shared Vao is only destroyed once,
+            // rather than risking the double-destroy this codebase has already hit
+            // once during this change (see the GameState MeshPtr lifetime bug).
+            VertexArrayObjectArray toDestroy;
+
+            for( size_t i = 1u; i < subMesh->mVao[VpNormal].size(); ++i )
+                toDestroy.push_back( subMesh->mVao[VpNormal][i] );
+
+            for( size_t i = 1u; i < subMesh->mVao[VpShadow].size(); ++i )
+            {
+                VertexArrayObject *shadowVao = subMesh->mVao[VpShadow][i];
+                bool alreadyQueued = false;
+                for( size_t j = 0u; j < toDestroy.size() && !alreadyQueued; ++j )
+                    alreadyQueued = ( toDestroy[j] == shadowVao );
+                if( !alreadyQueued )
+                    toDestroy.push_back( shadowVao );
+            }
+
+            if( !toDestroy.empty() )
+                SubMesh::destroyVaos( toDestroy, vaoManager, true );
+
+            if( subMesh->mVao[VpNormal].size() > 1u )
+                subMesh->mVao[VpNormal].resize( 1u );
+            if( subMesh->mVao[VpShadow].size() > 1u )
+                subMesh->mVao[VpShadow].resize( 1u );
+        }
+
+        // Empty mLodValues means "always render LOD 0" -- lodSet()'s lower_bound
+        // over an empty range returns end(), and end() - begin() - 1 clamped to >= 0
+        // gives mCurrentMeshLod = 0. No need to push a base value back in.
         mLodValues.clear();
-
-        LodStrategy *lodStrategy = LodStrategyManager::getSingleton().getDefaultStrategy();
-
-        // Reinitialise
-        mNumLods = 1;
-        mMeshLodUsageList.resize(1);
-        mMeshLodUsageList[0].edgeData = NULL;
-        // TODO: Shouldn't we rebuild edge lists after freeing them?
-        mLodValues.push_back( lodStrategy->getBaseValue() );*/
-#endif
     }
     //---------------------------------------------------------------------
     void Mesh::_setHashForCaches( const uint64 hash[2] )
