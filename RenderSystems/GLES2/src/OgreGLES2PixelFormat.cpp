@@ -762,7 +762,7 @@ namespace Ogre {
     GLenum GLES2PixelUtil::getClosestGLImageInternalFormat(PixelFormat format)
     {
         GLenum GLformat = getGLImageInternalFormat(format);
-        return (format == GL_NONE ? GL_RGBA8 : GLformat);
+        return (GLformat == GL_NONE ? GL_RGBA8 : GLformat);
     }
     //-----------------------------------------------------------------------------
     PixelFormat GLES2PixelUtil::getClosestOGREFormat(GLenum fmt, GLenum dataType)
