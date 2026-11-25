@@ -1672,9 +1672,8 @@ namespace Ogre
 
     bool GL3PlusRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newBlock, uint64 deadline )
     {
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-        debugLogPso( newBlock );
-#endif
+        if( !RenderSystem::_hlmsPipelineStateObjectCreated( newBlock, deadline ) )
+            return false;
 
         GL3PlusHlmsPso *pso = new GL3PlusHlmsPso();
         memset( pso, 0, sizeof( GL3PlusHlmsPso ) );
@@ -2296,6 +2295,36 @@ namespace Ogre
         }
 
         GLSLMonolithicProgramManager::getSingleton().getActiveMonolithicProgram();
+    }
+
+    void GL3PlusRenderSystem::_validatePipelineStateObject( const HlmsPso *pso ) const
+    {
+        GLint currentProgram = 0;
+        OGRE_CHECK_GL_ERROR( glGetIntegerv( GL_CURRENT_PROGRAM, &currentProgram ) );
+
+        GLSLShader *vertexShader = nullptr;
+        GLSLShader *hullShader = nullptr;
+        GLSLShader *domainShader = nullptr;
+        GLSLShader *geometryShader = nullptr;
+        GLSLShader *fragmentShader = nullptr;
+        if( pso->vertexShader != nullptr )
+            vertexShader = static_cast<GLSLShader *>( pso->vertexShader->_getBindingDelegate() );
+        if( pso->tesselationHullShader != nullptr )
+            hullShader = static_cast<GLSLShader *>( pso->tesselationHullShader->_getBindingDelegate() );
+        if( pso->tesselationDomainShader != nullptr )
+            domainShader =
+                static_cast<GLSLShader *>( pso->tesselationDomainShader->_getBindingDelegate() );
+        if( pso->geometryShader != nullptr )
+            geometryShader = static_cast<GLSLShader *>( pso->geometryShader->_getBindingDelegate() );
+        if( pso->pixelShader != nullptr )
+            fragmentShader = static_cast<GLSLShader *>( pso->pixelShader->_getBindingDelegate() );
+
+        GLSLMonolithicProgram *monolithicProgram = new GLSLMonolithicProgram(
+            vertexShader, hullShader, domainShader, geometryShader, fragmentShader, nullptr );
+        monolithicProgram->activate();  // This compiles and links the shaders together and logs the
+                                        // errors if the compilation/linking fails.
+        delete monolithicProgram;
+        OGRE_CHECK_GL_ERROR( glUseProgram( currentProgram ) );
     }
 
     void GL3PlusRenderSystem::_setComputePso( const HlmsComputePso *pso )

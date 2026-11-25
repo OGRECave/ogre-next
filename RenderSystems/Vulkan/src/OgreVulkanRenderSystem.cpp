@@ -3290,9 +3290,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     bool VulkanRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newPso, uint64 deadline )
     {
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-        debugLogPso( newPso );
-#endif
+        if( !RenderSystem::_hlmsPipelineStateObjectCreated( newPso, deadline ) )
+            return false;
 
         if( ( newPso->geometryShader && !mDevice->mDeviceFeatures.geometryShader ) ||
             ( newPso->tesselationHullShader && !mDevice->mDeviceFeatures.tessellationShader ) ||
