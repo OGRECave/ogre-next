@@ -59,6 +59,7 @@ namespace Ogre
         bool mInitialized;
 
         v1::HardwareBufferManager *mHardwareBufferManager;
+        NULLGpuProgramManager     *mShaderManager;
 
         ConfigOptionMap mOptions;
 
