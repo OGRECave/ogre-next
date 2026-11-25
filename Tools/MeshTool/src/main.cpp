@@ -473,10 +473,10 @@ void buildLod(v1::MeshPtr& mesh)
                 else
                 {
                     std::cout << "Wrong answer!\n";
-                    response = "";
+                    response.clear();
                 }
             }
-            while( response == "" );
+            while( response.empty() );
         }
         else if (askLodDtls)
         {
@@ -496,10 +496,10 @@ void buildLod(v1::MeshPtr& mesh)
                 else
                 {
                     std::cout << "Wrong answer!\n";
-                    response = "";
+                    response.clear();
                 }
             }
-            while( response == "" );
+            while( response.empty() );
         }
     }
 
@@ -529,10 +529,10 @@ void buildLod(v1::MeshPtr& mesh)
             else
             {
                 std::cout << "Wrong answer!\n";
-                response = "";
+                response.clear();
             }
         }
-        while (response == "");
+        while (response.empty());
         if (!opts.lodAutoconfigure)
         {
             do
@@ -551,10 +551,10 @@ void buildLod(v1::MeshPtr& mesh)
                 else
                 {
                     std::cout << "Wrong answer!\n";
-                    response = "";
+                    response.clear();
                 }
             }
-            while (response == "");
+            while (response.empty());
             LodLevel lodLevel;
             size_t vertexCount = 0;
             do
@@ -576,10 +576,10 @@ void buildLod(v1::MeshPtr& mesh)
                 else
                 {
                     std::cout << "Wrong answer!\n";
-                    response = "";
+                    response.clear();
                 }
             }
-            while (response == "");
+            while (response.empty());
 
             numLod = 0;
             while (numLod < 1 || numLod > 99)
@@ -660,10 +660,10 @@ void buildLod(v1::MeshPtr& mesh)
                     else
                     {
                         std::cout << "Wrong answer!\n";
-                        response = "";
+                        response.clear();
                     }
                 }
-                while (response == "");
+                while (response.empty());
 
                 if (lodConfig.strategy == DistanceLodStrategy::getSingletonPtr())
                 {
@@ -837,7 +837,7 @@ void resolveColourAmbiguities(v1::Mesh* mesh)
                 else
                 {
                     std::cout << "Wrong answer!\n";
-                    response = "";
+                    response.clear();
                 }
             }
         }
@@ -855,7 +855,7 @@ void resolveColourAmbiguities(v1::Mesh* mesh)
         {
             if (opts.interactive)
             {
-                response = "";
+                response.clear();
                 std::cout   << "\nYour mesh has vertex colours, which can be stored in one of two layouts,\n"
                             << "each of which will be slightly faster to load in a different render system.\n"
                             << "Do you want to prefer Direct3D (d3d) or OpenGL (gl)?\n";
@@ -874,7 +874,7 @@ void resolveColourAmbiguities(v1::Mesh* mesh)
                     else
                     {
                         std::cout << "Wrong answer!\n";
-                        response = "";
+                        response.clear();
                     }
                 }
             }
@@ -1288,15 +1288,15 @@ int main(int numargs, char** args)
         unOptList["-U"] = false;
         unOptList["-v1"]= false;
         unOptList["-v2"]= false;
-        binOptList["-l"] = "";
-        binOptList["-d"] = "";
-        binOptList["-p"] = "";
-        binOptList["-f"] = "";
-        binOptList["-E"] = "";
-        binOptList["-td"] = "";
-        binOptList["-ts"] = "";
-        binOptList["-V"] = "";
-        binOptList["-O"] = "";
+        binOptList["-l"].clear();
+        binOptList["-d"].clear();
+        binOptList["-p"].clear();
+        binOptList["-f"].clear();
+        binOptList["-E"].clear();
+        binOptList["-td"].clear();
+        binOptList["-ts"].clear();
+        binOptList["-V"].clear();
+        binOptList["-O"].clear();
 
         int startIdx = findCommandLineOpts(numargs, args, unOptList, binOptList);
         parseOpts(unOptList, binOptList);
