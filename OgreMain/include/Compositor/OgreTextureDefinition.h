@@ -394,7 +394,7 @@ namespace Ogre
         static void destroyTextures( CompositorChannelVec &inOutTexContainer, RenderSystem *renderSys );
 
         /** Destroys & recreates only the textures that depend on the main RT
-            (e.g. the Render Window) resolution.
+            (e.g., the Render Window) resolution.
         @remarks
             This is divided in two steps: recreateResizableTextures01 & recreateResizableTextures02
             since in some cases in RenderPassDescriptor, setting up MRT and depth textures
@@ -502,14 +502,14 @@ namespace Ogre
         /// We need the definition because, unlike textures, the container passed in may
         /// contain textures that were not created by us (i.e. global & input textures)
         /// that we shouldn't delete.
-        /// It is illegal for two buffers to have the same name, so it's invalid that a
+        /// It is illegal for two buffers to have the same name, so it's invalid that
         /// e.g. an input and a local texture would share the same name.
         static void destroyBuffers( const BufferDefinitionVec &bufferDefs,
                                     CompositorNamedBufferVec  &inOutBufContainer,
                                     RenderSystem              *renderSys );
 
         /** Destroys & recreates only the buffers that depend on the main RT
-            (i.e. the RenderWindow) resolution
+            (i.e., the RenderWindow) resolution
         @param textureDefs
             Array of texture definitions, so we know which ones depend on main RT's resolution
         @param inOutTexContainer

@@ -189,7 +189,7 @@ namespace Ogre
         */
         void _setNodeParent( Node *nodeParent );
 
-        /** Sets a given orientation in local space (ie. relative to its parent)
+        /** Sets a given orientation in local space (i.e., relative to its parent)
         @remarks
             Don't call this function too often, as we need to convert to SoA
         */
@@ -225,7 +225,7 @@ namespace Ogre
         */
         inline Vector3 getScale() const;
 
-        /** Tells the Bone whether it should inherit orientation from it's parent node.
+        /** Tells the Bone whether it should inherit orientation from its parent node.
         @remarks
             See Node::setInheritOrientation remarks.
             Note that Nodes and bones inherit scale and orientation differently, because
@@ -247,7 +247,7 @@ namespace Ogre
         */
         bool getInheritOrientation() const;
 
-        /** Tells the node whether it should inherit scaling factors from it's parent node.
+        /** Tells the node whether it should inherit scaling factors from its parent node.
         @remarks
             See setInheritOrientation().
         @param inherit If true, this node's scale will be affected by its parent's scale. If false,
@@ -270,7 +270,7 @@ namespace Ogre
         */
         Matrix4 _getDerivedTransform() const;
 
-        /** Gets the transformation matrix for this bone in local space (i.e. as if the
+        /** Gets the transformation matrix for this bone in local space (i.e., as if the
             skeleton wasn't attached to a SceneNode).
         @remarks
             This method returns the full transformation matrix

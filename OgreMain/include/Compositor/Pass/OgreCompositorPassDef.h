@@ -163,8 +163,8 @@ namespace Ogre
         /** Will issue a warning (by raising an exception) if Ogre is forced to flush
             the RenderTarget, which is very bad for performance on mobile, and can
             cause serious performance problems in Desktop if using MSAA, and also
-            cause correctness problems (i.e. bad rendering) if store action is
-            StoreAction::Resolve.
+            cause correctness problems (i.e., bad rendering) if store action is
+            StoreAction::MultisampleResolve.
         @remarks
             Flushes are caused by splitting rendering to the same RenderTarget
             in multiple passes while rendering to a different RenderTarget in the middle.
